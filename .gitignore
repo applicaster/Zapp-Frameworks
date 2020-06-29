@@ -84,7 +84,12 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+# I do exactly this from time to time using
+# git update-index --assume-unchanged [<file> ...]
+# To undo and start tracking again (if you forgot what files were untracked, see this question):
+# git update-index --no-assume-unchanged [<file> ...]
 localProject/apple/FrameworksApp.xcodeproj/project.pbxproj
+
 plugins/**/FrameworksApp.xcworkspace
 plugins/**/Pods
 plugins/**/Podfile.lock
