@@ -1,0 +1,47 @@
+{
+  "name": "@applicaster/zapp-generic-chromecast",
+  "version": "0.1.3",
+  "description": "A react native plugin that adds chromecast support to QuickBrick",
+  "main": "src/index.js",
+  "scripts": {
+    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/AppleApplicasterFrameworks"
+  },
+  "keywords": [
+    "chromecast",
+    "cast"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/AppleApplicasterFrameworks"
+  },
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks",
+  "dependencies": {
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "@applicaster/zapplicaster-cli": "3.0.1-rc.3"
+  },
+  "peerDependencies": {
+    "@applicaster/zapp-react-native-redux": "^3.0.0",
+    "@applicaster/zapp-react-native-ui-components": "^3.0.0",
+    "@applicaster/zapp-react-native-utils": "^3.0.0",
+    "react": "16.8.3",
+    "react-native": "0.59.10"
+  },
+  "applicaster": {
+    "isPlugin": true,
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick",
+      "ios",
+      "android"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
+}

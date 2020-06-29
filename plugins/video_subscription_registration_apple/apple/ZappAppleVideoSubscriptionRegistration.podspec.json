@@ -1,0 +1,37 @@
+{
+  "name": "ZappAppleVideoSubscriptionRegistration",
+  "version": "0.1.10",
+  "summary": "ZappAppleVideoSubscriptionRegistration",
+  "description": "ZappAppleVideoSubscriptionRegistration container.",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "branch": "master"
+  },
+  "platforms": {
+    "tvos": "11.0",
+    "ios": "11.0"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "swift_versions": "5.1",
+  "source_files": "Universal/**/*.swift",
+  "frameworks": "VideoSubscriberAccount",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "Tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

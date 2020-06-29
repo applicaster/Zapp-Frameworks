@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>Item Name</string>
+	<string>Item Type</string>
+	<string>Trigger</string>
+	<string>Free</string>
+	<string>VOD Type</string>
+	<string>Duration</string>
+	<string>Duration Played</string>
+	<string>Percent Complete</string>
+	<string>Channel Name</string>
+	<string>Program Name</string>
+	<string>ATOM Feed Name</string>
+	<string>Item ID</string>
+	<string>Channel ID</string>
+	<string>Program ID</string>
+	<string>Selected Menu Item</string>
+	<string>Pause Timecode</string>
+	<string>Unpause Timecode</string>
+	<string>Category Name</string>
+	<string>Parent Category Name</string>
+	<string>TLC Name</string>
+	<string>Show Name</string>
+	<string>Season Name</string>
+	<string>Category ID</string>
+	<string>Parent Category ID</string>
+	<string>TLC ID</string>
+	<string>Show ID</string>
+	<string>Season ID</string>
+</array>
+</plist>

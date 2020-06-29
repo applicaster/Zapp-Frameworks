@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+android {
+    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
+
+    defaultConfig {
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+        targetSdkVersion safeExtGet('targetSdkVersion', 28)
+        versionCode 1
+        versionName "1.0"
+        buildConfigField "String", "castFrameworkVersion", "\"${safeExtGet('castFrameworkVersion', '18.1.0')}\""
+    }
+    lintOptions {
+       warning 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
+    api 'androidx.mediarouter:mediarouter:1.1.0'
+    api "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '18.1.0')}"
+
+    if (!findProject(':applicaster-android-sdk')) {
+        // core is the same project as applicaster-android-sdk but uses a different flavor
+        api ("com.applicaster:applicaster-android-sdk-core:5.1.0") {
+            exclude group: 'com.applicaster', module: 'react-native'
+        }
+    }
+    else {
+        api (project(':applicaster-android-sdk'))
+    }
+
+}

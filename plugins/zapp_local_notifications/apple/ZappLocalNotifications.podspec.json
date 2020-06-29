@@ -1,0 +1,50 @@
+{
+  "name": "ZappLocalNotifications",
+  "version": "0.1.0",
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0"
+  },
+  "summary": "ZappLocalNotifications",
+  "description": "ZappLocalNotifications container.",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "branch": "master"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "swift_versions": "5.1",
+  "source_files": "Universal/**/*.swift",
+  "ios": {
+    "source_files": "iOS/**/*.swift"
+  },
+  "tvos": {
+    "source_files": "tvOS/**/*.swift"
+  },
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "ios": {
+        "source_files": "tests/iOS/**/*.{swift}",
+        "resources": [
+          "tests/iOS/**/*.{png}"
+        ]
+      },
+      "tvos": {
+        "source_files": "tests/iOS/**/Dummy.swift"
+      }
+    }
+  ],
+  "swift_version": "5.1"
+}

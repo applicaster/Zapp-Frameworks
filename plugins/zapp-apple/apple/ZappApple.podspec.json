@@ -1,0 +1,57 @@
+{
+  "name": "ZappApple",
+  "version": "0.7.21",
+  "summary": "Framework that has general logic of the Zapp Apple application",
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0"
+  },
+  "swift_versions": "5.1",
+  "description": "'Framework that has general logic of the Zapp Apple application'",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "Appache 2.0",
+  "authors": {
+    "a.kononenko@applicaster.com": "a.kononenko@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "branch": "master"
+  },
+  "static_framework": true,
+  "ios": {
+    "xcconfig": {
+      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode",
+      "OTHER_LDFLAGS": "$(inherited) -objc -framework \"AppCenter\" -framework \"AppCenterDistribute\" "
+    },
+    "dependencies": {
+      "AppCenter/Distribute": ["= 3.0.0"],
+      "AppCenter/Analytics": ["= 3.0.0"]
+    },
+    "source_files": "Frameworks/ZappApple/Files/ios/**/*.{swift}"
+  },
+  "tvos": {
+    "xcconfig": {
+      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode",
+      "OTHER_LDFLAGS": "$(inherited) -objc "
+    },
+    "source_files": "Frameworks/ZappApple/Files/tvos/**/*.{swift}"
+  },
+  "dependencies": {
+    "ZappCore": [],
+    "ReachabilitySwift": ["= 5.0.0"],
+    "DeviceKit": ["= 3.2.0"]
+  },
+  "source_files": "Frameworks/ZappApple/Files/Universal/**/*.{h,m,swift}",
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "Frameworks/ZappApple/Files/Tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

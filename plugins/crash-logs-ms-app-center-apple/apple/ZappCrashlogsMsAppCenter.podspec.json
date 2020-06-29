@@ -1,0 +1,36 @@
+{
+  "name": "ZappCrashlogsMsAppCenter",
+  "version": "4.5.2",
+  "summary": "ZappCrashlogsMsAppCenter",
+  "description": "CrashlogsMsAppCenter container.",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "branch": "master"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "swift_versions": "5.1",
+  "source_files": "iOS/**/*.swift",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": [],
+    "AppCenter/Crashes": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "Tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

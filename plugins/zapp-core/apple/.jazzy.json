@@ -1,0 +1,76 @@
+{
+  "module": "ZappCore",
+  "module_version": "0.9.16",
+
+  "author": "Applicaster ltd.",
+  "copyright": "© 2019 [Applicaster ltd.](https://www.applicaster.com) under [Appache 2.0](https://github.com/applicaster/AppleApplicasterFrameworks/blob/master/LICENSE).",
+  "author_url": "https://www.applicaster.com",
+  "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/ZappCore",
+  "xcodebuild_arguments": ["-scheme", "ZappCore"],
+  "output": "../../docs/ZappCore",
+  "clean": true,
+  "min_acl": "public",
+  "sdk": ["iphone", "appletv"],
+  "theme": "jony",
+  "custom_categories": [
+    {
+      "name": "User Interface Layer",
+      "children": [
+        "UserInterfaceLayerProtocol",
+        "UserInterfaceLayerApplicationDelegate"
+      ]
+    },
+    {
+      "name": "Facade Connector",
+      "children": [
+        "FacadeConnectorProtocol",
+        "FacadeConnector",
+        "FacadeConnectorAppDataProtocol",
+        "FacadeConnectorPlayerDependantProtocol",
+        "FacadeConnectorAnalyticsProtocol",
+        "FacadeConnectorPluginManagerProtocol",
+        "FacadeConnectorStorageProtocol"
+      ]
+    },
+    {
+      "name": "Pipes Data Model Helper",
+      "children": [
+        "PipesDataModelHelper",
+        "PipesDataModelHelperMediaItem",
+        "PipesDataModelHelperExtensions",
+        "PipesDataModelHelperContent",
+        "PipesDataModelHelperMediaGroups",
+        "PipesDataModelHelperMediaGroupsTypes"
+      ]
+    },
+    {
+      "name": "Plugins Models",
+      "children": [
+        "ZPPluginModel",
+        "ZPAdapterProtocol",
+        "ZPPluginType",
+        "ZappPluginModelKeys"
+      ]
+    },
+    {
+      "name": "Plugin Type: Player",
+      "children": ["PlayerProtocol", "PlayerObserverProtocol"]
+    },
+    {
+      "name": "Plugin Type: Analytics",
+      "children": ["AnalyticsProviderProtocol", "APTimedEvent"]
+    },
+    {
+      "name": "Plugin Type: Player Dependant",
+      "children": [
+        "PlayerDependantPluginProtocol",
+        "DependablePlayerAdDelegatePluginProtocol",
+        "DependablePlayerAdDelegatePluginProtocolKeys"
+      ]
+    },
+    {
+      "name": "Plugin Type: Crashlogs",
+      "children": ["CrashlogsPluginProtocol"]
+    }
+  ]
+}

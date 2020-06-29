@@ -1,0 +1,141 @@
+{
+  "module": "ZappApple",
+  "module_version": "0.7.21",
+  "author": "Applicaster ltd.",
+  "copyright": "© 2019 [Applicaster ltd.](https://www.applicaster.com) under [Appache 2.0](https://github.com/applicaster/AppleApplicasterFrameworks/blob/master/LICENSE).",
+
+  "author_url": "https://www.applicaster.com",
+  "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/ZappCore",
+
+  "xcodebuild_arguments": ["-scheme", "ZappApple"],
+  "output": "../../docs/ZappApple",
+  "clean": true,
+  "min_acl": "private",
+  "sdk": ["iphone", "appletv"],
+  "theme": "jony",
+  "custom_categories": [
+    {
+      "name": "Zapp Root Controller",
+      "children": [
+        "SplashViewController",
+        "RootController",
+        "AppDelegateProtocol"
+      ]
+    },
+    {
+      "name": "Plugins",
+      "children": [
+        "PluginsManager",
+        "AnalyticsManager",
+        "CrashlogsPluginsManager",
+        "PlayerDependantPluginsManager"
+      ]
+    },
+    {
+      "name": "AppLoading",
+      "children": [
+        "DataManager",
+        "LoadingManager",
+        "LoadingLoaderTypes",
+        "LoadingStateTypes",
+        "MsAppCenterDistributionHandler",
+        "kMSAppCenterCheckForUpdatesNotification",
+        "ZappStyles"
+      ]
+    },
+    {
+      "name": "Analytics",
+      "children": [
+        "AnalyticManagerPreparationCompletion",
+        "ProviderSendAnalyticsCompletion"
+      ]
+    },
+    {
+      "name": "CacheHelper",
+      "children": [
+        "APCachedModel",
+        "APCacheHelper",
+        "APCacheManager",
+        "APFile",
+        "APFileLoadingCompletion",
+        "JsonSerializableProtocol"
+      ]
+    },
+    {
+      "name": "CacheHelper",
+      "children": [
+        "APCachedModel",
+        "APCacheHelper",
+        "APCacheManager",
+        "APFile",
+        "APFileLoadingCompletion",
+        "JsonSerializableProtocol"
+      ]
+    },
+    {
+      "name": "FeaturesCustomization",
+      "children": ["FeaturesCusimizationConsts", "FeaturesCustomization"]
+    },
+    {
+      "name": "Keychain",
+      "children": ["HTTPStatusCode"]
+    },
+    {
+      "name": "Keys",
+      "children": ["CoreAnalyticsKeys", "AssetsKeys"]
+    },
+    {
+      "name": "Reachability",
+      "children": ["ReachabilityManager", "ReachabilityManagerDelegate"]
+    },
+    {
+      "name": "StateMachine",
+      "children": [
+        "LoadingStateMachineDataSource",
+        "LoadingStateMachineDelegate",
+        "LoadingState",
+        "LoadingStateMachine",
+        "stateMachineLogCategory",
+        "StateCallBack",
+        "StateHandler"
+      ]
+    },
+    {
+      "name": "Storages",
+      "children": [
+        "LocalStorage",
+        "SessionStorage",
+        "StorageHelper",
+        "StorageInitialization",
+        "ZappStorageKeys",
+        "ZappStorageProtocol",
+        "zappLocalStorageName"
+      ]
+    },
+    {
+      "name": "Styles",
+      "children": ["CoreStylesKeys", "StylesHelper"]
+    },
+    {
+      "name": "UniversalSearch",
+      "children": ["SpotlightSubscription"]
+    },
+    {
+      "name": "UserInterfaceLayerManager",
+      "children": ["UserInterfaceLayerManager"]
+    },
+    {
+      "name": "Categories",
+      "children": [
+        "AVPlayer",
+        "AVURLAsset",
+        "String",
+        "HTTPURLResponse",
+        "UIApplication",
+        "UIColor",
+        "UIView",
+        "UIViewController"
+      ]
+    }
+  ]
+}

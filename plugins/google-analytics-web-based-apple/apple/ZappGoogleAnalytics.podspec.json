@@ -1,0 +1,41 @@
+{
+  "name": "ZappGoogleAnalytics",
+  "version": "0.7.3",
+  "summary": "ZappGoogleAnalytics",
+  "swift_versions": "5.1",
+  "description": "ZappAnalyticsPluginGAtvOS container.",
+  "homepage": "https://applicaster.com",
+  "license": "Appache 2.0",
+  "authors": {
+    "cmps": "a.zchut@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "branch": "master"
+  },
+  "platforms": {
+    "tvos": "10.0",
+    "ios": "10.0"
+  },
+  "dependencies": {
+    "ZappCore": []
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "source_files": ["Universal/**/*.{swift}"],
+  "resources": [
+    "Universal/CustomDimensionMapping/CustomDimensionMapping.plist"
+  ],
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "Tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

@@ -1,0 +1,14 @@
+{
+  "module": "ZappGoogleAnalytics",
+  "module_version": "0.7.2",
+  "author": "Applicaster ltd.",
+  "copyright": "© 2019 [Applicaster ltd.](https://www.applicaster.com) under [Appache 2.0](https://github.com/applicaster/AppleApplicasterFrameworks/blob/master/LICENSE)",
+  "author_url": "https://www.applicaster.com",
+  "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/Plugins/Analytics/GoogleAnalytics/",
+  "xcodebuild_arguments": ["-scheme", "ZappGoogleAnalytics"],
+  "output": "../../../docs/ZappGoogleAnalytics",
+  "clean": true,
+  "min_acl": "private",
+  "sdk": ["iphone", "appletv"],
+  "theme": "jony"
+}

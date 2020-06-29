@@ -1,0 +1,30 @@
+source 'https://cdn.cocoapods.org/'
+
+platform :ios, '10.0'
+install! 'cocoapods', :share_schemes_for_development_pods => true
+project '../../FrameworksApp/FrameworksApp.xcodeproj'
+
+pre_install do |installer|
+	# workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+	Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+
+target 'FrameworksApp' do
+  supports_swift_versions '5.1'
+  use_frameworks!
+  pod 'ZappCore', :path => '../../ZappCore.podspec', :testspecs => ['UnitTests']
+
+  target 'FrameworksAppTests' do
+    inherit! :search_paths
+  end
+
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+          config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
+      end
+  end
+end

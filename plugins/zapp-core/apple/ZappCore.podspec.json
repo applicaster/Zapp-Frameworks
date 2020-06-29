@@ -1,0 +1,40 @@
+{
+  "name": "ZappCore",
+  "version": "0.9.16",
+  "summary": "General Applicaster iOS and tvOS framework that provides protocol",
+  "platforms": {
+    "ios": "10.0",
+    "tvos": "10.0"
+  },
+  "swift_versions": "5.1",
+  "description": "'General Applicaster iOS and tvOS framework that provides protocol and this lowest hierarchy layer'",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "Appache 2.0",
+  "authors": {
+    "a.kononenko@applicaster.com": "a.kononenko@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "tag": "2020.5.13.16-5-9"
+  },
+  "source_files": "Frameworks/ZappCore/Files/Universal/**/*.{swift}",
+  "ios": {
+    "source_files": "Frameworks/ZappCore/Files/iOS/**/*.{swift}"
+  },
+  "tvos": {
+    "source_files": "Frameworks/ZappCore/Files/tvOS/**/*.{swift}"
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "ios": {
+        "source_files": "Frameworks/ZappCore/Files/Tests/iOS/**/*.{swift}"
+      },
+      "tvos": {
+        "source_files": "Frameworks/ZappCore/Files/Tests/Dummy.swift"
+      }
+    }
+  ],
+  "swift_version": "5.1"
+}
