@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "branch": "master"
+    "tag": "master"
   },
   "platforms": {
     "tvos": "11.0",
@@ -17,7 +17,7 @@
   "requires_arc": true,
   "static_framework": true,
   "swift_versions": "5.1",
-  "source_files": "Universal/**/*.swift",
+  "source_files": "universal/**/*.swift",
   "frameworks": "VideoSubscriberAccount",
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
@@ -30,7 +30,7 @@
     {
       "name": "UnitTests",
       "test_type": "unit",
-      "source_files": "Tests/**"
+      "source_files": "tests/**"
     }
   ],
   "swift_version": "5.1"
