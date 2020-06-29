@@ -93,3 +93,4 @@ localProject/apple/FrameworksApp.xcodeproj/project.pbxproj
 plugins/**/FrameworksApp.xcworkspace
 plugins/**/Pods
 plugins/**/Podfile.lock
+plugins/**/node_modules/
