@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "branch": "master"
+    "tag": "master"
   },
   "platforms": {
     "ios": "11.0"
@@ -28,7 +28,7 @@
     {
       "name": "UnitTests",
       "test_type": "unit",
-      "source_files": "Tests/**"
+      "source_files": "tests/**"
     }
   ],
   "swift_version": "5.1"
