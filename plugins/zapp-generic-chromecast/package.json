@@ -25,7 +25,9 @@
     "ramda": "^0.26.1"
   },
   "devDependencies": {
-    "@applicaster/zapplicaster-cli": "3.0.1-rc.3"
+    "@applicaster/zapplicaster-cli": "3.0.1-rc.3",
+    "react": "16.8.3",
+    "react-native": "0.59.10"
   },
   "peerDependencies": {
     "@applicaster/zapp-react-native-redux": "^3.0.0",

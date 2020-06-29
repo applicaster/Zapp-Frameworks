@@ -2,7 +2,7 @@ source 'https://cdn.cocoapods.org/'
 
 platform :ios, '11.0'
 install! 'cocoapods', :share_schemes_for_development_pods => true
-project '../../../FrameworksApp/FrameworksApp.xcodeproj'
+project '../../../localProject/apple/FrameworksApp.xcodeproj'
 
 pre_install do |installer|
 	# workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
@@ -11,11 +11,11 @@ end
 
 target 'FrameworksApp' do
   use_frameworks!
-  pod 'ZappChromecast', :path => 'Files/ZappChromecast.podspec', :testspecs => ['UnitTests']
-  pod 'ZappCore'
-	pod 'React', :path => './node_modules/react-native', :subspecs => ['CxxBridge','DevSupport','RCTActionSheet','RCTNetwork','RCTWebSocket','RCTText','RCTImage','Core','RCTLinkingIOS','RCTAnimation']
-  pod 'yoga', :path => './node_modules/react-native/ReactCommon/yoga'
-  pod 'Folly', :podspec => './node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'ZappChromecast', :path => './ZappChromecast.podspec', :testspecs => ['UnitTests']
+  pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
+	pod 'React', :path => '../node_modules/react-native', :subspecs => ['CxxBridge','DevSupport','RCTActionSheet','RCTNetwork','RCTWebSocket','RCTText','RCTImage','Core','RCTLinkingIOS','RCTAnimation']
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 	
   target 'FrameworksAppTests' do
     inherit! :search_paths
