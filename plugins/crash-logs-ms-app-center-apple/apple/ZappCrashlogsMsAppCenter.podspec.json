@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "branch": "master"
+    "tag": "master"
   },
   "platforms": {
     "ios": "10.0"
