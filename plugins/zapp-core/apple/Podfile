@@ -17,7 +17,6 @@ target 'FrameworksApp' do
   target 'FrameworksAppTests' do
     inherit! :search_paths
   end
-
 end
 
 post_install do |installer|
