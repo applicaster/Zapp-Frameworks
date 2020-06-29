@@ -29,7 +29,7 @@
       "AppCenter/Distribute": ["= 3.0.0"],
       "AppCenter/Analytics": ["= 3.0.0"]
     },
-    "source_files": "Frameworks/ZappApple/Files/ios/**/*.{swift}"
+    "source_files": "ios/**/*.{swift}"
   },
   "tvos": {
     "xcconfig": {
@@ -38,19 +38,19 @@
       "OTHER_CFLAGS": "-fembed-bitcode",
       "OTHER_LDFLAGS": "$(inherited) -objc "
     },
-    "source_files": "Frameworks/ZappApple/Files/tvos/**/*.{swift}"
+    "source_files": "tvos/**/*.{swift}"
   },
   "dependencies": {
     "ZappCore": [],
     "ReachabilitySwift": ["= 5.0.0"],
     "DeviceKit": ["= 3.2.0"]
   },
-  "source_files": "Frameworks/ZappApple/Files/Universal/**/*.{h,m,swift}",
+  "source_files": "universal/**/*.{h,m,swift}",
   "testspecs": [
     {
       "name": "UnitTests",
       "test_type": "unit",
-      "source_files": "Frameworks/ZappApple/Files/Tests/**"
+      "source_files": "Tests/**"
     }
   ],
   "swift_version": "5.1"

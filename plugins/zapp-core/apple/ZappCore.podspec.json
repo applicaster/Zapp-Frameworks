@@ -17,22 +17,22 @@
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
     "tag": "2020.5.13.16-5-9"
   },
-  "source_files": "Frameworks/ZappCore/Files/Universal/**/*.{swift}",
+  "source_files": "universal/**/*.{swift}",
   "ios": {
-    "source_files": "Frameworks/ZappCore/Files/iOS/**/*.{swift}"
+    "source_files": "ios/**/*.{swift}"
   },
   "tvos": {
-    "source_files": "Frameworks/ZappCore/Files/tvOS/**/*.{swift}"
+    "source_files": "tvos/**/*.{swift}"
   },
   "testspecs": [
     {
       "name": "UnitTests",
       "test_type": "unit",
       "ios": {
-        "source_files": "Frameworks/ZappCore/Files/Tests/iOS/**/*.{swift}"
+        "source_files": "tests/iOS/**/*.{swift}"
       },
       "tvos": {
-        "source_files": "Frameworks/ZappCore/Files/Tests/Dummy.swift"
+        "source_files": "tests/Dummy.swift"
       }
     }
   ],
