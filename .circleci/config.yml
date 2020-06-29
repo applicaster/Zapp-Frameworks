@@ -1,93 +1,160 @@
 version: 2.1
-jobs:
-        build:
-                # Specify the Xcode version to use
-                macos:
-                        xcode: "11.5.0"
+parameters:
+        general-caching-key:
+                type: string
+                default: "zapp_frameworks_cache_1.0.0"
+
+references:
+        defaults: &defaults
+                workspace_root: &workspace_root ~/Zapp-Frameworks
                 shell: /bin/bash --login -eo pipefail
-                environment:
-                        GENERAL_CACHE_KEY: "AppleApplicasterFrameworks_Cache_1.1.1"
-                        PROJECT_NAME: "FrameworksApp"
-                        SCHEME_NAME: "FrameworksApp"
-                        PROJECT_PATH: "FrameworksApp"
-                        HOMEBREW_NO_AUTO_UPDATE: "1"
 
-                working_directory: ~/AppleApplicasterFrameworks
+        #Hack general caching until circle does not support global env variables
+        prepare_caching_file: &prepare_caching_file
+                run: echo "<< pipeline.parameters.general-caching-key >>" > ~/_caching_file
+
+        set_ruby_version: &set_ruby_version
+                run:
+                        name: Set Ruby Version
+                        command: echo 'chruby ruby-2.5.8' >> ~/.bash_profile
+
+        install_node: &install_node
+                run:
+                        name: install node@12.0.0
+                        command: |
+                                set +e
+                                touch $BASH_ENV
+                                curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+                                echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+                                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+                                echo nvm install 12.0.0 >> $BASH_ENV
+                                echo nvm alias default 12.0.0 >> $BASH_ENV
+
+        whitch_ruby: &whitch_ruby
+                run:
+                        name: Ruby - version
+                        command: ruby -v
+
+        npm_login: &npm_login
+                run:
+                        name: NPM login
+                        command: npx npm-shell-login
+
+        npm_cache_key: &npm_cache_key Yarn.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "yarn.lock" }}
+
+        prepare_npm_cache_file: &prepare_npm_cache_file
+                run:
+                        name: "Prepare npm caching file: Copy yarn lock to main folder"
+                        command: yarn
+
+        restore_npm: &restore_npm
+                restore_cache:
+                        name: Restore npm dependencies
+                        key: *npm_cache_key
+
+        save_npm: &save_npm
+                save_cache:
+                        name: Saving NPM dependencies
+                        key: *npm_cache_key
+                        paths:
+                                - node_modules
+
+        install_npm_dependencies: &install_npm_dependencies
+                run:
+                        name: Install NPM dependencies
+                        command: yarn
+
+        gems_cache_key: &gems_cache_key GEMS.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "Gemfile.lock" }}
+        restore_gems: &restore_gems
+                restore_cache:
+                        name: Bundler - restore cache
+                        key: *gems_cache_key
+
+        gems_install: &gems_install
+                run:
+                        name: Bundler - install dependencies
+                        command: |
+                                gem install bundler
+                                bundle check --path=.bundle || bundle install --path=.bundle
+
+        save_gems: &save_gems
+                save_cache:
+                        name: Bundler - save cache
+                        key: *gems_cache_key
+                        paths:
+                                - .bundle
+                                - /Users/distiller/.rubies/ruby-2.4.2/lib/ruby/gems/2.4.0/gems
+
+        version_xcode: &version_xcode
+                run:
+                        name: Current Xcode version
+                        command: /usr/bin/xcodebuild -version
+
+        location_xcode: &location_xcode
+                run:
+                        name: Xcode installed location
+                        command: xcode-select -p
+
+jobs:
+        deploy_plugins:
+                <<: *defaults
+                docker:
+                        - image: applicaster/quick-brick:0.4.0
                 steps:
-                        #Hack general caching until circle does not support global env variables
-                        - run: echo "$GENERAL_CACHE_KEY" > ~/_caching_file
-
-                        - run:
-                                  name: Ruby - version
-                                  command: ruby -v
-
-                        # Prepere Git
-                        - restore_cache:
-                                  keys:
-                                          - GIT-{{ checksum "~/_caching_file" }}-{{ .Branch }}-{{ .Revision }}
-                                          - GIT-{{ checksum "~/_caching_file" }}-{{ .Branch }}-
-                                          - GIT-{{ checksum "~/_caching_file" }}-
+                        - *prepare_caching_file
 
                         - checkout
-
-                        - save_cache:
-                                  name: Git - save cache
-                                  key: GIT-{{ checksum "~/_caching_file" }}-{{ .Branch }}-{{ .Revision }}
-                                  paths:
-                                          - ".git"
-
-                        # Prepare Bundler
-                        - restore_cache:
-                                  name: Bundler - restore cache
-                                  key: Bundler-{{ checksum "~/_caching_file" }}-{{ checksum "Gemfile.lock" }}
-
-                        - run:
-                                  name: Bundler - update dependencies
-                                  command: bundle check --path=.bundle || bundle install --path=.bundle
-
-                        - save_cache:
-                                  name: Bundler - save cache
-                                  key: Bundler-{{ checksum "~/_caching_file" }}-{{ checksum "Gemfile.lock" }}
-                                  paths:
-                                          - /Users/distiller/.rubies/ruby-2.4.2/lib/ruby/gems/2.4.0/gems
-                                          - ./.bundle
-
-                        - restore_cache:
-                                  name: Restore npm dependencies
-                                  key: YARN-{{ checksum "~/_caching_file" }}-{{ checksum "yarn.lock" }}
 
                         - run:
                                   name: NPM Login
                                   command: npx npm-shell-login
+
+                        - restore_cache:
+                                  keys:
+                                          - v1-npm-{{ checksum "yarn.lock" }}
 
                         - run:
                                   name: Install npm dependencies
                                   command: yarn
 
                         - save_cache:
-                                  name: Saving NPM dependencies
-                                  key: YARN-{{ checksum "~/_caching_file" }}-{{ checksum "yarn.lock" }}
+                                  key: v1-npm-{{  checksum "yarn.lock" }}
                                   paths:
-                                          - ./node_modules
+                                          - .yarn
+                                          - node_modules
 
                         - run:
-                                  name: Homebrew tap Applicaster
-                                  command: brew tap applicaster/tap
+                                  name: Publishing plugins
+                                  command: node ./scripts/publish_plugins.js
+
+        test_apple_plugins_to_deploy:
+                <<: *defaults
+                macos:
+                        xcode: "11.5.0"
+                environment:
+                        HOMEBREW_NO_AUTO_UPDATE: "1"
+
+                working_directory: ~/AppleApplicasterFrameworks
+                steps:
+                        - *prepare_caching_file
+                        - checkout
+                        - *set_ruby_version
+                        - *whitch_ruby
+                        - *install_node
+                        - *restore_gems
+                        - *gems_install
+                        - *save_gems
+
+                        - *npm_login
+                        - *restore_npm
+                        - *install_npm_dependencies
+                        - *save_npm
+
+                        - *version_xcode
+                        - *location_xcode
 
                         - run:
-                                  name: Homebrew Install Zappifest
-                                  command: brew install zappifest
-
-                        - run:
-                                  name: Zappifest Version
-                                  command: zappifest -v
-
-                        - run:
-                                  name: CocoaPods - version
-                                  command: bundle exec pod --version
-
-                        - deploy:
-                                  name: Publish new or changed pliugins
+                                  name: Start Apple Unit Test
                                   command: node ./Scripts/publish_plugins.js
 
                         - store_test_results:
@@ -104,4 +171,16 @@ workflows:
         version: 2
         build:
                 jobs:
-                        - build
+                        - deploy_plugins:
+                                  filters:
+                                          branches:
+                                                  only: master
+                        - test_apple_plugins_to_deploy:
+                                  filters:
+                                          branches:
+                                                  ignore: master
+                        # Add it when will be impllemted android environment check
+                        # - test_android_plugins_to_deploy:
+                        #           filters:
+                        #                   branches:
+                        #                           ignore: master
