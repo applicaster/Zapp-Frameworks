@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "branch": "master"
+    "tag": "master"
   },
   "static_framework": true,
   "ios": {

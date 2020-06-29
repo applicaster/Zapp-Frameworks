@@ -12,17 +12,17 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "branch": "master"
+    "tag": "master"
   },
   "requires_arc": true,
   "static_framework": true,
   "swift_versions": "5.1",
-  "source_files": "Universal/**/*.swift",
+  "source_files": "universal/**/*.swift",
   "ios": {
-    "source_files": "iOS/**/*.swift"
+    "source_files": "ios/**/*.swift"
   },
   "tvos": {
-    "source_files": "tvOS/**/*.swift"
+    "source_files": "tvos/**/*.swift"
   },
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
@@ -37,9 +37,7 @@
       "test_type": "unit",
       "ios": {
         "source_files": "tests/iOS/**/*.{swift}",
-        "resources": [
-          "tests/iOS/**/*.{png}"
-        ]
+        "resources": ["tests/iOS/**/*.{png}"]
       },
       "tvos": {
         "source_files": "tests/iOS/**/Dummy.swift"

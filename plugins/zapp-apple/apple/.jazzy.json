@@ -8,7 +8,7 @@
   "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/ZappCore",
 
   "xcodebuild_arguments": ["-scheme", "ZappApple"],
-  "output": "../../docs/ZappApple",
+  "output": "../../../docs/ZappApple",
   "clean": true,
   "min_acl": "private",
   "sdk": ["iphone", "appletv"],
