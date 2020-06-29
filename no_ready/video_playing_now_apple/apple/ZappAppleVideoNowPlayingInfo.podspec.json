@@ -1,0 +1,43 @@
+{
+  "name": "ZappAppleVideoNowPlayingInfo",
+  "version": "0.1.7",
+  "summary": "ZappAppleVideoNowPlayingInfo",
+  "description": "ZappAppleVideoNowPlayingInfo container.",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "tag": "master"
+  },
+  "platforms": {
+    "tvos": "11.0",
+    "ios": "11.0"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "swift_versions": "5.1",
+  "frameworks": "AVKit",
+  "ios": {
+    "frameworks": "MediaPlayer",
+    "source_files": ["universal/**/*.swift", "ios/**/*.swift"]
+  },
+  "tvos": {
+    "source_files": ["universal/**/*.swift", "tvos/**/*.swift"]
+  },
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

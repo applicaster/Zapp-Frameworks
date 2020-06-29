@@ -1,0 +1,12 @@
+# Node modules
+node_modules
+
+# Logs
+*.log
+
+# Packages unpacked from NPM
+package
+*.tgz
+
+# OS files
+.DS_Store

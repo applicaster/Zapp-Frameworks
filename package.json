@@ -1,0 +1,49 @@
+{
+  "name": "appleframeworks",
+  "version": "1.0.0",
+  "description": "All Core Framework for Zapp Team",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "plugins",
+    "development-app"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare_app": "node_modules/.bin/zapplicaster-cli prepare --yarn -d ./development-app",
+    "reload": "node_modules/.bin/zapplicaster-cli reload_config --yarn -d ./development-app",
+    "reset_dev_app": "rm -rf ./development-app/* ./development-app/.babelrc",
+    "start": "node_modules/.bin/react-native start --projectRoot ./development-app",
+    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y",
+    "publish:plugin:canary": "node_modules/.bin/zapplicaster-cli publish_plugin -y --next --skip-git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/ApplicasterFrameworks.git"
+  },
+  "keywords": [
+    "frameworks"
+  ],
+  "author": "Applicaster",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/applicaster/ApplicasterFrameworks/issues"
+  },
+  "homepage": "https://github.com/applicaster/ApplicasterFrameworks#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "@applicaster/zapplicaster-cli": "4.1.0-alpha.57ebc4c4",
+    "ramda": "^0.27.0",
+    "react": "16.8.3",
+    "react-native": "0.59.10",
+    "plist": "3.0.1",
+    "ejs": "3.0.1",
+    "cli-task-runner": "^1.0.4",
+    "dotenv": "^8.1.0",
+    "semver": "7.1.1",
+    "moment": "2.24.0"
+  },
+  "devDependencies": {}
+}

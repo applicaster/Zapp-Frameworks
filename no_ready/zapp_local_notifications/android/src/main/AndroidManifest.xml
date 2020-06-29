@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.applicaster.rn.localnotification">
+
+    <application>
+        <receiver android:name="com.applicaster.localnotifications.implementation.LocalNotificationBroadcastReceiver" />
+        <receiver android:name="com.applicaster.localnotifications.implementation.LocalNotificationActionRouter" />
+
+    </application>
+</manifest>
