@@ -32,7 +32,7 @@ async function exec(command, options) {
   });
 }
 
-async function publishPlugin({ pluginFolder, newVersion }) {
+async function invokeAppleUnitTests({ pluginFolder, newVersion }) {
   try {
     const output = await exec(
       `yarn publish:plugin plugins/${pluginFolder} -v ${newVersion}`
@@ -43,9 +43,10 @@ async function publishPlugin({ pluginFolder, newVersion }) {
     throw e;
   }
 }
+
 async function run() {
   console.log("#--------------------#");
-  console.log("  Publishing plugins  ");
+  console.log("  Starting Unit Test for Apple  ");
   console.log("#--------------------#\n");
 
   try {
@@ -55,12 +56,6 @@ async function run() {
     const diffedPlugins = await retrieveDiffedPlugins();
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
 
-    console.log(`Plugins are published, pushing commits`);
-    await exec(
-      "git push origin ${CIRCLE_BRANCH} --quiet > /dev/null 2>&1" // eslint-disable-line
-    );
-
-    await createGitTags(diffedPlugins);
     return result;
   } catch (e) {
     console.log(
@@ -71,20 +66,4 @@ async function run() {
   }
 }
 
-async function createGitTags(diffedPlugins) {
-  const tagsToCreate = R.map(getNewTagName)(diffedPlugins);
-  for (const tag of tagsToCreate) {
-    await createTag(tag);
-  }
-}
-
-function getNewTagName({ pluginFolder, newVersion }) {
-  return `@${pluginFolder}/${newVersion}`;
-}
-
-async function createTag(newTagName) {
-  await exec(`git tag ${newVersion}`);
-
-  await exec(`git push origin ${newVersion}`);
-}
 run();
