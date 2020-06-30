@@ -136,7 +136,7 @@ async function retriveNewPluginData({ pluginFolder, latestSha }) {
   return { pluginFolder, newVersion };
 }
 
-export async function retrieveDiffedPlugins() {
+async function retrieveDiffedPlugins() {
   console.log("#--------------------#");
   console.log("  Retrieve diffed plugins ");
   console.log("#--------------------#\n");
@@ -170,16 +170,17 @@ export async function retrieveDiffedPlugins() {
     );
     const filtered = R.filter(isNotNil)(result);
 
-    console.log({ result, filtered });
-
-    return result;
+    return filtered;
   } catch (e) {
     console.log("An error occured to retrieve diffed items");
     console.error(e);
     process.exit(1);
   }
 }
-// async function run() {
-//     await retrieveDiffedPlugins()
-// }
-// run();
+
+module.exports = { retrieveDiffedPlugins };
+
+async function run() {
+  await retrieveDiffedPlugins();
+}
+run();

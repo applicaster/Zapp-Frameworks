@@ -9,11 +9,11 @@
 
 const {
   iosBuildUnitTests,
-} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/publishPlugin/iOSTasks");
+} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/src/commands/publishPlugin/iOSTasks");
 
 const {
   getIosModuleName,
-} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/publishPlugin/iOSTasks/helper");
+} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/src/commands/publishPlugin/iOSTasks/helper");
 
 const { resolve } = require("path");
 const rootPath = resolve(__dirname, "..");
@@ -44,10 +44,12 @@ async function exec(command, options) {
 }
 
 async function invokeAppleUnitTests({ pluginFolder }) {
-  let iosModuleName = await getIosModuleName(pluginFolder);
+  const pluginPath = `plugins/${pluginFolder}`;
+
+  let iosModuleName = await getIosModuleName({ pluginPath });
 
   try {
-    const output = iosBuildUnitTests({ iosModuleName });
+    const output = iosBuildUnitTests({ iosModuleName, pluginPath });
     return output;
   } catch (e) {
     throw e;
@@ -60,10 +62,8 @@ async function run() {
   console.log("#--------------------#\n");
 
   try {
-    await exec("git checkout -- .");
-    await exec("git clean -fd");
-
     const diffedPlugins = await retrieveDiffedPlugins();
+    console.log({ diffedPlugins });
     const result = await Promise.all(
       R.map(invokeAppleUnitTests)(diffedPlugins)
     );
@@ -71,7 +71,7 @@ async function run() {
     return result;
   } catch (e) {
     console.log(
-      "An error occured while publishing plugins, please check the error below"
+      "An error occured while start unit testing plugin, please check the error below"
     );
     console.error(e);
     process.exit(1);

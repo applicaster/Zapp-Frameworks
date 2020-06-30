@@ -6,7 +6,7 @@ parameters:
 
 references:
         defaults: &defaults
-                workspace_root: &workspace_root ~/Zapp-Frameworks
+                working_directory: ~/Zapp-Frameworks
                 shell: /bin/bash --login -eo pipefail
 
         #Hack general caching until circle does not support global env variables
@@ -178,9 +178,4 @@ workflows:
                         - test_apple_plugins_to_deploy:
                                   filters:
                                           branches:
-                                                  ignore: master
-                        # Add it when will be impllemted android environment check
-                        # - test_android_plugins_to_deploy:
-                        #           filters:
-                        #                   branches:
-                        #                           ignore: master
+                                                  only: master
