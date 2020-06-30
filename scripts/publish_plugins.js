@@ -83,8 +83,7 @@ function getNewTagName({ pluginFolder, newVersion }) {
 }
 
 async function createTag(newTagName) {
-  await exec(`git tag ${newVersion}`);
-
-  await exec(`git push origin ${newVersion}`);
+  await exec(`git tag ${newTagName}`);
+  await exec(`git push origin ${newTagName}`);
 }
 run();

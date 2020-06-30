@@ -1,14 +1,25 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
+// const {
+//   iosBuildUnitTests,
+// } = require("@applicaster/zapplicaster-cli/publishPlugin/iOSTasks");
+// const {
+//   getIosModuleName,
+// } = require("@applicaster/zapplicaster-cli/publishPlugin/iOSTasks/helper");
+
+const {
+  iosBuildUnitTests,
+} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/publishPlugin/iOSTasks");
+
+const {
+  getIosModuleName,
+} = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/publishPlugin/iOSTasks/helper");
 
 const { resolve } = require("path");
-
 const rootPath = resolve(__dirname, "..");
-
 const git = require("simple-git/promise")(rootPath);
 const shelljs = require("shelljs");
 const R = require("ramda");
-const semver = require("semver");
 
 const { retrieveDiffedPlugins } = require("./get_changed_plugins");
 
@@ -32,12 +43,11 @@ async function exec(command, options) {
   });
 }
 
-async function invokeAppleUnitTests({ pluginFolder, newVersion }) {
-  try {
-    const output = await exec(
-      `yarn publish:plugin plugins/${pluginFolder} -v ${newVersion}`
-    );
+async function invokeAppleUnitTests({ pluginFolder }) {
+  let iosModuleName = await getIosModuleName(pluginFolder);
 
+  try {
+    const output = iosBuildUnitTests({ iosModuleName });
     return output;
   } catch (e) {
     throw e;
@@ -54,7 +64,9 @@ async function run() {
     await exec("git clean -fd");
 
     const diffedPlugins = await retrieveDiffedPlugins();
-    const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
+    const result = await Promise.all(
+      R.map(invokeAppleUnitTests)(diffedPlugins)
+    );
 
     return result;
   } catch (e) {
