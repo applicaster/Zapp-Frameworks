@@ -133,8 +133,6 @@ jobs:
       xcode: "11.5.0"
     environment:
       HOMEBREW_NO_AUTO_UPDATE: "1"
-
-    working_directory: ~/AppleApplicasterFrameworks
     steps:
       - *prepare_caching_file
       - checkout
