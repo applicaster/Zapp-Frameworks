@@ -9,6 +9,6 @@
   "output": "../../../docs/ZappAppleGenericUniversalLinks",
   "clean": true,
   "min_acl": "private",
-  "sdk": ["iphone"],
+  "sdk": ["iphone", "appletv"],
   "theme": "jony"
 }
