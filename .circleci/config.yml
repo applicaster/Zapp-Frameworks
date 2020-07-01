@@ -1,181 +1,181 @@
 version: 2.1
 parameters:
-        general-caching-key:
-                type: string
-                default: "zapp_frameworks_cache_1.0.0"
+  general-caching-key:
+    type: string
+    default: "zapp_frameworks_cache_1.0.0"
 
 references:
-        defaults: &defaults
-                working_directory: ~/Zapp-Frameworks
-                shell: /bin/bash --login -eo pipefail
+  defaults: &defaults
+    working_directory: ~/Zapp-Frameworks
+    shell: /bin/bash --login -eo pipefail
 
-        #Hack general caching until circle does not support global env variables
-        prepare_caching_file: &prepare_caching_file
-                run: echo "<< pipeline.parameters.general-caching-key >>" > ~/_caching_file
+  #Hack general caching until circle does not support global env variables
+  prepare_caching_file: &prepare_caching_file
+    run: echo "<< pipeline.parameters.general-caching-key >>" > ~/_caching_file
 
-        set_ruby_version: &set_ruby_version
-                run:
-                        name: Set Ruby Version
-                        command: echo 'chruby ruby-2.5.8' >> ~/.bash_profile
+  set_ruby_version: &set_ruby_version
+    run:
+      name: Set Ruby Version
+      command: echo 'chruby ruby-2.5.8' >> ~/.bash_profile
 
-        install_node: &install_node
-                run:
-                        name: install node@12.0.0
-                        command: |
-                                set +e
-                                touch $BASH_ENV
-                                curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
-                                echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
-                                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-                                echo nvm install 12.0.0 >> $BASH_ENV
-                                echo nvm alias default 12.0.0 >> $BASH_ENV
+  install_node: &install_node
+    run:
+      name: install node@12.0.0
+      command: |
+        set +e
+        touch $BASH_ENV
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+        echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+        echo nvm install 12.0.0 >> $BASH_ENV
+        echo nvm alias default 12.0.0 >> $BASH_ENV
 
-        whitch_ruby: &whitch_ruby
-                run:
-                        name: Ruby - version
-                        command: ruby -v
+  whitch_ruby: &whitch_ruby
+    run:
+      name: Ruby - version
+      command: ruby -v
 
-        npm_login: &npm_login
-                run:
-                        name: NPM login
-                        command: npx npm-shell-login
+  npm_login: &npm_login
+    run:
+      name: NPM login
+      command: npx npm-shell-login
 
-        npm_cache_key: &npm_cache_key Yarn.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "yarn.lock" }}
+  npm_cache_key: &npm_cache_key Yarn.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "yarn.lock" }}
 
-        prepare_npm_cache_file: &prepare_npm_cache_file
-                run:
-                        name: "Prepare npm caching file: Copy yarn lock to main folder"
-                        command: yarn
+  prepare_npm_cache_file: &prepare_npm_cache_file
+    run:
+      name: "Prepare npm caching file: Copy yarn lock to main folder"
+      command: yarn
 
-        restore_npm: &restore_npm
-                restore_cache:
-                        name: Restore npm dependencies
-                        key: *npm_cache_key
+  restore_npm: &restore_npm
+    restore_cache:
+      name: Restore npm dependencies
+      key: *npm_cache_key
 
-        save_npm: &save_npm
-                save_cache:
-                        name: Saving NPM dependencies
-                        key: *npm_cache_key
-                        paths:
-                                - node_modules
+  save_npm: &save_npm
+    save_cache:
+      name: Saving NPM dependencies
+      key: *npm_cache_key
+      paths:
+        - node_modules
 
-        install_npm_dependencies: &install_npm_dependencies
-                run:
-                        name: Install NPM dependencies
-                        command: yarn
+  install_npm_dependencies: &install_npm_dependencies
+    run:
+      name: Install NPM dependencies
+      command: yarn
 
-        gems_cache_key: &gems_cache_key GEMS.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "Gemfile.lock" }}
-        restore_gems: &restore_gems
-                restore_cache:
-                        name: Bundler - restore cache
-                        key: *gems_cache_key
+  gems_cache_key: &gems_cache_key GEMS.1.0-{{ checksum "~/_caching_file" }}-{{ checksum "Gemfile.lock" }}
+  restore_gems: &restore_gems
+    restore_cache:
+      name: Bundler - restore cache
+      key: *gems_cache_key
 
-        gems_install: &gems_install
-                run:
-                        name: Bundler - install dependencies
-                        command: |
-                                gem install bundler
-                                bundle check --path=.bundle || bundle install --path=.bundle
+  gems_install: &gems_install
+    run:
+      name: Bundler - install dependencies
+      command: |
+        gem install bundler
+        bundle check --path=.bundle || bundle install --path=.bundle
 
-        save_gems: &save_gems
-                save_cache:
-                        name: Bundler - save cache
-                        key: *gems_cache_key
-                        paths:
-                                - .bundle
-                                - /Users/distiller/.rubies/ruby-2.4.2/lib/ruby/gems/2.4.0/gems
+  save_gems: &save_gems
+    save_cache:
+      name: Bundler - save cache
+      key: *gems_cache_key
+      paths:
+        - .bundle
+        - /Users/distiller/.rubies/ruby-2.4.2/lib/ruby/gems/2.4.0/gems
 
-        version_xcode: &version_xcode
-                run:
-                        name: Current Xcode version
-                        command: /usr/bin/xcodebuild -version
+  version_xcode: &version_xcode
+    run:
+      name: Current Xcode version
+      command: /usr/bin/xcodebuild -version
 
-        location_xcode: &location_xcode
-                run:
-                        name: Xcode installed location
-                        command: xcode-select -p
+  location_xcode: &location_xcode
+    run:
+      name: Xcode installed location
+      command: xcode-select -p
 
 jobs:
-        deploy_plugins:
-                <<: *defaults
-                docker:
-                        - image: applicaster/quick-brick:0.4.0
-                steps:
-                        - *prepare_caching_file
+  deploy_plugins:
+    <<: *defaults
+    docker:
+      - image: applicaster/quick-brick:0.4.0
+    steps:
+      - *prepare_caching_file
 
-                        - checkout
+      - checkout
 
-                        - run:
-                                  name: NPM Login
-                                  command: npx npm-shell-login
+      - run:
+          name: NPM Login
+          command: npx npm-shell-login
 
-                        - restore_cache:
-                                  keys:
-                                          - v1-npm-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "yarn.lock" }}
 
-                        - run:
-                                  name: Install npm dependencies
-                                  command: yarn
+      - run:
+          name: Install npm dependencies
+          command: yarn
 
-                        - save_cache:
-                                  key: v1-npm-{{  checksum "yarn.lock" }}
-                                  paths:
-                                          - .yarn
-                                          - node_modules
+      - save_cache:
+          key: v1-npm-{{  checksum "yarn.lock" }}
+          paths:
+            - .yarn
+            - node_modules
 
-                        - run:
-                                  name: Publishing plugins
-                                  command: node ./scripts/publish_plugins.js
+      - run:
+          name: Publishing plugins
+          command: node ./scripts/publish_plugins.js
 
-        apple_unit_tests:
-                <<: *defaults
-                macos:
-                        xcode: "11.5.0"
-                environment:
-                        HOMEBREW_NO_AUTO_UPDATE: "1"
+  apple_unit_tests:
+    <<: *defaults
+    macos:
+      xcode: "11.5.0"
+    environment:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
 
-                working_directory: ~/AppleApplicasterFrameworks
-                steps:
-                        - *prepare_caching_file
-                        - checkout
-                        - *set_ruby_version
-                        - *whitch_ruby
-                        - *install_node
-                        - *restore_gems
-                        - *gems_install
-                        - *save_gems
+    working_directory: ~/AppleApplicasterFrameworks
+    steps:
+      - *prepare_caching_file
+      - checkout
+      - *set_ruby_version
+      - *whitch_ruby
+      - *install_node
+      - *restore_gems
+      - *gems_install
+      - *save_gems
 
-                        - *npm_login
-                        - *restore_npm
-                        - *install_npm_dependencies
-                        - *save_npm
+      - *npm_login
+      - *restore_npm
+      - *install_npm_dependencies
+      - *save_npm
 
-                        - *version_xcode
-                        - *location_xcode
+      - *version_xcode
+      - *location_xcode
 
-                        - run:
-                                  name: Start Apple Unit Test
-                                  command: node ./Scripts/apple_unit_tests.js
+      - run:
+          name: Start Apple Unit Test
+          command: node ./Scripts/apple_unit_tests.js
 
-                        - store_test_results:
-                                  path: ./CircleArtifacts/test-results
+      - store_test_results:
+          path: ./CircleArtifacts/test-results
 
-                        - store_artifacts:
-                                  path: ./CircleArtifacts
+      # - store_artifacts:
+      #           path: ./CircleArtifacts
 
-                        - store_artifacts:
-                                  path: ~/Library/Logs/scan
-                                  destination: scan-logs
+      - store_artifacts:
+          path: ~/Library/Logs/scan
+          destination: scan-logs
 
 workflows:
-        version: 2
-        build:
-                jobs:
-                        - deploy_plugins:
-                                  filters:
-                                          branches:
-                                                  ignore: master
-                        - apple_unit_tests:
-                                  filters:
-                                          branches:
-                                                  only: master
+  version: 2
+  build:
+    jobs:
+      - deploy_plugins:
+          filters:
+            branches:
+              ignore: master
+      - apple_unit_tests:
+          filters:
+            branches:
+              only: master
