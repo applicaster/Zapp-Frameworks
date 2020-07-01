@@ -33,7 +33,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "@applicaster/zapplicaster-cli": "^3.0.0",
+    "@applicaster/zapplicaster-cli": "4.0.0-alpha.0a6dd335",
     "ramda": "^0.27.0",
     "react": "16.8.3",
     "react-native": "0.59.10",
