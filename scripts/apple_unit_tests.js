@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --login -eo pipefail
+
 /* eslint-disable no-console */
 const {
   iosBuildUnitTests,
