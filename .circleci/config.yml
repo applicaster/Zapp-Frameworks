@@ -157,15 +157,8 @@ jobs:
           name: Start Apple Unit Test
           command: node ./Scripts/apple_unit_tests.js
 
-      - store_test_results:
-          path: ./CircleArtifacts/test-results
-
-      # - store_artifacts:
-      #           path: ./CircleArtifacts
-
       - store_artifacts:
-          path: ~/Library/Logs/scan
-          destination: scan-logs
+          path: ~/Zapp-Frameworks/CircleArtifacts
 
 workflows:
   version: 2
