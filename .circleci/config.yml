@@ -138,7 +138,7 @@ jobs:
       - checkout
       # - *set_ruby_version
       # - *whitch_ruby
-      # - *install_node
+      - *install_node
       - *restore_gems
       - *gems_install
       - *save_gems
