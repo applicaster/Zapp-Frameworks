@@ -13,10 +13,10 @@ references:
   prepare_caching_file: &prepare_caching_file
     run: echo "<< pipeline.parameters.general-caching-key >>" > ~/_caching_file
 
-  # set_ruby_version: &set_ruby_version
-  #   run:
-  #     name: Set Ruby Version
-  #     command: echo 'chruby ruby-2.5.8' >> ~/.bash_profile
+  set_ruby_version: &set_ruby_version
+    run:
+      name: Set Ruby Version
+      command: echo 'chruby ruby-2.5.8' >> ~/.bash_profile
 
   install_node: &install_node
     run:
@@ -137,8 +137,8 @@ jobs:
       - *prepare_caching_file
       - checkout
       # - *set_ruby_version
-      - *whitch_ruby
-      - *install_node
+      # - *whitch_ruby
+      # - *install_node
       - *restore_gems
       - *gems_install
       - *save_gems
