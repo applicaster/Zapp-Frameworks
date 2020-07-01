@@ -74,7 +74,7 @@ references:
     run:
       name: Bundler - install dependencies
       command: |
-        gem install bundler
+
         bundle check --path=.bundle || bundle install --path=.bundle
 
   save_gems: &save_gems
