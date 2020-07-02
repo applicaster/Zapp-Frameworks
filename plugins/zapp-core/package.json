@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/applicaster/AppleApplicasterFrameworks"
   },
-  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks"
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks",
+  "applicaster": {}
 }
