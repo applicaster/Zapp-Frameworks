@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-core",
-  "version": "0.1.8-alpha.ac72be0",
+  "version": "0.1.9",
   "description": "Native iOS low level framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/applicaster/AppleApplicasterFrameworks"
   },
-  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks",
-  "applicaster": {
-    "skipPublishToZapp": true
-  }
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks"
 }
