@@ -127,36 +127,36 @@ jobs:
           name: Publishing plugins
           command: node ./scripts/publish_plugins.js
 
-    deploy_plugins_canary:
-      <<: *defaults
-      docker:
-        - image: applicaster/quick-brick:0.4.0
-      steps:
-        - *prepare_caching_file
+  deploy_plugins_canary:
+    <<: *defaults
+    docker:
+      - image: applicaster/quick-brick:0.4.0
+    steps:
+      - *prepare_caching_file
 
-        - checkout
+      - checkout
 
-        - run:
-            name: NPM Login
-            command: npx npm-shell-login
+      - run:
+          name: NPM Login
+          command: npx npm-shell-login
 
-        - restore_cache:
-            keys:
-              - v1-npm-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "yarn.lock" }}
 
-        - run:
-            name: Install npm dependencies
-            command: yarn
+      - run:
+          name: Install npm dependencies
+          command: yarn
 
-        - save_cache:
-            key: v1-npm-{{  checksum "yarn.lock" }}
-            paths:
-              - .yarn
-              - node_modules
+      - save_cache:
+          key: v1-npm-{{  checksum "yarn.lock" }}
+          paths:
+            - .yarn
+            - node_modules
 
-        - run:
-            name: Publishing canary plugins
-            command: node ./scripts/publish_plugins.js --canary
+      - run:
+          name: Publishing canary plugins
+          command: node ./scripts/publish_plugins.js --canary
 
   apple_unit_tests:
     <<: *defaults
