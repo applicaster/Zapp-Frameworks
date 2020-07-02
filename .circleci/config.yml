@@ -213,4 +213,4 @@ workflows:
             - hold_create_canary
           filters:
             branches:
-              only: master
+              ignore: master
