@@ -201,12 +201,6 @@ workflows:
           filters:
             branches:
               ignore: master
-      - deploy_plugins_canary:
-          requires:
-            - hold_create_canary
-          filters:
-            branches:
-              only: master
       - hold_create_canary:
           type: approval
           requires:
@@ -214,3 +208,9 @@ workflows:
           filters:
             branches:
               ignore: master
+      - deploy_plugins_canary:
+          requires:
+            - hold_create_canary
+          filters:
+            branches:
+              only: master
