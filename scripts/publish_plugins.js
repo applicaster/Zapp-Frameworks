@@ -31,12 +31,15 @@ async function exec(command, options) {
     );
   });
 }
-
-async function publishPlugin({ pluginFolder, newVersion }) {
+function isCanary() {
+  return process.argv[2] === "--canary";
+}
+async function publishPlugin({ pluginFolder, newVersion, latestSha }) {
+  const command = isCanary()
+    ? `yarn publish:plugin:canary plugins/${pluginFolder} -v ${newVersion}-alpha.${latestSha}`
+    : `yarn publish:plugin plugins/${pluginFolder} -v ${newVersion}`;
   try {
-    const output = await exec(
-      `yarn publish:plugin plugins/${pluginFolder} -v ${newVersion}`
-    );
+    const output = await exec(command);
 
     return output;
   } catch (e) {
@@ -48,19 +51,19 @@ async function run() {
   console.log("  Publishing plugins  ");
   console.log("#--------------------#\n");
 
+  console.log({ argv: process.argv });
   try {
     await exec("git checkout -- .");
     await exec("git clean -fd");
 
     const diffedPlugins = await retrieveDiffedPlugins();
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
+    console.log(`Plugins are published`);
 
-    console.log(`Plugins are published, pushing commits`);
-    await exec(
-      "git push origin ${CIRCLE_BRANCH} --quiet > /dev/null 2>&1" // eslint-disable-line
-    );
+    if (!isCanary()) {
+      await startGitTask(diffedPlugins);
+    }
 
-    await createGitTags(diffedPlugins);
     return result;
   } catch (e) {
     console.log(
@@ -71,6 +74,14 @@ async function run() {
   }
 }
 
+async function startGitTask(diffedPlugins) {
+  console.log(`Pushing commits`);
+  await exec(
+    "git push origin ${CIRCLE_BRANCH} --quiet > /dev/null 2>&1" // eslint-disable-line
+  );
+
+  await createGitTags(diffedPlugins);
+}
 async function createGitTags(diffedPlugins) {
   const tagsToCreate = R.map(getNewTagName)(diffedPlugins);
   for (const tag of tagsToCreate) {

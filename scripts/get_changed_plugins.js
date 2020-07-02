@@ -133,7 +133,7 @@ async function retriveNewPluginData({ pluginFolder, latestSha }) {
   const newVersion = semver.inc(currentVersion, release);
 
   console.log(`plugin to update ${pluginFolder} with ${newVersion}`);
-  return { pluginFolder, newVersion };
+  return { pluginFolder, newVersion, latestSha };
 }
 
 async function retrieveDiffedPlugins() {

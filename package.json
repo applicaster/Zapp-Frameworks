@@ -14,7 +14,8 @@
     "reload": "node_modules/.bin/zapplicaster-cli reload_config --yarn -d ./development-app",
     "reset_dev_app": "rm -rf ./development-app/* ./development-app/.babelrc",
     "start": "node_modules/.bin/react-native start --projectRoot ./development-app",
-    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y"
+    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y",
+    "publish:plugin:canary": "node_modules/.bin/zapplicaster-cli publish_plugin -y --next"
   },
   "repository": {
     "type": "git",
