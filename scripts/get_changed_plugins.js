@@ -131,9 +131,10 @@ async function retriveNewPluginData({ pluginFolder, latestSha }) {
   const release = major ? "major" : minor ? "minor" : "patch";
 
   const newVersion = semver.inc(currentVersion, release);
+  const lastPluginCommit = await getLatestVersionSha(`plugins/${pluginFolder}`);
 
   console.log(`plugin to update ${pluginFolder} with ${newVersion}`);
-  return { pluginFolder, newVersion, latestSha };
+  return { pluginFolder, newVersion, lastPluginCommit };
 }
 
 async function retrieveDiffedPlugins() {
