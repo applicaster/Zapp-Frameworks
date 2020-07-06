@@ -88,7 +88,6 @@ function hasPluginChanged(latestTagSha) {
       const lastPluginCommit = await getLatestVersionSha(
         `plugins/${pluginFolder}`
       );
-      console.log({ lastPluginCommit });
       const latestSha = lastPluginCommit || latestTagSha;
       const diffedPlugins = await getDiffedPlugins(latestSha);
 
@@ -125,7 +124,6 @@ async function retriveNewPluginData({ pluginFolder, latestSha }) {
   );
 
   const currentVersion = pluginPackageJson(pluginFolder).version;
-  console.log({ currentVersion, pluginFolder, latestSha });
   const lastCommits = R.compose(R.reject(R.isEmpty), R.split("\n"))(result);
 
   const minor = commitMessagesContains("feat")(lastCommits);
