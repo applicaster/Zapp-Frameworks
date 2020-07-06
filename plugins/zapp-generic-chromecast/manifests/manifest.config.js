@@ -1,3 +1,4 @@
+const npmDependency = "@applicaster/zapp-generic-chromecast";
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
@@ -21,19 +22,20 @@ const baseManifest = {
   custom_configuration_fields: [],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  identifier: "chromecast_qb",
 };
 
 function createManifest({ version, platform }) {
   const manifest = {
     ...baseManifest,
     platform,
-    dependency_name: identifier,
+    dependency_name: "npmDependency",
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: `@applicaster/zapp-generic-chromecast@${version}`,
+    npm_dependencies: `${npmDependency}@${version}`,
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
   };
@@ -49,8 +51,7 @@ const min_zapp_sdk = {
 };
 
 const extra_dependencies_apple = {
-  ZappChromecast:
-    ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'",
+  ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
 };
 const extra_dependencies = {
   ios: [extra_dependencies_apple],
@@ -60,14 +61,12 @@ const extra_dependencies = {
 };
 
 const api_apple = {
-  class_name: "LocalNotificationManager",
-  modules: ["ZappLocalNotifications"],
+  class_name: "ChromecastAdapter",
+  modules: ["ZappChromecast"],
 };
 const api_android = {
-  class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-  react_packages: [
-    "com.applicaster.localnotifications.reactnative.LocalNotificationPackage",
-  ],
+  class_name: "com.applicaster.chromecast.ChromeCastPlugin",
+  react_packages: ["com.reactnative.googlecast.GoogleCastPackage"],
 };
 const api = {
   ios: [api_apple],
@@ -90,8 +89,7 @@ const targets = {
 };
 
 const project_dependencies_android = {
-  "react-native-google-cast":
-    "./node_modules/@applicaster/zapp-generic-chromecast/android",
+  "react-native-google-cast": `./node_modules/${npmDependency}/android`,
 };
 const project_dependencies = {
   android: [project_dependencies_android],
