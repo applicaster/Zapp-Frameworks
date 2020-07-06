@@ -1,6 +1,5 @@
 const npmDependency = "@applicaster/zapp-generic-chromecast";
 const baseManifest = {
-  api: {},
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
@@ -19,8 +18,13 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-  custom_configuration_fields: [],
-  targets: ["mobile"],
+  custom_configuration_fields: [
+    {
+      type: "text",
+      key: "chromecast_app_id",
+      tooltip_text: "Chromecast application ID",
+    },
+  ],
   ui_frameworks: ["quickbrick"],
   identifier: "chromecast_qb",
 };
@@ -29,7 +33,7 @@ function createManifest({ version, platform }) {
   const manifest = {
     ...baseManifest,
     platform,
-    dependency_name: "npmDependency",
+    dependency_name: npmDependency,
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
@@ -74,12 +78,12 @@ const api = {
 const mobileTarget = ["mobile"];
 const tvTarget = ["tv"];
 const targets = {
-  ios: [mobileTarget],
-  ios_for_quickbrick: [mobileTarget],
-  tvos: [tvTarget],
-  tvos_for_quickbrick: [tvTarget],
-  android: [mobileTarget],
-  android_for_quickbrick: [mobileTarget],
+  ios: mobileTarget,
+  ios_for_quickbrick: mobileTarget,
+  tvos: tvTarget,
+  tvos_for_quickbrick: tvTarget,
+  android: mobileTarget,
+  android_for_quickbrick: mobileTarget,
 };
 
 module.exports = createManifest;
