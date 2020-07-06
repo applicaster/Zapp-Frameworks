@@ -66,9 +66,9 @@ async function run() {
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
     console.log(`Plugins are published`);
 
-    if (!isCanary()) {
-      await startGitTask(diffedPlugins);
-    }
+    // if (!isCanary()) {
+    //   await startGitTask(diffedPlugins);
+    // }
 
     return result;
   } catch (e) {
