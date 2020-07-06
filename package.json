@@ -14,7 +14,8 @@
     "reload": "node_modules/.bin/zapplicaster-cli reload_config --yarn -d ./development-app",
     "reset_dev_app": "rm -rf ./development-app/* ./development-app/.babelrc",
     "start": "node_modules/.bin/react-native start --projectRoot ./development-app",
-    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y"
+    "publish:plugin": "node_modules/.bin/zapplicaster-cli publish_plugin -y",
+    "publish:plugin:canary": "node_modules/.bin/zapplicaster-cli publish_plugin -y --next --skip-git"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "@applicaster/zapplicaster-cli": "4.0.0-alpha.166e57cf",
+    "@applicaster/zapplicaster-cli": "4.1.0-alpha.57ebc4c4",
     "ramda": "^0.27.0",
     "react": "16.8.3",
     "react-native": "0.59.10",
