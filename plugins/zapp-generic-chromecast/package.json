@@ -37,7 +37,6 @@
     "react-native": "0.59.10"
   },
   "applicaster": {
-    "isPlugin": true,
     "supportedPlatforms": [
       "ios_for_quickbrick",
       "android_for_quickbrick",
