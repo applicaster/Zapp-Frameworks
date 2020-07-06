@@ -51,9 +51,12 @@ async function getLastCommit() {
 
 async function getLatestVersionSha(pluginPath) {
   const commitMessage = getCommitMessage(pluginPath);
+
   const result = await exec(
     `git log --grep="${commitMessage}" --pretty=tformat:%h | cat`
   );
+
+  console.log({ pluginPath, commitMessage, result });
 
   return R.replace("\n", "", result);
 }
@@ -85,7 +88,7 @@ function hasPluginChanged(latestTagSha) {
       const lastPluginCommit = await getLatestVersionSha(
         `plugins/${pluginFolder}`
       );
-
+      console.log({ lastPluginCommit });
       const latestSha = lastPluginCommit || latestTagSha;
       const diffedPlugins = await getDiffedPlugins(latestSha);
 
@@ -134,7 +137,7 @@ async function retriveNewPluginData({ pluginFolder, latestSha }) {
   const lastPluginCommit = await getLatestVersionSha(`plugins/${pluginFolder}`);
 
   console.log(`plugin to update ${pluginFolder} with ${newVersion}`);
-  return { pluginFolder, newVersion, lastPluginCommit };
+  return { pluginFolder, newVersion };
 }
 
 async function retrieveDiffedPlugins() {

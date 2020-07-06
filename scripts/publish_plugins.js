@@ -34,10 +34,15 @@ async function exec(command, options) {
 function isCanary() {
   return process.argv[2] === "--canary";
 }
-async function publishPlugin({ pluginFolder, newVersion, latestSha }) {
+async function publishPlugin({ pluginFolder, newVersion }) {
+  const pluginPath = `plugins/${pluginFolder}`;
+  const latestCommitSha = await exec(
+    `git log -n 1 --pretty=format:%h "${pluginPath}"`
+  );
+  console.log({ newCanary: `${newVersion}-alpha.${latestCommitSha}` });
   const command = isCanary()
-    ? `yarn publish:plugin:canary plugins/${pluginFolder} -v ${newVersion}-alpha.${latestSha}`
-    : `yarn publish:plugin plugins/${pluginFolder} -v ${newVersion}`;
+    ? `yarn publish:plugin:canary ${pluginPath} -v ${newVersion}-alpha.${latestCommitSha}`
+    : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
   try {
     const output = await exec(command);
 
@@ -53,8 +58,8 @@ async function run() {
 
   console.log({ argv: process.argv });
   try {
-    await exec("git checkout -- .");
-    await exec("git clean -fd");
+    // await exec("git checkout -- .");
+    // await exec("git clean -fd");
 
     const diffedPlugins = await retrieveDiffedPlugins();
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
