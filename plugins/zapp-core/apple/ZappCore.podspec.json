@@ -1,7 +1,7 @@
 {
   "name": "ZappCore",
   "version": "0.9.16",
-  "summary": "General Applicaster iOS and tvOS framework that provides protocol",
+  "summary": "General Applicaster iOS and tvOS framework that provides protocol.",
   "platforms": {
     "ios": "10.0",
     "tvos": "10.0"
