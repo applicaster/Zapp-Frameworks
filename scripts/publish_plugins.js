@@ -36,6 +36,7 @@ function isCanary() {
 }
 async function publishPlugin({ pluginFolder, newVersion }) {
   const pluginPath = `plugins/${pluginFolder}`;
+  console.log({ pluginPath });
   const latestCommitSha = await exec(
     `git log -n 1 --pretty=format:%h "${pluginPath}"`
   );
