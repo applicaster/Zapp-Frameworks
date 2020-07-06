@@ -70,7 +70,7 @@ async function run() {
     console.log(`Plugins are published`);
 
     if (!isCanary()) {
-      await createGitTags(diffedPlugins);
+      await startGitTask(diffedPlugins);
     }
 
     return result;
@@ -81,6 +81,15 @@ async function run() {
     console.error(e);
     process.exit(1);
   }
+}
+
+async function startGitTask(diffedPlugins) {
+  console.log(`Pushing commits`);
+  await exec(
+    "git push origin ${CIRCLE_BRANCH} --quiet > /dev/null 2>&1" // eslint-disable-line
+  );
+
+  await createGitTags(diffedPlugins);
 }
 
 async function createGitTags(diffedPlugins) {
