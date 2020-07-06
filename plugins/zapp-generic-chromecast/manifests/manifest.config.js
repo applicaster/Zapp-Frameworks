@@ -59,14 +59,6 @@ const extra_dependencies = {
   tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
-const project_dependencies_android = {
-  ZappChromecast: "node_modules/@applicaster/zapp-generic-chromecast/Android",
-};
-const project_dependencies = {
-  android: [project_dependencies_android],
-  android_for_quickbrick: [project_dependencies_android],
-};
-
 const api_apple = {
   class_name: "LocalNotificationManager",
   modules: ["ZappLocalNotifications"],
@@ -99,7 +91,7 @@ const targets = {
 
 const project_dependencies_android = {
   "react-native-google-cast":
-    "./node_modules/@applicaster/zapp-generic-chromecast/android/",
+    "./node_modules/@applicaster/zapp-generic-chromecast/android",
 };
 const project_dependencies = {
   android: [project_dependencies_android],
