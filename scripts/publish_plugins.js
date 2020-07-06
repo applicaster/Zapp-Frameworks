@@ -84,8 +84,9 @@ async function run() {
 }
 
 async function createGitTags(diffedPlugins) {
-  const tagsToCreate = R.map(getNewTagName)(diffedPlugins);
-  for (const tag of tagsToCreate) {
+  console.log({ diffedPlugins });
+  for (const plugin of diffedPlugins) {
+    const tag = await getNewTagName(plugin);
     await createTag(tag);
   }
 }
@@ -99,6 +100,7 @@ async function getNewTagName({ pluginFolder, newVersion }) {
 }
 
 async function createTag(newTagName) {
+  console.log("createTag", newTagName);
   await exec(`git tag ${newTagName}`);
   await exec(`git push origin ${newTagName}`);
 }
