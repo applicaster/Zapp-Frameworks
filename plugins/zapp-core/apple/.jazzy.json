@@ -1,16 +1,21 @@
 {
   "module": "ZappCore",
-  "module_version": "0.9.16",
-
+  "module_version": "0.13.0",
   "author": "Applicaster ltd.",
   "copyright": "© 2019 [Applicaster ltd.](https://www.applicaster.com) under [Appache 2.0](https://github.com/applicaster/AppleApplicasterFrameworks/blob/master/LICENSE).",
   "author_url": "https://www.applicaster.com",
   "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/ZappCore",
-  "xcodebuild_arguments": ["-scheme", "ZappCore"],
+  "xcodebuild_arguments": [
+    "-scheme",
+    "ZappCore"
+  ],
   "output": "../../../docs/ZappCore",
   "clean": true,
   "min_acl": "public",
-  "sdk": ["iphone", "appletv"],
+  "sdk": [
+    "iphone",
+    "appletv"
+  ],
   "theme": "jony",
   "custom_categories": [
     {
@@ -54,11 +59,17 @@
     },
     {
       "name": "Plugin Type: Player",
-      "children": ["PlayerProtocol", "PlayerObserverProtocol"]
+      "children": [
+        "PlayerProtocol",
+        "PlayerObserverProtocol"
+      ]
     },
     {
       "name": "Plugin Type: Analytics",
-      "children": ["AnalyticsProviderProtocol", "APTimedEvent"]
+      "children": [
+        "AnalyticsProviderProtocol",
+        "APTimedEvent"
+      ]
     },
     {
       "name": "Plugin Type: Player Dependant",
@@ -70,7 +81,9 @@
     },
     {
       "name": "Plugin Type: Crashlogs",
-      "children": ["CrashlogsPluginProtocol"]
+      "children": [
+        "CrashlogsPluginProtocol"
+      ]
     }
   ]
 }
