@@ -67,12 +67,12 @@ const api_android = {
   react_packages: ["com.reactnative.googlecast.GoogleCastPackage"],
 };
 const api = {
-  ios: [api_apple],
-  ios_for_quickbrick: [api_apple],
-  tvos: [api_apple],
-  tvos_for_quickbrick: [api_apple],
-  android: [api_android],
-  android_for_quickbrick: [api_android],
+  ios: api_apple,
+  ios_for_quickbrick: api_apple,
+  tvos: api_apple,
+  tvos_for_quickbrick: api_apple,
+  android: api_android,
+  android_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
