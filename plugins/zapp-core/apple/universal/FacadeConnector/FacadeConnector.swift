@@ -50,6 +50,10 @@ import UIKit
         return connectorProvider as? FacadeConnectorChromecastProtocol
     }
     
+    @objc public var audioSession: FacadeConnectorAudioSessionProtocol? {
+        return connectorProvider as? FacadeConnectorAudioSessionProtocol
+    }
+    
     
     let connectorProvider: NSObject
 
