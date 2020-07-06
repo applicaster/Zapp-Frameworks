@@ -33,10 +33,14 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
-    extra_dependencies: extra_dependencies[platform],
+    extra_dependencies: {
+      ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
+    },
     api: api[platform],
     npm_dependencies: `${npmDependency}@${version}`,
-    project_dependencies: project_dependencies[platform],
+    project_dependencies: {
+      "react-native-google-cast": `./node_modules/${npmDependency}/android`,
+    },
     targets: targets[platform],
   };
   return manifest;
@@ -48,16 +52,6 @@ const min_zapp_sdk = {
   tvos_for_quickbrick: "0.1.0-alpha1",
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
-};
-
-const extra_dependencies_apple = {
-  ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
-};
-const extra_dependencies = {
-  ios: [extra_dependencies_apple],
-  ios_for_quickbrick: [extra_dependencies_apple],
-  tvos: [extra_dependencies_apple],
-  tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
 const api_apple = {
@@ -86,14 +80,6 @@ const targets = {
   tvos_for_quickbrick: [tvTarget],
   android: [mobileTarget],
   android_for_quickbrick: [mobileTarget],
-};
-
-const project_dependencies_android = {
-  "react-native-google-cast": `./node_modules/${npmDependency}/android`,
-};
-const project_dependencies = {
-  android: [project_dependencies_android],
-  android_for_quickbrick: [project_dependencies_android],
 };
 
 module.exports = createManifest;
