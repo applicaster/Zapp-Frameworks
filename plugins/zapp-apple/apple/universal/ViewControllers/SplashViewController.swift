@@ -14,7 +14,8 @@ class SplashViewController: UIViewController {
     typealias LoadingCompletion = () -> Void
     open lazy var playerViewController = AVPlayerViewController()
     private var loadingCompletion: LoadingCompletion?
-
+    private var rootViewController: RootController?
+    
     @IBOutlet open var imageView: UIImageView!
     @IBOutlet open var loadingView: UIActivityIndicatorView!
     @IBOutlet open var playerContainer: UIView!
@@ -44,7 +45,7 @@ class SplashViewController: UIViewController {
         prepareController()
     }
 
-    func startAppLoading(completion: @escaping LoadingCompletion) {
+    func startAppLoading(rootViewController: RootController, completion: @escaping LoadingCompletion) {
         loadingView?.color = StylesHelper.color(forKey: CoreStylesKeys.loadingSpinnerColor)
         StylesHelper.updateLabel(forKey: CoreStylesKeys.loadingErrorLabel,
                                  label: errorLabel)
@@ -52,8 +53,10 @@ class SplashViewController: UIViewController {
 
         loadingView?.stopAnimating()
         loadingCompletion = completion
-
+        self.rootViewController = rootViewController
+        
         if let player = playerViewController.player {
+            rootViewController.facadeConnector.audioSession?.enablePlaybackCategoryIfNeededToMuteBackgroundAudio(forItem: player.currentItem)
             player.play()
         } else {
             loadingView?.startAnimating()
@@ -67,6 +70,7 @@ class SplashViewController: UIViewController {
             playerContainer.subviews.count == 0 {
             playerViewController.view.backgroundColor = UIColor.clear
             playerViewController.player = AVPlayer(url: url)
+            playerViewController.player?.pause()
             playerViewController.showsPlaybackControls = false
             addChildViewController(childController: playerViewController,
                                    to: playerContainer)
@@ -143,15 +147,19 @@ class SplashViewController: UIViewController {
 
 extension SplashViewController {
     @objc func playerDidFinishPlaying(_ note: Notification) {
+        rootViewController?.facadeConnector.audioSession?.notifyBackgroundAudioToContinuePlaying()
+        playerViewController.player?.replaceCurrentItem(with: nil)
         playerDidFinishTask()
     }
 
     @objc func willEnterForeground(_ notification: Notification) {
+        rootViewController?.facadeConnector.audioSession?.enablePlaybackCategoryIfNeededToMuteBackgroundAudio(forItem: playerViewController.player?.currentItem)
         playerViewController.player?.play()
     }
 
     @objc func didEnterBackground(_ notification: Notification) {
         if playerViewController.player?.isPlaying == true {
+            rootViewController?.facadeConnector.audioSession?.disableAudioSession()
             playerViewController.player?.pause()
         }
     }

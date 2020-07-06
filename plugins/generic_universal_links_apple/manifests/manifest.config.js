@@ -37,23 +37,24 @@ function createManifest({ identifier, version, platform, appleFrameworkName }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: updateParams({identifier, appleFrameworkName}, extra_dependencies[platform]),
     api: api[platform],
-    npm_dependencies: updateParams({identifier, version}, npm_dependencies[platform])
+    npm_dependencies: updateParams({identifier, version}, npm_dependencies[platform]),
+    targets: targets[platform]
   };
   return manifest;
 }
 const min_zapp_sdk = {
-  ios: "20.0.0-Dev",
-  ios_for_quickbrick: "0.1.0-alpha1"
+  ios_for_quickbrick: "0.1.0-alpha1",
+  tvos_for_quickbrick: "0.1.0-alpha1"
 };
 
 const extra_dependencies_apple = {
   "##appleFrameworkName##": ":path => './node_modules/@applicaster/##identifier##/##appleFrameworkName##.podspec'"
 };
 const extra_dependencies = {
-  ios: [
+  ios_for_quickbrick: [
     extra_dependencies_apple
   ],
-  ios_for_quickbrick: [
+  tvos_for_quickbrick: [
     extra_dependencies_apple
   ]
 };
@@ -69,13 +70,7 @@ const api_apple = {
 };
 
 const api = {
-  ios: [
-    api_apple,
-  ],
   ios_for_quickbrick: [
-    api_apple
-  ],
-  tvos: [
     api_apple
   ],
   tvos_for_quickbrick: [
@@ -87,17 +82,22 @@ const npm_dependencies_apple = {
   "@applicaster/##identifier##@##version##"
 };
 const npm_dependencies = {
-  ios: [
-    npm_dependencies_apple
-  ],
   ios_for_quickbrick: [
-    npm_dependencies_apple
-  ],
-  tvos: [
     npm_dependencies_apple
   ],
   tvos_for_quickbrick: [
     npm_dependencies_apple
+  ]
+};
+
+const mobileTarget = ["mobile"]
+const tvTarget = ["tv"]
+const targets = {
+  ios_for_quickbrick: [
+    mobileTarget
+  ],
+  tvos_for_quickbrick: [
+    tvTarget
   ]
 };
 
