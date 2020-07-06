@@ -1,5 +1,8 @@
 const npmDependency = "@applicaster/zapp-generic-chromecast";
 const baseManifest = {
+  general: {},
+  data: {},
+  styles: {},
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
@@ -37,14 +40,18 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
-    extra_dependencies: {
-      ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
-    },
+    extra_dependencies: [
+      {
+        ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
+      },
+    ],
     api: api[platform],
     npm_dependencies: `${npmDependency}@${version}`,
-    project_dependencies: {
-      "react-native-google-cast": `./node_modules/${npmDependency}/android`,
-    },
+    project_dependencies: [
+      {
+        "react-native-google-cast": `./node_modules/${npmDependency}/android`,
+      },
+    ],
     targets: targets[platform],
   };
   return manifest;
