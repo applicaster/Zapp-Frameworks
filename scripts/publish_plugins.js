@@ -66,9 +66,9 @@ async function run() {
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
     console.log(`Plugins are published`);
 
-    // if (!isCanary()) {
-    //   await startGitTask(diffedPlugins);
-    // }
+    if (!isCanary()) {
+      await createGitTags(diffedPlugins);
+    }
 
     return result;
   } catch (e) {
@@ -80,14 +80,6 @@ async function run() {
   }
 }
 
-async function startGitTask(diffedPlugins) {
-  console.log(`Pushing commits`);
-  await exec(
-    "git push origin ${CIRCLE_BRANCH} --quiet > /dev/null 2>&1" // eslint-disable-line
-  );
-
-  await createGitTags(diffedPlugins);
-}
 async function createGitTags(diffedPlugins) {
   const tagsToCreate = R.map(getNewTagName)(diffedPlugins);
   for (const tag of tagsToCreate) {
