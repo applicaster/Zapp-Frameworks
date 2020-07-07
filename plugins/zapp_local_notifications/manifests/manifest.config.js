@@ -1,5 +1,3 @@
-const { updateVersion } = require("./../../Scripts/manifestHelpers.js");
-
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
