@@ -83,18 +83,21 @@ async function canaryVersion({ pluginName, newVersion }) {
   return `${newVersion}-alpha.0`;
 }
 
+async function publishAllPlugins(diffedPlugins) {
+  for (const plugin of diffedPlugins) {
+    const result = await publishPlugin(plugin);
+    console.log({ result });
+  }
+}
+
 async function run() {
   console.log("#--------------------#");
   console.log("  Publishing plugins  ");
   console.log("#--------------------#\n");
   try {
-    if (!isCanary) {
-      await exec("git checkout -- .");
-      await exec("git clean -fd");
-    }
     const diffedPlugins = await retrieveDiffedPlugins();
-    const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
-    console.log(`Plugins are published`, result);
+    await publishAllPlugins(diffedPlugins);
+    console.log(`Plugins are published`);
     if (!isCanary()) {
       await startGitTask(diffedPlugins);
     }
