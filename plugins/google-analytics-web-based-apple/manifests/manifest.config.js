@@ -14,7 +14,19 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  custom_configuration_fields: [],
+  custom_configuration_fields: [
+    {
+      type: "text",
+      key: "tracker_id",
+      tooltip_text: "Tracker ID",
+    },
+    {
+      type: "checkbox",
+      key: "screen_views_enabled",
+      tooltip_text: "Enable Screen Views",
+      default: 0,
+    },
+  ],
   npm_dependencies: [],
   identifier: "zapp_google_analytics",
   targets: ["mobile"],
@@ -28,7 +40,9 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: `[@applicaster/google-analytics-web-based-apple@${version}]`,
+    npm_dependencies: [
+      `@applicaster/google-analytics-web-based-apple@${version}`,
+    ],
     targets: targets[platform],
   };
   return manifest;

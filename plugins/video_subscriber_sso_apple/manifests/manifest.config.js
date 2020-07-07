@@ -7,7 +7,8 @@ const baseManifest = {
   name: "Apple Video Subscriber SSO",
   description: "Apple Video Subscriber SSO",
   type: "general",
-  screen: false,
+  screen: true,
+  preload: true,
   react_native: true,
   ui_builder_support: true,
   whitelisted_account_ids: [

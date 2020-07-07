@@ -17,10 +17,41 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  custom_configuration_fields: [],
   npm_dependencies: [],
   identifier: "zapp_google_interactive_media_ads",
   targets: ["mobile"],
+  custom_configuration_fields: [
+    {
+      type: "text",
+      key: "tag_vmap_url",
+      tooltip_text: "VMAP URL",
+      default: "",
+    },
+    {
+      type: "text",
+      key: "tag_preroll_url",
+      tooltip_text: "Preroll URL",
+      default: "",
+    },
+    {
+      type: "text",
+      key: "tag_postroll_url",
+      tooltip_text: "Postroll URL",
+      default: "",
+    },
+    {
+      type: "text",
+      key: "tag_midroll_url",
+      tooltip_text: "Midroll URL",
+      default: "",
+    },
+    {
+      type: "text",
+      key: "midroll_offset",
+      tooltip_text: "Midroll offset",
+      default: "",
+    },
+  ],
 };
 
 function createManifest({ version, platform }) {
