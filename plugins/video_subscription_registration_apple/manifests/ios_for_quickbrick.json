@@ -2,7 +2,7 @@
   "dependency_repository_url": [],
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "Apple Video Subscription Registration",
+  "name": "Apple Video Subscription Registration.",
   "description": "Apple Video Subscription Registration",
   "type": "general",
   "identifier": "video_subscription_registration_apple",
@@ -25,11 +25,11 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.3.0",
   "min_zapp_sdk": "0.1.0-alpha1",
   "extra_dependencies": [
     {
-      "ZappAppleVideoSubscriptionRegistration": ":path => './node_modules/@applicaster/video_subscription_registration_apple/ZappAppleVideoSubscriptionRegistration.podspec'"
+      "ZappAppleVideoSubscriptionRegistration": ":path => './node_modules/@applicaster/video_subscription_registration_apple/apple/ZappAppleVideoSubscriptionRegistration.podspec'"
     }
   ],
   "api": {
@@ -46,7 +46,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.2.0"
+    "@applicaster/video_subscription_registration_apple@0.3.0"
   ],
   "targets": [
     "mobile"
