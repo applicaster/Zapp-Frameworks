@@ -35,20 +35,19 @@ function isCanary() {
 }
 
 async function publishPlugin({ pluginFolder, newVersion }) {
+  const canaryRequested = isCanary();
   const packageJson = await getPackageJson({ pluginFolder });
   const pluginName = packageJson.name;
 
   const pluginPath = `plugins/${pluginFolder}`;
   console.log({ pluginPath });
-  const latestCommitSha = await exec(
-    `git log -n 1 --pretty=format:%h "${pluginPath}"`
-  );
+
   const newCanaryVersion = await canaryVersion({ pluginName, newVersion });
-  if (isCanary) {
-    console.log("Publishing new canary version", { newCanaryVersion });
+  if (canaryRequested) {
+    console.log({ newCanaryVersion });
   }
 
-  const command = isCanary()
+  const command = canaryRequested
     ? `yarn publish:plugin:canary ${pluginPath} -v ${newCanaryVersion}`
     : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
   try {
