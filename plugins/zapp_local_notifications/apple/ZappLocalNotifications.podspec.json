@@ -1,6 +1,6 @@
 {
   "name": "ZappLocalNotifications",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "platforms": {
     "ios": "11.0",
     "tvos": "11.0"
@@ -12,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "master"
+    "tag": "@@applicaster/zapp_local_notifications/0.2.0"
   },
   "requires_arc": true,
   "static_framework": true,
@@ -37,7 +37,9 @@
       "test_type": "unit",
       "ios": {
         "source_files": "tests/iOS/**/*.{swift}",
-        "resources": ["tests/iOS/**/*.{png}"]
+        "resources": [
+          "tests/iOS/**/*.{png}"
+        ]
       },
       "tvos": {
         "source_files": "tests/iOS/**/Dummy.swift"

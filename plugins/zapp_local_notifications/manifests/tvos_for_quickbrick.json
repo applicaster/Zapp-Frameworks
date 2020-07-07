@@ -1,0 +1,42 @@
+{
+  "api": {
+    "class_name": "LocalNotificationManager",
+    "modules": [
+      "ZappLocalNotifications"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Generic Local Notifications",
+  "description": "Generic Local Notifications",
+  "type": "general",
+  "screen": false,
+  "react_native": false,
+  "identifier": "generic_local_notifications",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "5e39259919785a0008225336"
+  ],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "tvos_for_quickbrick",
+  "manifest_version": "0.2.0",
+  "extra_dependencies": [
+    {
+      "ZappLocalNotifications": ":path => './node_modules/@applicaster/zapp_local_notifications/ZappLocalNotifications.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp_local_notifications@0.2.0"
+  ]
+}

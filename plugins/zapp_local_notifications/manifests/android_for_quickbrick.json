@@ -1,0 +1,42 @@
+{
+  "api": {
+    "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
+    "react_packages": [
+      "com.applicaster.localnotifications.reactnative.LocalNotificationPackage"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Generic Local Notifications",
+  "description": "Generic Local Notifications",
+  "type": "general",
+  "screen": false,
+  "react_native": false,
+  "identifier": "generic_local_notifications",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "5e39259919785a0008225336"
+  ],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "0.2.0",
+  "npm_dependencies": [
+    "@applicaster/zapp_local_notifications@0.2.0"
+  ],
+  "project_dependencies": [
+    {
+      "generic_local_notifications": "node_modules/@applicaster/zapp_local_notifications/Android"
+    }
+  ]
+}
