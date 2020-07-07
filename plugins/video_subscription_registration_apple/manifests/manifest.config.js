@@ -34,7 +34,9 @@ function createManifest({ identifier, version, platform, appleFrameworkName }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: `@applicaster/video_subscription_registration_apple@${version}`,
+    npm_dependencies: [
+      `@applicaster/video_subscription_registration_apple@${version}`,
+    ],
     targets: targets[platform],
   };
   return manifest;
