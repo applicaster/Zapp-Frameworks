@@ -1,6 +1,6 @@
 {
   "name": "ZappGoogleAnalytics",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "summary": "ZappGoogleAnalytics",
   "swift_versions": "5.1",
   "description": "ZappAnalyticsPluginGAtvOS container.",
@@ -11,7 +11,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "master"
+    "tag": "@@applicaster/google-analytics-web-based-apple/0.8.0"
   },
   "platforms": {
     "tvos": "10.0",
@@ -22,7 +22,9 @@
   },
   "requires_arc": true,
   "static_framework": true,
-  "source_files": ["universal/**/*.{swift}"],
+  "source_files": [
+    "universal/**/*.{swift}"
+  ],
   "resources": [
     "universal/CustomDimensionMapping/CustomDimensionMapping.plist"
   ],
