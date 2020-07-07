@@ -26,11 +26,10 @@ const baseManifest = {
   ],
 };
 
-function createManifest({ identifier, version, platform, appleFrameworkName }) {
+function createManifest({ version, platform }) {
   const manifest = {
     ...baseManifest,
     platform,
-    identifier,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
