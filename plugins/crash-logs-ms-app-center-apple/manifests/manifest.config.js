@@ -28,7 +28,9 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: `@applicaster/crash-logs-ms-app-center-apple@${version}`,
+    npm_dependencies: [
+      `@applicaster/crash-logs-ms-app-center-apple@${version}`,
+    ],
     targets: targets[platform],
   };
   return manifest;
