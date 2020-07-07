@@ -50,7 +50,7 @@ async function publishPlugin({ pluginFolder, newVersion }) {
     : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
   try {
     const output = await exec(command);
-
+    console.log({ output });
     return output;
   } catch (e) {
     throw e;
