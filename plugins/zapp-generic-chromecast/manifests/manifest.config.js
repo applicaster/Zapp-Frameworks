@@ -40,18 +40,10 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
-    extra_dependencies: [
-      {
-        ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
-      },
-    ],
     api: api[platform],
-    npm_dependencies: `${npmDependency}@${version}`,
-    project_dependencies: [
-      {
-        "react-native-google-cast": `./node_modules/${npmDependency}/android`,
-      },
-    ],
+    extra_dependencies: extra_dependencies[platform],
+    npm_dependencies: [`${npmDependency}@${version}`],
+    project_dependencies: project_dependencies[platform],
     targets: targets[platform],
   };
   return manifest;
@@ -70,8 +62,10 @@ const api_apple = {
   modules: ["ZappChromecast"],
 };
 const api_android = {
+  require_startup_execution: false,
   class_name: "com.applicaster.chromecast.ChromeCastPlugin",
   react_packages: ["com.reactnative.googlecast.GoogleCastPackage"],
+  proguard_rules: "-keep public class com.reactnative.googlecast.** {*;}",
 };
 const api = {
   ios: api_apple,
@@ -80,6 +74,37 @@ const api = {
   tvos_for_quickbrick: api_apple,
   android: api_android,
   android_for_quickbrick: api_android,
+};
+
+const project_dependencies_android = [
+  {
+    "react-native-google-cast":
+      "./node_modules/@applicaster/zapp-generic-chromecast/android/",
+  },
+];
+
+const project_dependencies = {
+  android: project_dependencies_android,
+  android_for_quickbrick: project_dependencies_android,
+  ios: [],
+  ios_for_quickbrick: [],
+  tvos: [],
+  tvos_for_quickbrick: [],
+};
+
+const extra_dependencies_apple = [
+  {
+    ZappChromecast: `:path => './node_modules/${npmDependency}/apple/ZappChromecast.podspec'`,
+  },
+];
+
+const extra_dependencies = {
+  android: [],
+  android_for_quickbrick: [],
+  ios: extra_dependencies_apple,
+  ios_for_quickbrick: extra_dependencies_apple,
+  tvos: [],
+  tvos_for_quickbrick: [],
 };
 
 const mobileTarget = ["mobile"];
