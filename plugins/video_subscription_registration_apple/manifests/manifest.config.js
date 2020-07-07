@@ -50,7 +50,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = {
   ZappAppleVideoSubscriptionRegistration:
-    ":path => './node_modules/@applicaster/video_subscription_registration_apple/ZappAppleVideoSubscriptionRegistration.podspec'",
+    ":path => './node_modules/@applicaster/video_subscription_registration_apple/apple/ZappAppleVideoSubscriptionRegistration.podspec'",
 };
 
 const extra_dependencies = {
