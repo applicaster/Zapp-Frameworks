@@ -59,16 +59,14 @@ const extra_dependencies = {
 };
 
 const api_apple = {
-  api: {
-    require_startup_execution: false,
-    class_name: "ZPAppleVideoSubscriptionRegistration",
-    modules: ["ZappAppleVideoSubscriptionRegistration"],
-    plist: {
-      UISupportsTVApp: true,
-    },
-    entitlements: {
-      "com.apple.smoot.subscriptionservice": true,
-    },
+  require_startup_execution: false,
+  class_name: "ZPAppleVideoSubscriptionRegistration",
+  modules: ["ZappAppleVideoSubscriptionRegistration"],
+  plist: {
+    UISupportsTVApp: true,
+  },
+  entitlements: {
+    "com.apple.smoot.subscriptionservice": true,
   },
 };
 
