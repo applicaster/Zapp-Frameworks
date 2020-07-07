@@ -5,6 +5,7 @@ const baseManifest = {
   name: "Apple Video Subscription Registration",
   description: "Apple Video Subscription Registration",
   type: "general",
+  identifier: "video_subscription_registration_apple",
   screen: false,
   react_native: false,
   ui_builder_support: true,
