@@ -45,7 +45,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = {
   ZappLocalNotifications:
-    ":path => './node_modules/@applicaster/zapp_local_notifications/ZappLocalNotifications.podspec'",
+    ":path => './node_modules/@applicaster/zapp_local_notifications/apple/ZappLocalNotifications.podspec'",
 };
 
 const extra_dependencies = {

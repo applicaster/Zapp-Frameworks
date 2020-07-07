@@ -2,7 +2,7 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Apple Video Subscription Registration",
+  name: "Apple Video Subscription Registration.",
   description: "Apple Video Subscription Registration",
   type: "general",
   identifier: "video_subscription_registration_apple",
