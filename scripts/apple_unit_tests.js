@@ -8,14 +8,6 @@ const {
   getIosModuleName,
 } = require("@applicaster/zapplicaster-cli/src/commands/publishPlugin/iOSTasks/helper");
 
-// const {
-//   iosBuildUnitTests,
-// } = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/src/commands/publishPlugin/iOSTasks");
-
-// const {
-//   getIosModuleName,
-// } = require("/Users/antonkononenko/Work3/QuickBrick/packages/zapplicaster-cli/src/commands/publishPlugin/iOSTasks/helper");
-
 const { resolve } = require("path");
 const rootPath = resolve(__dirname, "..");
 const git = require("simple-git/promise")(rootPath);

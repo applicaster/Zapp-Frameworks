@@ -35,14 +35,18 @@ function isCanary() {
 }
 
 async function publishPlugin({ pluginFolder, newVersion }) {
+  const packageJson = await getPackageJson({ pluginFolder });
+  const pluginName = packageJson.name;
+
   const pluginPath = `plugins/${pluginFolder}`;
   console.log({ pluginPath });
   const latestCommitSha = await exec(
     `git log -n 1 --pretty=format:%h "${pluginPath}"`
   );
-  console.log({ newCanary: `${newVersion}-alpha.${latestCommitSha}` });
+  const newCanaryVersion = canaryVersion({ pluginName, newVersion });
+  console.log({ newCanaryVersion });
   const command = isCanary()
-    ? `yarn publish:plugin:canary ${pluginPath} -v ${newVersion}-alpha.${latestCommitSha}`
+    ? `yarn publish:plugin:canary ${pluginPath} -v ${newCanaryVersion}`
     : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
   try {
     const output = await exec(command);
@@ -52,26 +56,49 @@ async function publishPlugin({ pluginFolder, newVersion }) {
     throw e;
   }
 }
+async function canaryVersion({ pluginName, newVersion }) {
+  const data = await exec(`yarn info ${pluginName} --json`);
+  const parsed = data && JSON.parse(data);
+
+  const distTags = parsed.data["dist-tags"];
+  console.log({ distTags });
+
+  const next = distTags && distTags.next;
+  console.log({ next });
+  if (next) {
+    const corsedNextVersion = semver.coerce(next);
+    console.log({ corsedNextVersion });
+    const compareVersions = semver.compare(newVersion, corsedNextVersion);
+    console.log({ compareVersions });
+
+    if (compareVersions === 0) {
+      const incrementedAlpha = semver.inc(next, "prerelease", "alpha");
+      console.log("I am inside", incrementedAlpha);
+
+      if (incrementedAlpha) {
+        return incrementedAlpha;
+      }
+    }
+  }
+  return `${newVersion}-alpha.0`;
+}
+
 async function run() {
   console.log("#--------------------#");
   console.log("  Publishing plugins  ");
   console.log("#--------------------#\n");
-
   console.log({ argv: process.argv });
   try {
     if (!isCanary) {
       await exec("git checkout -- .");
       await exec("git clean -fd");
     }
-
     const diffedPlugins = await retrieveDiffedPlugins();
     const result = await Promise.all(R.map(publishPlugin)(diffedPlugins));
     console.log(`Plugins are published`, result);
-
     if (!isCanary()) {
       await startGitTask(diffedPlugins);
     }
-
     return result;
   } catch (e) {
     console.log(
