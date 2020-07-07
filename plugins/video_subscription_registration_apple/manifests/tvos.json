@@ -1,0 +1,54 @@
+{
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Apple Video Subscription Registration",
+  "description": "Apple Video Subscription Registration",
+  "type": "general",
+  "identifier": "video_subscription_registration_apple",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "5ae06cef8fba0f00084bd3c6",
+    "5c20970320f1c500088842dd",
+    "5e39259919785a0008225336"
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "type": "checkbox",
+      "key": "enabled",
+      "tooltip_text": "Is plugin enabled on app start",
+      "default": 1
+    }
+  ],
+  "platform": "tvos",
+  "manifest_version": "0.2.0",
+  "min_zapp_sdk": "12.0.0-Dev",
+  "extra_dependencies": [
+    {
+      "ZappAppleVideoSubscriptionRegistration": ":path => './node_modules/@applicaster/video_subscription_registration_apple/ZappAppleVideoSubscriptionRegistration.podspec'"
+    }
+  ],
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "ZPAppleVideoSubscriptionRegistration",
+    "modules": [
+      "ZappAppleVideoSubscriptionRegistration"
+    ],
+    "plist": {
+      "UISupportsTVApp": true
+    },
+    "entitlements": {
+      "com.apple.smoot.subscriptionservice": true
+    }
+  },
+  "npm_dependencies": [
+    "@applicaster/video_subscription_registration_apple@0.2.0"
+  ],
+  "targets": [
+    "tv"
+  ]
+}
