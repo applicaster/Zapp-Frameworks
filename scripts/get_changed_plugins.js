@@ -56,8 +56,6 @@ async function getLatestVersionSha(pluginPath) {
     `git log --grep="${commitMessage}" --pretty=tformat:%h | cat`
   );
 
-  console.log({ pluginPath, commitMessage, result });
-
   return R.replace("\n", "", result);
 }
 
@@ -182,7 +180,7 @@ async function retrieveDiffedPlugins() {
 
 module.exports = { retrieveDiffedPlugins };
 
-async function run() {
-  await retrieveDiffedPlugins();
-}
-run();
+// async function run() {
+//   await retrieveDiffedPlugins();
+// }
+// run();
