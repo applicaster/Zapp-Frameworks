@@ -19,14 +19,28 @@
   "min_zapp_sdk": "20.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "custom_configuration_fields": [],
-  "npm_dependencies": "[@applicaster/google-analytics-web-based-apple@0.8.0]",
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "tracker_id",
+      "tooltip_text": "Tracker ID"
+    },
+    {
+      "type": "checkbox",
+      "key": "screen_views_enabled",
+      "tooltip_text": "Enable Screen Views",
+      "default": 0
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/google-analytics-web-based-apple@0.8.1"
+  ],
   "identifier": "zapp_google_analytics",
   "targets": [
     "mobile"
   ],
   "platform": "ios",
-  "manifest_version": "0.8.0",
+  "manifest_version": "0.8.1",
   "extra_dependencies": [
     {
       "ZappGoogleAnalytics": ":path => './node_modules/@applicaster/google-analytics-web-based-apple/apple/ZappGoogleAnalytics.podspec'"
