@@ -1,17 +1,21 @@
 {
   "module": "ZappApple",
-  "module_version": "0.7.21",
+  "module_version": "0.8.0",
   "author": "Applicaster ltd.",
   "copyright": "© 2019 [Applicaster ltd.](https://www.applicaster.com) under [Appache 2.0](https://github.com/applicaster/AppleApplicasterFrameworks/blob/master/LICENSE).",
-
   "author_url": "https://www.applicaster.com",
   "github_url": "https://github.com/applicaster/AppleApplicasterFrameworks/tree/master/Frameworks/ZappCore",
-
-  "xcodebuild_arguments": ["-scheme", "ZappApple"],
+  "xcodebuild_arguments": [
+    "-scheme",
+    "ZappApple"
+  ],
   "output": "../../../docs/ZappApple",
   "clean": true,
   "min_acl": "private",
-  "sdk": ["iphone", "appletv"],
+  "sdk": [
+    "iphone",
+    "appletv"
+  ],
   "theme": "jony",
   "custom_categories": [
     {
@@ -74,19 +78,30 @@
     },
     {
       "name": "FeaturesCustomization",
-      "children": ["FeaturesCusimizationConsts", "FeaturesCustomization"]
+      "children": [
+        "FeaturesCusimizationConsts",
+        "FeaturesCustomization"
+      ]
     },
     {
       "name": "Keychain",
-      "children": ["HTTPStatusCode"]
+      "children": [
+        "HTTPStatusCode"
+      ]
     },
     {
       "name": "Keys",
-      "children": ["CoreAnalyticsKeys", "AssetsKeys"]
+      "children": [
+        "CoreAnalyticsKeys",
+        "AssetsKeys"
+      ]
     },
     {
       "name": "Reachability",
-      "children": ["ReachabilityManager", "ReachabilityManagerDelegate"]
+      "children": [
+        "ReachabilityManager",
+        "ReachabilityManagerDelegate"
+      ]
     },
     {
       "name": "StateMachine",
@@ -114,15 +129,22 @@
     },
     {
       "name": "Styles",
-      "children": ["CoreStylesKeys", "StylesHelper"]
+      "children": [
+        "CoreStylesKeys",
+        "StylesHelper"
+      ]
     },
     {
       "name": "UniversalSearch",
-      "children": ["SpotlightSubscription"]
+      "children": [
+        "SpotlightSubscription"
+      ]
     },
     {
       "name": "UserInterfaceLayerManager",
-      "children": ["UserInterfaceLayerManager"]
+      "children": [
+        "UserInterfaceLayerManager"
+      ]
     },
     {
       "name": "Categories",
