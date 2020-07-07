@@ -44,7 +44,10 @@ async function publishPlugin({ pluginFolder, newVersion }) {
     `git log -n 1 --pretty=format:%h "${pluginPath}"`
   );
   const newCanaryVersion = await canaryVersion({ pluginName, newVersion });
-  console.log({ newCanaryVersion });
+  if (isCanary) {
+    console.log("Publishing new canary version", { newCanaryVersion });
+  }
+
   const command = isCanary()
     ? `yarn publish:plugin:canary ${pluginPath} -v ${newCanaryVersion}`
     : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
@@ -61,19 +64,14 @@ async function canaryVersion({ pluginName, newVersion }) {
   const parsed = data && JSON.parse(data);
 
   const distTags = parsed.data["dist-tags"];
-  console.log({ distTags });
 
   const next = distTags && distTags.next;
-  console.log({ next });
   if (next) {
     const corsedNextVersion = semver.coerce(next);
-    console.log({ corsedNextVersion });
     const compareVersions = semver.compare(newVersion, corsedNextVersion);
-    console.log({ compareVersions });
 
     if (compareVersions === 0) {
       const incrementedAlpha = semver.inc(next, "prerelease", "alpha");
-      console.log("I am inside", incrementedAlpha);
 
       if (incrementedAlpha) {
         return incrementedAlpha;
@@ -101,7 +99,6 @@ async function run() {
     if (!isCanary()) {
       await startGitTask(diffedPlugins);
     }
-    return result;
   } catch (e) {
     console.log(
       "An error occured while publishing plugins, please check the error below"
