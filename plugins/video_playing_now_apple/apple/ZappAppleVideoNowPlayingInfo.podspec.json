@@ -1,6 +1,6 @@
 {
   "name": "ZappAppleVideoNowPlayingInfo",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "summary": "ZappAppleVideoNowPlayingInfo",
   "description": "ZappAppleVideoNowPlayingInfo container.",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "master"
+    "tag": "@@applicaster/video_playing_now_apple/0.2.0"
   },
   "platforms": {
     "tvos": "11.0",
@@ -20,10 +20,16 @@
   "frameworks": "AVKit",
   "ios": {
     "frameworks": "MediaPlayer",
-    "source_files": ["universal/**/*.swift", "ios/**/*.swift"]
+    "source_files": [
+      "universal/**/*.swift",
+      "ios/**/*.swift"
+    ]
   },
   "tvos": {
-    "source_files": ["universal/**/*.swift", "tvos/**/*.swift"]
+    "source_files": [
+      "universal/**/*.swift",
+      "tvos/**/*.swift"
+    ]
   },
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
