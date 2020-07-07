@@ -22,16 +22,47 @@
   "min_zapp_sdk": "0.1.0-alpha1",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "custom_configuration_fields": [],
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.11.0"
+    "@applicaster/quick-brick-google-ima-apple@0.11.1"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
     "tv"
   ],
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "tag_vmap_url",
+      "tooltip_text": "VMAP URL",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "tag_preroll_url",
+      "tooltip_text": "Preroll URL",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "tag_postroll_url",
+      "tooltip_text": "Postroll URL",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "tag_midroll_url",
+      "tooltip_text": "Midroll URL",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "midroll_offset",
+      "tooltip_text": "Midroll offset",
+      "default": ""
+    }
+  ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.11.0",
+  "manifest_version": "0.11.1",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
