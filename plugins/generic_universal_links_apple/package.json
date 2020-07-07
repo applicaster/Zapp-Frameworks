@@ -8,17 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/applicaster/AppleApplicasterFrameworks"
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/applicaster/AppleApplicasterFrameworks"
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
-  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "applicaster": {
-    "isPlugin": true,
     "supportedPlatforms": [
       "ios_for_quickbrick",
       "tvos_for_quickbrick"
