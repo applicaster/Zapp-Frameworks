@@ -1,0 +1,35 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "ZappCrashlogsMsAppCenter",
+    "modules": [
+      "ZappCrashlogsMsAppCenter"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "App Center Crashlogs",
+  "description": "Zapp Crashlogs Plugin App Center",
+  "type": "error_monitoring",
+  "screen": false,
+  "react_native": false,
+  "identifier": "crashlogs_appcenter",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "12.0.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [],
+  "npm_dependencies": "@applicaster/crash-logs-ms-app-center-apple@4.6.1",
+  "targets": [
+    "mobile"
+  ],
+  "platform": "ios",
+  "manifest_version": "4.6.1",
+  "extra_dependencies": [
+    {
+      "ZappCrashlogsMsAppCenter": ":path => './node_modules/@applicaster/crash-logs-ms-app-center-apple/apple/ZappCrashlogsMsAppCenter.podspec'"
+    }
+  ]
+}
