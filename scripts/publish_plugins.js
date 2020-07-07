@@ -43,7 +43,7 @@ async function publishPlugin({ pluginFolder, newVersion }) {
   const latestCommitSha = await exec(
     `git log -n 1 --pretty=format:%h "${pluginPath}"`
   );
-  const newCanaryVersion = canaryVersion({ pluginName, newVersion });
+  const newCanaryVersion = await canaryVersion({ pluginName, newVersion });
   console.log({ newCanaryVersion });
   const command = isCanary()
     ? `yarn publish:plugin:canary ${pluginPath} -v ${newCanaryVersion}`
