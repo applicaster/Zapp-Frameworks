@@ -20,8 +20,8 @@
     "quickbrick"
   ],
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.3.0",
   "npm_dependencies": [
-    "@applicaster/zapp_local_notifications@0.2.0"
+    "@applicaster/zapp_local_notifications@0.3.0"
   ]
 }

@@ -30,13 +30,13 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.3.0",
   "extra_dependencies": [
     {
-      "ZappLocalNotifications": ":path => './node_modules/@applicaster/zapp_local_notifications/ZappLocalNotifications.podspec'"
+      "ZappLocalNotifications": ":path => './node_modules/@applicaster/zapp_local_notifications/apple/ZappLocalNotifications.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp_local_notifications@0.2.0"
+    "@applicaster/zapp_local_notifications@0.3.0"
   ]
 }
