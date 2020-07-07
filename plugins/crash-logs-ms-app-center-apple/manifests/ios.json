@@ -21,12 +21,14 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
-  "npm_dependencies": "@applicaster/crash-logs-ms-app-center-apple@4.6.1",
+  "npm_dependencies": [
+    "@applicaster/crash-logs-ms-app-center-apple@4.9.0"
+  ],
   "targets": [
     "mobile"
   ],
   "platform": "ios",
-  "manifest_version": "4.6.1",
+  "manifest_version": "4.9.0",
   "extra_dependencies": [
     {
       "ZappCrashlogsMsAppCenter": ":path => './node_modules/@applicaster/crash-logs-ms-app-center-apple/apple/ZappCrashlogsMsAppCenter.podspec'"
