@@ -32,8 +32,8 @@
   "identifier": "chromecast_qb",
   "platform": "ios_for_quickbrick",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.0",
-  "manifest_version": "0.2.0",
+  "dependency_version": "0.2.1",
+  "manifest_version": "0.2.1",
   "extra_dependencies": [
     {
       "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'"
@@ -45,7 +45,7 @@
       "ZappChromecast"
     ]
   },
-  "npm_dependencies": "@applicaster/zapp-generic-chromecast@0.2.0",
+  "npm_dependencies": "@applicaster/zapp-generic-chromecast@0.2.1",
   "project_dependencies": [
     {
       "react-native-google-cast": "./node_modules/@applicaster/zapp-generic-chromecast/android"
