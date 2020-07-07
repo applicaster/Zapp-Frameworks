@@ -87,7 +87,6 @@ async function run() {
   console.log("#--------------------#");
   console.log("  Publishing plugins  ");
   console.log("#--------------------#\n");
-  console.log({ argv: process.argv });
   try {
     if (!isCanary) {
       await exec("git checkout -- .");
