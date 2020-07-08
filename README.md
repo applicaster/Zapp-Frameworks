@@ -22,10 +22,10 @@ This Repo is a monorepo that contains open source Zapp Projects
     * android
     * src - for JS
     * any other type
-* Copy `package.json` for `templates` folder in a root of the repo and add it to your plugin folder
+* Copy `package.json` from `templates` folder in a root of the repo to your plugin folder
     * Fill `package.json` according you plugin needs
     * Fill `zappOwnerAccountId` with id provided for your team. If you don't know how to get plugin owner account id, ask #support in slack
-    * Fill `supportedPlatforms` array with platforms that you plugin will support. Supported list below
+    * Fill `supportedPlatforms` array with platforms that you plugin will support:
         * ios
         * tvos
         * ios_for_quickbrick
@@ -62,14 +62,14 @@ This Repo is a monorepo that contains open source Zapp Projects
 
 Note: Script will check you latest commit if you want to have breaking change or feat. Make sure that you latest commit for you plugin will have expected format
 
-## Continious Integration
+## Continuous Integration
 
 CI will start to check `plugin` folder if changed any commit for any plugin.
-If script will find such plugins. This plugin will be updated during Continious integration
+If script will find such plugins. This plugin will be updated during Continuous integration
 
 #### Pull Request
 
-* Commits not in `master` branch will force CI to start awail workflows to test unit test on platform
+* Commits not in `master` branch will force CI to start avail workflows to test unit test on platform
 * After all test workflows will be finished in CI user can publish canary plugin:
     * Prepare version number according your latest commit adding prerelease format. __example__: `2.0.0-alpha.0`
     * Publish plugin to npm
