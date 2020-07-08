@@ -16,7 +16,7 @@
   "requires_arc": true,
   "static_framework": true,
   "swift_versions": "5.1",
-  "source_files": "ios/**/*.swift",
+  "source_files": "ios/**/*.{m,swift}",
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES"
@@ -24,9 +24,7 @@
   "dependencies": {
     "ZappCore": [],
     "React": [],
-    "google-cast-sdk-no-bluetooth": [
-      "= 4.4.6"
-    ]
+    "google-cast-sdk-no-bluetooth": ["= 4.4.6"]
   },
   "testspecs": [
     {
