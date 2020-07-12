@@ -103,16 +103,4 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
-
-    func sendNowPlayingOnPause() {
-        guard let playerPlugin = playerPlugin else {
-            return
-        }
-
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo
-        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin.playbackPosition()
-        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
-        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-    }
 }

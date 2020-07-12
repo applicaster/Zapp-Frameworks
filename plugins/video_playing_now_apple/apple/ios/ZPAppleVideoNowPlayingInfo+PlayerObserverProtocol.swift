@@ -8,32 +8,7 @@
 import Foundation
 import AVKit
 import ZappCore
-
-extension ZPAppleVideoNowPlayingInfo {
-    public override func observeValue(forKeyPath keyPath: String?,
-                                      of object: Any?,
-                                      change: [NSKeyValueChangeKey : Any]?,
-                                      context: UnsafeMutableRawPointer?) {
-
-        if let object = object as? AVPlayer,
-            let player = avPlayer,
-            object == player {
-
-            //if playing
-            if playbackStalled, player.rate > 0 {
-                playbackStalled = false
-            }
-            //if paused
-            else if !playbackStalled, player.rate == 0 {
-                self.sendNowPlayingOnPause()
-                playbackStalled = true
-            }
-        }
-        else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
-}
+import MediaPlayer
 
 extension ZPAppleVideoNowPlayingInfo {
 
@@ -48,18 +23,20 @@ extension ZPAppleVideoNowPlayingInfo {
 
         //Send Now Playing Info
         sendNowPlayingInitial(player: player)
-
-        //Register for oobserver for player
-        avPlayer?.addObserver(self,
-                              forKeyPath: "rate",
-                              options: [],
-                              context: nil)
     }
 
     public override func playerDidDismiss(player: PlayerProtocol) {
-        avPlayer?.removeObserver(self,
-                                 forKeyPath: "rate",
-                                 context: nil)
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo
+
+        //update playback position for currently played item
+        let playbackProgress = player.playbackPosition() / player.playbackDuration()
+
+        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
+        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
+        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
+        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+        
         logger?.stop()
     }
 }
