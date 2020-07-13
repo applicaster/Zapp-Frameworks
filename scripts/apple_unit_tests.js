@@ -7,6 +7,7 @@ const {
 const {
   getIosModuleName,
 } = require("@applicaster/zapplicaster-cli/src/commands/publishPlugin/iOSTasks/helper");
+const { existsSync } = require("fs");
 
 const { resolve } = require("path");
 const rootPath = resolve(__dirname, "..");
@@ -16,36 +17,18 @@ const R = require("ramda");
 
 const { retrieveDiffedPlugins } = require("./get_changed_plugins");
 
-async function exec(command, options) {
-  return new Promise((resolve, reject) => {
-    shelljs.exec(
-      command,
-      {
-        cwd: rootPath,
-        silent: true,
-        ...options,
-      },
-      (code, stdIn, stdErr) => {
-        if (code === 0) {
-          resolve(stdIn);
-        } else {
-          reject(stdErr);
-        }
-      }
-    );
-  });
-}
-
 async function invokeAppleUnitTests({ pluginFolder }) {
   const pluginPath = `plugins/${pluginFolder}`;
+  const iosPluginPath = `${pluginPath}/apple`;
 
   let iosModuleName = await getIosModuleName({ pluginPath });
-
-  try {
-    const output = iosBuildUnitTests({ iosModuleName, pluginPath });
-    return output;
-  } catch (e) {
-    throw e;
+  if (existsSync(iosPluginPath) && pluginPath) {
+    try {
+      const output = iosBuildUnitTests({ iosModuleName, pluginPath });
+      return output;
+    } catch (e) {
+      throw e;
+    }
   }
 }
 
