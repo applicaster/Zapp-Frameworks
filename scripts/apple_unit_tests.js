@@ -21,8 +21,9 @@ async function invokeAppleUnitTests({ pluginFolder }) {
   const pluginPath = `plugins/${pluginFolder}`;
   const iosPluginPath = `${pluginPath}/apple`;
 
-  let iosModuleName = await getIosModuleName({ pluginPath });
-  if (existsSync(iosPluginPath) && pluginPath) {
+  if (existsSync(iosPluginPath)) {
+    let iosModuleName = await getIosModuleName({ pluginPath });
+
     try {
       const output = iosBuildUnitTests({ iosModuleName, pluginPath });
       return output;
