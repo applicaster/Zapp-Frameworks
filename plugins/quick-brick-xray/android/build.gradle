@@ -42,6 +42,8 @@ dependencies {
 
     implementation project(':xray') // x-ray core
     implementation project(':xray-react-native') // x-ray react-native bridge
+    implementation project(':xray-notification') // x-ray notification
+    implementation project(':xray-reporting')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
