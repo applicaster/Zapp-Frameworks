@@ -104,5 +104,4 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
         }
         return accessLevel
     }()
-    
 }
