@@ -14,7 +14,9 @@ extension ZPAppleVideoNowPlayingInfo {
     public override func playerDidCreate(player: PlayerProtocol) {
         //docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
 
-        guard let entry = player.entry else {
+        guard let entry = player.entry,
+            let currentPlayer = player.playerObject as? AVPlayer,
+            let currentItem = currentPlayer.currentItem else {
             return
         }
 
@@ -54,14 +56,18 @@ extension ZPAppleVideoNowPlayingInfo {
                                                    value: summary))
         }
         
-        avPlayer?.currentItem?.externalMetadata = metadataItems
+        currentItem.externalMetadata = metadataItems
     }
     
     override func playerDidDismiss(player: PlayerProtocol) {
         //update playback position for currently played item
-
+        
+        guard let currentPlayer = player.playerObject as? AVPlayer,
+            let currentItem = currentPlayer.currentItem else {
+            return
+        }
         //get exising metadata of currently played item
-        var metadataItems = avPlayer?.currentItem?.externalMetadata ?? [AVMetadataItem]()
+        var metadataItems = currentItem.externalMetadata
         //playback position identifier
         let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
         //remove old value if exists
@@ -73,5 +79,7 @@ extension ZPAppleVideoNowPlayingInfo {
         let playbackProgresItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
                                                     value: NSNumber(value: playbackProgress))
         metadataItems.append(playbackProgresItem)
+        
+        currentItem.externalMetadata = metadataItems
     }
 }
