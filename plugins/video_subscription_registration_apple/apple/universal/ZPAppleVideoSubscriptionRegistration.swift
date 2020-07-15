@@ -48,7 +48,9 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
 
-        if self.hasNeededEntitlements {
+        if self.hasNeededEntitlements,
+            self.accessLevel != .unknown {
+            
             let subscription = VSSubscription()
             subscription.expirationDate = Date.distantFuture
             subscription.accessLevel = self.accessLevel
@@ -99,7 +101,7 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
             let intValue = Int(value), intValue > 0,
             let accessLevel = VSSubscriptionAccessLevel(rawValue: intValue)
             else {
-            return .paid
+            return .unknown
         }
         return accessLevel
     }()

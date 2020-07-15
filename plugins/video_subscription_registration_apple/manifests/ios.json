@@ -26,8 +26,8 @@
     {
       "type": "text",
       "key": "access_leval",
-      "tooltip_text": "Access Level (1 or 2)",
-      "default": "2"
+      "tooltip_text": "Access Level (0 - free, 1 - account, 2 - paid subscription)",
+      "default": "0"
     }
   ],
   "platform": "ios",
