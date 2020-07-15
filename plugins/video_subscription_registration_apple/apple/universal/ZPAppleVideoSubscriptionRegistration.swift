@@ -25,7 +25,6 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
         guard isInfoPlistSupportEnabled == true else {
             return false
         }
-
         return true
     }()
 
