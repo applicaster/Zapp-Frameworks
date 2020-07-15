@@ -21,10 +21,12 @@ extension ZPAppleVideoNowPlayingInfo {
         }
 
         guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
-            let contentId = entry[ItemMetadata.contentId] as? (NSCopying & NSObjectProtocol) else {
+            let contentIdString = entry[ItemMetadata.contentId] as? String,
+                let contentIdInt = Int(contentIdString) else {
                 return
         }
-
+        let contentId = NSNumber(value: contentIdInt)
+        
         var metadataItems: [AVMetadataItem] = [AVMetadataItem]()
         //title
         let titleItem = self.metadataItem(identifier: AVMetadataIdentifier.commonIdentifierTitle,
