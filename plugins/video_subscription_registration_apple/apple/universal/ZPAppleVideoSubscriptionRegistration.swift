@@ -78,7 +78,6 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
         completion?(true)
     }
 
-
     lazy var billingIdentifier:String = {
         guard let value = self.configurationJSON?[PluginKeys.billingIdentifier] as? String
             else {

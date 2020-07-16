@@ -31,7 +31,7 @@
     }
   ],
   "platform": "tvos",
-  "manifest_version": "0.3.0",
+  "manifest_version": "0.4.1",
   "min_zapp_sdk": "12.0.0-Dev",
   "extra_dependencies": [
     {
