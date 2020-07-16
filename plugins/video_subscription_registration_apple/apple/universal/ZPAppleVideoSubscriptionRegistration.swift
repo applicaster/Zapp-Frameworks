@@ -64,7 +64,7 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
             let registrationCenter = VSSubscriptionRegistrationCenter.default()
             registrationCenter.setCurrentSubscription(subscription)
 
-            completion?(true)
+            completion?(true) 
         }
         else {
             completion?(false)
