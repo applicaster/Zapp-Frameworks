@@ -33,6 +33,16 @@ const baseManifest = {
     },
     {
       type: "text",
+      key: "provider_name",
+      tooltip_text: "Provider name",
+    },
+    {
+      type: "text",
+      key: "provider_channe_id",
+      tooltip_text: "Provider channel id",
+    },
+    {
+      type: "text",
       key: "authentication_endpoint",
       tooltip_text: "AuthN endpoint",
     },
@@ -48,12 +58,12 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "app_level_authentication_endpoint",
+      key: "app_level_user_metadata_endpoint",
       tooltip_text: "AppLevel Authentication (user metadata) endpoint",
     },
     {
       type: "text",
-      key: "app_level_authentication_attributes",
+      key: "app_level_user_metadata_attributes",
       tooltip_text: "AppLevel Authentication (user metadata) attributes",
     },
   ],

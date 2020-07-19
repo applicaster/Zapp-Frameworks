@@ -46,19 +46,19 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
 
     lazy var vsSupportedProviderIdentifiers: [String] = {
-        guard let identifiers = configurationJSON?["provider_identifiers"] as? String,
-            !identifiers.isEmpty else {
+        guard let identifier = configurationJSON?["provider_identifier"] as? String,
+            !identifier.isEmpty else {
             return []
         }
-        return identifiers.components(separatedBy: ",")
+        return [identifier]
     }()
 
     lazy var vsProviderName: String? = {
-        guard let identifier = configurationJSON?["provider_name"] as? String,
-            !identifier.isEmpty else {
+        guard let name = configurationJSON?["provider_name"] as? String,
+            !name.isEmpty else {
             return nil
         }
-        return identifier
+        return name
     }()
     
     lazy var vsProviderChannelID: String? = {
@@ -70,16 +70,16 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
     
 
-    lazy var vsApplevelAuthenticationEndpoint: String? = {
-        guard let endpoint = configurationJSON?["app_level_authentication_endpoint"] as? String,
+    lazy var vsApplevelUserMetadataEndpoint: String? = {
+        guard let endpoint = configurationJSON?["app_level_user_metadata_endpoint"] as? String,
             !endpoint.isEmpty else {
             return nil
         }
         return endpoint
     }()
 
-    lazy var vsApplevelAuthenticationAttributes: [String] = {
-        guard let attributes = configurationJSON?["app_level_authentication_attributes"] as? String,
+    lazy var vsApplevelUserMetadataAttributes: [String] = {
+        guard let attributes = configurationJSON?["app_level_user_metadata_attributes"] as? String,
             !attributes.isEmpty else {
             return []
         }
@@ -117,7 +117,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
     fileprivate func performApplevelAuthenticationIfNeeded() {
         // check and perform app level authentication if required
-        if vsApplevelAuthenticationEndpoint?.isEmpty == false && vsApplevelAuthenticationAttributes.count > 0 {
+        if vsApplevelUserMetadataEndpoint?.isEmpty == false && vsApplevelUserMetadataAttributes.count > 0 {
             // reset authentication status
             managerInfo.isAuthenticated = false
 

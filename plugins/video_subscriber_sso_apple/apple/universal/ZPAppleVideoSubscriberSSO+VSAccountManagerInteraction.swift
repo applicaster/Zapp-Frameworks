@@ -99,10 +99,20 @@ extension ZPAppleVideoSubscriberSSO {
         request.includeAuthenticationExpirationDate = true
         request.isInterruptionAllowed = true
         request.verificationToken = verificationToken
-        request.channelIdentifier = vsApplevelAuthenticationEndpoint
-        request.attributeNames = vsApplevelAuthenticationAttributes
-        request.supportedAuthenticationSchemes = [VSAccountProviderAuthenticationScheme(rawValue: "OAuth")]
+        request.channelIdentifier = vsApplevelUserMetadataEndpoint
+        request.attributeNames = vsApplevelUserMetadataAttributes
+        request.supportedAccountProviderIdentifiers = vsSupportedProviderIdentifiers
 
+        if #available(tvOS 10.1, iOS 13.0, *) {
+            request.supportedAuthenticationSchemes = [.saml, .api]
+        } else {
+            if #available(iOS 10.2, *) {
+                request.supportedAuthenticationSchemes = [.saml]
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
         videoSubscriberAccountManager.enqueue(request) { userMetadata, error in
             if let data = userMetadata {
                 DispatchQueue.main.async {
