@@ -81,14 +81,14 @@
   ],
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.4.1"
+    "@applicaster/video_subscriber_sso_apple@0.4.2"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos",
-  "dependency_version": "0.4.1",
-  "manifest_version": "0.4.1",
+  "dependency_version": "0.4.2",
+  "manifest_version": "0.4.2",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
