@@ -45,6 +45,16 @@
     },
     {
       "type": "text",
+      "key": "provider_name",
+      "tooltip_text": "Provider name"
+    },
+    {
+      "type": "text",
+      "key": "provider_channe_id",
+      "tooltip_text": "Provider channel id"
+    },
+    {
+      "type": "text",
       "key": "authentication_endpoint",
       "tooltip_text": "AuthN endpoint"
     },
@@ -60,25 +70,25 @@
     },
     {
       "type": "text",
-      "key": "app_level_authentication_endpoint",
+      "key": "app_level_user_metadata_endpoint",
       "tooltip_text": "AppLevel Authentication (user metadata) endpoint"
     },
     {
       "type": "text",
-      "key": "app_level_authentication_attributes",
+      "key": "app_level_user_metadata_attributes",
       "tooltip_text": "AppLevel Authentication (user metadata) attributes"
     }
   ],
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.3.1"
+    "@applicaster/video_subscriber_sso_apple@0.4.0"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios",
-  "dependency_version": "0.3.1",
-  "manifest_version": "0.3.1",
+  "dependency_version": "0.4.0",
+  "manifest_version": "0.4.0",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
