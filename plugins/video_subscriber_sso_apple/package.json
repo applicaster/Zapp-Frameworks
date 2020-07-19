@@ -17,10 +17,6 @@
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
-  "dependencies": {
-    "react": "^16.8.0",
-    "react-native": "^0.59.10"
-  },
   "applicaster": {
     "isPlugin": true,
     "supportedPlatforms": [
