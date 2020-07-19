@@ -169,8 +169,14 @@ extension ZPAppleVideoSubscriberSSO {
     }
 
     func getServiceProviderToken(for authResult: VideoSubscriberAccountManagerResult?, completion: @escaping (_ success: Bool, _ token: String?, _ message: String?) -> Void) {
-        guard let postString = authResult?.samlAttributeQueryResponse,
-            let urlString = self.vsAuthenticationEndpoint,
+        if let samlAttributeQueryResponse = authResult?.samlAttributeQueryResponse {
+            postString = samlAttributeQueryResponse
+        }
+        else if let providerResponseBody = authResult?.accountProviderResponseBody  {
+            postString = providerResponseBody
+        }
+        
+        guard let urlString = self.vsAuthenticationEndpoint,
             let url = URL(string: urlString) else {
             completion(false, nil, nil)
             return
