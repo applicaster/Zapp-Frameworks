@@ -25,7 +25,7 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "access_leval",
+      key: "access_level",
       tooltip_text: "Access Level (0 - free, 1 - account, 2 - paid subscription)",
       default: "0",
     }
