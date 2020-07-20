@@ -107,7 +107,13 @@ class ZPAppleVideoSubscriberSSO: NSObject {
                         // update authentication status
                         self.managerInfo.isAuthenticated = authResult.success
                     }
-                    self.performApplevelAuthenticationIfNeeded()
+                    // continue to app level auth if device authenticated and authorized
+                    if self.managerInfo.isAuthenticated && self.managerInfo.isAuthorized {
+                        self.performApplevelAuthenticationIfNeeded()
+                    }
+                    else {
+                        self.processResult()
+                    }
                 }
             } else {
                 self.processResult()
