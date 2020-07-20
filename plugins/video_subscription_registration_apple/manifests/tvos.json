@@ -31,7 +31,7 @@
     }
   ],
   "platform": "tvos",
-  "manifest_version": "0.5.1",
+  "manifest_version": "0.5.2",
   "min_zapp_sdk": "12.0.0-Dev",
   "extra_dependencies": [
     {
@@ -52,7 +52,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.5.1"
+    "@applicaster/video_subscription_registration_apple@0.5.2"
   ],
   "targets": [
     "tv"

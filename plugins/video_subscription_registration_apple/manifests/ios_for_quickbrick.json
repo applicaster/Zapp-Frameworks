@@ -31,7 +31,7 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.5.1",
+  "manifest_version": "0.5.2",
   "min_zapp_sdk": "0.1.0-alpha1",
   "extra_dependencies": [
     {
@@ -52,7 +52,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.5.1"
+    "@applicaster/video_subscription_registration_apple@0.5.2"
   ],
   "targets": [
     "mobile"
