@@ -33,7 +33,7 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
     struct PluginKeys {
         static let billingIdentifier = "billing_identifier"
         static let tierIdentifiers = "tier_identifiers"
-        static let accessLevel = "access_leval"
+        static let accessLevel = "access_level"
     }
 
     public required init(pluginModel: ZPPluginModel) {
