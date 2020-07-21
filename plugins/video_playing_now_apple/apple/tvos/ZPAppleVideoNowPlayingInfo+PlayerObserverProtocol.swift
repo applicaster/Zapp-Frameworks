@@ -61,27 +61,27 @@ extension ZPAppleVideoNowPlayingInfo {
         currentItem.externalMetadata = metadataItems
     }
     
-    override func playerDidDismiss(player: PlayerProtocol) {
-        //update playback position for currently played item
+    // override func playerDidDismiss(player: PlayerProtocol) {
+    //     //update playback position for currently played item
         
-        guard let currentPlayer = player.playerObject as? AVPlayer,
-            let currentItem = currentPlayer.currentItem else {
-            return
-        }
-        //get exising metadata of currently played item
-        var metadataItems = currentItem.externalMetadata
-        //playback position identifier
-        let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
-        //remove old value if exists
-        metadataItems.removeAll { (item) -> Bool in
-            return item.identifier == identifier
-        }
-        //set new value of current stopped position
-        let playbackProgress = player.playbackPosition() / player.playbackDuration()
-        let playbackProgresItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
-                                                    value: NSNumber(value: playbackProgress))
-        metadataItems.append(playbackProgresItem)
+    //     guard let currentPlayer = player.playerObject as? AVPlayer,
+    //         let currentItem = currentPlayer.currentItem else {
+    //         return
+    //     }
+    //     //get exising metadata of currently played item
+    //     var metadataItems = currentItem.externalMetadata
+    //     //playback position identifier
+    //     let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
+    //     //remove old value if exists
+    //     metadataItems.removeAll { (item) -> Bool in
+    //         return item.identifier == identifier
+    //     }
+    //     //set new value of current stopped position
+    //     let playbackProgress = player.playbackPosition() / player.playbackDuration()
+    //     let playbackProgresItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
+    //                                                 value: NSNumber(value: playbackProgress))
+    //     metadataItems.append(playbackProgresItem)
         
-        currentItem.externalMetadata = metadataItems
-    }
+    //     currentItem.externalMetadata = metadataItems
+    // }
 }
