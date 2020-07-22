@@ -16,7 +16,42 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-  custom_configuration_fields: [],
+  custom_configuration_fields: [
+    {
+      "type": "dropdown",
+      "key": "file_sink",
+      "tooltip_text": "Minimum message level to log to the file",
+      "multiple": false,
+      "options": [
+        "off",
+        "error",
+        "warning",
+        "info",
+        "debug",
+        "verbose"
+      ],
+      "default": "error"
+    },
+    {
+      "key": "report_email",
+      "type": "text",
+      "tooltip_text": "Email to send reports to. Empty is allowed."
+    },
+    {
+      "type": "checkbox",
+      "label": "Notification controls",
+      "key": "notification",
+      "default": 1,
+      "tooltip_text": "Enable notification controls"
+    },
+    {
+      "type": "checkbox",
+      "label": "Report crashes",
+      "key": "report_crashes",
+      "default": 1,
+      "tooltip_text": "Enable crash reporting"
+    }
+  ],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
 };

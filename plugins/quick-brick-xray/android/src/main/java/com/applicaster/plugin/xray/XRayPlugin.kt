@@ -1,18 +1,17 @@
 package com.applicaster.plugin.xray
 
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
+import com.applicaster.util.StringUtil
 import com.applicaster.util.logging.IAPLogger
 import com.applicaster.xray.android.routing.DefaultSinkFilter
 import com.applicaster.xray.android.sinks.ADBSink
 import com.applicaster.xray.android.sinks.PackageFileLogSink
 import com.applicaster.xray.core.Core
+import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
@@ -24,6 +23,9 @@ class XRayPlugin : CrashlogPlugin {
     companion object {
         private const val TAG = "XRayPlugin"
         private const val fileSinkKey = "file_sink"
+        private const val reportEmailKey = "report_email"
+        private const val notificationKey = "notification"
+        private const val crashReportingKey = "report_crashes"
     }
 
     private var activated = false
@@ -37,7 +39,7 @@ class XRayPlugin : CrashlogPlugin {
             return
         }
 
-        // dont really need it there, we already had to use AppContext.get() by this point
+        // don't really need it there, we already had to use AppContext.get() by this point
         context = applicationContext
 
         Core.get().addSink("adb", ADBSink())
@@ -67,33 +69,52 @@ class XRayPlugin : CrashlogPlugin {
     override fun init(configuration: Map<String, String>?) {
         context = AppContext.get()
 
-        // todo: update sinks configuration based on settings
         Core.get().removeSink(fileSinkKey)
-        val errorFile = PackageFileLogSink(context, "errors_log.txt")
-        Core.get()
-                .addSink(fileSinkKey, errorFile)
-                .setFilter(fileSinkKey, "", DefaultSinkFilter(Log.ERROR))
 
-        // enable our own crash reports sending, but do not handle crashes
-        Reporting.init("crash@example.com", errorFile.file)
+        val fileLogLevel = configuration?.get(fileSinkKey)
+        // Try to parse log level. "off" will be resolved as null.
+        val eFileLogLevel = when {
+            !fileLogLevel.isNullOrEmpty() -> enumValues<LogLevel>().find { it.name == fileLogLevel }
+            else -> null
+        }
+        val reportEmail = configuration?.get(reportEmailKey)
 
-        // add report sharing button to notification
-        val shareLogIntent = PendingIntent.getActivity(
-                AppContext.get(),
-                0,
-                Intent(AppContext.get(), SendActivity::class.java)
-                        .setAction("com.applicaster.xray.send"),
-                PendingIntent.FLAG_CANCEL_CURRENT
-        )
+        if(null != eFileLogLevel) {
+            val errorFile = PackageFileLogSink(context, "errors_log.txt")
+            Core.get()
+                    .addSink(fileSinkKey, errorFile)
+                    .setFilter(fileSinkKey, "", DefaultSinkFilter(eFileLogLevel))
+            // enable our own crash reports sending, but do not handle crashes
+            Reporting.init(reportEmail?:"", errorFile.file)
+        } else {
+            // enable basic reporting without file (not very useful)
+            Reporting.init(reportEmail?:"", null)
+        }
 
-        val actions: HashMap<String, PendingIntent> = hashMapOf("Send" to shareLogIntent)
+        // todo: we need immediate crash reporting mode in zapp: show share intent right after the crash
+        val reportCrashes = StringUtil.booleanValue(configuration?.get(crashReportingKey))
+        if(reportCrashes) {
+            Reporting.enableForCurrentThread(AppContext.get())
+        } else {
+            // can't disable it right now, since previous exception handler is lost, and this code could be called twice
+        }
 
-        // here we show Notification UI with custom actions
-        XRayNotification.show(
-                AppContext.get(),
-                101,
-                actions
-        )
+        val showNotification = StringUtil.booleanValue(configuration?.get(notificationKey))
+
+        if(showNotification) {
+            // add report sharing button to notification
+            val shareLogIntent = SendActivity.getSendPendingIntent(AppContext.get())
+
+            // if we have file logging enabled, allow to send it
+            val actions = if(fileLogLevel != null) hashMapOf("Send" to shareLogIntent) else null
+
+            // here we show Notification UI with custom actions
+            XRayNotification.show(
+                    AppContext.get(),
+                    101,
+                    actions
+            )
+        }
 
         // todo: update filters configuration
     }
