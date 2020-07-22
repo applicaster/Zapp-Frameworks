@@ -10,7 +10,6 @@ const baseManifest = {
   description:
     "A react native plugin that allows you to add chromecast support to a QuickBrick based project",
   type: "general",
-  screen: true,
   react_native: true,
   ui_builder_support: true,
   whitelisted_account_ids: [
