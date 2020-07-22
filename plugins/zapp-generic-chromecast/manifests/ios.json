@@ -8,7 +8,6 @@
   "name": "Chromecast (QB)",
   "description": "A react native plugin that allows you to add chromecast support to a QuickBrick based project",
   "type": "general",
-  "screen": true,
   "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [
@@ -32,8 +31,8 @@
   "identifier": "chromecast_qb",
   "platform": "ios",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.1",
-  "manifest_version": "0.2.1",
+  "dependency_version": "0.2.2",
+  "manifest_version": "0.2.2",
   "extra_dependencies": [
     {
       "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'"
@@ -45,7 +44,7 @@
       "ZappChromecast"
     ]
   },
-  "npm_dependencies": "@applicaster/zapp-generic-chromecast@0.2.1",
+  "npm_dependencies": "@applicaster/zapp-generic-chromecast@0.2.2",
   "project_dependencies": [
     {
       "react-native-google-cast": "./node_modules/@applicaster/zapp-generic-chromecast/android"
