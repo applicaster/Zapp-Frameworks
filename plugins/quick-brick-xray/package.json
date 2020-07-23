@@ -1,10 +1,9 @@
 {
   "name": "@applicaster/quick-brick-xray",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Applicaster X-Ray Logger",
   "main": "src/index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks"
@@ -33,8 +32,8 @@
   },
   "applicaster": {
     "supportedPlatforms": [
-        "android_for_quickbrick",
-        "android_tv_for_quickbrick"
+      "android_for_quickbrick",
+      "android_tv_for_quickbrick"
     ],
     "zappOwnerAccountId": "ZAPP_OWNER_ID"
   },
