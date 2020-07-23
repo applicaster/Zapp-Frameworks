@@ -42,10 +42,30 @@ declare interface XRayLoggerNativeBridgeI {
   e: (event: XRayErrorEvent) => void;
 }
 
+declare interface XRayEventI {
+  logger: XRayLoggerI;
+  level: XRayLogLevel;
+  message: string;
+  data: AnyDictionary;
+  error?: Error;
+  setLevel(level: XRayLogLevel): this;
+  setMessage(message: string): this;
+  addData(data: AnyDictionary): this;
+  attachError(error: Error): this;
+  send(): void;
+}
+
 declare interface XRayLoggerI {
-  log: (event: XRayEvent) => void;
-  debug: (event: XRayEvent) => void;
-  info: (event: XRayEvent) => void;
-  warning: (event: XRayEvent) => void;
-  error: (event: XRayEvent) => void;
+  category: string;
+  subsystem: string;
+  context: AnyDictionary;
+  getContext(): AnyDictionary;
+  log(event: XRayEvent): void;
+  debug(event: XRayEvent): void;
+  info(event: XRayEvent): void;
+  warning(event: XRayEvent): void;
+  error(event: XRayEvent): void;
+  addContext(context: AnyDictionary): this;
+  addSubsystem(subsystem: string): XRayLoggerI;
+  createEvent(): XRayEventI;
 }

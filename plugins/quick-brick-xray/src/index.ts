@@ -1,42 +1,90 @@
-import { NativeModules } from "react-native";
-import { logInConsole } from "./console";
-import { logInXray } from "./xray";
+import * as logger from "./logger";
+import { Event } from "./Event";
 
-const {
-  XRayLoggerBridge,
-}: { XRayLoggerBridge?: XRayLoggerNativeBridgeI } = NativeModules;
-
-const XRayLoggerEnabled = !!XRayLoggerBridge;
-
-if (!XRayLoggerEnabled) {
-  logInConsole(XRayLogLevel.info, {
-    category: "XRayLogger",
-    subsystem: "XRayLogger/init",
-    message:
-      "XRayLogger native module not found. Logs will be directed to the console",
-  });
-}
-
-const logFunction = XRayLoggerEnabled
-  ? logInXray(XRayLoggerBridge)
-  : logInConsole;
-
-const XRayLogger: XRayLoggerI = {
-  log(event) {
-    logFunction(XRayLogLevel.verbose, event);
-  },
-  debug(event) {
-    logFunction(XRayLogLevel.debug, event);
-  },
-  info(event) {
-    logFunction(XRayLogLevel.info, event);
-  },
-  warning(event) {
-    logFunction(XRayLogLevel.warning, event);
-  },
-  error(event) {
-    logFunction(XRayLogLevel.error, event);
-  },
+type XRayEventData = {
+  message: string;
+  data?: AnyDictionary;
+  error?: Error;
 };
 
-export default XRayLogger;
+export default class Logger implements XRayLoggerI {
+  category: string;
+  subsystem: string;
+  context: AnyDictionary;
+  parent?: Logger;
+
+  constructor(category: string, subsystem: string, parent?: Logger) {
+    this.category = category;
+    this.subsystem = subsystem;
+    this.context = {};
+    this.parent = parent || null;
+  }
+
+  addSubsystem(subsystem: string): Logger {
+    return new Logger(this.category, `${this.subsystem}/${subsystem}`, this);
+  }
+
+  log(event: XRayEventData) {
+    logger.log({
+      category: this.category,
+      subsystem: this.subsystem,
+      context: this.context,
+      ...event,
+    });
+  }
+
+  debug(event: XRayEventData) {
+    logger.debug({
+      category: this.category,
+      subsystem: this.subsystem,
+      context: this.context,
+      ...event,
+    });
+  }
+
+  info(event: XRayEventData) {
+    logger.info({
+      category: this.category,
+      subsystem: this.subsystem,
+      context: this.context,
+      ...event,
+    });
+  }
+
+  warning(event: XRayEventData) {
+    logger.warn({
+      category: this.category,
+      subsystem: this.subsystem,
+      context: this.context,
+      ...event,
+    });
+  }
+
+  error(event: XRayEventData) {
+    logger.error({
+      category: this.category,
+      subsystem: this.subsystem,
+      context: this.context,
+      ...event,
+    });
+  }
+
+  getContext(): AnyDictionary {
+    return Object.assign({}, this.parent?.getContext() || {}, this.context);
+  }
+
+  addContext(context: AnyDictionary): this {
+    this.context = Object.assign(
+      {},
+      this.parent?.getContext(),
+      this.context,
+      context
+    );
+
+    return this;
+  }
+
+  createEvent(): Event {
+    return new Event(this);
+  }
+}
