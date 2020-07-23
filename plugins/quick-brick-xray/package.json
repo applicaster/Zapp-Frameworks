@@ -2,8 +2,12 @@
   "name": "@applicaster/quick-brick-xray",
   "version": "0.0.1-alpha.4",
   "description": "Applicaster X-Ray Logger",
-  "main": "src/index.js",
-  "scripts": {},
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks"
@@ -19,10 +23,11 @@
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "dependencies": {
-    "@applicaster/x-ray": "git://github.com/applicaster/x-ray.git"
+    "@applicaster/x-ray": "git://github.com/applicaster/x-ray.git",
+    "@types/react-native": "^0.63.1",
+    "typescript": "^3.9.7"
   },
   "devDependencies": {
-    "@applicaster/zapplicaster-cli": "4.0.0",
     "react": "16.11.0",
     "react-native": "0.62.2"
   },
@@ -39,6 +44,8 @@
   },
   "files": [
     "android",
-    "src"
+    "src",
+    "lib",
+    "types"
   ]
 }
