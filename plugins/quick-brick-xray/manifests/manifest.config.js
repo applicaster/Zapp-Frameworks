@@ -50,6 +50,13 @@ const baseManifest = {
       "key": "report_crashes",
       "default": 1,
       "tooltip_text": "Enable crash reporting"
+    },
+    {
+      "type": "checkbox",
+      "label": "Log react native debug messages",
+      "key": "log_react_native_debug",
+      "default": 0,
+      "tooltip_text": "Enable logging or react native internal debug messages. Very verbose!"
     }
   ],
   targets: ["mobile"],
