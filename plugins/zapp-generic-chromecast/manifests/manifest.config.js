@@ -45,7 +45,7 @@ function createManifest({ version, platform }) {
       },
     ],
     api: api[platform],
-    npm_dependencies: `${npmDependency}@${version}`,
+    npm_dependencies: [`${npmDependency}@${version}`],
     project_dependencies: [
       {
         "react-native-google-cast": `./node_modules/${npmDependency}/android`,
