@@ -2,6 +2,8 @@ package com.applicaster.plugin.xray
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import android.util.Printer
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
@@ -16,6 +18,11 @@ import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
 import com.applicaster.xray.ui.notification.XRayNotification
+import com.facebook.common.logging.FLog
+import com.facebook.common.logging.LoggingDelegate
+import com.facebook.debug.debugoverlay.model.DebugOverlayTag
+import com.facebook.debug.holder.NoopPrinter
+import com.facebook.debug.holder.PrinterHolder
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
@@ -25,45 +32,155 @@ class XRayPlugin : CrashlogPlugin {
         private const val fileSinkKey = "file_sink"
         private const val reportEmailKey = "report_email"
         private const val notificationKey = "notification"
+        private const val debugRNKey = "log_react_native_debug"
         private const val crashReportingKey = "report_crashes"
+
+        private const val fileSinkFileName = "xray_log.txt"
     }
 
     private var activated = false
     private lateinit var context: Context
+    private val pluginLogger = Logger.get(TAG)
 
     override fun activate(applicationContext: Application) {
-        val logger = Logger.get(TAG)
 
         if (activated) {
-            logger.w(TAG).message("X-Ray logging plugin is already activated")
+            pluginLogger.w(TAG).message("X-Ray logging plugin is already activated")
             return
         }
 
         // don't really need it there, we already had to use AppContext.get() by this point
         context = applicationContext
 
+        // add default ADB sink
         Core.get().addSink("adb", ADBSink())
 
         // override default SDK Logger
+        hookApplicasterLogger()
+
+        // override logging from react native
+        hookRNLogger()
+
+        activated = true
+        pluginLogger.i(TAG).message("X-Ray logging was activated")
+    }
+
+    private fun overrideRNPrinter() {
+        PrinterHolder.setPrinter(object : Printer, com.facebook.debug.holder.Printer {
+
+            val logger = Logger.get("ReactNative/DebugPrinter")
+
+            override fun println(x: String?) {
+                logger.d(TAG).message(x!!)
+            }
+
+            override fun logMessage(tag: DebugOverlayTag?, message: String?, vararg args: Any?) {
+                logger.d(tag!!.name).message(java.lang.String.format(message!!, *args))
+            }
+
+            override fun logMessage(tag: DebugOverlayTag?, message: String?) {
+                logger.d(tag!!.name).message(message!!)
+            }
+
+            override fun shouldDisplayLogMessage(tag: DebugOverlayTag?): Boolean {
+                return true
+            }
+
+        })
+        pluginLogger.i(TAG).message("React native printer is now intercepted by X-Ray")
+    }
+
+    private fun hookRNLogger() {
+        FLog.setLoggingDelegate(object : LoggingDelegate {
+
+            val logger = Logger.get("ReactNative")
+            var level = Log.DEBUG // log at debug level since we have our own filters
+
+            override fun wtf(tag: String?, msg: String?) {
+                this.logger.e(tag!!).message(msg!!)
+            }
+
+            override fun wtf(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.e(tag!!).exception(tr!!).message(msg!!)
+            }
+
+            override fun getMinimumLoggingLevel(): Int = level
+
+            override fun w(tag: String?, msg: String?) {
+                this.logger.w(tag!!).message(msg!!)
+            }
+
+            override fun w(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.w(tag!!).exception(tr!!).message(msg!!)
+            }
+
+            override fun v(tag: String?, msg: String?) {
+                this.logger.v(tag!!).message(msg!!)
+            }
+
+            override fun v(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.v(tag!!).exception(tr!!).message(msg!!)
+            }
+
+            override fun log(priority: Int, tag: String?, msg: String?) {
+                this.logger.e(tag!!).message(msg!!)
+            }
+
+            override fun setMinimumLoggingLevel(level: Int) {
+                this.level = level
+            }
+
+            override fun isLoggable(level: Int): Boolean {
+                return this.level >= level
+            }
+
+            override fun i(tag: String?, msg: String?) {
+                this.logger.i(tag!!).message(msg!!)
+            }
+
+            override fun i(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.i(tag!!).exception(tr!!).message(msg!!)
+            }
+
+            override fun e(tag: String?, msg: String?) {
+                this.logger.e(tag!!).message(msg!!)
+            }
+
+            override fun e(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.e(tag!!).exception(tr!!).message(msg!!)
+            }
+
+            override fun d(tag: String?, msg: String?) {
+                this.logger.d(tag!!).message(msg!!)
+            }
+
+            override fun d(tag: String?, msg: String?, tr: Throwable?) {
+                this.logger.d(tag!!).exception(tr!!).message(msg!!)
+            }
+
+        })
+        pluginLogger.i(TAG).message("React native logger is now intercepted by X-Ray")
+    }
+
+    private fun hookApplicasterLogger() {
         APLogger.setLogger(object : IAPLogger {
 
-            private val rootLogger = Logger.get()
+            private val logger = Logger.get("ApplicasterSDK")
 
-            override fun verbose(tag: String, msg: String) = rootLogger.v(tag).message(msg)
+            override fun verbose(tag: String, msg: String) = logger.v(tag).message(msg)
 
-            override fun debug(tag: String, msg: String) = rootLogger.d(tag).message(msg)
+            override fun debug(tag: String, msg: String) = logger.d(tag).message(msg)
 
-            override fun info(tag: String, msg: String) = rootLogger.i(tag).message(msg)
+            override fun info(tag: String, msg: String) = logger.i(tag).message(msg)
 
-            override fun warn(tag: String, msg: String) = rootLogger.w(tag).message(msg)
+            override fun warn(tag: String, msg: String) = logger.w(tag).message(msg)
 
-            override fun error(tag: String, msg: String) = rootLogger.e(tag).message(msg)
+            override fun error(tag: String, msg: String) = logger.e(tag).message(msg)
 
             override fun error(tag: String, msg: String, t: Throwable) =
-                    rootLogger.e(tag).exception(t).message(msg)
+                    logger.e(tag).exception(t).message(msg)
         })
-        activated = true
-        logger.i(TAG).message("X-Ray logging was activated")
+        pluginLogger.i(TAG).message("Applicaster APLogger is now intercepted by X-Ray")
     }
 
     override fun init(configuration: Map<String, String>?) {
@@ -80,12 +197,12 @@ class XRayPlugin : CrashlogPlugin {
         val reportEmail = configuration?.get(reportEmailKey)
 
         if(null != eFileLogLevel) {
-            val errorFile = PackageFileLogSink(context, "errors_log.txt")
+            val fileSink = PackageFileLogSink(context, fileSinkFileName)
             Core.get()
-                    .addSink(fileSinkKey, errorFile)
+                    .addSink(fileSinkKey, fileSink)
                     .setFilter(fileSinkKey, "", DefaultSinkFilter(eFileLogLevel))
             // enable our own crash reports sending, but do not handle crashes
-            Reporting.init(reportEmail?:"", errorFile.file)
+            Reporting.init(reportEmail?:"", fileSink.file)
         } else {
             // enable basic reporting without file (not very useful)
             Reporting.init(reportEmail?:"", null)
@@ -116,6 +233,12 @@ class XRayPlugin : CrashlogPlugin {
             )
         }
 
+        val logRNPrinter =  StringUtil.booleanValue(configuration?.get(debugRNKey))
+        if(logRNPrinter) {
+            overrideRNPrinter()
+        } else {
+            PrinterHolder.setPrinter(NoopPrinter.INSTANCE)
+        }
         // todo: update filters configuration
     }
 
