@@ -61,7 +61,7 @@ extension ZPAppleVideoSubscriberSSO {
         }
     }
 
-    func requestAuthenticationStatus(interrruption: Bool = false, completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
+    func requestAuthenticationStatus(interrruption: Bool = true, completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
         let request = VSAccountMetadataRequest()
         request.includeAccountProviderIdentifier = true
         request.includeAuthenticationExpirationDate = true
