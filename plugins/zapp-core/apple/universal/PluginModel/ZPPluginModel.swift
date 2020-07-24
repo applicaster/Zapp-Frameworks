@@ -44,6 +44,11 @@ public enum ZPPluginType: String {
     case Unknown = "unknown"
 }
 
+public enum ZPPluginCoreType: String {
+    case loggerSink = "logger_sink"
+    case undefined = ""
+}
+
 @objc open class ZPPluginModel: NSObject {
     public private(set) var object: NSDictionary
 
@@ -72,6 +77,13 @@ public enum ZPPluginType: String {
     }
 
     public lazy var pluginType: ZPPluginType? = {
+        guard let stringPluginType = plugin?[ZappPluginModelKeys.kPluginTypeString] as? String else {
+            return nil
+        }
+        return ZPPluginType(rawValue: stringPluginType)
+    }()
+    
+    public lazy var pluginCoreType: ZPPluginCoreType? = {
         guard let stringPluginType = plugin?[ZappPluginModelKeys.kPluginTypeString] as? String else {
             return nil
         }

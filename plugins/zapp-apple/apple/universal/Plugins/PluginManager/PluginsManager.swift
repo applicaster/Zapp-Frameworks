@@ -15,6 +15,7 @@ public class PluginsManager: NSObject {
     public lazy var push = PushPluginsManager()
     public lazy var general = GeneralPluginsManager()
     public lazy var crashlogs = CrashlogsPluginsManager()
+    public lazy var loggerSink = LoggerSinksManager()
 
     public lazy var localNotificationManager: FacadeConnectorLocalNotificationProtocol? = {
         let retVal = general.providers.first(where: { ($0.value as? FacadeConnectorLocalNotificationProtocol) != nil })
@@ -42,6 +43,13 @@ public class PluginsManager: NSObject {
     func crashLogs(_ successHandler: @escaping StateCallBack,
                    _ failHandler: @escaping StateCallBack) {
         crashlogs.prepareManager { success in
+            success ? successHandler() : failHandler()
+        }
+    }
+    
+    func loggerSinks(_ successHandler: @escaping StateCallBack,
+                   _ failHandler: @escaping StateCallBack) {
+        loggerSink.prepareManager { success in
             success ? successHandler() : failHandler()
         }
     }

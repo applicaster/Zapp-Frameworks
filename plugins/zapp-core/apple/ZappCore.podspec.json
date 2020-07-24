@@ -24,6 +24,9 @@
   "tvos": {
     "source_files": "tvos/**/*.{swift}"
   },
+  "dependencies": {
+    "xray": ["~> 0.0.1"]
+  },
   "testspecs": [
     {
       "name": "UnitTests",

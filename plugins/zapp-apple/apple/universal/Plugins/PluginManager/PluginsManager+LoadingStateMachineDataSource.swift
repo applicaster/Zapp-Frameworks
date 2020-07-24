@@ -19,10 +19,15 @@ extension PluginsManager: LoadingStateMachineDataSource {
         onLaunchHook.readableName = "<plugins-state-machine> Execute Hook Plugin On Launch"
         onLaunchHook.dependantStates = [loadPlugins.name]
 
+        let loggerSinks = LoadingState()
+        loggerSinks.stateHandler = crashLogs
+        loggerSinks.dependantStates = [onLaunchHook.name]
+        loggerSinks.readableName = "<plugins-state-machine> Prepare Logger Sinks Plugins"
+        
         let crashlogs = LoadingState()
         crashlogs.stateHandler = crashLogs
         crashlogs.dependantStates = [onLaunchHook.name]
-        crashlogs.readableName = "<plugins-state-machine> CrashLogs Crashlogs Plugins"
+        crashlogs.readableName = "<plugins-state-machine> Prepare CrashLogs Plugins"
 
         let analytics = LoadingState()
         analytics.stateHandler = prepareAnalyticsPlugins

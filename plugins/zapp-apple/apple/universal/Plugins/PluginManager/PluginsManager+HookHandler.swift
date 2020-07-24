@@ -40,6 +40,7 @@ extension PluginsManager {
         retVal += push.hooksProviders()
         retVal += general.hooksProviders()
         retVal += crashlogs.hooksProviders()
+        retVal += loggerSink.hooksProviders()
 
         return retVal
     }
