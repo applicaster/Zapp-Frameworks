@@ -6,7 +6,7 @@
 //
 
 import ZappCore
-import xray
+import XrayLogger
 
 public class LoggerSinksManager: PluginManagerBase {
     typealias pluginTypeProtocol = LoggerSinkPluginProtocol

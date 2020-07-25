@@ -87,7 +87,8 @@ public enum ZPPluginCoreType: String {
         guard let stringPluginType = plugin?[ZappPluginModelKeys.kPluginTypeString] as? String else {
             return nil
         }
-        return ZPPluginType(rawValue: stringPluginType)
+        return nil
+//        return ZPPluginType(rawValue: stringPluginType)
     }()
 
     public var pluginClassName: String? {
