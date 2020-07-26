@@ -66,31 +66,35 @@ const baseManifest = {
       key: "app_level_user_metadata_attributes",
       tooltip_text: "AppLevel Authentication (user metadata) attributes",
     },
-    {
-      type: "text",
-      key: "failure_alert_title",
-      tooltip_text: "Failure alert title",
-      initial_value: "Unable to connect to TV Provider"
-    },
-    {
-      type: "text",
-      key: "failure_alert_description",
-      tooltip_text: "Failure alert description",
-      initial_value: "Please make sure TV Provider is configured in the device's Settings app"
-    },
-    {
-      type: "text",
-      key: "failure_alert_ok_button_title",
-      tooltip_text: "Failure alert button title",
-      initial_value: "Ok"
-    },
-    {
-      type: "text",
-      key: "failure_alert_settings_button_title",
-      tooltip_text: "Failure alert settings title",
-      initial_value: "Open app settings"
-    },
   ],
+  localizations: {
+    fields: [
+      {
+        key: "failure_alert_title",
+        label: "Failure alert title",
+        tooltip:  "Failure alert title",
+        initial_value: "Unable to connect to TV Provider"
+      },
+      {
+        key: "failure_alert_description",
+        label: "Failure alert description",
+        tooltip:  "Failure alert description",
+        initial_value: "Please make sure TV Provider is configured in the device's Settings app"
+      },
+      {
+        key: "failure_alert_ok_button_title",
+        label: "Failure alert button title",
+        tooltip:  "Failure alert button title",
+        initial_value: "Ok"
+      },
+      {
+        key: "failure_alert_settings_button_title",
+        label: "Failure alert settings title",
+        tooltip:  "Failure alert settings title",
+        initial_value: "Open app settings"
+      },
+    ]
+  },
   identifier: "video_subscriber_sso_apple",
   npm_dependencies: [],
   targets: ["mobile"],
