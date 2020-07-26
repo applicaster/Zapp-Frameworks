@@ -91,7 +91,7 @@
         "key": "failure_alert_description",
         "label": "Failure alert description",
         "tooltip": "Failure alert description",
-        "initial_value": "Please make sure TV Provider is configured in the device's Settings app"
+        "initial_value": "Please make sure TV Provider is configured in the device settings"
       },
       {
         "key": "failure_alert_ok_button_title",
@@ -109,14 +109,14 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.4.8"
+    "@applicaster/video_subscriber_sso_apple@0.4.9"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos",
-  "dependency_version": "0.4.8",
-  "manifest_version": "0.4.8",
+  "dependency_version": "0.4.9",
+  "manifest_version": "0.4.9",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
