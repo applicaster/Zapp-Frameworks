@@ -103,7 +103,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
     
     lazy var vsFailureAlertDescription: String = {
-        let defaultValue = "Please make sure \"\(self.vsProviderName ?? "")\" TV Provider is configured in the device's Settings app"
+        let defaultValue = "Please make sure TV Provider is configured in device settings"
         guard let value = configurationJSON?["failure_alert_description"] as? String,
             !value.isEmpty else {
             return defaultValue
@@ -111,10 +111,18 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         return value
     }()
     
-    lazy var vsFailureAlertButtonTitle: String = {
-        guard let value = configurationJSON?["failure_alert_button_title"] as? String,
+    lazy var vsFailureAlertOkButtonTitle: String = {
+        guard let value = configurationJSON?["failure_alert_ok_button_title"] as? String,
             !value.isEmpty else {
             return "Ok"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertSettingButtonTitle: String = {
+        guard let value = configurationJSON?["failure_alert_settings_button_title"] as? String,
+            !value.isEmpty else {
+            return "Open app settings"
         }
         return value
     }()

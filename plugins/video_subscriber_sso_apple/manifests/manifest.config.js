@@ -80,9 +80,15 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "failure_alert_button_title",
+      key: "failure_alert_ok_button_title",
       tooltip_text: "Failure alert button title",
       initial_value: "Ok"
+    },
+    {
+      type: "text",
+      key: "failure_alert_settings_button_title",
+      tooltip_text: "Failure alert settings title",
+      initial_value: "Open app settings"
     },
   ],
   identifier: "video_subscriber_sso_apple",
