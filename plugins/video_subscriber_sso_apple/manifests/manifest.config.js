@@ -21,10 +21,10 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [
     {
-      type: "checkbox",
+      type: "hidden",
       key: "enabled",
       tooltip_text: "Is plugin enabled on app start",
-      default: 0,
+      initial_value: 0,
     },
     {
       type: "text",
@@ -65,6 +65,24 @@ const baseManifest = {
       type: "text",
       key: "app_level_user_metadata_attributes",
       tooltip_text: "AppLevel Authentication (user metadata) attributes",
+    },
+    {
+      type: "text",
+      key: "failure_alert_title",
+      tooltip_text: "Failure alert title",
+      initial_value: "Unable to connect to TV Provider"
+    },
+    {
+      type: "text",
+      key: "failure_alert_description",
+      tooltip_text: "Failure alert description",
+      initial_value: "Please make sure TV Provider is configured in the device's Settings app"
+    },
+    {
+      type: "text",
+      key: "failure_alert_button_title",
+      tooltip_text: "Failure alert button title",
+      initial_value: "Ok"
     },
   ],
   identifier: "video_subscriber_sso_apple",

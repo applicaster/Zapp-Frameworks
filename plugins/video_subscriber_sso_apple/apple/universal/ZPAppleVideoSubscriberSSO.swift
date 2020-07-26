@@ -93,6 +93,31 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
         videoSubscriberAccountManager.delegate = self
     }
+    
+    lazy var vsFailureAlertTitle: String = {
+        guard let value = configurationJSON?["failure_alert_title"] as? String,
+            !value.isEmpty else {
+            return "Unable to connect to TV Provider"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertDescription: String = {
+        let defaultValue = "Please make sure \"\(self.vsProviderName ?? "")\" TV Provider is configured in the device's Settings app"
+        guard let value = configurationJSON?["failure_alert_description"] as? String,
+            !value.isEmpty else {
+            return defaultValue
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertButtonTitle: String = {
+        guard let value = configurationJSON?["failure_alert_button_title"] as? String,
+            !value.isEmpty else {
+            return "Ok"
+        }
+        return value
+    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion
@@ -152,7 +177,12 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     fileprivate func processResult() {
         let success = managerInfo.isAuthorized && managerInfo.isAuthenticated
         DispatchQueue.main.async {
+            if !success {
+                self.presentFailureAlert()
+            }
             self.vsaAccessOperationCompletion?(success)
         }
     }
 }
+
+
