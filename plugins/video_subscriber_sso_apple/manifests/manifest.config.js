@@ -79,7 +79,7 @@ const baseManifest = {
         key: "failure_alert_description",
         label: "Failure alert description",
         tooltip:  "Failure alert description",
-        initial_value: "Please make sure TV Provider is configured in the device's Settings app"
+        initial_value: "Please make sure TV Provider is configured in the device settings"
       },
       {
         key: "failure_alert_ok_button_title",

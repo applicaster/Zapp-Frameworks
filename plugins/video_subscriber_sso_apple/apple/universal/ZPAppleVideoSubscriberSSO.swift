@@ -94,8 +94,17 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         videoSubscriberAccountManager.delegate = self
     }
     
+    lazy var localizations: [String: String] = {
+        guard let localizations = configurationJSON?["localizations"] as? [String: NSDictionary],
+            let languageCode = NSLocale.current.languageCode,
+            let languageContent = localizations[languageCode] as? [String: String] else {
+                return [:]
+        }
+        return languageContent
+    }()
+    
     lazy var vsFailureAlertTitle: String = {
-        guard let value = configurationJSON?["failure_alert_title"] as? String,
+        guard let value = localizations["failure_alert_title"],
             !value.isEmpty else {
             return "Unable to connect to TV Provider"
         }
@@ -104,7 +113,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     
     lazy var vsFailureAlertDescription: String = {
         let defaultValue = "Please make sure TV Provider is configured in device settings"
-        guard let value = configurationJSON?["failure_alert_description"] as? String,
+        guard let value = localizations["failure_alert_description"],
             !value.isEmpty else {
             return defaultValue
         }
@@ -112,7 +121,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
     
     lazy var vsFailureAlertOkButtonTitle: String = {
-        guard let value = configurationJSON?["failure_alert_ok_button_title"] as? String,
+        guard let value = localizations["failure_alert_ok_button_title"],
             !value.isEmpty else {
             return "Ok"
         }
@@ -120,7 +129,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
     
     lazy var vsFailureAlertSettingButtonTitle: String = {
-        guard let value = configurationJSON?["failure_alert_settings_button_title"] as? String,
+        guard let value = localizations["failure_alert_settings_button_title"],
             !value.isEmpty else {
             return "Open app settings"
         }
