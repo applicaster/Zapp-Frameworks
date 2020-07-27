@@ -15,8 +15,8 @@ public class RootController: NSObject {
     public var appReadyForUse: Bool = false
 
     // Properties for managing connectivity listeners
-    lazy var connectivityListeners:NSMutableArray = []
-    
+    lazy var connectivityListeners: NSMutableArray = []
+
     var reachabilityManager: ReachabilityManager?
     var currentConnection: Reachability.Connection?
 
@@ -33,7 +33,7 @@ public class RootController: NSObject {
         FacadeConnector(connectorProvider: self)
     }()
 
-    public override init() {
+    override public init() {
         super.init()
         if let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) {
             self.userInterfaceLayer = userInterfaceLayer
@@ -46,9 +46,17 @@ public class RootController: NSObject {
 
     public func reloadApplication() {
         appReadyForUse = false
-        loadingStateMachine = LoadingStateMachine(dataSource: self,
-                                                  withStates: preapreLoadingStates())
-        loadingStateMachine.startStatesInvocation()
+
+        pluginsManager.crashlogs.prepareManager { [weak self] success in
+            guard let self = self else { return }
+            if success {
+                self.loadingStateMachine = LoadingStateMachine(dataSource: self,
+                                                               withStates: self.preapreLoadingStates())
+                self.loadingStateMachine.startStatesInvocation()
+            } else {
+                self.showErrorMessage(message: "Can not intialize application!")
+            }
+        }
     }
 
     func preapreLoadingStates() -> [LoadingState] {
