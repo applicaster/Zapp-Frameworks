@@ -78,8 +78,10 @@ const api_apple = {
   modules: ["ZappChromecast"],
 };
 const api_android = {
+  require_startup_exectution: false,
   class_name: "com.applicaster.chromecast.ChromeCastPlugin",
   react_packages: ["com.reactnative.googlecast.GoogleCastPackage"],
+  roguard_rules: "-keep public class com.reactnative.googlecast.** {*;}",
 };
 const api = {
   ios: api_apple,
