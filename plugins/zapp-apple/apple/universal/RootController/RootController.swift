@@ -42,11 +42,9 @@ public class RootController: NSObject {
         splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
 
         reachabilityManager = ReachabilityManager(delegate: self)
-
-        reloadApplication()
     }
 
-    func reloadApplication() {
+    public func reloadApplication() {
         appReadyForUse = false
         loadingStateMachine = LoadingStateMachine(dataSource: self,
                                                   withStates: preapreLoadingStates())
