@@ -1,6 +1,6 @@
 {
   "name": "ZappChromecast",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "summary": "ZappChromecast",
   "description": "ZappChromecast container.",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-generic-chromecast/0.2.4"
+    "tag": "@@applicaster/zapp-generic-chromecast/0.2.5"
   },
   "platforms": {
     "ios": "11.0"

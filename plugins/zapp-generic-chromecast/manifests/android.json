@@ -31,11 +31,11 @@
   "identifier": "chromecast_qb",
   "platform": "android",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.4",
-  "manifest_version": "0.2.4",
+  "dependency_version": "0.2.5",
+  "manifest_version": "0.2.5",
   "extra_dependencies": [
     {
-      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'"
+      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/apple/ZappChromecast.podspec'"
     }
   ],
   "api": {
@@ -45,7 +45,7 @@
     ]
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@0.2.4"
+    "@applicaster/zapp-generic-chromecast@0.2.5"
   ],
   "project_dependencies": [
     {
