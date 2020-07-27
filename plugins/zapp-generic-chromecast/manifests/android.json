@@ -31,28 +31,26 @@
   "identifier": "chromecast_qb",
   "platform": "android",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.3",
-  "manifest_version": "0.2.3",
-  "extra_dependencies": [
-    {
-      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'"
-    }
-  ],
+  "dependency_version": "0.2.6",
+  "manifest_version": "0.2.6",
   "api": {
+    "require_startup_exectution": false,
     "class_name": "com.applicaster.chromecast.ChromeCastPlugin",
     "react_packages": [
       "com.reactnative.googlecast.GoogleCastPackage"
-    ]
+    ],
+    "roguard_rules": "-keep public class com.reactnative.googlecast.** {*;}"
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@0.2.3"
+    "@applicaster/zapp-generic-chromecast@0.2.6"
+  ],
+  "targets": [
+    "mobile"
   ],
   "project_dependencies": [
     {
       "react-native-google-cast": "./node_modules/@applicaster/zapp-generic-chromecast/android"
     }
   ],
-  "targets": [
-    "mobile"
-  ]
+  "extra_dependencies": []
 }

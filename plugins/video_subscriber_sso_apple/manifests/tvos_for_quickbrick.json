@@ -33,10 +33,10 @@
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
     {
-      "type": "checkbox",
+      "type": "hidden",
       "key": "enabled",
       "tooltip_text": "Is plugin enabled on app start",
-      "default": 0
+      "initial_value": 0
     },
     {
       "type": "text",
@@ -79,16 +79,44 @@
       "tooltip_text": "AppLevel Authentication (user metadata) attributes"
     }
   ],
+  "localizations": {
+    "fields": [
+      {
+        "key": "failure_alert_title",
+        "label": "Failure alert title",
+        "tooltip": "Failure alert title",
+        "initial_value": "Unable to connect to TV Provider"
+      },
+      {
+        "key": "failure_alert_description",
+        "label": "Failure alert description",
+        "tooltip": "Failure alert description",
+        "initial_value": "Please make sure TV Provider is configured in the device settings"
+      },
+      {
+        "key": "failure_alert_ok_button_title",
+        "label": "Failure alert button title",
+        "tooltip": "Failure alert button title",
+        "initial_value": "Ok"
+      },
+      {
+        "key": "failure_alert_settings_button_title",
+        "label": "Failure alert settings title",
+        "tooltip": "Failure alert settings title",
+        "initial_value": "Open app settings"
+      }
+    ]
+  },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.4.5"
+    "@applicaster/video_subscriber_sso_apple@0.4.10"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "dependency_version": "0.4.5",
-  "manifest_version": "0.4.5",
+  "dependency_version": "0.4.10",
+  "manifest_version": "0.4.10",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"

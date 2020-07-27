@@ -103,7 +103,7 @@ extension ZPAppleVideoSubscriberSSO {
         request.attributeNames = vsApplevelUserMetadataAttributes
         request.supportedAccountProviderIdentifiers = vsSupportedProviderIdentifiers
 
-        if #available(tvOS 10.1, iOS 13.0, *) {
+        if #available(tvOS 13.0, iOS 13.0, *) {
             request.supportedAuthenticationSchemes = [.saml, .api]
         } else {
             if #available(iOS 10.2, *) {

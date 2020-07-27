@@ -93,6 +93,48 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
         videoSubscriberAccountManager.delegate = self
     }
+    
+    lazy var localizations: [String: String] = {
+        guard let localizations = configurationJSON?["localizations"] as? [String: NSDictionary],
+            let languageCode = NSLocale.current.languageCode,
+            let languageContent = localizations[languageCode] as? [String: String] else {
+                return [:]
+        }
+        return languageContent
+    }()
+    
+    lazy var vsFailureAlertTitle: String = {
+        guard let value = localizations["failure_alert_title"],
+            !value.isEmpty else {
+            return "Unable to connect to TV Provider"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertDescription: String = {
+        let defaultValue = "Please make sure TV Provider is configured in device settings"
+        guard let value = localizations["failure_alert_description"],
+            !value.isEmpty else {
+            return defaultValue
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertOkButtonTitle: String = {
+        guard let value = localizations["failure_alert_ok_button_title"],
+            !value.isEmpty else {
+            return "Ok"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertSettingButtonTitle: String = {
+        guard let value = localizations["failure_alert_settings_button_title"],
+            !value.isEmpty else {
+            return "Open app settings"
+        }
+        return value
+    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion
@@ -152,7 +194,12 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     fileprivate func processResult() {
         let success = managerInfo.isAuthorized && managerInfo.isAuthenticated
         DispatchQueue.main.async {
+            if !success {
+                self.presentFailureAlert()
+            }
             self.vsaAccessOperationCompletion?(success)
         }
     }
 }
+
+
