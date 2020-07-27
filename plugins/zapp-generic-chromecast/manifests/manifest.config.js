@@ -41,7 +41,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: [
       {
-        ZappChromecast: `:path => './node_modules/${npmDependency}/ZappChromecast.podspec'`,
+        ZappChromecast: `:path => './node_modules/${npmDependency}/apple/ZappChromecast.podspec'`,
       },
     ],
     api: api[platform],
