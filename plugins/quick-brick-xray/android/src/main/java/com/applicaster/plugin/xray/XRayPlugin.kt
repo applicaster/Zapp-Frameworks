@@ -211,7 +211,7 @@ class XRayPlugin : CrashlogPlugin {
         // todo: we need immediate crash reporting mode in zapp: show share intent right after the crash
         val reportCrashes = StringUtil.booleanValue(configuration?.get(crashReportingKey))
         if(reportCrashes) {
-            Reporting.enableForCurrentThread(AppContext.get())
+            Reporting.enableForCurrentThread(AppContext.get(), true)
         } else {
             // can't disable it right now, since previous exception handler is lost, and this code could be called twice
         }
