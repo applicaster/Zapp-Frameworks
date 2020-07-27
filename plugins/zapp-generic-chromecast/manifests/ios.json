@@ -35,7 +35,7 @@
   "manifest_version": "0.2.3",
   "extra_dependencies": [
     {
-      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/ZappChromecast.podspec'"
+      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/apple/ZappChromecast.podspec'"
     }
   ],
   "api": {
