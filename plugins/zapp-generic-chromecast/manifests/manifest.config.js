@@ -1,4 +1,5 @@
 const npmDependency = "@applicaster/zapp-generic-chromecast";
+
 const baseManifest = {
   general: {},
   data: {},
@@ -39,24 +40,32 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
-    extra_dependencies: [
-      {
-        ZappChromecast: `:path => './node_modules/${npmDependency}/apple/ZappChromecast.podspec'`,
-      },
-    ],
     api: api[platform],
     npm_dependencies: [`${npmDependency}@${version}`],
-    project_dependencies: [
+    targets: ["mobile"],
+  };
+
+  if (platform.includes("android")) {
+    manifest.project_dependencies = [
       {
         "react-native-google-cast": `./node_modules/${npmDependency}/android`,
       },
-    ],
-    targets: targets[platform],
-  };
+    ];
+
+    manifest.extra_dependencies = [];
+  }
+
+  if (platform.includes("ios")) {
+    manifest.extra_dependencies = [
+      {
+        ZappChromecast: `:path => './node_modules/${npmDependency}/apple/ZappChromecast.podspec'`,
+      },
+    ];
+  }
+
   return manifest;
 }
 const min_zapp_sdk = {
-  tvos: "12.1.0-dev",
   ios: "20.1.0-dev",
   android: "20.0.0",
   tvos_for_quickbrick: "0.1.0-alpha1",
@@ -69,27 +78,16 @@ const api_apple = {
   modules: ["ZappChromecast"],
 };
 const api_android = {
+  require_startup_exectution: false,
   class_name: "com.applicaster.chromecast.ChromeCastPlugin",
   react_packages: ["com.reactnative.googlecast.GoogleCastPackage"],
+  roguard_rules: "-keep public class com.reactnative.googlecast.** {*;}",
 };
 const api = {
   ios: api_apple,
   ios_for_quickbrick: api_apple,
-  tvos: api_apple,
-  tvos_for_quickbrick: api_apple,
   android: api_android,
   android_for_quickbrick: api_android,
-};
-
-const mobileTarget = ["mobile"];
-const tvTarget = ["tv"];
-const targets = {
-  ios: mobileTarget,
-  ios_for_quickbrick: mobileTarget,
-  tvos: tvTarget,
-  tvos_for_quickbrick: tvTarget,
-  android: mobileTarget,
-  android_for_quickbrick: mobileTarget,
 };
 
 module.exports = createManifest;
