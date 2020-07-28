@@ -39,11 +39,12 @@ public class PluginsManager: NSObject {
         }
     }
 
+    // If will not be used remove in future
     func crashLogs(_ successHandler: @escaping StateCallBack,
                    _ failHandler: @escaping StateCallBack) {
-        crashlogs.prepareManager { success in
-            success ? successHandler() : failHandler()
-        }
+//        crashlogs.prepareManager { success in
+//            success ? successHandler() : failHandler()
+//        }
     }
 
     func prepareAnalyticsPlugins(_ successHandler: @escaping StateCallBack,

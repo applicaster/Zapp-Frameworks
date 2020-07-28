@@ -64,9 +64,11 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         }
 
         guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
-            let contentId = entry[ItemMetadata.contentId] as? (NSCopying & NSObjectProtocol) else {
+            let contentIdString = entry[ItemMetadata.contentId] as? String,
+                let contentIdInt = Int(contentIdString) else {
                 return
         }
+        let contentId = NSNumber(value: contentIdInt)
 
         logger = NowPlayingLogger()
         logger?.start()
@@ -101,18 +103,6 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
             nowPlayingInfo[MPMediaItemPropertyComments] = summary
         }
 
-        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-    }
-
-    func sendNowPlayingOnPause() {
-        guard let playerPlugin = playerPlugin else {
-            return
-        }
-
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo
-        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin.playbackPosition()
-        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
 }

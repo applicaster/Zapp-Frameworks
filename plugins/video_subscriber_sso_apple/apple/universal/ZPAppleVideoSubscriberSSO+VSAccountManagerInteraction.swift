@@ -61,7 +61,7 @@ extension ZPAppleVideoSubscriberSSO {
         }
     }
 
-    func requestAuthenticationStatus(interrruption: Bool = false, completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
+    func requestAuthenticationStatus(interrruption: Bool = true, completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
         let request = VSAccountMetadataRequest()
         request.includeAccountProviderIdentifier = true
         request.includeAuthenticationExpirationDate = true
@@ -99,10 +99,20 @@ extension ZPAppleVideoSubscriberSSO {
         request.includeAuthenticationExpirationDate = true
         request.isInterruptionAllowed = true
         request.verificationToken = verificationToken
-        request.channelIdentifier = vsApplevelAuthenticationEndpoint
-        request.attributeNames = vsApplevelAuthenticationAttributes
-        request.supportedAuthenticationSchemes = [VSAccountProviderAuthenticationScheme(rawValue: "OAuth")]
+        request.channelIdentifier = vsApplevelUserMetadataEndpoint
+        request.attributeNames = vsApplevelUserMetadataAttributes
+        request.supportedAccountProviderIdentifiers = vsSupportedProviderIdentifiers
 
+        if #available(tvOS 13.0, iOS 13.0, *) {
+            request.supportedAuthenticationSchemes = [.saml, .api]
+        } else {
+            if #available(iOS 10.2, *) {
+                request.supportedAuthenticationSchemes = [.saml]
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
         videoSubscriberAccountManager.enqueue(request) { userMetadata, error in
             if let data = userMetadata {
                 DispatchQueue.main.async {
@@ -159,8 +169,15 @@ extension ZPAppleVideoSubscriberSSO {
     }
 
     func getServiceProviderToken(for authResult: VideoSubscriberAccountManagerResult?, completion: @escaping (_ success: Bool, _ token: String?, _ message: String?) -> Void) {
-        guard let postString = authResult?.samlAttributeQueryResponse,
-            let urlString = self.vsAuthenticationEndpoint,
+        var postString = ""
+        if let samlAttributeQueryResponse = authResult?.samlAttributeQueryResponse {
+            postString = samlAttributeQueryResponse
+        }
+        else if let providerResponseBody = authResult?.accountProviderResponseBody  {
+            postString = providerResponseBody
+        }
+        
+        guard let urlString = self.vsAuthenticationEndpoint,
             let url = URL(string: urlString) else {
             completion(false, nil, nil)
             return

@@ -23,6 +23,12 @@ const baseManifest = {
       tooltip_text: "Is plugin enabled on app start",
       default: 1,
     },
+    {
+      type: "text",
+      key: "access_level",
+      tooltip_text: "Access Level (0 - free, 1 - account, 2 - paid subscription)",
+      default: "0",
+    }
   ],
 };
 

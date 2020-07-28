@@ -46,19 +46,19 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
 
     lazy var vsSupportedProviderIdentifiers: [String] = {
-        guard let identifiers = configurationJSON?["provider_identifiers"] as? String,
-            !identifiers.isEmpty else {
+        guard let identifier = configurationJSON?["provider_identifier"] as? String,
+            !identifier.isEmpty else {
             return []
         }
-        return identifiers.components(separatedBy: ",")
+        return [identifier]
     }()
 
     lazy var vsProviderName: String? = {
-        guard let identifier = configurationJSON?["provider_name"] as? String,
-            !identifier.isEmpty else {
+        guard let name = configurationJSON?["provider_name"] as? String,
+            !name.isEmpty else {
             return nil
         }
-        return identifier
+        return name
     }()
     
     lazy var vsProviderChannelID: String? = {
@@ -70,16 +70,16 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }()
     
 
-    lazy var vsApplevelAuthenticationEndpoint: String? = {
-        guard let endpoint = configurationJSON?["app_level_authentication_endpoint"] as? String,
+    lazy var vsApplevelUserMetadataEndpoint: String? = {
+        guard let endpoint = configurationJSON?["app_level_user_metadata_endpoint"] as? String,
             !endpoint.isEmpty else {
             return nil
         }
         return endpoint
     }()
 
-    lazy var vsApplevelAuthenticationAttributes: [String] = {
-        guard let attributes = configurationJSON?["app_level_authentication_attributes"] as? String,
+    lazy var vsApplevelUserMetadataAttributes: [String] = {
+        guard let attributes = configurationJSON?["app_level_user_metadata_attributes"] as? String,
             !attributes.isEmpty else {
             return []
         }
@@ -93,6 +93,48 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
         videoSubscriberAccountManager.delegate = self
     }
+    
+    lazy var localizations: [String: String] = {
+        guard let localizations = configurationJSON?["localizations"] as? [String: NSDictionary],
+            let languageCode = NSLocale.current.languageCode,
+            let languageContent = localizations[languageCode] as? [String: String] else {
+                return [:]
+        }
+        return languageContent
+    }()
+    
+    lazy var vsFailureAlertTitle: String = {
+        guard let value = localizations["failure_alert_title"],
+            !value.isEmpty else {
+            return "Unable to connect to TV Provider"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertDescription: String = {
+        let defaultValue = "Please make sure TV Provider is configured in device settings"
+        guard let value = localizations["failure_alert_description"],
+            !value.isEmpty else {
+            return defaultValue
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertOkButtonTitle: String = {
+        guard let value = localizations["failure_alert_ok_button_title"],
+            !value.isEmpty else {
+            return "Ok"
+        }
+        return value
+    }()
+    
+    lazy var vsFailureAlertSettingButtonTitle: String = {
+        guard let value = localizations["failure_alert_settings_button_title"],
+            !value.isEmpty else {
+            return "Open app settings"
+        }
+        return value
+    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion
@@ -107,7 +149,13 @@ class ZPAppleVideoSubscriberSSO: NSObject {
                         // update authentication status
                         self.managerInfo.isAuthenticated = authResult.success
                     }
-                    self.performApplevelAuthenticationIfNeeded()
+                    // continue to app level auth if device authenticated and authorized
+                    if self.managerInfo.isAuthenticated && self.managerInfo.isAuthorized {
+                        self.performApplevelAuthenticationIfNeeded()
+                    }
+                    else {
+                        self.processResult()
+                    }
                 }
             } else {
                 self.processResult()
@@ -117,7 +165,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
     fileprivate func performApplevelAuthenticationIfNeeded() {
         // check and perform app level authentication if required
-        if vsApplevelAuthenticationEndpoint?.isEmpty == false && vsApplevelAuthenticationAttributes.count > 0 {
+        if vsApplevelUserMetadataEndpoint?.isEmpty == false && vsApplevelUserMetadataAttributes.count > 0 {
             // reset authentication status
             managerInfo.isAuthenticated = false
 
@@ -146,7 +194,12 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     fileprivate func processResult() {
         let success = managerInfo.isAuthorized && managerInfo.isAuthenticated
         DispatchQueue.main.async {
+            if !success {
+                self.presentFailureAlert()
+            }
             self.vsaAccessOperationCompletion?(success)
         }
     }
 }
+
+

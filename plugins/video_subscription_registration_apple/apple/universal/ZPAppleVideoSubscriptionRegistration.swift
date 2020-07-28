@@ -25,17 +25,15 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
         guard isInfoPlistSupportEnabled == true else {
             return false
         }
-        #if DEBUG
-        return false
-        #else
+
         return true
-        #endif
     }()
 
     /// Plugin configuration keys
     struct PluginKeys {
         static let billingIdentifier = "billing_identifier"
         static let tierIdentifiers = "tier_identifiers"
+        static let accessLevel = "access_level"
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -50,10 +48,12 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
 
-        if self.hasNeededEntitlements {
+        if self.hasNeededEntitlements,
+            self.accessLevel != .unknown {
+            
             let subscription = VSSubscription()
             subscription.expirationDate = Date.distantFuture
-            subscription.accessLevel = .paid
+            subscription.accessLevel = self.accessLevel
             if #available(iOS 11.3, tvOS 11.3, *) {
               if !billingIdentifier.isEmpty {
                   subscription.billingIdentifier = billingIdentifier
@@ -78,22 +78,30 @@ class ZPAppleVideoSubscriptionRegistration: NSObject, GeneralProviderProtocol {
         completion?(true)
     }
 
-
     lazy var billingIdentifier:String = {
-        if let value = self.configurationJSON?[PluginKeys.billingIdentifier] as? String {
-            return value
-        }
-        else {
+        guard let value = self.configurationJSON?[PluginKeys.billingIdentifier] as? String
+            else {
             return ""
         }
+        return value
     }()
 
     lazy var tierIdentifiers:[String] = {
-        if let value = self.configurationJSON?[PluginKeys.tierIdentifiers] as? String {
-            return value.components(separatedBy: ",")
-        }
-        else {
+        guard let value = self.configurationJSON?[PluginKeys.tierIdentifiers] as? String
+            else {
             return []
         }
+        return value.components(separatedBy: ",")
+
+    }()
+    
+    lazy var accessLevel:VSSubscriptionAccessLevel = {
+        guard let value = self.configurationJSON?[PluginKeys.accessLevel] as? String,
+            let intValue = Int(value), intValue > 0,
+            let accessLevel = VSSubscriptionAccessLevel(rawValue: intValue)
+            else {
+            return .unknown
+        }
+        return accessLevel
     }()
 }

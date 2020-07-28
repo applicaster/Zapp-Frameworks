@@ -22,10 +22,16 @@
       "key": "enabled",
       "tooltip_text": "Is plugin enabled on app start",
       "default": 1
+    },
+    {
+      "type": "text",
+      "key": "access_level",
+      "tooltip_text": "Access Level (0 - free, 1 - account, 2 - paid subscription)",
+      "default": "0"
     }
   ],
   "platform": "tvos",
-  "manifest_version": "0.3.0",
+  "manifest_version": "0.5.3",
   "min_zapp_sdk": "12.0.0-Dev",
   "extra_dependencies": [
     {
@@ -46,7 +52,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.3.0"
+    "@applicaster/video_subscription_registration_apple@0.5.3"
   ],
   "targets": [
     "tv"

@@ -14,23 +14,29 @@ extension ZPAppleVideoNowPlayingInfo {
     public override func playerDidCreate(player: PlayerProtocol) {
         //docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
 
-        guard let entry = player.entry else {
+        guard let entry = player.entry,
+            let currentPlayer = player.playerObject as? AVPlayer,
+            let currentItem = currentPlayer.currentItem else {
             return
         }
 
         guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
-            let contentId = entry[ItemMetadata.contentId] as? (NSCopying & NSObjectProtocol) else {
+            let contentIdString = entry[ItemMetadata.contentId] as? String,
+                let contentIdInt = Int(contentIdString) else {
                 return
         }
-
+        let contentId = NSNumber(value: contentIdInt)
+        
         var metadataItems: [AVMetadataItem] = [AVMetadataItem]()
-        metadataItems.append(self.metadataItem(identifier: AVMetadataIdentifier.commonIdentifierTitle,
-                                               value: title))
-        metadataItems.append(self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierExternalContentIdentifier),
-                                               value: contentId))
-        metadataItems.append(self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
-                                               value: NSNumber(integerLiteral: 0)))
-
+        //title
+        let titleItem = self.metadataItem(identifier: AVMetadataIdentifier.commonIdentifierTitle,
+                                          value: title)
+        metadataItems.append(titleItem)
+        
+        //identifier
+        let identifierItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierExternalContentIdentifier),
+                                               value: contentId)
+        metadataItems.append(identifierItem)
         
         //image
         if let mediaGroup = entry[ItemMetadata.media_group] as? [[AnyHashable: Any]],
@@ -52,6 +58,30 @@ extension ZPAppleVideoNowPlayingInfo {
                                                    value: summary))
         }
         
-        avPlayer?.currentItem?.externalMetadata = metadataItems
+        currentItem.externalMetadata = metadataItems
     }
+    
+    // override func playerDidDismiss(player: PlayerProtocol) {
+    //     //update playback position for currently played item
+        
+    //     guard let currentPlayer = player.playerObject as? AVPlayer,
+    //         let currentItem = currentPlayer.currentItem else {
+    //         return
+    //     }
+    //     //get exising metadata of currently played item
+    //     var metadataItems = currentItem.externalMetadata
+    //     //playback position identifier
+    //     let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
+    //     //remove old value if exists
+    //     metadataItems.removeAll { (item) -> Bool in
+    //         return item.identifier == identifier
+    //     }
+    //     //set new value of current stopped position
+    //     let playbackProgress = player.playbackPosition() / player.playbackDuration()
+    //     let playbackProgresItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
+    //                                                 value: NSNumber(value: playbackProgress))
+    //     metadataItems.append(playbackProgresItem)
+        
+    //     currentItem.externalMetadata = metadataItems
+    // }
 }
