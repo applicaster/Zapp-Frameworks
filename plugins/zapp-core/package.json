@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-core",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "Native iOS low level framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
