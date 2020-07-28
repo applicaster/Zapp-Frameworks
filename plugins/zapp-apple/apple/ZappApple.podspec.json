@@ -26,13 +26,8 @@
       "OTHER_LDFLAGS": "$(inherited) -objc -framework \"AppCenter\" -framework \"AppCenterDistribute\" "
     },
     "dependencies": {
-      "AppCenter/Distribute": [
-        "= 3.0.0"
-      ],
-      "AppCenter/Analytics": [
-        "= 3.0.0"
-      ],
-      "XrayLogger": []
+      "AppCenter/Distribute": ["= 3.0.0"],
+      "AppCenter/Analytics": ["= 3.0.0"]
     },
     "source_files": "ios/**/*.{swift}"
   },
@@ -47,12 +42,8 @@
   },
   "dependencies": {
     "ZappCore": [],
-    "ReachabilitySwift": [
-      "= 5.0.0"
-    ],
-    "DeviceKit": [
-      "= 3.2.0"
-    ]
+    "ReachabilitySwift": ["= 5.0.0"],
+    "DeviceKit": ["= 3.2.0"]
   },
   "source_files": "universal/**/*.{h,m,swift}",
   "testspecs": [
