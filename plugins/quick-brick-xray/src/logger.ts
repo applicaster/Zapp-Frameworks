@@ -1,3 +1,5 @@
+import { XRayLogLevel } from "./logLevels";
+
 import { NativeModules } from "react-native";
 import { logInConsole } from "./console";
 import { logInXray } from "./xray";
@@ -26,17 +28,17 @@ export function log(event: XRayEvent) {
 }
 
 export function debug(event: XRayEvent) {
-  logFunction(XRayLogLevel.verbose, event);
+  logFunction(XRayLogLevel.debug, event);
 }
 
 export function info(event: XRayEvent) {
-  logFunction(XRayLogLevel.verbose, event);
+  logFunction(XRayLogLevel.info, event);
 }
 
 export function warn(event: XRayEvent) {
-  logFunction(XRayLogLevel.verbose, event);
+  logFunction(XRayLogLevel.warning, event);
 }
 
 export function error(event: XRayEvent) {
-  logFunction(XRayLogLevel.verbose, event);
+  logFunction(XRayLogLevel.error, event);
 }

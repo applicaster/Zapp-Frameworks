@@ -1,5 +1,7 @@
 type AnyDictionary = { [K in string]: any };
 
+declare module "@applicaster/quick-brick-xray";
+
 declare enum XRayLogLevel {
   verbose = 0,
   debug = 1,
@@ -17,8 +19,8 @@ declare type XRayEvent = {
   exception?: Error;
 };
 
-declare type XRayLogEvent<LogLevel> = XRayEvent & {
-  level: LogLevel;
+declare type XRayLogEvent<XRayLogLevel> = XRayEvent & {
+  level: XRayLogLevel;
 };
 
 declare type XRayVerboseEvent = XRayLogEvent<XRayLogLevel.verbose>;

@@ -1,5 +1,8 @@
+import * as R from "ramda";
+
 import * as logger from "./logger";
 import { Event } from "./Event";
+import { XRayLogLevel } from "./logLevels";
 
 type XRayEventData = {
   message: string;
@@ -13,6 +16,8 @@ export default class Logger implements XRayLoggerI {
   context: AnyDictionary;
   parent?: Logger;
 
+  static logLevels = XRayLogLevel;
+
   constructor(category: string, subsystem: string, parent?: Logger) {
     this.category = category;
     this.subsystem = subsystem;
@@ -24,48 +29,60 @@ export default class Logger implements XRayLoggerI {
     return new Logger(this.category, `${this.subsystem}/${subsystem}`, this);
   }
 
-  log(event: XRayEventData) {
+  log(event: string | XRayEventData) {
+    const logEvent = typeof event === "string" ? { message: event } : event;
+
     logger.log({
       category: this.category,
       subsystem: this.subsystem,
       context: this.context,
-      ...event,
+      ...logEvent,
     });
   }
 
-  debug(event: XRayEventData) {
+  debug(event: string | XRayEventData) {
+    const logEvent = typeof event === "string" ? { message: event } : event;
+
     logger.debug({
       category: this.category,
       subsystem: this.subsystem,
       context: this.context,
-      ...event,
+      ...logEvent,
     });
   }
 
-  info(event: XRayEventData) {
+  info(event: string | XRayEventData) {
+    const logEvent = typeof event === "string" ? { message: event } : event;
+
     logger.info({
       category: this.category,
       subsystem: this.subsystem,
       context: this.context,
-      ...event,
+      ...logEvent,
     });
   }
 
-  warning(event: XRayEventData) {
+  warning(event: string | XRayEventData) {
+    const logEvent = typeof event === "string" ? { message: event } : event;
+
     logger.warn({
       category: this.category,
       subsystem: this.subsystem,
       context: this.context,
-      ...event,
+      ...logEvent,
     });
   }
 
-  error(event: XRayEventData) {
+  error(event: Error | XRayEventData) {
+    const logEvent = R.is(Error, event)
+      ? { error: event, message: "an error occurred" }
+      : event;
+
     logger.error({
       category: this.category,
       subsystem: this.subsystem,
       context: this.context,
-      ...event,
+      ...logEvent,
     });
   }
 

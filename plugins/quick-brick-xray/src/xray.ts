@@ -1,4 +1,5 @@
 import { logInConsole } from "./console";
+import { XRayLogLevel } from "./logLevels";
 
 const XRayMethods = {
   [XRayLogLevel.verbose]: "l",

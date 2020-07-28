@@ -1,3 +1,5 @@
+import { XRayLogLevel } from "./logLevels";
+
 const loggerMethods = {
   [XRayLogLevel.verbose]: "log",
   [XRayLogLevel.debug]: "debug",
