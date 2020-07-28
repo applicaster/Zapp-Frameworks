@@ -23,7 +23,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
 
     open var providers: [String: pluginTypeProtocol] = [:]
 
-    func prepareManager(completion: PluginManagerCompletion) {
+    public func prepareManager(completion: PluginManagerCompletion) {
         createProviders(completion: completion)
     }
 

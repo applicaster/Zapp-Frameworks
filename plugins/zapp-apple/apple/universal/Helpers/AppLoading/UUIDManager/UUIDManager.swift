@@ -19,8 +19,8 @@ public class UUIDManager {
     
     static func fetchExistingKey() -> (key: String, value: String)? {
         var retValue:(key: String, value: String)?
-        guard let bundleIdentifier = FacadeConnector.connector?.storage?.sessionStorageValue(for: ZappStorageKeys.bundleIdentifier, namespace: nil),
-        let deviceType = FacadeConnector.connector?.storage?.sessionStorageValue(for: ZappStorageKeys.deviceType, namespace: nil) else {
+        guard let bundleIdentifier = SessionStorage.sharedInstance.get(key: ZappStorageKeys.bundleIdentifier, namespace: nil),
+            let deviceType = SessionStorage.sharedInstance.get(key: ZappStorageKeys.deviceType, namespace: nil) else {
             return retValue
         }
         
