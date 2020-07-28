@@ -10,7 +10,7 @@ const baseManifest = {
   ui_builder_support: true,
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
-    "5a364b49e03b2f000d51a0de"
+    "5a364b49e03b2f000d51a0de",
   ],
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
@@ -18,46 +18,40 @@ const baseManifest = {
   preload: true,
   custom_configuration_fields: [
     {
-      "type": "dropdown",
-      "key": "file_sink",
-      "tooltip_text": "Minimum message level to log to the file",
-      "multiple": false,
-      "options": [
-        "off",
-        "error",
-        "warning",
-        "info",
-        "debug",
-        "verbose"
-      ],
-      "default": "error"
+      type: "dropdown",
+      key: "file_sink",
+      tooltip_text: "Minimum message level to log to the file",
+      multiple: false,
+      options: ["off", "error", "warning", "info", "debug", "verbose"],
+      default: "error",
     },
     {
-      "key": "report_email",
-      "type": "text",
-      "tooltip_text": "Email to send reports to. Empty is allowed."
+      key: "report_email",
+      type: "text",
+      tooltip_text: "Email to send reports to. Empty is allowed.",
     },
     {
-      "type": "checkbox",
-      "label": "Notification controls",
-      "key": "notification",
-      "default": 1,
-      "tooltip_text": "Enable notification controls"
+      type: "checkbox",
+      label: "Notification controls",
+      key: "notification",
+      default: 1,
+      tooltip_text: "Enable notification controls",
     },
     {
-      "type": "checkbox",
-      "label": "Report crashes",
-      "key": "report_crashes",
-      "default": 1,
-      "tooltip_text": "Enable crash reporting"
+      type: "checkbox",
+      label: "Report crashes",
+      key: "report_crashes",
+      default: 1,
+      tooltip_text: "Enable crash reporting",
     },
     {
-      "type": "checkbox",
-      "label": "Log react native debug messages",
-      "key": "log_react_native_debug",
-      "default": 0,
-      "tooltip_text": "Enable logging or react native internal debug messages. Very verbose!"
-    }
+      type: "checkbox",
+      label: "Log react native debug messages",
+      key: "log_react_native_debug",
+      default: 0,
+      tooltip_text:
+        "Enable logging or react native internal debug messages. Very verbose!",
+    },
   ],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
@@ -80,9 +74,16 @@ function createManifest({ version, platform }) {
 
 const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
+  tvos: "12.1.0-dev",
+  ios: "20.1.0-dev",
+  tvos_for_quickbrick: "0.1.0-alpha1",
+  ios_for_quickbrick: "0.1.0-alpha1",
+  android_for_quickbrick: "0.1.0-alpha1",
 };
 
 const extra_dependencies_apple = {
+  QickBrickXray:
+    ":path => './node_modules/@applicaster/x-ray/apple/QickBrickXray.podspec'",
 };
 
 const extra_dependencies = {
@@ -93,11 +94,11 @@ const extra_dependencies = {
 };
 
 const project_dependencies_android = {
-    "xray": "node_modules/@applicaster/x-ray/android/xray",
-    "xray-react-native": "node_modules/@applicaster/x-ray/android/react-native",
-    "xrayplugin": "node_modules/@applicaster/quick-brick-xray/android",
-    "xray-notification": "node_modules/@applicaster/x-ray/android/notification",
-    "xray-reporting": "node_modules/@applicaster/x-ray/android/crashreporter"
+  xray: "node_modules/@applicaster/x-ray/android/xray",
+  "xray-react-native": "node_modules/@applicaster/x-ray/android/react-native",
+  xrayplugin: "node_modules/@applicaster/quick-brick-xray/android",
+  "xray-notification": "node_modules/@applicaster/x-ray/android/notification",
+  "xray-reporting": "node_modules/@applicaster/x-ray/android/crashreporter",
 };
 
 const project_dependencies = {
@@ -105,17 +106,20 @@ const project_dependencies = {
 };
 
 const api_apple = {
-  class_name: "MyPluginManager",
-  modules: ["MyPluginModule"],
+  class_name: "QickBrickXray",
+  modules: ["QickBrickXray"],
 };
 
 const api_android = {
   class_name: "com.applicaster.plugin.xray.XRayPlugin",
-  react_packages: [
-    "com.applicaster.xray.reactnative.XRayLoggerPackage",
-  ],
+  react_packages: ["com.applicaster.xray.reactnative.XRayLoggerPackage"],
 };
+
 const api = {
+  ios: api_apple,
+  ios_for_quickbrick: api_apple,
+  tvos: api_apple,
+  tvos_for_quickbrick: api_apple,
   android_for_quickbrick: api_android,
 };
 
@@ -123,6 +127,10 @@ const mobileTarget = ["mobile"];
 const tvTarget = ["tv"];
 const targets = {
   android_for_quickbrick: mobileTarget,
+  ios: mobileTarget,
+  ios_for_quickbrick: mobileTarget,
+  tvos: tvTarget,
+  tvos_for_quickbrick: tvTarget,
 };
 
 module.exports = createManifest;
