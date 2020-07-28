@@ -11,6 +11,7 @@ public class UrlSchemeHandler {
     
     enum SystemActions: String {
         case generateNewUUID
+        case plugin
     }
     
     public class func handle(with rootViewController: RootController?,
@@ -26,6 +27,8 @@ public class UrlSchemeHandler {
         switch action {
         case .generateNewUUID:
             retValue = self.handleUUIDregeneration(with: rootViewController)
+        case .plugin:
+            retValue = handlePluginURLScheme(url: url)
         default:
             break
         }
