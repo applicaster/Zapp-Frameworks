@@ -47,9 +47,14 @@ class StylesHelper {
     }
     
     public class func style(forKey key: String) -> [String:String]? {
-        guard let universalDict = ZappStyles?[StylesHelperApi.universal] as? [String:[String:String]],
-            let styleDict = universalDict[key] else {
-                return nil
+        var styleDict:[String:String]?
+        if let universalDict = ZappStyles?[StylesHelperApi.universal] as? [String:[String:String]],
+            let value = universalDict[key] {
+            styleDict = value
+        }
+        else if let deviceTypeDict = ZappStyles?[UIDevice.current.model.lowercased()] as? [String:[String:String]],
+            let value = deviceTypeDict[key] {
+            styleDict = value
         }
         return styleDict
     }
