@@ -27,7 +27,8 @@
     },
     "dependencies": {
       "AppCenter/Distribute": ["= 3.0.0"],
-      "AppCenter/Analytics": ["= 3.0.0"]
+      "AppCenter/Analytics": ["= 3.0.0"],
+      "XrayLogger": []
     },
     "source_files": "ios/**/*.{swift}"
   },
