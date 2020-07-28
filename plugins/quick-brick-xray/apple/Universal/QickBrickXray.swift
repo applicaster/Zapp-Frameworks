@@ -2,15 +2,15 @@
 //  QickBrickXray.swift
 //  QickBrickXray
 //
-//  Created by Alex Zchut on 27/08/2020.
+//  Created by Anton Kononenko on 27/08/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
 //
 
+import LoggerInfo
 import Reporter
 import UIKit
 import XrayLogger
 import ZappCore
-
 
 struct DefaultSinkIdentifiers {
     static let Console = "Console"
@@ -18,11 +18,12 @@ struct DefaultSinkIdentifiers {
     static let InMemorySink = "InMemorySink"
 }
 
-protocol NativeViewController {
-    func presentViewController(presenter:UIViewController, parms:[String:Any])
+enum ActionType {
+    case presentLoggerView
+    case shareLogs
 }
 
-public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, NativeViewController {
+public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol {
     public var configurationJSON: NSDictionary?
     let configurationHelper: KeysHelper
 
@@ -71,6 +72,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         Reporter.setDefaultData(emails: emailsForShare,
                                 url: fileJSONSink.fileURL,
                                 contexts: [:])
+        preparePlatform()
 
         completion?(true)
     }
@@ -79,8 +81,35 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         completion?(true)
     }
 
+    public func handlePluginURLScheme(with rootViewController: UIViewController?, url: URL) -> Bool {
+        return callActionFromURL(with: rootViewController, url: url)
+    }
 
-    public func present() {
-        InfoComponent.presentmost
+    private func callActionFromURL(with rootViewController: UIViewController?, url: URL) -> Bool {
+        guard let params = queryParams(url: url),
+            let action = params["action"] as? String else {
+            return false
+        }
+        if action == "loggerView" {
+            let loggerNavController = LoggerNavigationController.loggerNavigationController()
+            let presenter = rootViewController ?? UIApplication.shared.windows.first?.rootViewController
+            presenter?.present(loggerNavController,
+                               animated: true,
+                               completion: nil)
+            return true
+        } else if action == "shareLogs" {
+            Reporter.requestSendEmail()
+            return true
+        }
+        return false
+    }
+
+    private func queryParams(url: URL) -> [String: Any]? {
+        guard let components = URLComponents(url: url,
+                                             resolvingAgainstBaseURL: true),
+            let queryItems = components.queryItems else { return nil }
+        return queryItems.reduce(into: [String: String]()) { result, item in
+            result[item.name] = item.value
+        }
     }
 }
