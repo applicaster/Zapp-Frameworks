@@ -37,14 +37,6 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 
-const custom_configuration_fields = {
-  ios: custom_configuration_fields_apple,
-  ios_for_quickbrick: custom_configuration_fields_apple,
-  tvos: custom_configuration_fields_apple,
-  tvos_for_quickbrick: custom_configuration_fields_apple,
-  android_for_quickbrick: custom_configuration_fields_android,
-};
-
 const custom_configuration_fields_apple = [
   {
     type: "dropdown",
@@ -98,6 +90,15 @@ const custom_configuration_fields_android = [
       "Enable logging or react native internal debug messages. Very verbose!",
   },
 ];
+
+const custom_configuration_fields = {
+  ios: custom_configuration_fields_apple,
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
+  android_for_quickbrick: custom_configuration_fields_android,
+};
+
 const min_zapp_sdk = {
   tvos: "12.1.0-dev",
   ios: "20.1.0-dev",
