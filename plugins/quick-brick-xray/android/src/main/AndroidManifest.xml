@@ -4,6 +4,15 @@
     <application>
         <activity
             android:name="com.applicaster.plugin.xray.ui.LogActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:label="Setup"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/scheme_url_prefix" android:host="xray" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

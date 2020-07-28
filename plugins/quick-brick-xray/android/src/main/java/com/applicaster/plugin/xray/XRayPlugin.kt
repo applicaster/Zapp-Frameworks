@@ -4,6 +4,10 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.util.Log
 import android.util.Printer
 import com.applicaster.plugin.xray.ui.LogActivity
@@ -259,6 +263,21 @@ class XRayPlugin : CrashlogPlugin {
             overrideRNPrinter()
         } else {
             PrinterHolder.setPrinter(NoopPrinter.INSTANCE)
+        }
+
+        // add shortcut
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            context.getSystemService<ShortcutManager>(ShortcutManager::class.java)?.let { shortcutManager ->
+                if (!shortcutManager.dynamicShortcuts.stream().anyMatch { it.id == "xray" }) {
+                    val shortcut = ShortcutInfo.Builder(context, "xray")
+                            .setShortLabel("XRay")
+                            .setLongLabel("Open XRay log")
+                            .setIcon(Icon.createWithResource(context, R.drawable.ic_xray_settings_24))
+                            .setIntent(Intent(context, LogActivity::class.java).setAction(Intent.ACTION_VIEW))
+                            .build()
+                    shortcutManager.addDynamicShortcuts(listOf(shortcut))
+                }
+            }
         }
         // todo: update filters configuration
     }
