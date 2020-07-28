@@ -16,43 +16,7 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-  custom_configuration_fields: [
-    {
-      type: "dropdown",
-      key: "file_sink",
-      tooltip_text: "Minimum message level to log to the file",
-      multiple: false,
-      options: ["off", "error", "warning", "info", "debug", "verbose"],
-      default: "error",
-    },
-    {
-      key: "report_email",
-      type: "text",
-      tooltip_text: "Email to send reports to. Empty is allowed.",
-    },
-    {
-      type: "checkbox",
-      label: "Notification controls",
-      key: "notification",
-      default: 1,
-      tooltip_text: "Enable notification controls",
-    },
-    {
-      type: "checkbox",
-      label: "Report crashes",
-      key: "report_crashes",
-      default: 1,
-      tooltip_text: "Enable crash reporting",
-    },
-    {
-      type: "checkbox",
-      label: "Log react native debug messages",
-      key: "log_react_native_debug",
-      default: 0,
-      tooltip_text:
-        "Enable logging or react native internal debug messages. Very verbose!",
-    },
-  ],
+  custom_configuration_fields: [],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
 };
@@ -68,12 +32,73 @@ function createManifest({ version, platform }) {
     npm_dependencies: [`@applicaster/quick-brick-xray@${version}`],
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
+    custom_configuration_fields: custom_configuration_fields[platform],
   };
   return manifest;
 }
 
+const custom_configuration_fields = {
+  ios: custom_configuration_fields_apple,
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
+  android_for_quickbrick: custom_configuration_fields_android,
+};
+
+const custom_configuration_fields_apple = [
+  {
+    type: "dropdown",
+    key: "file_sink",
+    tooltip_text: "Minimum message level to log to the file",
+    multiple: false,
+    options: ["off", "error", "warning", "info", "debug", "verbose"],
+    default: "error",
+  },
+  {
+    key: "report_email",
+    type: "text",
+    tooltip_text: "Email to send reports to. Empty is allowed.",
+  },
+];
+
+const custom_configuration_fields_android = [
+  {
+    type: "dropdown",
+    key: "file_sink",
+    tooltip_text: "Minimum message level to log to the file",
+    multiple: false,
+    options: ["off", "error", "warning", "info", "debug", "verbose"],
+    default: "error",
+  },
+  {
+    key: "report_email",
+    type: "text",
+    tooltip_text: "Email to send reports to. Empty is allowed.",
+  },
+  {
+    type: "checkbox",
+    label: "Notification controls",
+    key: "notification",
+    default: 1,
+    tooltip_text: "Enable notification controls",
+  },
+  {
+    type: "checkbox",
+    label: "Report crashes",
+    key: "report_crashes",
+    default: 1,
+    tooltip_text: "Enable crash reporting",
+  },
+  {
+    type: "checkbox",
+    label: "Log react native debug messages",
+    key: "log_react_native_debug",
+    default: 0,
+    tooltip_text:
+      "Enable logging or react native internal debug messages. Very verbose!",
+  },
+];
 const min_zapp_sdk = {
-  android_for_quickbrick: "0.1.0-alpha1",
   tvos: "12.1.0-dev",
   ios: "20.1.0-dev",
   tvos_for_quickbrick: "0.1.0-alpha1",
