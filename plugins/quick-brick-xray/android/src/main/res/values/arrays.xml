@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="log_levels">
+        <item>@color/colorLogVerbose</item>
+        <item>@color/colorLogDebug</item>
+        <item>@color/colorLogInfo</item>
+        <item>@color/colorLogWarning</item>
+        <item>@color/colorLogError</item>
+    </array>
+</resources>
