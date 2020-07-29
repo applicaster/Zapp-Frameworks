@@ -7,6 +7,8 @@ const baseManifest = {
   description: "Enable advanced logging using Applicaster X-Ray",
   type: "error_monitoring",
   identifier: "xray_logging_plugin",
+  screen: false,
+  react_native: true,
   ui_builder_support: true,
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
@@ -136,16 +138,26 @@ const extra_dependencies = {
   tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
-const project_dependencies_android = {
-  xray: "node_modules/@applicaster/x-ray/android/xray",
-  "xray-react-native": "node_modules/@applicaster/x-ray/android/react-native",
-  xrayplugin: "node_modules/@applicaster/quick-brick-xray/android",
-  "xray-notification": "node_modules/@applicaster/x-ray/android/notification",
-  "xray-reporting": "node_modules/@applicaster/x-ray/android/crashreporter",
-};
+const project_dependencies_android = [
+    {
+      "xray": "node_modules/@applicaster/x-ray/android/xray"
+    },
+    {
+      "xray-react-native": "node_modules/@applicaster/x-ray/android/react-native"
+    },
+    {
+      "xrayplugin": "node_modules/@applicaster/quick-brick-xray/android"
+    },
+    {
+      "xray-notification": "node_modules/@applicaster/x-ray/android/notification"
+    },
+    {
+      "xray-reporting": "node_modules/@applicaster/x-ray/android/crashreporter"
+    }
+];
 
 const project_dependencies = {
-  android_for_quickbrick: [project_dependencies_android],
+  android_for_quickbrick: project_dependencies_android,
 };
 
 const api_apple = {
