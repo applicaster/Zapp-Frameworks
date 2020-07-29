@@ -132,10 +132,10 @@ const extra_dependencies_apple = [
 ];
 
 const extra_dependencies = {
-  ios: [extra_dependencies_apple],
-  ios_for_quickbrick: [extra_dependencies_apple],
-  tvos: [extra_dependencies_apple],
-  tvos_for_quickbrick: [extra_dependencies_apple],
+  ios: extra_dependencies_apple,
+  ios_for_quickbrick: extra_dependencies_apple,
+  tvos: extra_dependencies_apple,
+  tvos_for_quickbrick: extra_dependencies_apple,
 };
 
 const project_dependencies_android = [
