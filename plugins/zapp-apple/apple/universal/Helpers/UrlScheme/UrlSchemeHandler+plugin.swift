@@ -1,5 +1,5 @@
 //
-//  UrlSchemeHandler+generateNewUUID.swift
+//  UrlSchemeHandler+plugin.swift
 //  ZappApple
 //
 //  Created by Alex Zchut on 26/02/2020.
@@ -22,8 +22,11 @@ extension UrlSchemeHandler {
         }
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
         let pluginAdapter = classType.init(pluginModel: pluginModel)
-        return pluginAdapter.handlePluginURLScheme?(with: viewController,
-                                                    url: url) ?? false
+        if let pluginAdapter = pluginAdapter as? PluginURLHandlerProtocol {
+            return pluginAdapter.handlePluginURLScheme?(with: viewController,
+                                                        url: url) ?? false
+        }
+        return false
     }
 
     private class func queryParams(url: URL) -> [String: Any]? {

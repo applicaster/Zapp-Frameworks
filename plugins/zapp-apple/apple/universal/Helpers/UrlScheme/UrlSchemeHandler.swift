@@ -27,6 +27,7 @@ public class UrlSchemeHandler {
         switch action {
         case .generateNewUUID:
             retValue = self.handleUUIDregeneration(with: rootViewController)
+            // This section is experimental, not in use. If not needed in future, please remove it, with handlePluginURLScheme: func
         case .plugin:
             retValue = handlePluginURLScheme(url: url)
         default:
