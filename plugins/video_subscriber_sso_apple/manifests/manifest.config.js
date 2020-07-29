@@ -24,7 +24,7 @@ const baseManifest = {
       type: "hidden",
       key: "enabled",
       tooltip_text: "Is plugin enabled on app start",
-      initial_value: 0,
+      default: 0,
     },
     {
       type: "text",
