@@ -33,9 +33,9 @@
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
     {
-      "type": "hidden",
+      "type": "checkbox",
       "key": "enabled",
-      "tooltip_text": "Is plugin enabled on app start",
+      "tooltip_text": "PLUGIN SHOULD BE DISABLED ON START",
       "default": 0
     },
     {
@@ -109,14 +109,14 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.4.11"
+    "@applicaster/video_subscriber_sso_apple@0.4.12"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos",
-  "dependency_version": "0.4.11",
-  "manifest_version": "0.4.11",
+  "dependency_version": "0.4.12",
+  "manifest_version": "0.4.12",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
