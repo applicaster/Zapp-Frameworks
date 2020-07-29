@@ -83,7 +83,6 @@ extension RootController: LoadingStateMachineDataSource {
         if state == .success {
             appReadyForUse = true
             makeInterfaceLayerAsRootViewContoroller()
-            appDelegate?.handleDelayedEventsIfNeeded()
 
             facadeConnector.analytics?.sendEvent?(name: CoreAnalyticsKeys.applicationWasLaunched,
                                                   parameters: [:])
@@ -92,6 +91,10 @@ extension RootController: LoadingStateMachineDataSource {
                                             object: nil)
             pluginsManager.hookAfterAppRootPresentation(hooksPlugins: nil,
                                                         completion: {})
+            // Delay to provide time for QB present view
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.appDelegate?.handleDelayedEventsIfNeeded()
+            }
 
         } else {
             // TODO: After will be added multi language support should be take from localization string
