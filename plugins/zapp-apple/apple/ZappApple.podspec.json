@@ -55,7 +55,6 @@
     "XrayLogger": []
   },
   "source_files": "universal/**/*.{h,m,swift}",
-  "exclude_files": "universal/**/XrayLogger/*.{swift}",
   "testspecs": [
     {
       "name": "UnitTests",
