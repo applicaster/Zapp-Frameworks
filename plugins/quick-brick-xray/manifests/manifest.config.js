@@ -106,19 +106,28 @@ const min_zapp_sdk = {
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
 };
-
-const extra_dependencies_apple = {
-  QickBrickXray:
-    ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
-  XrayLogger:
-    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  "XrayLogger/ReactNative":
-    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  Reporter:
-    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  LoggerInfo:
-    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-};
+const extra_dependencies_apple = [
+  {
+    QickBrickXray:
+      ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
+  },
+  {
+    XrayLogger:
+      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+  },
+  {
+    "XrayLogger/ReactNative":
+      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+  },
+  {
+    Reporter:
+      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+  },
+  {
+    LoggerInfo:
+      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+  },
+];
 
 const extra_dependencies = {
   ios: [extra_dependencies_apple],
