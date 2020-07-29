@@ -51,8 +51,7 @@
     ],
     "DeviceKit": [
       "= 3.2.0"
-    ],
-    "XrayLogger": []
+    ]
   },
   "source_files": "universal/**/*.{h,m,swift}",
   "testspecs": [
