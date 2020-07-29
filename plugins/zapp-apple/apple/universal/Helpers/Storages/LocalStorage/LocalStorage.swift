@@ -34,7 +34,8 @@ import Foundation
         let setResult = StorageHelper.setZappData(inStorageDict: storage,
                                                   key: key,
                                                   value: value,
-                                                  namespace: namespace)
+                                                  namespace: namespace,
+                                                  storageType: .local)
         saveToUserDefaults(storage: setResult.storageDict)
         return setResult.succeed
     }

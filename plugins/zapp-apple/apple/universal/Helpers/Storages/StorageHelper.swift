@@ -8,6 +8,11 @@
 
 import Foundation
 
+public enum StorageTypes: String {
+    case session
+    case local
+}
+
 public class StorageHelper {
     /// Create empty object that conforms Zapp storage API
     ///
@@ -30,13 +35,14 @@ public class StorageHelper {
     public class func setZappData(inStorageDict storageDict: [String: Any],
                                   key: String,
                                   value: String,
-                                  namespace: String?) -> (storageDict: [String: Any], succeed: Bool) {
+                                  namespace: String?,
+                                  storageType: StorageTypes) -> (storageDict: [String: Any], succeed: Bool) {
         var sessionData: [String: Any] = [String: Any]()
         var namespaceToUse = ZappStorageKeys.applicasterNamespace
-               if let namespace = namespace,
-                   namespace.isEmpty == false {
-                   namespaceToUse = namespace
-               }
+        if let namespace = namespace,
+            namespace.isEmpty == false {
+            namespaceToUse = namespace
+        }
 
         guard var namespaceDict = storageDict[ZappStorageKeys.zapp] as? [String: Any] else { return (storageDict: storageDict, succeed: false) }
 
@@ -47,6 +53,9 @@ public class StorageHelper {
         sessionData[key] = value
         namespaceDict[namespaceToUse] = sessionData
 
+        NotificationCenter.default.post(name: Notification.Name("\(storageType.rawValue)_\(namespaceToUse)"),
+                                        object: nil,
+                                        userInfo: sessionData)
         return (storageDict: [ZappStorageKeys.zapp: namespaceDict], succeed: true)
     }
 
@@ -65,7 +74,7 @@ public class StorageHelper {
             namespace.isEmpty == false {
             namespaceToUse = namespace
         }
-        
+
         guard let namespaceDicts = storageDict[ZappStorageKeys.zapp] as? [String: Any],
             let currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return nil }
 
@@ -86,7 +95,7 @@ public class StorageHelper {
     /// - Returns: String Value represantation of the JSON. If namespace not nil will return all items for namespace domain, otherwise all storage items
     public class func getAll(inStorageDict storageDict: [String: Any],
                              namespace: String?) -> String? {
-      var namespaceToUse = ZappStorageKeys.applicasterNamespace
+        var namespaceToUse = ZappStorageKeys.applicasterNamespace
         if let namespace = namespace,
             namespace.isEmpty == false {
             namespaceToUse = namespace
@@ -109,5 +118,4 @@ public class StorageHelper {
         }
         return jsonString
     }
-    
 }
