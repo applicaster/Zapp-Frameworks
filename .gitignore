@@ -98,3 +98,4 @@ node_modules
 /**/.DS_Store
 CircleArtifacts
 plugins/**/package-lock.json
+lib
