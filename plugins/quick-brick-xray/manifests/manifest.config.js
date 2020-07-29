@@ -109,7 +109,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = {
   QickBrickXray:
-    ":path => './node_modules/@applicaster/x-ray/apple/QickBrickXray.podspec'",
+    ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
   XrayLogger:
     "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   "XrayLogger/ReactNative":
