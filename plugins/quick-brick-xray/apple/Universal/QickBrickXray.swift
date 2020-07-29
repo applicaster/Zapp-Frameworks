@@ -24,6 +24,9 @@ enum ActionType {
 }
 
 public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol {
+    let pluginNameSpace = "xray_logging_plugin"
+    let sessionStorageObservationKey = "session_xray_logging_plugin"
+
     public var configurationJSON: NSDictionary?
     let configurationHelper: KeysHelper
 
@@ -79,37 +82,5 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
 
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
-    }
-
-    public func handlePluginURLScheme(with rootViewController: UIViewController?, url: URL) -> Bool {
-        return callActionFromURL(with: rootViewController, url: url)
-    }
-
-    private func callActionFromURL(with rootViewController: UIViewController?, url: URL) -> Bool {
-        guard let params = queryParams(url: url),
-            let action = params["action"] as? String else {
-            return false
-        }
-        if action == "loggerView" {
-            let loggerNavController = LoggerNavigationController.loggerNavigationController()
-            let presenter = rootViewController ?? UIApplication.shared.windows.first?.rootViewController
-            presenter?.present(loggerNavController,
-                               animated: true,
-                               completion: nil)
-            return true
-        } else if action == "shareLogs" {
-            Reporter.requestSendEmail()
-            return true
-        }
-        return false
-    }
-
-    private func queryParams(url: URL) -> [String: Any]? {
-        guard let components = URLComponents(url: url,
-                                             resolvingAgainstBaseURL: true),
-            let queryItems = components.queryItems else { return nil }
-        return queryItems.reduce(into: [String: String]()) { result, item in
-            result[item.name] = item.value
-        }
     }
 }
