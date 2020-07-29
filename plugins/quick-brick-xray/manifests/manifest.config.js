@@ -111,13 +111,13 @@ const extra_dependencies_apple = {
   QickBrickXray:
     ":path => './node_modules/@applicaster/x-ray/apple/QickBrickXray.podspec'",
   XrayLogger:
-    "git: 'https://github.com/applicaster/x-ray.git, :tag => '0.0.2-alpha'",
+    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   "XrayLogger/ReactNative":
-    "git: 'https://github.com/applicaster/x-ray.git, :tag => '0.0.2-alpha'",
+    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   Reporter:
-    "git: 'https://github.com/applicaster/x-ray.git, :tag => '0.0.2-alpha'",
+    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   LoggerInfo:
-    "git: 'https://github.com/applicaster/x-ray.git, :tag => '0.0.2-alpha'",
+    "git: 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
 };
 
 const extra_dependencies = {
