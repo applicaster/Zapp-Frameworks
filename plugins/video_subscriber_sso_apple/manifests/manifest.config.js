@@ -21,9 +21,9 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [
     {
-      type: "hidden",
+      type: "checkbox",
       key: "enabled",
-      tooltip_text: "Is plugin enabled on app start",
+      tooltip_text: "PLUGIN SHOULD BE DISABLED ON START",
       default: 0,
     },
     {
