@@ -72,32 +72,34 @@ const baseManifest = {
       {
         key: "failure_alert_title",
         label: "Failure alert title",
-        tooltip:  "Failure alert title",
-        initial_value: "Unable to connect to TV Provider"
+        tooltip: "Failure alert title",
+        initial_value: "Unable to connect to TV Provider",
       },
       {
         key: "failure_alert_description",
         label: "Failure alert description",
-        tooltip:  "Failure alert description",
-        initial_value: "Please make sure TV Provider is configured in the device settings"
+        tooltip: "Failure alert description",
+        initial_value:
+          "Please make sure TV Provider is configured in the device settings",
       },
       {
         key: "failure_alert_ok_button_title",
         label: "Failure alert button title",
-        tooltip:  "Failure alert button title",
-        initial_value: "Ok"
+        tooltip: "Failure alert button title",
+        initial_value: "Ok",
       },
       {
         key: "failure_alert_settings_button_title",
         label: "Failure alert settings title",
-        tooltip:  "Failure alert settings title",
-        initial_value: "Open app settings"
+        tooltip: "Failure alert settings title",
+        initial_value: "Open app settings",
       },
-    ]
+    ],
   },
   identifier: "video_subscriber_sso_apple",
   npm_dependencies: [],
   targets: ["mobile"],
+  ui_frameworks: ["quickbrick"],
 };
 
 function createManifest({ version, platform }) {
