@@ -202,4 +202,20 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }
 }
 
-
+extension ZPAppleVideoSubscriberSSO {
+    func signIn(_ completion: ((_ success: Bool) -> Void)?) {
+        performSsoOperation({ success in
+            completion?(success)
+        })
+    }
+    
+    func signOut() {
+        self.presentLogoutAlert()
+    }
+    
+    func isSignedIn(_ completion: ((_ success: Bool) -> Void)?) {
+        self.checkSignInStatus { (success) in
+            completion?(success)
+        }
+    }
+}
