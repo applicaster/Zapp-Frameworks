@@ -2,9 +2,7 @@
   "api": {
     "require_startup_execution": false,
     "class_name": "ZPAppleVideoSubscriberSSO",
-    "modules": [
-      "ZappAppleVideoSubscriberSSO"
-    ],
+    "modules": ["ZappAppleVideoSubscriberSSO"],
     "plist": {
       "NSVideoSubscriberAccountUsageDescription": "We need to access you TV Provider for Single Sign-On to work."
     },
@@ -12,6 +10,7 @@
       "com.apple.developer.video-subscriber-single-sign-on": true
     }
   },
+  "ui_frameworks": ["quickbrick"],
   "dependency_repository_url": [],
   "dependency_name": "@applicaster/video_subscriber_sso_apple",
   "author_name": "Applicaster",
@@ -108,12 +107,8 @@
     ]
   },
   "identifier": "video_subscriber_sso_apple",
-  "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.4.14"
-  ],
-  "targets": [
-    "mobile"
-  ],
+  "npm_dependencies": ["@applicaster/video_subscriber_sso_apple@0.4.14"],
+  "targets": ["mobile"],
   "platform": "ios",
   "dependency_version": "0.4.14",
   "manifest_version": "0.4.14",
