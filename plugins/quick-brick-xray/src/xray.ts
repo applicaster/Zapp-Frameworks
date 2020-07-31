@@ -8,6 +8,7 @@ export function logInXray(XRayLoggerBridge: XRayLoggerNativeBridgeI) {
       logInConsole(level, event);
     }
 
+    event.context = null; // todo: one of the logged events has cycles in context
     XRayLoggerBridge.logEvent({ level, ...event });
   };
 }
