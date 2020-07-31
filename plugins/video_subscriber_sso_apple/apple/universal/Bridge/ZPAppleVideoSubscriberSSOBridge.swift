@@ -10,11 +10,6 @@ import Foundation
 import React
 import ZappCore
 
-struct ErrorCode {
-    static let unexpectedError = "Unexpected Error, please try again later"
-    static let notAuthorized = "Not Authorized"
-}
-
 struct ErrorMessages {
     static let unexpectedError = (code: "0", message: "Unexpected Error, please try again later")
     static let notAuthorized = (code: "1", message: "Not authorized")
