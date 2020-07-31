@@ -1,7 +1,7 @@
-import { SsoUiHook as Component } from "./videoSubscriberSsoUiHook";
+import SSOProvider from "./SSOProvider";
 
 const VideoSubscriberSsoUiHook = {
-  Component,
+  Component: SSOProvider,
   hasPlayerHook: true,
   presentFullScreen: true,
   isFlowBlocker: true,
