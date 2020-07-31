@@ -1,9 +1,16 @@
 package com.applicaster.plugin.xray
 
 import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.util.Log
 import android.util.Printer
+import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
@@ -17,6 +24,7 @@ import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
+import com.applicaster.xray.example.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.notification.XRayNotification
 import com.facebook.common.logging.FLog
 import com.facebook.common.logging.LoggingDelegate
@@ -36,6 +44,8 @@ class XRayPlugin : CrashlogPlugin {
         private const val crashReportingKey = "report_crashes"
 
         private const val fileSinkFileName = "xray_log.txt"
+
+        const val inMemorySinkName = "in_memory_sink"
     }
 
     private var activated = false
@@ -54,6 +64,9 @@ class XRayPlugin : CrashlogPlugin {
 
         // add default ADB sink
         Core.get().addSink("adb", ADBSink())
+
+        // default in memory sink (should be optional and configurable!)
+        Core.get().addSink(inMemorySinkName, InMemoryLogSink())
 
         // override default SDK Logger
         hookApplicasterLogger()
@@ -219,15 +232,27 @@ class XRayPlugin : CrashlogPlugin {
         val showNotification = StringUtil.booleanValue(configuration?.get(notificationKey))
 
         if(showNotification) {
-            // add report sharing button to notification
-            val shareLogIntent = SendActivity.getSendPendingIntent(AppContext.get())
+            val showLogIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, LogActivity::class.java)
+                            .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                    PendingIntent.FLAG_CANCEL_CURRENT
+            )!!
 
-            // if we have file logging enabled, allow to send it
-            val actions = if(fileLogLevel != null) hashMapOf("Send" to shareLogIntent) else null
+            // actions order is kept in the UI
+            val actions: HashMap<String, PendingIntent> = linkedMapOf("Show" to showLogIntent)
+
+            if(fileLogLevel != null) {
+                // add report sharing button to notification
+                // if we have file logging enabled, allow to send it
+                val shareLogIntent = SendActivity.getSendPendingIntent(context)
+                actions.put("Send", shareLogIntent)
+            }
 
             // here we show Notification UI with custom actions
             XRayNotification.show(
-                    AppContext.get(),
+                    context,
                     101,
                     actions
             )
@@ -238,6 +263,21 @@ class XRayPlugin : CrashlogPlugin {
             overrideRNPrinter()
         } else {
             PrinterHolder.setPrinter(NoopPrinter.INSTANCE)
+        }
+
+        // add shortcut
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            context.getSystemService<ShortcutManager>(ShortcutManager::class.java)?.let { shortcutManager ->
+                if (!shortcutManager.dynamicShortcuts.stream().anyMatch { it.id == "xray" }) {
+                    val shortcut = ShortcutInfo.Builder(context, "xray")
+                            .setShortLabel("XRay")
+                            .setLongLabel("Open XRay log")
+                            .setIcon(Icon.createWithResource(context, R.drawable.ic_xray_settings_24))
+                            .setIntent(Intent(context, LogActivity::class.java).setAction(Intent.ACTION_VIEW))
+                            .build()
+                    shortcutManager.addDynamicShortcuts(listOf(shortcut))
+                }
+            }
         }
         // todo: update filters configuration
     }
