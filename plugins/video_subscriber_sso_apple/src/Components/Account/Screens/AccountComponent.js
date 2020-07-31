@@ -87,7 +87,6 @@ function AccountComponent(props: Props) {
   }, []);
 
   useEffect(() => {
-    console.log("IS_LOGED_IN", { isLoggedIn });
     setIsLoading(false);
   }, [isLoggedIn]);
 
@@ -115,7 +114,6 @@ function AccountComponent(props: Props) {
   const start = async () => {
     try {
       const isSignedIn = await SSOBridge.isSignedIn();
-      console.log({ isSignedIn });
       return isSignedIn ? setIsLoggedIn(true) : setIsLoggedIn(false);
     } catch (err) {
       setIsLoggedIn(false);
@@ -125,7 +123,6 @@ function AccountComponent(props: Props) {
   };
 
   async function performButtonAction() {
-    console.log({ isLoggedIn });
     if (isLoggedIn) {
       return await SSOBridge.signOut();
     } else {
