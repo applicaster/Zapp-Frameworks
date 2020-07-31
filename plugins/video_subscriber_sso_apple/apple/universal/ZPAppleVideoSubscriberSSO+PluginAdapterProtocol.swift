@@ -15,14 +15,12 @@ extension ZPAppleVideoSubscriberSSO: PluginAdapterProtocol {
     }
 
     public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
-        performSsoOperation({ success in
-            ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO = self
-            completion?(success)
-        })
+        completion(success)
+        ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO = self
+ 
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
-        
         ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO = nil
         completion?(true)
     }

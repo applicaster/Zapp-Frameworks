@@ -36,33 +36,18 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
         return true
     }
 
-    @objc public func requestSso(_ resolver: @escaping RCTPromiseResolveBlock,
+    @objc public func requestSSO(_ resolver: @escaping RCTPromiseResolveBlock,
                                  rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            FacadeConnector.connector?.pluginManager?.enablePlugin(identifier: self.pluginIdentifier,
-                                                                   completion: { success in
-                                                                       if success {
-                                                                           resolver(true)
-                                                                       } else {
-                                                                           rejecter(ErrorMessages.notAuthorized.code,
-                                                                                    ErrorMessages.notAuthorized.message, nil)
-                                                                       }
-                                                                   })
-        }
-    }
-
-    @objc public func signIn(_ resolver: @escaping RCTPromiseResolveBlock,
-                             rejecter: @escaping RCTPromiseRejectBlock) {
-        DispatchQueue.main.async {
             if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO {
-                videoSubscriber.signIn({ success in
+                videoSubscriber.performSsoOperation { success in
                     if success {
-                        resolver(true)
+                        resolver(success)
                     } else {
-                        rejecter(ErrorMessages.canNotSignIn.code,
-                                 ErrorMessages.canNotSignIn.message, nil)
+                        rejecter(ErrorMessages.notAuthorized.code,
+                                 ErrorMessages.notAuthorized.message, nil)
                     }
-                })
+                }
             } else {
                 rejecter(ErrorMessages.unexpectedError.code,
                          ErrorMessages.unexpectedError.message, nil)

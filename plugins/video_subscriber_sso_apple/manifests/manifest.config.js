@@ -21,12 +21,6 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [
     {
-      type: "checkbox",
-      key: "enabled",
-      tooltip_text: "PLUGIN SHOULD BE DISABLED ON START",
-      default: 0,
-    },
-    {
       type: "text",
       key: "provider_identifier",
       tooltip_text: "Provider identifier",
