@@ -9,20 +9,6 @@
 import Foundation
 import XrayLogger
 
-protocol XrayLoggerTemplateProtocol {
-    static var subsystem: String { get }
-}
-
-public struct LogTemplate {
-    internal init(message: String, category: String) {
-        self.message = message
-        self.category = category
-    }
-
-    let message: String
-    let category: String
-}
-
 extension Logger {
     public func verboseLog(template: LogTemplate,
                            data: [String: Any]? = nil,

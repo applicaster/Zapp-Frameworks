@@ -10,14 +10,18 @@ import AppCenter
 import AppCenterAnalytics
 import AppCenterDistribute
 import Foundation
+import XrayLogger
 
 #if canImport(AppCenterCrashes)
     import AppCenterCrashes
 #endif
 
 public class MsAppCenterHandler: NSObject {
+    lazy var logger = Logger.getLogger(for: ApplicationLoading.subsystem)
+
     public func configure() {
         guard let appSecret = FeaturesCustomization.msAppCenterAppSecret() else {
+            logger?.warningLog(template: ApplicationLoading.appCenterConfigureNoSecret)
             return
         }
 
@@ -28,7 +32,13 @@ public class MsAppCenterHandler: NSObject {
         }
         MSAppCenter.start(appSecret,
                           withServices: services)
+
         configureDistribution()
+        logger?.infoLog(template: ApplicationLoading.appCenterConfigure,
+                        data: ["app_secret": appSecret,
+                               "distribute_service_enabled": "1",
+                               "analytics_service_enabled": "1",
+                               "crashes_service_enabled": crashesSerice() != nil ? "1" : "0"])
     }
 
     func configureDistribution() {
@@ -40,6 +50,10 @@ public class MsAppCenterHandler: NSObject {
             selector: #selector(checkUpdatesForNewVersions),
             name: NSNotification.Name(kMSAppCenterCheckForUpdatesNotification),
             object: nil)
+
+        logger?.verboseLog(template: ApplicationLoading.appCenterConfigureDiscribution,
+                           data: ["starting_observe_key": kMSAppCenterCheckForUpdatesNotification,
+                                  "selector": "checkUpdatesForNewVersions:"])
     }
 
     func crashesSerice() -> MSServiceAbstract.Type? {

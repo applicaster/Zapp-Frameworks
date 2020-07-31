@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import XrayLogger
 
 public class StorageInitialization {
     public class func initializeDefaultValues(sessionStorage: [String: String] = [:],
                                               localStorage: [String: String] = [:]) {
+        let logger = Logger.getLogger(for: ApplicationLoading.subsystem)
+
         // Local storage default params
         setDefaultValues(for: LocalStorage.sharedInstance,
                          defaultValues: localStorage)
@@ -18,6 +21,11 @@ public class StorageInitialization {
         // Session storage default params
         setDefaultValues(for: SessionStorage.sharedInstance,
                          defaultValues: sessionStorage)
+
+        logger?.debugLog(template: ApplicationLoading.sessionStorageInitialized,
+                         data: sessionStorage)
+        logger?.debugLog(template: ApplicationLoading.localStorageInitialized,
+                         data: localStorage)
     }
 
     public class func setDefaultValues(for storageManager: ZappStorageProtocol,
