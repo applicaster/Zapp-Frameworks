@@ -10,8 +10,16 @@ import Foundation
 import React
 import ZappCore
 
+struct ErrorMessages {
+    static let unexpectedError = (code: "0", message: "Unexpected Error, please try again later")
+    static let notAuthorized = (code: "1", message: "Not authorized")
+    static let canNotSignIn = (code: "2", message: "Can not sign in, please try again later")
+}
+
 @objc(AppleVideoSubscriberSSO)
 class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
+    static var appleVideoSubscriberSSO: ZPAppleVideoSubscriberSSO?
+
     let pluginIdentifier = "video_subscriber_sso_apple"
     var bridge: RCTBridge!
 
@@ -23,17 +31,44 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
         return true
     }
 
-    @objc public func requestSso(_ resolver: @escaping RCTPromiseResolveBlock,
+    @objc public func signIn(_ resolver: @escaping RCTPromiseResolveBlock,
                                  rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            FacadeConnector.connector?.pluginManager?.enablePlugin(identifier: self.pluginIdentifier,
-                                                                   completion: { success in
-                                                                       if success {
-                                                                           resolver(true)
-                                                                       } else {
-                                                                           rejecter("0", "Not Authorized", nil)
-                                                                       }
-            })
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
+                videoSubscriber.performSsoOperation { success in
+                    resolver(success)
+                }
+            } else {
+                rejecter(ErrorMessages.unexpectedError.code,
+                         ErrorMessages.unexpectedError.message, nil)
+            }
+        }
+    }
+
+    @objc public func signOut(_ resolver: @escaping RCTPromiseResolveBlock,
+                              rejecter: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
+                videoSubscriber.signOut()
+                resolver(true)
+            } else {
+                rejecter(ErrorMessages.unexpectedError.code,
+                         ErrorMessages.unexpectedError.message, nil)
+            }
+        }
+    }
+
+    @objc public func isSignedIn(_ resolver: @escaping RCTPromiseResolveBlock,
+                                 rejecter: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
+                videoSubscriber.isSignedIn({ isSignedIn in
+                    resolver(isSignedIn)
+                })
+            } else {
+                rejecter(ErrorMessages.unexpectedError.code,
+                         ErrorMessages.unexpectedError.message, nil)
+            }
         }
     }
 }
