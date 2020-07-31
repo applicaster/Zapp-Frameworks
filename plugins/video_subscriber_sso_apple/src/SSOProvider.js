@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
-import * as R from "ramda";
 import AccountComponent from "./Components/Account/Screens/AccountComponent";
+import { withAppManager } from "@applicaster/quick-brick-core/App/AppStateDecorator";
 
 import SSOBridge from "./SSOBridge";
 import { isHook } from "./Utils";
@@ -40,7 +40,7 @@ const SSOProvider = (props) => {
     if (providerType === SSOProviderType.SSO_HOOK) {
       const { callback, payload } = props;
       // Will be called once, when component finish logic
-      SSOBridge.requestSSO(callback)
+      SSOBridge.signIn()
         .then((result) => {
           callback({ success: result, error: null, payload });
         })
@@ -51,8 +51,6 @@ const SSOProvider = (props) => {
   }, [providerType]);
 
   const setupEnviroment = async () => {
-    console.log("setupEnviroment", { isHook: isHook(navigator), props });
-
     if (isHook(navigator)) {
       stillMounted && setProviderType(SSOProviderType.SSO_HOOK);
     } else {
@@ -62,13 +60,12 @@ const SSOProvider = (props) => {
 
   const renderFlow = () => {
     if (providerType === SSOProviderType.USER_ACCOUNT) {
-      return <AccountComponent navigator={navigator} />;
+      return <AccountComponent navigator={navigator} {...props} />;
     } else {
       return <ActivityIndicator color="white" size="large" />;
     }
-    // return null;
   };
 
   return <View style={[overlayColor, centerChildren]}>{renderFlow()}</View>;
 };
-export default SSOProvider;
+export default withAppManager(SSOProvider);

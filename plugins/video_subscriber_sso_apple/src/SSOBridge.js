@@ -3,7 +3,7 @@ import { NativeModules } from "react-native";
 
 const nullPromise = () => Promise.reject("SSO module is Null");
 const defautVideoSubscriberSSO = {
-  requestSSO: nullPromise,
+  signIn: nullPromise,
   signOut: nullPromise,
   isSignedIn: nullPromise,
 };
@@ -11,12 +11,12 @@ const { AppleVideoSubscriberSSO = defautVideoSubscriberSSO } = NativeModules;
 
 const SSOBridge = {
   /**
-   * Request SSO procedure
+   * Sign in to TV provider
    * @return {Promise<Boolean>} response promise
    */
-  requestSSO() {
+  signIn() {
     try {
-      return AppleVideoSubscriberSSO.requestSSO();
+      return AppleVideoSubscriberSSO.signIn();
     } catch (e) {
       throw e;
     }

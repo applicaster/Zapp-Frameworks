@@ -23,7 +23,7 @@ struct ErrorMessages {
 
 @objc(AppleVideoSubscriberSSO)
 class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
-    static var appleSubscriptionSSO: ZPAppleVideoSubscriberSSO?
+    static var appleVideoSubscriberSSO: ZPAppleVideoSubscriberSSO?
 
     let pluginIdentifier = "video_subscriber_sso_apple"
     var bridge: RCTBridge!
@@ -36,17 +36,12 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
         return true
     }
 
-    @objc public func requestSSO(_ resolver: @escaping RCTPromiseResolveBlock,
+    @objc public func signIn(_ resolver: @escaping RCTPromiseResolveBlock,
                                  rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO {
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
                 videoSubscriber.performSsoOperation { success in
-                    if success {
-                        resolver(success)
-                    } else {
-                        rejecter(ErrorMessages.notAuthorized.code,
-                                 ErrorMessages.notAuthorized.message, nil)
-                    }
+                    resolver(success)
                 }
             } else {
                 rejecter(ErrorMessages.unexpectedError.code,
@@ -58,7 +53,7 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     @objc public func signOut(_ resolver: @escaping RCTPromiseResolveBlock,
                               rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO {
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
                 videoSubscriber.signOut()
                 resolver(true)
             } else {
@@ -71,7 +66,7 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     @objc public func isSignedIn(_ resolver: @escaping RCTPromiseResolveBlock,
                                  rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO {
+            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
                 videoSubscriber.isSignedIn({ isSignedIn in
                     resolver(isSignedIn)
                 })

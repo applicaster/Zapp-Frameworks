@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Platform,
   Image,
+  AppState,
 } from "react-native";
 
 import SSOBridge from "../../../SSOBridge";
@@ -60,7 +61,6 @@ function AccountComponent(props: Props) {
       logout_action_button_background_color: logoutButtonBackground,
     } = {},
   } = screenData || {};
-  console.log({ navigator, screenData });
 
   const {
     greetingsStyle,
@@ -70,13 +70,20 @@ function AccountComponent(props: Props) {
     authProviderTitleStyle,
   } = createStyleSheet(screenData);
 
+  const appState = useRef(AppState.currentState);
   const [authProviderItem, setAuthProviderItem] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [loading, setIsLoading] = useState(false);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   useEffect(() => {
+    const appStateChange = "change";
     setIsLoading(true);
+    AppState.addEventListener(appStateChange, _handleAppStateChange);
     start().catch((err) => console.log(err));
+    return () => {
+      AppState.removeEventListener(appStateChange, _handleAppStateChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -84,9 +91,28 @@ function AccountComponent(props: Props) {
     setIsLoading(false);
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (appStateVisible) {
+      setIsLoading(true);
+      start().catch((err) => console.log(err));
+    }
+  }, [appStateVisible]);
+
+  const _handleAppStateChange = (nextAppState) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
+      console.log("App has come to the foreground!");
+    }
+
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+    console.log("AppState", appState.current);
+  };
+
   // eslint-disable-next-line consistent-return
   const start = async () => {
-    console.log("Start loading", { SSOBridge });
     try {
       const isSignedIn = await SSOBridge.isSignedIn();
       console.log({ isSignedIn });
@@ -98,12 +124,22 @@ function AccountComponent(props: Props) {
     }
   };
 
+  async function performButtonAction() {
+    console.log({ isLoggedIn });
+    if (isLoggedIn) {
+      return await SSOBridge.signOut();
+    } else {
+      return await SSOBridge.signIn();
+    }
+  }
+
   // eslint-disable-next-line consistent-return
   async function handlePress() {
     try {
       setIsLoading(true);
       trackEvent(EVENTS.clickLogin, { screenData });
-      // navigator.push(plugin);
+      const result = await performButtonAction();
+      setIsLoggedIn(result);
     } catch (err) {
       console.log(err);
       return isLoggedIn
@@ -114,6 +150,7 @@ function AccountComponent(props: Props) {
     }
   }
 
+  // NOT IN WORK, need to fix to support
   const renderAuthorizationProvider = () => {
     if (!authProviderItem) {
       return null;
@@ -152,7 +189,6 @@ function AccountComponent(props: Props) {
     );
   };
 
-  console.log("loading", { loading });
   return (
     <View style={styles.layout}>
       {loading ? (
