@@ -37,11 +37,12 @@ declare type XRayNativeEvent =
   | XRayErrorEvent;
 
 declare interface XRayLoggerNativeBridgeI {
-  l: (event: XRayLogLevel) => void;
-  d: (event: XRayDebugEvent) => void;
-  i: (event: XRayInfoEvent) => void;
-  w: (event: XRayWarningEvent) => void;
-  e: (event: XRayErrorEvent) => void;
+  logEvent: any;
+  // l: (event: XRayLogLevel) => void;
+  // d: (event: XRayDebugEvent) => void;
+  // i: (event: XRayInfoEvent) => void;
+  // w: (event: XRayWarningEvent) => void;
+  // e: (event: XRayErrorEvent) => void;
 }
 
 declare interface XRayEventI {
