@@ -15,9 +15,9 @@ extension ZPAppleVideoSubscriberSSO: PluginAdapterProtocol {
     }
 
     public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
-        completion(success)
         ZPAppleVideoSubscriberSSOBridge.appleSubscriptionSSO = self
- 
+
+        completion?(true)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
