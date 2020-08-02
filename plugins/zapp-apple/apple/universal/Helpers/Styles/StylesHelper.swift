@@ -21,6 +21,14 @@ class StylesHelper {
             static let fontSize = "font_size"
         }
     }
+    
+    class var deviceType: String {
+        var retValue = UIDevice.current.model.lowercased()
+        #if os(tvOS)
+            retValue = "apple_tv"
+        #endif
+        return retValue
+    }
 
     public class func retriveStyles() -> [AnyHashable:Any]? {
         let file = LoadingManager().file(type: .styles)
@@ -52,7 +60,7 @@ class StylesHelper {
             let value = universalDict[key] {
             styleDict = value
         }
-        else if let deviceTypeDict = ZappStyles?[UIDevice.current.model.lowercased()] as? [String:[String:String]],
+        else if let deviceTypeDict = ZappStyles?[deviceType] as? [String:[String:String]],
             let value = deviceTypeDict[key] {
             styleDict = value
         }
@@ -64,7 +72,11 @@ class StylesHelper {
             let colorKey = stylesDict[StylesHelperApi.UniversalKey.color] else {
             return nil
         }
-        return UIColor(ARGBHex: colorKey)
+        #if os(tvOS)
+            return UIColor(RGBAHex: colorKey)
+        #else
+            return UIColor(ARGBHex: colorKey)
+        #endif
     }
     
     public class func updateLabel(forKey key:String, label:UILabel?) {
