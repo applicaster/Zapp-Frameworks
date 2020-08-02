@@ -72,11 +72,7 @@ class StylesHelper {
             let colorKey = stylesDict[StylesHelperApi.UniversalKey.color] else {
             return nil
         }
-        #if os(tvOS)
-            return UIColor(RGBAHex: colorKey)
-        #else
-            return UIColor(ARGBHex: colorKey)
-        #endif
+        return UIColor(ARGBHex: colorKey)
     }
     
     public class func updateLabel(forKey key:String, label:UILabel?) {
