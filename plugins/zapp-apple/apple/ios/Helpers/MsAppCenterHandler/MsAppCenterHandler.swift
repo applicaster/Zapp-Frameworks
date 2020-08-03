@@ -17,11 +17,11 @@ import XrayLogger
 #endif
 
 public class MsAppCenterHandler: NSObject {
-    lazy var logger = Logger.getLogger(for: ApplicationLoading.subsystem)
+    lazy var logger = Logger.getLogger(for: AppCenterLogs.subsystem)
 
     public func configure() {
         guard let appSecret = FeaturesCustomization.msAppCenterAppSecret() else {
-            logger?.warningLog(template: ApplicationLoading.appCenterConfigureNoSecret)
+            logger?.warningLog(template: AppCenterLogs.appCenterConfigureNoSecret)
             return
         }
 
@@ -34,11 +34,11 @@ public class MsAppCenterHandler: NSObject {
                           withServices: services)
 
         configureDistribution()
-        logger?.infoLog(template: ApplicationLoading.appCenterConfigure,
-                        data: ["app_secret": appSecret,
-                               "distribute_service_enabled": "1",
-                               "analytics_service_enabled": "1",
-                               "crashes_service_enabled": crashesSerice() != nil ? "1" : "0"])
+        logger?.debugLog(template: AppCenterLogs.appCenterConfigure,
+                         data: ["app_secret": appSecret,
+                                "distribute_service_enabled": true,
+                                "analytics_service_enabled": true,
+                                "crashes_service_enabled": crashesSerice() != nil ? true : false])
     }
 
     func configureDistribution() {
@@ -51,7 +51,7 @@ public class MsAppCenterHandler: NSObject {
             name: NSNotification.Name(kMSAppCenterCheckForUpdatesNotification),
             object: nil)
 
-        logger?.verboseLog(template: ApplicationLoading.appCenterConfigureDiscribution,
+        logger?.verboseLog(template: AppCenterLogs.appCenterConfigureDiscribution,
                            data: ["starting_observe_key": kMSAppCenterCheckForUpdatesNotification,
                                   "selector": "checkUpdatesForNewVersions:"])
     }
