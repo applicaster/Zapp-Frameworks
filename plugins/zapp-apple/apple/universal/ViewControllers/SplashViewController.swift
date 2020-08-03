@@ -8,14 +8,17 @@
 
 import AVKit
 import UIKit
+import XrayLogger
 import ZappCore
 
 class SplashViewController: UIViewController {
+    lazy var logger = Logger.getLogger(for: SplashViewControllerLogs.subsystem)
+
     typealias LoadingCompletion = () -> Void
     open lazy var playerViewController = AVPlayerViewController()
     private var loadingCompletion: LoadingCompletion?
     private var rootViewController: RootController?
-    
+
     @IBOutlet open var imageView: UIImageView!
     @IBOutlet open var loadingView: UIActivityIndicatorView!
     @IBOutlet open var playerContainer: UIView!
@@ -30,6 +33,10 @@ class SplashViewController: UIViewController {
             String.isNotEmptyOrWhitespace(localMoviePath) {
             retVal = URL(fileURLWithPath: localMoviePath)
         }
+
+        logger?.debugLog(template: SplashViewControllerLogs.videoURL,
+                         data: ["url": localMoviePath ?? "no data",
+                                "item_exist": retVal != nil])
         return retVal
     }()
 
@@ -37,9 +44,9 @@ class SplashViewController: UIViewController {
         removeVideoObservers()
     }
 
-    open override func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
-
+        logger?.debugLog(template: SplashViewControllerLogs.splashViewControllerCreated)
         view.backgroundColor = UIColor.black
         addSplashImage()
         prepareController()
@@ -54,6 +61,8 @@ class SplashViewController: UIViewController {
         loadingView?.stopAnimating()
         loadingCompletion = completion
         self.rootViewController = rootViewController
+        
+        logger?.debugLog(template: SplashViewControllerLogs.splashViewConrollerStartAppLoadingTask)
         
         if let player = playerViewController.player {
             rootViewController.facadeConnector.audioSession?.enablePlaybackCategoryIfNeededToMuteBackgroundAudio(forItem: player.currentItem)
@@ -77,6 +86,15 @@ class SplashViewController: UIViewController {
             playerViewController.videoGravity = .resizeAspectFill
 
             addVideoObservers()
+
+            logger?.debugLog(template: SplashViewControllerLogs.preparePlayerViewController,
+                             data: ["url": url.absoluteURL,
+                                    "video_gravity": "resize_aspect_fill",
+                                    "showsPlaybackControls": playerViewController.showsPlaybackControls,
+                                    "pause_player": true,
+                                    "color": "clear"])
+        } else {
+            logger?.debugLog(template: SplashViewControllerLogs.preparePlayerViewControllerNoURL)
         }
     }
 
@@ -86,6 +104,7 @@ class SplashViewController: UIViewController {
     }
 
     func callLoadingCompletion() {
+        logger?.debugLog(template: SplashViewControllerLogs.splashViewConrollerFinishedTask)
         loadingCompletion?()
         loadingCompletion = nil
     }
@@ -114,7 +133,7 @@ class SplashViewController: UIViewController {
                                                object: nil)
     }
 
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if let playerItem = object as? AVPlayerItem {
             if playerItem.status == .failed {
                 playerViewController.view.isHidden = true
@@ -131,16 +150,25 @@ class SplashViewController: UIViewController {
 
     @objc open func showErrorMessage(_ errorMessage: String) {
         DispatchQueue.main.async { [weak self] in
-            self?.errorLabel?.isHidden = errorMessage.isEmpty ? true : false
-            self?.errorLabel?.text = errorMessage
-            self?.loadingView?.startAnimating()
+            guard let self = self else { return }
+            self.errorLabel?.isHidden = errorMessage.isEmpty ? true : false
+            self.errorLabel?.text = errorMessage
+            self.loadingView?.startAnimating()
+            self.logger?.debugLog(template: SplashViewControllerLogs.showErrorMessage,
+                                  data: ["error_message": errorMessage])
         }
     }
 
     open func playerDidFinishTask() {
+        var loggerData: [String: Any] = [:]
         if errorLabel == nil || errorLabel?.isHidden == true {
             loadingView?.startAnimating()
+        } else {
+            loggerData["error_message"] = errorLabel?.text
         }
+
+        logger?.debugLog(template: SplashViewControllerLogs.playerVIewControllerFinished,
+                         data: loggerData)
         callLoadingCompletion()
     }
 }
