@@ -135,6 +135,14 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         }
         return value
     }()
+    
+    lazy var vsSignOutAlertSettingButtonTitle: String = {
+        guard let value = localizations["sign_out_alert_settings_button_title"],
+            !value.isEmpty else {
+            return "Open TV Providers"
+        }
+        return value
+    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion

@@ -61,7 +61,7 @@ extension ZPAppleVideoSubscriberSSO {
         
         if #available(tvOS 13.0, iOS 13.0, *) {
             if let providerSettingsUrl = URL(string: self.tvProviderSettingsUrl) {
-                let goToSettings = UIAlertAction(title: vsFailureAlertSettingButtonTitle,
+                let goToSettings = UIAlertAction(title: vsSignOutAlertSettingButtonTitle,
                                                  style: .default,
                                                  handler: { _ in
                        alert.dismiss(animated: true, completion: {
