@@ -22,16 +22,3 @@ public struct SplashViewControllerLogs: XrayLoggerTemplateProtocol {
     public static var splashViewConrollerStartAppLoadingTask = LogTemplate(message: "SplashViewController start loading app")
     public static var splashViewConrollerFinishedTask = LogTemplate(message: "SplashViewController finish task")
 }
-
-public struct SplashViewControllerDataManagerLogs: XrayLoggerTemplateProtocol {
-    public static var subsystem: String = "\(rootControllerSubsystem)/splash_view_controller/data_manager"
-
-    public static var splashVideoPath = LogTemplate(message: "Splash video path")
-    public static var stylePath = LogTemplate(message: "Zapp styles file path")
-}
-
-public struct SplashViewControllerHelperLogs: XrayLoggerTemplateProtocol {
-    public static var subsystem: String = "\(rootControllerSubsystem)/splash_view_controller/local_splash_helper"
-
-    public static var localSplashImge = LogTemplate(message: "Retrieve local splash image")
-}
