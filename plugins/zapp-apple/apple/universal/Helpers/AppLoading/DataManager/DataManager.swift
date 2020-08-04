@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import XrayLogger
+
 let stateMachineLogCategory = "State Machine"
 
 class DataManager {
@@ -23,18 +25,29 @@ class DataManager {
     }
 
     class func splashVideoPath() -> String? {
+        let logger = Logger.getLogger(for: SplashViewControllerDataManagerLogs.subsystem)
+
         var videoPath = AssetsKeys.splashVideoKey
 
         #if os(iOS)
             videoPath = LocalSplashHelper.localSplashVideoNameForScreenSize()
         #endif
+        let retVal = Bundle.main.path(forResource: videoPath,
+                                      ofType: DataKeysExtensions.mp4)
+        logger?.debugLog(template: SplashViewControllerDataManagerLogs.splashVideoPath,
+                         data: ["url": videoPath,
+                                "item_exist": retVal != nil])
 
-        return Bundle.main.path(forResource: videoPath,
-                                ofType: DataKeysExtensions.mp4)
+        return retVal
     }
 
     class func zappStylesPath() -> String? {
-        return Bundle.main.path(forResource: DataManager.stylesFileName,
-                                ofType: DataKeysExtensions.json)
+        let logger = Logger.getLogger(for: SplashViewControllerDataManagerLogs.subsystem)
+        let retVal = Bundle.main.path(forResource: DataManager.stylesFileName,
+                                      ofType: DataKeysExtensions.json)
+        logger?.debugLog(template: SplashViewControllerDataManagerLogs.stylePath,
+                         data: ["url": "\(DataManager.stylesFileName).\(DataKeysExtensions.json)",
+                                "item_exist": retVal != nil])
+        return retVal
     }
 }
