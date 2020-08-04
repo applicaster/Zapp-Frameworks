@@ -135,6 +135,14 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         }
         return value
     }()
+    
+    lazy var vsSignOutAlertSettingButtonTitle: String = {
+        guard let value = localizations["sign_out_alert_settings_button_title"],
+            !value.isEmpty else {
+            return "Open TV Providers"
+        }
+        return value
+    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion
@@ -202,4 +210,21 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     }
 }
 
-
+extension ZPAppleVideoSubscriberSSO {
+    //should be called to log in
+    public func signIn(_ completion: ((_ success: Bool) -> Void)?) {
+        performSsoOperation({ success in
+            completion?(success)
+        })
+    }
+    //should be called to logout
+    public func signOut() {
+        self.presentLogoutAlert()
+    }
+    //should be called to check if logged in
+    public func isSignedIn(_ completion: ((_ success: Bool) -> Void)?) {
+        self.checkSignInStatus { (success) in
+            completion?(success)
+        }
+    }
+}

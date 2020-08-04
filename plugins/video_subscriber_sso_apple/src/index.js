@@ -1,7 +1,8 @@
-import { SsoUiHook as Component } from "./videoSubscriberSsoUiHook";
+import SSOProvider from "./SSOProvider";
+import * as R from "ramda";
 
 const VideoSubscriberSsoUiHook = {
-  Component,
+  Component: SSOProvider,
   hasPlayerHook: true,
   presentFullScreen: true,
   isFlowBlocker: true,

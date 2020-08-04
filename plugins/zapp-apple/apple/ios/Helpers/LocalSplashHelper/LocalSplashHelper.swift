@@ -7,54 +7,53 @@
 //
 
 import Foundation
-
-//iPhone 7 Plus
+import XrayLogger
+// iPhone 7 Plus
 //    (0.0, 0.0, 414.0, 736.0)
 //    (0.0, 0.0, 1242.0, 2208.0)
 
-//iPhone 6
+// iPhone 6
 //    (0.0, 0.0, 375.0, 667.0)
 //    (0.0, 0.0, 750.0, 1334.0)
 
-//iPhone SE, iPhone 5
+// iPhone SE, iPhone 5
 //    (0.0, 0.0, 320.0, 568.0)
 //    (0.0, 0.0, 640.0, 1136.0)
 
-//iPhone 4s
+// iPhone 4s
 //    (0.0, 0.0, 320.0, 480.0)
 //    (0.0, 0.0, 640.0, 960.0)
 
-//iPad 2
+// iPad 2
 //    (0.0, 0.0, 768.0, 1024.0)
 //    (0.0, 0.0, 768.0, 1024.0)
 
-//iPad Retina, Air, Air2, Pro(9.7)
+// iPad Retina, Air, Air2, Pro(9.7)
 //    (0.0, 0.0, 768.0, 1024.0)
 //    (0.0, 0.0, 1536.0, 2048.0)
 
-//iPad Pro(12.9)
+// iPad Pro(12.9)
 //    (0.0, 0.0, 1024.0, 1366.0)
 //    (0.0, 0.0, 2048.0, 2732.0)
 
-//case iphone     = "local_splash"
-//case iphone_568 = "Default-568h"
-//case iphone_667 = "Default-667h"
-//case iphone_736 = "Default-736h"
-//case ipad_1024  = "Default"
-//case ipad_1366  = "Default-1366h"
+// case iphone     = "local_splash"
+// case iphone_568 = "Default-568h"
+// case iphone_667 = "Default-667h"
+// case iphone_736 = "Default-736h"
+// case ipad_1024  = "Default"
+// case ipad_1366  = "Default-1366h"
 
-public class LocalSplashHelper:NSObject {
-
-    static private let localSplashImageIphone_480 = "LaunchImage-700@2x"
-    static private let localSplashImageIphone_568 = "LaunchImage-700-568h@2x"
-    static private let localSplashImageIphone_667 = "LaunchImage-800-667h@2x"
-    static private let localSplashImageIphone_736 = "LaunchImage-800-Portrait-736h@3x"
-    static private let localSplashImageIphone_812 = "LaunchImage-1100-Portrait-2436h@3x"
-    static private let localSplashImageIphone_896 = "LaunchImage-1200-Portrait-1792h@2x"
-    static private let localSplashImageIphone_1242 = "LaunchImage-1200-Portrait-2688h@3x"
-    static private let localSplashImageIpadNonRetina_1024  = "LaunchImage-700-Landscape~ipad"
-    static private let localSplashImageIpad_1024  = "LaunchImage-700-Landscape@2x~ipad"
-    static private let localSplashImageIpad_1366  = "Default-1366h"
+public class LocalSplashHelper: NSObject {
+    private static let localSplashImageIphone_480 = "LaunchImage-700@2x"
+    private static let localSplashImageIphone_568 = "LaunchImage-700-568h@2x"
+    private static let localSplashImageIphone_667 = "LaunchImage-800-667h@2x"
+    private static let localSplashImageIphone_736 = "LaunchImage-800-Portrait-736h@3x"
+    private static let localSplashImageIphone_812 = "LaunchImage-1100-Portrait-2436h@3x"
+    private static let localSplashImageIphone_896 = "LaunchImage-1200-Portrait-1792h@2x"
+    private static let localSplashImageIphone_1242 = "LaunchImage-1200-Portrait-2688h@3x"
+    private static let localSplashImageIpadNonRetina_1024 = "LaunchImage-700-Landscape~ipad"
+    private static let localSplashImageIpad_1024 = "LaunchImage-700-Landscape@2x~ipad"
+    private static let localSplashImageIpad_1366 = "Default-1366h"
 
     enum FilePostfixForSize: String {
         case none, iphone480 = ""
@@ -71,20 +70,30 @@ public class LocalSplashHelper:NSObject {
     }
 
     public class func localSplashImage(for presentingViewController: UIViewController) -> UIImage? {
+        let logger = Logger.getLogger(for: SplashViewControllerHelperLogs.subsystem)
+
         // Rotate the splash image for iPhone
         var image = UIImage(named: LocalSplashHelper.localSplashImageNameForScreenSize())
 
+        var loggerData = ["image_name": LocalSplashHelper.localSplashImageNameForScreenSize()]
+
         if UIDevice.current.userInterfaceIdiom == .phone,
             let cgImage = image?.cgImage {
-            switch (presentingViewController.preferredInterfaceOrientationForPresentation) {
+            switch presentingViewController.preferredInterfaceOrientationForPresentation {
             case .landscapeRight:
+                loggerData["orientation"] = "right"
                 image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .right)
             case .landscapeLeft:
+                loggerData["orientation"] = "left"
                 image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .left)
             default:
                 break
             }
         }
+
+        logger?.debugLog(template: AppDelegateLogs.didFinishLaunching,
+                         data: loggerData)
+
         return image
     }
 
@@ -118,20 +127,17 @@ public class LocalSplashHelper:NSObject {
             } else if devicePortraitWidth == 375 {
                 if devicePortraitHeight == 812 {
                     retVal = localSplashImageIphone_812
-                }
-                else {
+                } else {
                     retVal = localSplashImageIphone_667
                 }
             } else if devicePortraitWidth == 414 {
                 if devicePortraitHeight == 896 {
                     if UIScreen.main.scale == 3.0 {
                         retVal = localSplashImageIphone_1242
-                    }
-                    else {
+                    } else {
                         retVal = localSplashImageIphone_896
                     }
-                }
-                else {
+                } else {
                     retVal = localSplashImageIphone_736
                 }
             }
@@ -176,8 +182,7 @@ public class LocalSplashHelper:NSObject {
             } else if devicePortraitWidth == 375 {
                 if devicePortraitHeight == 812 {
                     postix = .iphone812
-                }
-                else {
+                } else {
                     postix = .iphone667
                 }
 
@@ -185,22 +190,19 @@ public class LocalSplashHelper:NSObject {
                 if devicePortraitHeight == 896 {
                     if UIScreen.main.scale == 3.0 {
                         postix = .iphone1242
-                    }
-                    else {
+                    } else {
                         postix = .iphone896
                     }
-                }
-                else {
+                } else {
                     postix = .iphone736
                 }
             }
-
         }
 
         return baseFileName + postix.rawValue
     }
 
-    private class func fileExist(fileName:String, fileExtension:String) -> Bool {
+    private class func fileExist(fileName: String, fileExtension: String) -> Bool {
         return (Bundle.main.path(forResource: fileName,
                                  ofType: fileExtension) != nil) ? true : false
     }

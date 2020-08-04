@@ -8,9 +8,16 @@
 
 import Reachability
 import UIKit
+import XrayLogger
 import ZappCore
 
+struct RootControllerError {
+    static let canNotCreateInterfaceLayer = "Can not create Interface Layer"
+}
+
 public class RootController: NSObject {
+    lazy var logger = Logger.getLogger(for: RootControllerLogs.subsystem)
+
     public var appDelegate: AppDelegateProtocol?
     public var appReadyForUse: Bool = false
 
@@ -35,10 +42,15 @@ public class RootController: NSObject {
 
     override public init() {
         super.init()
-        if let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) {
-            self.userInterfaceLayer = userInterfaceLayer
-        }
+        prepareRooController()
+    }
 
+    public func prepareRooController() {
+        guard let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) else {
+            showErrorMessage(message: RootControllerError.canNotCreateInterfaceLayer)
+            return
+        }
+        self.userInterfaceLayer = userInterfaceLayer
         splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
 
         reachabilityManager = ReachabilityManager(delegate: self)
@@ -109,12 +121,10 @@ public class RootController: NSObject {
     }
 
     func makeInterfaceLayerAsRootViewContoroller() {
-        DispatchQueue.main.async { [weak self] in
-            guard let window = UIApplication.shared.delegate?.window else {
-                return
-            }
-            window?.rootViewController = self?.userInterfaceLayerViewController
+        guard let window = UIApplication.shared.delegate?.window else {
+            return
         }
+        window?.rootViewController = userInterfaceLayerViewController
     }
 
     func showErrorMessage(message: String) {

@@ -43,6 +43,14 @@ struct VideoSubscriberAccountManagerResult {
 }
 
 extension ZPAppleVideoSubscriberSSO {
+    var tvProviderSettingsUrl: String {
+        if #available(tvOS 13.0, iOS 13.0, *) {
+            return VSOpenTVProviderSettingsURLString
+        } else {
+            return ""
+        }
+    }
+    
     func askForAccessIfNeeded(prompt: Bool, _ completion: @escaping (_ result: Bool) -> Void) {
         videoSubscriberAccountManager.checkAccessStatus(options: [VSCheckAccessOption.prompt: NSNumber(booleanLiteral: prompt)]) { status, _ in
             if prompt {
@@ -60,8 +68,32 @@ extension ZPAppleVideoSubscriberSSO {
             }
         }
     }
+    
+    func checkSignInStatus(_ completion: @escaping (_ result: Bool) -> Void) {
+        videoSubscriberAccountManager.checkAccessStatus(options: [VSCheckAccessOption.prompt: NSNumber(booleanLiteral: false)]) { status, _ in
+            var success = false
+            if status == .granted {
+                self.requestAuthenticationStatus(interrruption: false,
+                                                 getCurrentStatusOnly: true) { authResult, _ in
+                    if let authResult = authResult {
+                        success = authResult.success
+                    }
+                    DispatchQueue.main.async {
+                        completion(success)
+                    }
+                }
+            }
+            else {
+                DispatchQueue.main.async {
+                    completion(success)
+                }
+            }
+        }
+    }
 
-    func requestAuthenticationStatus(interrruption: Bool = true, completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
+    func requestAuthenticationStatus(interrruption: Bool = true,
+                                     getCurrentStatusOnly: Bool = false,
+                                     completion: @escaping (_ result: VideoSubscriberAccountManagerResult?, _ error: VSError?) -> Void) {
         let request = VSAccountMetadataRequest()
         request.includeAccountProviderIdentifier = true
         request.includeAuthenticationExpirationDate = true
@@ -79,7 +111,7 @@ extension ZPAppleVideoSubscriberSSO {
                     completion(VideoSubscriberAccountManagerResult.createFromMetadata(data), error as? VSError)
                 }
             } else {
-                if interrruption == false {
+                if interrruption == false && getCurrentStatusOnly == false {
                     /*
                      If the customer has not authenticated with a TV provider yet and authentication is required because of a user action, device authentication can be requested. The key differentiator between requesting device authentication status and requesting device authentication is that interruption is allowed for authentication.
                      */
