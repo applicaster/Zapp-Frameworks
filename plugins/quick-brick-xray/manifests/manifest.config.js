@@ -115,15 +115,15 @@ const extra_dependencies_apple = [
   },
   {
     XrayLogger:
-      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   },
   {
     Reporter:
-      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   },
   {
     LoggerInfo:
-      "git: => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
+      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
   },
 ];
 
