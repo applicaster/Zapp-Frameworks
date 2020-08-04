@@ -216,6 +216,12 @@ const baseManifest = {
         tooltip: "Failure alert settings title",
         initial_value: "Open app settings",
       },
+      {
+        key: "sign_out_alert_settings_button_title",
+        label: "SignOut alert settings title",
+        tooltip: "SignOut alert settings title",
+        initial_value: "Open TV Providers",
+      },
     ],
   },
   identifier: "video_subscriber_sso_apple",

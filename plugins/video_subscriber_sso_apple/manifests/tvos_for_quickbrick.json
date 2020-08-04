@@ -222,12 +222,18 @@
         "label": "Failure alert settings title",
         "tooltip": "Failure alert settings title",
         "initial_value": "Open app settings"
+      },
+      {
+        "key": "sign_out_alert_settings_button_title",
+        "label": "SignOut alert settings title",
+        "tooltip": "SignOut alert settings title",
+        "initial_value": "Open TV Providers"
       }
     ]
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.5.0"
+    "@applicaster/video_subscriber_sso_apple@0.5.1"
   ],
   "targets": [
     "tv"
@@ -236,8 +242,8 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "dependency_version": "0.5.0",
-  "manifest_version": "0.5.0",
+  "dependency_version": "0.5.1",
+  "manifest_version": "0.5.1",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
