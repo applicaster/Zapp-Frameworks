@@ -42,23 +42,17 @@ public class RootController: NSObject {
 
     override public init() {
         super.init()
-        prepareRooController()
+        reachabilityManager = ReachabilityManager(delegate: self)
     }
 
-    public func prepareRooController() {
+    public func reloadApplication() {
+        appReadyForUse = false
         guard let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) else {
             showErrorMessage(message: RootControllerError.canNotCreateInterfaceLayer)
             return
         }
         self.userInterfaceLayer = userInterfaceLayer
         splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
-
-        reachabilityManager = ReachabilityManager(delegate: self)
-    }
-
-    public func reloadApplication() {
-        appReadyForUse = false
-
         pluginsManager.crashlogs.prepareManager { [weak self] success in
             guard let self = self else { return }
             if success {
