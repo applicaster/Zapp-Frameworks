@@ -236,7 +236,7 @@ class XRayPlugin : CrashlogPlugin {
                     context,
                     0,
                     Intent(context, LogActivity::class.java)
-                            .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                     PendingIntent.FLAG_CANCEL_CURRENT
             )!!
 
