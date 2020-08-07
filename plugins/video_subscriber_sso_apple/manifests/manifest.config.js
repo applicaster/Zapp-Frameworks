@@ -22,6 +22,43 @@ const baseManifest = {
   general: {
     fields: [
       {
+        key: "failure_alert_title",
+        label: "Failure alert title",
+        tooltip: "Failure alert title",
+        initial_value: "Unable to connect to TV Provider",
+      },
+      {
+        key: "failure_alert_description",
+        label: "Failure alert description",
+        tooltip: "Failure alert description",
+        initial_value:
+          "Please make sure TV Provider is configured in the device settings. As alternative you can login with Applicaster provider.",
+      },
+      {
+        key: "failure_alert_ok_button_title",
+        label: "Failure alert button title",
+        tooltip: "Failure alert button title",
+        initial_value: "Ok",
+      },
+      {
+        key: "failure_alert_login_applicaster_button_title",
+        label: "Failure alert login applicaster button title",
+        tooltip: "Login with Applicaster",
+        initial_value: "Login with Applicaster",
+      },
+      {
+        key: "failure_alert_settings_button_title",
+        label: "Failure alert settings title",
+        tooltip: "Failure alert settings title",
+        initial_value: "Open app settings",
+      },
+      {
+        key: "sign_out_alert_settings_button_title",
+        label: "SignOut alert settings title",
+        tooltip: "SignOut alert settings title",
+        initial_value: "Open TV Providers",
+      },
+      {
         group: true,
         label: "Screen Design and Text",
         tooltip: "These fields affect the design of the main screen plugin.",
