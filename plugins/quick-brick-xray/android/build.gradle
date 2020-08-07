@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+dependencies {
+    // Applicaster SDK
+    if (!findProject(':applicaster-android-sdk') || project.hasProperty('forceClosedDependencies')) {
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '6.3.0')
+        api ("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
+    }
+    else {
+        api project(':applicaster-android-sdk')
+    }
+
+    api "com.facebook.react:react-native:+"
+
+    implementation project(':xray') // x-ray core
+    implementation project(':xray-react-native') // x-ray react-native bridge
+    implementation project(':xray-notification') // x-ray notification
+    implementation project(':xray-reporting')
+
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}

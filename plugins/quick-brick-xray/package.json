@@ -1,0 +1,55 @@
+{
+  "name": "@applicaster/quick-brick-xray",
+  "version": "0.0.1",
+  "description": "Applicaster X-Ray Logger",
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "xray",
+    "logging"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {
+    "@applicaster/x-ray": "git://github.com/applicaster/x-ray.git"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.26",
+    "@types/react-native": "^0.63.1",
+    "typescript": "^3.9.7"
+  },
+  "peerDependencies": {
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "android_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "ios_for_quickbrick",
+      "ios",
+      "tvos",
+      "tvos_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  },
+  "files": [
+    "apple",
+    "android",
+    "src",
+    "lib",
+    "types"
+  ]
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Will be replaced on build -->
+    <string name="scheme_url_prefix">xray</string>
+    <string name="xray">xray</string>
+</resources>

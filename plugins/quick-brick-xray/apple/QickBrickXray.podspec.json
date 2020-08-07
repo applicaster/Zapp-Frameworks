@@ -1,0 +1,52 @@
+{
+  "name": "QickBrickXray",
+  "version": "0.0.1",
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0"
+  },
+  "summary": "QickBrickXray",
+  "description": "QickBrickXray.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "Appache 2.0",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp_local_notifications/0.3.0"
+  },
+  "requires_arc": true,
+  "swift_versions": "5.1",
+  "source_files": "universal/**/*.swift",
+  "ios": {
+    "source_files": "ios/**/*.swift"
+  },
+  "tvos": {
+    "source_files": "tvos/**/*.swift"
+  },
+
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": [],
+    "XrayLogger": [],
+    "XrayLogger/ReactNative": [],
+    "Reporter": [],
+    "LoggerInfo": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "ios": {
+        "source_files": "tests/**/*.{swift}",
+        "resources": ["tests/iOS/**/*.{png}"]
+      },
+      "tvos": {
+        "source_files": "tests/**/Dummy.swift"
+      }
+    }
+  ],
+  "swift_version": "5.1"
+}
