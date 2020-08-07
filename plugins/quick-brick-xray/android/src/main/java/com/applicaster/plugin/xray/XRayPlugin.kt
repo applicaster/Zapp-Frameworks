@@ -43,7 +43,7 @@ class XRayPlugin : CrashlogPlugin {
         private const val debugRNKey = "log_react_native_debug"
         private const val crashReportingKey = "report_crashes"
 
-        private const val fileSinkFileName = "xray_log.txt"
+        const val fileSinkFileName = "xray_log.txt"
 
         const val inMemorySinkName = "in_memory_sink"
     }

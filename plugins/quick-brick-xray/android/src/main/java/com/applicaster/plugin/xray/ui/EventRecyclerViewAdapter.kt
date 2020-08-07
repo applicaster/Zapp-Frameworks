@@ -73,8 +73,9 @@ class EventRecyclerViewAdapter(
 
         fun bind(item: Event) {
             event = item
-            itemView.lbl_tag.text = "${item.category} ${item.subsystem}"
             itemView.message.text = item.message
+            itemView.lbl_tag.text = item.category
+            itemView.lbl_subsystem.text = item.subsystem
             itemView.time.text = DateFormat.format("yyyy-MM-dd HH:mm:ss", item.timestamp)
             itemView.view_color_tag.setBackgroundColor(getColor(item))
         }
