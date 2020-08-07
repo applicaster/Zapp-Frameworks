@@ -202,9 +202,9 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     fileprivate func processResult() {
         let success = managerInfo.isAuthorized && managerInfo.isAuthenticated
         DispatchQueue.main.async {
-            if !success {
-                self.presentFailureAlert()
-            }
+//            if !success {
+//                self.presentFailureAlert()
+//            }
             self.vsaAccessOperationCompletion?(success)
         }
     }
