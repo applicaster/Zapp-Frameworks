@@ -28,6 +28,14 @@ const baseManifest = {
         folded: true,
         fields: [
           {
+            key: "fallback_login_plugin_id",
+            type: "text_input",
+            label:
+              "Add identifier of the login plugin. If no identifier provided will be used first availible login plugin",
+            initial_value: "",
+            placeholder: "Login plugin identifier id",
+          },
+          {
             key: "account_component_instructions_text",
             type: "text_input",
             label: "Account Component Instructions Text",
