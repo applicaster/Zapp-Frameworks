@@ -11,14 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.viewpager.widget.PagerTitleStrip
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@android:color/holo_green_light"
+            android:padding="4dp" />
+
         <fragment
-            android:id="@+id/fragment"
-            android:name="com.applicaster.plugin.xray.ui.EventLogFragment"
+            android:id="@+id/events_fragment"
+            android:name="com.applicaster.plugin.xray.ui.fragements.EventLogFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <fragment
-            android:name="com.applicaster.plugin.xray.ui.FileLogFragment"
+            android:id="@+id/logfile_fragment"
+            android:name="com.applicaster.plugin.xray.ui.fragements.FileLogFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

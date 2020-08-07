@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray.ui
+package com.applicaster.plugin.xray.ui.fragements
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
+import com.applicaster.plugin.xray.ui.FilteredEventList
+import com.applicaster.plugin.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.example.sinks.InMemoryLogSink
@@ -56,6 +58,7 @@ class EventLogFragment : Fragment() {
             )
 
         }
+        view.setTag(R.id.fragment_title_tag, getString(R.string.tab_title_events))
         return view
     }
 

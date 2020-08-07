@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray.ui
+package com.applicaster.plugin.xray.ui.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager

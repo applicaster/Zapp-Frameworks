@@ -19,6 +19,6 @@
         android:layout_weight="1"
         app:layoutManager="LinearLayoutManager"
         app:stackFromEnd="true"
-        tools:context=".ui.EventLogFragment"
+        tools:context=".ui.fragements.EventLogFragment"
         tools:listitem="@layout/fragment_event_log_entry" />
 </LinearLayout>

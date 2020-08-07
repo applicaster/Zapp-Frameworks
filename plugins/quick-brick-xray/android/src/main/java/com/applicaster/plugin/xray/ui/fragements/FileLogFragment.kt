@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray.ui
+package com.applicaster.plugin.xray.ui.fragements
 
 import android.os.Bundle
 import android.os.FileObserver
@@ -37,6 +37,7 @@ class FileLogFragment : Fragment() {
                 reloadLog()
             }
         }
+        view.setTag(R.id.fragment_title_tag, file!!.name)
         return view
     }
 

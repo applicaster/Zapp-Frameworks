@@ -3,4 +3,5 @@
     <!-- Will be replaced on build -->
     <string name="scheme_url_prefix">xray</string>
     <string name="xray">xray</string>
+    <string name="tab_title_events">Current session events</string>
 </resources>
