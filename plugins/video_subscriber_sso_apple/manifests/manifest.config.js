@@ -39,12 +39,12 @@ const baseManifest = {
           "Please make sure TV Provider is configured in the device settings. As alternative you can login with Applicaster provider.",
       },
       {
-        key: "failure_alert_ok_button_title",
+        key: "failure_alert_cancel_button_title",
         type: "text_input",
 
         label: "Failure alert button title",
         tooltip: "Failure alert button title",
-        initial_value: "Ok",
+        initial_value: "Cancel",
       },
       {
         key: "failure_alert_login_applicaster_button_title",
