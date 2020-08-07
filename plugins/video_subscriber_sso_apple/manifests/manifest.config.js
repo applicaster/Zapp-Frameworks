@@ -23,12 +23,16 @@ const baseManifest = {
     fields: [
       {
         key: "failure_alert_title",
+        type: "text_input",
+
         label: "Failure alert title",
         tooltip: "Failure alert title",
         initial_value: "Unable to connect to TV Provider",
       },
       {
         key: "failure_alert_description",
+        type: "text_input",
+
         label: "Failure alert description",
         tooltip: "Failure alert description",
         initial_value:
@@ -36,24 +40,31 @@ const baseManifest = {
       },
       {
         key: "failure_alert_ok_button_title",
+        type: "text_input",
+
         label: "Failure alert button title",
         tooltip: "Failure alert button title",
         initial_value: "Ok",
       },
       {
         key: "failure_alert_login_applicaster_button_title",
+        type: "text_input",
+
         label: "Failure alert login applicaster button title",
         tooltip: "Login with Applicaster",
         initial_value: "Login with Applicaster",
       },
       {
         key: "failure_alert_settings_button_title",
+        type: "text_input",
+
         label: "Failure alert settings title",
         tooltip: "Failure alert settings title",
         initial_value: "Open app settings",
       },
       {
         key: "sign_out_alert_settings_button_title",
+        type: "text_input",
         label: "SignOut alert settings title",
         tooltip: "SignOut alert settings title",
         initial_value: "Open TV Providers",
