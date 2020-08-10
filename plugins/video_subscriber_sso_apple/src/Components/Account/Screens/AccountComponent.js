@@ -297,9 +297,11 @@ function AccountComponent(props: Props) {
             focus={focused}
             parentFocus={parentFocus}
           />
-          <Text style={{ ...greetingsStyle, ...styles.separator }}>
-            {separator}
-          </Text>
+          {!isLoggedIn ? (
+            <Text style={{ ...greetingsStyle, ...styles.separator }}>
+              {separator}
+            </Text>
+          ) : null}
           {!isLoggedIn ? (
             <Button
               label={loginLabelApplicaster}
