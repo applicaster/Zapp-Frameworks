@@ -72,7 +72,7 @@ function AccountComponent(props: Props) {
       account_component_separator_text: separator,
       account_component_instructions_text: instructions,
       login_action_button_text: loginLabel,
-      login_action_button_applicaster_text: loginLabelApplicaster,
+      failure_alert_login_applicaster_button_title: loginLabelApplicaster,
       logout_action_button_text: logoutLabel,
       login_action_button_applicaster_background_color: loginButtonApplicasterBackground,
       login_action_button_background_color: loginButtonBackground,
@@ -128,7 +128,6 @@ function AccountComponent(props: Props) {
 
   useEffect(() => {
     if (appStateVisible) {
-      console.log("appStateVisible");
       setIsLoading(true);
       start().catch((err) => console.log(err));
     }
@@ -191,8 +190,6 @@ function AccountComponent(props: Props) {
   }
 
   async function signOutLogic() {
-    console.log({ providerType });
-
     if (providerType === SSOProviderType.APPLE_SSO) {
       await SSOBridge.signOut();
       presentLogoutAlert(screenGeneralStyles, plugin, navigator);
