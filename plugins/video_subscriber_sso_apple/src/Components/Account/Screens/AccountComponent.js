@@ -11,8 +11,12 @@ import {
 } from "react-native";
 
 import SSOBridge from "../../../SSOBridge";
+import {
+  presentLoginFailAlert,
+  presentLogoutAlert,
+} from "../Components/AlertActions";
 
-import { getFromLocalStorage, isItemInStorage } from "../Utils";
+import { isItemInStorage } from "../../../Utils";
 import Button from "../Components/Button";
 import createStyleSheet from "../Styles/Styles";
 import trackEvent from "../Analytics";
@@ -41,26 +45,43 @@ type Props = {
     ],
     rivers: {},
   },
+  configuration: { fallback_login_plugin_id: string },
   screenData: {
     general: any,
   },
   plugin: {},
   focused: boolean,
   parentFocus: {},
+  screenGeneralStyles: {},
 };
 
 function AccountComponent(props: Props) {
-  const { plugin, screenData = {}, navigator, focused, parentFocus } = props;
+  const {
+    plugin,
+    screenData = {},
+    navigator,
+    focused,
+    parentFocus,
+    configuration,
+    screenGeneralStyles,
+  } = props;
+
   const {
     general: {
       account_component_greetings_text: greetings,
+      account_component_separator_text: separator,
       account_component_instructions_text: instructions,
       login_action_button_text: loginLabel,
+      failure_alert_login_applicaster_button_title: loginLabelApplicaster,
       logout_action_button_text: logoutLabel,
+      login_action_button_applicaster_background_color: loginButtonApplicasterBackground,
       login_action_button_background_color: loginButtonBackground,
       logout_action_button_background_color: logoutButtonBackground,
+      screen_background_color: screenBackgroundColor,
     } = {},
   } = screenData || {};
+
+  const { fallback_login_plugin_id } = configuration;
 
   const {
     greetingsStyle,
@@ -68,10 +89,19 @@ function AccountComponent(props: Props) {
     logoutButtonStyle,
     loginButtonStyle,
     authProviderTitleStyle,
+    loginButtonApplicasterStyle,
   } = createStyleSheet(screenData);
+
+  const SSOProviderType = {
+    UNDEFINED: "Undefined",
+    APPLE_SSO: "AppleSSO",
+    LOGIN_PLUGIN_SSO: "LoginPluginSSO",
+  };
 
   const appState = useRef(AppState.currentState);
   const [authProviderItem, setAuthProviderItem] = useState(null);
+
+  const [providerType, setProviderType] = useState(SSOProviderType.UNDEFINED);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -81,10 +111,16 @@ function AccountComponent(props: Props) {
     setIsLoading(true);
     AppState.addEventListener(appStateChange, _handleAppStateChange);
     start().catch((err) => console.log(err));
+
     return () => {
       AppState.removeEventListener(appStateChange, _handleAppStateChange);
     };
   }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    start().catch((err) => console.log(err));
+  }, [navigator.previousAction]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -113,8 +149,7 @@ function AccountComponent(props: Props) {
   // eslint-disable-next-line consistent-return
   const start = async () => {
     try {
-      const isSignedIn = await SSOBridge.isSignedIn();
-      return isSignedIn ? setIsLoggedIn(true) : setIsLoggedIn(false);
+      await checkUserSignedIn();
     } catch (err) {
       setIsLoggedIn(false);
     } finally {
@@ -122,12 +157,52 @@ function AccountComponent(props: Props) {
     }
   };
 
+  async function checkUserSignedIn() {
+    let isSignedIn = await SSOBridge.isSignedIn();
+
+    if (isSignedIn) {
+      setProviderType(SSOProviderType.APPLE_SSO);
+    } else {
+      isSignedIn = await isItemInStorage("idToken", fallback_login_plugin_id);
+
+      if (isSignedIn) {
+        setProviderType(SSOProviderType.LOGIN_PLUGIN_SSO);
+      }
+    }
+
+    return isSignedIn ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  }
+
   async function performButtonAction() {
     if (isLoggedIn) {
-      return await SSOBridge.signOut();
+      return await signOutLogic();
     } else {
-      return await SSOBridge.signIn();
+      const result = await SSOBridge.signIn();
+
+      if (result) {
+        setProviderType(SSOProviderType.APPLE_SSO);
+      } else {
+        presentLoginFailAlert(screenGeneralStyles, plugin, navigator);
+      }
+
+      return result;
     }
+  }
+
+  async function signOutLogic() {
+    if (providerType === SSOProviderType.APPLE_SSO) {
+      await SSOBridge.signOut();
+      presentLogoutAlert(screenGeneralStyles, plugin, navigator);
+    } else if (providerType === SSOProviderType.LOGIN_PLUGIN_SSO) {
+      navigator.push(plugin);
+    }
+
+    return true;
+  }
+
+  // eslint-disable-next-line consistent-return
+  async function handleLoginApplicaster() {
+    navigator.push(plugin);
   }
 
   // eslint-disable-next-line consistent-return
@@ -139,6 +214,7 @@ function AccountComponent(props: Props) {
       setIsLoggedIn(result);
     } catch (err) {
       console.log(err);
+
       return isLoggedIn
         ? trackEvent(EVENTS.logoutFailure, { screenData })
         : trackEvent(EVENTS.loginFailure, { screenData });
@@ -152,6 +228,7 @@ function AccountComponent(props: Props) {
     if (!authProviderItem) {
       return null;
     }
+
     const {
       mobile_screen_logo: authProviderMobileLogo,
       tablet_screen_logo: authProviderTabletLogo,
@@ -162,12 +239,15 @@ function AccountComponent(props: Props) {
     if (!isMobile && authProviderTVLogo) {
       return renderProviderImage(authProviderTVLogo);
     }
+
     if (isPad && authProviderTabletLogo) {
       return renderProviderImage(authProviderTabletLogo);
     }
+
     if (!isPad && authProviderMobileLogo) {
       return renderProviderImage(authProviderMobileLogo);
     }
+
     return authProviderTitle ? renderProviderTitle(authProviderTitle) : null;
   };
 
@@ -178,6 +258,7 @@ function AccountComponent(props: Props) {
   const renderProviderTitle = (title) => {
     return (
       <Text
+        // eslint-disable-next-line react-native/no-inline-styles
         style={[{ textAlign: "center", marginTop: 5 }, authProviderTitleStyle]}
         ellipsizeMode="tail"
       >
@@ -194,7 +275,7 @@ function AccountComponent(props: Props) {
         <>
           <Text
             style={[
-              { textAlign: "center" },
+              { textAlign: "center", marginBottom: 100 },
               isLoggedIn ? greetingsStyle : instructionsStyle,
             ]}
             numberOfLines={4}
@@ -216,6 +297,22 @@ function AccountComponent(props: Props) {
             focus={focused}
             parentFocus={parentFocus}
           />
+          <Text style={{ ...greetingsStyle, ...styles.separator }}>
+            {separator}
+          </Text>
+          {!isLoggedIn ? (
+            <Button
+              label={loginLabelApplicaster}
+              onPress={handleLoginApplicaster}
+              textStyle={loginButtonApplicasterStyle}
+              buttonStyle={styles.input}
+              backgroundColor={loginButtonApplicasterBackground}
+              backgroundButtonUri={ASSETS.loginButtonBackground}
+              backgroundButtonUriActive={ASSETS.loginButtonBackgroundActive}
+              focus={focused}
+              parentFocus={parentFocus}
+            />
+          ) : null}
         </>
       )}
     </View>
@@ -225,8 +322,9 @@ function AccountComponent(props: Props) {
 const mobileInput = {
   width: isPad ? 500 : 300,
   height: isPad ? 90 : 50,
-  marginTop: isPad ? 100 : 60,
+  marginTop: isPad ? 60 : 20,
 };
+
 const tvInput = {
   width: 600,
   height: 90,
@@ -258,9 +356,17 @@ const styles = {
     ...(isMobile ? mobileLayout : tvLayout),
   },
   input: {
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    alignSelf: "center",
     ...(isMobile ? mobileInput : tvInput),
+  },
+  separator: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: isPad ? 80 : 20,
   },
 };
 
