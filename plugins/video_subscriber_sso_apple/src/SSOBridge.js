@@ -15,22 +15,14 @@ const SSOBridge = {
    * @return {Promise<Boolean>} response promise
    */
   signIn() {
-    try {
-      return AppleVideoSubscriberSSO.signIn();
-    } catch (e) {
-      throw e;
-    }
+    return AppleVideoSubscriberSSO.signIn();
   },
   /**
    * Logout from TV provider
    * @return {Promise<Boolean>} response promise
    */
   signOut() {
-    try {
-      return AppleVideoSubscriberSSO.signOut();
-    } catch (e) {
-      throw e;
-    }
+    return AppleVideoSubscriberSSO.signOut();
   },
 
   /**
@@ -38,11 +30,7 @@ const SSOBridge = {
    * @return {Promise<Boolean>} response promise
    */
   isSignedIn() {
-    try {
-      return AppleVideoSubscriberSSO.isSignedIn();
-    } catch (e) {
-      throw e;
-    }
+    return AppleVideoSubscriberSSO.isSignedIn();
   },
 };
 

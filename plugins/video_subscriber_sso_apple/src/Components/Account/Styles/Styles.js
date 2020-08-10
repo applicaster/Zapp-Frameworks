@@ -1,4 +1,4 @@
-import { getPluginData } from '../Utils';
+import { getPluginData } from "../../../Utils";
 
 export default function createStyleSheet(screenData) {
   const {
@@ -11,39 +11,47 @@ export default function createStyleSheet(screenData) {
     logout_action_button_fontcolor: logoutButtonFontColor,
     logout_action_button_fontsize: logoutButtonFontSize,
     authorization_provider_title_fontcolor: authProviderTitleFontColor,
-    authorization_provider_title_fontsize: authProviderTitleFontSize
+    authorization_provider_title_fontsize: authProviderTitleFontSize,
+    login_action_button_applicaster_fontsize: loginButtonApplicasterFontSize,
+    login_action_button_applicaster_fontcolor: loginButtonApplicasterFontColor,
   } = getPluginData(screenData);
 
   const instructionsStyle = {
     color: instructionsFontColor,
-    fontSize: instructionsFontSize
+    fontSize: instructionsFontSize,
   };
 
   const greetingsStyle = {
     color: greetingsFontColor,
-    fontSize: greetingsFontSize
+    fontSize: greetingsFontSize,
+  };
+
+  const loginButtonApplicasterStyle = {
+    color: loginButtonApplicasterFontColor,
+    fontSize: loginButtonApplicasterFontSize,
   };
 
   const loginButtonStyle = {
     color: loginButtonFontColor,
-    fontSize: loginButtonFontSize
+    fontSize: loginButtonFontSize,
   };
 
   const logoutButtonStyle = {
     color: logoutButtonFontColor,
-    fontSize: logoutButtonFontSize
+    fontSize: logoutButtonFontSize,
   };
 
   const authProviderTitleStyle = {
     color: authProviderTitleFontColor,
-    fontSize: authProviderTitleFontSize
+    fontSize: authProviderTitleFontSize,
   };
 
   return {
+    loginButtonApplicasterStyle,
     instructionsStyle,
     greetingsStyle,
     loginButtonStyle,
     logoutButtonStyle,
-    authProviderTitleStyle
+    authProviderTitleStyle,
   };
 }

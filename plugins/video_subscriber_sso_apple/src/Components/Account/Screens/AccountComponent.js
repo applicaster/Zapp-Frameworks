@@ -8,13 +8,15 @@ import {
   Platform,
   Image,
   AppState,
-  Alert,
 } from "react-native";
 
 import SSOBridge from "../../../SSOBridge";
-import {presentAlert} from "../Components/FailAction"
+import {
+  presentLoginFailAlert,
+  presentLogoutAlert,
+} from "../Components/AlertActions";
 
-import { getFromLocalStorage, isItemInStorage } from "../Utils";
+import { isItemInStorage } from "../../../Utils";
 import Button from "../Components/Button";
 import createStyleSheet from "../Styles/Styles";
 import trackEvent from "../Analytics";
@@ -50,6 +52,7 @@ type Props = {
   plugin: {},
   focused: boolean,
   parentFocus: {},
+  screenGeneralStyles: {},
 };
 
 function AccountComponent(props: Props) {
@@ -60,6 +63,7 @@ function AccountComponent(props: Props) {
     focused,
     parentFocus,
     configuration,
+    screenGeneralStyles,
   } = props;
 
   const {
@@ -67,7 +71,9 @@ function AccountComponent(props: Props) {
       account_component_greetings_text: greetings,
       account_component_instructions_text: instructions,
       login_action_button_text: loginLabel,
+      login_action_button_applicaster_text: loginLabelApplicaster,
       logout_action_button_text: logoutLabel,
+      login_action_button_applicaster_background_color: loginButtonApplicasterBackground,
       login_action_button_background_color: loginButtonBackground,
       logout_action_button_background_color: logoutButtonBackground,
     } = {},
@@ -81,6 +87,7 @@ function AccountComponent(props: Props) {
     logoutButtonStyle,
     loginButtonStyle,
     authProviderTitleStyle,
+    loginButtonApplicasterStyle,
   } = createStyleSheet(screenData);
 
   const SSOProviderType = {
@@ -96,11 +103,6 @@ function AccountComponent(props: Props) {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  console.log({
-    props,
-    plugin,
-    navigator,
-  });
 
   useEffect(() => {
     const appStateChange = "change";
@@ -179,7 +181,7 @@ function AccountComponent(props: Props) {
       if (result) {
         setProviderType(SSOProviderType.APPLE_SSO);
       } else {
-        presentAlert(props.screenGeneralStyles)
+        presentLoginFailAlert(screenGeneralStyles, plugin, navigator);
       }
 
       return result;
@@ -190,7 +192,8 @@ function AccountComponent(props: Props) {
     console.log({ providerType });
 
     if (providerType === SSOProviderType.APPLE_SSO) {
-      return await SSOBridge.signOut();
+      await SSOBridge.signOut();
+      presentLogoutAlert(screenGeneralStyles, plugin, navigator);
     } else if (providerType === SSOProviderType.LOGIN_PLUGIN_SSO) {
       navigator.push(plugin);
     }
@@ -256,6 +259,7 @@ function AccountComponent(props: Props) {
   const renderProviderTitle = (title) => {
     return (
       <Text
+        // eslint-disable-next-line react-native/no-inline-styles
         style={[{ textAlign: "center", marginTop: 5 }, authProviderTitleStyle]}
         ellipsizeMode="tail"
       >
@@ -296,13 +300,11 @@ function AccountComponent(props: Props) {
           />
           {!isLoggedIn ? (
             <Button
-              label={"Login Applicaster"}
+              label={loginLabelApplicaster}
               onPress={handleLoginApplicaster}
-              textStyle={isLoggedIn ? logoutButtonStyle : loginButtonStyle}
+              textStyle={loginButtonApplicasterStyle}
               buttonStyle={styles.input}
-              backgroundColor={
-                isLoggedIn ? logoutButtonBackground : loginButtonBackground
-              }
+              backgroundColor={loginButtonApplicasterBackground}
               backgroundButtonUri={ASSETS.loginButtonBackground}
               backgroundButtonUriActive={ASSETS.loginButtonBackgroundActive}
               focus={focused}

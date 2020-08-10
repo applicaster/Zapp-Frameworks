@@ -1,4 +1,4 @@
-import { postAnalyticEvent } from '@applicaster/zapp-react-native-utils/analyticsUtils/manager';
+import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
 
 export default function trackEvent(event, props) {
   try {
@@ -7,7 +7,7 @@ export default function trackEvent(event, props) {
 
     return postAnalyticEvent(event, {
       ...data,
-      timestamp
+      timestamp,
     });
   } catch (err) {
     throw err;
@@ -15,23 +15,18 @@ export default function trackEvent(event, props) {
 }
 
 function getAnalyticsData(props) {
-  const {
-    payload = {},
-    screenData: {
-      type: pluginProvider
-    } = {}
-  } = props;
+  const { payload = {}, screenData: { type: pluginProvider } = {} } = props;
 
   if (payload.type && payload.type.value) {
     return {
       contentType: payload.type.value,
       contentName: payload.title,
-      pluginProvider
+      pluginProvider,
     };
   }
 
   return {
-    contentName: 'App',
-    pluginProvider
+    contentName: "App",
+    pluginProvider,
   };
 }
