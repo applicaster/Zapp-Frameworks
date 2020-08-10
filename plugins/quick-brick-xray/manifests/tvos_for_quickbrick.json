@@ -1,0 +1,73 @@
+{
+  "api": {
+    "class_name": "QickBrickXray",
+    "modules": [
+      "QickBrickXray"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "X-Ray Logging",
+  "description": "Enable advanced logging using Applicaster X-Ray",
+  "type": "error_monitoring",
+  "identifier": "xray_logging_plugin",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
+  ],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "dropdown",
+      "key": "file_sink",
+      "tooltip_text": "Minimum message level to log to the file",
+      "multiple": false,
+      "options": [
+        "off",
+        "error",
+        "warning",
+        "info",
+        "debug",
+        "verbose"
+      ],
+      "default": "error"
+    },
+    {
+      "key": "report_email",
+      "type": "text",
+      "tooltip_text": "Email to send reports to. Empty is allowed."
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "tvos_for_quickbrick",
+  "manifest_version": "0.0.2",
+  "extra_dependencies": [
+    {
+      "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
+    },
+    {
+      "XrayLogger": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
+    },
+    {
+      "Reporter": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
+    },
+    {
+      "LoggerInfo": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/quick-brick-xray@0.0.2"
+  ]
+}

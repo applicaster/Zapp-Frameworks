@@ -1,0 +1,27 @@
+{
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "X-Ray Logging",
+  "description": "Enable advanced logging using Applicaster X-Ray",
+  "type": "error_monitoring",
+  "identifier": "xray_logging_plugin",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_tv_for_quickbrick",
+  "manifest_version": "0.0.2",
+  "npm_dependencies": [
+    "@applicaster/quick-brick-xray@0.0.2"
+  ]
+}
