@@ -120,6 +120,14 @@ const baseManifest = {
             placeholder: "Connect to your account",
           },
           {
+            key: "account_component_separator_text",
+            type: "text_input",
+            label: "Separator text between buttons",
+            label_tooltip: "Text to explain briefly the section context.",
+            initial_value: "Or",
+            placeholder: "Or",
+          },
+          {
             key: "account_component_instructions_fontsize",
             type: "number_input",
             label_tooltip: "Font Size for Account Component Instructions Text.",
@@ -177,10 +185,9 @@ const baseManifest = {
           {
             key: "login_action_button_applicaster_background_color",
             type: "color_picker_rgba",
-            label: "Login Button Color for Samsung TV",
-            label_tooltip:
-              "Background Color for the Login Login Applicaster Button for Samsung TV.",
-            initial_value: "rgba(39, 218, 134, 1)",
+            label: "Login Button Background Color Applicaster",
+            label_tooltip: "Background Color for the Login Applicaster Button",
+            initial_value: "rgba(241, 173, 18, 1)",
           },
           {
             key: "login_action_button_text",
@@ -206,9 +213,8 @@ const baseManifest = {
             key: "login_action_button_background_color",
             type: "color_picker_rgba",
             label: "Login Button Color for Samsung TV",
-            label_tooltip:
-              "Background Color for the Login Action Button for Samsung TV.",
-            initial_value: "rgba(39, 218, 134, 1)",
+            label_tooltip: "Background Color for the Login Action Button",
+            initial_value: "rgba(241, 173, 18, 1)",
           },
           {
             key: "logout_action_button_text",
@@ -234,9 +240,8 @@ const baseManifest = {
             key: "logout_action_button_background_color",
             type: "color_picker_rgba",
             label: "Logout Button Color for Samsung TV",
-            label_tooltip:
-              "Background Color for the Logout Action Button for Samsung TV.",
-            initial_value: "rgba(39, 218, 134, 1)",
+            label_tooltip: "Background Color for the Logout Action Button",
+            initial_value: "rgba(241, 173, 18, 1)",
           },
           {
             key: "authorization_provider_title_fontsize",
