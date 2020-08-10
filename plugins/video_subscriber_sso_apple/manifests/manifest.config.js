@@ -95,6 +95,13 @@ const baseManifest = {
               "Settings > Users and Accounts > TV Provider > Sign Out",
           },
           {
+            key: "sign_out_alert_title",
+            type: "text_input",
+            label: "SignOut alert title",
+            tooltip: "SignOut alert title",
+            initial_value: "SignOut",
+          },
+          {
             key: "sign_out_alert_message",
             type: "text_input",
             label: "SignOut alert message",
@@ -149,7 +156,6 @@ const baseManifest = {
             label_tooltip: "Font Color for Account Component Greetings Text.",
             initial_value: "rgb(84, 90, 92)",
           },
-
           {
             key: "login_action_button_applicaster_text",
             type: "text_input",
