@@ -69,6 +69,7 @@ function AccountComponent(props: Props) {
   const {
     general: {
       account_component_greetings_text: greetings,
+      account_component_separator_text: separator,
       account_component_instructions_text: instructions,
       login_action_button_text: loginLabel,
       login_action_button_applicaster_text: loginLabelApplicaster,
@@ -76,6 +77,7 @@ function AccountComponent(props: Props) {
       login_action_button_applicaster_background_color: loginButtonApplicasterBackground,
       login_action_button_background_color: loginButtonBackground,
       logout_action_button_background_color: logoutButtonBackground,
+      screen_background_color: screenBackgroundColor,
     } = {},
   } = screenData || {};
 
@@ -276,7 +278,7 @@ function AccountComponent(props: Props) {
         <>
           <Text
             style={[
-              { textAlign: "center" },
+              { textAlign: "center", marginBottom: 100 },
               isLoggedIn ? greetingsStyle : instructionsStyle,
             ]}
             numberOfLines={4}
@@ -298,6 +300,9 @@ function AccountComponent(props: Props) {
             focus={focused}
             parentFocus={parentFocus}
           />
+          <Text style={{ ...greetingsStyle, ...styles.separator }}>
+            {separator}
+          </Text>
           {!isLoggedIn ? (
             <Button
               label={loginLabelApplicaster}
@@ -320,7 +325,7 @@ function AccountComponent(props: Props) {
 const mobileInput = {
   width: isPad ? 500 : 300,
   height: isPad ? 90 : 50,
-  marginTop: isPad ? 100 : 60,
+  marginTop: isPad ? 60 : 20,
 };
 
 const tvInput = {
@@ -354,9 +359,17 @@ const styles = {
     ...(isMobile ? mobileLayout : tvLayout),
   },
   input: {
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 50,
+    alignSelf: "center",
     ...(isMobile ? mobileInput : tvInput),
+  },
+  separator: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: isPad ? 80 : 20,
   },
 };
 

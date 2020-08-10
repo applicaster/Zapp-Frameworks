@@ -12,6 +12,7 @@ export default function MobileButton({
   buttonStyle = {},
   textStyle = {},
   backgroundButtonUri,
+  backgroundColor,
 }) {
   const formattedTitle =
     Platform.OS === "android" ? label.toUpperCase() : label;
@@ -20,7 +21,7 @@ export default function MobileButton({
     <TouchableOpacity accessibilityRole="button" onPress={onPress}>
       <ImageBackground
         source={{ uri: backgroundButtonUri }}
-        style={buttonStyle}
+        style={{ ...buttonStyle, backgroundColor }}
       >
         <Text style={textStyle}>{formattedTitle}</Text>
       </ImageBackground>
