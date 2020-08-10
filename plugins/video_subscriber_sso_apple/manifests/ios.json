@@ -40,12 +40,103 @@
         "folded": true,
         "fields": [
           {
+            "key": "screen_background_color",
+            "type": "color_picker",
+            "label": "Background font color",
+            "initial_value": "#161b29ff"
+          },
+          {
+            "key": "failure_alert_title",
+            "type": "text_input",
+            "label": "Failure alert title",
+            "tooltip": "Failure alert title",
+            "initial_value": "Unable to connect to TV Provider"
+          },
+          {
+            "key": "failure_alert_description",
+            "type": "text_input",
+            "label": "Failure alert description",
+            "tooltip": "Failure alert description",
+            "initial_value": "Please make sure TV Provider is configured in the device settings. As alternative you can login with Applicaster provider."
+          },
+          {
+            "key": "failure_alert_cancel_button_title",
+            "type": "text_input",
+            "label": "Failure alert button title",
+            "tooltip": "Failure alert button title",
+            "initial_value": "Cancel"
+          },
+          {
+            "key": "failure_alert_login_applicaster_button_title",
+            "type": "text_input",
+            "label": "Failure alert login applicaster button title",
+            "tooltip": "Login with Applicaster",
+            "initial_value": "Login with Applicaster"
+          },
+          {
+            "key": "failure_alert_settings_button_title",
+            "type": "text_input",
+            "label": "Failure alert settings title",
+            "tooltip": "Failure alert settings title",
+            "initial_value": "Open app settings"
+          },
+          {
+            "key": "sign_out_alert_settings_button_title",
+            "type": "text_input",
+            "label": "SignOut alert settings title",
+            "tooltip": "SignOut alert settings title",
+            "initial_value": "Open TV Providers"
+          },
+          {
+            "key": "sign_out_settings_path_ios",
+            "type": "text_input",
+            "label": "SignOut part of message where define pass to the user to settings",
+            "tooltip": "SignOut part of message where define pass to the user to settings",
+            "initial_value": "Settings > TV Provider > Sign Out"
+          },
+          {
+            "key": "sign_out_settings_path_tvos",
+            "type": "text_input",
+            "label": "SignOut part of message where define pass to the user to settings",
+            "tooltip": "SignOut part of message where define pass to the user to settings",
+            "initial_value": "Settings > Users and Accounts > TV Provider > Sign Out"
+          },
+          {
+            "key": "sign_out_alert_title",
+            "type": "text_input",
+            "label": "SignOut alert title",
+            "tooltip": "SignOut alert title",
+            "initial_value": "SignOut"
+          },
+          {
+            "key": "sign_out_alert_message",
+            "type": "text_input",
+            "label": "SignOut alert message",
+            "tooltip": "SignOut alert message",
+            "initial_value": "The app was authenticated through Apple TV Provider Authenticaiton. \nTo Sign Out please navigate to the device Settings App. \n"
+          },
+          {
+            "key": "sign_out_alert_ok_button_title",
+            "type": "text_input",
+            "label": "Sign out alert ok button title",
+            "tooltip": "Sign out alert ok button title",
+            "initial_value": "Ok"
+          },
+          {
             "key": "account_component_instructions_text",
             "type": "text_input",
             "label": "Account Component Instructions Text",
             "label_tooltip": "Text to explain briefly the section context.",
             "initial_value": "Connect to your account",
             "placeholder": "Connect to your account"
+          },
+          {
+            "key": "account_component_separator_text",
+            "type": "text_input",
+            "label": "Separator text between buttons",
+            "label_tooltip": "Text to explain briefly the section context.",
+            "initial_value": "Or",
+            "placeholder": "Or"
           },
           {
             "key": "account_component_instructions_fontsize",
@@ -80,6 +171,33 @@
             "initial_value": "rgb(84, 90, 92)"
           },
           {
+            "key": "login_action_button_applicaster_text",
+            "type": "text_input",
+            "label": "Login Action Button Text",
+            "label_tooltip": "Text for the Applicaster Login Button.",
+            "initial_value": "Login Applicaster",
+            "placeholder": "Login Applicaster"
+          },
+          {
+            "key": "login_action_button_applicaster_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Login Applicaster Action Button Text.",
+            "initial_value": "24"
+          },
+          {
+            "key": "login_action_button_applicaster_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Login Applicaster Action Button Text.",
+            "initial_value": "rgb(84, 90, 92)"
+          },
+          {
+            "key": "login_action_button_applicaster_background_color",
+            "type": "color_picker_rgba",
+            "label": "Login Button Background Color Applicaster",
+            "label_tooltip": "Background Color for the Login Applicaster Button",
+            "initial_value": "rgba(241, 173, 18, 1)"
+          },
+          {
             "key": "login_action_button_text",
             "type": "text_input",
             "label": "Login Action Button Text",
@@ -103,8 +221,8 @@
             "key": "login_action_button_background_color",
             "type": "color_picker_rgba",
             "label": "Login Button Color for Samsung TV",
-            "label_tooltip": "Background Color for the Login Action Button for Samsung TV.",
-            "initial_value": "rgba(39, 218, 134, 1)"
+            "label_tooltip": "Background Color for the Login Action Button",
+            "initial_value": "rgba(241, 173, 18, 1)"
           },
           {
             "key": "logout_action_button_text",
@@ -130,8 +248,8 @@
             "key": "logout_action_button_background_color",
             "type": "color_picker_rgba",
             "label": "Logout Button Color for Samsung TV",
-            "label_tooltip": "Background Color for the Logout Action Button for Samsung TV.",
-            "initial_value": "rgba(39, 218, 134, 1)"
+            "label_tooltip": "Background Color for the Logout Action Button",
+            "initial_value": "rgba(241, 173, 18, 1)"
           },
           {
             "key": "authorization_provider_title_fontsize",
@@ -150,6 +268,13 @@
     ]
   },
   "custom_configuration_fields": [
+    {
+      "key": "fallback_login_plugin_id",
+      "type": "text_input",
+      "label": "Add identifier of the login plugin. If no identifier provided will be used first availible login plugin",
+      "initial_value": "",
+      "placeholder": "Login plugin identifier id"
+    },
     {
       "key": "ios_assets_bundle",
       "type": "uploader",
@@ -198,42 +323,11 @@
     }
   ],
   "localizations": {
-    "fields": [
-      {
-        "key": "failure_alert_title",
-        "label": "Failure alert title",
-        "tooltip": "Failure alert title",
-        "initial_value": "Unable to connect to TV Provider"
-      },
-      {
-        "key": "failure_alert_description",
-        "label": "Failure alert description",
-        "tooltip": "Failure alert description",
-        "initial_value": "Please make sure TV Provider is configured in the device settings"
-      },
-      {
-        "key": "failure_alert_ok_button_title",
-        "label": "Failure alert button title",
-        "tooltip": "Failure alert button title",
-        "initial_value": "Ok"
-      },
-      {
-        "key": "failure_alert_settings_button_title",
-        "label": "Failure alert settings title",
-        "tooltip": "Failure alert settings title",
-        "initial_value": "Open app settings"
-      },
-      {
-        "key": "sign_out_alert_settings_button_title",
-        "label": "SignOut alert settings title",
-        "tooltip": "SignOut alert settings title",
-        "initial_value": "Open TV Providers"
-      }
-    ]
+    "fields": []
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.5.1"
+    "@applicaster/video_subscriber_sso_apple@0.5.2"
   ],
   "targets": [
     "mobile"
@@ -242,8 +336,8 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "dependency_version": "0.5.1",
-  "manifest_version": "0.5.1",
+  "dependency_version": "0.5.2",
+  "manifest_version": "0.5.2",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
