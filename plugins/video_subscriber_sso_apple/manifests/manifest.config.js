@@ -116,6 +116,37 @@ const baseManifest = {
             label_tooltip: "Font Color for Account Component Greetings Text.",
             initial_value: "rgb(84, 90, 92)",
           },
+
+          {
+            key: "login_action_button_applicaster_text",
+            type: "text_input",
+            label: "Login Action Button Text",
+            label_tooltip: "Text for the Applicaster Login Button.",
+            initial_value: "Login Applicaster",
+            placeholder: "Login Applicaster",
+          },
+          {
+            key: "login_action_button_applicaster_fontsize",
+            type: "number_input",
+            label_tooltip:
+              "Font Size for Login Applicaster Action Button Text.",
+            initial_value: "24",
+          },
+          {
+            key: "login_action_button_applicaster_fontcolor",
+            type: "color_picker_rgba",
+            label_tooltip:
+              "Font Color for Login Applicaster Action Button Text.",
+            initial_value: "rgb(84, 90, 92)",
+          },
+          {
+            key: "login_action_button_applicaster_background_color",
+            type: "color_picker_rgba",
+            label: "Login Button Color for Samsung TV",
+            label_tooltip:
+              "Background Color for the Login Login Applicaster Button for Samsung TV.",
+            initial_value: "rgba(39, 218, 134, 1)",
+          },
           {
             key: "login_action_button_text",
             type: "text_input",
