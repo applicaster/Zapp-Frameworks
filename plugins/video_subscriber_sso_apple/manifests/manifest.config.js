@@ -30,7 +30,6 @@ const baseManifest = {
           {
             key: "failure_alert_title",
             type: "text_input",
-
             label: "Failure alert title",
             tooltip: "Failure alert title",
             initial_value: "Unable to connect to TV Provider",
@@ -38,7 +37,6 @@ const baseManifest = {
           {
             key: "failure_alert_description",
             type: "text_input",
-
             label: "Failure alert description",
             tooltip: "Failure alert description",
             initial_value:
@@ -47,7 +45,6 @@ const baseManifest = {
           {
             key: "failure_alert_cancel_button_title",
             type: "text_input",
-
             label: "Failure alert button title",
             tooltip: "Failure alert button title",
             initial_value: "Cancel",
@@ -55,7 +52,6 @@ const baseManifest = {
           {
             key: "failure_alert_login_applicaster_button_title",
             type: "text_input",
-
             label: "Failure alert login applicaster button title",
             tooltip: "Login with Applicaster",
             initial_value: "Login with Applicaster",
@@ -63,7 +59,6 @@ const baseManifest = {
           {
             key: "failure_alert_settings_button_title",
             type: "text_input",
-
             label: "Failure alert settings title",
             tooltip: "Failure alert settings title",
             initial_value: "Open app settings",
@@ -111,6 +106,7 @@ const baseManifest = {
           },
           {
             key: "sign_out_alert_ok_button_title",
+            type: "text_input",
             label: "Sign out alert ok button title",
             tooltip: "Sign out alert ok button title",
             initial_value: "Ok",
