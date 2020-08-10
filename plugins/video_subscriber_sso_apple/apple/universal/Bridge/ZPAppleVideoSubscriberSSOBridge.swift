@@ -32,7 +32,7 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     }
 
     @objc public func signIn(_ resolver: @escaping RCTPromiseResolveBlock,
-                                 rejecter: @escaping RCTPromiseRejectBlock) {
+                             rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
             if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
                 videoSubscriber.performSsoOperation { success in
@@ -48,13 +48,7 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     @objc public func signOut(_ resolver: @escaping RCTPromiseResolveBlock,
                               rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
-                videoSubscriber.signOut()
-                resolver(true)
-            } else {
-                rejecter(ErrorMessages.unexpectedError.code,
-                         ErrorMessages.unexpectedError.message, nil)
-            }
+            resolver(true)
         }
     }
 

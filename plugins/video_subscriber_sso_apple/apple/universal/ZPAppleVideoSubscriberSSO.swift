@@ -60,7 +60,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         }
         return name
     }()
-    
+
     lazy var vsProviderChannelID: String? = {
         guard let channelID = configurationJSON?["provider_channe_id"] as? String,
             !channelID.isEmpty else {
@@ -68,7 +68,6 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         }
         return channelID
     }()
-    
 
     lazy var vsApplevelUserMetadataEndpoint: String? = {
         guard let endpoint = configurationJSON?["app_level_user_metadata_endpoint"] as? String,
@@ -93,56 +92,6 @@ class ZPAppleVideoSubscriberSSO: NSObject {
 
         videoSubscriberAccountManager.delegate = self
     }
-    
-    lazy var localizations: [String: String] = {
-        guard let localizations = configurationJSON?["localizations"] as? [String: NSDictionary],
-            let languageCode = NSLocale.current.languageCode,
-            let languageContent = localizations[languageCode] as? [String: String] else {
-                return [:]
-        }
-        return languageContent
-    }()
-    
-    lazy var vsFailureAlertTitle: String = {
-        guard let value = localizations["failure_alert_title"],
-            !value.isEmpty else {
-            return "Unable to connect to TV Provider"
-        }
-        return value
-    }()
-    
-    lazy var vsFailureAlertDescription: String = {
-        let defaultValue = "Please make sure TV Provider is configured in device settings"
-        guard let value = localizations["failure_alert_description"],
-            !value.isEmpty else {
-            return defaultValue
-        }
-        return value
-    }()
-    
-    lazy var vsFailureAlertOkButtonTitle: String = {
-        guard let value = localizations["failure_alert_ok_button_title"],
-            !value.isEmpty else {
-            return "Ok"
-        }
-        return value
-    }()
-    
-    lazy var vsFailureAlertSettingButtonTitle: String = {
-        guard let value = localizations["failure_alert_settings_button_title"],
-            !value.isEmpty else {
-            return "Open app settings"
-        }
-        return value
-    }()
-    
-    lazy var vsSignOutAlertSettingButtonTitle: String = {
-        guard let value = localizations["sign_out_alert_settings_button_title"],
-            !value.isEmpty else {
-            return "Open TV Providers"
-        }
-        return value
-    }()
 
     func performSsoOperation(_ completion: @escaping (_ success: Bool) -> Void) {
         vsaAccessOperationCompletion = completion
@@ -160,8 +109,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
                     // continue to app level auth if device authenticated and authorized
                     if self.managerInfo.isAuthenticated && self.managerInfo.isAuthorized {
                         self.performApplevelAuthenticationIfNeeded()
-                    }
-                    else {
+                    } else {
                         self.processResult()
                     }
                 }
@@ -182,12 +130,16 @@ class ZPAppleVideoSubscriberSSO: NSObject {
                     /*
                      Once the customer is authenticated to a TV provider, the next step is to request information from your service provider for the specific app using the customer’s TV provider. This information includes the verificationToken used to authenticate at the app-level and attributesNames in the metadata request. Along with this request, you are required to request at least one attribute.
                      */
-                    self.requestAppLevelAuthentication(verificationToken: verificationToken) { authResult, _ in
-                        self.getServiceProviderToken(for: authResult) { success, token, message in
-                            self.getServiceProviderAuthorization(for: token) { (success) in
-                                self.managerInfo.isAuthenticated = success
-                                self.processResult()
+                    self.requestAppLevelAuthentication(verificationToken: verificationToken) { authResult, error in
+                        if error == nil {
+                            self.getServiceProviderToken(for: authResult) { success, token, _ in
+                                self.getServiceProviderAuthorization(for: token) { success in
+                                    self.managerInfo.isAuthenticated = success
+                                    self.processResult()
+                                }
                             }
+                        } else {
+                            self.processResult()
                         }
                     }
                 } else {
@@ -202,28 +154,22 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     fileprivate func processResult() {
         let success = managerInfo.isAuthorized && managerInfo.isAuthenticated
         DispatchQueue.main.async {
-//            if !success {
-//                self.presentFailureAlert()
-//            }
             self.vsaAccessOperationCompletion?(success)
         }
     }
 }
 
 extension ZPAppleVideoSubscriberSSO {
-    //should be called to log in
+    // should be called to log in
     public func signIn(_ completion: ((_ success: Bool) -> Void)?) {
         performSsoOperation({ success in
             completion?(success)
         })
     }
-    //should be called to logout
-    public func signOut() {
-        self.presentLogoutAlert()
-    }
-    //should be called to check if logged in
+
+    // should be called to check if logged in
     public func isSignedIn(_ completion: ((_ success: Bool) -> Void)?) {
-        self.checkSignInStatus { (success) in
+        checkSignInStatus { success in
             completion?(success)
         }
     }
