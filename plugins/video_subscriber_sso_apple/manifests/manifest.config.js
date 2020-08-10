@@ -28,6 +28,12 @@ const baseManifest = {
         folded: true,
         fields: [
           {
+            key: "screen_background_color",
+            type: "color_picker",
+            label: "Background font color",
+            initial_value: "#161b29ff",
+          },
+          {
             key: "failure_alert_title",
             type: "text_input",
             label: "Failure alert title",
