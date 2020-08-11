@@ -327,7 +327,7 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.5.2"
+    "@applicaster/video_subscriber_sso_apple@0.5.3"
   ],
   "targets": [
     "mobile"
@@ -336,8 +336,8 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "dependency_version": "0.5.2",
-  "manifest_version": "0.5.2",
+  "dependency_version": "0.5.3",
+  "manifest_version": "0.5.3",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
