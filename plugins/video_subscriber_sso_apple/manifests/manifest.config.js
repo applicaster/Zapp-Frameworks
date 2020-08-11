@@ -167,14 +167,6 @@ const baseManifest = {
             initial_value: "rgb(84, 90, 92)",
           },
           {
-            key: "login_action_button_applicaster_text",
-            type: "text_input",
-            label: "Login Action Button Text",
-            label_tooltip: "Text for the Applicaster Login Button.",
-            initial_value: "Login Applicaster",
-            placeholder: "Login Applicaster",
-          },
-          {
             key: "login_action_button_applicaster_fontsize",
             type: "number_input",
             label_tooltip:
@@ -216,13 +208,6 @@ const baseManifest = {
             initial_value: "rgb(84, 90, 92)",
           },
           {
-            key: "login_action_button_background_color",
-            type: "color_picker_rgba",
-            label: "Login Button Color for Samsung TV",
-            label_tooltip: "Background Color for the Login Action Button",
-            initial_value: "rgba(241, 173, 18, 1)",
-          },
-          {
             key: "logout_action_button_text",
             type: "text_input",
             label: "Logout Action Button Text",
@@ -241,13 +226,6 @@ const baseManifest = {
             type: "color_picker_rgba",
             label_tooltip: "Font Color for Logout Action Button Text.",
             initial_value: "rgb(84, 90, 92)",
-          },
-          {
-            key: "logout_action_button_background_color",
-            type: "color_picker_rgba",
-            label: "Logout Button Color for Samsung TV",
-            label_tooltip: "Background Color for the Logout Action Button",
-            initial_value: "rgba(241, 173, 18, 1)",
           },
           {
             key: "authorization_provider_title_fontsize",
