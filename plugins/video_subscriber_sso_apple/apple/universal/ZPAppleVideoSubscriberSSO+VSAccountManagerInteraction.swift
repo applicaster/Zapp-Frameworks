@@ -98,6 +98,17 @@ extension ZPAppleVideoSubscriberSSO {
         request.includeAccountProviderIdentifier = true
         request.includeAuthenticationExpirationDate = true
         request.isInterruptionAllowed = interrruption
+
+        if #available(tvOS 13.0, iOS 13.0, *) {
+            request.supportedAuthenticationSchemes = [.saml, .api]
+        } else {
+            if #available(iOS 10.2, *) {
+                request.supportedAuthenticationSchemes = [.saml]
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
         if interrruption {
             /*
              When requesting authentication, you should set the supportedAccountProviderIdentifiers property to a list of TV providers supported by your application. This limits the TV providers presented to the customer and establishes the order in which they will be displayed.
