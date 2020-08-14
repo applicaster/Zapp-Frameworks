@@ -30,22 +30,17 @@
       "key": "screen_views_enabled",
       "tooltip_text": "Enable Screen Views",
       "default": 0
-    },
-    {
-      "type": "text",
-      "key": "user_id",
-      "tooltip_text": "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
     }
   ],
   "npm_dependencies": [
-    "@applicaster/google-analytics-web-based-apple@0.9.0"
+    "@applicaster/google-analytics-web-based-apple@0.8.1"
   ],
   "identifier": "zapp_google_analytics",
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.9.0",
+  "manifest_version": "0.8.1",
   "extra_dependencies": [
     {
       "ZappGoogleAnalytics": ":path => './node_modules/@applicaster/google-analytics-web-based-apple/apple/ZappGoogleAnalytics.podspec'"
