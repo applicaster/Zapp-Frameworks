@@ -10,10 +10,20 @@ import Foundation
 import ZappCore
 
 public class MeasurementProtocolManager {
+    //Constants used for User ID tracking functionality
+    struct UserIDConstants {
+        static let familyIDLocalStorageKey = "app_family_id"
+        static let userIDCompareString = "allow-tracking-user-id-for-app-family-"
+        static let userIDLocalStorageKey = "user_id"
+        static let loginNamespace = "login"
+    }
+    
     let dataNotAvailible = "N/A"
 
     /// Google Analytic tracking ID
     private(set) var trackingID: String
+    /// If this value is "allow-tracking-user-id-for-app-family-<APP_FAMILY_ID>" we must track the user id
+    private(set) var allowingUserID: String?
 
     /// Create unique user identifier and save it to UserDefaules, in case was generated, retrive from UserDefaules
     lazy var clientID: String = {
@@ -27,6 +37,20 @@ public class MeasurementProtocolManager {
         }
         return identifier
     }()
+    
+    var userID: String? {
+        guard let userID = FacadeConnector.connector?.storage?.localStorageValue(for: UserIDConstants.userIDLocalStorageKey, namespace:UserIDConstants.loginNamespace) else {
+            return nil
+        }
+        return userID
+    }
+    
+    lazy var familyID: String = {
+        guard let familyID = FacadeConnector.connector?.storage?.localStorageValue(for: UserIDConstants.familyIDLocalStorageKey, namespace:nil) else {
+            return ""
+        }
+        return familyID
+    }()
 
     /// Contains array of the general params, that relevant for every hit event
     lazy var generalParams: [String] = {
@@ -37,8 +61,6 @@ public class MeasurementProtocolManager {
                                value: mesurementProtocolVersion))
         retVal.append(urlParam(with: MeasurementProtocolKeys.All.dataSource,
                                value: dataSourceKey))
-        retVal.append(urlParam(with: MeasurementProtocolKeys.All.clientID,
-                               value: clientID))
         retVal.append(urlParam(with: MeasurementProtocolKeys.All.screenResolution,
                                value: screenSize))
         retVal.append(urlParam(with: MeasurementProtocolKeys.AppTracking.applicationName,
@@ -93,8 +115,9 @@ public class MeasurementProtocolManager {
     /// Initialize application with Google Tracking ID
     ///
     /// - Parameter trackingID: Identifier to send Google Analytics events
-    init(trackingID: String) {
+    init(trackingID: String, allowingUserID: String?) {
         self.trackingID = trackingID
+        self.allowingUserID = allowingUserID
     }
 
     /// Send event with Hit Type and custom parameters
@@ -204,8 +227,16 @@ public class MeasurementProtocolManager {
         guard isAllowedHitType(hitType: hitType) else {
             return nil
         }
-
+        
+        //We need to send the userID or the clientID, but not both
         var urlParams: [String] = generalParams
+        if allowingUserID == "\(UserIDConstants.userIDCompareString)\(familyID)",
+            let userID = self.userID {
+            urlParams.append(urlParam(with: MeasurementProtocolKeys.All.userID, value: userID))
+        }else {
+            urlParams.append(urlParam(with: MeasurementProtocolKeys.All.clientID, value: clientID))
+        }
+
         if let customParameters = customParameters {
             let customParams = transferDictParamsToUrlParams(customParameters: customParameters)
             urlParams.append(contentsOf: customParams)

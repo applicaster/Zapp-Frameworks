@@ -26,6 +26,7 @@ import ZappCore
     struct PluginKeys {
         static let trackingID = "tracker_id"
         static let screenViewsEsnabled = "screen_views_enabled"
+        static let allowingUserID = "user_id"
     }
 
     /// Google Analytics Manager
@@ -55,7 +56,8 @@ import ZappCore
             isScreenViewsEnabled = enableScreenViews
         }
         defaultEventParameters = defaultParams
-        manager = MeasurementProtocolManager(trackingID: trackingID)
+        manager = MeasurementProtocolManager(trackingID: trackingID,
+                                             allowingUserID: configurationJSON?[PluginKeys.allowingUserID] as? String)
         completion?(true)
     }
 
