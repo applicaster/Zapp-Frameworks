@@ -269,8 +269,7 @@ function AccountComponent(props: Props) {
     );
   };
 
-  const fallBackLoginEnabled =
-    fallback_login_button_enabled == "1" ? true : false;
+  const fallBackLoginEnabled = fallback_login_button_enabled === "1";
 
   return (
     <View style={styles.layout}>
