@@ -1,6 +1,6 @@
 {
   "name": "ZappGoogleAnalytics",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "summary": "ZappGoogleAnalytics",
   "swift_versions": "5.1",
   "description": "ZappAnalyticsPluginGAtvOS container.",
@@ -11,7 +11,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/google-analytics-web-based-apple/0.8.1"
+    "tag": "@@applicaster/google-analytics-web-based-apple/0.9.0"
   },
   "platforms": {
     "tvos": "10.0",
