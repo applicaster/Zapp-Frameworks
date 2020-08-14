@@ -269,6 +269,9 @@ function AccountComponent(props: Props) {
     );
   };
 
+  const fallBackLoginEnabled =
+    fallback_login_button_enabled == "1" ? true : false;
+
   return (
     <View style={styles.layout}>
       {loading ? (
@@ -299,12 +302,12 @@ function AccountComponent(props: Props) {
             focus={focused}
             parentFocus={parentFocus}
           />
-          {!isLoggedIn && fallback_login_button_enabled ? (
+          {!isLoggedIn && fallBackLoginEnabled ? (
             <Text style={{ ...greetingsStyle, ...styles.separator }}>
               {separator}
             </Text>
           ) : null}
-          {!isLoggedIn && fallback_login_button_enabled ? (
+          {!isLoggedIn && fallBackLoginEnabled ? (
             <Button
               label={loginLabelApplicaster}
               onPress={handleLoginApplicaster}
