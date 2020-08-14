@@ -77,11 +77,13 @@ function AccountComponent(props: Props) {
       login_action_button_applicaster_background_color: loginButtonApplicasterBackground,
       login_action_button_background_color: loginButtonBackground,
       logout_action_button_background_color: logoutButtonBackground,
-      screen_background_color: screenBackgroundColor,
     } = {},
   } = screenData || {};
 
-  const { fallback_login_plugin_id } = configuration;
+  const {
+    fallback_login_plugin_id,
+    fallback_login_button_enabled,
+  } = configuration;
 
   const {
     greetingsStyle,
@@ -297,12 +299,12 @@ function AccountComponent(props: Props) {
             focus={focused}
             parentFocus={parentFocus}
           />
-          {!isLoggedIn ? (
+          {!isLoggedIn && fallback_login_button_enabled ? (
             <Text style={{ ...greetingsStyle, ...styles.separator }}>
               {separator}
             </Text>
           ) : null}
-          {!isLoggedIn ? (
+          {!isLoggedIn && fallback_login_button_enabled ? (
             <Button
               label={loginLabelApplicaster}
               onPress={handleLoginApplicaster}
