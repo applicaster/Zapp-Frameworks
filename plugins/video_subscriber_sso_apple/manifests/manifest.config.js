@@ -245,6 +245,12 @@ const baseManifest = {
   },
   custom_configuration_fields: [
     {
+      key: "fallback_login_button_enabled",
+      type: "checkbox",
+      tooltip_text: "Enable login fallback button",
+      default: 0,
+    },
+    {
       key: "fallback_login_plugin_id",
       type: "text_input",
       label:
