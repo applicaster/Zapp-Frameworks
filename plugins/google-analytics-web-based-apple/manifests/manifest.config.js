@@ -26,6 +26,11 @@ const baseManifest = {
       tooltip_text: "Enable Screen Views",
       default: 0,
     },
+    {
+      type: "text",
+      key: "user_id",
+      tooltip_text: "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
+    },
   ],
   npm_dependencies: [],
   identifier: "zapp_google_analytics",

@@ -69,6 +69,16 @@ struct MeasurementProtocolKeys {
         /// cid=35009a79-1a05-49d7-b876-2b884d0f825b
         /// ````
         static let clientID = "cid"
+        
+        /// This field is required if Client ID (cid) is not specified in the request. This is intended to be a known identifier for a user provided by the site owner/library user. It must not itself be PII (personally identifiable information). The value should never be persisted in Google Analytics cookies or other Analytics provided storage.
+        /// - Note:
+        ///     - [User ID](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#uid)
+        /// - Example:
+
+        /// ````
+        /// uid=as8eknlll
+        /// ````
+        static let userID = "uid"
 
         ///  Specifies the screen resolution.
         /// - Note:
