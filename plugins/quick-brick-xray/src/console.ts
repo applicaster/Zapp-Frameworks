@@ -18,7 +18,14 @@ export function logInConsole(level: XRayLogLevel, event: XRayEvent): void {
       `XRay:: ${category}::${subsystem} - ${event.message}`
     );
     console.log(`event logged at:: ${timestamp}`);
-    console[consoleMethods[level]](otherEventProps);
+
+    if (level === XRayLogLevel.error) {
+      console.warn({ ...otherEventProps, message: `Error:: ${event.message}` });
+      console.error(new Error(event.message));
+    } else {
+      console[consoleMethods[level]](otherEventProps);
+    }
+
     if (level >= XRayLogLevel.warning) {
       console.trace();
     }
