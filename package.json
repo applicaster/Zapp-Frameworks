@@ -45,5 +45,10 @@
     "semver": "7.1.1",
     "moment": "2.24.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "lodash": "^4.17.19",
+    "minimist": "^0.2.1",
+    "mem": "^4.0.0"
+  }
 }
