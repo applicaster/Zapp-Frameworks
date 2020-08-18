@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AdSupport
 
 @objc public class APSwiftUtils : NSObject {
     
@@ -19,18 +18,4 @@ import AdSupport
         #endif
         return isSim
     }()
-    
-    /**
-     This method returns the idfa for this device. This is the advertising it. Nil if don't have one.
-     */
-    @objc public static func identifierForAdvertising() -> String? {
-        // Check whether advertising tracking is enabled
-        guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
-            return nil
-        }
-        
-        // Get and return IDFA
-        return ASIdentifierManager.shared().advertisingIdentifier.uuidString
-    }
-    
 }
