@@ -20,10 +20,4 @@ public struct PluginsManagerLogs: XrayLoggerTemplateProtocol {
     public static var preparingGeneralPlugins = LogTemplate(message: "Preparing general plugins")
     public static var preparingHookPlugins = LogTemplate(message: "Preparing hook plugins to be executed on launch")
     public static var savingPluginConfigurationToSessionStorage = LogTemplate(message: "Saving configuration of each plugin to session storage")
-    public static var disableSinglePlugin = LogTemplate(message: "Disable single plugin by identifier")
-    public static var enableSinglePlugin = LogTemplate(message: "Enable single plugin by identifier")
-    public static var disableAllPlugins = LogTemplate(message: "Disable all plugins")
-    public static var enableAllPlugins = LogTemplate(message: "Enable all plugins")
-    public static var getPluginManagerRelatedToSpecificPlugin = LogTemplate(message: "Get plugin manager related to specific plugin by identifier")
-    public static var getPluginInstanceByIdentifier = LogTemplate(message: "Get plugin instance by identifier")
 }
