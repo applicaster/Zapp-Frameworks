@@ -8,11 +8,10 @@ import android.graphics.Bitmap
 import android.media.RingtoneManager
 import android.net.Uri
 import androidx.core.app.NotificationCompat
-import com.applicaster.util.StringUtil
-import com.bumptech.glide.Glide
 import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
-import com.applicaster.util.push.PushUtil
+import com.applicaster.util.StringUtil
+import com.bumptech.glide.Glide
 
 
 class NotificationUtil {
@@ -99,9 +98,7 @@ class NotificationUtil {
         }
 
         private fun getContentIntent(context: Context): PendingIntent {
-            val intent = Intent()
-            intent.apply {
-                setClassName(context, "com.applicaster.componentsapp.IntroActivity")
+            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
