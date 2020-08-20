@@ -14,9 +14,10 @@ public let kPluginEnabledValue = "true"
 public let kPluginDisabledValue = "false"
 
 extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
+
     public func disablePlugin(identifier: String, completion: ((_ success: Bool) -> Void)?) {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.disableSinglePlugin,
-                         data: ["identifier": identifier])
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.disablePlugin,
+                                    data: ["identifier": identifier])
 
         guard let manager = pluginManager(identifier: identifier) else {
             completion?(false)
@@ -29,7 +30,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
 
     public func disableAllPlugins(pluginType: String,
                                   completion: ((_ success: Bool) -> Void)?) {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.disableAllPlugins)
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.disableAllPlugins)
         
         guard let pluginType = ZPPluginType(rawValue: pluginType),
             let manager = pluginManager(type: pluginType) else {
@@ -40,8 +41,8 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
     }
 
     public func enablePlugin(identifier: String, completion: ((_ success: Bool) -> Void)?) {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.enableSinglePlugin,
-                         data: ["identifier": identifier])
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.enablePlugin,
+                                    data: ["identifier": identifier])
         
         guard let pluginManager = pluginManager(identifier: identifier) else {
             completion?(false)
@@ -54,7 +55,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
     }
 
     public func enableAllPlugins(pluginType: String, completion: ((_ success: Bool) -> Void)?) {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.enableAllPlugins)
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.enableAllPlugins)
 
         guard let pluginType = ZPPluginType(rawValue: pluginType),
             let manager = pluginManager(type: pluginType) else {
@@ -66,7 +67,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
     }
 
     func pluginManager(identifier: String) -> PluginManagerControlFlowProtocol? {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.getPluginManagerRelatedToSpecificPlugin,
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.getPluginManagerRelatedToSpecificPlugin,
                          data: ["identifier": identifier])
         guard let plugin = PluginsManager.pluginModelById(identifier),
             let pluginType = plugin.pluginType else {
@@ -93,7 +94,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
     }
     
     public func getProviderInstance(identifier: String) -> PluginAdapterProtocol? {
-        logger?.debugLog(template: PluginsManagerControlFlowLogs.getPluginInstanceByIdentifier,
+        loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.getProviderInstance,
                          data: ["identifier": identifier])
         
         guard let pluginManager = pluginManager(identifier: identifier) else {

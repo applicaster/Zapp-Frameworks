@@ -12,6 +12,8 @@ import XrayLogger
 
 public class PluginsManager: NSObject {
     lazy var logger = Logger.getLogger(for: PluginsManagerLogs.subsystem)
+    lazy var loggerControlFlow = Logger.getLogger(for: PluginsManagerControlFlowLogs.subsystem)
+    lazy var loggerHookHandler = Logger.getLogger(for: PluginsManagerHookHandlerLogs.subsystem)
 
     public lazy var analytics = AnalyticsManager()
     public lazy var playerDependants = PlayerDependantPluginsManager()

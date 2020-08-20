@@ -8,8 +8,11 @@
 
 import Foundation
 import ZappCore
+import XrayLogger
 
 @objc public class PlayerDependantPluginsManager: NSObject, PluginManagerControlFlowProtocol {
+    lazy var logger = Logger.getLogger(for: PlayerDependantPluginsManangerLogs.subsystem)
+
     /// List of registered providers for player Plugins
     var providers: [String: [String: PlayerDependantPluginProtocol]] = [:]
 
@@ -29,6 +32,8 @@ import ZappCore
     }
 
     @objc public func createPlayerDependantProviders(for player: PlayerProtocol) -> [String: PlayerDependantPluginProtocol] {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.createPlayerDependantProviders)
+
         var retVal: [String: PlayerDependantPluginProtocol] = [:]
 
         if let pluginModels = FacadeConnector.connector?.pluginManager?.getAllPlugins() {
@@ -46,22 +51,33 @@ import ZappCore
     }
 
     func disableProvider(identifier: String, completion: PluginManagerCompletion) {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.disableProvider,
+                         data: ["identifier": identifier])
         completion?(true)
     }
 
     func disableProviders(completion: PluginManagerCompletion) {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.disableProviders)
+
         completion?(true)
     }
 
     func createProvider(identifier: String, forceEnable: Bool, completion: PluginManagerCompletion) {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.createProvider,
+                         data: ["identifier": identifier])
         completion?(true)
     }
 
     func createProviders(forceEnable: Bool, completion: PluginManagerCompletion) {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.createProviders)
+
         completion?(true)
     }
     
     func getProviderInstance(identifier: String) -> PluginAdapterProtocol? {
+        logger?.debugLog(template: PlayerDependantPluginsManangerLogs.getProviderInstance,
+                         data: ["identifier": identifier])
+        
         return nil
     }
     

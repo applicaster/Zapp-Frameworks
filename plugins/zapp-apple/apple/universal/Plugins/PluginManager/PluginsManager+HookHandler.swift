@@ -50,7 +50,7 @@ extension PluginsManager {
 extension PluginsManager {
     func hookOnLaunch(hooksPlugins: [AppLoadingHookProtocol]?,
                       completion: @escaping (() -> Void)) {
-        logger?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnLaunch)
+        loggerHookHandler?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnLaunch)
 
         var plugins = hooksPlugins ?? retrieveHooksPlugins()
         guard plugins.count > 0 else {
@@ -79,7 +79,7 @@ extension PluginsManager {
 extension PluginsManager {
     func hookFailedLoading(hooksPlugins: [AppLoadingHookProtocol]?,
                            completion: @escaping (() -> Void)) {
-        logger?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnFailedLoading)
+        loggerHookHandler?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnFailedLoading)
 
         var plugins = hooksPlugins ?? retrieveHooksPlugins()
         guard plugins.count > 0 else {
@@ -109,7 +109,7 @@ extension PluginsManager {
     func hookOnApplicationReady(displayViewController: UIViewController?,
                                 hooksPlugins: [AppLoadingHookProtocol]?,
                                 completion: @escaping (() -> Void)) {
-        logger?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnApplicationReady)
+        loggerHookHandler?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnApplicationReady)
 
         var plugins = hooksPlugins ?? retrieveHooksPlugins()
         guard plugins.count > 0 else {
@@ -142,7 +142,7 @@ extension PluginsManager {
 extension PluginsManager {
     func hookAfterAppRootPresentation(hooksPlugins: [AppLoadingHookProtocol]?,
                                       completion: @escaping (() -> Void)) {
-        logger?.debugLog(template: PluginsManagerHookHandlerLogs.hookAfterAppRootPresentation)
+        loggerHookHandler?.debugLog(template: PluginsManagerHookHandlerLogs.hookAfterAppRootPresentation)
 
         var plugins = hooksPlugins ?? retrieveHooksPlugins()
         guard plugins.count > 0 else {
@@ -174,7 +174,7 @@ extension PluginsManager {
     public func hookOnContinuingUserActivity(userActivity: NSUserActivity,
                                              hooksPlugins: [AppLoadingHookProtocol]?,
                                              completion: @escaping (() -> Void)) {
-        logger?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnContinuingUserActivity)
+        loggerHookHandler?.debugLog(template: PluginsManagerHookHandlerLogs.hookOnContinuingUserActivity)
 
         var plugins = hooksPlugins ?? retrieveHooksPlugins()
         guard plugins.count > 0 else {
