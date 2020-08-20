@@ -67,7 +67,7 @@ const extra_dependencies = {
 
 const project_dependencies_android = [
   {
-    "zapp-push-plugin-firebase": "node_modules/@applicaster/zapp-push-plugin-firebase",
+    "zapp-push-plugin-firebase": "node_modules/@applicaster/zapp-push-plugin-firebase/android",
   }
 ];
 
