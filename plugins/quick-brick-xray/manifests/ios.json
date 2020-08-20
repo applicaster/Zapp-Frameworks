@@ -52,7 +52,7 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "manifest_version": "0.0.2",
+  "manifest_version": "0.0.4",
   "extra_dependencies": [
     {
       "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
@@ -68,6 +68,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.2"
+    "@applicaster/quick-brick-xray@0.0.4"
   ]
 }

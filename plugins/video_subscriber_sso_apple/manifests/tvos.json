@@ -247,6 +247,12 @@
   },
   "custom_configuration_fields": [
     {
+      "key": "fallback_login_button_enabled",
+      "type": "checkbox",
+      "tooltip_text": "Enable login fallback button",
+      "default": 0
+    },
+    {
       "key": "fallback_login_plugin_id",
       "type": "text_input",
       "label": "Add identifier of the login plugin. If no identifier provided will be used first availible login plugin",
@@ -305,7 +311,7 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.5.5"
+    "@applicaster/video_subscriber_sso_apple@0.6.0"
   ],
   "targets": [
     "tv"
@@ -314,8 +320,8 @@
     "quickbrick"
   ],
   "platform": "tvos",
-  "dependency_version": "0.5.5",
-  "manifest_version": "0.5.5",
+  "dependency_version": "0.6.0",
+  "manifest_version": "0.6.0",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
