@@ -73,9 +73,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "0.0.2",
+  "manifest_version": "0.0.4",
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.2"
+    "@applicaster/quick-brick-xray@0.0.4"
   ],
   "project_dependencies": [
     {
