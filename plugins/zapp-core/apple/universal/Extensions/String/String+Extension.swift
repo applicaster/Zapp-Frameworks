@@ -14,7 +14,26 @@ extension String {
             let host = url.host else {
             return self
         }
-        
-        return self.replacingOccurrences(of: host, with: newHost)
+
+        return replacingOccurrences(of: host, with: newHost)
     }
+}
+
+enum Regex {
+    static let ipAddress = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+    static let hostname = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+}
+
+extension String {
+    public var isIPv4: Bool {
+        var sin = sockaddr_in()
+        return withCString({ cstring in inet_pton(AF_INET, cstring, &sin.sin_addr) }) == 1
+    }
+
+    public var isIPv6: Bool {
+        var sin6 = sockaddr_in6()
+        return withCString({ cstring in inet_pton(AF_INET6, cstring, &sin6.sin6_addr) }) == 1
+    }
+
+    public var isIpAddress: Bool { return isIPv6 || isIPv4 }
 }
