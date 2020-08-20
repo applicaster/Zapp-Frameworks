@@ -31,8 +31,8 @@
   "identifier": "chromecast_qb",
   "platform": "android",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.6",
-  "manifest_version": "0.2.6",
+  "dependency_version": "0.2.7",
+  "manifest_version": "0.2.7",
   "api": {
     "require_startup_exectution": false,
     "class_name": "com.applicaster.chromecast.ChromeCastPlugin",
@@ -42,7 +42,7 @@
     "roguard_rules": "-keep public class com.reactnative.googlecast.** {*;}"
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@0.2.6"
+    "@applicaster/zapp-generic-chromecast@0.2.7"
   ],
   "targets": [
     "mobile"
