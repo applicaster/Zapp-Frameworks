@@ -8,7 +8,7 @@
 import Foundation
 import XrayLogger
 
-let playerDependantPluginsManagerSubsystem = "\(kNativeSubsystemPath)/player_dependant_plugins_manager"
+let playerDependantPluginsManagerSubsystem = "\(PluginsManagerLogs.subsystem)/player_dependant_plugins"
 
 public struct PlayerDependantPluginsManangerLogs: XrayLoggerTemplateProtocol {
     public static var subsystem: String = playerDependantPluginsManagerSubsystem

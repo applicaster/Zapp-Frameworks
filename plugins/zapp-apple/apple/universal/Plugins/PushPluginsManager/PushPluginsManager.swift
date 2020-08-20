@@ -7,8 +7,11 @@
 
 import Foundation
 import ZappCore
+import XrayLogger
 
 public class PushPluginsManager: PluginManagerBase {
+    lazy var logger = Logger.getLogger(for: PushPluginsManagerLogs.subsystem)
+
     typealias pluginTypeProtocol = PushProviderProtocol
     var _providers: [String: PushProviderProtocol] {
         return providers as? [String: PushProviderProtocol] ?? [:]
@@ -31,6 +34,9 @@ public class PushPluginsManager: PluginManagerBase {
     }
 
     public func registerDeviceToken(data: Data) {
+        logger?.verboseLog(template: PushPluginsManagerLogs.registerDeviceToken,
+                           data: ["token": data])
+
         _providers.forEach { providerDict in
             let provider = providerDict.value
             provider.didRegisterForRemoteNotificationsWithDeviceToken?(data)
