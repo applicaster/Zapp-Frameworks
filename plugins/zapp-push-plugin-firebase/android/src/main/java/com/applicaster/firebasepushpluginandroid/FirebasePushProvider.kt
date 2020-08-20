@@ -2,12 +2,16 @@ package com.applicaster.firebasepushpluginandroid
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import com.applicaster.firebasepushpluginandroid.services.APMessagingService
 import com.applicaster.plugin_manager.push_plugin.PushContract
 import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
+import com.applicaster.util.APLogger
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -73,6 +77,14 @@ class FirebasePushProvider : PushContract {
 
     override fun getTagList(context: Context?, listener: PushTagLoadedI?) {
 
+    }
+
+    override fun setPushEnabled(context: Context?, isEnabled: Boolean) {
+        val componentName = ComponentName(context!!, APMessagingService::class.java)
+        context.packageManager.setComponentEnabledSetting(componentName,
+                if (isEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP)
+        APLogger.info(TAG, "Firebase push receiver is now ${if (isEnabled) "enabled" else "disabled"}")
     }
 
     //region Private methods
