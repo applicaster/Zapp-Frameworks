@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import XrayLogger
 
 public class TrackingManager: NSObject {
+    let logger = Logger.getLogger(for: TrackingManagerLogs.subsystem)
+
     fileprivate let endPoint = "https://track.applicaster.com/events/v1/"
 
     public struct PlatformType {
@@ -39,6 +42,7 @@ public class TrackingManager: NSObject {
 
     override init() {
         super.init()
+        logger?.verboseLog(template: TrackingManagerLogs.trackingInitialized)
         registerObservers()
     }
 
@@ -107,10 +111,16 @@ public class TrackingManager: NSObject {
 
     private func send(_ params: [String: Any],
                       completion: @escaping (_ succeed: Bool) -> Void) {
+
+        logger?.verboseLog(template: TrackingManagerLogs.sendEvent,
+                           data: params)
+
         let events = ["events": [params]]
 
         // vallidate url
         guard let url = URL(string: self.endPoint) else {
+            logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedNoEndpoint,
+                               data: params)
             return
         }
 
@@ -122,12 +132,18 @@ public class TrackingManager: NSObject {
         // vallidate params
         guard let jsonString = StorageHelper.getJSONStringFrom(dictionary: events),
             let jsonData = jsonString.data(using: .utf8) else {
+            logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedJson,
+                               data: params)
             return
         }
 
         // assign json data
         request.httpBody = jsonData
         URLSession.shared.dataTask(with: request) { _, _, error in
+            if error != nil {
+                self.logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedResponse,
+                                   data: ["error": error.debugDescription])
+            }
             completion(error == nil)
         }.resume()
     }

@@ -8,8 +8,13 @@
 
 import Foundation
 import ZappCore
+import XrayLogger
 
 public class PluginsManager: NSObject {
+    lazy var logger = Logger.getLogger(for: PluginsManagerLogs.subsystem)
+    lazy var loggerControlFlow = Logger.getLogger(for: PluginsManagerControlFlowLogs.subsystem)
+    lazy var loggerHookHandler = Logger.getLogger(for: PluginsManagerHookHandlerLogs.subsystem)
+
     public lazy var analytics = AnalyticsManager()
     public lazy var playerDependants = PlayerDependantPluginsManager()
     public lazy var push = PushPluginsManager()
@@ -25,6 +30,8 @@ public class PluginsManager: NSObject {
     var pluginLoaderCompletion: ((_ success: Bool) -> Void)?
 
     func intializePlugins(completion: @escaping (_ success: Bool) -> Void) {
+        logger?.debugLog(template: PluginsManagerLogs.pluginsInitialization)
+        
         pluginLoaderCompletion = completion
         pluginsStateMachine = LoadingStateMachine(dataSource: self,
                                                   withStates: preapareLoadingPluginStates())
@@ -33,6 +40,8 @@ public class PluginsManager: NSObject {
 
     func loadPluginsGroup(_ successHandler: @escaping StateCallBack,
                           _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.loadingPluginsConfiguration)
+
         let loadingManager = LoadingManager()
         loadingManager.loadFile(type: .plugins) { success in
             success ? successHandler() : failHandler()
@@ -42,6 +51,8 @@ public class PluginsManager: NSObject {
     // If will not be used remove in future
     func crashLogs(_ successHandler: @escaping StateCallBack,
                    _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingCrashlogPlugins)
+
 //        crashlogs.prepareManager { success in
 //            success ? successHandler() : failHandler()
 //        }
@@ -49,6 +60,8 @@ public class PluginsManager: NSObject {
 
     func prepareAnalyticsPlugins(_ successHandler: @escaping StateCallBack,
                                  _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingAnalyticsPlugins)
+        
         analytics.prepareManager { success in
             success ? successHandler() : failHandler()
         }
@@ -56,6 +69,8 @@ public class PluginsManager: NSObject {
 
     func preparePushPlugins(_ successHandler: @escaping StateCallBack,
                             _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingPushPlugins)
+
         push.prepareManager { success in
             success ? successHandler() : failHandler()
         }
@@ -63,6 +78,8 @@ public class PluginsManager: NSObject {
 
     func prepareGeneralPlugins(_ successHandler: @escaping StateCallBack,
                                _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingGeneralPlugins)
+        
         general.prepareManager { success in
             success ? successHandler() : failHandler()
         }
@@ -70,6 +87,8 @@ public class PluginsManager: NSObject {
 
     func updatePluginSessionStorageData(_ successHandler: @escaping StateCallBack,
                                         _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.savingPluginConfigurationToSessionStorage)
+
         func sendConfigurationToSessionStorage(pluginModel: ZPPluginModel) {
             guard let configationJSON = pluginModel.configurationJSON as? [String: String] else {
                 return
@@ -96,6 +115,8 @@ public class PluginsManager: NSObject {
 
     func hookOnLaunch(_ successHandler: @escaping StateCallBack,
                       _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingHookPlugins)
+
         createLaunchHooksPlugins { [weak self] in
             self?.hookOnLaunch(hooksPlugins: nil) {
                 successHandler()

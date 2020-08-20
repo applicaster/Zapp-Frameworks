@@ -43,6 +43,7 @@ public class RootController: NSObject {
     override public init() {
         super.init()
         reachabilityManager = ReachabilityManager(delegate: self)
+        logger?.debugLog(template: RootControllerLogs.rootControllerCreated)
     }
 
     public func reloadApplication() {
