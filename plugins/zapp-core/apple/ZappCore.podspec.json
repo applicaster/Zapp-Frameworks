@@ -1,6 +1,6 @@
 {
   "name": "ZappCore",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "summary": "General Applicaster iOS and tvOS framework that provides protocol",
   "platforms": {
     "ios": "10.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-core/0.13.3"
+    "tag": "@@applicaster/zapp-core/0.13.4"
   },
   "source_files": "universal/**/*.{swift}",
   "ios": {
