@@ -12,6 +12,9 @@ import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
 import com.applicaster.util.APLogger
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,6 +43,16 @@ class FirebasePushProvider : PushContract {
 
             notificationManager?.createNotificationChannel(channel)
         }
+
+        FirebaseInstanceId.getInstance().instanceId
+                .addOnCompleteListener(OnCompleteListener<InstanceIdResult?> {
+                    if (!it.isSuccessful) {
+                        APLogger.error(TAG, "getInstanceId failed", it.exception)
+                    } else {
+                        val token = it.result?.token
+                        APLogger.error(TAG, "Firebase token $token")
+                    }
+                })
     }
 
     override fun registerPushProvider(context: Context?, registerID: String?) {
