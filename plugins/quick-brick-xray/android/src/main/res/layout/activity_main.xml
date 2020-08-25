@@ -19,6 +19,12 @@
             android:padding="4dp" />
 
         <fragment
+            android:id="@+id/settings_fragment"
+            android:name="com.applicaster.plugin.xray.ui.fragements.SettingsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <fragment
             android:id="@+id/events_fragment"
             android:name="com.applicaster.plugin.xray.ui.fragements.EventLogFragment"
             android:layout_width="match_parent"
