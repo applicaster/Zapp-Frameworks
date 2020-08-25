@@ -50,7 +50,7 @@ class FirebasePushProvider : PushContract {
                         APLogger.error(TAG, "getInstanceId failed", it.exception)
                     } else {
                         val token = it.result?.token
-                        APLogger.error(TAG, "Firebase token $token")
+                        APLogger.info(TAG, "Firebase token $token")
                     }
                 })
     }
