@@ -1,6 +1,6 @@
 //
 //  PlayerDependantPluginsManager_PlayerAdObserverProtocol.swift
-//  Alamofire
+//  ZappPlugins
 //
 //  Created by Shay markovich on 26/08/2020.
 //
