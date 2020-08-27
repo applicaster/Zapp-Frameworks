@@ -40,7 +40,7 @@ dependencies {
 
     api "com.facebook.react:react-native:+"
 
-    implementation project(':xray') // x-ray core
+    implementation project(':xray-core') // x-ray core
     implementation project(':xray-react-native') // x-ray react-native bridge
     implementation project(':xray-notification') // x-ray notification
     implementation project(':xray-reporting')
