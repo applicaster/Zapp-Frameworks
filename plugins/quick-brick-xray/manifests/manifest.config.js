@@ -74,14 +74,14 @@ const custom_configuration_fields_android = [
     label: "Notification controls",
     key: "notification",
     default: 1,
-    tooltip_text: "Enable notification controls",
+    tooltip_text: "Enable notification controls in debug builds",
   },
   {
     type: "checkbox",
     label: "Report crashes",
     key: "report_crashes",
     default: 1,
-    tooltip_text: "Enable crash reporting",
+    tooltip_text: "Enable crash reporting in debug builds",
   },
   {
     type: "checkbox",
