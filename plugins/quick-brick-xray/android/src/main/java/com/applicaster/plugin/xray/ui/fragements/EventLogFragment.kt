@@ -42,6 +42,7 @@ class EventLogFragment : Fragment() {
             // Setup log level filter spinner
             val levels = view.findViewById<Spinner>(R.id.cb_filter)
             levels.adapter = ArrayAdapter(levels.context, android.R.layout.simple_list_item_1, LogLevel.values())
+            levels.setSelection(LogLevel.info.level)
             levels.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }

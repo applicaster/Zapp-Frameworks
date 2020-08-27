@@ -4,6 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".ui.fragements.SettingsFragment">
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show notification" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchCrashReporting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crash reporting" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="File log level" />
+
+        <Spinner
+            android:id="@+id/cbFileLogLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="React log level" />
+
+        <Spinner
+            android:id="@+id/cbReactLogLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

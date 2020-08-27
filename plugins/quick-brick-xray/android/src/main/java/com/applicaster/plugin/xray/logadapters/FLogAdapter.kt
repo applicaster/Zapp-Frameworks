@@ -4,11 +4,9 @@ import android.util.Log
 import com.applicaster.xray.core.Logger
 import com.facebook.common.logging.LoggingDelegate
 
-class FLogAdapter : LoggingDelegate {
+class FLogAdapter(private var level: Int = Log.DEBUG) : LoggingDelegate {
 
     private val logger = Logger.get("ReactNative")
-
-    private var level = Log.DEBUG // log at debug level since we have our own filters
 
     override fun wtf(tag: String?, msg: String?) {
         this.logger.e(tag!!).message(msg!!)
