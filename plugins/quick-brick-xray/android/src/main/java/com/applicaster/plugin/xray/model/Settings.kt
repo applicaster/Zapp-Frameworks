@@ -4,6 +4,8 @@ import com.applicaster.xray.core.LogLevel
 
 data class Settings(val dummy: Any? = null) {
 
+    var shortcutEnabled: Boolean? = null
+
     var crashReporting: Boolean? = null
 
     var fileLogLevel: LogLevel? = null
@@ -18,13 +20,14 @@ data class Settings(val dummy: Any? = null) {
 
     companion object {
         fun merge(base: Settings, overrides: Settings): Settings {
-            val copy = base.copy()
-            copy.crashReporting = overrides.crashReporting ?: base.crashReporting
-            copy.fileLogLevel = overrides.fileLogLevel ?: base.fileLogLevel
-            copy.showNotification = overrides.showNotification ?: base.showNotification
-            copy.reactNativeLogLevel = overrides.reactNativeLogLevel ?: base.reactNativeLogLevel
-            copy.reactNativeDebugLogging = overrides.reactNativeDebugLogging ?: base.reactNativeDebugLogging
-            return copy
+            val merged = base.copy()
+            merged.shortcutEnabled = overrides.shortcutEnabled ?: base.shortcutEnabled
+            merged.crashReporting = overrides.crashReporting ?: base.crashReporting
+            merged.fileLogLevel = overrides.fileLogLevel ?: base.fileLogLevel
+            merged.showNotification = overrides.showNotification ?: base.showNotification
+            merged.reactNativeLogLevel = overrides.reactNativeLogLevel ?: base.reactNativeLogLevel
+            merged.reactNativeDebugLogging = overrides.reactNativeDebugLogging ?: base.reactNativeDebugLogging
+            return merged
         }
 
     }

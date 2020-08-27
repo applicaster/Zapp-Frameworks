@@ -11,13 +11,19 @@
         android:id="@+id/switchNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show notification" />
+        android:text="@string/show_notification" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchCrashReporting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crash reporting" />
+        android:text="@string/crash_reporting" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchShortcut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/shortcut_access" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="File log level" />
+            android:text="@string/file_log_level" />
 
         <Spinner
             android:id="@+id/cbFileLogLevel"

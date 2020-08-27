@@ -26,7 +26,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
         view.setTag(R.id.fragment_title_tag, "Settings")
 
         val pluginManager = PluginManager.getInstance()
-        val initiatedPlugin = pluginManager.getInitiatedPlugin("xray_logging_plugin")
+        val initiatedPlugin = pluginManager.getInitiatedPlugin(XRayPlugin.pluginId)
         val xRayPlugin = initiatedPlugin?.instance as? XRayPlugin
         if(null != xRayPlugin) {
             val settings = xRayPlugin.getEffectiveSettings()
@@ -48,6 +48,15 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                     xRayPlugin.update(settings)
                 }
             }
+
+            view.findViewById<SwitchCompat>(R.id.switchShortcut).let {
+                it.isChecked = true == settings.shortcutEnabled
+                it.setOnCheckedChangeListener { _, isChecked ->
+                    settings.shortcutEnabled = isChecked
+                    xRayPlugin.update(settings)
+                }
+            }
+
 
             // File logging level
             bindLogLevel(view.findViewById(R.id.cbFileLogLevel),

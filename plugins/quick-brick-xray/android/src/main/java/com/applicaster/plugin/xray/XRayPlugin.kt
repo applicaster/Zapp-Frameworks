@@ -32,6 +32,7 @@ import com.applicaster.xray.ui.notification.XRayNotification
 import com.facebook.common.logging.FLog
 import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
+import com.google.gson.GsonBuilder
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
@@ -48,9 +49,14 @@ class XRayPlugin : CrashlogPlugin {
         const val fileSinkFileName = "xray_log.txt"
         const val inMemorySinkName = "in_memory_sink"
 
+        const val pluginId = "xray_logging_plugin"
+
         // private constants
         private const val TAG = "XRayPlugin"
         private const val notificationId = 101
+        private const val storageKey = "settings"
+
+        private val gson = GsonBuilder().create()
     }
 
     private var configuration: Map<String, String>? = null
@@ -64,6 +70,11 @@ class XRayPlugin : CrashlogPlugin {
     fun update(settings: Settings) {
         localSettings = settings
         apply(Settings.merge(pluginSettings, localSettings))
+        // todo: dirty. Local storage is not initialized yet
+        context.getSharedPreferences(pluginId, 0)
+                .edit()
+                .putString(storageKey, gson.toJson(localSettings))
+                .apply()
     }
 
     fun getEffectiveSettings(): Settings = Settings.merge(pluginSettings, localSettings)
@@ -87,7 +98,15 @@ class XRayPlugin : CrashlogPlugin {
         // override default SDK Logger
         hookApplicasterLogger()
 
-        apply(Settings.merge(pluginSettings,localSettings))
+        // todo: dirty.
+        context.getSharedPreferences(pluginId, 0)
+                .getString(storageKey, null)?.let {
+                    gson.fromJson(it, Settings::class.java)?.let {
+                        localSettings = it
+                    }
+                }
+
+        apply(Settings.merge(pluginSettings, localSettings))
 
         activated = true
         pluginLogger.i(TAG).message("X-Ray logging was activated")
@@ -141,7 +160,7 @@ class XRayPlugin : CrashlogPlugin {
         }
 
         // add shortcut
-        setupShortcut(true == settings.showNotification)
+        setupShortcut(true == settings.shortcutEnabled)
     }
 
     private fun hookRNLogger(level: LogLevel?) {
@@ -174,6 +193,8 @@ class XRayPlugin : CrashlogPlugin {
 
         pluginSettings.showNotification = APDebugUtil.getIsInDebugMode()
                 && StringUtil.booleanValue(configuration?.get(notificationKey))
+
+        pluginSettings.shortcutEnabled = APDebugUtil.getIsInDebugMode()
     }
 
     private fun setupShortcut(showNotification: Boolean) {
