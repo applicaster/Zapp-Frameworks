@@ -52,7 +52,7 @@ const custom_configuration_fields_apple = [
   },
   {
     type: "uploader",
-    key: "notification_extension_provisioning_profile",
+    key: "notification_service_extension_provisioning_profile",
     tooltip_text:
       "Upload Notification Extension Provisioning Profile for Store builds only",
   },
