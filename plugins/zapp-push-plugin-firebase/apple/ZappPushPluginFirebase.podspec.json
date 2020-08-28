@@ -33,14 +33,7 @@
         "ZappPlugins": [],
         "Firebase/Messaging": [],
         "Firebase/Core": []
-      },
-      "testspecs": [
-        {
-          "name": "UnitTests",
-          "test_type": "unit",
-          "source_files": "tests/**"
-        }
-      ]
+      }
     },
     {
       "name": "NotificationServiceExtension",
@@ -55,6 +48,13 @@
         "Firebase": [],
         "Firebase/Messaging": []
       }
+    }
+  ],
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "tests/**"
     }
   ],
   "swift_version": "5.1"
