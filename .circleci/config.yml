@@ -162,6 +162,7 @@ jobs:
     <<: *defaults
     macos:
       xcode: "11.5.0"
+    resource_class: large
     environment:
       HOMEBREW_NO_AUTO_UPDATE: "1"
     steps:
