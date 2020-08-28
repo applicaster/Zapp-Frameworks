@@ -7,7 +7,7 @@
 //
 
 import AppCenter
-import AppCenterAnalytics
+//import AppCenterAnalytics
 import AppCenterDistribute
 import Foundation
 import XrayLogger
@@ -25,8 +25,9 @@ public class MsAppCenterHandler: NSObject {
             return
         }
 
-        var services: [MSServiceAbstract.Type] = [MSDistribute.self,
-                                                  MSAnalytics.self]
+//        var services: [MSServiceAbstract.Type] = [MSDistribute.self,
+//                                                  MSAnalytics.self]
+        var services: [MSServiceAbstract.Type] = [MSDistribute.self]
         if let crashes = crashesSerice() {
             services.append(crashes)
         }
