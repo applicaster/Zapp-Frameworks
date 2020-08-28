@@ -80,7 +80,7 @@ const extra_dependencies_apple = [
       ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
   },
   {
-    NotificationServiceExtension:
+    "ZappPushPluginFirebase/NotificationServiceExtension":
       ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
   },
 ];
