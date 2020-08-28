@@ -1,45 +1,61 @@
-# frozen_string_literal: true
-
-Pod::Spec.new do |s|
-  s.name = 'ZappPushPluginFirebase'
-  s.version          = '2.0.0'
-  s.summary          = 'FirebasePushPlugin for Zapp iOS.'
-  s.description      = <<-DESC
-                          FirebasePushPlugin for Zapp iOS.
-  DESC
-  s.homepage         = 'https://github.com/applicaster/Zapp-Frameworks.git'
-  s.license          = 'CMPS'
-  s.author           = { 'Anton Kononenko' => 'a.kononenko@applicaster.com' }
-  s.source           = { git: 'https://github.com/applicaster/Zapp-Frameworks.git', tag: s.version.to_s }
-  s.platform     = :ios, '11.0'
-  s.requires_arc = true
-  s.swift_version = '5.1'
-  s.source_files = 'ios/**/*.{swift}'
-  s.default_subspec = 'Base'
-  s.static_framework = true
-
-  s.subspec 'Base' do |base|
-    base.xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES',
-                      'FRAMEWORK_SEARCH_PATHS' => '$(inherited)',
-                      'OTHER_LDFLAGS' => '$(inherited)',
-                      'ENABLE_BITCODE' => 'YES',
-                      'OTHER_CFLAGS' => '-fembed-bitcode' }
-
-    base.dependency 'ZappPushPluginsSDK'
-    base.dependency 'ZappPlugins'
-    base.dependency 'Firebase/Messaging'
-    base.dependency 'Firebase/Core'
-  end
-
-  s.subspec 'NotificationServiceExtension' do |service_extension|
-    service_extension.xcconfig = {
-      'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES',
-      'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) FIREBASE_EXTENSIONS_ENABLED=1',
-      'OTHER_SWIFT_FLAGS' => '$(inherited) "-D" "FIREBASE_EXTENSIONS_ENABLED"',
-      'ENABLE_BITCODE' => 'YES',
-      'OTHER_CFLAGS' => '-fembed-bitcode'
+{
+  "name": "ZappPushPluginFirebase",
+  "version": "2.0.0",
+  "summary": "FirebasePushPlugin for Zapp iOS.",
+  "description": "FirebasePushPlugin for Zapp iOS.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "2.0.0"
+  },
+  "platforms": {
+    "ios": "11.0"
+  },
+  "requires_arc": true,
+  "swift_versions": "5.1",
+  "source_files": "ios/**/*.{swift}",
+  "default_subspecs": "Base",
+  "static_framework": true,
+  "subspecs": [
+    {
+      "name": "Base",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "FRAMEWORK_SEARCH_PATHS": "$(inherited)",
+        "OTHER_LDFLAGS": "$(inherited)",
+        "ENABLE_BITCODE": "YES",
+        "OTHER_CFLAGS": "-fembed-bitcode"
+      },
+      "dependencies": {
+        "ZappPushPluginsSDK": [],
+        "ZappPlugins": [],
+        "Firebase/Messaging": [],
+        "Firebase/Core": []
+      },
+      "testspecs": [
+        {
+          "name": "UnitTests",
+          "test_type": "unit",
+          "source_files": "tests/**"
+        }
+      ]
+    },
+    {
+      "name": "NotificationServiceExtension",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) FIREBASE_EXTENSIONS_ENABLED=1",
+        "OTHER_SWIFT_FLAGS": "$(inherited) \"-D\" \"FIREBASE_EXTENSIONS_ENABLED\"",
+        "ENABLE_BITCODE": "YES",
+        "OTHER_CFLAGS": "-fembed-bitcode"
+      },
+      "dependencies": {
+        "Firebase": [],
+        "Firebase/Messaging": []
+      }
     }
-    service_extension.dependency 'Firebase'
-    service_extension.dependency 'Firebase/Messaging'
-  end
-end
+  ],
+  "swift_version": "5.1"
+}
