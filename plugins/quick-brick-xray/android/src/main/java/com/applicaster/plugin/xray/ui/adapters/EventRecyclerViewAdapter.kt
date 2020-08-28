@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.utility.format
 import com.applicaster.xray.core.Event
-import kotlinx.android.synthetic.main.fragment_event_log_entry.view.*
+import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
 
 class EventRecyclerViewAdapter(
         owner: LifecycleOwner,
@@ -30,7 +30,7 @@ class EventRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_event_log_entry, parent, false)
+                .inflate(R.layout.xray_fragment_event_log_entry, parent, false)
         return ViewHolder(binding)
     }
 

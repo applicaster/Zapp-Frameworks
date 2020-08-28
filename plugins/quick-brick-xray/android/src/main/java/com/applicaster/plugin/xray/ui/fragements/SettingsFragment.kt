@@ -22,7 +22,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val view = inflater.inflate(R.layout.xray_fragment_settings, container, false)
         view.setTag(R.id.fragment_title_tag, "Settings")
 
         val pluginManager = PluginManager.getInstance()

@@ -11,7 +11,7 @@ class LogActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_xray_main)
+        setContentView(R.layout.xray_activity_main)
         val pager: ViewPager = findViewById(R.id.pager)
         pager.adapter = ViewsPagerAdapter(pager)
         pager.currentItem = 1

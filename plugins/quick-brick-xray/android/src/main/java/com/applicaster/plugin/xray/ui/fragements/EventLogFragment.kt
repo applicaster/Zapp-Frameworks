@@ -27,7 +27,7 @@ class EventLogFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_event_log_list, container, false)
+        val view = inflater.inflate(R.layout.xray_fragment_event_log_list, container, false)
 
         // We expect our example Plugin to provide this sink as InMemoryLogSink
         val inMemoryLogSink = Core.get().getSink(XRayPlugin.inMemorySinkName) as InMemoryLogSink?

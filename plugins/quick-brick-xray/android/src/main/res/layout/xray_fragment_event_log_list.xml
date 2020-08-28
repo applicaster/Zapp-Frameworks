@@ -25,5 +25,5 @@
         app:layoutManager="LinearLayoutManager"
         app:stackFromEnd="true"
         tools:context=".ui.fragements.EventLogFragment"
-        tools:listitem="@layout/fragment_event_log_entry" />
+        tools:listitem="@layout/xray_fragment_event_log_entry" />
 </LinearLayout>
