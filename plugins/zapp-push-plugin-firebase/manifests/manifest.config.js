@@ -4,8 +4,10 @@ const baseManifest = {
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Firebase Notifications",
-  description: "Send high-velocity targeted push via Google's Firebase Notifications Console",
-  cover_image: "https://res.cloudinary.com/dtiodujtz/image/upload/v1552096080/Plugins/Firebase_Push1.png",
+  description:
+    "Send high-velocity targeted push via Google's Firebase Notifications Console",
+  cover_image:
+    "https://res.cloudinary.com/dtiodujtz/image/upload/v1552096080/Plugins/Firebase_Push1.png",
   type: "push_provider",
   identifier: "ZappPushPluginFirebase",
   screen: false,
@@ -40,7 +42,21 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 
-const custom_configuration_fields_apple = [];
+const custom_configuration_fields_apple = [
+  {
+    type: "checkbox",
+    key: "allow_enterprise_rich_push_notifications",
+    default: 1,
+    tooltip_text:
+      'When checked, this field enables debug builds to support sending push notifications, but disables other debug functionality. For more details, <a href="https://sites.google.com/applicaster.com/fb-notifications-debug-push/home";>Click Here</a>',
+  },
+  {
+    type: "uploader",
+    key: "notification_extension_provisioning_profile",
+    tooltip_text:
+      "Upload Notification Extension Provisioning Profile for Store builds only",
+  },
+];
 
 const custom_configuration_fields_android = [];
 
@@ -54,9 +70,21 @@ const custom_configuration_fields = {
 
 const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
+  ios: "20.1.0-Dev",
+  ios_for_quickbrick: "1.0.0-RC",
 };
 
-const extra_dependencies_apple = [];
+const extra_dependencies_apple = [
+  {
+    ZappPushPluginFirebase:
+      ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+  },
+  {
+    NotificationServiceExtension: {
+      ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+    },
+  },
+];
 
 const extra_dependencies = {
   ios: extra_dependencies_apple,
@@ -67,26 +95,37 @@ const extra_dependencies = {
 
 const project_dependencies_android = [
   {
-    "zapp-push-plugin-firebase": "node_modules/@applicaster/zapp-push-plugin-firebase/android",
-  }
+    "zapp-push-plugin-firebase":
+      "node_modules/@applicaster/zapp-push-plugin-firebase/android",
+  },
 ];
 
 const project_dependencies = {
   android_for_quickbrick: project_dependencies_android,
 };
 
-
 const api_android = {
   class_name: "com.applicaster.firebasepushpluginandroid.FirebasePushProvider",
 };
 
+const api_apple = {
+  require_startup_execution: false,
+  class_name: "APPushProviderFirebase",
+  modules: ["ZappPushPluginFirebase"],
+};
+
 const api = {
   android_for_quickbrick: api_android,
+  ios: api_apple,
+  ios_for_quickbrick: api_apple,
 };
 
 const mobileTarget = ["mobile"];
+
 const targets = {
   android_for_quickbrick: mobileTarget,
+  ios: mobileTarget,
+  ios_for_quickbrick: mobileTarget,
 };
 
 module.exports = createManifest;
