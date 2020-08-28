@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-push-plugin-firebase",
-  "version": "0.0.1-alpha0",
+  "version": "2.0.0",
   "description": "Firebase Push Notifications for Applicaster",
   "repository": {
     "type": "git",
@@ -21,7 +21,9 @@
   "peerDependencies": {},
   "applicaster": {
     "supportedPlatforms": [
-      "android_for_quickbrick"
+      "android_for_quickbrick",
+      "ios_for_quickbrick",
+      "ios"
     ],
     "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
   },

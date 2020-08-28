@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+
+platform :ios, '10.0'
+use_frameworks!
+install! 'cocoapods', deterministic_uuids: false
+
+source 'git@github.com:applicaster/CocoaPods.git'
+source 'git@github.com:applicaster/PluginsBuilderCocoaPods.git'
+source 'https://cdn.cocoapods.org/'
+
+pre_install do |_installer|
+  # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+
+target 'FrameworksApp' do
+  supports_swift_versions '5.1'
+  use_frameworks!
+
+  pod 'ZappPushPluginFirebase', path: './ZappPushPluginFirebase.podspec', testspecs: ['UnitTests']
+  pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
+
+  target 'FrameworksAppTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+      config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+    end
+  end
+end
