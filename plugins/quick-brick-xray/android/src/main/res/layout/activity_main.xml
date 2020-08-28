@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.PagerTitleStrip
+        <androidx.viewpager.widget.PagerTabStrip
+            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:background="@android:color/holo_green_light"
-            android:padding="4dp" />
+            android:background="@color/colorPagerTabStrip"
+            android:padding="8dp" />
 
         <fragment
             android:id="@+id/settings_fragment"

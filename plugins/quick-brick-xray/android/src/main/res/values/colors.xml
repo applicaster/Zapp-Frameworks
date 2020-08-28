@@ -5,4 +5,5 @@
     <color name="colorLogInfo">#00F</color>
     <color name="colorLogDebug">#777</color>
     <color name="colorLogVerbose">#000</color>
+    <color name="colorPagerTabStrip">#09b98a</color>
 </resources>
