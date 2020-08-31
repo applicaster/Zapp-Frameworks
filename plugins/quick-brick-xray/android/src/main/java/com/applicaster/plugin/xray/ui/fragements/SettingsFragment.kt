@@ -17,11 +17,13 @@ import com.applicaster.plugin.xray.model.Settings
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
 
-class SettingsFragment : Fragment(), Observer<Settings> {
+class SettingsFragment : Fragment() {
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         val view = inflater.inflate(R.layout.xray_fragment_settings, container, false)
         view.setTag(R.id.fragment_title_tag, "Settings")
 
@@ -36,7 +38,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                 it.isChecked = true == settings.showNotification
                 it.setOnCheckedChangeListener { _, isChecked ->
                     settings.showNotification = isChecked
-                    xRayPlugin.update(settings)
+                    xRayPlugin.applySettings(settings)
                 }
             }
 
@@ -45,7 +47,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                 it.isChecked = true == settings.crashReporting
                 it.setOnCheckedChangeListener { _, isChecked ->
                     settings.crashReporting = isChecked
-                    xRayPlugin.update(settings)
+                    xRayPlugin.applySettings(settings)
                 }
             }
 
@@ -53,7 +55,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                 it.isChecked = true == settings.shortcutEnabled
                 it.setOnCheckedChangeListener { _, isChecked ->
                     settings.shortcutEnabled = isChecked
-                    xRayPlugin.update(settings)
+                    xRayPlugin.applySettings(settings)
                 }
             }
 
@@ -66,7 +68,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                             settings.fileLogLevel =
                                     if (LogLevel.values().size <= position) null
                                     else LogLevel.values()[position]
-                            xRayPlugin.update(settings)
+                            xRayPlugin.applySettings(settings)
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -81,7 +83,7 @@ class SettingsFragment : Fragment(), Observer<Settings> {
                             settings.reactNativeLogLevel =
                                     if (LogLevel.values().size <= position) null
                                     else LogLevel.values()[position]
-                            xRayPlugin.update(settings)
+                            xRayPlugin.applySettings(settings)
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -110,9 +112,5 @@ class SettingsFragment : Fragment(), Observer<Settings> {
     companion object {
         @JvmStatic
         fun newInstance() = SettingsFragment()
-    }
-
-    override fun onChanged(t: Settings?) {
-
     }
 }

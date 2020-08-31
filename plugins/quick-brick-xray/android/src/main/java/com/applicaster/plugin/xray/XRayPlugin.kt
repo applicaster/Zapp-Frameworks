@@ -9,6 +9,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
 import com.applicaster.plugin.xray.logadapters.FLogAdapter
 import com.applicaster.plugin.xray.logadapters.PrinterAdapter
@@ -67,7 +68,9 @@ class XRayPlugin : CrashlogPlugin {
     private var localSettings: Settings = Settings()
     private val pluginSettings: Settings = Settings()
 
-    fun update(settings: Settings) {
+    val effectiveSettingsObservable: MutableLiveData<Settings> = MutableLiveData();
+
+    fun applySettings(settings: Settings) {
         localSettings = settings
         apply(Settings.merge(pluginSettings, localSettings))
         // todo: dirty. Local storage is not initialized yet
@@ -161,6 +164,8 @@ class XRayPlugin : CrashlogPlugin {
 
         // add shortcut
         setupShortcut(true == settings.shortcutEnabled)
+
+        effectiveSettingsObservable.postValue(settings)
     }
 
     private fun hookRNLogger(level: LogLevel?) {
