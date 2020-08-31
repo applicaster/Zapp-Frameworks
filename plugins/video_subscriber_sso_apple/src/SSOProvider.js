@@ -33,13 +33,18 @@ const storeConnector = connectToStore((state, props) => {
     configuration: { fallback_login_plugin_id },
   } = props;
 
-  let loginPlugin = state.plugins.find(
-    ({ type, identifier }) =>
-      type === "login" && identifier === fallback_login_plugin_id
-  );
+  let loginPlugin = state.plugins.find(({ type, identifier }) => {
+    return (
+      type === "login" && identifier && identifier === fallback_login_plugin_id
+    );
+  });
 
   if (!loginPlugin) {
     loginPlugin = state.plugins.find(({ type }) => type === "login");
+  }
+
+  if (!loginPlugin) {
+    return {};
   }
 
   const values = Object.values(state.rivers);
@@ -151,4 +156,5 @@ const SSOProvider = (props) => {
 
   return <View style={[overlayColor, centerChildren]}>{renderFlow()}</View>;
 };
+
 export default withAppManager(storeConnector(SSOProvider));
