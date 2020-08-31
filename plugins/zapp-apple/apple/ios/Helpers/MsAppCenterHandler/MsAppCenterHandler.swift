@@ -7,13 +7,16 @@
 //
 
 import AppCenter
-//import AppCenterAnalytics
 import AppCenterDistribute
 import Foundation
 import XrayLogger
 
 #if canImport(AppCenterCrashes)
     import AppCenterCrashes
+#endif
+
+#if canImport(AppCenterAnalytics)
+    import AppCenterAnalytics
 #endif
 
 public class MsAppCenterHandler: NSObject {
@@ -24,22 +27,29 @@ public class MsAppCenterHandler: NSObject {
             logger?.warningLog(template: AppCenterLogs.appCenterConfigureNoSecret)
             return
         }
-
-//        var services: [MSServiceAbstract.Type] = [MSDistribute.self,
-//                                                  MSAnalytics.self]
+        
         var services: [MSServiceAbstract.Type] = [MSDistribute.self]
-        if let crashes = crashesSerice() {
+
+        if let crashes = crashesService() {
             services.append(crashes)
         }
+
+        if let analytics = analyticsService() {
+            services.append(analytics)
+        }
+        
         MSAppCenter.start(appSecret,
                           withServices: services)
 
         configureDistribution()
+        
+        let analyticsLogsMessage = analyticsService() != nil ? true : false
+        let crashLogsMessage = crashesService() != nil ? true : false
         logger?.debugLog(template: AppCenterLogs.appCenterConfigure,
                          data: ["app_secret": appSecret,
                                 "distribute_service_enabled": true,
-                                "analytics_service_enabled": true,
-                                "crashes_service_enabled": crashesSerice() != nil ? true : false])
+                                "analytics_service_enabled": analyticsLogsMessage,
+                                "crashes_service_enabled": crashLogsMessage])
     }
 
     func configureDistribution() {
@@ -57,9 +67,17 @@ public class MsAppCenterHandler: NSObject {
                                   "selector": "checkUpdatesForNewVersions:"])
     }
 
-    func crashesSerice() -> MSServiceAbstract.Type? {
+    func crashesService() -> MSServiceAbstract.Type? {
         #if canImport(AppCenterCrashes)
             return MSCrashes.self
+        #else
+            return nil
+        #endif
+    }
+
+ func analyticsService() -> MSServiceAbstract.Type? {
+        #if canImport(AppCenterAnalytics)
+            return MSAnalytics.self
         #else
             return nil
         #endif
