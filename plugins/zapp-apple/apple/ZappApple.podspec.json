@@ -1,6 +1,6 @@
 {
   "name": "ZappApple",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "summary": "Framework that has general logic of the Zapp Apple application",
   "platforms": {
     "ios": "11.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-apple/0.9.3"
+    "tag": "@@applicaster/zapp-apple/0.9.4"
   },
   "static_framework": true,
   "ios": {
@@ -26,7 +26,9 @@
       "OTHER_LDFLAGS": "$(inherited) -objc -framework \"AppCenter\" -framework \"AppCenterDistribute\" "
     },
     "dependencies": {
-      "AppCenter/Distribute": ["= 3.0.0"]
+      "AppCenter/Distribute": [
+        "= 3.0.0"
+      ]
     },
     "source_files": "ios/**/*.{swift}"
   },
@@ -41,8 +43,12 @@
   },
   "dependencies": {
     "ZappCore": [],
-    "ReachabilitySwift": ["= 5.0.0"],
-    "DeviceKit": ["= 3.2.0"],
+    "ReachabilitySwift": [
+      "= 5.0.0"
+    ],
+    "DeviceKit": [
+      "= 3.2.0"
+    ],
     "XrayLogger": []
   },
   "source_files": "universal/**/*.{h,m,swift}",
