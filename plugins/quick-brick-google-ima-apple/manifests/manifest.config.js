@@ -89,6 +89,13 @@ const api_apple = {
   require_startup_execution: false,
   class_name: "GoogleInteractiveMediaAdsAdapter",
   modules: ["ZappGoogleInteractiveMediaAds"],
+  plist: {
+    "SKAdNetworkItems": [
+      {
+        "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+      }
+    ]
+  }
 };
 
 const api = {
