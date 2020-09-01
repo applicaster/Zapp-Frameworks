@@ -80,8 +80,14 @@ const extra_dependencies_apple = [
       ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
   },
   {
-    "ZappPushPluginFirebase/NotificationServiceExtension":
-      ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+    NotificationServiceExtension: {
+      "ZappPushPluginFirebase/ServiceExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+    }
+  },
+  {
+    NotificationContentExtension: {
+      "ZappPushPluginFirebase/ContentExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+    }
   },
 ];
 
