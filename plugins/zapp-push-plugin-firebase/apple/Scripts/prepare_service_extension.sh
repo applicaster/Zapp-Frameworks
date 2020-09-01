@@ -5,7 +5,7 @@ echo "The ZAPP_HOME dir is $ZAPP_HOME"
 # Get NotificationService.swift file path
 old_file_path=`find "$ZAPP_HOME" -maxdepth 3 -name "NotificationService.swift" | tail -1`
 new_file_path="$ZAPP_HOME/node_modules/@applicaster/zapp-push-plugin-firebase/apple/extensions/service/NotificationService.swift"
-
+ 
 echo "Replacing file: $old_file_path"
 
 if [ -z "$old_file_path" ]; then
