@@ -26,6 +26,10 @@ extension GoogleInteractiveMediaAdsAdapter: IMAAdsManagerDelegate {
                 isVMAPAdsCompleted = true
             }
             postrollCompletion?(true)
+        case .SKIPPED:
+            if let playerPlugin = playerPlugin {
+                FacadeConnector.connector?.playerDependant?.playerAdSkiped(player: playerPlugin)
+            }
         default:
             return
         }
@@ -33,6 +37,9 @@ extension GoogleInteractiveMediaAdsAdapter: IMAAdsManagerDelegate {
 
     public func adsManagerDidRequestContentPause(_ adsManager: IMAAdsManager!) {
         delegate?.advertisementWillPresented(provider: self)
+        if let playerPlugin = playerPlugin {
+            FacadeConnector.connector?.playerDependant?.playerAdStarted(player: playerPlugin)
+        }
         // The SDK is going to play ads, so pause the content.
         pausePlayback()
     }
@@ -53,7 +60,17 @@ extension GoogleInteractiveMediaAdsAdapter: IMAAdsManagerDelegate {
 
     public func adsManagerDidRequestContentResume(_ adsManager: IMAAdsManager!) {
         delegate?.advertisementWillDismissed(provider: self)
+        if let playerPlugin = playerPlugin {
+            FacadeConnector.connector?.playerDependant?.playerAdCompleted(player: playerPlugin)
+        }
         // The SDK is done playing ads (at least for now), so resume the content.
         resumePlayback()
     }
+    
+    public func adsManager(_ adsManager: IMAAdsManager!, adDidProgressToTime mediaTime: TimeInterval, totalTime: TimeInterval) {
+        if let playerPlugin = playerPlugin {
+            FacadeConnector.connector?.playerDependant?.playerAdProgressUpdate(player: playerPlugin, currentTime: mediaTime, duration: totalTime)
+        }
+    }
+    
 }
