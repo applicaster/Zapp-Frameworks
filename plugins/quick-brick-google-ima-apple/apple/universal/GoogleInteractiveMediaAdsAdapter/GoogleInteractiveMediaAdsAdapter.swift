@@ -11,6 +11,11 @@ import GoogleInteractiveMediaAds
 import UIKit
 import ZappCore
 
+#if canImport(AppTrackingTransparency)
+import AppTrackingTransparency
+#endif
+import AdSupport
+
 @objc public class GoogleInteractiveMediaAdsAdapter: NSObject, PlayerDependantPluginProtocol {
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
@@ -87,13 +92,22 @@ import ZappCore
         guard let player = avPlayer else { return }
         addNotificationsObserver()
         addRateObserver()
+        
         urlTagData = GoogleUrlTagData(entry: playerPlugin?.entry,
                                       pluginParams: configurationJSON)
         contentPlayhead = IMAAVPlayerContentPlayhead(avPlayer: player)
 
         if let urlToPresent = urlTagData?.prerollUrlString() {
             isPrerollAdLoading = true
-            requestAd(adUrl: urlToPresent)
+            
+            if #available(iOS 14, *) {
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+                    // Tracking authorization completed. Start loading ads.
+                    self.requestAd(adUrl: urlToPresent)
+                })
+            } else {
+                self.requestAd(adUrl: urlToPresent)
+            }
         }
         
     }
@@ -181,7 +195,9 @@ import ZappCore
         }
         setupAdsLoader()
 
-        adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView, companionSlots: nil)
+        adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView,
+                                                   viewController: nil,
+                                                   companionSlots: nil)
         if let request = IMAAdsRequest(adTagUrl: adUrl,
                                        adDisplayContainer: adDisplayContainer,
                                        contentPlayhead: contentPlayhead,
