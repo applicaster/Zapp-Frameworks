@@ -18,7 +18,7 @@ import AdSupport
 
     @objc static public func requestTrackingAuthorization(_ completion: @escaping (_ identifier: String) -> Void) {
 
-        if #available(iOS 14, *) {
+        if #available(iOS 14, tvOS 14, *) {
             #if canImport(AppTrackingTransparency)
             ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
                 // Tracking authorization completed. Start loading ads.

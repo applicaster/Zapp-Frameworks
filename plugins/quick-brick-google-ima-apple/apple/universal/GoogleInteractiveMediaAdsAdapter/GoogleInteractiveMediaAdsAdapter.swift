@@ -186,9 +186,14 @@ import ZappCore
         }
         setupAdsLoader()
 
+        #if os(tvOS)
+        adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView,
+                                                   viewController: nil)
+        #else
         adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView,
                                                    viewController: nil,
                                                    companionSlots: nil)
+        #endif
         if let request = IMAAdsRequest(adTagUrl: adUrl,
                                        adDisplayContainer: adDisplayContainer,
                                        contentPlayhead: contentPlayhead,
