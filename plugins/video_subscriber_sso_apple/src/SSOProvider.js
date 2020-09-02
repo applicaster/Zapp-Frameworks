@@ -52,7 +52,7 @@ const storeConnector = connectToStore((state, props) => {
   // eslint-disable-next-line array-callback-return,consistent-return
   const plugin = values.find((item) => {
     if (item && item.type) {
-      return item.type === loginPlugin.identifier;
+      return item.type === loginPlugin?.identifier;
     }
   });
 
