@@ -96,7 +96,9 @@ import ZappCore
             isPrerollAdLoading = true
             
             GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization { (identifier) in
-                self.requestAd(adUrl: urlToPresent)
+                DispatchQueue.main.async {
+                    self.requestAd(adUrl: urlToPresent)
+                }
             }
         }
     }

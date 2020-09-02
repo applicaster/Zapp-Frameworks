@@ -12,16 +12,16 @@
     "tag": "@@applicaster/quick-brick-google-ima-apple/0.13.0"
   },
   "platforms": {
-    "ios": "10.0",
-    "tvos": "10.0"
+    "ios": "11.0",
+    "tvos": "11.0"
   },
   "tvos": {
-    "vendored_frameworks": "tvos/GoogleInteractiveMediaAds.framework",
-    "preserve_paths": "tvos/GoogleInteractiveMediaAds.framework",
-    "source_files": [
-      "universal/**/*.swift",
-      "tvos/**/*.swift"
-    ]
+    "source_files": "universal/**/*.swift",
+    "dependencies": {
+      "GoogleAds-IMA-tvOS-SDK": [
+        "= 4.3.2"
+      ]
+    }
   },
   "ios": {
     "source_files": "universal/**/*.swift",
