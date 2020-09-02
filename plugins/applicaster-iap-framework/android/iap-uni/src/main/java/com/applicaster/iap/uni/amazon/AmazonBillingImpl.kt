@@ -9,15 +9,19 @@ import com.applicaster.iap.uni.api.*
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
-    private val receipts: MutableList<Receipt> = mutableListOf()
+    private val receipts: MutableSet<Receipt> = mutableSetOf()
     private val skuRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private val purchaseRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private var restoreObserver: IAPListener? = null
 
     // region IAPAPI
 
-    override fun init(applicationContext: Context) {
+    override fun init(applicationContext: Context,
+                      updateCallback: IAPListener?) {
         PurchasingService.registerListener(applicationContext, this)
+        // todo: load stored receipts and change arg to false
+        restoreObserver = updateCallback
+        PurchasingService.getPurchaseUpdates(true)
     }
 
     override fun loadSkuDetails(skuType: IBillingAPI.SkuType, skusList: List<String>, callback: IAPListener?) {
@@ -32,15 +36,6 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         if (null != callback) {
             skuRequests[request] = callback
         }
-    }
-
-    override fun restorePurchases(
-        skuType: IBillingAPI.SkuType,
-        callback: IAPListener?
-    ) {
-        receipts.clear()
-        restoreObserver = callback
-        PurchasingService.getPurchaseUpdates(true)
     }
 
     override fun restorePurchasesForAllTypes(callback: IAPListener?) {
@@ -99,9 +94,9 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         val request = purchaseRequests.remove(response.requestId)
         if (PurchaseResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
             val iapResult =
-                    if (PurchaseResponse.RequestStatus.ALREADY_PURCHASED == response.requestStatus) {
+                    if (PurchaseResponse.RequestStatus.ALREADY_PURCHASED == response.requestStatus)
                         IBillingAPI.IAPResult.alreadyOwned
-                    } else
+                    else
                         IBillingAPI.IAPResult.generalError
             request?.onPurchaseFailed(
                     iapResult,

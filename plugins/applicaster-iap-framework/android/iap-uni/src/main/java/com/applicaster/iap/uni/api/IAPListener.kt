@@ -32,8 +32,6 @@ interface IAPListener {
     fun onBillingClientError(result: IBillingAPI.IAPResult, description: String)
 
     // Amazon specific
-    fun onAmazonUserId(userId: String, marketplace: String) {
-
-    }
+    fun onAmazonUserId(userId: String, marketplace: String) = Unit
 
 }

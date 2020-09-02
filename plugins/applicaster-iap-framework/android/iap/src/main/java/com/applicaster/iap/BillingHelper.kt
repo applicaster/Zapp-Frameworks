@@ -17,7 +17,8 @@ interface BillingHelper {
      * @see BillingListener
      * @see BillingHelper
      */
-    fun init(applicationContext: Context, callback: BillingListener)
+    fun init(applicationContext: Context,
+             callback: BillingListener)
 
     /**
      * Loads list of SkuDetails that and calls [BillingListener.onSkuDetailsLoaded]

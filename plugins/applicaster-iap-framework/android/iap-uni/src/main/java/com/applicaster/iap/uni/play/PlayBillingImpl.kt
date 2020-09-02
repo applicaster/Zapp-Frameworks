@@ -18,7 +18,7 @@ class PlayBillingImpl: IBillingAPI, BillingListener {
         const val TAG = "PlayBilling"
     }
 
-    //private val purchasesMap: MutableMap<String, com.android.billingclient.api.Purchase> = hashMapOf()
+    private val purchasesMap: MutableMap<String, com.android.billingclient.api.Purchase> = hashMapOf()
     private val purchaseListeners: MutableMap<String, IAPListener> = hashMapOf()
 
     // sku details cache
@@ -26,8 +26,12 @@ class PlayBillingImpl: IBillingAPI, BillingListener {
 
     // region IAPAPI
 
-    override fun init(applicationContext: Context) {
+    override fun init(applicationContext: Context,
+                      updateCallback: IAPListener?) {
+        val restorePromiseListener =
+                if (null != updateCallback) RestorePromiseListener(updateCallback) else null
         GoogleBillingHelper.init(applicationContext, this)
+        GoogleBillingHelper.restorePurchasesForAllTypes(restorePromiseListener)
     }
 
     override fun loadSkuDetails(
@@ -56,11 +60,6 @@ class PlayBillingImpl: IBillingAPI, BillingListener {
         GoogleBillingHelper.loadSkuDetailsForAllTypes(
                 playSKUs,
                 if (null == callback) null else SKUPromiseListener(callback))
-    }
-
-    override fun restorePurchases(skuType: IBillingAPI.SkuType, callback: IAPListener?) {
-        // todo: callback
-        GoogleBillingHelper.restorePurchases(mapSkuType(skuType))
     }
 
     override fun restorePurchasesForAllTypes(callback: IAPListener?) {
@@ -111,24 +110,20 @@ class PlayBillingImpl: IBillingAPI, BillingListener {
             purchaseListeners.remove(purchase.sku)
                 ?.onPurchased(Purchase(purchase.sku, purchase.purchaseToken, purchase.originalJson))
         }
+        purchasesMap.putAll(purchases.map { it.sku to it })
     }
 
     override fun onPurchaseLoadingFailed(statusCode: Int, description: String) {
         Log.e(TAG, "onPurchaseLoadingFailed: $statusCode $description")
-        if(BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED == statusCode) {
-            // there will be only single item, I suppose, but just to have generic code
-            purchaseListeners.forEach{
-                it.value.onPurchaseFailed(Mappers.mapStatus(statusCode), description)
-            }
-        } else {
-            purchaseListeners.values.forEach {
-                it.onPurchaseFailed(Mappers.mapStatus(statusCode), description)
-            }
+        // there will be only single at a time item, I suppose, but just to have generic code
+        purchaseListeners.values.forEach {
+            it.onPurchaseFailed(Mappers.mapStatus(statusCode), description)
         }
         purchaseListeners.clear()
     }
 
     override fun onPurchasesRestored(purchases: List<com.android.billingclient.api.Purchase>) {
+        purchasesMap.putAll(purchases.map { it.sku to it })
     }
 
     override fun onSkuDetailsLoaded(skuDetails: List<SkuDetails>) {

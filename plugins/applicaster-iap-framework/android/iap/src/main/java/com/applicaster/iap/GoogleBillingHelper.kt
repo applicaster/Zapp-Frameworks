@@ -35,7 +35,8 @@ object GoogleBillingHelper : BillingHelper {
     private var isMultitypeQueryInProgress: Boolean = false
     private val cachedSkuDetails = arrayListOf<SkuDetails>()
 
-    override fun init(applicationContext: Context, callback: BillingListener) {
+    override fun init(applicationContext: Context,
+                      callback: BillingListener) {
         billingListener = callback
 
         val billingClientBuilder = with(BillingClient.newBuilder(applicationContext)) {
@@ -150,7 +151,8 @@ object GoogleBillingHelper : BillingHelper {
     }
 
     //update handle response code and update purchases if ResponseCode.OK
-    private fun updatePurchases(billingResult: BillingResult, purchases: List<Purchase>?) {
+    private fun updatePurchases(billingResult: BillingResult,
+                                purchases: List<Purchase>?) {
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 billingListener.onPurchaseLoaded(purchases ?: arrayListOf())
@@ -158,8 +160,7 @@ object GoogleBillingHelper : BillingHelper {
             else -> {
                 billingListener.onPurchaseLoadingFailed(
                         billingResult.responseCode,
-                        handleErrorResult(billingResult.responseCode)
-                )
+                        handleErrorResult(billingResult.responseCode))
             }
         }
     }

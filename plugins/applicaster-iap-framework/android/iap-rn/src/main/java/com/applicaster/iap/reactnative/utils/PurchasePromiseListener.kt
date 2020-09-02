@@ -10,13 +10,17 @@ open class PurchasePromiseListener(protected val bridge: IAPBridge,
                                    private val sku: String) : PromiseListener(promise) {
 
     override fun onPurchased(purchase: Purchase) {
-        val purchase = fix(purchase)
-        promise.resolve(wrap(purchase))
+        promise.resolve(wrap(fix(purchase)))
     }
 
     override fun onPurchaseFailed(result: IBillingAPI.IAPResult, description: String) {
         if(IBillingAPI.IAPResult.alreadyOwned == result) {
-            bridge.restoreOwned(this)
+            val purchase = bridge.purchases[sku]
+            if(null != purchase) {
+                promise.resolve(wrap(fix(purchase)))
+            } else {
+                bridge.restoreOwned(this)
+            }
         }
         else {
             super.onPurchaseFailed(result, description)

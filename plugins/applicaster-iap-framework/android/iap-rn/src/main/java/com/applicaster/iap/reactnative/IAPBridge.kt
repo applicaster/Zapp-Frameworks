@@ -1,9 +1,7 @@
 package com.applicaster.iap.reactnative
 
 import com.applicaster.iap.reactnative.utils.*
-import com.applicaster.iap.uni.api.IBillingAPI
-import com.applicaster.iap.uni.api.PurchaseRequest
-import com.applicaster.iap.uni.api.Sku
+import com.applicaster.iap.uni.api.*
 import com.facebook.react.bridge.*
 
 // todo: call restore on already owned error
@@ -37,6 +35,10 @@ class IAPBridge(reactContext: ReactApplicationContext)
         }
     }
 
+    // todo: implement in api maybe? since we have it already, and its updated on every purchase
+    // also we need to remove consumed consumables
+    val purchases: MutableMap<String, Purchase> = mutableMapOf()
+
     private lateinit var api: IBillingAPI
 
     // lookup map to SkuDetails
@@ -53,8 +55,38 @@ class IAPBridge(reactContext: ReactApplicationContext)
     @ReactMethod
     fun init(vendor: String) {
         api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
-        api.init(reactApplicationContext)
-        api.restorePurchasesForAllTypes()
+        // todo: use js promise
+        api.init(reactApplicationContext, object : IAPListener {
+            override fun onSkuDetailsLoaded(skuDetails: List<Sku>) = Unit
+
+            override fun onSkuDetailsLoadingFailed(result: IBillingAPI.IAPResult,
+                                                   description: String) = Unit
+
+            override fun onPurchased(purchase: Purchase) = Unit
+
+            override fun onPurchaseFailed(result: IBillingAPI.IAPResult,
+                                          description: String) = Unit
+
+            override fun onPurchasesRestored(purchases: List<Purchase>) {
+                this@IAPBridge.purchases.putAll(purchases.map { it.productIdentifier to it })
+            }
+
+            override fun onPurchaseRestoreFailed(result: IBillingAPI.IAPResult,
+                                                 description: String) = Unit
+
+            override fun onPurchaseConsumed(purchaseToken: String) = Unit
+
+            override fun onPurchaseConsumptionFailed(result: IBillingAPI.IAPResult,
+                                                     description: String) = Unit
+
+            override fun onPurchaseAcknowledged() = Unit
+
+            override fun onPurchaseAcknowledgeFailed(result: IBillingAPI.IAPResult,
+                                                     description: String) = Unit
+
+            override fun onBillingClientError(result: IBillingAPI.IAPResult,
+                                              description: String) = Unit
+        })
     }
 
     @ReactMethod

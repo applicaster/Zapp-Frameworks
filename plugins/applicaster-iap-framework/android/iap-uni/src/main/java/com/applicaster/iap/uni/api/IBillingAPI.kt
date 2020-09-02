@@ -23,9 +23,8 @@ interface IBillingAPI {
         generalError
     }
 
-    // todo: init should have listener
-    //  (errors are not returned right now in init, so we fine for now)
-    fun init(applicationContext: Context)
+    fun init(applicationContext: Context,
+             updateCallback: IAPListener? = null)
 
     fun loadSkuDetails(
             skuType: SkuType,
@@ -35,11 +34,6 @@ interface IBillingAPI {
 
     fun loadSkuDetailsForAllTypes(
             skus: Map<String, SkuType>,
-            callback: IAPListener? = null
-    )
-
-    fun restorePurchases(
-            skuType: SkuType,
             callback: IAPListener? = null
     )
 
