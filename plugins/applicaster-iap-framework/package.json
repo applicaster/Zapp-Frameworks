@@ -14,15 +14,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/applicaster/applicaster-iap-framework"
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/applicaster/applicaster-iap-framework"
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
-  "homepage": "https://github.com/applicaster/applicaster-iap-framework",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "peerDependencies": {
     "react": "^16.8.0",
     "react-native": "^0.59.10"

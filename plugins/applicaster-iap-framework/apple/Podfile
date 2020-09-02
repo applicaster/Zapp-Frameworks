@@ -13,9 +13,9 @@ target 'FrameworksApp' do
   supports_swift_versions '5.2'
   use_frameworks!
   pod 'ApplicasterIAP', path: './ApplicasterIAP.podspec', testspecs: ['UnitTests']
-  pod 'React', path: '../node_modules/react-native', subspecs: %w[CxxBridge DevSupport RCTActionSheet RCTNetwork RCTWebSocket RCTText RCTImage Core RCTLinkingIOS RCTAnimation]
-  pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
-  pod 'Folly', podspec: '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'React', :path => '../../../node_modules/react-native', :subspecs => ['CxxBridge','DevSupport','RCTActionSheet','RCTNetwork','RCTWebSocket','RCTText','RCTImage','Core','RCTLinkingIOS','RCTAnimation']
+  pod 'yoga', :path => '../../../node_modules/react-native/ReactCommon/yoga'
+  pod 'Folly', :podspec => '../../../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   target 'FrameworksAppTests' do
     inherit! :search_paths
