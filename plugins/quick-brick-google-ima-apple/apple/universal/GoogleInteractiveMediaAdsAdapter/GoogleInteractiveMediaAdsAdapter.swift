@@ -1,20 +1,15 @@
 //
 //  ImaPluginAdapter.swift
-//  ZappTvOS
+//  GoogleInteractiveMediaAds
 //
 //  Created by Anton Kononenko on 7/17/19.
-//  Copyright © 2019 Anton Kononenko. All rights reserved.
-// ZPPlayerDependantPluginProtocol
+//  Copyright (c) 2020 Applicaster. All rights reserved.
+//
 
 import AVFoundation
 import GoogleInteractiveMediaAds
 import UIKit
 import ZappCore
-
-#if canImport(AppTrackingTransparency)
-import AppTrackingTransparency
-#endif
-import AdSupport
 
 @objc public class GoogleInteractiveMediaAdsAdapter: NSObject, PlayerDependantPluginProtocol {
     public required init(pluginModel: ZPPluginModel) {
@@ -100,16 +95,10 @@ import AdSupport
         if let urlToPresent = urlTagData?.prerollUrlString() {
             isPrerollAdLoading = true
             
-            if #available(iOS 14, *) {
-                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
-                    // Tracking authorization completed. Start loading ads.
-                    self.requestAd(adUrl: urlToPresent)
-                })
-            } else {
+            GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization { (identifier) in
                 self.requestAd(adUrl: urlToPresent)
             }
         }
-        
     }
 
     func addNotificationsObserver() {

@@ -1,9 +1,9 @@
 //
 //  GoogleInteractiveMediaAdsAdapter+QBPlayerObserverProtocol.swift
-//  GoogleInteractiveMediaAdsTvOS
+//  GoogleInteractiveMediaAds
 //
 //  Created by Anton Kononenko on 7/25/19.
-//  Copyright © 2019 Anton Kononenko. All rights reserved.
+//  Copyright (c) 2020 Applicaster. All rights reserved.
 //
 
 import Foundation
