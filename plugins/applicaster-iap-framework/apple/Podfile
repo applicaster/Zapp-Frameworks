@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+# Uncomment the next line to define a global platform for your project
+platform :ios, '11.0'
+
+target 'ApplicasterIAP' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for ApplicasterIAP
+  pod 'React', path: '../node_modules/react-native', subspecs: %w[CxxBridge DevSupport RCTActionSheet RCTNetwork RCTWebSocket RCTText RCTImage Core RCTLinkingIOS RCTAnimation]
+  pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
+  pod 'Folly', podspec: '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+end
