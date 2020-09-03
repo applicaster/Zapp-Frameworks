@@ -1,0 +1,34 @@
+{
+  "name": "@applicaster/zapp-push-plugin-firebase",
+  "version": "2.0.1",
+  "description": "Firebase Push Notifications for Applicaster",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "firebase",
+    "push"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "android_for_quickbrick",
+      "ios_for_quickbrick",
+      "ios"
+    ],
+    "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
+  },
+  "files": [
+    "apple",
+    "android"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APPushProviderFirebase",
+    "modules": [
+      "ZappPushPluginFirebase"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Firebase Notifications",
+  "description": "Send high-velocity targeted push via Google's Firebase Notifications Console",
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1552096080/Plugins/Firebase_Push1.png",
+  "type": "push_provider",
+  "identifier": "ZappPushPluginFirebase",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
+  ],
+  "min_zapp_sdk": "20.1.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "checkbox",
+      "key": "allow_enterprise_rich_push_notifications",
+      "default": 1,
+      "tooltip_text": "When checked, this field enables debug builds to support sending push notifications, but disables other debug functionality. For more details, <a href=\"https://sites.google.com/applicaster.com/fb-notifications-debug-push/home\";>Click Here</a>"
+    },
+    {
+      "type": "uploader",
+      "key": "notification_service_extension_provisioning_profile",
+      "tooltip_text": "Upload Notification Extension Provisioning Profile for Store builds only"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios",
+  "manifest_version": "2.0.1",
+  "extra_dependencies": [
+    {
+      "ZappPushPluginFirebase": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
+    },
+    {
+      "NotificationServiceExtension": {
+        "ZappPushPluginFirebase/ServiceExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
+      }
+    },
+    {
+      "NotificationContentExtension": {
+        "ZappPushPluginFirebase/ContentExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
+      }
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-push-plugin-firebase@2.0.1"
+  ]
+}
