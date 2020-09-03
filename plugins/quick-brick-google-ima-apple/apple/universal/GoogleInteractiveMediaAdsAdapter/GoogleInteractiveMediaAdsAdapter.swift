@@ -95,7 +95,7 @@ import ZappCore
         if let urlToPresent = urlTagData?.prerollUrlString() {
             isPrerollAdLoading = true
             
-            GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization { (identifier) in
+            GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization {
                 DispatchQueue.main.async {
                     self.requestAd(adUrl: urlToPresent)
                 }
