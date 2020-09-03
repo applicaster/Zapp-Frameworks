@@ -30,7 +30,7 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.0"
+    "@applicaster/quick-brick-google-ima-apple@0.14.1"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -66,10 +66,16 @@
       "key": "midroll_offset",
       "tooltip_text": "Midroll offset",
       "default": ""
+    },
+    {
+      "type": "checkbox",
+      "key": "disable_personalized_advertising",
+      "tooltip_text": "TFUA param to disable personalized advertising",
+      "default": 0
     }
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.14.0",
+  "manifest_version": "0.14.1",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
