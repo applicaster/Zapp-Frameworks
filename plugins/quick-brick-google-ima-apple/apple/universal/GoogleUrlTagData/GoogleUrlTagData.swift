@@ -61,16 +61,16 @@ class GoogleUrlTagData {
 
         /// Tagging users as under the age of consent
         /// https://developers.google.com/interactive-media-ads/docs/sdks/ios/client-side/consent#tagging_users_as_under_the_age_of_consent
-        if let tfua = pluginParams[PluginsCustomizationKeys.tfua] {
+        if let tfuaValue = pluginParams[PluginsCustomizationKeys.tfua] {
             var tfuaEnabled = false
-            if let tfua = tfua as? String {
-                if let pluginEnabledBool = Bool(tfua) {
-                    tfuaEnabled = pluginEnabledBool
-                } else if let pluginEnabledInt = Int(tfua) {
-                    tfuaEnabled = Bool(truncating: pluginEnabledInt as NSNumber)
+            if let tfuaValue = tfuaValue as? String {
+                if let tfuaValueBool = Bool(tfuaValue) {
+                    tfuaEnabled = tfuaValueBool
+                } else if let tfuaValueInt = Int(tfuaValue) {
+                    tfuaEnabled = Bool(truncating: tfuaValueInt as NSNumber)
                 }
-            } else if let tfua = tfua as? Bool {
-                tfuaEnabled = tfua
+            } else if let tfuaValue = tfuaValue as? Bool {
+                tfuaEnabled = tfuaValue
             }
 
             tfuaDisablePersonalizedAdvertising = tfuaEnabled
