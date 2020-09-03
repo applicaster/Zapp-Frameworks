@@ -156,7 +156,10 @@ extension URL {
             return nil
         }
         // append the query items to the existing ones
-        urlComponents.queryItems = (urlComponents.queryItems ?? []) + queryItems
+        let queryItemsNames = urlComponents.queryItems?.map { $0.name }
+        let filteredItems = queryItems.filter { queryItemsNames?.contains($0.name) == false }
+            
+        urlComponents.queryItems = (urlComponents.queryItems ?? []) + filteredItems
 
         // return the url from new url components
         return urlComponents.url
