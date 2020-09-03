@@ -51,6 +51,12 @@ const baseManifest = {
       tooltip_text: "Midroll offset",
       default: "",
     },
+    {
+      type: "checkbox",
+      key: "disable_personalized_advertising",
+      tooltip_text: "TFUA param to disable personalized advertising",
+      default: 0,
+    },
   ],
 };
 
