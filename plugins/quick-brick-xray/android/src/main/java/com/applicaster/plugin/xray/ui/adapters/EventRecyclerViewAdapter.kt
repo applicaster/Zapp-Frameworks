@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray.ui
+package com.applicaster.plugin.xray.ui.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.utility.format
 import com.applicaster.xray.core.Event
-import kotlinx.android.synthetic.main.fragment_event_log_entry.view.*
+import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
 
 class EventRecyclerViewAdapter(
         owner: LifecycleOwner,
@@ -30,7 +30,7 @@ class EventRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_event_log_entry, parent, false)
+                .inflate(R.layout.xray_fragment_event_log_entry, parent, false)
         return ViewHolder(binding)
     }
 
@@ -73,8 +73,9 @@ class EventRecyclerViewAdapter(
 
         fun bind(item: Event) {
             event = item
-            itemView.lbl_tag.text = "${item.category} ${item.subsystem}"
             itemView.message.text = item.message
+            itemView.lbl_tag.text = item.category
+            itemView.lbl_subsystem.text = item.subsystem
             itemView.time.text = DateFormat.format("yyyy-MM-dd HH:mm:ss", item.timestamp)
             itemView.view_color_tag.setBackgroundColor(getColor(item))
         }
