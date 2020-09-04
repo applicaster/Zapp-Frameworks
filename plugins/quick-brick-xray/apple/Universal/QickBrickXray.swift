@@ -23,12 +23,13 @@ enum ActionType {
     case shareLogs
 }
 
-public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol {
+public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, PluginAdapterProtocol {
     let pluginNameSpace = "xray_logging_plugin"
     let sessionStorageObservationKey = "session_xray_logging_plugin"
 
     public var configurationJSON: NSDictionary?
     let configurationHelper: KeysHelper
+    var currentSettings: Settings?
 
     public required init(configurationJSON: NSDictionary?) {
         self.configurationJSON = configurationJSON
@@ -51,10 +52,27 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         "Qick Brick Xray Plugin"
     }
 
+    var isDebugEnvironment: Bool {
+        return FacadeConnector.connector?.applicationData?.isDebugEnvironment() ?? true
+    }
+
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
-        XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.Console,
-                                          sink: Console(logType: .print))
+        prepareSettings()
+
+        let emailsForShare = configurationHelper.emailsToShare()
+
+        if isDebugEnvironment {
+            let consoleSink = Console(logType: .print)
+            if let formatter = consoleSink.formatter as? DefaultEventFormatter {
+                formatter.skipContext = true
+                formatter.skipData = true
+                formatter.skipException = true
+            }
+
+            XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.Console,
+                                              sink: consoleSink)
+        }
 
         let inMemorySink = InMemory()
         XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.InMemorySink,
@@ -64,20 +82,24 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
                                           sink: fileJSONSink)
 
-        var filter: SinkFilterProtocol? = DisabledSinkFilter()
-        if let logLevel = configurationHelper.logLevel() {
-            filter = DefaultSinkFilter(level: logLevel)
-        }
-        XrayLogger.sharedInstance.setFilter(loggerSubsystem: "",
-                                            sinkIdentifier: DefaultSinkIdentifiers.FileJSON,
-                                            filter: filter)
-        let emailsForShare = configurationHelper.emailsToShare()
         Reporter.setDefaultData(emails: emailsForShare,
                                 url: fileJSONSink.fileURL,
                                 contexts: [:])
-        preparePlatform()
 
         completion?(true)
+    }
+
+    func commitSettings() {
+        var filter: SinkFilterProtocol? = DisabledSinkFilter()
+        if let logLevel = currentSettings?.fileLogLevel {
+            filter = DefaultSinkFilter(level: logLevel)
+        }
+
+        XrayLogger.sharedInstance.setFilter(loggerSubsystem: "",
+                                            sinkIdentifier: DefaultSinkIdentifiers.FileJSON,
+                                            filter: filter)
+        XRayLoggerBridge.customLogLevel = currentSettings?.reactNativeLogLevel
+        prepareShortcuts()
     }
 
     public func disable(completion: ((Bool) -> Void)?) {

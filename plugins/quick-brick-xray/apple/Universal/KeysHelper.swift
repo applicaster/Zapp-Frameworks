@@ -12,8 +12,11 @@ import XrayLogger
 import ZappCore
 
 struct PluginConfigurationKeys {
-    static let SinkFileLogLevel = "file_sink"
-    struct SinkFileLogLevelValues {
+    static let FileLogLevel = "fileLogLevel"
+    static let ReactNativeLogLevel = "reactNativeLogLevel"
+    static let ShortcutEnabled = "shortcutEnabled"
+    static let ShareLog = "shareLog"
+    struct LogLevelValues {
         static let off = "off"
         static let error = "error"
         static let warning = "warning"
@@ -22,7 +25,7 @@ struct PluginConfigurationKeys {
         static let verbose = "verbose"
     }
 
-    static let ReportEmails = "report_email"
+    static let ReportEmails = "reportEmail"
 }
 
 struct KeysHelper {
@@ -33,24 +36,11 @@ struct KeysHelper {
     }
 
     func logLevel() -> LogLevel? {
-        guard let fileSinkLevel = configurationJSON[PluginConfigurationKeys.SinkFileLogLevel] as? String else {
-            return nil
-        }
+        return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.FileLogLevel] as? String)
+    }
 
-        switch fileSinkLevel {
-        case PluginConfigurationKeys.SinkFileLogLevelValues.error:
-            return .error
-        case PluginConfigurationKeys.SinkFileLogLevelValues.warning:
-            return .warning
-        case PluginConfigurationKeys.SinkFileLogLevelValues.info:
-            return .info
-        case PluginConfigurationKeys.SinkFileLogLevelValues.debug:
-            return .debug
-        case PluginConfigurationKeys.SinkFileLogLevelValues.verbose:
-            return .verbose
-        default:
-            return nil
-        }
+    func RNlogLevel() -> LogLevel? {
+        return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.ReactNativeLogLevel] as? String)
     }
 
     func emailsToShare() -> [String] {
