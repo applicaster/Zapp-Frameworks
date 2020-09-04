@@ -49,14 +49,6 @@ const custom_configuration_fields_apple = [
     default: "error",
   },
   {
-    type: "dropdown",
-    key: "reactNativeLogLevel",
-    tooltip_text: "Minimum message to rn log",
-    multiple: false,
-    options: ["off", "error", "warning", "info", "debug", "verbose"],
-    default: "error",
-  },
-  {
     key: "reportEmail",
     type: "text",
     tooltip_text: "Email to send reports to. Empty is allowed.",
@@ -66,22 +58,14 @@ const custom_configuration_fields_apple = [
 const custom_configuration_fields_android = [
   {
     type: "dropdown",
-    key: "fileLogLevel",
+    key: "file_sink",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
     default: "error",
   },
   {
-    type: "dropdown",
-    key: "reactNativeLogLevel",
-    tooltip_text: "Minimum message to rn log",
-    multiple: false,
-    options: ["off", "error", "warning", "info", "debug", "verbose"],
-    default: "error",
-  },
-  {
-    key: "reportEmail",
+    key: "report_email",
     type: "text",
     tooltip_text: "Email to send reports to. Empty is allowed.",
   },
@@ -95,14 +79,14 @@ const custom_configuration_fields_android = [
   {
     type: "checkbox",
     label: "Report crashes",
-    key: "reportCrashes",
+    key: "report_crashes",
     default: 1,
     tooltip_text: "Enable crash reporting in debug builds",
   },
   {
     type: "checkbox",
     label: "Log react native debug messages",
-    key: "logReactNativeDebug",
+    key: "log_react_native_debug",
     default: 0,
     tooltip_text:
       "Enable logging or react native internal debug messages. Very verbose!",
