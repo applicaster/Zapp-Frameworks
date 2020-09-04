@@ -19,7 +19,7 @@ import Foundation
     ///   - namespace: Namespace that will be used for save item
     /// - Returns: true if saving succeed
     func set(key: String,
-             value: String,
+             value: String?,
              namespace: String?) -> Bool
     
     /// Retrieve value from the storage

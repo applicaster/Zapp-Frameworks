@@ -21,7 +21,7 @@ import Foundation
 
     // MARK: ZappStorageProtocol
 
-    @discardableResult public func set(key: String, value: String, namespace: String?) -> Bool {
+    @discardableResult public func set(key: String, value: String?, namespace: String?) -> Bool {
         let setResult = StorageHelper.setZappData(inStorageDict: storage,
                                                   key: key,
                                                   value: value,
