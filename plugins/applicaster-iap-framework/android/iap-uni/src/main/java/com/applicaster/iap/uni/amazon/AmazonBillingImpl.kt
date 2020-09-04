@@ -2,10 +2,12 @@ package com.applicaster.iap.uni.amazon
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.amazon.device.iap.PurchasingListener
 import com.amazon.device.iap.PurchasingService
 import com.amazon.device.iap.model.*
 import com.applicaster.iap.uni.api.*
+import com.applicaster.iap.uni.play.PlayBillingImpl
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
@@ -89,6 +91,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
         val request = skuRequests.remove(response.requestId)
         if (ProductDataResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
+            Log.e(PlayBillingImpl.TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
             skuRequests[response.requestId]?.onSkuDetailsLoadingFailed(
                 IBillingAPI.IAPResult.generalError,
                 response.requestStatus.toString()
@@ -106,6 +109,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         }
         val request = purchaseRequests.remove(response.requestId)
         if (PurchaseResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
+            Log.e(PlayBillingImpl.TAG, "onPurchaseFailed: ${response.requestStatus}")
             val iapResult =
                     if (PurchaseResponse.RequestStatus.ALREADY_PURCHASED == response.requestStatus)
                         IBillingAPI.IAPResult.alreadyOwned
@@ -130,6 +134,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     override fun onPurchaseUpdatesResponse(response: PurchaseUpdatesResponse?) {
         if (null != response) {
             if (response.requestStatus != PurchaseUpdatesResponse.RequestStatus.SUCCESSFUL) {
+                Log.e(PlayBillingImpl.TAG, "onPurchaseUpdatesResponse: ${response.requestStatus}")
                 restoreObserver?.onPurchaseRestoreFailed(
                     IBillingAPI.IAPResult.generalError,
                     response.requestStatus.toString()

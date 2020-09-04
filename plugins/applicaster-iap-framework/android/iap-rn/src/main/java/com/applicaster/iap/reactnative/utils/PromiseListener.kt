@@ -1,6 +1,8 @@
 package com.applicaster.iap.reactnative.utils
 
 
+import android.util.Log
+import com.applicaster.iap.reactnative.IAPBridge
 import com.applicaster.iap.uni.api.IAPListener
 import com.applicaster.iap.uni.api.IBillingAPI
 import com.applicaster.iap.uni.api.Purchase
@@ -20,23 +22,25 @@ abstract class PromiseListener(protected val promise: Promise) : IAPListener {
     override fun onPurchaseAcknowledged() = Unit
 
     override fun onSkuDetailsLoadingFailed(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("SkuDetails", result, description)
 
     override fun onPurchaseRestoreFailed(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("PurchaseRestore", result, description)
 
     override fun onPurchaseFailed(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("Purchase", result, description)
 
     override fun onPurchaseConsumptionFailed(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("PurchaseConsumption", result, description)
 
     override fun onBillingClientError(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("Billing client", result, description)
 
     override fun onPurchaseAcknowledgeFailed(result: IBillingAPI.IAPResult, description: String) =
-            reportError(result, description)
+            reportError("PurchaseAcknowledge", result, description)
 
-    private fun reportError(result: IBillingAPI.IAPResult, description: String) =
-            promise.reject(result.toString(), description)
+    private fun reportError(operation: String, result: IBillingAPI.IAPResult, description: String) {
+        Log.d(IAPBridge.TAG, "$operation failed with result $result: $description")
+        promise.reject(result.toString(), description)
+    }
 }

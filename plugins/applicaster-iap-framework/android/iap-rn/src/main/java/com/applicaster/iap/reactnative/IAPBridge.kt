@@ -5,9 +5,6 @@ import com.applicaster.iap.reactnative.utils.*
 import com.applicaster.iap.uni.api.*
 import com.facebook.react.bridge.*
 
-// todo: call restore on already owned error
-// todo: revert purchase if not fulfilled by backend
-// todo: skip expired subscriptions from restored
 
 class IAPBridge(reactContext: ReactApplicationContext)
     : ReactContextBaseJavaModule(reactContext) {
@@ -21,13 +18,11 @@ class IAPBridge(reactContext: ReactApplicationContext)
         const val consumable = "consumable"
 
         // map product fields for IAP library and update sky type lookup table
-        private fun unwrapProductIdentifier(map: HashMap<String, String>,
-                                            skuTypesCache: MutableMap<String, IBillingAPI.SkuType>
-        ): Pair<String, IBillingAPI.SkuType> {
+        private fun unwrapProductIdentifier(map: HashMap<String, String>)
+                : Pair<String, IBillingAPI.SkuType> {
             val productId = map["productIdentifier"]!!
             val productType = map["productType"]!!
             val skuType = skuType(productType)
-            skuTypesCache[productId] = skuType
             return Pair(productId, skuType)
         }
 
@@ -36,7 +31,7 @@ class IAPBridge(reactContext: ReactApplicationContext)
                 subscription -> IBillingAPI.SkuType.subscription
                 nonConsumable -> IBillingAPI.SkuType.nonConsumable
                 consumable -> IBillingAPI.SkuType.consumable
-                else -> throw IllegalArgumentException("Unknown SKU type ${productType}")
+                else -> throw IllegalArgumentException("Unknown SKU type $productType")
             }
         }
     }
@@ -50,10 +45,6 @@ class IAPBridge(reactContext: ReactApplicationContext)
     // lookup map to SkuDetails
     private val skuDetailsMap: MutableMap<String, Sku> = mutableMapOf()
 
-    // cache for initial purchase type since Google billing does not distinguish consumables and non-consumables
-    // and we do not keep it in the Sku class
-    private val skuTypes: MutableMap<String, IBillingAPI.SkuType> = mutableMapOf()
-
     override fun getName(): String {
         return bridgeName
     }
@@ -62,8 +53,8 @@ class IAPBridge(reactContext: ReactApplicationContext)
     fun isInitialized(result: Promise) = result.resolve(this::api::isInitialized)
 
     @ReactMethod
-    fun initialize(vendor: String, result: Promise) {
-        api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
+    fun init(vendor: String, result: Promise) {
+        api = IBillingAPI.create(IBillingAPI.Vendor.valueOf("google_play"))
         // todo: use js promise
         api.init(reactApplicationContext, object : InitializationListener {
             override fun onSuccess() {
@@ -80,7 +71,7 @@ class IAPBridge(reactContext: ReactApplicationContext)
     @ReactMethod
     fun products(identifiers: ReadableArray, result: Promise) {
         val productIds = identifiers.toArrayList().map {
-            unwrapProductIdentifier(it as HashMap<String, String>, skuTypes)
+            unwrapProductIdentifier(it as HashMap<String, String>)
         }.toMap()
         api.loadSkuDetailsForAllTypes(productIds, SKUPromiseListener(result, skuDetailsMap))
     }
@@ -92,14 +83,14 @@ class IAPBridge(reactContext: ReactApplicationContext)
     @ReactMethod
     fun purchase(payload: ReadableMap, result: Promise) {
         val identifier = payload.getString("productIdentifier")!!
-        val finishTransactionAfterPurchase = payload.getBoolean("finishing")
+        val finishTransaction = payload.getBoolean("finishing")
         val productType = payload.getString("productType")!!
         val skuType = skuType(productType)
         val sku = skuDetailsMap[identifier]
         if (null == sku) {
             result.reject(IllegalArgumentException("SKU $identifier not found"))
         } else {
-            val listener = if(finishTransactionAfterPurchase) {
+            val listener = if(finishTransaction) {
                 FinishingPurchasePromiseListener(this, identifier, skuType, result)
             } else {
                 PurchasePromiseListener(this, result, identifier)
@@ -131,13 +122,6 @@ class IAPBridge(reactContext: ReactApplicationContext)
         acknowledge(identifier, transactionIdentifier, skuType, result)
     }
 
-    private fun acknowledge(identifier: String,
-                            transactionIdentifier: String,
-                            skuType: IBillingAPI.SkuType,
-                            result: Promise) {
-        acknowledge(identifier, transactionIdentifier, skuType, AcknowledgePromiseListener(result))
-    }
-
     fun acknowledge(identifier: String,
                     transactionIdentifier: String,
                     skuType: IBillingAPI.SkuType,
@@ -148,6 +132,18 @@ class IAPBridge(reactContext: ReactApplicationContext)
                 IBillingAPI.SkuType.nonConsumable == skuType) {
             api.acknowledge(transactionIdentifier, listener)
         }
+    }
+
+    private fun acknowledge(identifier: String,
+                            transactionIdentifier: String,
+                            skuType: IBillingAPI.SkuType,
+                            result: Promise) {
+        val listener =
+                when (skuType) {
+                    IBillingAPI.SkuType.consumable -> ConsumePromiseListener(result)
+                    else -> AcknowledgePromiseListener(result)
+                }
+        acknowledge(identifier, transactionIdentifier, skuType, listener)
     }
 
     fun restoreOwned(purchasePromiseListener: PurchasePromiseListener) {

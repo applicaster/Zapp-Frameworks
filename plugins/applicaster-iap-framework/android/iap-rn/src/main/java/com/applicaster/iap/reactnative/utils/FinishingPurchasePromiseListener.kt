@@ -1,5 +1,6 @@
 package com.applicaster.iap.reactnative.utils
 
+import android.util.Log
 import com.applicaster.iap.reactnative.IAPBridge
 import com.applicaster.iap.uni.api.IBillingAPI
 import com.applicaster.iap.uni.api.Purchase
@@ -14,6 +15,7 @@ class FinishingPurchasePromiseListener(bridge: IAPBridge,
     private lateinit var purchase: Purchase
 
     override fun onPurchased(purchase: Purchase) {
+        Log.d(IAPBridge.TAG, "Finishing transaction for $sku.")
         this.purchase = fix(purchase)
         bridge.acknowledge(
                 sku,
@@ -23,10 +25,12 @@ class FinishingPurchasePromiseListener(bridge: IAPBridge,
     }
 
     override fun onPurchaseConsumed(purchaseToken: String) {
+        Log.d(IAPBridge.TAG, "Transaction for $sku was finished.")
         promise.resolve(wrap(purchase))
     }
 
     override fun onPurchaseAcknowledged() {
+        Log.d(IAPBridge.TAG, "Failed to finish transaction for $sku.")
         promise.resolve(wrap(purchase))
     }
 }
