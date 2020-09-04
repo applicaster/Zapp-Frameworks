@@ -50,7 +50,7 @@ class IAPBridge(reactContext: ReactApplicationContext)
     }
 
     @ReactMethod
-    fun isInitialized(result: Promise) = result.resolve(this::api::isInitialized)
+    fun isInitialized(result: Promise) = result.resolve(::api.isInitialized)
 
     @ReactMethod
     fun initialize(vendor: String, result: Promise) {
