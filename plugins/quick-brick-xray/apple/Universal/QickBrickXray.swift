@@ -98,7 +98,6 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         XrayLogger.sharedInstance.setFilter(loggerSubsystem: "",
                                             sinkIdentifier: DefaultSinkIdentifiers.FileJSON,
                                             filter: filter)
-        XRayLoggerBridge.customLogLevel = currentSettings?.reactNativeLogLevel
         prepareShortcuts()
     }
 

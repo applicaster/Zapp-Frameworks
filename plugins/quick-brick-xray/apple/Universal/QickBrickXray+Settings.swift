@@ -40,8 +40,7 @@ extension QickBrickXray {
     }
 
     func getConfigurationJSONSettings() -> Settings {
-        let settings = Settings(fileLogLevel: configurationHelper.logLevel(),
-                                reactNativeLogLevel: configurationHelper.RNlogLevel())
+        let settings = Settings(fileLogLevel: configurationHelper.logLevel())
         return settings
     }
 
@@ -49,7 +48,6 @@ extension QickBrickXray {
         var settings = Settings()
         if isDebugEnvironment == false {
             settings.fileLogLevel = .error
-            settings.reactNativeLogLevel = .error
         }
 
         return settings
@@ -70,11 +68,6 @@ extension QickBrickXray {
             settings.fileLogLevel = fileLogLevel
         }
 
-        if let reactNativeLogLevelString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ReactNativeLogLevel,
-                                                                                                 namespace: pluginNameSpace),
-            let reactNativeLogLevel = LogLevel.logLevel(fromConfigurationKey: reactNativeLogLevelString) {
-            settings.reactNativeLogLevel = reactNativeLogLevel
-        }
         return settings
     }
 
@@ -85,9 +78,6 @@ extension QickBrickXray {
                                                                      namespace: pluginNameSpace)
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.FileLogLevel,
                                                                      value: settings?.fileLogLevel?.toConfigurationKey(),
-                                                                     namespace: pluginNameSpace)
-        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.ReactNativeLogLevel,
-                                                                     value: settings?.reactNativeLogLevel?.toConfigurationKey(),
                                                                      namespace: pluginNameSpace)
     }
 

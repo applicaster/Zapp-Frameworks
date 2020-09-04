@@ -15,20 +15,14 @@ import ZappCore
 struct Settings {
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
-    var reactNativeLogLevel: LogLevel?
 
     func merge(highPriority settings: Settings) -> Settings {
         var newSettings = Settings(shortcutEnabled: shortcutEnabled,
-                                   fileLogLevel: fileLogLevel,
-                                   reactNativeLogLevel: reactNativeLogLevel)
+                                   fileLogLevel: fileLogLevel)
         newSettings.shortcutEnabled = settings.shortcutEnabled
         
         if let fileLogLevel = settings.fileLogLevel {
             newSettings.fileLogLevel = fileLogLevel
-        }
-
-        if let reactNativeLogLevel = settings.reactNativeLogLevel {
-            newSettings.reactNativeLogLevel = reactNativeLogLevel
         }
 
         return newSettings

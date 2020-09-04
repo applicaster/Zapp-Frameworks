@@ -13,7 +13,6 @@ import ZappCore
 
 struct PluginConfigurationKeys {
     static let FileLogLevel = "fileLogLevel"
-    static let ReactNativeLogLevel = "reactNativeLogLevel"
     static let ShortcutEnabled = "shortcutEnabled"
     static let ShareLog = "shareLog"
     struct LogLevelValues {
@@ -37,10 +36,6 @@ struct KeysHelper {
 
     func logLevel() -> LogLevel? {
         return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.FileLogLevel] as? String)
-    }
-
-    func RNlogLevel() -> LogLevel? {
-        return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.ReactNativeLogLevel] as? String)
     }
 
     func emailsToShare() -> [String] {

@@ -28,10 +28,6 @@ extension QickBrickXray: PluginURLHandlerProtocol {
             settings.fileLogLevel = LogLevel.logLevel(fromConfigurationKey: fileLogLevelString)
         }
 
-        if let reactNativeLogLevelString = params[PluginConfigurationKeys.ReactNativeLogLevel] as? String {
-            settings.reactNativeLogLevel = LogLevel.logLevel(fromConfigurationKey: reactNativeLogLevelString)
-        }
-
         return true
     }
 
