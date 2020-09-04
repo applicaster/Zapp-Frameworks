@@ -19,7 +19,7 @@ export const ApplicasterIAPModule = {
    * @param {String} vendor: one of 'google_play' of 'amazon'
    */
   async initialize(vendor) {
-    return ApplicasterIAPBridge?.init?.(vendor);
+    return ApplicasterIAPBridge?.initialize?.(vendor);
   },
 
   /**
