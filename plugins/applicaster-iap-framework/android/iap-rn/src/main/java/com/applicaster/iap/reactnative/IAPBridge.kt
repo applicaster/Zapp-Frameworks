@@ -53,9 +53,8 @@ class IAPBridge(reactContext: ReactApplicationContext)
     fun isInitialized(result: Promise) = result.resolve(this::api::isInitialized)
 
     @ReactMethod
-    fun init(vendor: String, result: Promise) {
-        api = IBillingAPI.create(IBillingAPI.Vendor.valueOf("google_play"))
-        // todo: use js promise
+    fun initialize(vendor: String, result: Promise) {
+        api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
         api.init(reactApplicationContext, object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Billing client initialized")
