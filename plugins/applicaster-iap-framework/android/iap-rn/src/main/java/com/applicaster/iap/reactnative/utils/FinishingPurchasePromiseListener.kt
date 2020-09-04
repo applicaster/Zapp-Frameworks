@@ -1,11 +1,13 @@
 package com.applicaster.iap.reactnative.utils
 
 import com.applicaster.iap.reactnative.IAPBridge
+import com.applicaster.iap.uni.api.IBillingAPI
 import com.applicaster.iap.uni.api.Purchase
 import com.facebook.react.bridge.Promise
 
 class FinishingPurchasePromiseListener(bridge: IAPBridge,
                                        private val sku: String,
+                                       private val skuType: IBillingAPI.SkuType,
                                        promise: Promise)
     : PurchasePromiseListener(bridge, promise, sku) {
 
@@ -16,6 +18,7 @@ class FinishingPurchasePromiseListener(bridge: IAPBridge,
         bridge.acknowledge(
                 sku,
                 purchase.transactionIdentifier,
+                skuType,
                 this)
     }
 

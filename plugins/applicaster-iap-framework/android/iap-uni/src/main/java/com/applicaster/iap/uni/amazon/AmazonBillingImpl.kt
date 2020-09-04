@@ -9,19 +9,32 @@ import com.applicaster.iap.uni.api.*
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
-    private val receipts: MutableSet<Receipt> = mutableSetOf()
+    private lateinit var receipts: ReceiptStorage
     private val skuRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private val purchaseRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private var restoreObserver: IAPListener? = null
 
+    interface IRestoreListener {
+        fun onRestored()
+        fun onFailed()
+    }
+
     // region IAPAPI
 
     override fun init(applicationContext: Context,
-                      updateCallback: IAPListener?) {
+                      updateCallback: InitializationListener) {
+        receipts = ReceiptStorage(applicationContext)
         PurchasingService.registerListener(applicationContext, this)
-        // todo: load stored receipts and change arg to false
-        restoreObserver = updateCallback
-        PurchasingService.getPurchaseUpdates(true)
+        restoreObserver = object : DummyIAPListener() {
+            override fun onPurchasesRestored(purchases: List<Purchase>) {
+                updateCallback.onSuccess()
+            }
+
+            override fun onAnyError(result: IBillingAPI.IAPResult, description: String) {
+                updateCallback.onBillingClientError(result, description)
+            }
+        }
+        PurchasingService.getPurchaseUpdates(receipts.hasPurchases())
     }
 
     override fun loadSkuDetails(skuType: IBillingAPI.SkuType, skusList: List<String>, callback: IAPListener?) {
@@ -39,7 +52,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     }
 
     override fun restorePurchasesForAllTypes(callback: IAPListener?) {
-        receipts.clear()
+        receipts.reset()
         restoreObserver = callback
         PurchasingService.getPurchaseUpdates(true)
     }
@@ -104,7 +117,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             return
         }
         val receipt = response.receipt
-        receipts.add(receipt)
+        receipts.update(listOf(receipt))
         request?.onPurchased(
             Purchase(
                 receipt.sku,
@@ -123,14 +136,13 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
                 )
                 return
             }
-            receipts.addAll(response.receipts)
+            receipts.update(response.receipts)
             if (response.hasMore()) {
                 PurchasingService.getPurchaseUpdates(false)
                 return
             }
         }
-        val purchases = receipts.map { Purchase(it.sku, it.receiptId, it.toJSON().toString()) }
-        restoreObserver?.onPurchasesRestored(purchases)
+        restoreObserver?.onPurchasesRestored(receipts.getPurchases())
         restoreObserver = null
     }
 

@@ -9,11 +9,16 @@ const defaultIAP = {
 const { ApplicasterIAPBridge = defaultIAP } = NativeModules;
 
 export const ApplicasterIAPModule = {
+
+  async isInitialized() {
+    return ApplicasterIAPBridge?.isInitialized?.();
+  },
+
   /**
    * Initialize bridge with given billing provider on Android platform
-   * @param {String} vendor: one of 'play' of 'amazon'
+   * @param {String} vendor: one of 'google_play' of 'amazon'
    */
-  async init(vendor) {
+  async initialize(vendor) {
     return ApplicasterIAPBridge?.init?.(vendor);
   },
 

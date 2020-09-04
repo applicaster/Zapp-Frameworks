@@ -1,5 +1,6 @@
 package com.applicaster.iap.reactnative
 
+import android.util.Log
 import com.applicaster.iap.reactnative.utils.*
 import com.applicaster.iap.uni.api.*
 import com.facebook.react.bridge.*
@@ -24,14 +25,19 @@ class IAPBridge(reactContext: ReactApplicationContext)
                                             skuTypesCache: MutableMap<String, IBillingAPI.SkuType>
         ): Pair<String, IBillingAPI.SkuType> {
             val productId = map["productIdentifier"]!!
-            val skuType = when (map["productType"]!!) {
+            val productType = map["productType"]!!
+            val skuType = skuType(productType)
+            skuTypesCache[productId] = skuType
+            return Pair(productId, skuType)
+        }
+
+        private fun skuType(productType: String): IBillingAPI.SkuType {
+            return when (productType) {
                 subscription -> IBillingAPI.SkuType.subscription
                 nonConsumable -> IBillingAPI.SkuType.nonConsumable
                 consumable -> IBillingAPI.SkuType.consumable
-                else -> throw IllegalArgumentException("Unknown SKU type ${map["productType"]}")
+                else -> throw IllegalArgumentException("Unknown SKU type ${productType}")
             }
-            skuTypesCache[productId] = skuType
-            return Pair(productId, skuType)
         }
     }
 
@@ -53,39 +59,21 @@ class IAPBridge(reactContext: ReactApplicationContext)
     }
 
     @ReactMethod
-    fun init(vendor: String) {
+    fun isInitialized(result: Promise) = result.resolve(this::api::isInitialized)
+
+    @ReactMethod
+    fun initialize(vendor: String, result: Promise) {
         api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
         // todo: use js promise
-        api.init(reactApplicationContext, object : IAPListener {
-            override fun onSkuDetailsLoaded(skuDetails: List<Sku>) = Unit
-
-            override fun onSkuDetailsLoadingFailed(result: IBillingAPI.IAPResult,
-                                                   description: String) = Unit
-
-            override fun onPurchased(purchase: Purchase) = Unit
-
-            override fun onPurchaseFailed(result: IBillingAPI.IAPResult,
-                                          description: String) = Unit
-
-            override fun onPurchasesRestored(purchases: List<Purchase>) {
-                this@IAPBridge.purchases.putAll(purchases.map { it.productIdentifier to it })
+        api.init(reactApplicationContext, object : InitializationListener {
+            override fun onSuccess() {
+                Log.d(TAG, "Billing client initialized")
+                result.resolve(true)
             }
-
-            override fun onPurchaseRestoreFailed(result: IBillingAPI.IAPResult,
-                                                 description: String) = Unit
-
-            override fun onPurchaseConsumed(purchaseToken: String) = Unit
-
-            override fun onPurchaseConsumptionFailed(result: IBillingAPI.IAPResult,
-                                                     description: String) = Unit
-
-            override fun onPurchaseAcknowledged() = Unit
-
-            override fun onPurchaseAcknowledgeFailed(result: IBillingAPI.IAPResult,
-                                                     description: String) = Unit
-
-            override fun onBillingClientError(result: IBillingAPI.IAPResult,
-                                              description: String) = Unit
+            override fun onBillingClientError(billingResult: IBillingAPI.IAPResult, description: String) {
+                Log.e(TAG, "Billing client initialization failed $description")
+                result.reject(billingResult.toString(), description)
+            }
         })
     }
 
@@ -105,12 +93,14 @@ class IAPBridge(reactContext: ReactApplicationContext)
     fun purchase(payload: ReadableMap, result: Promise) {
         val identifier = payload.getString("productIdentifier")!!
         val finishTransactionAfterPurchase = payload.getBoolean("finishing")
+        val productType = payload.getString("productType")!!
+        val skuType = skuType(productType)
         val sku = skuDetailsMap[identifier]
         if (null == sku) {
             result.reject(IllegalArgumentException("SKU $identifier not found"))
         } else {
             val listener = if(finishTransactionAfterPurchase) {
-                FinishingPurchasePromiseListener(this, identifier, result)
+                FinishingPurchasePromiseListener(this, identifier, skuType, result)
             } else {
                 PurchasePromiseListener(this, result, identifier)
             }
@@ -135,38 +125,27 @@ class IAPBridge(reactContext: ReactApplicationContext)
     @ReactMethod
     fun finishPurchasedTransaction(transaction: ReadableMap, result: Promise) {
         val identifier = transaction.getString("productIdentifier")!!
+        val productType = transaction.getString("productType")!!
         val transactionIdentifier = transaction.getString("transactionIdentifier")!!
-        acknowledge(identifier, transactionIdentifier, result)
+        val skuType = skuType(productType)
+        acknowledge(identifier, transactionIdentifier, skuType, result)
     }
 
-    private fun acknowledge(identifier: String, transactionIdentifier: String, result: Promise) {
-        val skuDetails = skuTypes[identifier]
-        if (null == skuDetails) {
-            result.reject(IllegalArgumentException("SKU details are not loaded $transactionIdentifier"))
-            return
-        }
-        if (IBillingAPI.SkuType.consumable == skuDetails) {
-            api.consume(transactionIdentifier, ConsumePromiseListener(result))
-        } else if (IBillingAPI.SkuType.subscription == skuDetails ||
-                IBillingAPI.SkuType.nonConsumable == skuDetails) {
-            api.acknowledge(transactionIdentifier, AcknowledgePromiseListener(result))
-        }
+    private fun acknowledge(identifier: String,
+                            transactionIdentifier: String,
+                            skuType: IBillingAPI.SkuType,
+                            result: Promise) {
+        acknowledge(identifier, transactionIdentifier, skuType, AcknowledgePromiseListener(result))
     }
 
     fun acknowledge(identifier: String,
                     transactionIdentifier: String,
+                    skuType: IBillingAPI.SkuType,
                     listener: PromiseListener) {
-        val skuDetails = skuTypes[identifier]
-        if (null == skuDetails) {
-            listener.onPurchaseAcknowledgeFailed(
-                    IBillingAPI.IAPResult.generalError,
-                    "SKU details are not loaded $transactionIdentifier")
-            return
-        }
-        if (IBillingAPI.SkuType.consumable == skuDetails) {
+        if (IBillingAPI.SkuType.consumable == skuType) {
             api.consume(transactionIdentifier, listener)
-        } else if (IBillingAPI.SkuType.subscription == skuDetails ||
-                IBillingAPI.SkuType.nonConsumable == skuDetails) {
+        } else if (IBillingAPI.SkuType.subscription == skuType ||
+                IBillingAPI.SkuType.nonConsumable == skuType) {
             api.acknowledge(transactionIdentifier, listener)
         }
     }

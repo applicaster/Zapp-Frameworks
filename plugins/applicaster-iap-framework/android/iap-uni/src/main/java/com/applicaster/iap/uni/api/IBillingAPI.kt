@@ -8,7 +8,7 @@ import com.applicaster.iap.uni.play.PlayBillingImpl
 interface IBillingAPI {
 
     enum class Vendor {
-        play, amazon
+        google_play, amazon
     }
 
     enum class SkuType {
@@ -24,7 +24,7 @@ interface IBillingAPI {
     }
 
     fun init(applicationContext: Context,
-             updateCallback: IAPListener? = null)
+             updateCallback: InitializationListener)
 
     fun loadSkuDetails(
             skuType: SkuType,
@@ -59,7 +59,7 @@ interface IBillingAPI {
 
     companion object {
         fun create(vendor: Vendor): IBillingAPI = when (vendor) {
-            Vendor.play -> PlayBillingImpl()
+            Vendor.google_play -> PlayBillingImpl()
             Vendor.amazon -> AmazonBillingImpl()
         }
     }

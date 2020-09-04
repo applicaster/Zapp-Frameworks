@@ -123,7 +123,7 @@ class UnifiedApiTest {
         assertEquals("Need specific package name","com.applicaster.inplayerdemo", appContext.packageName)
 
         testApi(IBillingAPI.Vendor.amazon, appContext, IBillingAPI.SkuType.subscription, "72348_17073")
-        testApi(IBillingAPI.Vendor.play, appContext, IBillingAPI.SkuType.subscription,"72348_17073")
+        testApi(IBillingAPI.Vendor.google_play, appContext, IBillingAPI.SkuType.subscription,"72348_17073")
     }
 
     private fun testApi(

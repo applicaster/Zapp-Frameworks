@@ -7,10 +7,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.SkuDetails
 import com.applicaster.iap.BillingListener
 import com.applicaster.iap.GoogleBillingHelper
-import com.applicaster.iap.uni.api.IBillingAPI
-import com.applicaster.iap.uni.api.IAPListener
-import com.applicaster.iap.uni.api.Purchase
-import com.applicaster.iap.uni.api.PurchaseRequest
+import com.applicaster.iap.uni.api.*
 
 class PlayBillingImpl: IBillingAPI, BillingListener {
 
@@ -27,11 +24,9 @@ class PlayBillingImpl: IBillingAPI, BillingListener {
     // region IAPAPI
 
     override fun init(applicationContext: Context,
-                      updateCallback: IAPListener?) {
-        val restorePromiseListener =
-                if (null != updateCallback) RestorePromiseListener(updateCallback) else null
+                      updateCallback: InitializationListener) {
         GoogleBillingHelper.init(applicationContext, this)
-        GoogleBillingHelper.restorePurchasesForAllTypes(restorePromiseListener)
+        updateCallback.onSuccess()
     }
 
     override fun loadSkuDetails(
