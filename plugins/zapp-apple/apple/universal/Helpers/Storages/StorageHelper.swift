@@ -34,7 +34,7 @@ public class StorageHelper {
     /// - Returns: Zapp storage dictionary with updated values
     public class func setZappData(inStorageDict storageDict: [String: Any],
                                   key: String,
-                                  value: String,
+                                  value: String?,
                                   namespace: String?,
                                   storageType: StorageTypes) -> (storageDict: [String: Any], succeed: Bool) {
         var sessionData: [String: Any] = [String: Any]()

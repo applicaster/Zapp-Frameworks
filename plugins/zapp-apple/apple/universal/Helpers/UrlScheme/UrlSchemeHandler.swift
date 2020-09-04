@@ -28,7 +28,7 @@ public class UrlSchemeHandler {
             retValue = handleUUIDregeneration(with: rootViewController)
         case .xray:
             retValue = handleXray(url: url,
-                                  rootViewController: rootViewController)
+                                  rootController: rootViewController)
         case .plugin:
             // This section is experimental, not in use. If not needed in future, please remove it, with handlePluginURLScheme: func
             retValue = handlePluginURLScheme(url: url)
