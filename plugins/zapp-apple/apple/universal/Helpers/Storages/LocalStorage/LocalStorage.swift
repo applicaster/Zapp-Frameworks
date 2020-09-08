@@ -24,18 +24,24 @@ import Foundation
     }
 
     func saveToUserDefaults(storage: [String: Any]) {
-        userDefaults.setValue(storage, forKey: zappLocalStorageName)
+        userDefaults.setValue(storage,
+                              forKey: zappLocalStorageName)
         userDefaults.synchronize()
     }
 
     // MARK: ZappStorageProtocol
 
     @discardableResult public func set(key: String, value: String?, namespace: String?) -> Bool {
+        guard get(key: key, namespace: namespace) != value else {
+            return true
+        }
+
         let setResult = StorageHelper.setZappData(inStorageDict: storage,
                                                   key: key,
                                                   value: value,
                                                   namespace: namespace,
                                                   storageType: .local)
+
         saveToUserDefaults(storage: setResult.storageDict)
         return setResult.succeed
     }

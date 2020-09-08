@@ -20,12 +20,18 @@ extension QickBrickXray {
     // URL Scheme
 
     func prepareSettings() {
-        guard let settingsFromLocalStorage = getLocalStorageSettings() else {
-            let settingsParams = getConfigurationJSONSettings().merge(highPriority: getEnvironmentSettings())
+        let settingsFromLocalStorage = getLocalStorageSettings()
+        guard settingsFromLocalStorage.customSettingsEnabled == true else {
+            let settingsParams = getDefaultPluginSettings()
             applyNewSettings(settings: settingsParams)
             return
         }
         applyNewSettings(settings: settingsFromLocalStorage)
+    }
+
+    func applyCustomSettings(settings: Settings) {
+        applyNewSettings(settings: settings)
+        saveSettingsToLocalStorage(settings: currentSettings)
     }
 
     func applyNewSettings(settings: Settings) {
@@ -35,26 +41,30 @@ extension QickBrickXray {
             currentSettings = currentSettings?.merge(highPriority: settings)
         }
 
-        saveSettingsToLocalStorage(settings: currentSettings)
         commitSettings()
     }
 
-    func getConfigurationJSONSettings() -> Settings {
-        let settings = Settings(fileLogLevel: configurationHelper.logLevel())
-        return settings
-    }
-
-    func getEnvironmentSettings() -> Settings {
-        var settings = Settings()
+    func getDefaultPluginSettings() -> Settings {
+        var settings = Settings(customSettingsEnabled: false,
+                                shortcutEnabled: true,
+                                fileLogLevel: configurationHelper.logLevel())
         if isDebugEnvironment == false {
             settings.fileLogLevel = .error
+            settings.shortcutEnabled = false
         }
-
         return settings
     }
 
-    func getLocalStorageSettings() -> Settings? {
-        var settings = Settings()
+    func getLocalStorageSettings() -> Settings {
+        var settings = Settings(customSettingsEnabled: false,
+                                shortcutEnabled: true,
+                                fileLogLevel: configurationHelper.logLevel())
+
+        if let customSettingsEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.CustomSettingsEnabled,
+                                                                                                   namespace: pluginNameSpace),
+            let customSettingsEnabled = Bool(customSettingsEnabledString) {
+            settings.customSettingsEnabled = customSettingsEnabled
+        }
 
         if let shortcutEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ShortcutEnabled,
                                                                                              namespace: pluginNameSpace),
@@ -78,6 +88,12 @@ extension QickBrickXray {
                                                                      namespace: pluginNameSpace)
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.FileLogLevel,
                                                                      value: settings?.fileLogLevel?.toConfigurationKey(),
+                                                                     namespace: pluginNameSpace)
+
+        let customSettingsEnabled = settings?.customSettingsEnabled ?? false ? "true" : "false"
+
+        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.CustomSettingsEnabled,
+                                                                     value: customSettingsEnabled,
                                                                      namespace: pluginNameSpace)
     }
 

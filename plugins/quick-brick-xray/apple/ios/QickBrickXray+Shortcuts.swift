@@ -102,12 +102,7 @@ extension QickBrickXray {
         }
 
         if action == ShortcutsActions.presentLoggerInfo.rawValue {
-            let loggerNavController = LoggerNavigationController.loggerNavigationController()
-            let presenter = UIApplication.shared.windows.first?.rootViewController
-            presenter?.present(loggerNavController,
-                               animated: true,
-                               completion: nil)
-
+            presentLoggerView()
         } else if action == ShortcutsActions.shareLogs.rawValue {
             Reporter.requestSendEmail()
         }

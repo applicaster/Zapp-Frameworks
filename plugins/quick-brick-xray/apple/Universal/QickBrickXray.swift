@@ -24,6 +24,8 @@ enum ActionType {
 }
 
 public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, PluginAdapterProtocol {
+    private(set) static var sharedInstance: QickBrickXray?
+
     let pluginNameSpace = "xray_logging_plugin"
     let sessionStorageObservationKey = "session_xray_logging_plugin"
 
@@ -52,14 +54,12 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         "Qick Brick Xray Plugin"
     }
 
-    var isDebugEnvironment: Bool {
-        return FacadeConnector.connector?.applicationData?.isDebugEnvironment() ?? true
-    }
+    lazy var isDebugEnvironment: Bool = {
+        FacadeConnector.connector?.applicationData?.isDebugEnvironment() ?? true
+    }()
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
-        prepareSettings()
-
         let emailsForShare = configurationHelper.emailsToShare()
 
         if isDebugEnvironment {
@@ -85,6 +85,8 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         Reporter.setDefaultData(emails: emailsForShare,
                                 url: fileJSONSink.fileURL,
                                 contexts: [:])
+        prepareSettings()
+        QickBrickXray.sharedInstance = self
 
         completion?(true)
     }
@@ -103,5 +105,27 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
 
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
+    }
+}
+
+extension QickBrickXray {
+    func getTabBarViewController() -> UIViewController? {
+        let bundle = Bundle(for: Self.self)
+
+        let storyboard = UIStoryboard(name: "QuickBrickXray", bundle: bundle)
+
+        let viewController = storyboard.instantiateInitialViewController() as? UITabBarController
+
+        return viewController
+    }
+
+    func presentLoggerView() {
+        guard let viewController = getTabBarViewController() else {
+            return
+        }
+        let presenter = UIApplication.shared.windows.first?.rootViewController
+        presenter?.present(viewController,
+                           animated: true,
+                           completion: nil)
     }
 }

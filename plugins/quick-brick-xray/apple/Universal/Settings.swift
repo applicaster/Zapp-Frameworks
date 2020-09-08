@@ -13,17 +13,17 @@ import XrayLogger
 import ZappCore
 
 struct Settings {
+    var customSettingsEnabled: Bool = false
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
 
     func merge(highPriority settings: Settings) -> Settings {
         var newSettings = Settings(shortcutEnabled: shortcutEnabled,
                                    fileLogLevel: fileLogLevel)
+
+        newSettings.fileLogLevel = settings.fileLogLevel
         newSettings.shortcutEnabled = settings.shortcutEnabled
-        
-        if let fileLogLevel = settings.fileLogLevel {
-            newSettings.fileLogLevel = fileLogLevel
-        }
+        newSettings.customSettingsEnabled = settings.customSettingsEnabled
 
         return newSettings
     }

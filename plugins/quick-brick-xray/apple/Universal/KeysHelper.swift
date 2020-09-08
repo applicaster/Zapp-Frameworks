@@ -12,6 +12,7 @@ import XrayLogger
 import ZappCore
 
 struct PluginConfigurationKeys {
+    static let CustomSettingsEnabled = "customSettingsEnabled"
     static let FileLogLevel = "fileLogLevel"
     static let ShortcutEnabled = "shortcutEnabled"
     static let ShareLog = "shareLog"
@@ -34,8 +35,8 @@ struct KeysHelper {
         self.configurationJSON = configurationJSON
     }
 
-    func logLevel() -> LogLevel? {
-        return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.FileLogLevel] as? String)
+    func logLevel() -> LogLevel {
+        return LogLevel.logLevel(fromConfigurationKey: configurationJSON[PluginConfigurationKeys.FileLogLevel] as? String) ?? .verbose
     }
 
     func emailsToShare() -> [String] {

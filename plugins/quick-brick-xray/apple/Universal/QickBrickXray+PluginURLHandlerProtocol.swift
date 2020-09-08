@@ -20,12 +20,26 @@ extension QickBrickXray: PluginURLHandlerProtocol {
         }
 
         var settings = Settings()
+
         if let shortcutEnabled = params[PluginConfigurationKeys.ShortcutEnabled] as? Bool {
+            settings.customSettingsEnabled = true
             settings.shortcutEnabled = shortcutEnabled
         }
 
         if let fileLogLevelString = params[PluginConfigurationKeys.FileLogLevel] as? String {
+            settings.customSettingsEnabled = true
             settings.fileLogLevel = LogLevel.logLevel(fromConfigurationKey: fileLogLevelString)
+        }
+
+        if settings.customSettingsEnabled == true {
+            applyCustomSettings(settings: settings)
+        }
+
+        if let sendEmail = params[PluginConfigurationKeys.ShareLog] as? Bool,
+            sendEmail == true {
+            Reporter.requestSendEmail()
+        } else {
+            presentLoggerView()
         }
 
         return true

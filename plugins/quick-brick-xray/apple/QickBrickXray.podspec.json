@@ -23,6 +23,7 @@
   "tvos": {
     "source_files": "tvos/**/*.swift"
   },
+  "resources": ["universal/**/*.{storyboard}"],
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES"
@@ -40,9 +41,7 @@
       "test_type": "unit",
       "ios": {
         "source_files": "tests/**/*.{swift}",
-        "resources": [
-          "tests/iOS/**/*.{png}"
-        ]
+        "resources": ["tests/iOS/**/*.{png}"]
       },
       "tvos": {
         "source_files": "tests/**/Dummy.swift"
