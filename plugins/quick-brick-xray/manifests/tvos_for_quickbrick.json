@@ -52,8 +52,8 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.0.7",
+  "manifest_version": "0.0.8",
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.7"
+    "@applicaster/quick-brick-xray@0.0.8"
   ]
 }
