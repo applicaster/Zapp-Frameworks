@@ -29,7 +29,7 @@ function createManifest({ version, platform }) {
     platform,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
-    extra_dependencies: extra_dependencies[platform],
+    extra_dependencies: extra_dependencies(platform),
     api: api[platform],
     npm_dependencies: [`@applicaster/quick-brick-xray@${version}`],
     project_dependencies: project_dependencies[platform],
@@ -108,6 +108,7 @@ const min_zapp_sdk = {
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
 };
+
 function extra_dependencies_apple(xrayLoggerDependency) {
   return [
     {
@@ -126,15 +127,18 @@ function extra_dependencies_apple(xrayLoggerDependency) {
   ];
 }
 
-function extra_dependencies() {
+function extra_dependencies(platform) {
   const xrayLoggerDependency =
     ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'";
-  return {
-    ios: extra_dependencies_apple(xrayLoggerDependency),
-    ios_for_quickbrick: extra_dependencies_apple(xrayLoggerDependency),
-    tvos: extra_dependencies_apple(xrayLoggerDependency),
-    tvos_for_quickbrick: extra_dependencies_apple(xrayLoggerDependency),
-  };
+  if (
+    platform === "ios" ||
+    platform === "ios_for_quickbrick" ||
+    platform === "tvos" ||
+    platform === "tvos_for_quickbrick"
+  ) {
+    return extra_dependencies_apple(xrayLoggerDependency);
+  }
+  return null;
 }
 
 const project_dependencies_android = [
