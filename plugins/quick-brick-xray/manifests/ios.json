@@ -52,22 +52,22 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "manifest_version": "0.0.9",
+  "manifest_version": "0.0.10",
   "extra_dependencies": [
     {
       "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
     },
     {
-      "XrayLogger": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+      "XrayLogger": ":path => './node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'"
     },
     {
-      "Reporter": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+      "Reporter": ":path => './node_modules/@applicaster/x-ray/apple/Reporter.podspec'"
     },
     {
-      "LoggerInfo": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+      "LoggerInfo": ":path => './node_modules/@applicaster/x-ray/apple/LoggerInfo.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.9"
+    "@applicaster/quick-brick-xray@0.0.10"
   ]
 }
