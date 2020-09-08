@@ -109,34 +109,33 @@ const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
 };
 
-function extra_dependencies_apple(xrayLoggerDependency) {
-  return [
-    {
-      QickBrickXray:
-        ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
-    },
-    {
-      XrayLogger: xrayLoggerDependency,
-    },
-    {
-      Reporter: xrayLoggerDependency,
-    },
-    {
-      LoggerInfo: xrayLoggerDependency,
-    },
-  ];
-}
+const extra_dependencies_apple = [
+  {
+    QickBrickXray:
+      ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
+  },
+  {
+    XrayLogger:
+      ":path => './node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'",
+  },
+  {
+    Reporter:
+      ":path => './node_modules/@applicaster/x-ray/apple/Reporter.podspec'",
+  },
+  {
+    LoggerInfo:
+      ":path => './node_modules/@applicaster/x-ray/apple/LoggerInfo.podspec'",
+  },
+];
 
 function extra_dependencies(platform) {
-  const xrayLoggerDependency =
-    ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'";
   if (
     platform === "ios" ||
     platform === "ios_for_quickbrick" ||
     platform === "tvos" ||
     platform === "tvos_for_quickbrick"
   ) {
-    return extra_dependencies_apple(xrayLoggerDependency);
+    return extra_dependencies_apple;
   }
   return null;
 }
