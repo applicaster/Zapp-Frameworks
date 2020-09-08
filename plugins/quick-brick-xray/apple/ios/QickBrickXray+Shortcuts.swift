@@ -44,6 +44,20 @@ extension QickBrickXray {
                                                     ShortcutsUserInfoKeys.namespace: pluginNameSpace] as [String: NSSecureCoding])
     }
 
+    func removePluginShortcuts() -> [UIApplicationShortcutItem]? {
+        guard let shortcutItems = UIApplication.shared.shortcutItems else {
+            return nil
+        }
+        let result = shortcutItems.filter { (shortcutItem) -> Bool in
+            guard let identifier = shortcutItem.userInfo?[ShortcutsUserInfoKeys.action] as? String,
+                identifier == ShortcutsActions.presentLoggerInfo.rawValue else {
+                return false
+            }
+            return identifier != ShortcutsActions.presentLoggerInfo.rawValue && identifier != ShortcutsActions.shareLogs.rawValue
+        }
+        return result
+    }
+
     func shortcutsWasNotAdded() -> Bool {
         guard let shortcutItems = UIApplication.shared.shortcutItems else {
             return true
@@ -58,13 +72,19 @@ extension QickBrickXray {
         return result != nil
     }
 
-    func preparePlatform() {
+    func prepareShortcuts() {
         addSessionStorageObserver()
+        guard currentSettings?.shortcutEnabled == true else {
+            UIApplication.shared.shortcutItems = removePluginShortcuts()
+            return
+        }
+
         var shortcutItems = UIApplication.shared.shortcutItems ?? []
         if shortcutItems.isEmpty || shortcutsWasNotAdded() {
             shortcutItems += [loggerViewShortcut,
                               shareEmailShortcut]
         }
+
         UIApplication.shared.shortcutItems = shortcutItems
     }
 
@@ -82,13 +102,7 @@ extension QickBrickXray {
         }
 
         if action == ShortcutsActions.presentLoggerInfo.rawValue {
-            
-            let loggerNavController = LoggerNavigationController.loggerNavigationController()
-            let presenter = UIApplication.shared.windows.first?.rootViewController
-            presenter?.present(loggerNavController,
-                               animated: true,
-                               completion: nil)
-
+            presentLoggerView()
         } else if action == ShortcutsActions.shareLogs.rawValue {
             Reporter.requestSendEmail()
         }

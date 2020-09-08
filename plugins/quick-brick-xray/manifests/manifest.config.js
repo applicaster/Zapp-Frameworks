@@ -42,14 +42,14 @@ function createManifest({ version, platform }) {
 const custom_configuration_fields_apple = [
   {
     type: "dropdown",
-    key: "file_sink",
+    key: "fileLogLevel",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
     default: "error",
   },
   {
-    key: "report_email",
+    key: "reportEmail",
     type: "text",
     tooltip_text: "Email to send reports to. Empty is allowed.",
   },
@@ -108,48 +108,54 @@ const min_zapp_sdk = {
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
 };
-const extra_dependencies_apple = [
-  {
-    QickBrickXray:
-      ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
-  },
-  {
-    XrayLogger:
-      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  },
-  {
-    Reporter:
-      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  },
-  {
-    LoggerInfo:
-      ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'",
-  },
-];
+function extra_dependencies_apple(xrayLoggerDependency) {
+  return [
+    {
+      QickBrickXray:
+        ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
+    },
+    {
+      XrayLogger: xrayLoggerDependency,
+    },
+    {
+      Reporter: xrayLoggerDependency,
+    },
+    {
+      LoggerInfo: xrayLoggerDependency,
+    },
+  ];
+}
 
-const extra_dependencies = {
-  ios: extra_dependencies_apple,
-  ios_for_quickbrick: extra_dependencies_apple,
-  tvos: extra_dependencies_apple,
-  tvos_for_quickbrick: extra_dependencies_apple,
-};
+function extra_dependencies() {
+  const xrayLoggerDependency =
+    ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.6-alpha'";
+  return {
+    ios: extra_dependencies_apple(xrayLoggerDependency),
+    ios_for_quickbrick: extra_dependencies_apple(xrayLoggerDependency),
+    tvos: extra_dependencies_apple(xrayLoggerDependency),
+    tvos_for_quickbrick: extra_dependencies_apple(xrayLoggerDependency),
+  };
+}
 
 const project_dependencies_android = [
   {
     "xray-core": "node_modules/@applicaster/x-ray/android/xray-core",
   },
   {
-    "xray-react-native": "node_modules/@applicaster/x-ray/android/xray-react-native",
+    "xray-react-native":
+      "node_modules/@applicaster/x-ray/android/xray-react-native",
   },
   {
-    "xray-notification": "node_modules/@applicaster/x-ray/android/xray-notification",
+    "xray-notification":
+      "node_modules/@applicaster/x-ray/android/xray-notification",
   },
   {
-    "xray-reporting": "node_modules/@applicaster/x-ray/android/xray-crashreporter",
+    "xray-reporting":
+      "node_modules/@applicaster/x-ray/android/xray-crashreporter",
   },
   {
     xrayplugin: "node_modules/@applicaster/quick-brick-xray/android",
-  }
+  },
 ];
 
 const project_dependencies = {
