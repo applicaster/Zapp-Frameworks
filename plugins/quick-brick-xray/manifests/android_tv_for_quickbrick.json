@@ -20,8 +20,9 @@
     "quickbrick"
   ],
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "0.0.8",
+  "manifest_version": "0.0.9",
+  "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.8"
+    "@applicaster/quick-brick-xray@0.0.9"
   ]
 }
