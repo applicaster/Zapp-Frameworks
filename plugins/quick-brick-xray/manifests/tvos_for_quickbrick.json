@@ -26,7 +26,7 @@
   "custom_configuration_fields": [
     {
       "type": "dropdown",
-      "key": "file_sink",
+      "key": "fileLogLevel",
       "tooltip_text": "Minimum message level to log to the file",
       "multiple": false,
       "options": [
@@ -40,7 +40,7 @@
       "default": "error"
     },
     {
-      "key": "report_email",
+      "key": "reportEmail",
       "type": "text",
       "tooltip_text": "Email to send reports to. Empty is allowed."
     }
@@ -52,22 +52,8 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.0.6",
-  "extra_dependencies": [
-    {
-      "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
-    },
-    {
-      "XrayLogger": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
-    },
-    {
-      "Reporter": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
-    },
-    {
-      "LoggerInfo": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.2-alpha'"
-    }
-  ],
+  "manifest_version": "0.0.7",
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.6"
+    "@applicaster/quick-brick-xray@0.0.7"
   ]
 }

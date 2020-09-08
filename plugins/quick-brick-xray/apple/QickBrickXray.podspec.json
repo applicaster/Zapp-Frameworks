@@ -1,6 +1,6 @@
 {
   "name": "QickBrickXray",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "platforms": {
     "ios": "11.0",
     "tvos": "11.0"
@@ -12,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-xray/0.0.6"
+    "tag": "@@applicaster/quick-brick-xray/0.0.7"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
@@ -23,7 +23,9 @@
   "tvos": {
     "source_files": "tvos/**/*.swift"
   },
-  "resources": ["universal/**/*.{storyboard}"],
+  "resources": [
+    "universal/**/*.{storyboard}"
+  ],
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES"
@@ -41,7 +43,9 @@
       "test_type": "unit",
       "ios": {
         "source_files": "tests/**/*.{swift}",
-        "resources": ["tests/iOS/**/*.{png}"]
+        "resources": [
+          "tests/iOS/**/*.{png}"
+        ]
       },
       "tvos": {
         "source_files": "tests/**/Dummy.swift"
