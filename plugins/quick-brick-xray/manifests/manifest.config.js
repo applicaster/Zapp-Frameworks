@@ -128,7 +128,7 @@ function extra_dependencies_apple(xrayLoggerDependency) {
 
 function extra_dependencies() {
   const xrayLoggerDependency =
-    ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.6-alpha'";
+    ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'";
   return {
     ios: extra_dependencies_apple(xrayLoggerDependency),
     ios_for_quickbrick: extra_dependencies_apple(xrayLoggerDependency),

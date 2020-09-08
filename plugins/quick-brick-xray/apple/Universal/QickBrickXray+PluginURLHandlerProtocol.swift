@@ -21,7 +21,8 @@ extension QickBrickXray: PluginURLHandlerProtocol {
 
         var settings = Settings()
 
-        if let shortcutEnabled = params[PluginConfigurationKeys.ShortcutEnabled] as? Bool {
+        if let shortcutEnabledString = params[PluginConfigurationKeys.ShortcutEnabled] as? String,
+            let shortcutEnabled = Bool(shortcutEnabledString) {
             settings.customSettingsEnabled = true
             settings.shortcutEnabled = shortcutEnabled
         }
@@ -35,7 +36,8 @@ extension QickBrickXray: PluginURLHandlerProtocol {
             applyCustomSettings(settings: settings)
         }
 
-        if let sendEmail = params[PluginConfigurationKeys.ShareLog] as? Bool,
+        if let sendEmailString = params[PluginConfigurationKeys.ShareLog] as? String,
+            let sendEmail = Bool(sendEmailString),
             sendEmail == true {
             Reporter.requestSendEmail()
         } else {

@@ -25,6 +25,7 @@ enum ActionType {
 
 public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, PluginAdapterProtocol {
     private(set) static var sharedInstance: QickBrickXray?
+    private(set) weak var loggerInstance: UITabBarController?
 
     let pluginNameSpace = "xray_logging_plugin"
     let sessionStorageObservationKey = "session_xray_logging_plugin"
@@ -109,7 +110,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
 }
 
 extension QickBrickXray {
-    func getTabBarViewController() -> UIViewController? {
+    func getTabBarViewController() -> UITabBarController? {
         let bundle = Bundle(for: Self.self)
 
         let storyboard = UIStoryboard(name: "QuickBrickXray", bundle: bundle)
@@ -124,6 +125,11 @@ extension QickBrickXray {
             return
         }
         let presenter = UIApplication.shared.windows.first?.rootViewController
+        if let oldLogger = loggerInstance {
+            oldLogger.dismiss(animated: false, completion: nil)
+        }
+
+        loggerInstance = viewController
         presenter?.present(viewController,
                            animated: true,
                            completion: nil)

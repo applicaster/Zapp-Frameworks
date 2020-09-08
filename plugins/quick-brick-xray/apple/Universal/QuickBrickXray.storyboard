@@ -66,7 +66,6 @@
         <!--Logger View Controller-->
         <scene sceneID="OOe-8F-CxY">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bj9-Ge-F0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="9P1-iB-hoW" customClass="LoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="odK-QV-Vkk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -76,6 +75,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="LOz-0n-uve"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bj9-Ge-F0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="910" y="-40"/>
         </scene>
