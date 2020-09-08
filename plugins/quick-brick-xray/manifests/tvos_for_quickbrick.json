@@ -52,8 +52,22 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.0.8",
+  "manifest_version": "0.0.9",
+  "extra_dependencies": [
+    {
+      "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
+    },
+    {
+      "XrayLogger": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+    },
+    {
+      "Reporter": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+    },
+    {
+      "LoggerInfo": ":git => 'https://github.com/applicaster/x-ray.git', :tag => '0.0.7-alpha'"
+    }
+  ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.8"
+    "@applicaster/quick-brick-xray@0.0.9"
   ]
 }
