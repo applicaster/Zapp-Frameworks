@@ -9,7 +9,7 @@
   "files": [
     "android",
     "src",
-    "apple/ApplicasterIAP.podspec",
+    "apple/ApplicasterIAP.podspec.json",
     "apple/universal"
   ],
   "repository": {
