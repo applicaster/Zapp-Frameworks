@@ -167,6 +167,8 @@ const project_dependencies_android = [
 
 const project_dependencies = {
   android_for_quickbrick: project_dependencies_android,
+  android_tv_for_quickbrick: project_dependencies_android,
+  amazon_fire_tv_for_quickbrick: project_dependencies_android,
 };
 
 const api_apple = {
