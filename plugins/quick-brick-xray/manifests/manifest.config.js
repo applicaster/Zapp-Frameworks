@@ -181,6 +181,8 @@ const api = {
   tvos: api_apple,
   tvos_for_quickbrick: api_apple,
   android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  amazon_fire_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
@@ -191,6 +193,8 @@ const targets = {
   ios_for_quickbrick: mobileTarget,
   tvos: tvTarget,
   tvos_for_quickbrick: tvTarget,
+  android_tv_for_quickbrick: tvTarget,
+  amazon_fire_tv_for_quickbrick: tvTarget,
 };
 
 module.exports = createManifest;
