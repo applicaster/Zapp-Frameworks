@@ -99,6 +99,8 @@ const custom_configuration_fields = {
   tvos: custom_configuration_fields_apple,
   tvos_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_android,
+  android_tv_for_quickbrick: custom_configuration_fields_android,
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android,
 };
 
 const min_zapp_sdk = {
@@ -107,6 +109,8 @@ const min_zapp_sdk = {
   tvos_for_quickbrick: "0.1.0-alpha1",
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
+  android_tv_for_quickbrick: "0.1.0-alpha1",
+  amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
 };
 
 const extra_dependencies_apple = [
