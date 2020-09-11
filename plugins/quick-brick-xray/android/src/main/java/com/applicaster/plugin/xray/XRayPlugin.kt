@@ -62,7 +62,7 @@ class XRayPlugin : CrashlogPlugin {
 
     private var configuration: Map<String, String>? = null
     private var activated = false
-    private lateinit var context: Context
+    private val context: Context = AppContext.get()
     private val pluginLogger = Logger.get(TAG)
 
     private var localSettings: Settings = Settings()
@@ -88,9 +88,6 @@ class XRayPlugin : CrashlogPlugin {
             pluginLogger.w(TAG).message("X-Ray logging plugin is already activated")
             return
         }
-
-        // don't really need it there, we already had to use AppContext.get() by this point
-        context = applicationContext
 
         // add default ADB sink
         Core.get().addSink("adb", ADBSink())
@@ -179,7 +176,6 @@ class XRayPlugin : CrashlogPlugin {
     }
 
     override fun init(configuration: Map<String, String>?) {
-        context = AppContext.get()
         this.configuration = configuration
 
         val fileLogLevel = configuration?.get(fileSinkKey)
