@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "dependencies": {
-    "@applicaster/x-ray": "0.0.5-alpha"
+    "@applicaster/x-ray": "0.0.8-alpha"
   },
   "devDependencies": {
     "@types/node": "^14.0.26",

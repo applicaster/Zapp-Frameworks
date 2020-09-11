@@ -126,12 +126,18 @@ extension QickBrickXray {
         }
         let presenter = UIApplication.shared.windows.first?.rootViewController
         if let oldLogger = loggerInstance {
-            oldLogger.dismiss(animated: false, completion: nil)
-        }
+            loggerInstance = viewController
 
-        loggerInstance = viewController
-        presenter?.present(viewController,
-                           animated: true,
-                           completion: nil)
+            oldLogger.dismiss(animated: false) {
+                presenter?.present(viewController,
+                                   animated: true,
+                                   completion: nil)
+            }
+        } else {
+            loggerInstance = viewController
+            presenter?.present(viewController,
+                               animated: true,
+                               completion: nil)
+        }
     }
 }
