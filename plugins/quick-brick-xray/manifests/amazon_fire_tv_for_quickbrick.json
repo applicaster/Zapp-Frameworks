@@ -65,7 +65,7 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "android_tv_for_quickbrick",
+  "platform": "amazon_fire_tv_for_quickbrick",
   "manifest_version": "0.0.12",
   "extra_dependencies": null,
   "npm_dependencies": [
