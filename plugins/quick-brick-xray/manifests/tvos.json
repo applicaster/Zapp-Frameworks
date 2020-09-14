@@ -52,7 +52,7 @@
     "quickbrick"
   ],
   "platform": "tvos",
-  "manifest_version": "0.0.12",
+  "manifest_version": "0.1.0",
   "extra_dependencies": [
     {
       "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
@@ -68,6 +68,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.12"
+    "@applicaster/quick-brick-xray@0.1.0"
   ]
 }
