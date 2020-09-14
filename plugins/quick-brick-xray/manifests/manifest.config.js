@@ -55,38 +55,69 @@ const custom_configuration_fields_apple = [
   },
 ];
 
-const custom_configuration_fields_android = [
+const custom_configuration_fields_android_mobile = [
   {
     type: "dropdown",
-    key: "file_sink",
+    key: "fileLogLevel",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
     default: "error",
   },
   {
-    key: "report_email",
+    key: "reportEmail",
     type: "text",
     tooltip_text: "Email to send reports to. Empty is allowed.",
   },
   {
     type: "checkbox",
     label: "Notification controls",
-    key: "notification",
+    key: "showNotification",
     default: 1,
     tooltip_text: "Enable notification controls in debug builds",
   },
   {
     type: "checkbox",
     label: "Report crashes",
-    key: "report_crashes",
+    key: "crashReporting",
     default: 1,
     tooltip_text: "Enable crash reporting in debug builds",
   },
   {
     type: "checkbox",
     label: "Log react native debug messages",
-    key: "log_react_native_debug",
+    key: "reactNativeDebugLogging",
+    default: 0,
+    tooltip_text:
+      "Enable logging or react native internal debug messages. Very verbose!",
+  },
+];
+
+const custom_configuration_fields_android_tv = [
+  {
+    type: "dropdown",
+    key: "fileLogLevel",
+    tooltip_text: "Minimum message level to log to the file",
+    multiple: false,
+    options: ["off", "error", "warning", "info", "debug", "verbose"],
+    default: "error",
+  },
+  {
+    key: "reportEmail",
+    type: "text",
+    tooltip_text: "Email to send reports to. Empty is allowed.",
+  },
+  {
+    type: "checkbox",
+    label: "Report crashes",
+    key: "crashReporting",
+    default: 1,
+    tooltip_text: "Enable crash reporting in debug builds",
+  },
+  {
+    type: "checkbox",
+    label: "Log react native debug messages",
+    key: "reactNativeDebugLogging",
     default: 0,
     tooltip_text:
       "Enable logging or react native internal debug messages. Very verbose!",
@@ -98,7 +129,9 @@ const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
   tvos: custom_configuration_fields_apple,
   tvos_for_quickbrick: custom_configuration_fields_apple,
-  android_for_quickbrick: custom_configuration_fields_android,
+  android_for_quickbrick: custom_configuration_fields_android_mobile,
+  android_tv_for_quickbrick: custom_configuration_fields_android_tv,
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android_tv,
 };
 
 const min_zapp_sdk = {
@@ -107,6 +140,8 @@ const min_zapp_sdk = {
   tvos_for_quickbrick: "0.1.0-alpha1",
   ios_for_quickbrick: "0.1.0-alpha1",
   android_for_quickbrick: "0.1.0-alpha1",
+  android_tv_for_quickbrick: "0.1.0-alpha1",
+  amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
 };
 
 const extra_dependencies_apple = [
@@ -163,6 +198,8 @@ const project_dependencies_android = [
 
 const project_dependencies = {
   android_for_quickbrick: project_dependencies_android,
+  android_tv_for_quickbrick: project_dependencies_android,
+  amazon_fire_tv_for_quickbrick: project_dependencies_android,
 };
 
 const api_apple = {
@@ -181,6 +218,8 @@ const api = {
   tvos: api_apple,
   tvos_for_quickbrick: api_apple,
   android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  amazon_fire_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
@@ -191,6 +230,8 @@ const targets = {
   ios_for_quickbrick: mobileTarget,
   tvos: tvTarget,
   tvos_for_quickbrick: tvTarget,
+  android_tv_for_quickbrick: tvTarget,
+  amazon_fire_tv_for_quickbrick: tvTarget,
 };
 
 module.exports = createManifest;

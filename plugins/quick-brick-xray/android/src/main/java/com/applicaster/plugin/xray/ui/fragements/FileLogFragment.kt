@@ -34,7 +34,7 @@ class FileLogFragment : Fragment() {
         @Suppress("DEPRECATION")
         observer = object : FileObserver(file?.absolutePath, CLOSE_WRITE or DELETE_SELF) {
             override fun onEvent(event: Int, path: String?) {
-                reloadLog()
+                logView?.post { reloadLog() }
             }
         }
         view.setTag(R.id.fragment_title_tag, file!!.name)
