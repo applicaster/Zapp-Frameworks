@@ -40,11 +40,11 @@ class XRayPlugin : CrashlogPlugin {
 
     companion object {
         // keys
-        private const val fileSinkKey = "file_sink"
-        private const val reportEmailKey = "report_email"
+        private const val fileSinkKey = "fileLogLevel"
+        private const val reportEmailKey = "reportEmail"
         private const val notificationKey = "notification"
-        private const val debugRNKey = "log_react_native_debug"
-        private const val crashReportingKey = "report_crashes"
+        private const val debugRNKey = "reactNativeDebugLogging"
+        private const val crashReportingKey = "crashReporting"
 
         // public constants
         const val fileSinkFileName = "xray_log.txt"
