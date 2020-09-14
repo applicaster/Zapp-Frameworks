@@ -72,7 +72,7 @@ const custom_configuration_fields_android_mobile = [
   {
     type: "checkbox",
     label: "Notification controls",
-    key: "notification",
+    key: "showNotification",
     default: 1,
     tooltip_text: "Enable notification controls in debug builds",
   },

@@ -16,10 +16,7 @@ import com.applicaster.plugin.xray.logadapters.PrinterAdapter
 import com.applicaster.plugin.xray.model.Settings
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
-import com.applicaster.util.APDebugUtil
-import com.applicaster.util.APLogger
-import com.applicaster.util.AppContext
-import com.applicaster.util.StringUtil
+import com.applicaster.util.*
 import com.applicaster.xray.android.routing.DefaultSinkFilter
 import com.applicaster.xray.android.sinks.ADBSink
 import com.applicaster.xray.android.sinks.PackageFileLogSink
@@ -42,7 +39,7 @@ class XRayPlugin : CrashlogPlugin {
         // keys
         private const val fileSinkKey = "fileLogLevel"
         private const val reportEmailKey = "reportEmail"
-        private const val notificationKey = "notification"
+        private const val notificationKey = "showNotification"
         private const val debugRNKey = "reactNativeDebugLogging"
         private const val crashReportingKey = "crashReporting"
 
@@ -192,7 +189,7 @@ class XRayPlugin : CrashlogPlugin {
 
         pluginSettings.reactNativeDebugLogging = if(StringUtil.booleanValue(configuration?.get(debugRNKey))) true else null
 
-        pluginSettings.showNotification = APDebugUtil.getIsInDebugMode()
+        pluginSettings.showNotification = APDebugUtil.getIsInDebugMode() && !OSUtil.isTv()
                 && StringUtil.booleanValue(configuration?.get(notificationKey))
 
         pluginSettings.shortcutEnabled = APDebugUtil.getIsInDebugMode()
