@@ -2,7 +2,7 @@ import * as R from "ramda";
 
 import * as logger from "./logger";
 import { Event } from "./Event";
-import { XRayLogLevel } from "./logLevels";
+import { XRayLogLevel as LogLevel } from "./logLevels";
 
 type XRayEventData = {
   message: string;
@@ -10,19 +10,27 @@ type XRayEventData = {
   error?: Error;
 };
 
+export const XRayLogLevel = LogLevel;
+
 export default class Logger implements XRayLoggerI {
   category: string;
   subsystem: string;
   context: AnyDictionary;
   parent?: Logger;
 
-  static logLevels = XRayLogLevel;
+  static logLevels = LogLevel;
 
   constructor(category: string, subsystem: string, parent?: Logger) {
     this.category = category;
     this.subsystem = subsystem;
     this.context = {};
     this.parent = parent || null;
+    this.log = this.log.bind(this);
+    this.debug = this.debug.bind(this);
+    this.info = this.info.bind(this);
+    this.warning = this.warning.bind(this);
+    this.warn = this.warning.bind(this);
+    this.error = this.error.bind(this);
   }
 
   addSubsystem(subsystem: string): Logger {
@@ -71,6 +79,10 @@ export default class Logger implements XRayLoggerI {
       context: this.context,
       ...logEvent,
     });
+  }
+
+  warn(event: string | XRayEventData) {
+    this.warning(event);
   }
 
   error(event: Error | XRayEventData) {
