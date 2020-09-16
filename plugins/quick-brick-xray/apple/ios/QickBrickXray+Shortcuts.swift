@@ -73,7 +73,6 @@ extension QickBrickXray {
     }
 
     func prepareShortcuts() {
-        addSessionStorageObserver()
         guard currentSettings?.shortcutEnabled == true else {
             UIApplication.shared.shortcutItems = removePluginShortcuts()
             return

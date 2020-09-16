@@ -61,6 +61,8 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
+        addSessionStorageObserver()
+
         let emailsForShare = configurationHelper.emailsToShare()
 
         if isDebugEnvironment {
@@ -121,6 +123,7 @@ extension QickBrickXray {
     }
 
     func presentLoggerView() {
+
         guard let viewController = getTabBarViewController() else {
             return
         }

@@ -16,7 +16,8 @@ extension QickBrickXray: PluginURLHandlerProtocol {
     public func handlePluginURLScheme(with rootViewController: UIViewController?,
                                       url: URL) -> Bool {
         guard let params = queryParams(url: url) else {
-            return false
+            presentLoggerView()
+            return true
         }
 
         var settings = Settings()

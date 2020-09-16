@@ -13,12 +13,6 @@ import XrayLogger
 import ZappCore
 
 extension QickBrickXray {
-    // Priority List for Settings
-    // ConfigrationJSON
-    // IS_DEBUB_EnV = false -> Specific rules
-    // Setting screen
-    // URL Scheme
-
     func prepareSettings() {
         let settingsFromLocalStorage = getLocalStorageSettings()
         guard settingsFromLocalStorage.customSettingsEnabled == true else {
@@ -30,8 +24,12 @@ extension QickBrickXray {
     }
 
     func applyCustomSettings(settings: Settings) {
-        applyNewSettings(settings: settings)
-        saveSettingsToLocalStorage(settings: currentSettings)
+        saveSettingsToLocalStorage(settings: settings)
+        if settings.customSettingsEnabled == false {
+            prepareSettings()
+        } else {
+            applyNewSettings(settings: settings)
+        }
     }
 
     func applyNewSettings(settings: Settings) {

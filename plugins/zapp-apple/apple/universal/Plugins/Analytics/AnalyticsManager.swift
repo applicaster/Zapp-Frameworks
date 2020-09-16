@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import ZappCore
 import XrayLogger
+import ZappCore
 
 public typealias AnalyticManagerPreparationCompletion = () -> Void
 public typealias ProviderSendAnalyticsCompletion = (_ provider: AnalyticsProviderProtocol,
@@ -29,7 +29,7 @@ public class AnalyticsManager: PluginManagerBase {
 
     @objc public private(set) var currentScreenViewTitle: String?
 
-    public override func providerCreated(provider: PluginAdapterProtocol,
+    override public func providerCreated(provider: PluginAdapterProtocol,
                                          completion: PluginManagerCompletion) {
         provider.prepareProvider(defaultParams()) { succeed in
             completion?(succeed)
@@ -77,7 +77,7 @@ public class AnalyticsManager: PluginManagerBase {
         logger?.verboseLog(template: AnalyticsPluginsManagerLogs.sendEvent,
                            data: ["name": name,
                                   "parameters": parameters])
-        
+
         for provider in _providers {
             if isProviderEnabled(provider: provider) {
                 provider.sendEvent(name,
@@ -92,7 +92,7 @@ public class AnalyticsManager: PluginManagerBase {
         logger?.verboseLog(template: AnalyticsPluginsManagerLogs.startObserveTimedEvent,
                            data: ["name": name,
                                   "parameters": parameters])
-        
+
         for provider in _providers {
             if isProviderEnabled(provider: provider) {
                 provider.startObserveTimedEvent?(name,
@@ -107,7 +107,7 @@ public class AnalyticsManager: PluginManagerBase {
         logger?.verboseLog(template: AnalyticsPluginsManagerLogs.stopObserveTimedEvent,
                            data: ["name": eventName,
                                   "parameters": parameters])
-        
+
         for provider in _providers {
             if isProviderEnabled(provider: provider) {
                 provider.stopObserveTimedEvent?(eventName,
@@ -124,7 +124,7 @@ public class AnalyticsManager: PluginManagerBase {
             logger?.verboseLog(template: AnalyticsPluginsManagerLogs.sendScreenEvent,
                                data: ["screenTitle": screenTitle,
                                       "parameters": parameters])
-            
+
             for provider in _providers {
                 if isProviderEnabled(provider: provider) {
                     provider.sendScreenEvent(screenTitle, parameters: parameters)
@@ -138,10 +138,12 @@ public class AnalyticsManager: PluginManagerBase {
         guard let url = url as NSURL? else {
             return
         }
-        
-        logger?.verboseLog(template: AnalyticsPluginsManagerLogs.trackCampaignParamsFromUrl,
-                           data: ["url": url])
-        
+
+        if let urlString = url.absoluteString {
+            logger?.verboseLog(template: AnalyticsPluginsManagerLogs.trackCampaignParamsFromUrl,
+                               data: ["url": urlString])
+        }
+
         for provider in _providers {
             if isProviderEnabled(provider: provider) {
                 provider.trackCampaignParamsFromUrl?(url)
