@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-xray",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Applicaster X-Ray Logger",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
@@ -29,9 +29,9 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@applicaster/x-ray": "0.0.10-alpha",
     "react": "16.11.0",
-    "react-native": "0.62.2",
-    "@applicaster/x-ray": "0.0.10-alpha"
+    "react-native": "0.62.2"
   },
   "applicaster": {
     "supportedPlatforms": [
