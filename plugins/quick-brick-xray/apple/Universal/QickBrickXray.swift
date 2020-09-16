@@ -73,20 +73,20 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
                 formatter.skipException = true
             }
 
-            XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.Console,
+            Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.Console,
                                               sink: consoleSink)
         }
 
         let inMemorySink = InMemory()
-        XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.InMemorySink,
+        Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.InMemorySink,
                                           sink: inMemorySink)
 
         let fileJSONSink = FileJSON()
-        XrayLogger.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
+        Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
                                           sink: fileJSONSink)
-
+        let fileURL = fileJSONSink.fileURL
         Reporter.setDefaultData(emails: emailsForShare,
-                                url: fileJSONSink.fileURL,
+                                url: fileURL,
                                 contexts: [:])
         prepareSettings()
         QickBrickXray.sharedInstance = self
@@ -100,7 +100,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
             filter = DefaultSinkFilter(level: logLevel)
         }
 
-        XrayLogger.sharedInstance.setFilter(loggerSubsystem: "",
+        Xray.sharedInstance.setFilter(loggerSubsystem: "",
                                             sinkIdentifier: DefaultSinkIdentifiers.FileJSON,
                                             filter: filter)
         prepareShortcuts()
