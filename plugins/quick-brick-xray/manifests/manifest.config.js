@@ -31,7 +31,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies(platform),
     api: api[platform],
-    npm_dependencies: [`@applicaster/quick-brick-xray@${version}`],
+    npm_dependencies: [`@applicaster/quick-brick-xray@${version}`].concat(extra_npm_dependencies(platform)),
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
@@ -173,6 +173,17 @@ function extra_dependencies(platform) {
     return extra_dependencies_apple;
   }
   return null;
+}
+
+function extra_npm_dependencies(platform) {
+  if (
+    platform === "android_for_quickbrick" ||
+    platform === "android_tv_for_quickbrick" ||
+    platform === "amazon_fire_tv_for_quickbrick"
+  ) {
+    return ["@applicaster/x-ray@0.0.10-alpha"];
+  }
+  return [];
 }
 
 const project_dependencies_android = [
