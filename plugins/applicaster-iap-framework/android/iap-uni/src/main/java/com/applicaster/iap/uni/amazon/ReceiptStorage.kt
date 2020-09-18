@@ -9,15 +9,16 @@ private fun fromJSON(json: JSONObject): Purchase {
     return Purchase(
             json.getString("productIdentifier"),
             json.getString("transactionIdentifier"),
-            json.getString("receipt"))
+            json.getString("receipt"),
+            json.getString("userId"))
 }
-
 
 private fun Purchase.toJSON(): String {
     return  JSONObject().let {
         it.put("productIdentifier", this.productIdentifier)
         it.put("transactionIdentifier", this.transactionIdentifier)
         it.put("receipt", this.receipt)
+        it.put("userId", this.userId)
     }.toString()
 }
 
@@ -29,7 +30,7 @@ class ReceiptStorage(context: Context) {
 
     fun hasPurchases(): Boolean = store.all.isNotEmpty()
 
-    fun update(receipts: List<Receipt>) {
+    fun update(receipts: List<Receipt>, userId: String?) {
         val edit = store.edit()
         for (r in receipts) {
             if(null != r.cancelDate) {
@@ -41,7 +42,8 @@ class ReceiptStorage(context: Context) {
                 val purchase = Purchase(
                         r.sku,
                         r.receiptId,
-                        r.toJSON().toString())
+                        r.toJSON().toString(),
+                        userId)
                 edit.putString(r.sku, purchase.toJSON())
             }
         }
