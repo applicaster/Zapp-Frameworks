@@ -11,14 +11,54 @@ import com.applicaster.iap.uni.play.PlayBillingImpl
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
+    private var userData: UserData? = null
     private lateinit var receipts: ReceiptStorage
     private val skuRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private val purchaseRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
     private var restoreObserver: IAPListener? = null
+    private var initializationListener: InitializationFlow? = null
 
-    interface IRestoreListener {
+    // todo: use specific interface for update,
+    //  so we do not deserialize purchases from the storage
+    interface IUpdateListener {
         fun onRestored()
         fun onFailed()
+    }
+
+    inner class InitializationFlow(callback: InitializationListener)
+        : DummyIAPListener() {
+
+        private var callback: InitializationListener? = callback
+
+        init {
+            PurchasingService.getUserData()
+        }
+
+        fun onUserDataLoaded() {
+            restoreObserver = initializationListener
+            PurchasingService.getPurchaseUpdates(receipts.hasPurchases())
+        }
+
+        override fun onPurchasesRestored(purchases: List<Purchase>) {
+            callback?.onSuccess()
+            nullify()
+        }
+
+        public override fun onAnyError(result: IBillingAPI.IAPResult, description: String) {
+            callback?.onBillingClientError(result, description)
+            nullify()
+        }
+
+        // only allow callback to be called once
+        // (should not happen since we nullify listener pointers, but anyway)
+        private fun nullify() {
+            callback = null
+            initializationListener = null
+            if (restoreObserver == this) {
+                restoreObserver = null
+            }
+        }
+
     }
 
     // region IAPAPI
@@ -27,16 +67,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
                       updateCallback: InitializationListener) {
         receipts = ReceiptStorage(applicationContext)
         PurchasingService.registerListener(applicationContext, this)
-        restoreObserver = object : DummyIAPListener() {
-            override fun onPurchasesRestored(purchases: List<Purchase>) {
-                updateCallback.onSuccess()
-            }
-
-            override fun onAnyError(result: IBillingAPI.IAPResult, description: String) {
-                updateCallback.onBillingClientError(result, description)
-            }
-        }
-        PurchasingService.getPurchaseUpdates(receipts.hasPurchases())
+        initializationListener = InitializationFlow(updateCallback)
     }
 
     override fun loadSkuDetails(skuType: IBillingAPI.SkuType, skusList: List<String>, callback: IAPListener?) {
@@ -121,13 +152,14 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             return
         }
         val receipt = response.receipt
-        receipts.update(listOf(receipt))
+        receipts.update(listOf(receipt), userData?.userId)
         request?.onPurchased(
-            Purchase(
-                receipt.sku,
-                receipt.receiptId,
-                receipt.toJSON().toString()
-            )
+                Purchase(
+                        receipt.sku,
+                        receipt.receiptId,
+                        receipt.toJSON().toString(),
+                        userData?.userId
+                )
         )
     }
 
@@ -141,7 +173,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
                 )
                 return
             }
-            receipts.update(response.receipts)
+            receipts.update(response.receipts, userData?.userId)
             if (response.hasMore()) {
                 PurchasingService.getPurchaseUpdates(false)
                 return
@@ -152,6 +184,17 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     }
 
     override fun onUserDataResponse(userDataResponse: UserDataResponse?) {
+        if(null == userDataResponse) {
+            initializationListener?.onAnyError(IBillingAPI.IAPResult.generalError, "Failed to load user data: got null")
+            return
+        }
+        if (userDataResponse.requestStatus != UserDataResponse.RequestStatus.SUCCESSFUL) {
+            Log.e(PlayBillingImpl.TAG, "onPurchaseUpdatesResponse: ${userDataResponse.requestStatus}")
+            initializationListener?.onAnyError(IBillingAPI.IAPResult.generalError, "Failed to load user data")
+            return
+        }
+        userData = userDataResponse.userData
+        initializationListener?.onUserDataLoaded()
         // nothing yet
     }
 

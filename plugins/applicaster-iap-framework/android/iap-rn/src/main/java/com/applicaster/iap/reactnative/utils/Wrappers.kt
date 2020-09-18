@@ -20,5 +20,6 @@ fun wrap(purchase: Purchase): WritableNativeMap {
     nativeMap.putString("productIdentifier", purchase.productIdentifier)
     nativeMap.putString("transactionIdentifier", purchase.transactionIdentifier)
     nativeMap.putString("receipt", purchase.receipt)
+    purchase.userId?.let { nativeMap.putString("userId", it) }
     return nativeMap
 }
