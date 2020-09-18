@@ -72,6 +72,15 @@ export function sanitizeEventData(event: EventData) {
     return event;
   }
 
+  const { data } = event;
+
+  if (typeof data !== "object") {
+    return {
+      ...event,
+      data: { data: applyConditions(data) },
+    };
+  }
+
   return {
     ...event,
     data: applyConditions(event.data),
