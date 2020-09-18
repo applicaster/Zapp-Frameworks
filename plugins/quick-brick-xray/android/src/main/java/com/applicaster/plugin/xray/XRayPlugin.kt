@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
 import com.applicaster.plugin.xray.logadapters.FLogAdapter
 import com.applicaster.plugin.xray.logadapters.PrinterAdapter
+import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.model.Settings
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
@@ -28,9 +29,11 @@ import com.applicaster.xray.crashreporter.SendActivity
 import com.applicaster.xray.example.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.notification.XRayNotification
 import com.facebook.common.logging.FLog
+import com.facebook.common.logging.FLogDefaultLoggingDelegate
 import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
 import com.google.gson.GsonBuilder
+import org.json.JSONException
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
@@ -96,12 +99,21 @@ class XRayPlugin : CrashlogPlugin {
         hookApplicasterLogger()
 
         // todo: dirty.
-        context.getSharedPreferences(pluginId, 0)
-                .getString(storageKey, null)?.let {
-                    gson.fromJson(it, Settings::class.java)?.let {
-                        localSettings = it
-                    }
+        val sharedPreferences = context.getSharedPreferences(pluginId, 0)
+        sharedPreferences.getString(storageKey, null)?.let {
+            try {
+                gson.fromJson(it, Settings::class.java)?.let {
+                    localSettings = it
                 }
+            } catch (ex: Exception) {
+                // usually format change, just remove stored setting
+                ex.printStackTrace()
+                sharedPreferences
+                        .edit()
+                        .remove(storageKey)
+                        .apply()
+            }
+        }
 
         apply(Settings.merge(pluginSettings, localSettings))
 
@@ -120,7 +132,7 @@ class XRayPlugin : CrashlogPlugin {
 
         val reportEmail = configuration?.get(reportEmailKey)
 
-        val fileLogLevel = settings.fileLogLevel
+        val fileLogLevel = settings.fileLogLevel?.level
         if(null != fileLogLevel) {
             val fileSink = PackageFileLogSink(context, fileSinkFileName)
             Core.get()
@@ -147,7 +159,7 @@ class XRayPlugin : CrashlogPlugin {
             XRayNotification.hide(context)
         }
 
-        hookRNLogger(settings.reactNativeLogLevel)
+        hookRNLogger(settings.reactNativeLogLevel?.level)
 
         if(true == settings.reactNativeDebugLogging) {
             PrinterHolder.setPrinter(PrinterAdapter())
@@ -164,11 +176,11 @@ class XRayPlugin : CrashlogPlugin {
 
     private fun hookRNLogger(level: LogLevel?) {
         if(null == level){
-            FLog.setLoggingDelegate(null)
+            FLog.setLoggingDelegate(FLogDefaultLoggingDelegate.getInstance())
             pluginLogger.i(TAG).message("React native logger is not intercepted by X-Ray anymore")
         } else {
             FLog.setLoggingDelegate(FLogAdapter(Log.VERBOSE + level.level))
-            pluginLogger.i(TAG).message("React native logger is now intercepted by X-Ray af ${level.name}")
+            pluginLogger.i(TAG).message("React native logger is now intercepted by X-Ray at ${level.name} level")
         }
     }
 
@@ -178,14 +190,14 @@ class XRayPlugin : CrashlogPlugin {
         val fileLogLevel = configuration?.get(fileSinkKey)
         // Try to parse log level. "off" will be resolved as null.
         pluginSettings.fileLogLevel = when {
-            !fileLogLevel.isNullOrEmpty() -> enumValues<LogLevel>().find { it.name == fileLogLevel }
+            !fileLogLevel.isNullOrEmpty() -> LogLevelSetting(enumValues<LogLevel>().find { it.name == fileLogLevel })
             else -> null
         }
 
         pluginSettings.crashReporting = APDebugUtil.getIsInDebugMode()
                 && StringUtil.booleanValue(configuration?.get(crashReportingKey))
 
-        pluginSettings.reactNativeLogLevel = if(APDebugUtil.getIsInDebugMode()) LogLevel.debug else null
+        pluginSettings.reactNativeLogLevel = if(APDebugUtil.getIsInDebugMode()) LogLevelSetting(LogLevel.debug) else null
 
         pluginSettings.reactNativeDebugLogging = if(StringUtil.booleanValue(configuration?.get(debugRNKey))) true else null
 

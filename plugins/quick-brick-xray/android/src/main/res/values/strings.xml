@@ -8,4 +8,6 @@
     <string name="show_notification">Show notification</string>
     <string name="shortcut_access">Shortcut access</string>
     <string name="file_log_level">File log level</string>
+    <string name="react_flog_adapter_level">React FLog level</string>
+    <string name="react_flog_adapter_level_hint">Logging level for React Native internal FLog adapter (not QuickBrick)</string>
 </resources>
