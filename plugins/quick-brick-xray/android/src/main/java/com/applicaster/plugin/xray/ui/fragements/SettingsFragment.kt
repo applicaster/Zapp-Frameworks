@@ -84,6 +84,16 @@ class SettingsFragment : Fragment() {
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                         }
                     })
+
+            // RN Printer logging
+            view.findViewById<SwitchCompat>(R.id.switchReactNativeDebugLogging).let {
+                it.isChecked = true == settings.reactNativeDebugLogging
+                it.setOnCheckedChangeListener { _, isChecked ->
+                    settings.reactNativeDebugLogging = isChecked
+                    xRayPlugin.applySettings(settings)
+                }
+            }
+
         }
 
         return view

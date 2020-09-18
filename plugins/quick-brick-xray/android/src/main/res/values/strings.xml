@@ -10,4 +10,6 @@
     <string name="file_log_level">File log level</string>
     <string name="react_flog_adapter_level">React FLog level</string>
     <string name="react_flog_adapter_level_hint">Logging level for React Native internal FLog adapter (not QuickBrick)</string>
+    <string name="react_native_low_level_logging">React Native diagnostics logging</string>
+    <string name="react_native_low_level_logging_hint">Log React Native Printer messages. Very verbose. Always logged at debug level.</string>
 </resources>
