@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
+import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.ui.adapters.ViewsPagerAdapter
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
@@ -53,12 +54,13 @@ class LogActivity : AppCompatActivity() {
         return "true" == value
     }
 
-    private fun optLogLevel(data: Uri, key: String, default: LogLevel?): LogLevel? {
+    private fun optLogLevel(data: Uri, key: String, default: LogLevelSetting?): LogLevelSetting? {
         val value = data.getQueryParameter(key)
         if(value.isNullOrEmpty()) {
             return default
         }
-        return LogLevel.values().find { it.name == value } ?: default
+        val logLevel = LogLevel.values().find { it.name == value }
+        return if (logLevel != null) LogLevelSetting(logLevel) else default
     }
 
 }

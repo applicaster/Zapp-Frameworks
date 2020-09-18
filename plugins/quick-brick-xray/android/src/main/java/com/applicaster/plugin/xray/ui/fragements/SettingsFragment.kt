@@ -10,10 +10,9 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
-import com.applicaster.plugin.xray.model.Settings
+import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
 
@@ -65,9 +64,7 @@ class SettingsFragment : Fragment() {
                     settings.fileLogLevel,
                     object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            settings.fileLogLevel =
-                                    if (LogLevel.values().size <= position) null
-                                    else LogLevel.values()[position]
+                            settings.fileLogLevel = asLogLevelSetting(position)
                             xRayPlugin.applySettings(settings)
                         }
 
@@ -80,31 +77,43 @@ class SettingsFragment : Fragment() {
                     settings.reactNativeLogLevel,
                     object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            settings.reactNativeLogLevel =
-                                    if (LogLevel.values().size <= position) null
-                                    else LogLevel.values()[position]
+                            settings.reactNativeLogLevel = asLogLevelSetting(position)
                             xRayPlugin.applySettings(settings)
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                         }
                     })
+
+            // RN Printer logging
+            view.findViewById<SwitchCompat>(R.id.switchReactNativeDebugLogging).let {
+                it.isChecked = true == settings.reactNativeDebugLogging
+                it.setOnCheckedChangeListener { _, isChecked ->
+                    settings.reactNativeDebugLogging = isChecked
+                    xRayPlugin.applySettings(settings)
+                }
+            }
+
         }
 
         return view
     }
 
+    private fun asLogLevelSetting(position: Int) =
+            if (LogLevel.values().size <= position) LogLevelSetting()
+            else LogLevelSetting(LogLevel.values()[position])
+
     private fun bindLogLevel(spinner: Spinner,
-                             logLevel: LogLevel?,
+                             logLevel: LogLevelSetting?,
                              listener: AdapterView.OnItemSelectedListener) {
         spinner.adapter = ArrayAdapter(
                 spinner.context,
                 android.R.layout.simple_list_item_1,
                 listOf(*(LogLevel.values().map { it.name }.toTypedArray()), "off"))
-        if (null == logLevel) {
+        if (logLevel?.level == null) {
             spinner.setSelection(LogLevel.values().size) // "off" position
         } else {
-            spinner.setSelection(logLevel.level)
+            spinner.setSelection(logLevel.level!!.level)
         }
         spinner.post { spinner.onItemSelectedListener = listener }
     }

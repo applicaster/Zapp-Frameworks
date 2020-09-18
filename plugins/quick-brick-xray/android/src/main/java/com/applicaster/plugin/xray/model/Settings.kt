@@ -1,19 +1,17 @@
 package com.applicaster.plugin.xray.model
 
-import com.applicaster.xray.core.LogLevel
-
 data class Settings(val dummy: Any? = null) {
 
     var shortcutEnabled: Boolean? = null
 
     var crashReporting: Boolean? = null
 
-    var fileLogLevel: LogLevel? = null
+    var fileLogLevel: LogLevelSetting? = null
 
     var showNotification: Boolean? = null
 
     // intercept public react native messages from FLog
-    var reactNativeLogLevel: LogLevel? = null
+    var reactNativeLogLevel: LogLevelSetting? = null
 
     // intercept internal react native messages from Printer
     var reactNativeDebugLogging: Boolean? = null
