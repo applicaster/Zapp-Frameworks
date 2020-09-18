@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
 import com.applicaster.xray.crashreporter.Reporting
@@ -22,6 +23,8 @@ class FileLogFragment : Fragment() {
     private var btnClear: Button? = null
     private var btnSend: Button? = null
 
+    private val updater: Runnable = Runnable { reloadLog() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.xray_fragment_log, container, false)
@@ -34,7 +37,9 @@ class FileLogFragment : Fragment() {
         @Suppress("DEPRECATION")
         observer = object : FileObserver(file?.absolutePath, CLOSE_WRITE or DELETE_SELF) {
             override fun onEvent(event: Int, path: String?) {
-                logView?.post { reloadLog() }
+                // do not let update too often, it degrade performance to a point of unusable
+                logView?.removeCallbacks(updater)
+                logView?.postDelayed(updater, UPDATE_DELAY)
             }
         }
         view.setTag(R.id.fragment_title_tag, file!!.name)
@@ -42,17 +47,20 @@ class FileLogFragment : Fragment() {
     }
 
     private fun reloadLog() {
+        if(!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            return
+        }
         if(null == logView) {
             return
         }
         var hasLog = false
         if (!file!!.exists()) {
-            logView?.text = "[Not found]"
+            logView?.text = MSG_NOT_FOUND
         } else {
             observer?.startWatching() // can be called multiple times, no problem
             val log = file!!.readText(Charsets.UTF_8)
             hasLog = !TextUtils.isEmpty(log)
-            logView?.text = if (hasLog) log else "[Empty]"
+            logView?.text = if (hasLog) log else MSG_EMPTY
         }
         btnSend?.isEnabled = hasLog
         btnClear?.isEnabled = hasLog
@@ -61,11 +69,12 @@ class FileLogFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         observer?.stopWatching()
+        logView?.removeCallbacks(updater)
     }
 
     override fun onResume() {
         super.onResume()
-        reloadLog()
+        logView?.post(updater)
     }
 
     private fun send() {
@@ -76,7 +85,7 @@ class FileLogFragment : Fragment() {
 
     private fun clear() {
         if(file!!.delete()) {
-            logView!!.text = "[Not found]"
+            logView!!.text = MSG_NOT_FOUND
             btnSend?.isEnabled = false
             btnClear?.isEnabled = false
         }
@@ -85,5 +94,8 @@ class FileLogFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = FileLogFragment()
+        private const val UPDATE_DELAY = 100L
+        private const val MSG_EMPTY = "[Empty]"
+        private const val MSG_NOT_FOUND = "[Not found]"
     }
 }
