@@ -24,7 +24,7 @@ class ZPAppleVideoSubscriberSSO: NSObject {
     lazy var vsIsZSO: Bool = {
         var retVal = false
 
-        guard let value = configurationJSON["is_zso"] else {
+        guard let value = configurationJSON?["is_zso"] else {
             return retVal
         }
 
