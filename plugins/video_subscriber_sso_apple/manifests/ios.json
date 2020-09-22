@@ -248,9 +248,9 @@
   "custom_configuration_fields": [
     {
       "type": "checkbox",
-      "key": "enabled",
-      "tooltip_text": "Is plugin enabled on app start",
-      "default": 1
+      "key": "is_zso",
+      "tooltip_text": "Is plugin enabled for Zero Sign On",
+      "default": 0
     },
     {
       "key": "fallback_login_button_enabled",
@@ -317,7 +317,7 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.6.3"
+    "@applicaster/video_subscriber_sso_apple@0.7.0"
   ],
   "targets": [
     "mobile"
@@ -326,8 +326,8 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "dependency_version": "0.6.3",
-  "manifest_version": "0.6.3",
+  "dependency_version": "0.7.0",
+  "manifest_version": "0.7.0",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
