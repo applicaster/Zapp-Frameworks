@@ -17,14 +17,16 @@ struct Settings {
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
 
-    func merge(highPriority settings: Settings) -> Settings {
-        var newSettings = Settings(shortcutEnabled: shortcutEnabled,
-                                   fileLogLevel: fileLogLevel)
-
-        newSettings.fileLogLevel = settings.fileLogLevel
-        newSettings.shortcutEnabled = settings.shortcutEnabled
-        newSettings.customSettingsEnabled = settings.customSettingsEnabled
-
-        return newSettings
+    static func == (lhs: Settings,
+                    rhs: Settings) -> Bool {
+        return
+            lhs.customSettingsEnabled == rhs.customSettingsEnabled &&
+            lhs.shortcutEnabled == rhs.shortcutEnabled &&
+            lhs.fileLogLevel == rhs.fileLogLevel
+    }
+    
+    static func != (lhs: Settings,
+                    rhs: Settings) -> Bool {
+        return (lhs == rhs) == false
     }
 }

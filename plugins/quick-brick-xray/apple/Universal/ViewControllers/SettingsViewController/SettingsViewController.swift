@@ -28,6 +28,7 @@ class SettingsViewController: UITableViewController, SettingsViewControllerProto
             let fileLogLevelOptions = LogLevelOptions(rawValue: fileLogLevel.rawValue + 1) {
             self.fileLogLevelOptions = fileLogLevelOptions
         }
+
     }
 
     private(set) var fileLogLevelOptions: LogLevelOptions = .off
@@ -35,16 +36,13 @@ class SettingsViewController: UITableViewController, SettingsViewControllerProto
     func setFileLogLevelOptions(newLogLevelOptions: LogLevelOptions) {
         fileLogLevelOptions = newLogLevelOptions
         settings.fileLogLevel = fileLogLevelOptions.toLogLevel()
+        applyNewSettings()
     }
 
-    var settings: Settings = QickBrickXray.sharedInstance!.getLocalStorageSettings() {
-        didSet {
-            tableView.reloadData()
-            applyNewSettings()
-        }
-    }
+    var settings: Settings = QickBrickXray.sharedInstance!.getLocalStorageSettings()
 
     func applyNewSettings() {
+        tableView.reloadData()
         QickBrickXray.sharedInstance?.applyCustomSettings(settings: settings)
     }
 }
@@ -111,8 +109,10 @@ extension SettingsViewController: SwitchCellDelegate {
                            indexPath: IndexPath) {
         if SettingsIndexesHelper.isCustomSettingsEnabled(in: indexPath) {
             settings.customSettingsEnabled = value
+            applyNewSettings()
         } else if SettingsIndexesHelper.isShortcutAccessEnabled(in: indexPath) {
             settings.shortcutEnabled = value
+            applyNewSettings()
         }
     }
 }
