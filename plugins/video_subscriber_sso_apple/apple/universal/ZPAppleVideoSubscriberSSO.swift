@@ -21,6 +21,27 @@ class ZPAppleVideoSubscriberSSO: NSObject {
         VSAccountManager()
     }()
 
+    lazy var vsIsZSO: Bool = {
+        var retVal = false
+
+        guard let value = configurationJSON["is_zso"] else {
+            return retVal
+        }
+
+        // Check if value bool or string
+        if let value = value as? String {
+            if let valueBool = Bool(value) {
+                retVal = valueBool
+            } else if let valueInt = Int(value) {
+                retVal = Bool(truncating: valueInt as NSNumber)
+            }
+        } else if let value = value as? Bool {
+            retVal = value
+        }
+
+        return retVal
+    }()
+
     lazy var vsVerificationTokenEndpoint: String? = {
         guard let endpoint = configurationJSON?["verification_token_endpoint"] as? String,
             !endpoint.isEmpty else {
