@@ -33,12 +33,7 @@ extension QickBrickXray {
     }
 
     func applyNewSettings(settings: Settings) {
-        if currentSettings == nil {
-            currentSettings = settings
-        } else {
-            currentSettings = currentSettings?.merge(highPriority: settings)
-        }
-
+        currentSettings = settings
         commitSettings()
     }
 
@@ -56,7 +51,7 @@ extension QickBrickXray {
     func getLocalStorageSettings() -> Settings {
         var settings = Settings(customSettingsEnabled: false,
                                 shortcutEnabled: true,
-                                fileLogLevel: configurationHelper.logLevel())
+                                fileLogLevel: nil)
 
         if let customSettingsEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.CustomSettingsEnabled,
                                                                                                    namespace: pluginNameSpace),
