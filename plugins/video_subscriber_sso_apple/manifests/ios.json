@@ -1,6 +1,6 @@
 {
   "api": {
-    "require_startup_execution": false,
+    "require_startup_execution": true,
     "class_name": "ZPAppleVideoSubscriberSSO",
     "modules": [
       "ZappAppleVideoSubscriberSSO"
@@ -247,6 +247,12 @@
   },
   "custom_configuration_fields": [
     {
+      "type": "checkbox",
+      "key": "enabled",
+      "tooltip_text": "Is plugin enabled on app start",
+      "default": 1
+    },
+    {
       "key": "fallback_login_button_enabled",
       "type": "checkbox",
       "tooltip_text": "Enable login fallback button",
@@ -311,7 +317,7 @@
   },
   "identifier": "video_subscriber_sso_apple",
   "npm_dependencies": [
-    "@applicaster/video_subscriber_sso_apple@0.6.2"
+    "@applicaster/video_subscriber_sso_apple@0.6.3"
   ],
   "targets": [
     "mobile"
@@ -320,8 +326,8 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "dependency_version": "0.6.2",
-  "manifest_version": "0.6.2",
+  "dependency_version": "0.6.3",
+  "manifest_version": "0.6.3",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriberSSO": ":path => './node_modules/@applicaster/video_subscriber_sso_apple/apple/ZappAppleVideoSubscriberSSO.podspec'"
