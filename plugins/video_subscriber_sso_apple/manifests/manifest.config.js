@@ -245,6 +245,12 @@ const baseManifest = {
   },
   custom_configuration_fields: [
     {
+      type: "checkbox",
+      key: "enabled",
+      tooltip_text: "Is plugin enabled on app start",
+      default: 1,
+    },
+    {
       key: "fallback_login_button_enabled",
       type: "checkbox",
       tooltip_text: "Enable login fallback button",
@@ -349,7 +355,7 @@ const extra_dependencies = {
 };
 
 const api_apple = {
-  require_startup_execution: false,
+  require_startup_execution: true,
   class_name: "ZPAppleVideoSubscriberSSO",
   modules: ["ZappAppleVideoSubscriberSSO"],
   plist: {
