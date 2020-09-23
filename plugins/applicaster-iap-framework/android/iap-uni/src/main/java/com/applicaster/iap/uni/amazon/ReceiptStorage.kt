@@ -51,7 +51,14 @@ class ReceiptStorage(context: Context) {
     }
 
     fun getPurchase(sku: String) : Purchase? {
-        val json = store.getString(sku, null) ?: return null
+        var json = store.getString(sku, null)
+        if (json == null) {
+            // workaround for {sku}_parent
+            json = store.all.entries.find { it.key.startsWith(sku)}?.value?.toString()
+            if(null == json) {
+                return null
+            }
+        }
         val jsonObject = JSONObject(json)
         return fromJSON(jsonObject)
     }

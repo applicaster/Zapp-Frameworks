@@ -11,10 +11,15 @@ import com.applicaster.iap.uni.play.PlayBillingImpl
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
+    data class PurchaseRequests(
+            val sku: String,
+            val listener: IAPListener
+    )
+
     private var userData: UserData? = null
     private lateinit var receipts: ReceiptStorage
     private val skuRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
-    private val purchaseRequests: MutableMap<RequestId, IAPListener> = mutableMapOf()
+    private val purchaseRequests: MutableMap<RequestId, PurchaseRequests> = mutableMapOf()
     private var restoreObserver: IAPListener? = null
     private var initializationListener: InitializationFlow? = null
 
@@ -93,7 +98,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     override fun purchase(activity: Activity, request: PurchaseRequest, callback: IAPListener?) {
         val requestId = PurchasingService.purchase(request.productIdentifier)
         if (null != callback) {
-            purchaseRequests[requestId] = callback
+            purchaseRequests[requestId] = PurchaseRequests(request.productIdentifier, callback)
         }
     }
 
@@ -141,24 +146,36 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         val request = purchaseRequests.remove(response.requestId)
         if (PurchaseResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
             Log.e(PlayBillingImpl.TAG, "onPurchaseFailed: ${response.requestStatus}")
-            val iapResult =
-                    if (PurchaseResponse.RequestStatus.ALREADY_PURCHASED == response.requestStatus)
-                        IBillingAPI.IAPResult.alreadyOwned
-                    else
-                        IBillingAPI.IAPResult.generalError
-            request?.onPurchaseFailed(
-                    iapResult,
-                    response.requestStatus.toString())
+            if(null != request) {
+                // for items that ara not fulfilled we do not get alreadyOwned, but just error
+                // try to handle it
+                if (PurchaseResponse.RequestStatus.FAILED == response.requestStatus) {
+                    val ownedPurchase = receipts.getPurchase(request.sku)
+                    if (null != ownedPurchase) {
+                        Log.i(PlayBillingImpl.TAG, "Already owned purchase found in storage: ${request.sku}")
+                        request.listener.onPurchased(ownedPurchase)
+                        return
+                    }
+                }
+                val iapResult =
+                        if (PurchaseResponse.RequestStatus.ALREADY_PURCHASED == response.requestStatus)
+                            IBillingAPI.IAPResult.alreadyOwned
+                        else
+                            IBillingAPI.IAPResult.generalError
+                request.listener.onPurchaseFailed(
+                        iapResult,
+                        response.requestStatus.toString())
+            }
             return
         }
         val receipt = response.receipt
-        receipts.update(listOf(receipt), userData?.userId)
-        request?.onPurchased(
+        receipts.update(listOf(receipt), response.userData?.userId)
+        request?.listener?.onPurchased(
                 Purchase(
                         receipt.sku,
                         receipt.receiptId,
                         receipt.toJSON().toString(),
-                        userData?.userId
+                        response.userData?.userId
                 )
         )
     }
@@ -173,7 +190,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
                 )
                 return
             }
-            receipts.update(response.receipts, userData?.userId)
+            receipts.update(response.receipts, response.userData?.userId)
             if (response.hasMore()) {
                 PurchasingService.getPurchaseUpdates(false)
                 return
