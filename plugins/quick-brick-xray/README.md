@@ -130,3 +130,22 @@ declare interface XRayLoggerI {
   createEvent(): XRayEventI;
 }
 ```
+
+## Android
+
+X-Ray screen can be opened and configured via url:
+
+Example url: ```wino://xray?shortcutEnabled=true&crashReporting=true&reactNativeLogLevel=info```
+
+Where ```wino``` is application url scheme.
+
+All url options:
+
+shortcutEnabled: Boolean
+crashReporting: Boolean
+fileLogLevel: LogLevel
+showNotification: Boolean
+reactNativeLogLevel: LogLevel
+reactNativeDebugLogging: Boolean
+
+Available LogLevel values are: error, warning, debug, info, verbose, off
