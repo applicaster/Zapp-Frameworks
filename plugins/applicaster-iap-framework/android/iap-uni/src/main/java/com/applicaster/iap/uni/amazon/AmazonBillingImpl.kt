@@ -7,7 +7,6 @@ import com.amazon.device.iap.PurchasingListener
 import com.amazon.device.iap.PurchasingService
 import com.amazon.device.iap.model.*
 import com.applicaster.iap.uni.api.*
-import com.applicaster.iap.uni.play.PlayBillingImpl
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
@@ -15,6 +14,10 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             val sku: String,
             val listener: IAPListener
     )
+
+    companion object {
+        const val TAG = "AmazonBilling"
+    }
 
     private var userData: UserData? = null
     private lateinit var receipts: ReceiptStorage
@@ -127,7 +130,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
         val request = skuRequests.remove(response.requestId)
         if (ProductDataResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
-            Log.e(PlayBillingImpl.TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
+            Log.e(TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
             skuRequests[response.requestId]?.onSkuDetailsLoadingFailed(
                 IBillingAPI.IAPResult.generalError,
                 response.requestStatus.toString()
@@ -145,14 +148,14 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         }
         val request = purchaseRequests.remove(response.requestId)
         if (PurchaseResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
-            Log.e(PlayBillingImpl.TAG, "onPurchaseFailed: ${response.requestStatus}")
+            Log.e(TAG, "onPurchaseFailed: ${response.requestStatus}")
             if(null != request) {
                 // for items that ara not fulfilled we do not get alreadyOwned, but just error
                 // try to handle it
                 if (PurchaseResponse.RequestStatus.FAILED == response.requestStatus) {
                     val ownedPurchase = receipts.getPurchase(request.sku)
                     if (null != ownedPurchase) {
-                        Log.i(PlayBillingImpl.TAG, "Already owned purchase found in storage: ${request.sku}")
+                        Log.i(TAG, "Already owned purchase found in storage: ${request.sku}")
                         request.listener.onPurchased(ownedPurchase)
                         return
                     }
@@ -183,7 +186,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     override fun onPurchaseUpdatesResponse(response: PurchaseUpdatesResponse?) {
         if (null != response) {
             if (response.requestStatus != PurchaseUpdatesResponse.RequestStatus.SUCCESSFUL) {
-                Log.e(PlayBillingImpl.TAG, "onPurchaseUpdatesResponse: ${response.requestStatus}")
+                Log.e(TAG, "onPurchaseUpdatesResponse: ${response.requestStatus}")
                 restoreObserver?.onPurchaseRestoreFailed(
                     IBillingAPI.IAPResult.generalError,
                     response.requestStatus.toString()
@@ -206,7 +209,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             return
         }
         if (userDataResponse.requestStatus != UserDataResponse.RequestStatus.SUCCESSFUL) {
-            Log.e(PlayBillingImpl.TAG, "onPurchaseUpdatesResponse: ${userDataResponse.requestStatus}")
+            Log.e(TAG, "onPurchaseUpdatesResponse: ${userDataResponse.requestStatus}")
             initializationListener?.onAnyError(IBillingAPI.IAPResult.generalError, "Failed to load user data")
             return
         }
