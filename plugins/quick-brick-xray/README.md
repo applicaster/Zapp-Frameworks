@@ -141,11 +141,14 @@ Where ```wino``` is application url scheme.
 
 All url options:
 
-shortcutEnabled: Boolean
-crashReporting: Boolean
-fileLogLevel: LogLevel
-showNotification: Boolean
-reactNativeLogLevel: LogLevel
-reactNativeDebugLogging: Boolean
+- shortcutEnabled: Boolean
+- crashReporting: Boolean
+- fileLogLevel: LogLevel
+- showNotification: Boolean
+- reactNativeLogLevel: LogLevel
+- reactNativeDebugLogging: Boolean
 
 Available LogLevel values are: error, warning, debug, info, verbose, off
+
+If needed, screen can be also invoked from adb using same url scheme. This can come in handy for TV.
+```adb shell am start -a android.intent.action.VIEW -d "wino://xray"```
