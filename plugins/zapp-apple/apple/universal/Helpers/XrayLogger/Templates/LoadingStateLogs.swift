@@ -7,6 +7,7 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 public struct LoadingStateLogs: XrayLoggerTemplateProtocol {
     public static var subsystem: String = "\(kNativeSubsystemPath)/loading_state"

@@ -3,7 +3,7 @@
 //  ZappApple
 //
 //  Created by Anton Kononenko on 17/01/2017.
-//  Copyright © 2017 Anton Kononenko. All rights reserved.
+//  Copyright © 2017 Applicaster LTD. All rights reserved.
 //
 
 import Foundation

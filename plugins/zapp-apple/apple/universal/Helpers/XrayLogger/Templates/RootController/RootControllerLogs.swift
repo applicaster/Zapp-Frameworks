@@ -3,11 +3,13 @@
 //  ZappApple
 //
 //  Created by Anton Kononenko on 08/03/20.
-//  Copyright © 2020 Anton Kononenko. All rights reserved.
+//  Copyright © 2020 Applicaster LTD. All rights reserved.
 //
 
 import Foundation
 import XrayLogger
+import ZappCore
+
 let rootControllerSubsystem = "\(kNativeSubsystemPath)/root_controller"
 
 public struct RootControllerLogs: XrayLoggerTemplateProtocol {

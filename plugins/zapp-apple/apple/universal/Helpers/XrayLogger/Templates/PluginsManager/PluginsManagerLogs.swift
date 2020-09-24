@@ -7,6 +7,8 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
+
 let pluginsManagerSubsystem = "\(kNativeSubsystemPath)/plugins_manager"
 
 public struct PluginsManagerLogs: XrayLoggerTemplateProtocol {

@@ -3,10 +3,13 @@
 //  ZappApple
 //
 //  Created by Alex Zchut on 19/08/2020.
+//  Copyright © 2020 Applicaster LTD. All rights reserved.
 //
 
 import Foundation
 import XrayLogger
+import ZappCore
+
 let pluginsManagerHookHandlerSubsystem = "\(PluginsManagerLogs.subsystem)/hooks_handler"
 
 public struct PluginsManagerHookHandlerLogs: XrayLoggerTemplateProtocol {
