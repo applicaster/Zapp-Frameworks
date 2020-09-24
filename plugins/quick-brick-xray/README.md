@@ -131,7 +131,7 @@ declare interface XRayLoggerI {
 }
 ```
 
-## Android
+## URL Scheme
 
 X-Ray screen can be opened and configured via url:
 
@@ -141,14 +141,19 @@ Where ```wino``` is application url scheme.
 
 All url options:
 
-- shortcutEnabled: Boolean
-- crashReporting: Boolean
-- fileLogLevel: LogLevel
-- showNotification: Boolean
-- reactNativeLogLevel: LogLevel
-- reactNativeDebugLogging: Boolean
+Available __LogLevel__` values are: error, warning, debug, info, verbose, off
 
-Available LogLevel values are: error, warning, debug, info, verbose, off
+#### Universal
+
+- shortcutEnabled: __Boolean__
+- fileLogLevel: __LogLevel__
+
+#### Android
+
+- crashReporting: __Boolean__
+- showNotification: __Boolean__
+- reactNativeLogLevel: __LogLevel__
+- reactNativeDebugLogging: __Boolean__
 
 If needed, screen can be also invoked from adb using same url scheme. This can come in handy for TV.
 ```adb shell am start -a android.intent.action.VIEW -d "wino://xray"```
