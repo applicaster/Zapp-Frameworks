@@ -141,7 +141,7 @@ Where ```wino``` is application url scheme.
 
 All url options:
 
-Available __LogLevel__ values are: error, warning, debug, info, verbose, off
+Available __LogLevel__ values are: __error__, __warning__, __debug__, __info__, __verbose__, __off__
 
 #### Universal
 
