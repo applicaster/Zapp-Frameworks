@@ -29,12 +29,5 @@ extension UrlSchemeHandler {
         return false
     }
 
-    private class func queryParams(url: URL) -> [String: Any]? {
-        guard let components = URLComponents(url: url,
-                                             resolvingAgainstBaseURL: true),
-            let queryItems = components.queryItems else { return nil }
-        return queryItems.reduce(into: [String: String]()) { result, item in
-            result[item.name] = item.value
-        }
-    }
+
 }

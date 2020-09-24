@@ -16,7 +16,7 @@ const baseManifest = {
     "5c20970320f1c500088842dd",
     "5e39259919785a0008225336",
   ],
-  min_zapp_sdk: "0.0.1",
+  min_zapp_sdk: "1.0.0-Dev",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   general: {
@@ -245,6 +245,18 @@ const baseManifest = {
   },
   custom_configuration_fields: [
     {
+      type: "checkbox",
+      key: "is_zso",
+      tooltip_text: "Is plugin enabled for Zero Sign On",
+      default: 0,
+    },
+    {
+      key: "fallback_login_button_enabled",
+      type: "checkbox",
+      tooltip_text: "Enable login fallback button",
+      default: 0,
+    },
+    {
       key: "fallback_login_plugin_id",
       type: "text_input",
       label:
@@ -343,7 +355,7 @@ const extra_dependencies = {
 };
 
 const api_apple = {
-  require_startup_execution: false,
+  require_startup_execution: true,
   class_name: "ZPAppleVideoSubscriberSSO",
   modules: ["ZappAppleVideoSubscriberSSO"],
   plist: {

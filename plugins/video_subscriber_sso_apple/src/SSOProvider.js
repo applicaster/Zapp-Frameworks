@@ -33,13 +33,18 @@ const storeConnector = connectToStore((state, props) => {
     configuration: { fallback_login_plugin_id },
   } = props;
 
-  let loginPlugin = state.plugins.find(
-    ({ type, identifier }) =>
-      type === "login" && identifier === fallback_login_plugin_id
-  );
+  let loginPlugin = state.plugins.find(({ type, identifier }) => {
+    return (
+      type === "login" && identifier && identifier === fallback_login_plugin_id
+    );
+  });
 
   if (!loginPlugin) {
     loginPlugin = state.plugins.find(({ type }) => type === "login");
+  }
+
+  if (!loginPlugin) {
+    return {};
   }
 
   const values = Object.values(state.rivers);
@@ -47,7 +52,7 @@ const storeConnector = connectToStore((state, props) => {
   // eslint-disable-next-line array-callback-return,consistent-return
   const plugin = values.find((item) => {
     if (item && item.type) {
-      return item.type === loginPlugin.identifier;
+      return item.type === loginPlugin?.identifier;
     }
   });
 
@@ -151,4 +156,5 @@ const SSOProvider = (props) => {
 
   return <View style={[overlayColor, centerChildren]}>{renderFlow()}</View>;
 };
+
 export default withAppManager(storeConnector(SSOProvider));

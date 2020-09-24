@@ -49,6 +49,8 @@
   "resolutions": {
     "lodash": "^4.17.19",
     "minimist": "^0.2.1",
-    "mem": "^4.0.0"
+    "mem": "^4.0.0",
+    "node-fetch": "^2.6.1",
+    "yargs-parser": "^13.1.2"
   }
 }

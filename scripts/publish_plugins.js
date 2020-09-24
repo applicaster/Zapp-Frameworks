@@ -60,20 +60,21 @@ async function publishPlugin({ pluginFolder, newVersion }) {
 }
 async function canaryVersion({ pluginName, newVersion }) {
   const data = await exec(`yarn info ${pluginName} --json`);
-  const parsed = data && JSON.parse(data);
+  if (data) {
+    const parsed = data && JSON.parse(data);
+    const distTags = parsed.data["dist-tags"];
 
-  const distTags = parsed.data["dist-tags"];
+    const next = distTags && distTags.next;
+    if (next) {
+      const corsedNextVersion = semver.coerce(next);
+      const compareVersions = semver.compare(newVersion, corsedNextVersion);
 
-  const next = distTags && distTags.next;
-  if (next) {
-    const corsedNextVersion = semver.coerce(next);
-    const compareVersions = semver.compare(newVersion, corsedNextVersion);
+      if (compareVersions === 0) {
+        const incrementedAlpha = semver.inc(next, "prerelease", "alpha");
 
-    if (compareVersions === 0) {
-      const incrementedAlpha = semver.inc(next, "prerelease", "alpha");
-
-      if (incrementedAlpha) {
-        return incrementedAlpha;
+        if (incrementedAlpha) {
+          return incrementedAlpha;
+        }
       }
     }
   }

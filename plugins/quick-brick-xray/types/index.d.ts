@@ -7,6 +7,7 @@ declare enum XRayLogLevel {
   debug = 1,
   info = 2,
   warning = 3,
+  warn = 3,
   error = 4,
 }
 
@@ -67,6 +68,7 @@ declare interface XRayLoggerI {
   debug(event: XRayEvent): void;
   info(event: XRayEvent): void;
   warning(event: XRayEvent): void;
+  warn(event: XRayEvent): void;
   error(event: XRayEvent): void;
   addContext(context: AnyDictionary): this;
   addSubsystem(subsystem: string): XRayLoggerI;

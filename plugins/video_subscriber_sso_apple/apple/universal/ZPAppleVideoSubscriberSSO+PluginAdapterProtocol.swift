@@ -17,6 +17,13 @@ extension ZPAppleVideoSubscriberSSO: PluginAdapterProtocol {
     public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
         ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO = self
 
+        // login on app start if required by ZSO
+        if self.vsIsZSO {
+            self.performSsoOperation { success in
+                //do nothing
+            }
+        }
+
         completion?(true)
     }
 

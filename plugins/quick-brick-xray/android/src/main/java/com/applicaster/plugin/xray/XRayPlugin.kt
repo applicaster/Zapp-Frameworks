@@ -9,13 +9,15 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Log
-import android.util.Printer
+import androidx.lifecycle.MutableLiveData
+import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
+import com.applicaster.plugin.xray.logadapters.FLogAdapter
+import com.applicaster.plugin.xray.logadapters.PrinterAdapter
+import com.applicaster.plugin.xray.model.LogLevelSetting
+import com.applicaster.plugin.xray.model.Settings
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
-import com.applicaster.util.APLogger
-import com.applicaster.util.AppContext
-import com.applicaster.util.StringUtil
-import com.applicaster.util.logging.IAPLogger
+import com.applicaster.util.*
 import com.applicaster.xray.android.routing.DefaultSinkFilter
 import com.applicaster.xray.android.sinks.ADBSink
 import com.applicaster.xray.android.sinks.PackageFileLogSink
@@ -27,30 +29,58 @@ import com.applicaster.xray.crashreporter.SendActivity
 import com.applicaster.xray.example.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.notification.XRayNotification
 import com.facebook.common.logging.FLog
-import com.facebook.common.logging.LoggingDelegate
-import com.facebook.debug.debugoverlay.model.DebugOverlayTag
+import com.facebook.common.logging.FLogDefaultLoggingDelegate
 import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
+import com.google.gson.GsonBuilder
+import org.json.JSONException
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
 
     companion object {
-        private const val TAG = "XRayPlugin"
-        private const val fileSinkKey = "file_sink"
-        private const val reportEmailKey = "report_email"
-        private const val notificationKey = "notification"
-        private const val debugRNKey = "log_react_native_debug"
-        private const val crashReportingKey = "report_crashes"
+        // keys
+        private const val fileSinkKey = "fileLogLevel"
+        private const val reportEmailKey = "reportEmail"
+        private const val notificationKey = "showNotification"
+        private const val debugRNKey = "reactNativeDebugLogging"
+        private const val crashReportingKey = "crashReporting"
 
-        private const val fileSinkFileName = "xray_log.txt"
-
+        // public constants
+        const val fileSinkFileName = "xray_log.txt"
         const val inMemorySinkName = "in_memory_sink"
+
+        const val pluginId = "xray_logging_plugin"
+
+        // private constants
+        private const val TAG = "XRayPlugin"
+        private const val notificationId = 101
+        private const val storageKey = "settings"
+
+        private val gson = GsonBuilder().create()
     }
 
+    private var configuration: Map<String, String>? = null
     private var activated = false
-    private lateinit var context: Context
+    private val context: Context = AppContext.get()
     private val pluginLogger = Logger.get(TAG)
+
+    private var localSettings: Settings = Settings()
+    private val pluginSettings: Settings = Settings()
+
+    val effectiveSettingsObservable: MutableLiveData<Settings> = MutableLiveData();
+
+    fun applySettings(settings: Settings) {
+        localSettings = settings
+        apply(Settings.merge(pluginSettings, localSettings))
+        // todo: dirty. Local storage is not initialized yet
+        context.getSharedPreferences(pluginId, 0)
+                .edit()
+                .putString(storageKey, gson.toJson(localSettings))
+                .apply()
+    }
+
+    fun getEffectiveSettings(): Settings = Settings.merge(pluginSettings, localSettings)
 
     override fun activate(applicationContext: Application) {
 
@@ -58,9 +88,6 @@ class XRayPlugin : CrashlogPlugin {
             pluginLogger.w(TAG).message("X-Ray logging plugin is already activated")
             return
         }
-
-        // don't really need it there, we already had to use AppContext.get() by this point
-        context = applicationContext
 
         // add default ADB sink
         Core.get().addSink("adb", ADBSink())
@@ -71,203 +98,123 @@ class XRayPlugin : CrashlogPlugin {
         // override default SDK Logger
         hookApplicasterLogger()
 
-        // override logging from react native
-        hookRNLogger()
+        // todo: dirty.
+        val sharedPreferences = context.getSharedPreferences(pluginId, 0)
+        sharedPreferences.getString(storageKey, null)?.let {
+            try {
+                gson.fromJson(it, Settings::class.java)?.let {
+                    localSettings = it
+                }
+            } catch (ex: Exception) {
+                // usually format change, just remove stored setting
+                ex.printStackTrace()
+                sharedPreferences
+                        .edit()
+                        .remove(storageKey)
+                        .apply()
+            }
+        }
+
+        apply(Settings.merge(pluginSettings, localSettings))
 
         activated = true
         pluginLogger.i(TAG).message("X-Ray logging was activated")
     }
 
-    private fun overrideRNPrinter() {
-        PrinterHolder.setPrinter(object : Printer, com.facebook.debug.holder.Printer {
-
-            val logger = Logger.get("ReactNative/DebugPrinter")
-
-            override fun println(x: String?) {
-                logger.d(TAG).message(x!!)
-            }
-
-            override fun logMessage(tag: DebugOverlayTag?, message: String?, vararg args: Any?) {
-                logger.d(tag!!.name).message(java.lang.String.format(message!!, *args))
-            }
-
-            override fun logMessage(tag: DebugOverlayTag?, message: String?) {
-                logger.d(tag!!.name).message(message!!)
-            }
-
-            override fun shouldDisplayLogMessage(tag: DebugOverlayTag?): Boolean {
-                return true
-            }
-
-        })
-        pluginLogger.i(TAG).message("React native printer is now intercepted by X-Ray")
-    }
-
-    private fun hookRNLogger() {
-        FLog.setLoggingDelegate(object : LoggingDelegate {
-
-            val logger = Logger.get("ReactNative")
-            var level = Log.DEBUG // log at debug level since we have our own filters
-
-            override fun wtf(tag: String?, msg: String?) {
-                this.logger.e(tag!!).message(msg!!)
-            }
-
-            override fun wtf(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.e(tag!!).exception(tr!!).message(msg!!)
-            }
-
-            override fun getMinimumLoggingLevel(): Int = level
-
-            override fun w(tag: String?, msg: String?) {
-                this.logger.w(tag!!).message(msg!!)
-            }
-
-            override fun w(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.w(tag!!).exception(tr!!).message(msg!!)
-            }
-
-            override fun v(tag: String?, msg: String?) {
-                this.logger.v(tag!!).message(msg!!)
-            }
-
-            override fun v(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.v(tag!!).exception(tr!!).message(msg!!)
-            }
-
-            override fun log(priority: Int, tag: String?, msg: String?) {
-                this.logger.e(tag!!).message(msg!!)
-            }
-
-            override fun setMinimumLoggingLevel(level: Int) {
-                this.level = level
-            }
-
-            override fun isLoggable(level: Int): Boolean {
-                return this.level >= level
-            }
-
-            override fun i(tag: String?, msg: String?) {
-                this.logger.i(tag!!).message(msg!!)
-            }
-
-            override fun i(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.i(tag!!).exception(tr!!).message(msg!!)
-            }
-
-            override fun e(tag: String?, msg: String?) {
-                this.logger.e(tag!!).message(msg!!)
-            }
-
-            override fun e(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.e(tag!!).exception(tr!!).message(msg!!)
-            }
-
-            override fun d(tag: String?, msg: String?) {
-                this.logger.d(tag!!).message(msg!!)
-            }
-
-            override fun d(tag: String?, msg: String?, tr: Throwable?) {
-                this.logger.d(tag!!).exception(tr!!).message(msg!!)
-            }
-
-        })
-        pluginLogger.i(TAG).message("React native logger is now intercepted by X-Ray")
-    }
-
     private fun hookApplicasterLogger() {
-        APLogger.setLogger(object : IAPLogger {
-
-            private val logger = Logger.get("ApplicasterSDK")
-
-            override fun verbose(tag: String, msg: String) = logger.v(tag).message(msg)
-
-            override fun debug(tag: String, msg: String) = logger.d(tag).message(msg)
-
-            override fun info(tag: String, msg: String) = logger.i(tag).message(msg)
-
-            override fun warn(tag: String, msg: String) = logger.w(tag).message(msg)
-
-            override fun error(tag: String, msg: String) = logger.e(tag).message(msg)
-
-            override fun error(tag: String, msg: String, t: Throwable) =
-                    logger.e(tag).exception(t).message(msg)
-        })
+        APLogger.setLogger(APLoggerAdapter())
         pluginLogger.i(TAG).message("Applicaster APLogger is now intercepted by X-Ray")
     }
 
-    override fun init(configuration: Map<String, String>?) {
-        context = AppContext.get()
+    private fun apply(settings: Settings) {
 
         Core.get().removeSink(fileSinkKey)
 
-        val fileLogLevel = configuration?.get(fileSinkKey)
-        // Try to parse log level. "off" will be resolved as null.
-        val eFileLogLevel = when {
-            !fileLogLevel.isNullOrEmpty() -> enumValues<LogLevel>().find { it.name == fileLogLevel }
-            else -> null
-        }
         val reportEmail = configuration?.get(reportEmailKey)
 
-        if(null != eFileLogLevel) {
+        val fileLogLevel = settings.fileLogLevel?.level
+        if(null != fileLogLevel) {
             val fileSink = PackageFileLogSink(context, fileSinkFileName)
             Core.get()
                     .addSink(fileSinkKey, fileSink)
-                    .setFilter(fileSinkKey, "", DefaultSinkFilter(eFileLogLevel))
+                    .setFilter(fileSinkKey, "", DefaultSinkFilter(fileLogLevel))
             // enable our own crash reports sending, but do not handle crashes
-            Reporting.init(reportEmail?:"", fileSink.file)
+            Reporting.init(reportEmail ?: "", fileSink.file)
         } else {
             // enable basic reporting without file (not very useful)
-            Reporting.init(reportEmail?:"", null)
+            Reporting.init(reportEmail ?: "", null)
         }
 
-        // todo: we need immediate crash reporting mode in zapp: show share intent right after the crash
-        val reportCrashes = StringUtil.booleanValue(configuration?.get(crashReportingKey))
-        if(reportCrashes) {
+        @Suppress("ControlFlowWithEmptyBody")
+        if(true == settings.crashReporting) {
             Reporting.enableForCurrentThread(AppContext.get(), true)
         } else {
-            // can't disable it right now, since previous exception handler is lost, and this code could be called twice
+            // can't disable it right now, since previous exception handler is lost,
+            // and this code could be called multiple times
         }
 
-        val showNotification = StringUtil.booleanValue(configuration?.get(notificationKey))
-
-        if(showNotification) {
-            val showLogIntent = PendingIntent.getActivity(
-                    context,
-                    0,
-                    Intent(context, LogActivity::class.java)
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                    PendingIntent.FLAG_CANCEL_CURRENT
-            )!!
-
-            // actions order is kept in the UI
-            val actions: HashMap<String, PendingIntent> = linkedMapOf("Show" to showLogIntent)
-
-            if(fileLogLevel != null) {
-                // add report sharing button to notification
-                // if we have file logging enabled, allow to send it
-                val shareLogIntent = SendActivity.getSendPendingIntent(context)
-                actions.put("Send", shareLogIntent)
-            }
-
-            // here we show Notification UI with custom actions
-            XRayNotification.show(
-                    context,
-                    101,
-                    actions
-            )
+        if(true == settings.showNotification) {
+            setupNotification(null != fileLogLevel)
+        } else {
+            XRayNotification.hide(context)
         }
 
-        val logRNPrinter =  StringUtil.booleanValue(configuration?.get(debugRNKey))
-        if(logRNPrinter) {
-            overrideRNPrinter()
+        hookRNLogger(settings.reactNativeLogLevel?.level)
+
+        if(true == settings.reactNativeDebugLogging) {
+            PrinterHolder.setPrinter(PrinterAdapter())
+            pluginLogger.i(TAG).message("React native printer is now intercepted by X-Ray")
         } else {
             PrinterHolder.setPrinter(NoopPrinter.INSTANCE)
         }
 
         // add shortcut
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            context.getSystemService<ShortcutManager>(ShortcutManager::class.java)?.let { shortcutManager ->
+        setupShortcut(true == settings.shortcutEnabled)
+
+        effectiveSettingsObservable.postValue(settings)
+    }
+
+    private fun hookRNLogger(level: LogLevel?) {
+        if(null == level){
+            FLog.setLoggingDelegate(FLogDefaultLoggingDelegate.getInstance())
+            pluginLogger.i(TAG).message("React native logger is not intercepted by X-Ray anymore")
+        } else {
+            FLog.setLoggingDelegate(FLogAdapter(Log.VERBOSE + level.level))
+            pluginLogger.i(TAG).message("React native logger is now intercepted by X-Ray at ${level.name} level")
+        }
+    }
+
+    override fun init(configuration: Map<String, String>?) {
+        this.configuration = configuration
+
+        val fileLogLevel = configuration?.get(fileSinkKey)
+        // Try to parse log level. "off" will be resolved as null.
+        pluginSettings.fileLogLevel = when {
+            !fileLogLevel.isNullOrEmpty() -> LogLevelSetting(enumValues<LogLevel>().find { it.name == fileLogLevel })
+            else -> null
+        }
+
+        pluginSettings.crashReporting = APDebugUtil.getIsInDebugMode()
+                && StringUtil.booleanValue(configuration?.get(crashReportingKey))
+
+        pluginSettings.reactNativeLogLevel = if(APDebugUtil.getIsInDebugMode()) LogLevelSetting(LogLevel.debug) else null
+
+        pluginSettings.reactNativeDebugLogging = if(StringUtil.booleanValue(configuration?.get(debugRNKey))) true else null
+
+        pluginSettings.showNotification = APDebugUtil.getIsInDebugMode() && !OSUtil.isTv()
+                && StringUtil.booleanValue(configuration?.get(notificationKey))
+
+        pluginSettings.shortcutEnabled = APDebugUtil.getIsInDebugMode()
+    }
+
+    private fun setupShortcut(showNotification: Boolean) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            return
+        }
+        context.getSystemService<ShortcutManager>(ShortcutManager::class.java)?.let { shortcutManager ->
+            if (!showNotification) {
+                shortcutManager.removeDynamicShortcuts(listOf("xray"))
+            } else {
                 if (!shortcutManager.dynamicShortcuts.stream().anyMatch { it.id == "xray" }) {
                     val shortcut = ShortcutInfo.Builder(context, "xray")
                             .setShortLabel("XRay")
@@ -279,7 +226,33 @@ class XRayPlugin : CrashlogPlugin {
                 }
             }
         }
-        // todo: update filters configuration
+    }
+
+    private fun setupNotification(enableLogSharing: Boolean) {
+        val showLogIntent = PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, LogActivity::class.java)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_CANCEL_CURRENT
+        )!!
+
+        // actions order is kept in the UI
+        val actions: HashMap<String, PendingIntent> = linkedMapOf("Show" to showLogIntent)
+
+        if (enableLogSharing) {
+            // add report sharing button to notification
+            // if we have file logging enabled, allow to send it
+            val shareLogIntent = SendActivity.getSendPendingIntent(context)
+            actions["Send"] = shareLogIntent
+        }
+
+        // here we show Notification UI with custom actions
+        XRayNotification.show(
+                context,
+                notificationId,
+                actions
+        )
     }
 
 }

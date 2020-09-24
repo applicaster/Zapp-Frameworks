@@ -31,4 +31,24 @@ extension RootController: FacadeConnectorPlayerDependantProtocol {
                                                              currentTime: currentTime,
                                                              duration: duration)
     }
+    
+    public func playerAdStarted(player: PlayerProtocol) {
+             pluginsManager.playerDependants.playerAdStarted(player: player)
+    }
+       
+    public func playerAdCompleted(player: PlayerProtocol) {
+         pluginsManager.playerDependants.playerAdCompleted(player: player)
+    }
+   
+    public func playerAdSkiped(player: PlayerProtocol) {
+         pluginsManager.playerDependants.playerAdSkiped(player: player)
+    }
+   
+    public func playerAdProgressUpdate(player: PlayerProtocol,
+                                       currentTime: TimeInterval,
+                                       duration: TimeInterval) {
+         pluginsManager.playerDependants.playerAdProgressUpdate(player: player,
+                                                              currentTime: currentTime,
+                                                              duration: duration)
+    }
 }

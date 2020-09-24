@@ -16,4 +16,5 @@ import Foundation
     @objc func bundleIdentifier() -> String
     @objc func bundleName() -> String
     @objc func appVersion() -> String
+    @objc func isDebugEnvironment() -> Bool
 }

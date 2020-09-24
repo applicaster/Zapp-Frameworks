@@ -26,7 +26,7 @@
   "custom_configuration_fields": [
     {
       "type": "dropdown",
-      "key": "file_sink",
+      "key": "fileLogLevel",
       "tooltip_text": "Minimum message level to log to the file",
       "multiple": false,
       "options": [
@@ -40,28 +40,28 @@
       "default": "error"
     },
     {
-      "key": "report_email",
+      "key": "reportEmail",
       "type": "text",
       "tooltip_text": "Email to send reports to. Empty is allowed."
     },
     {
       "type": "checkbox",
       "label": "Notification controls",
-      "key": "notification",
+      "key": "showNotification",
       "default": 1,
-      "tooltip_text": "Enable notification controls"
+      "tooltip_text": "Enable notification controls in debug builds"
     },
     {
       "type": "checkbox",
       "label": "Report crashes",
-      "key": "report_crashes",
+      "key": "crashReporting",
       "default": 1,
-      "tooltip_text": "Enable crash reporting"
+      "tooltip_text": "Enable crash reporting in debug builds"
     },
     {
       "type": "checkbox",
       "label": "Log react native debug messages",
-      "key": "log_react_native_debug",
+      "key": "reactNativeDebugLogging",
       "default": 0,
       "tooltip_text": "Enable logging or react native internal debug messages. Very verbose!"
     }
@@ -73,25 +73,27 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "0.0.2",
+  "manifest_version": "0.2.2",
+  "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.0.2"
+    "@applicaster/quick-brick-xray@0.2.2",
+    "@applicaster/x-ray@0.0.13-alpha"
   ],
   "project_dependencies": [
     {
-      "xray": "node_modules/@applicaster/x-ray/android/xray"
+      "xray-core": "node_modules/@applicaster/x-ray/android/xray-core"
     },
     {
-      "xray-react-native": "node_modules/@applicaster/x-ray/android/react-native"
+      "xray-react-native": "node_modules/@applicaster/x-ray/android/xray-react-native"
+    },
+    {
+      "xray-notification": "node_modules/@applicaster/x-ray/android/xray-notification"
+    },
+    {
+      "xray-reporting": "node_modules/@applicaster/x-ray/android/xray-crashreporter"
     },
     {
       "xrayplugin": "node_modules/@applicaster/quick-brick-xray/android"
-    },
-    {
-      "xray-notification": "node_modules/@applicaster/x-ray/android/notification"
-    },
-    {
-      "xray-reporting": "node_modules/@applicaster/x-ray/android/crashreporter"
     }
   ]
 }

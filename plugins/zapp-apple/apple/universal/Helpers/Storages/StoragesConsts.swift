@@ -31,8 +31,6 @@ public struct ZappStorageKeys {
     public static let uuid = "uuid"
     public static let tvOS = "tvOS"
     public static let iOS = "iOS"
-    public static let idfa = "idfa"
-    public static let advertisingIdentifier = "advertisingIdentifier"
     public static let deviceType = "deviceType"
     public static let deviceWidth = "deviceWidth"
     public static let deviceHeight = "deviceHeight"
@@ -53,6 +51,7 @@ public struct ZappStorageKeys {
     public static let remoteConfigurationUrl = "remote_configuration_url"
     public static let pluginConfigurationUrl = "plugin_configuration_url"
     public static let riversUrl = "rivers_url"
+    public static let applicationEnvironment = "application_environment"
 }
 
 //Example of the expected json

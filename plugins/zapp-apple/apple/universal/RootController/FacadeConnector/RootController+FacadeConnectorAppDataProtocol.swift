@@ -26,4 +26,8 @@ extension RootController: FacadeConnectorAppDataProtocol {
         return SessionStorage.sharedInstance.get(key: ZappStorageKeys.bundleIdentifier,
                                                  namespace: nil) ?? ""
     }
+
+    public func isDebugEnvironment() -> Bool {
+        return FeaturesCustomization.isDebugEnvironment()
+    }
 }

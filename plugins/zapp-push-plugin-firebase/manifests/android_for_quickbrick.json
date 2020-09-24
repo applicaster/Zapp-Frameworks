@@ -1,0 +1,41 @@
+{
+  "api": {
+    "class_name": "com.applicaster.firebasepushpluginandroid.FirebasePushProvider"
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Firebase Notifications",
+  "description": "Send high-velocity targeted push via Google's Firebase Notifications Console",
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1552096080/Plugins/Firebase_Push1.png",
+  "type": "push_provider",
+  "identifier": "ZappPushPluginFirebase",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
+  ],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "2.0.1",
+  "npm_dependencies": [
+    "@applicaster/zapp-push-plugin-firebase@2.0.1"
+  ],
+  "project_dependencies": [
+    {
+      "zapp-push-plugin-firebase": "node_modules/@applicaster/zapp-push-plugin-firebase/android"
+    }
+  ]
+}

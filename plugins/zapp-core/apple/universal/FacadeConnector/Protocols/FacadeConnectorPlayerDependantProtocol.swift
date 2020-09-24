@@ -9,5 +9,5 @@
 import Foundation
 
 // Allows lower layer classes like plugins to send analytics using the analytics providers set for the app
-@objc public protocol FacadeConnectorPlayerDependantProtocol: PlayerObserverProtocol {
+@objc public protocol FacadeConnectorPlayerDependantProtocol: PlayerObserverProtocol, PlayerAdObserverProtocol {
 }
