@@ -7,6 +7,7 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 let pushPluginsManagerLogsSubsystem = "\(PluginsManagerLogs.subsystem)/push_plugins"
 

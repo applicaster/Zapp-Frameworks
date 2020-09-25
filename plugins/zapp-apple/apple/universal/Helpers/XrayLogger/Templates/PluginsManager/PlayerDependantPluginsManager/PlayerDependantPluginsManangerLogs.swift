@@ -7,6 +7,7 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 let playerDependantPluginsManagerSubsystem = "\(PluginsManagerLogs.subsystem)/player_dependant_plugins"
 

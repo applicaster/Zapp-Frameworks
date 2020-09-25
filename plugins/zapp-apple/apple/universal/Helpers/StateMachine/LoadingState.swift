@@ -7,9 +7,11 @@
 //
 
 import Foundation
-import os.log
+import XrayLogger
 
 public class LoadingState {
+    lazy var logger = Logger.getLogger(for: LoadingStateLogs.subsystem)
+
     /// Readable name for debugging
     var readableName: String?
 
@@ -39,7 +41,9 @@ public class LoadingState {
     /// Defines state loading status
     private(set) var loadingState: LoadingStateTypes = .initial {
         didSet {
-            os_log("STATE %@ LOADING_STATE: %@ \n", readableName ?? name, loadingState.toString())
+            logger?.debugLog(template: LoadingStateLogs.loadingStateDidSet,
+                             data: ["name": name,
+                                    "loadingState": loadingState.toString()])
         }
     }
 

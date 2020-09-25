@@ -7,6 +7,8 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
+
 let pluginsManagerControlFlowSubsystem = "\(PluginsManagerLogs.subsystem)/control_flow"
 
 public struct PluginsManagerControlFlowLogs: XrayLoggerTemplateProtocol {

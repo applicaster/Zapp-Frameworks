@@ -3,10 +3,12 @@
 //  ZappApple
 //
 //  Created by Alex Zchut on 20/08/2020.
+//  Copyright © 2020 Applicaster LTD. All rights reserved.
 //
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 public struct TrackingManagerLogs: XrayLoggerTemplateProtocol {
     public static var subsystem: String = "\(kNativeSubsystemPath)/tracking_manager"

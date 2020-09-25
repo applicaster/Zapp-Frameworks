@@ -7,6 +7,7 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 let analyticsPluginsManagerLogsSubsystem = "\(PluginsManagerLogs.subsystem)/analytics_plugins"
 

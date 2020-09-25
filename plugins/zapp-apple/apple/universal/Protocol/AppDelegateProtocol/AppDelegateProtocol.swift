@@ -3,7 +3,7 @@
 //  ZappTvOS
 //
 //  Created by Anton Kononenko on 1/8/20.
-//  Copyright © 2020 Anton Kononenko. All rights reserved.
+//  Copyright © 2020 Applicaster LTD. All rights reserved.
 //
 
 import Foundation
