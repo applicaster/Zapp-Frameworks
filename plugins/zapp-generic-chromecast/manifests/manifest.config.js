@@ -20,7 +20,7 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  preload: true,
+  preload: false,
   custom_configuration_fields: [
     {
       type: "text",
