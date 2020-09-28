@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.media.RingtoneManager
 import android.net.Uri
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
@@ -20,6 +21,7 @@ class NotificationUtil {
         private val TAG = NotificationUtil::class.java.canonicalName
 
         private const val CUSTOM_SOUND_KEY = "custom sound"
+        private const val DEFAULT_SND = "system_default"
         private const val SILENT_PUSH_KEY = "silent"
 
         private var title: String = ""
@@ -30,10 +32,10 @@ class NotificationUtil {
         private var provider = "Firebase push provider"
 
         fun createCustomNotification(
-            context: Context,
-            pushMessage: PushMessage,
-            notificationIconId: Int,
-            notificationId: Int
+                context: Context,
+                pushMessage: PushMessage,
+                notificationIconId: Int,
+                notificationId: Int
         ): Notification {
 
             title = pushMessage.title
@@ -83,6 +85,22 @@ class NotificationUtil {
 
         private fun isSilent(message: PushMessage): Boolean {
             return SILENT_PUSH_KEY.equals(CUSTOM_SOUND_KEY, ignoreCase = true)
+        }
+
+        @JvmStatic
+        fun getSoundUri(sound: String?, context: Context): Uri? {
+            if (StringUtil.isEmpty(sound) || DEFAULT_SND.equals(sound, ignoreCase = true)) {
+                return Settings.System.DEFAULT_NOTIFICATION_URI
+            }
+
+            //no sound push
+            if (SILENT_PUSH_KEY.equals(sound, ignoreCase = true)) {
+                return null
+            }
+
+            //custom sound push
+            val custom: Uri? = getSoundUriByName(sound!!, context)
+            return custom ?: Settings.System.DEFAULT_NOTIFICATION_URI
         }
 
         private fun getSoundUriByName(soundName: String, context: Context): Uri? {
