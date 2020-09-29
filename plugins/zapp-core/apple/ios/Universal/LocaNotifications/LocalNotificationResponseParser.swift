@@ -21,11 +21,25 @@ public class LocalNotificationResponseParser {
         } else if let url = findUrlForDefaultActionsPayload(payload: payload,
                                                             actionIdentifier: actionIdentifier) {
             return url
+        } else if let url = findUrlInPayload(payload: payload) {
+            return url
         }
         return nil
     }
 
-    /// Retrieve url from payload data if deafault action match requested idenifier
+    /// Retrieve url from payload
+    /// - Parameters:
+    ///   - payload: Dictionary that contains data for creation Local Notification
+    class func findUrlInPayload(payload: [AnyHashable: Any]) -> URL? {
+
+        if let urlString = payload[LocalNotificationPayloadConst.url] as? String,
+            let url = URL(string: urlString) {
+            return url
+        }
+        return nil
+    }
+    
+    /// Retrieve url from payload data if default action match requested idenifier
     /// - Parameters:
     ///   - payload: Dictionary that contains data for creation Local Notification
     ///   - actionIdentifier: Unique identifier of the action  that user selected

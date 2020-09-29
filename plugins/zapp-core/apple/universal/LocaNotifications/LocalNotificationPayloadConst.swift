@@ -58,6 +58,10 @@ public struct LocalNotificationPayloadConst {
     
     /// Url of the dismiss action
     public static let dismissActionUrl = "dismissActionUrl"
+    
+    /// Custom open Url
+    public static let url = "url"
+
 }
 
 public struct LocalNotificationPayloadActions {
