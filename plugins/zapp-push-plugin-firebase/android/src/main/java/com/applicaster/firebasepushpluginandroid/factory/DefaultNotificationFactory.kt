@@ -2,7 +2,6 @@ package com.applicaster.firebasepushpluginandroid.factory
 
 import android.app.Notification
 import android.content.Context
-import android.net.Uri
 import com.applicaster.util.OSUtil
 import com.example.firebasepushpluginandroid.R
 import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil
@@ -13,11 +12,10 @@ class DefaultNotificationFactory(private val context: Context) : NotificationFac
 
     override fun createNotification(pushMessage: PushMessage): Notification {
         return NotificationUtil.createCustomNotification(
-            context,
-            pushMessage,
-            getSmallIconId(),
-            generateNotificationId()
-            )
+                context,
+                pushMessage,
+                getSmallIconId()
+        )
     }
 
     override fun getSmallIconId(): Int {

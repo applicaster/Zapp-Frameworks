@@ -9,7 +9,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
-import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
 import com.applicaster.util.StringUtil
 import com.bumptech.glide.Glide
@@ -24,33 +23,23 @@ class NotificationUtil {
         private const val DEFAULT_SND = "system_default"
         private const val SILENT_PUSH_KEY = "silent"
 
-        private var title: String = ""
-        private var contentText: String = ""
-        private var sound: Uri? = Uri.EMPTY
-        private var iconUrl: String = ""
-        private var messageId: String = ""
-        private var provider = "Firebase push provider"
-
         fun createCustomNotification(
                 context: Context,
                 pushMessage: PushMessage,
-                notificationIconId: Int,
-                notificationId: Int
+                notificationIconId: Int
         ): Notification {
-
-            title = pushMessage.title
-            contentText = pushMessage.contentText
-            sound = Uri.parse(pushMessage.sound)
-            iconUrl = pushMessage.icon
-            messageId = pushMessage.messageId
-            provider = "Firebase push provider"
+            val title = pushMessage.title
+            val contentText = pushMessage.contentText
+            val sound = pushMessage.sound
+            val iconUrl = pushMessage.icon
+            val messageId = pushMessage.messageId
 
             var largeIconBitmap: Bitmap? = null
             if (iconUrl.isNotEmpty()) {
                  largeIconBitmap = Glide.with(context.applicationContext).asBitmap().load(iconUrl).submit().get()
             }
 
-            val notificationBuilder = NotificationCompat.Builder(context, FIREBASE_DEFAULT_CHANNEL_ID)
+            val notificationBuilder = NotificationCompat.Builder(context, pushMessage.channel)
             notificationBuilder.apply {
                 setSmallIcon(notificationIconId)
                 setLargeIcon(largeIconBitmap)
@@ -110,7 +99,7 @@ class NotificationUtil {
             }
             val id = context.resources.getIdentifier(soundName, "raw", context.packageName)
             if (id != 0) {
-                res = Uri.parse("android.resource://" + context.packageName + "/" + id)
+                res = Uri.parse("android.resource://${context.packageName}/$id")
             }
             return res
         }

@@ -3,6 +3,8 @@ package com.applicaster.firebasepushpluginandroid
 const val FIREBASE_DEFAULT_CHANNEL_ID = "firebase_default_channel"
 const val CHANNEL_NAME_KEY = "channel_name_key"
 
+const val PLUGIN_ID = "ZappPushPluginFirebase"
+
 object ChannelSettings {
     // per-channel settings keys
 

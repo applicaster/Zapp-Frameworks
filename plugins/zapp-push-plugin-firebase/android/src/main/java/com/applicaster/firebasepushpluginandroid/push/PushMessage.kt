@@ -1,24 +1,26 @@
 package com.applicaster.firebasepushpluginandroid.push
 
 import android.net.Uri
+import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 
 data class PushMessage(
-    var body: String = "",
-    var bodyLocalizationArgs: Array<String> = arrayOf(),
-    var bodyLocalizationKey: Array<String> = arrayOf(),
-    var clickAction: String = "",
-    var color: String = "",
-    var icon: String = "",
-    var deepLink: Uri? = Uri.EMPTY,
-    var sound: String = "",
-    var tag: String = "",
-    var title: String = "",
-    var titleLocalizationArgs: Array<String> = arrayOf(),
-    var titleLocalizationKey: Array<String> = arrayOf(),
-    var description: String = "",
-    var contentText: String = "",
-    var messageId: String = ""
-    ) {
+        var body: String = "",
+        var bodyLocalizationArgs: Array<String> = arrayOf(),
+        var bodyLocalizationKey: Array<String> = arrayOf(),
+        var clickAction: String = "",
+        var color: String = "",
+        var icon: String = "",
+        var deepLink: Uri? = Uri.EMPTY,
+        var sound: Uri? = null,
+        var tag: String = "",
+        var title: String = "",
+        var titleLocalizationArgs: Array<String> = arrayOf(),
+        var titleLocalizationKey: Array<String> = arrayOf(),
+        var description: String = "",
+        var contentText: String = "",
+        var messageId: String = "",
+        val channel: String = FIREBASE_DEFAULT_CHANNEL_ID
+) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

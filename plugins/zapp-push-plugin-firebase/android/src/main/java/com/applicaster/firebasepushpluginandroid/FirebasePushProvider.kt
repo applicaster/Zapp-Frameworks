@@ -12,14 +12,15 @@ import android.text.TextUtils
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil
+import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil.Companion.getSoundUri
 import com.applicaster.firebasepushpluginandroid.services.APMessagingService
+import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.plugin_manager.push_plugin.PushContract
 import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
 import com.applicaster.util.APLogger
 import com.applicaster.util.StringUtil
-import com.applicaster.util.TextUtil
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
@@ -36,11 +37,14 @@ class FirebasePushProvider : PushContract {
 
     private var pluginsParamsMap: MutableMap<*, *>? = null
 
+    private val channelSounds = mutableMapOf<String, Uri>()
+
     override fun initPushProvider(context: Context) {
 
         if (Build.VERSION.SDK_INT >= 26) {
             ensureChannels(context)
         }
+        buildSoundLookup(context)
 
         FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener {
@@ -191,6 +195,30 @@ class FirebasePushProvider : PushContract {
         notificationManager.createNotificationChannel(channel)
     }
 
+
+    private fun buildSoundLookup(context: Context) {
+        // Custom channels
+        var i = 1
+        while (true) {
+            val channelId = getParamByKey(ChannelSettings.CHANNEL_ID_KEY + "_" + i)
+            if (StringUtil.isEmpty(channelId)) {
+                break
+            }
+            val sound = getParamByKey(ChannelSettings.CHANNEL_SOUND_KEY + "_" + i)
+            val soundUrl: Uri? = getSoundUri(sound, context)
+            if (soundUrl != null) {
+                channelSounds[channelId!!] = soundUrl
+            }
+            ++i
+        }
+        // Default channel
+        val sound = getParamByKey(ChannelSettings.CHANNEL_SOUND_KEY)
+        val soundUrl: Uri? = getSoundUri(sound, context)
+        if (null != soundUrl) {
+            channelSounds[FIREBASE_DEFAULT_CHANNEL_ID] = soundUrl
+        }
+    }
+
     private fun getImportanceId(importance: String?): Int {
         if (StringUtil.isEmpty(importance)) {
             return NotificationManagerCompat.IMPORTANCE_DEFAULT
@@ -206,5 +234,14 @@ class FirebasePushProvider : PushContract {
 
     private fun getParamByKey(key: String): String? {
         return pluginsParamsMap?.get(key) as String?
+    }
+
+    fun getSoundForChannel(channel: String) : Uri? = channelSounds[channel]
+
+    companion object {
+        fun getInstance(): FirebasePushProvider? {
+            val plugin = PluginManager.getInstance().getInitiatedPlugin(PLUGIN_ID)
+            return plugin?.instance as? FirebasePushProvider
+        }
     }
 }
