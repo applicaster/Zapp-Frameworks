@@ -40,7 +40,7 @@ abstract class PromiseListener(protected val promise: Promise) : IAPListener {
             reportError("PurchaseAcknowledge", result, description)
 
     private fun reportError(operation: String, result: IBillingAPI.IAPResult, description: String) {
-        Log.d(IAPBridge.TAG, "$operation failed with result $result: $description")
+        Log.e(IAPBridge.TAG, "$operation failed with result $result: $description")
         promise.reject(result.toString(), description)
     }
 }

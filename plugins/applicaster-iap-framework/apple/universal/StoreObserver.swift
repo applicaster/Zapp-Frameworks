@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Messages
 import StoreKit
 
 // Buy Item
