@@ -45,8 +45,14 @@ class ApplicasterIAPBridge: NSObject, RCTBridgeModule {
                     ReactNativeProductsResponseKeys.payload: payload,
                 ])
             case let .failure(error):
+                var errorMessage = error.localizedDescription
+                if errorMessage == "UNKNOWN_ERROR",
+                    let underlyingError = (error as NSError).userInfo["NSUnderlyingError"] as? NSError {
+                    errorMessage = underlyingError.localizedDescription
+                }
+
                 rejecter(ApplicasterIAPBridgeErrors.generalError,
-                         error.localizedDescription,
+                         errorMessage,
                          error)
             }
         }
