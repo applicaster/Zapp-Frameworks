@@ -26,6 +26,22 @@ public class LocalNotificationResponseParser {
         }
         return nil
     }
+    
+    /// Check if should open the url with internal safari browser
+    /// - Parameters:
+    ///   - payload: Dictionary that contains data for creation Local Notification
+    public class func urlToPresentModallyWithSafari(response: UNNotificationResponse) -> URL? {
+        let payload = response.notification.request.content.userInfo
+        
+        guard let url = findUrlInPayload(payload: payload),
+              let shouldOpenExternally = payload[LocalNotificationPayloadConst.external] as? Bool,
+              shouldOpenExternally == false,
+              ["http", "https"].contains(url.scheme?.lowercased()) else {
+            return nil
+        }
+        
+        return url
+    }
 
     /// Retrieve url from payload
     /// - Parameters:

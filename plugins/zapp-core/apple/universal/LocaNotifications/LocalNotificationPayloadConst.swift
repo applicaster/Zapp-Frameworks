@@ -62,6 +62,9 @@ public struct LocalNotificationPayloadConst {
     /// Custom open Url
     public static let url = "url"
 
+    /// Open externally
+    public static let external = "external"
+
 }
 
 public struct LocalNotificationPayloadActions {
