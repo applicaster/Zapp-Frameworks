@@ -14,6 +14,9 @@
     "5c20970320f1c500088842dd",
     "5e39259919785a0008225336"
   ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -31,7 +34,7 @@
     }
   ],
   "platform": "ios",
-  "manifest_version": "0.5.3",
+  "manifest_version": "0.5.4",
   "min_zapp_sdk": "20.0.0-Dev",
   "extra_dependencies": [
     {
@@ -52,7 +55,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.5.3"
+    "@applicaster/video_subscription_registration_apple@0.5.4"
   ],
   "targets": [
     "mobile"
