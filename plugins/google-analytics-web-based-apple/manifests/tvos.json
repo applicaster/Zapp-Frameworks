@@ -19,6 +19,9 @@
   "min_zapp_sdk": "12.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -38,14 +41,14 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/google-analytics-web-based-apple@0.9.0"
+    "@applicaster/google-analytics-web-based-apple@0.9.1"
   ],
   "identifier": "zapp_google_analytics",
   "targets": [
     "tv"
   ],
   "platform": "tvos",
-  "manifest_version": "0.9.0",
+  "manifest_version": "0.9.1",
   "extra_dependencies": [
     {
       "ZappGoogleAnalytics": ":path => './node_modules/@applicaster/google-analytics-web-based-apple/apple/ZappGoogleAnalytics.podspec'"
