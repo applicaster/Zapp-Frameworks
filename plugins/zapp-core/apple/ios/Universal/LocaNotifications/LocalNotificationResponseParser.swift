@@ -32,15 +32,32 @@ public class LocalNotificationResponseParser {
     ///   - payload: Dictionary that contains data for creation Local Notification
     public class func urlToPresentModallyWithSafari(response: UNNotificationResponse) -> URL? {
         let payload = response.notification.request.content.userInfo
+        let shouldOpenExternally = boolValue(for: payload[LocalNotificationPayloadConst.external])
         
         guard let url = findUrlInPayload(payload: payload),
-              let shouldOpenExternally = payload[LocalNotificationPayloadConst.external] as? Bool,
               shouldOpenExternally == false,
               ["http", "https"].contains(url.scheme?.lowercased()) else {
             return nil
         }
         
         return url
+    }
+    
+    class func boolValue(for content: Any?) -> Bool {
+        var retVal = false
+
+        // Check if value bool or string
+        if let content = content as? String {
+            if let contentBool = Bool(content) {
+                retVal = contentBool
+            } else if let contentInt = Int(content) {
+                retVal = Bool(truncating: contentInt as NSNumber)
+            }
+        }
+        else if let content = content as? Bool {
+            retVal = content
+        }
+        return retVal
     }
 
     /// Retrieve url from payload
