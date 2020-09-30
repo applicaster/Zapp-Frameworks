@@ -34,8 +34,9 @@ public class PushPluginsManager: PluginManagerBase {
     }
 
     public func registerDeviceToken(data: Data) {
+        let dataAsString = String(decoding: data, as: UTF8.self)
         logger?.verboseLog(template: PushPluginsManagerLogs.registerDeviceToken,
-                           data: ["token": data])
+                           data: ["token": dataAsString])
 
         _providers.forEach { providerDict in
             let provider = providerDict.value
