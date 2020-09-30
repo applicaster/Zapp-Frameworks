@@ -22,13 +22,16 @@
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
   "npm_dependencies": [
-    "@applicaster/crash-logs-ms-app-center-apple@4.9.0"
+    "@applicaster/crash-logs-ms-app-center-apple@4.9.1"
   ],
   "targets": [
     "mobile"
   ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "platform": "ios",
-  "manifest_version": "4.9.0",
+  "manifest_version": "4.9.1",
   "extra_dependencies": [
     {
       "ZappCrashlogsMsAppCenter": ":path => './node_modules/@applicaster/crash-logs-ms-app-center-apple/apple/ZappCrashlogsMsAppCenter.podspec'"
