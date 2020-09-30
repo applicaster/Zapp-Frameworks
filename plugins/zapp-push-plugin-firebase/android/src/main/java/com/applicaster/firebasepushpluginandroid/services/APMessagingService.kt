@@ -83,7 +83,7 @@ class APMessagingService : FirebaseMessagingService() {
             if (data?.containsKey("title") == true) title = data["title"]
             if (data?.containsKey("body") == true) body = data["body"]
             if (data?.containsKey("tag") == true) tag = data["tag"]
-            if (data?.containsKey("channel") == true) channel = data["channel"]
+            if (data?.containsKey("android_channel_id") == true) channel = data["android_channel_id"]
         }
 
         var soundUri: Uri? = Settings.System.DEFAULT_NOTIFICATION_URI

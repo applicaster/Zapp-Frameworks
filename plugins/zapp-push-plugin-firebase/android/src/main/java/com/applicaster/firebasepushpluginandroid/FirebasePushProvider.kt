@@ -12,7 +12,6 @@ import android.text.TextUtils
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil
-import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil.Companion.getSoundUri
 import com.applicaster.firebasepushpluginandroid.services.APMessagingService
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.plugin_manager.push_plugin.PushContract
@@ -200,12 +199,12 @@ class FirebasePushProvider : PushContract {
         // Custom channels
         var i = 1
         while (true) {
-            val channelId = getParamByKey(ChannelSettings.CHANNEL_ID_KEY + "_" + i)
+            val channelId = getParamByKey("${ChannelSettings.CHANNEL_ID_KEY}_$i")
             if (StringUtil.isEmpty(channelId)) {
                 break
             }
-            val sound = getParamByKey(ChannelSettings.CHANNEL_SOUND_KEY + "_" + i)
-            val soundUrl: Uri? = getSoundUri(sound, context)
+            val sound = getParamByKey("${ChannelSettings.CHANNEL_SOUND_KEY}_$i")
+            val soundUrl: Uri? = NotificationUtil.getSoundUri(sound, context)
             if (soundUrl != null) {
                 channelSounds[channelId!!] = soundUrl
             }
@@ -213,7 +212,7 @@ class FirebasePushProvider : PushContract {
         }
         // Default channel
         val sound = getParamByKey(ChannelSettings.CHANNEL_SOUND_KEY)
-        val soundUrl: Uri? = getSoundUri(sound, context)
+        val soundUrl: Uri? = NotificationUtil.getSoundUri(sound, context)
         if (null != soundUrl) {
             channelSounds[FIREBASE_DEFAULT_CHANNEL_ID] = soundUrl
         }
