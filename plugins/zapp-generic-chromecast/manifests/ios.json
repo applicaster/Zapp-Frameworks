@@ -23,6 +23,12 @@
       "type": "text",
       "key": "chromecast_app_id",
       "tooltip_text": "Chromecast application ID"
+    },
+    {
+      "type": "text",
+      "key": "plist.array.NSBonjourServices",
+      "tooltip_text": "Please replace ABCD1234 with Chromecast appId",
+      "default": "_ABCD1234._googlecast._tcp, _googlecast._tcp"
     }
   ],
   "ui_frameworks": [
@@ -31,16 +37,19 @@
   "identifier": "chromecast_qb",
   "platform": "ios",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.2.8",
-  "manifest_version": "0.2.8",
+  "dependency_version": "0.3.0",
+  "manifest_version": "0.3.0",
   "api": {
     "class_name": "ChromecastAdapter",
     "modules": [
       "ZappChromecast"
-    ]
+    ],
+    "plist": {
+      "NSLocalNetworkUsageDescription": "App uses the local network to discover Cast-enabled devices on your WiFi network."
+    }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@0.2.8"
+    "@applicaster/zapp-generic-chromecast@0.3.0"
   ],
   "targets": [
     "mobile"
