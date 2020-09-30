@@ -32,13 +32,16 @@
   ],
   "identifier": "video_playing_now_apple",
   "npm_dependencies": [
-    "@applicaster/video_playing_now_apple@0.3.5"
+    "@applicaster/video_playing_now_apple@0.3.6"
   ],
   "targets": [
     "tv"
   ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.3.5",
+  "manifest_version": "0.3.6",
   "extra_dependencies": [
     {
       "ZappAppleVideoNowPlayingInfo": ":path => './node_modules/@applicaster/video_playing_now_apple/apple/ZappAppleVideoNowPlayingInfo.podspec'"
