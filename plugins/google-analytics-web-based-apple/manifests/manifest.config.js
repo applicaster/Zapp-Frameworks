@@ -14,6 +14,8 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
+  ui_frameworks: ["quickbrick"],
+
   custom_configuration_fields: [
     {
       type: "text",
@@ -29,7 +31,8 @@ const baseManifest = {
     {
       type: "text",
       key: "user_id",
-      tooltip_text: "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
+      tooltip_text:
+        "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
     },
   ],
   npm_dependencies: [],

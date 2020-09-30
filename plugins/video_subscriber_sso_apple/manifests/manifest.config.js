@@ -16,6 +16,7 @@ const baseManifest = {
     "5c20970320f1c500088842dd",
     "5e39259919785a0008225336",
   ],
+  ui_frameworks: ["quickbrick"],
   min_zapp_sdk: "1.0.0-Dev",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",

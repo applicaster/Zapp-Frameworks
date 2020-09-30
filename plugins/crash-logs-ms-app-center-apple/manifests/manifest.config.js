@@ -18,6 +18,7 @@ const baseManifest = {
   npm_dependencies: [],
   identifier: "crashlogs_appcenter",
   targets: ["mobile"],
+  ui_frameworks: ["quickbrick"],
 };
 
 function createManifest({ version, platform }) {

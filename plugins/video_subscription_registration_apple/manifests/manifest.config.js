@@ -14,6 +14,7 @@ const baseManifest = {
     "5c20970320f1c500088842dd",
     "5e39259919785a0008225336",
   ],
+  ui_frameworks: ["quickbrick"],
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [
@@ -26,9 +27,10 @@ const baseManifest = {
     {
       type: "text",
       key: "access_level",
-      tooltip_text: "Access Level (0 - free, 1 - account, 2 - paid subscription)",
+      tooltip_text:
+        "Access Level (0 - free, 1 - account, 2 - paid subscription)",
       default: "0",
-    }
+    },
   ],
 };
 

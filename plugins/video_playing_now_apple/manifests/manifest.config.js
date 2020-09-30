@@ -27,6 +27,7 @@ const baseManifest = {
   identifier: "video_playing_now_apple",
   npm_dependencies: [],
   targets: ["mobile"],
+  ui_frameworks: ["quickbrick"],
 };
 
 function createManifest({ version, platform }) {
