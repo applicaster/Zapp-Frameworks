@@ -27,6 +27,12 @@ const baseManifest = {
       key: "chromecast_app_id",
       tooltip_text: "Chromecast application ID",
     },
+    {
+      type: "text",
+      key: "plist.array.NSBonjourServices",
+      tooltip_text: "Please replace ABCD1234 with Chromecast appId",
+      default: "_ABCD1234._googlecast._tcp, _googlecast._tcp"
+    },
   ],
   ui_frameworks: ["quickbrick"],
   identifier: "chromecast_qb",
@@ -68,14 +74,17 @@ function createManifest({ version, platform }) {
 const min_zapp_sdk = {
   ios: "20.1.0-dev",
   android: "20.0.0",
-  tvos_for_quickbrick: "0.1.0-alpha1",
-  ios_for_quickbrick: "0.1.0-alpha1",
-  android_for_quickbrick: "0.1.0-alpha1",
+  tvos_for_quickbrick: "1.0.0-Dev",
+  ios_for_quickbrick: "1.0.0-Dev",
+  android_for_quickbrick: "1.0.0-Dev",
 };
 
 const api_apple = {
   class_name: "ChromecastAdapter",
   modules: ["ZappChromecast"],
+  plist: {
+    NSLocalNetworkUsageDescription: "App uses the local network to discover Cast-enabled devices on your WiFi network.",
+  },
 };
 const api_android = {
   require_startup_exectution: false,
