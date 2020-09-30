@@ -49,10 +49,10 @@ extension ChromecastAdapter: ChromecastProtocol {
 
         let discoveryCriteria = GCKDiscoveryCriteria(applicationID: chromecastAppId)
         let options = GCKCastOptions(discoveryCriteria: discoveryCriteria)
-
+        options.disableDiscoveryAutostart = false
+        options.startDiscoveryAfterFirstTapOnCastButton = false
         if GCKCastContext.setSharedInstanceWith(options, error: nil) {
             GCKCastContext.sharedInstance().useDefaultExpandedMediaControls = false
-
             // set logger
             let logFilter: GCKLoggerFilter = GCKLoggerFilter()
             let classes = ["GCKDeviceScanner",
@@ -70,6 +70,7 @@ extension ChromecastAdapter: ChromecastProtocol {
 
             addObservers()
 
+            GCKCastContext.sharedInstance().discoveryManager.startDiscovery()
             return true
         } else {
             return false
