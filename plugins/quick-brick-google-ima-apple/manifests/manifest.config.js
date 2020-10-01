@@ -10,9 +10,6 @@ const baseManifest = {
   screen: false,
   react_native: false,
   ui_builder_support: true,
-  ui_frameworks: [
-    "mobile"
-  ],
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6",
@@ -23,7 +20,7 @@ const baseManifest = {
   npm_dependencies: [],
   identifier: "zapp_google_interactive_media_ads",
   targets: ["mobile"],
-  ui_frameworks: ["quickbrick"],
+  ui_frameworks: ["mobile"],
   custom_configuration_fields: [
     {
       type: "text",
