@@ -30,14 +30,15 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.6"
+    "@applicaster/quick-brick-google-ima-apple@0.14.7"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
     "tv"
   ],
   "ui_frameworks": [
-    "native"
+    "native",
+    "quickbrick"
   ],
   "custom_configuration_fields": [
     {
@@ -78,7 +79,7 @@
     }
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.14.6",
+  "manifest_version": "0.14.7",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
