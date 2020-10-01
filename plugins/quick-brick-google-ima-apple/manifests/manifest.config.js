@@ -10,6 +10,9 @@ const baseManifest = {
   screen: false,
   react_native: false,
   ui_builder_support: true,
+  ui_frameworks: [
+    "mobile"
+  ],
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6",
