@@ -185,7 +185,7 @@ class FirebasePushProvider : PushContract {
         val sound: String? = getParamByKey(ChannelSettings.CHANNEL_SOUND_KEY)
         val soundUrl: Uri? = NotificationUtil.getSoundUri(sound, context)
 
-        val paramChannelName = getParamByKey(CHANNEL_NAME_KEY)
+        val paramChannelName = getParamByKey(ChannelSettings.CHANNEL_NAME_KEY)
         val channel = NotificationChannel(
                 FIREBASE_DEFAULT_CHANNEL_ID,
                 if (TextUtils.isEmpty(paramChannelName)) ChannelSettings.DEFAULT_CHANNEL_NAME else paramChannelName,
