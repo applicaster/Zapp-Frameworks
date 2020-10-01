@@ -14,12 +14,12 @@ const baseManifest = {
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6",
   ],
-  min_zapp_sdk: "0.0.1",
+  min_zapp_sdk: "1.0.0-Dev",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   npm_dependencies: [],
   identifier: "zapp_google_interactive_media_ads",
-  targets: ["mobile"],
+  targets: ["mobile"], 
   ui_frameworks: ["mobile"],
   custom_configuration_fields: [
     {
