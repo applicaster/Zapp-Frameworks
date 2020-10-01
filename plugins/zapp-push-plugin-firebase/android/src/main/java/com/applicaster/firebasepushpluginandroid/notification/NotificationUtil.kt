@@ -25,7 +25,6 @@ class NotificationUtil {
         private const val CUSTOM_SOUND_KEY = "custom sound"
         private const val DEFAULT_SND = "system_default"
         private const val SILENT_PUSH_KEY = "silent"
-        private const val MAX_IMAGE_DIMENSIONS = 1024
 
         suspend fun createCustomNotification(
                 context: Context,

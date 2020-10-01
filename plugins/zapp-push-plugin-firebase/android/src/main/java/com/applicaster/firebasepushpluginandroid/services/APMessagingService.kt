@@ -89,7 +89,7 @@ class APMessagingService : FirebaseMessagingService() {
             if (data?.containsKey("body") == true) body = data["body"]
             if (data?.containsKey("tag") == true) tag = data["tag"]
             if (data?.containsKey("android_channel_id") == true) channel = data["android_channel_id"]
-            if (data?.containsKey("image_url") == true && !TextUtils.isEmpty(data["image"])) image = Uri.parse(data["image"])
+            if (data?.containsKey("image") == true && !TextUtils.isEmpty(data["image"])) image = Uri.parse(data["image"])
         }
 
         var soundUri: Uri? = Settings.System.DEFAULT_NOTIFICATION_URI
