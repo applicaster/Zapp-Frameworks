@@ -22,9 +22,6 @@
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
-  "ui_frameworks": [
-    "quickbrick"
-  ],
   "whitelisted_account_ids": [
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6"
@@ -33,11 +30,14 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.3"
+    "@applicaster/quick-brick-google-ima-apple@0.14.4"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
     "tv"
+  ],
+  "ui_frameworks": [
+    "mobile"
   ],
   "custom_configuration_fields": [
     {
@@ -78,7 +78,7 @@
     }
   ],
   "platform": "tvos",
-  "manifest_version": "0.14.3",
+  "manifest_version": "0.14.4",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
