@@ -11,6 +11,9 @@ import com.applicaster.firebasepushpluginandroid.push.PushMessage
 import com.applicaster.util.APLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class APMessagingService : FirebaseMessagingService() {
@@ -72,26 +75,32 @@ class APMessagingService : FirebaseMessagingService() {
         var body: String? = ""
         var tag: String? = ""
         var channel: String? = FIREBASE_DEFAULT_CHANNEL_ID
+        var image: Uri? = null
 
         if (message?.data?.isEmpty() == true) {
             title = message.notification?.title
             body = message.notification?.body
             tag = message.notification?.tag
             channel = message.notification?.channelId
+            image = message.notification?.imageUrl
         } else {
             val data = message?.data
             if (data?.containsKey("title") == true) title = data["title"]
             if (data?.containsKey("body") == true) body = data["body"]
             if (data?.containsKey("tag") == true) tag = data["tag"]
             if (data?.containsKey("android_channel_id") == true) channel = data["android_channel_id"]
+            if (data?.containsKey("image_url") == true && !TextUtils.isEmpty(data["image"])) image = Uri.parse(data["image"])
         }
 
         var soundUri: Uri? = Settings.System.DEFAULT_NOTIFICATION_URI
 
         if (!TextUtils.isEmpty(channel)) {
-            // fetch fallback sound for Android OS < 8.0
-            // (we fetch it in any case though)
-            FirebasePushProvider.getInstance()?.apply { soundUri = getSoundForChannel(channel!!) }
+            FirebasePushProvider.getInstance()?.apply {
+                channel = validateChannel(channel!!)
+                // fetch fallback sound for Android OS < 8.0
+                // (we fetch it in any case though)
+                soundUri = getSoundForChannel(channel!!)
+            }
         }
 
         val notificationFactory = DefaultNotificationFactory(applicationContext)
@@ -102,16 +111,20 @@ class APMessagingService : FirebaseMessagingService() {
                 contentText = body.orEmpty(),
                 messageId = message?.messageId.orEmpty(),
                 channel = if (TextUtils.isEmpty(channel)) FIREBASE_DEFAULT_CHANNEL_ID else channel!!,
-                sound = soundUri
+                sound = soundUri,
+                image = image
         )
         notify(notificationFactory, pushMsg)
     }
 
     // set up notification manager, create notification and notify
     private fun notify(notificationFactory: DefaultNotificationFactory, pushMessage: PushMessage) {
-        val notification = notificationFactory.createNotification(pushMessage)
-        with(NotificationManagerCompat.from(this)) {
-            notify(notificationFactory.generateNotificationId(), notification)
+        // run on UI thread, since some devices can't publish notifications from background threads
+        GlobalScope.launch(Dispatchers.Main) {
+            val notification = notificationFactory.createNotification(pushMessage)
+            with(NotificationManagerCompat.from(this@APMessagingService.applicationContext)) {
+                notify(notificationFactory.generateNotificationId(), notification)
+            }
         }
     }
 }

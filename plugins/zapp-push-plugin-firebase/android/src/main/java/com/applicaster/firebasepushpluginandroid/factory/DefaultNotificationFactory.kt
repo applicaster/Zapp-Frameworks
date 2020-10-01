@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 class DefaultNotificationFactory(private val context: Context) : NotificationFactory {
 
-    override fun createNotification(pushMessage: PushMessage): Notification {
+    override suspend fun createNotification(pushMessage: PushMessage): Notification {
         return NotificationUtil.createCustomNotification(
                 context,
                 pushMessage,

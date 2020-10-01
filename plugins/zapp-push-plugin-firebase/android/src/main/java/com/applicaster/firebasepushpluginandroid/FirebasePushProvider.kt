@@ -37,6 +37,7 @@ class FirebasePushProvider : PushContract {
     private var pluginsParamsMap: MutableMap<*, *>? = null
 
     private val channelSounds = mutableMapOf<String, Uri>()
+    private val channels = mutableSetOf<String>()
 
     override fun initPushProvider(context: Context) {
 
@@ -203,10 +204,11 @@ class FirebasePushProvider : PushContract {
             if (StringUtil.isEmpty(channelId)) {
                 break
             }
+            channels.add(channelId!!)
             val sound = getParamByKey("${ChannelSettings.CHANNEL_SOUND_KEY}_$i")
             val soundUrl: Uri? = NotificationUtil.getSoundUri(sound, context)
             if (soundUrl != null) {
-                channelSounds[channelId!!] = soundUrl
+                channelSounds[channelId] = soundUrl
             }
             ++i
         }
@@ -233,6 +235,16 @@ class FirebasePushProvider : PushContract {
 
     private fun getParamByKey(key: String): String? {
         return pluginsParamsMap?.get(key) as String?
+    }
+
+    fun validateChannel(channelId: String): String {
+        return when (channelId) {
+            in channels -> channelId
+            else -> {
+                APLogger.error(TAG, "Channel $channelId is not registered, default will be used")
+                FIREBASE_DEFAULT_CHANNEL_ID
+            }
+        }
     }
 
     fun getSoundForChannel(channel: String) : Uri? = channelSounds[channel]

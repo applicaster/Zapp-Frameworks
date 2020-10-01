@@ -19,7 +19,8 @@ data class PushMessage(
         var description: String = "",
         var contentText: String = "",
         var messageId: String = "",
-        val channel: String = FIREBASE_DEFAULT_CHANNEL_ID
+        var channel: String = FIREBASE_DEFAULT_CHANNEL_ID,
+        var image: Uri? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
