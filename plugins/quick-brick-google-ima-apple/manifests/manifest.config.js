@@ -20,7 +20,7 @@ const baseManifest = {
   npm_dependencies: [],
   identifier: "zapp_google_interactive_media_ads",
   targets: ["mobile"], 
-  ui_frameworks: ["native"],
+  ui_frameworks: ["native", "quickbrick"],
   custom_configuration_fields: [
     {
       type: "text",
