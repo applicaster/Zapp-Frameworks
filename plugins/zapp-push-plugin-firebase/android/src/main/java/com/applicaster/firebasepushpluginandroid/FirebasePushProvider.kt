@@ -197,7 +197,8 @@ class FirebasePushProvider : PushContract {
 
 
     private fun buildSoundLookup(context: Context) {
-        // Custom channels
+        // Build sound lookup table channels for Android before 8
+        // Also registers all known channels for verification
         var i = 1
         while (true) {
             val channelId = getParamByKey("${ChannelSettings.CHANNEL_ID_KEY}_$i")
@@ -218,6 +219,7 @@ class FirebasePushProvider : PushContract {
         if (null != soundUrl) {
             channelSounds[FIREBASE_DEFAULT_CHANNEL_ID] = soundUrl
         }
+        channels.add(FIREBASE_DEFAULT_CHANNEL_ID)
     }
 
     private fun getImportanceId(importance: String?): Int {

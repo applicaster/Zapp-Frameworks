@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
+import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
 import com.applicaster.util.APLogger
@@ -67,10 +68,15 @@ class NotificationUtil {
                 setContentIntent(getContentIntent(context))
 
                 if (null != imageBitmap) {
+                    setLargeIcon(imageBitmap) // override large icon with image
                     setStyle(NotificationCompat
                             .BigPictureStyle(this)
                             .bigPicture(imageBitmap))
-                    setLargeIcon(imageBitmap) // override large icon with image
+                }
+
+                if(!TextUtils.isEmpty(pushMessage.clickAction)) {
+                    val notificationIntent = Intent(Intent.ACTION_VIEW, Uri.parse(pushMessage.clickAction))
+                    setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0))
                 }
             }
             return notificationBuilder.build()

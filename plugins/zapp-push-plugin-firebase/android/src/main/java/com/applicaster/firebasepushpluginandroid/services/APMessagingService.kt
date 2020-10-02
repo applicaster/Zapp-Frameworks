@@ -35,8 +35,7 @@ class APMessagingService : FirebaseMessagingService() {
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
 
-        APLogger.info(TAG, "Message Received: title: [${remoteMessage?.notification?.title}], body: [${remoteMessage?.notification?.body}]")
-
+        APLogger.info(TAG, "Message Received: title: [${remoteMessage.notification?.title}], body: [${remoteMessage.notification?.body}]")
         processMessageSync(remoteMessage)
     }
 
@@ -70,30 +69,36 @@ class APMessagingService : FirebaseMessagingService() {
         APLogger.info(TAG, "onTokenRefresh")
     }
 
-    private fun processMessageSync(message: RemoteMessage?) {
+    private fun processMessageSync(message: RemoteMessage) {
+
         var title: String? = ""
         var body: String? = ""
         var tag: String? = ""
         var channel: String? = FIREBASE_DEFAULT_CHANNEL_ID
         var image: Uri? = null
 
-        if (message?.data?.isEmpty() == true) {
+        if(null != message.notification) {
+            APLogger.info(TAG, "The message received had notification attached, using it to retrieve params")
             title = message.notification?.title
             body = message.notification?.body
             tag = message.notification?.tag
-            channel = message.notification?.channelId
             image = message.notification?.imageUrl
+            channel = message.notification?.channelId
         } else {
-            val data = message?.data
-            if (data?.containsKey("title") == true) title = data["title"]
-            if (data?.containsKey("body") == true) body = data["body"]
-            if (data?.containsKey("tag") == true) tag = data["tag"]
-            if (data?.containsKey("android_channel_id") == true) channel = data["android_channel_id"]
-            if (data?.containsKey("image") == true && !TextUtils.isEmpty(data["image"])) image = Uri.parse(data["image"])
+            APLogger.info(TAG, "The message received had no notification attached, using data to retrieve params")
+            if (message.data.containsKey("title")) title = message.data["title"]
+            if (message.data.containsKey("body")) body = message.data["body"]
+            if (message.data.containsKey("tag")) tag = message.data["tag"]
+            if (message.data.containsKey("android_channel_id")) channel = message.data["android_channel_id"]
+            if (message.data.containsKey("image") && !TextUtils.isEmpty(message.data["image"])) image = Uri.parse(message.data["image"])
+        }
+        val action = message.data["url"]
+
+        if(TextUtils.isEmpty(channel)) {
+            channel = FIREBASE_DEFAULT_CHANNEL_ID
         }
 
         var soundUri: Uri? = Settings.System.DEFAULT_NOTIFICATION_URI
-
         if (!TextUtils.isEmpty(channel)) {
             FirebasePushProvider.getInstance()?.apply {
                 channel = validateChannel(channel!!)
@@ -108,9 +113,10 @@ class APMessagingService : FirebaseMessagingService() {
                 body = body.orEmpty(),
                 title = title.orEmpty(),
                 tag = tag.orEmpty(),
+                clickAction = action.orEmpty(),
                 contentText = body.orEmpty(),
-                messageId = message?.messageId.orEmpty(),
-                channel = if (TextUtils.isEmpty(channel)) FIREBASE_DEFAULT_CHANNEL_ID else channel!!,
+                messageId = message.messageId.orEmpty(),
+                channel = channel!!,
                 sound = soundUri,
                 image = image
         )
