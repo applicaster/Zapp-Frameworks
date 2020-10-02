@@ -183,7 +183,7 @@ function extra_npm_dependencies(platform) {
     platform === "android_tv_for_quickbrick" ||
     platform === "amazon_fire_tv_for_quickbrick"
   ) {
-    return ["@applicaster/x-ray@0.0.13-alpha"];
+    return ["@applicaster/x-ray@0.0.14-alpha"];
   }
   return [];
 }
