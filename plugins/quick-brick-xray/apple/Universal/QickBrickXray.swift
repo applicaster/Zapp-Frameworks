@@ -82,6 +82,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
                                           sink: inMemorySink)
 
         let fileJSONSink = FileJSON()
+        fileJSONSink.maxLogFileSizeInMB = configurationHelper.maxLogFileSizeInMB()
         Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
                                           sink: fileJSONSink)
         let fileURL = fileJSONSink.fileURL
