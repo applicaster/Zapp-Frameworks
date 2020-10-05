@@ -1,5 +1,6 @@
 package com.applicaster.firebasepushpluginandroid
 
+// matches default_notification_channel_id in strings.xml
 const val FIREBASE_DEFAULT_CHANNEL_ID = "firebase_default_channel"
 
 const val PLUGIN_ID = "ZappPushPluginFirebase"
