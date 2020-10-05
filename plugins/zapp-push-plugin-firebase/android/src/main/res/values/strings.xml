@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FirebasePushPlugin-Android</string>
+    <string name="default_notification_channel_id">firebase_default_channel</string>
 </resources>
