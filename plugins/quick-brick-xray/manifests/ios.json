@@ -43,6 +43,12 @@
       "key": "reportEmail",
       "type": "text",
       "tooltip_text": "Email to send reports to. Empty is allowed."
+    },
+    {
+      "type": "number_input",
+      "key": "maxLogFileSizeInMb",
+      "default": 20,
+      "tooltip_text": "Max log file size in MB"
     }
   ],
   "targets": [
@@ -52,7 +58,7 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "manifest_version": "0.3.4",
+  "manifest_version": "0.3.5",
   "extra_dependencies": [
     {
       "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
@@ -68,6 +74,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.3.4"
+    "@applicaster/quick-brick-xray@0.3.5"
   ]
 }
