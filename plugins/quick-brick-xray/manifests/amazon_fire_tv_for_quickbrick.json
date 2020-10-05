@@ -66,10 +66,10 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "manifest_version": "0.3.2",
+  "manifest_version": "0.3.3",
   "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.3.2",
+    "@applicaster/quick-brick-xray@0.3.3",
     "@applicaster/x-ray@0.0.14-alpha"
   ],
   "project_dependencies": [
