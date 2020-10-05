@@ -55,6 +55,12 @@ const custom_configuration_fields_apple = [
     type: "text",
     tooltip_text: "Email to send reports to. Empty is allowed.",
   },
+  {
+    type: "number_input",
+    key: "maxLogFileSizeInMb",
+    default: 20,
+    tooltip_text: "Max log file size in MB",
+  },
 ];
 
 const custom_configuration_fields_android_mobile = [

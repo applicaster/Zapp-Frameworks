@@ -15,6 +15,7 @@ struct PluginConfigurationKeys {
     static let CustomSettingsEnabled = "customSettingsEnabled"
     static let FileLogLevel = "fileLogLevel"
     static let ShortcutEnabled = "shortcutEnabled"
+    static let maxLogFileSizeInMb = "maxLogFileSizeInMb"
     static let ShareLog = "shareLog"
     struct LogLevelValues {
         static let off = "off"
@@ -44,5 +45,12 @@ struct KeysHelper {
             return []
         }
         return [email]
+    }
+    
+    func maxLogFileSizeInMB() -> Double {
+        guard let maxFileSize = configurationJSON[PluginConfigurationKeys.maxLogFileSizeInMb] as? Double else {
+            return 20
+        }
+        return maxFileSize
     }
 }
