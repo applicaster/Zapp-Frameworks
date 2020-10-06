@@ -1,6 +1,8 @@
 package com.reactnative.googlecast;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -87,10 +89,20 @@ public class GoogleCastModule
         super(reactContext);
         mPlugin = ChromeCastPlugin.getInstance();
         CAST_AVAILABLE = null != mPlugin;
-        if (CAST_AVAILABLE) {
-            reactContext.addLifecycleEventListener(this);
-            setupCastListener();
-        }
+        // UI queue in ReactApplicationContext is not yet created, so use app global one.
+        // This should not create race condition with another calls since we only have one UI queue in the end.
+        new Handler(Looper.getMainLooper()).post(() -> {
+            try {
+                CastContext.getSharedInstance(reactContext);
+            } catch (Exception e) {
+                APLogger.error("CastManager", "CastContext.getSharedInstance failed. Chromecast is not available", e);
+                CAST_AVAILABLE = false;
+            }
+            if (CAST_AVAILABLE) {
+                reactContext.addLifecycleEventListener(this);
+                setupCastListener();
+            }
+        });
     }
 
     @NonNull
