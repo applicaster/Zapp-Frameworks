@@ -37,8 +37,8 @@
   "identifier": "chromecast_qb",
   "platform": "ios",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "0.3.1",
-  "manifest_version": "0.3.1",
+  "dependency_version": "0.4.0",
+  "manifest_version": "0.4.0",
   "api": {
     "class_name": "ChromecastAdapter",
     "modules": [
@@ -49,7 +49,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@0.3.1"
+    "@applicaster/zapp-generic-chromecast@0.4.0"
   ],
   "targets": [
     "mobile"
