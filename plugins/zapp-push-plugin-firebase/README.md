@@ -22,6 +22,20 @@ A Push Provider plugin is used to enable the app owner to send push notification
 * Clone the project from github, cd to the Android folder, and open in Android Studio
 
 
+#### Sending Push Notifications using REST API
+Firebase has some limitations when Push messages are sent from Firebase Console. If the application is not running, the notification will be displayed by Firebase Service.
+It will have some limitations, since the event is not handled by our code. See https://firebase.google.com/docs/cloud-messaging/concept-options for more information.
+
+While the plugin has workarounds for this, it is recommended to use Firebase REST API to send data-type push messages.
+There is a set of available data fields:
+
+* title
+* body
+* tag
+* android_channel_id
+* image
+
+
 ### iOS
 
 * Clone the project from github, cd to the iOS folder

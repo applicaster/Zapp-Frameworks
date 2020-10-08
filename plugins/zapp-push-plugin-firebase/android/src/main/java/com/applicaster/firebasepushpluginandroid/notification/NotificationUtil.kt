@@ -7,11 +7,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.media.RingtoneManager
 import android.net.Uri
+import android.provider.Settings
+import android.text.TextUtils
 import androidx.core.app.NotificationCompat
-import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
+import com.applicaster.util.APLogger
 import com.applicaster.util.StringUtil
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class NotificationUtil {
@@ -20,35 +24,31 @@ class NotificationUtil {
         private val TAG = NotificationUtil::class.java.canonicalName
 
         private const val CUSTOM_SOUND_KEY = "custom sound"
+        private const val DEFAULT_SND = "system_default"
         private const val SILENT_PUSH_KEY = "silent"
 
-        private var title: String = ""
-        private var contentText: String = ""
-        private var sound: Uri? = Uri.EMPTY
-        private var iconUrl: String = ""
-        private var messageId: String = ""
-        private var provider = "Firebase push provider"
-
-        fun createCustomNotification(
-            context: Context,
-            pushMessage: PushMessage,
-            notificationIconId: Int,
-            notificationId: Int
+        suspend fun createCustomNotification(
+                context: Context,
+                pushMessage: PushMessage,
+                notificationIconId: Int
         ): Notification {
+            val title = pushMessage.title
+            val contentText = pushMessage.contentText
+            val sound = pushMessage.sound
+            val iconUrl = pushMessage.icon
+            val messageId = pushMessage.messageId
 
-            title = pushMessage.title
-            contentText = pushMessage.contentText
-            sound = Uri.parse(pushMessage.sound)
-            iconUrl = pushMessage.icon
-            messageId = pushMessage.messageId
-            provider = "Firebase push provider"
+            val largeIconBitmap: Bitmap? =
+                    when {
+                        iconUrl.isNotEmpty() -> fetchImage(context, iconUrl)
+                        else -> null
+                    }
 
-            var largeIconBitmap: Bitmap? = null
-            if (iconUrl.isNotEmpty()) {
-                 largeIconBitmap = Glide.with(context.applicationContext).asBitmap().load(iconUrl).submit().get()
+            val imageBitmap: Bitmap? = pushMessage.image?.let {
+                fetchImage(context, pushMessage.image.toString())
             }
 
-            val notificationBuilder = NotificationCompat.Builder(context, FIREBASE_DEFAULT_CHANNEL_ID)
+            val notificationBuilder = NotificationCompat.Builder(context, pushMessage.channel)
             notificationBuilder.apply {
                 setSmallIcon(notificationIconId)
                 setLargeIcon(largeIconBitmap)
@@ -66,9 +66,36 @@ class NotificationUtil {
                 setContentText(contentText)
                 //set the content intent
                 setContentIntent(getContentIntent(context))
-            }
 
+                if (null != imageBitmap) {
+                    setLargeIcon(imageBitmap) // override large icon with image
+                    setStyle(NotificationCompat
+                            .BigPictureStyle(this)
+                            .bigPicture(imageBitmap))
+                }
+
+                if(!TextUtils.isEmpty(pushMessage.clickAction)) {
+                    val notificationIntent = Intent(Intent.ACTION_VIEW, Uri.parse(pushMessage.clickAction))
+                    setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0))
+                }
+            }
             return notificationBuilder.build()
+        }
+
+        // fetch and downscale remote image asynchronously
+        private suspend fun fetchImage(context: Context, url: String): Bitmap? {
+            return withContext(Dispatchers.Default) {
+                try {
+                    @Suppress("BlockingMethodInNonBlockingContext")
+                    return@withContext Glide.with(context.applicationContext)
+                            .asBitmap()
+                            .load(url)
+                            .submit().get()
+                } catch (e: Exception) {
+                    APLogger.error(TAG, "Failed to fetch image $url", e)
+                }
+                return@withContext null
+            }
         }
 
         fun getPushSound(message: PushMessage, context: Context): Uri? {
@@ -85,6 +112,22 @@ class NotificationUtil {
             return SILENT_PUSH_KEY.equals(CUSTOM_SOUND_KEY, ignoreCase = true)
         }
 
+        @JvmStatic
+        fun getSoundUri(sound: String?, context: Context): Uri? {
+            if (StringUtil.isEmpty(sound) || DEFAULT_SND.equals(sound, ignoreCase = true)) {
+                return Settings.System.DEFAULT_NOTIFICATION_URI
+            }
+
+            //no sound push
+            if (SILENT_PUSH_KEY.equals(sound, ignoreCase = true)) {
+                return null
+            }
+
+            //custom sound push
+            val custom: Uri? = getSoundUriByName(sound!!, context)
+            return custom ?: Settings.System.DEFAULT_NOTIFICATION_URI
+        }
+
         private fun getSoundUriByName(soundName: String, context: Context): Uri? {
             var res: Uri? = null
             if (StringUtil.isEmpty(soundName)) {
@@ -92,7 +135,7 @@ class NotificationUtil {
             }
             val id = context.resources.getIdentifier(soundName, "raw", context.packageName)
             if (id != 0) {
-                res = Uri.parse("android.resource://" + context.packageName + "/" + id)
+                res = Uri.parse("android.resource://${context.packageName}/$id")
             }
             return res
         }

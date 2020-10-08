@@ -1,11 +1,19 @@
 package com.applicaster.firebasepushpluginandroid.services
 
+import android.net.Uri
+import android.provider.Settings
+import android.text.TextUtils
 import androidx.core.app.NotificationManagerCompat
-import android.util.Log
+import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
+import com.applicaster.firebasepushpluginandroid.FirebasePushProvider
 import com.applicaster.firebasepushpluginandroid.factory.DefaultNotificationFactory
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
+import com.applicaster.util.APLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class APMessagingService : FirebaseMessagingService() {
@@ -27,9 +35,8 @@ class APMessagingService : FirebaseMessagingService() {
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
 
-        Log.i(TAG, "Message Received: title: [${remoteMessage?.notification?.title}], body: [${remoteMessage?.notification?.body}]")
-
-        processMessageSync(message = remoteMessage)
+        APLogger.info(TAG, "Message Received: title: [${remoteMessage.notification?.title}], body: [${remoteMessage.notification?.body}]")
+        processMessageSync(remoteMessage)
     }
 
     /**
@@ -43,7 +50,7 @@ class APMessagingService : FirebaseMessagingService() {
      */
     override fun onDeletedMessages() {
         super.onDeletedMessages()
-        Log.i(TAG, "Deleted messages on server")
+        APLogger.info(TAG, "Deleted messages on server")
     }
 
     /**
@@ -54,48 +61,76 @@ class APMessagingService : FirebaseMessagingService() {
     override fun onSendError(msgId: String, exception: Exception) {
         super.onSendError(msgId, exception)
         exception.printStackTrace()
-        Log.e(TAG, "Received error: $msgId")
+        APLogger.error(TAG, "Received error: $msgId")
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.i(TAG, "onTokenRefresh")
+        APLogger.info(TAG, "onTokenRefresh")
     }
 
-    private fun processMessageSync(message: RemoteMessage?) {
+    private fun processMessageSync(message: RemoteMessage) {
+
         var title: String? = ""
         var body: String? = ""
         var tag: String? = ""
+        var channel: String? = FIREBASE_DEFAULT_CHANNEL_ID
+        var image: Uri? = null
 
-        if (message?.data?.isEmpty() == true) {
+        if(null != message.notification) {
+            APLogger.info(TAG, "The message received had notification attached, using it to retrieve params")
             title = message.notification?.title
             body = message.notification?.body
             tag = message.notification?.tag
-
+            image = message.notification?.imageUrl
+            channel = message.notification?.channelId
         } else {
-
-            val data = message?.data
-            if (data?.containsKey("title") == true) title = data["title"]
-            if (data?.containsKey("body") == true) body = data["body"]
-            if (data?.containsKey("tag") == true) tag = data["tag"]
-
+            APLogger.info(TAG, "The message received had no notification attached, using data to retrieve params")
+            if (message.data.containsKey("title")) title = message.data["title"]
+            if (message.data.containsKey("body")) body = message.data["body"]
+            if (message.data.containsKey("tag")) tag = message.data["tag"]
+            if (message.data.containsKey("android_channel_id")) channel = message.data["android_channel_id"]
+            if (message.data.containsKey("image") && !TextUtils.isEmpty(message.data["image"])) image = Uri.parse(message.data["image"])
         }
+        val action = message.data["url"]
+
+        if(TextUtils.isEmpty(channel)) {
+            channel = FIREBASE_DEFAULT_CHANNEL_ID
+        }
+
+        var soundUri: Uri? = Settings.System.DEFAULT_NOTIFICATION_URI
+        if (!TextUtils.isEmpty(channel)) {
+            FirebasePushProvider.getInstance()?.apply {
+                channel = validateChannel(channel!!)
+                // fetch fallback sound for Android OS < 8.0
+                // (we fetch it in any case though)
+                soundUri = getSoundForChannel(channel!!)
+            }
+        }
+
         val notificationFactory = DefaultNotificationFactory(applicationContext)
         val pushMsg = PushMessage(
-            body = body.orEmpty() ,
-            title = title.orEmpty(),
-            tag = tag.orEmpty(),
-            contentText = body.orEmpty(),
-            messageId = message?.messageId.orEmpty()
+                body = body.orEmpty(),
+                title = title.orEmpty(),
+                tag = tag.orEmpty(),
+                clickAction = action.orEmpty(),
+                contentText = body.orEmpty(),
+                messageId = message.messageId.orEmpty(),
+                channel = channel!!,
+                sound = soundUri,
+                image = image
         )
         notify(notificationFactory, pushMsg)
     }
 
     // set up notification manager, create notification and notify
     private fun notify(notificationFactory: DefaultNotificationFactory, pushMessage: PushMessage) {
-        val notification = notificationFactory.createNotification(pushMessage = pushMessage)
-        with(NotificationManagerCompat.from(this)) {
-            notify(notificationFactory.generateNotificationId(), notification)
+        // run on UI thread, since some devices can't publish notifications from background threads
+        GlobalScope.launch(Dispatchers.Main) {
+            val notification = notificationFactory.createNotification(pushMessage)
+            with(NotificationManagerCompat.from(this@APMessagingService.applicationContext)) {
+                notify(notificationFactory.generateNotificationId(), notification)
+            }
         }
     }
 }
