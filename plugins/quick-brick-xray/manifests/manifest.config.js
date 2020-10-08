@@ -45,7 +45,7 @@ const custom_configuration_fields_apple = [
   {
     type: "dropdown",
     key: "fileLogLevel",
-    label: "Minimum file log level",
+    label: "Log Level",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
@@ -58,7 +58,7 @@ const custom_configuration_fields_apple = [
     tooltip_text: "Email to send reports to. Empty is allowed.",
   },
   {
-    label: "File log size",
+    label: "Log File size",
     type: "number_input",
     key: "maxLogFileSizeInMb",
     default: 20,
@@ -70,7 +70,7 @@ const custom_configuration_fields_android_mobile = [
   {
     type: "dropdown",
     key: "fileLogLevel",
-    label: "Minimum file log level",
+    label: "Log Level",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
@@ -110,7 +110,7 @@ const custom_configuration_fields_android_tv = [
   {
     type: "dropdown",
     key: "fileLogLevel",
-    label: "Minimum file log level",
+    label: "Log Level",
     tooltip_text: "Minimum message level to log to the file",
     multiple: false,
     options: ["off", "error", "warning", "info", "debug", "verbose"],
