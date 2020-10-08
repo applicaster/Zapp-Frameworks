@@ -16,14 +16,7 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  custom_configuration_fields: [
-    {
-      type: "checkbox",
-      key: "enabled",
-      tooltip_text: "Is plugin enabled on app start",
-      default: 0,
-    },
-  ],
+  custom_configuration_fields: [],
   identifier: "video_playing_now_apple",
   npm_dependencies: [],
   targets: ["mobile"],
