@@ -38,10 +38,22 @@ import XrayLogger
 
         if let pluginModels = FacadeConnector.connector?.pluginManager?.getAllPlugins() {
             for pluginModel in pluginModels {
-                if let classType = FacadeConnector.connector?.pluginManager?.adapterClass(pluginModel) as? PlayerDependantPluginProtocol.Type,
-                    let provider = classType.init(pluginModel: pluginModel) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
+                var provider: (PlayerObserverProtocol & PlayerDependantPluginProtocol)?
+                //find provider in already iniaialized plugins
+                if let providerInstance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginModel.identifier) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
+                    provider = providerInstance
+                }
+                //create new plugin instance
+                else if let classType = FacadeConnector.connector?.pluginManager?.adapterClass(pluginModel) as? PlayerDependantPluginProtocol.Type,
+                    let providerInstance = classType.init(pluginModel: pluginModel) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
+                    provider = providerInstance
+                    provider?.prepareProvider([:], completion: nil)
+
+                }
+                
+                //add provider if created or found in already created instances
+                if let provider = provider {
                     provider.playerPlugin = player
-                    provider.prepareProvider([:], completion: nil)
                     provider.playerDidCreate(player: player)
                     retVal[pluginModel.identifier] = provider
                 }
