@@ -27,6 +27,7 @@
     {
       "type": "dropdown",
       "key": "fileLogLevel",
+      "label": "Log Level",
       "tooltip_text": "Minimum message level to log to the file",
       "multiple": false,
       "options": [
@@ -41,6 +42,7 @@
     },
     {
       "key": "reportEmail",
+      "label": "Report Email",
       "type": "text",
       "tooltip_text": "Email to send reports to. Empty is allowed."
     },
@@ -66,10 +68,10 @@
     "quickbrick"
   ],
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "0.3.6",
+  "manifest_version": "0.3.7",
   "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.3.6",
+    "@applicaster/quick-brick-xray@0.3.7",
     "@applicaster/x-ray@0.0.16-alpha"
   ],
   "project_dependencies": [

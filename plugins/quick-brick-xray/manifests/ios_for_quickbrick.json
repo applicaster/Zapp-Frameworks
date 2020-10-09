@@ -27,6 +27,7 @@
     {
       "type": "dropdown",
       "key": "fileLogLevel",
+      "label": "Log Level",
       "tooltip_text": "Minimum message level to log to the file",
       "multiple": false,
       "options": [
@@ -40,11 +41,13 @@
       "default": "error"
     },
     {
+      "label": "Report Email",
       "key": "reportEmail",
       "type": "text",
       "tooltip_text": "Email to send reports to. Empty is allowed."
     },
     {
+      "label": "Log File size",
       "type": "number_input",
       "key": "maxLogFileSizeInMb",
       "default": 20,
@@ -58,7 +61,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.3.6",
+  "manifest_version": "0.3.7",
   "extra_dependencies": [
     {
       "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
@@ -74,6 +77,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.3.6"
+    "@applicaster/quick-brick-xray@0.3.7"
   ]
 }
