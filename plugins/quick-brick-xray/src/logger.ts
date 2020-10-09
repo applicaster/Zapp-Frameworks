@@ -19,26 +19,30 @@ if (!XRayLoggerEnabled) {
   });
 }
 
-const logFunction = XRayLoggerEnabled
-  ? logInXray(XRayLoggerBridge)
-  : logInConsole;
+function invokeLogger(level: XRayLogLevel, event: XRayEvent) {
+  if (!event?.jsOnly && XRayLoggerEnabled) {
+    return logInXray(XRayLoggerBridge)(level, event);
+  }
+
+  logInConsole(level, event);
+}
 
 export function log(event: XRayEvent) {
-  logFunction(XRayLogLevel.verbose, event);
+  invokeLogger(XRayLogLevel.verbose, event);
 }
 
 export function debug(event: XRayEvent) {
-  logFunction(XRayLogLevel.debug, event);
+  invokeLogger(XRayLogLevel.debug, event);
 }
 
 export function info(event: XRayEvent) {
-  logFunction(XRayLogLevel.info, event);
+  invokeLogger(XRayLogLevel.info, event);
 }
 
 export function warn(event: XRayEvent) {
-  logFunction(XRayLogLevel.warning, event);
+  invokeLogger(XRayLogLevel.warning, event);
 }
 
 export function error(event: XRayEvent) {
-  logFunction(XRayLogLevel.error, event);
+  invokeLogger(XRayLogLevel.error, event);
 }

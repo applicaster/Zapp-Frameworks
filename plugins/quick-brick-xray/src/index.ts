@@ -3,6 +3,7 @@ import * as R from "ramda";
 import * as logger from "./logger";
 import { Event } from "./Event";
 import { XRayLogLevel as LogLevel } from "./logLevels";
+import { wrapInObject } from "./utils";
 
 type XRayEventData = {
   message: string;
@@ -103,12 +104,17 @@ export default class Logger implements XRayLoggerI {
   }
 
   addContext(context: AnyDictionary): this {
-    this.context = Object.assign(
-      {},
-      this.parent?.getContext(),
-      this.context,
-      context
-    );
+    try {
+      this.context = Object.assign(
+        {},
+        this.parent?.getContext(),
+        this.context,
+        wrapInObject(context, "context")
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("Couldn't sanitize context data", { context });
+    }
 
     return this;
   }

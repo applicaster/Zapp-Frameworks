@@ -1,7 +1,7 @@
 import { logInConsole } from "./console";
 import { XRayLogLevel } from "./logLevels";
 
-import { sanitizeEventData } from "./utils";
+import { sanitizeEventPayload } from "./utils";
 
 export function logInXray(XRayLoggerBridge: XRayLoggerNativeBridgeI) {
   return function (level: XRayLogLevel, event: XRayEvent): void {
@@ -10,6 +10,17 @@ export function logInXray(XRayLoggerBridge: XRayLoggerNativeBridgeI) {
       logInConsole(level, event);
     }
 
-    XRayLoggerBridge.logEvent({ level, ...sanitizeEventData(event) });
+    if (event.jsOnly) return;
+
+    try {
+      delete event.jsOnly;
+      XRayLoggerBridge.logEvent({ level, ...sanitizeEventPayload(event) });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("An error occurred when trying to log an XRay event", {
+        e,
+        event,
+      });
+    }
   };
 }
