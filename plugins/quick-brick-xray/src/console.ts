@@ -1,6 +1,7 @@
 /// <reference types="@types/node" />
 /* eslint-disable no-console */
 import { XRayLogLevel } from "./logLevels";
+import { __isRunningRepoTests } from "./utils";
 
 const consoleMethods = {
   [XRayLogLevel.verbose]: "log",
@@ -14,7 +15,7 @@ const consoleMethods = {
 export function logInConsole(level: XRayLogLevel, event: XRayEvent): void {
   const { env } = process;
 
-  if (env?.NODE_ENV === "development" || env.NODE_ENV === "test") {
+  if (env?.NODE_ENV === "development" || __isRunningRepoTests()) {
     const { category, subsystem, ...otherEventProps } = event;
     const timestamp = new Date(Date.now()).toISOString();
 

@@ -40,4 +40,8 @@ module.exports = {
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname",
   ],
+  globals: {
+    __DEV__: true,
+    __ZAPP_FRAMEWORKS_TESTS__: true,
+  },
 };
