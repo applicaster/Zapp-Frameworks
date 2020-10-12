@@ -103,3 +103,11 @@ export function sanitizeEventPayload(event: EventData) {
     };
   }
 }
+
+export function __isRunningRepoTests() {
+  try {
+    return __DEV__ && (global as any).__ZAPP_FRAMEWORKS_TESTS__;
+  } catch (e) {
+    return false;
+  }
+}
