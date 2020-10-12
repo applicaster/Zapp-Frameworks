@@ -2159,31 +2159,13 @@
     globals "^11.1.0"
     lodash "^4.17.13"
 
-"@babel/types@^7.0.0", "@babel/types@^7.10.1", "@babel/types@^7.10.3", "@babel/types@^7.4.4":
-  version "7.10.3"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.10.3.tgz#6535e3b79fea86a6b09e012ea8528f935099de8e"
-  integrity sha512-nZxaJhBXBQ8HVoIcGsf9qWep3Oh3jCENK54V4mRF7qaJabVsAYdbTtmSD8WmAp1R6ytPiu5apMwSXyxB1WlaBA==
-  dependencies:
-    "@babel/helper-validator-identifier" "^7.10.3"
-    lodash "^4.17.13"
-    to-fast-properties "^2.0.0"
-
-"@babel/types@^7.10.4":
+"@babel/types@^7.0.0", "@babel/types@^7.10.1", "@babel/types@^7.10.3", "@babel/types@^7.10.4", "@babel/types@^7.10.5", "@babel/types@^7.11.0", "@babel/types@^7.11.5", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.10.4.tgz#369517188352e18219981efd156bfdb199fff1ee"
   integrity sha512-UTCFOxC3FsFHb7lkRMVvgLzaRVamXuAs2Tz4wajva4WxtVY82eZeaUBtC2Zt95FU9TiznuC0Zk35tsim8jeVpg==
   dependencies:
     "@babel/helper-validator-identifier" "^7.10.4"
     lodash "^4.17.13"
-    to-fast-properties "^2.0.0"
-
-"@babel/types@^7.10.5", "@babel/types@^7.11.0", "@babel/types@^7.11.5", "@babel/types@^7.3.0", "@babel/types@^7.3.3":
-  version "7.11.5"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.11.5.tgz#d9de577d01252d77c6800cee039ee64faf75662d"
-  integrity sha512-bvM7Qz6eKnJVFIn+1LPtjlBFPVN5jNDc1XmN15vWe7Q3DPBufWWsLiIvUu7xW87uTG6QoggpIDnUgLQvPheU+Q==
-  dependencies:
-    "@babel/helper-validator-identifier" "^7.10.4"
-    lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
 "@bcoe/v8-coverage@^0.2.3":
@@ -7331,6 +7313,11 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
+
+prettier@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.2.tgz#3050700dae2e4c8b67c4c3f666cdb8af405e1ce5"
+  integrity sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==
 
 pretty-format@24.0.0-alpha.6:
   version "24.0.0-alpha.6"

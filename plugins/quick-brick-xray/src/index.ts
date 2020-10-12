@@ -32,6 +32,11 @@ export default class Logger implements XRayLoggerI {
     this.warning = this.warning.bind(this);
     this.warn = this.warning.bind(this);
     this.error = this.error.bind(this);
+    this.addContext = this.addContext.bind(this);
+    this.addSubsystem = this.addSubsystem.bind(this);
+    this.getContext = this.getContext.bind(this);
+    this.createEvent = this.createEvent.bind(this);
+    this.addContext({});
   }
 
   addSubsystem(subsystem: string): Logger {
@@ -88,7 +93,7 @@ export default class Logger implements XRayLoggerI {
 
   error(event: Error | XRayEventData) {
     const logEvent = R.is(Error, event)
-      ? { error: event, message: "an error occurred" }
+      ? { error: event, message: event.message }
       : event;
 
     logger.error({

@@ -53,6 +53,7 @@ export class Event implements XRayEventI {
     this.logger[loggerMethods[this.level]]({
       message: this.message,
       data: this.data,
+      context: this.logger.context,
       error: this.error,
     });
   }
