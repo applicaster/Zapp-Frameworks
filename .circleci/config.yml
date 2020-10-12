@@ -158,6 +158,37 @@ jobs:
           name: Publishing canary plugins
           command: node ./scripts/publish_plugins.js --canary
 
+  js_unit_tests:
+    <<: *defaults
+    docker:
+      - image: applicaster/quick-brick:0.4.0
+    steps:
+      - *prepare_caching_file
+
+      - checkout
+
+      - run:
+          name: NPM Login
+          command: npx npm-shell-login
+
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: Install npm dependencies
+          command: yarn
+
+      - save_cache:
+          key: v1-npm-{{  checksum "yarn.lock" }}
+          paths:
+            - .yarn
+            - node_modules
+
+      - run:
+          name: Tests
+          command: yarn test
+
   apple_unit_tests:
     <<: *defaults
     macos:
@@ -194,7 +225,13 @@ workflows:
   version: 2
   build:
     jobs:
+      - js_unit_tests:
+          filters:
+            branches:
+              ignore: master
       - deploy_plugins:
+          requires:
+            - js_unit_tests
           filters:
             branches:
               only: master
@@ -206,6 +243,7 @@ workflows:
           type: approval
           requires:
             - apple_unit_tests
+            - js_unit_tests
           filters:
             branches:
               ignore: master
