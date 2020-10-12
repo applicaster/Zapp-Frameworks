@@ -225,10 +225,7 @@ workflows:
   version: 2
   build:
     jobs:
-      - js_unit_tests:
-          filters:
-            branches:
-              ignore: master
+      - js_unit_tests
       - deploy_plugins:
           requires:
             - js_unit_tests
