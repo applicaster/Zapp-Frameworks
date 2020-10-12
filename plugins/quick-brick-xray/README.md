@@ -13,7 +13,19 @@ const logger = new XRayLogger("my app", "app");
 
 logger.log({
   message: "app launched !",
+  data: {
+    prop: "some value",
+  },
 });
+
+// the logger knows how to log events with just a message by simply
+// invoking it with a string. so the following is valid
+
+logger.info("app started");
+
+// Errors can also be logged directly with an error object
+
+logger.error(new Error("oupsie"));
 ```
 
 If the native module isn't available, logs will be directed to the console instead. Logs are also sent to the console as well when the app is running with React Native's `__DEV__` flag on.
