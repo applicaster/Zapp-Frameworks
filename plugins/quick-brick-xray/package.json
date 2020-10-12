@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-xray",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Applicaster X-Ray Logger",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
