@@ -14,6 +14,7 @@ export class Event implements XRayEventI {
   message: string;
   data: AnyDictionary;
   error?: Error;
+  jsOnly?: boolean;
 
   constructor(logger: XRayLoggerI) {
     this.logger = logger;
@@ -43,10 +44,16 @@ export class Event implements XRayEventI {
     return this;
   }
 
+  setJSOnly(jsOnly: boolean): this {
+    this.jsOnly = jsOnly;
+    return this;
+  }
+
   send(): void {
     this.logger[loggerMethods[this.level]]({
       message: this.message,
       data: this.data,
+      context: this.logger.context,
       error: this.error,
     });
   }

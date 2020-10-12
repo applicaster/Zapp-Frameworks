@@ -3,6 +3,7 @@ import * as R from "ramda";
 import * as logger from "./logger";
 import { Event } from "./Event";
 import { XRayLogLevel as LogLevel } from "./logLevels";
+import { wrapInObject } from "./utils";
 
 type XRayEventData = {
   message: string;
@@ -31,6 +32,11 @@ export default class Logger implements XRayLoggerI {
     this.warning = this.warning.bind(this);
     this.warn = this.warning.bind(this);
     this.error = this.error.bind(this);
+    this.addContext = this.addContext.bind(this);
+    this.addSubsystem = this.addSubsystem.bind(this);
+    this.getContext = this.getContext.bind(this);
+    this.createEvent = this.createEvent.bind(this);
+    this.addContext({});
   }
 
   addSubsystem(subsystem: string): Logger {
@@ -87,7 +93,7 @@ export default class Logger implements XRayLoggerI {
 
   error(event: Error | XRayEventData) {
     const logEvent = R.is(Error, event)
-      ? { error: event, message: "an error occurred" }
+      ? { error: event, message: event.message }
       : event;
 
     logger.error({
@@ -103,12 +109,17 @@ export default class Logger implements XRayLoggerI {
   }
 
   addContext(context: AnyDictionary): this {
-    this.context = Object.assign(
-      {},
-      this.parent?.getContext(),
-      this.context,
-      context
-    );
+    try {
+      this.context = Object.assign(
+        {},
+        this.parent?.getContext(),
+        this.context,
+        wrapInObject(context, "context")
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("Couldn't sanitize context data", { context });
+    }
 
     return this;
   }

@@ -13,7 +13,19 @@ const logger = new XRayLogger("my app", "app");
 
 logger.log({
   message: "app launched !",
+  data: {
+    prop: "some value",
+  },
 });
+
+// the logger knows how to log events with just a message by simply
+// invoking it with a string. so the following is valid
+
+logger.info("app started");
+
+// Errors can also be logged directly with an error object
+
+logger.error(new Error("oupsie"));
 ```
 
 If the native module isn't available, logs will be directed to the console instead. Logs are also sent to the console as well when the app is running with React Native's `__DEV__` flag on.
@@ -75,10 +87,21 @@ event
   .setLogLevel(XRayLogLevel.error)
   .attachError(new Error("An error occurred"));
 
+// if you want to log big jsons or structures that React Native doesn't allow
+// to send through the bridge (functions, React Components)
+// you can set a flag on the event to only log it on the console.
+
+event.setJSOnly(true);
+
 // when the event is ready to be sent, it can be logged
 
 event.send();
 ```
+
+## What can you log ?
+
+You can virtually log anything you want. This library will sanitize data & context so that we never send to the native bridge log data that would make the native code crash.
+You can choose to use the `jsOnly` flag on the event payload to specify log events which should only be logged in the console - which can be handy in development.
 
 ## API
 
@@ -101,6 +124,7 @@ type XRayEvent = {
   data?: AnyDictionary;
   context?: AnyDictionary;
   exception?: Error;
+  jsOnly?: boolean;
 };
 
 declare interface XRayEventI {
@@ -135,25 +159,23 @@ declare interface XRayLoggerI {
 
 X-Ray screen can be opened and configured via url:
 
-Example url: ```wino://xray?shortcutEnabled=true&crashReporting=true&reactNativeLogLevel=info```
-
-Where ```wino``` is application url scheme.
+Example url: `<app_scheme>://xray?shortcutEnabled=true&crashReporting=true&reactNativeLogLevel=info`
 
 All url options:
 
-Available __LogLevel__ values are: __error__, __warning__, __debug__, __info__, __verbose__, __off__
+Available **LogLevel** values are: **error**, **warning**, **debug**, **info**, **verbose**, **off**
 
 #### Universal
 
-- shortcutEnabled: __Boolean__
-- fileLogLevel: __LogLevel__
+- shortcutEnabled: **Boolean**
+- fileLogLevel: **LogLevel**
 
 #### Android
 
-- crashReporting: __Boolean__
-- showNotification: __Boolean__
-- reactNativeLogLevel: __LogLevel__
-- reactNativeDebugLogging: __Boolean__
+- crashReporting: **Boolean**
+- showNotification: **Boolean**
+- reactNativeLogLevel: **LogLevel**
+- reactNativeDebugLogging: **Boolean**
 
 If needed, screen can be also invoked from adb using same url scheme. This can come in handy for TV.
-```adb shell am start -a android.intent.action.VIEW -d "wino://xray"```
+`adb shell am start -a android.intent.action.VIEW -d "<app_scheme>://xray"`

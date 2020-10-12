@@ -18,6 +18,7 @@ declare type XRayEvent = {
   data?: AnyDictionary;
   context?: AnyDictionary;
   exception?: Error;
+  jsOnly?: boolean;
 };
 
 declare type XRayLogEvent<XRayLogLevel> = XRayEvent & {
@@ -39,11 +40,6 @@ declare type XRayNativeEvent =
 
 declare interface XRayLoggerNativeBridgeI {
   logEvent: any;
-  // l: (event: XRayLogLevel) => void;
-  // d: (event: XRayDebugEvent) => void;
-  // i: (event: XRayInfoEvent) => void;
-  // w: (event: XRayWarningEvent) => void;
-  // e: (event: XRayErrorEvent) => void;
 }
 
 declare interface XRayEventI {

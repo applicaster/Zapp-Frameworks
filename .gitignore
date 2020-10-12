@@ -99,3 +99,4 @@ node_modules
 CircleArtifacts
 plugins/**/package-lock.json
 lib
+test-report.html

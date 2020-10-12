@@ -1,7 +1,6 @@
 /// <reference types="@types/node" />
 /* eslint-disable no-console */
 import { XRayLogLevel } from "./logLevels";
-import { sanitizeEventData } from "./utils";
 
 const consoleMethods = {
   [XRayLogLevel.verbose]: "log",
@@ -15,7 +14,7 @@ const consoleMethods = {
 export function logInConsole(level: XRayLogLevel, event: XRayEvent): void {
   const { env } = process;
 
-  if (env?.NODE_ENV === "development") {
+  if (env?.NODE_ENV === "development" || env.NODE_ENV === "test") {
     const { category, subsystem, ...otherEventProps } = event;
     const timestamp = new Date(Date.now()).toISOString();
 
@@ -29,7 +28,7 @@ export function logInConsole(level: XRayLogLevel, event: XRayEvent): void {
       console.warn({ ...otherEventProps, message: `Error:: ${event.message}` });
       console.error(new Error(event.message));
     } else {
-      console[consoleMethods[level]](sanitizeEventData(otherEventProps));
+      console[consoleMethods[level]](otherEventProps);
     }
 
     if (level >= XRayLogLevel.warning) {

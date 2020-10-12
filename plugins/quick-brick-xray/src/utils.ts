@@ -4,8 +4,10 @@ type Condition = [Predicate<any>, Transformer<any>];
 type AnyArray = any[];
 type AnyObject = { [K in string]: any };
 type EventData = {
-  [K in "data"]?: any;
+  [K in "data" | "context"]?: any;
 };
+
+const REACT_COMPONENT_SYMBOL = "$$typeof";
 
 function hasProperty(property: string, object: AnyObject): boolean {
   return Object.prototype.hasOwnProperty.call(object, property);
@@ -16,7 +18,7 @@ function isReactClassComponent(value: any): boolean {
     return false;
   }
 
-  return hasProperty("$$typeof", value) && hasProperty("displayName", value);
+  return hasProperty(REACT_COMPONENT_SYMBOL, value);
 }
 
 function isFunction(value: any): boolean {
@@ -24,11 +26,7 @@ function isFunction(value: any): boolean {
 }
 
 function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
-}
-
-function True(_: any): boolean {
-  return true;
+  return typeof value === "object" && !Array.isArray(value) && value !== null;
 }
 
 function cond(conditions: Condition[]) {
@@ -37,23 +35,13 @@ function cond(conditions: Condition[]) {
 
     while (index < conditions.length) {
       const [predicate, transform] = conditions[index];
-
-      if (predicate(arg)) {
-        return transform(arg);
-      }
-
+      if (predicate(arg)) return transform(arg);
       index++;
     }
+
+    return arg;
   };
 }
-
-const applyConditions = cond([
-  [isFunction, (value) => `function ${value?.name}` || "anonymous function"],
-  [isReactClassComponent, (value) => `Component ${value.displayName}`],
-  [Array.isArray, sanitizeArrayEntries],
-  [isObject, sanitizeObjectProperties],
-  [True, (value) => value],
-]);
 
 function sanitizeArrayEntries(array: AnyArray): AnyArray {
   return array.map(applyConditions);
@@ -67,22 +55,51 @@ function sanitizeObjectProperties(object: AnyObject): AnyObject {
   }, {});
 }
 
-export function sanitizeEventData(event: EventData) {
-  if (!event?.data) {
-    return event;
+function sanitizeFunction(fn) {
+  return fn?.name ? `function ${fn?.name}` : "anonymous function";
+}
+
+function sanitizeReactComponentClass(Component) {
+  return Component?.displayName
+    ? `Component ${Component.displayName}`
+    : "React Component";
+}
+
+export function wrapInObject(object, propName) {
+  if (isObject(object)) {
+    return object;
   }
 
-  const { data } = event;
+  return { [propName]: object };
+}
 
-  if (typeof data !== "object") {
+export const applyConditions = cond([
+  [isFunction, sanitizeFunction],
+  [isReactClassComponent, sanitizeReactComponentClass],
+  [Array.isArray, sanitizeArrayEntries],
+  [isObject, sanitizeObjectProperties],
+]);
+
+export function sanitizeEventPayload(event: EventData) {
+  try {
+    const { data = {}, context = {} } = event;
+
     return {
       ...event,
-      data: { data: applyConditions(data) },
+      data: wrapInObject(applyConditions(data), "data"),
+      context: wrapInObject(applyConditions(context), "context"),
+    };
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "An error occurred when trying to sanitize the native payload",
+      { error, event }
+    );
+
+    return {
+      ...event,
+      data: {},
+      context: {},
     };
   }
-
-  return {
-    ...event,
-    data: applyConditions(event.data),
-  };
 }
