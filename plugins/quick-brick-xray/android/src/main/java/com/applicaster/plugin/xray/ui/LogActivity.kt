@@ -8,9 +8,9 @@ import androidx.viewpager.widget.ViewPager
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
 import com.applicaster.plugin.xray.model.LogLevelSetting
-import com.applicaster.plugin.xray.ui.adapters.ViewsPagerAdapter
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
+import com.applicaster.xray.ui.adapters.ViewsPagerAdapter
 
 class LogActivity : AppCompatActivity() {
 

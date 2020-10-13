@@ -43,7 +43,8 @@ dependencies {
     implementation project(':xray-core') // x-ray core
     implementation project(':xray-react-native') // x-ray react-native bridge
     implementation project(':xray-notification') // x-ray notification
-    implementation project(':xray-reporting')
+    implementation (project(':xray-crashreporter'))
+    implementation (project(':xray-ui')) // x-ray ui
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 

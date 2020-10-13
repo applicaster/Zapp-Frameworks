@@ -26,14 +26,13 @@ import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
-import com.applicaster.xray.example.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.notification.XRayNotification
+import com.applicaster.xray.ui.sinks.InMemoryLogSink
 import com.facebook.common.logging.FLog
 import com.facebook.common.logging.FLogDefaultLoggingDelegate
 import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
 import com.google.gson.GsonBuilder
-import org.json.JSONException
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
