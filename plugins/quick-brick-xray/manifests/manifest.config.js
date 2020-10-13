@@ -196,7 +196,7 @@ function extra_npm_dependencies(platform) {
     platform === "android_tv_for_quickbrick" ||
     platform === "amazon_fire_tv_for_quickbrick"
   ) {
-    return ["@applicaster/x-ray@0.0.16-alpha"];
+    return ["@applicaster/x-ray@0.0.17"];
   }
   return [];
 }
@@ -206,19 +206,19 @@ const project_dependencies_android = [
     "xray-core": "node_modules/@applicaster/x-ray/android/xray-core",
   },
   {
-    "xray-react-native":
-      "node_modules/@applicaster/x-ray/android/xray-react-native",
+    "xray-react-native": "node_modules/@applicaster/x-ray/android/xray-react-native",
   },
   {
-    "xray-notification":
-      "node_modules/@applicaster/x-ray/android/xray-notification",
+    "xray-notification": "node_modules/@applicaster/x-ray/android/xray-notification",
   },
   {
-    "xray-reporting":
-      "node_modules/@applicaster/x-ray/android/xray-crashreporter",
+    "xray-crashreporter": "node_modules/@applicaster/x-ray/android/xray-crashreporter",
   },
   {
-    xrayplugin: "node_modules/@applicaster/quick-brick-xray/android",
+    "xray-ui": "node_modules/@applicaster/x-ray/android/xray-ui",
+  },
+  {
+    "xrayplugin": "node_modules/@applicaster/quick-brick-xray/android",
   },
 ];
 

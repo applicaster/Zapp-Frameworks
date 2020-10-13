@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.LogActivity">
 
@@ -27,15 +28,17 @@
 
         <fragment
             android:id="@+id/events_fragment"
-            android:name="com.applicaster.plugin.xray.ui.fragements.EventLogFragment"
+            android:name="com.applicaster.xray.ui.fragments.EventLogFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:sink_name="in_memory_sink"/>
 
         <fragment
             android:id="@+id/logfile_fragment"
-            android:name="com.applicaster.plugin.xray.ui.fragements.FileLogFragment"
+            android:name="com.applicaster.xray.ui.fragments.FileLogFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:file_name="xray_log.txt"/>
 
     </androidx.viewpager.widget.ViewPager>
 
