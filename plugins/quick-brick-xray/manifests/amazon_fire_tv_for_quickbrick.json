@@ -68,11 +68,11 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "manifest_version": "0.3.9",
+  "manifest_version": "0.4.0",
   "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@0.3.9",
-    "@applicaster/x-ray@0.0.16-alpha"
+    "@applicaster/quick-brick-xray@0.4.0",
+    "@applicaster/x-ray@0.0.17"
   ],
   "project_dependencies": [
     {
@@ -85,7 +85,10 @@
       "xray-notification": "node_modules/@applicaster/x-ray/android/xray-notification"
     },
     {
-      "xray-reporting": "node_modules/@applicaster/x-ray/android/xray-crashreporter"
+      "xray-crashreporter": "node_modules/@applicaster/x-ray/android/xray-crashreporter"
+    },
+    {
+      "xray-ui": "node_modules/@applicaster/x-ray/android/xray-ui"
     },
     {
       "xrayplugin": "node_modules/@applicaster/quick-brick-xray/android"
