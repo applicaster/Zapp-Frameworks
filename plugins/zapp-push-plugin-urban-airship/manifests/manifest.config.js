@@ -38,7 +38,6 @@ function createManifest({ version, platform }) {
 }
 
 const identifier = {
-  ios: "UrbanAirship-iOS",
   ios_for_quickbrick: "UrbanAirship-iOS",
   android_for_quickbrick: "UrbanAirship",
 };
@@ -367,7 +366,6 @@ const api_android = {
 };
 
 const api = {
-  ios: api_apple,
   ios_for_quickbrick: api_apple,
   android_for_quickbrick: api_android,
 };
@@ -376,6 +374,7 @@ const mobileTarget = ["mobile"];
 
 const targets = {
   ios_for_quickbrick: mobileTarget,
+  android_for_quickbrick: mobileTarget,
 };
 
 module.exports = createManifest;
