@@ -82,12 +82,11 @@ export const applyConditions = cond([
 
 export function sanitizeEventPayload(event: EventData) {
   try {
-    const { data = {}, context = {} } = event;
+    const { data = {} } = event;
 
     return {
       ...event,
-      data: wrapInObject(applyConditions(data), "data"),
-      context: wrapInObject(applyConditions(context), "context"),
+      data: applyConditions(wrapInObject(data, "data")),
     };
   } catch (error) {
     // eslint-disable-next-line no-console
