@@ -1,0 +1,77 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APPushProviderUrbanAirship",
+    "modules": ["ZappPushPluginUrbanAirship"],
+    "plist": {
+      "NSLocationAlwaysAndWhenInUseUsageDescription": "Your current location will be used to enable location based push notifications.",
+      "NSLocationWhenInUseUsageDescription": "Your current location will be used to enable location based push notifications.",
+      "NSLocationAlwaysUsageDescription": "Your current location will be used to enable location based push notifications."
+    }
+  },
+  "dependency_repository_url": [
+    "git@github.com:applicaster/ZappPushPluginUrbanAirship-iOS.git"
+  ],
+  "platform": "ios_for_quickbrick",
+  "author_name": "Alex Zchut",
+  "author_email": "a.zchut@applicaster.com",
+  "manifest_version": "14.1.2",
+  "name": "UrbanAirship",
+  "description": "Urban Airship wrapper",
+  "type": "push_provider",
+  "identifier": "UrbanAirship-iOS",
+  "dependency_name": "ZappPushPluginUrbanAirship",
+  "dependency_version": "14.1.2",
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "1.1.0-Dev",
+  "ui_builder_support": true,
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "react_native": false,
+  "extra_dependencies": [
+    {
+      "NotificationServiceExtension": {
+        "ZappPushPluginUrbanAirship/ServiceExtension": "'~> 14.1.2'"
+      }
+    }
+  ],
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "store_app_key",
+      "tooltip_text": "AppStore production App Key"
+    },
+    {
+      "type": "text",
+      "key": "store_app_secret",
+      "tooltip_text": "AppStore production App Secret"
+    },
+    {
+      "type": "text",
+      "key": "enterprise_app_key",
+      "tooltip_text": "Enterprise production App Key"
+    },
+    {
+      "type": "text",
+      "key": "enterprise_app_secret",
+      "tooltip_text": "Enterprise production App Secret"
+    },
+    {
+      "type": "text",
+      "key": "google_analytics_account_id",
+      "tooltip_text": "Google Analytics Account ID"
+    },
+    {
+      "type": "checkbox",
+      "key": "allow_enterprise_rich_push_notifications",
+      "default": 1
+    },
+    {
+      "type": "uploader",
+      "key": "notification_service_extension_provisioning_profile",
+      "tooltip_text": "Upload Notification Extension Provisioning Profile for Store builds only"
+    }
+  ],
+  "targets": ["mobile"],
+  "ui_frameworks": ["native", "QuickBrick"]
+}
