@@ -11,7 +11,7 @@
   },
   "dependency_repository_url": [
     "git@github.com:applicaster/ZappPushPluginUrbanAirship-iOS.git"
-  ],
+  ], 
   "platform": "ios_for_quickbrick",
   "author_name": "Alex Zchut",
   "author_email": "a.zchut@applicaster.com",
