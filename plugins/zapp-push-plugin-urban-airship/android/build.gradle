@@ -1,0 +1,84 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    compileOptions.encoding = 'ISO-8859-1'
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 28
+
+        consumerProguardFiles 'proguard-project.txt'
+    }
+
+    packagingOptions {
+        exclude 'jsr305_annotations/Jsr305_annotations.gwt.xml'
+    }
+
+    buildTypes {
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://maven.google.com' }
+    maven { url 'https://jitpack.io' }
+    maven {
+        credentials {
+            username System.getenv("MAVEN_USERNAME")
+            password System.getenv("MAVEN_PASSWORD")
+        }
+        url 'https://dl.bintray.com/applicaster-ltd/maven'
+    }
+}
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+def _glideVersion = safeExtGet("glideVersion", "4.11.0")
+
+dependencies {
+
+    if (!findProject(':applicaster-android-sdk')) {
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '6.6.0')
+        api ("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
+    }
+    else {
+        api project(':applicaster-android-sdk')
+    }
+
+    implementation fileTree(include: '**/*.jar', dir: 'libs')
+
+    api "com.github.bumptech.glide:glide:$_glideVersion"
+
+    // Urban Airship SDK
+    implementation 'com.urbanairship.android:urbanairship-fcm:12.1.0'
+    // Manages Firebase libs version selection. Keep this in sync with SDK
+    api platform('com.google.firebase:firebase-bom:24.4.0')
+    api 'com.google.firebase:firebase-messaging'
+    testImplementation 'junit:junit:4.12'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+}

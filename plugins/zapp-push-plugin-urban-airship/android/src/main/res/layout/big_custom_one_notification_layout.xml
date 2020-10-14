@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="8dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/custom_notification_image"
+             />
+
+        <TextView
+            android:id="@+id/custom_notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:text="Title"
+            android:textColor="#222325"
+            android:textSize="16dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/custom_notification_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/logo"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="This is quite a long description"
+            android:textColor="#222325"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/custom_notification_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:ellipsize="end"
+            android:text="16:59"
+            android:textColor="#222325"
+            android:textSize="14dp"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/custom_notification_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:layout_below="@id/header_container" />
+
+
+    <!-- we must keep this id -->
+    <ImageView
+        android:id="@+id/custom_notification_app_icon"
+        android:layout_width="40dp"
+        android:layout_height="18dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone" />
+</RelativeLayout>
