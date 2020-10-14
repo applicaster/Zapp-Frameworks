@@ -1,6 +1,6 @@
 {
   "name": "ZappPushPluginUrbanAirship",
-  "version": "14.1.2",
+  "version": "14.0.0",
   "summary": "ZappPushPluginUrbanAirship",
   "description": "ZappPushPluginUrbanAirship container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-push-plugin-firebase/14.1.2"
+    "tag": "@@applicaster/zapp-push-plugin-urban-airship/14.0.0"
   },
   "platforms": {
     "ios": "11.0"
@@ -31,12 +31,8 @@
         "Airship": [
           "= 14.1.2"
         ],
-        "ZappPushPluginsSDK": [
-
-        ],
-        "ZappPlugins": [
-
-        ]
+        "ZappPushPluginsSDK": [],
+        "ZappPlugins": []
       }
     },
     {

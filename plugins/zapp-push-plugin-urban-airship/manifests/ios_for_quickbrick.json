@@ -2,39 +2,30 @@
   "api": {
     "require_startup_execution": false,
     "class_name": "APPushProviderUrbanAirship",
-    "modules": ["ZappPushPluginUrbanAirship"],
+    "modules": [
+      "ZappPushPluginUrbanAirship"
+    ],
     "plist": {
       "NSLocationAlwaysAndWhenInUseUsageDescription": "Your current location will be used to enable location based push notifications.",
       "NSLocationWhenInUseUsageDescription": "Your current location will be used to enable location based push notifications.",
       "NSLocationAlwaysUsageDescription": "Your current location will be used to enable location based push notifications."
     }
   },
-  "dependency_repository_url": [
-    "git@github.com:applicaster/ZappPushPluginUrbanAirship-iOS.git"
-  ], 
-  "platform": "ios_for_quickbrick",
-  "author_name": "Alex Zchut",
-  "author_email": "a.zchut@applicaster.com",
-  "manifest_version": "14.1.2",
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "UrbanAirship",
   "description": "Urban Airship wrapper",
+  "cover_image": "",
   "type": "push_provider",
   "identifier": "UrbanAirship-iOS",
-  "dependency_name": "ZappPushPluginUrbanAirship",
-  "dependency_version": "14.1.2",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
   "whitelisted_account_ids": [],
   "min_zapp_sdk": "1.1.0-Dev",
-  "ui_builder_support": true,
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "react_native": false,
-  "extra_dependencies": [
-    {
-      "NotificationServiceExtension": {
-        "ZappPushPluginUrbanAirship/ServiceExtension": "'~> 14.1.2'"
-      }
-    }
-  ],
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -72,6 +63,30 @@
       "tooltip_text": "Upload Notification Extension Provisioning Profile for Store builds only"
     }
   ],
-  "targets": ["mobile"],
-  "ui_frameworks": ["native", "QuickBrick"]
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "14.0.0",
+  "extra_dependencies": [
+    {
+      "ZappPushPluginUrbanAirship": ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'"
+    },
+    {
+      "NotificationServiceExtension": {
+        "ZappPushPluginUrbanAirship/ServiceExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'"
+      }
+    },
+    {
+      "NotificationContentExtension": {
+        "ZappPushPluginUrbanAirship/ContentExtension": ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'"
+      }
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-push-plugin-urban-airship@14.0.0"
+  ]
 }
