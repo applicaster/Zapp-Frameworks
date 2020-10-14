@@ -1,6 +1,6 @@
 {
   "name": "ZappPushPluginUrbanAirship",
-  "version": "14.0.0",
+  "version": "14.1.0",
   "summary": "ZappPushPluginUrbanAirship",
   "description": "ZappPushPluginUrbanAirship container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-push-plugin-urban-airship/14.0.0"
+    "tag": "@@applicaster/zapp-push-plugin-urban-airship/14.1.0"
   },
   "platforms": {
     "ios": "11.0"
