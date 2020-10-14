@@ -3,7 +3,7 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Firebase Notifications",
+  name: "UrbanAirship",
   description:
     "Urban Airship wrapper",
   cover_image:
@@ -90,13 +90,13 @@ const extra_dependencies_apple = [
   },
   {
     NotificationServiceExtension: {
-      "ZappPushPluginFirebase/ServiceExtension":
+      "ZappPushPluginUrbanAirship/ServiceExtension":
         ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'",
     },
   },
   {
     NotificationContentExtension: {
-      "ZappPushPluginFirebase/ContentExtension":
+      "ZappPushPluginUrbanAirship/ContentExtension":
         ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'",
     },
   },
