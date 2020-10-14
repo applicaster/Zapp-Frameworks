@@ -9,7 +9,7 @@ const baseManifest = {
   type: "push_provider",
   identifier: "UrbanAirship-iOS",
   screen: false,
-  react_native: false,
+  react_native: true,
   ui_builder_support: true,
   whitelisted_account_ids: [],
   min_zapp_sdk: "0.0.1",
