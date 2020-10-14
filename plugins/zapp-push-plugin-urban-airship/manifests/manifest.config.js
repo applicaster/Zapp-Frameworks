@@ -9,7 +9,7 @@ const baseManifest = {
   cover_image:
     "",
   type: "push_provider",
-  identifier: "UrbanAirship",
+  identifier: "UrbanAirship-iOS",
   screen: false,
   react_native: false,
   ui_builder_support: true,
