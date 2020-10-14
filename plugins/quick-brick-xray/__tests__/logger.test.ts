@@ -4,6 +4,8 @@ const { resetSpies, spies } = spyOnConsole();
 
 import XRayLogger from "../src";
 
+const { SayMyName, ClassSayMyName } = require("./reactComponents");
+
 jest.mock("react-native");
 
 const realDate = global.Date;
@@ -109,6 +111,30 @@ describe("logger", () => {
 
     logger.addContext(context);
     expect(logger).toHaveProperty("context", context);
+  });
+
+  it("sanitizes context", () => {
+    const logger = new XRayLogger(CATEGORY, SUBSYSTEM);
+    const context = [
+      {
+        SayMyName,
+        ClassSayMyName,
+        someFunc() {},
+      },
+    ];
+
+    logger.addContext(context);
+    expect(logger.getContext()).toMatchInlineSnapshot(`
+      Object {
+        "context": Array [
+          Object {
+            "ClassSayMyName": "function ClassSayMyName",
+            "SayMyName": "function SayMyName",
+            "someFunc": "function someFunc",
+          },
+        ],
+      }
+    `);
   });
 
   it("merges new context data", () => {

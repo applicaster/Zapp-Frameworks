@@ -69,11 +69,6 @@ describe("when XRay Native Module exists", () => {
         SayMyName,
         ClassSayMyName,
       ],
-      context: {
-        Components: { SayMyName, ClassSayMyName },
-        foo: "bar",
-        someFunc() {},
-      },
     };
 
     logger.log(invalidEvent);
@@ -83,14 +78,7 @@ describe("when XRay Native Module exists", () => {
         Array [
           Object {
             "category": "CATEGORY",
-            "context": Object {
-              "Components": Object {
-                "ClassSayMyName": "function ClassSayMyName",
-                "SayMyName": "function SayMyName",
-              },
-              "foo": "bar",
-              "someFunc": "function someFunc",
-            },
+            "context": Object {},
             "data": Object {
               "data": Array [
                 "a string",
