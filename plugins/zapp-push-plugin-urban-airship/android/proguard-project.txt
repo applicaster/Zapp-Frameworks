@@ -1,0 +1,4 @@
+-keep public class com.app.urbanairshippushplugin.UrbanAirshipPushProvider {
+   public <fields>;
+   public <methods>;
+}
