@@ -1,6 +1,6 @@
 {
   "name": "ApplicasterIAP",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "summary": "In App Purchases framework",
   "license": "MIT",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
@@ -14,7 +14,7 @@
   "swift_versions": "5.2",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/applicaster-iap/0.3.2"
+    "tag": "@@applicaster/applicaster-iap/0.3.3"
   },
   "source_files": [
     "universal/**/*.{swift}",
