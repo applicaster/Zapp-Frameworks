@@ -42,7 +42,7 @@ class ReceiptStorage(context: Context) {
                 val purchase = Purchase(
                         r.sku,
                         r.receiptId,
-                        r.toJSON().toString(),
+                        r.receiptId,
                         userId)
                 edit.putString(r.sku, purchase.toJSON())
             }
