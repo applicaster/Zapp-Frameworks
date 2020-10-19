@@ -1,0 +1,37 @@
+{
+  "name": "ZappAnalyticsPluginFirebase",
+  "version": "8.3.0",
+  "summary": "ZappAnalyticsPluginFirebase",
+  "description": "ZappAnalyticsPluginFirebase container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp-analytics-plugin-firebase/8.3.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "public_header_files": "ZappAnalyticsPluginFirebase/*.h",
+  "source_files": [
+    "ios/**/*.{swift}",
+    "\"${PODS_ROOT}\"/Firebase/**/*.{h}"
+  ],
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "FRAMEWORK_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Firebase/**",
+    "OTHER_LDFLAGS": "$(inherited) -objc -framework \"FirebaseCore\" -framework \"FirebaseInstanceID\" -framework \"FirebaseAnalytics\"",
+    "ENABLE_BITCODE": "YES",
+    "SWIFT_VERSION": "5.1",
+    "USER_HEADER_SEARCH_PATHS": "\"$(inherited)\" \"${PODS_ROOT}\"/Firebase/**"
+  },
+  "dependencies": {
+    "ZappAnalyticsPluginsSDK": [],
+    "Firebase": [],
+    "Firebase/Analytics": [],
+    "ZappPlugins": []
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderFirebase",
+    "modules": ["ZappAnalyticsPluginFirebase"]
+  },
+  "dependency_repository_url": [
+    "git@github.com:applicaster/zapp-analytics-plugin-firebase.git"
+  ],
+  "author_name": "Avi Levin",
+  "author_email": "a.levin@applicaster.com",
+  "manifest_version": "8.2.1",
+  "name": "Google Analytics for Firebase",
+  "description": "Google's free, deep, and broadly integrated analytics system designed specifically for mobile. Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
+  "identifier": "firebase_ios",
+  "type": "analytics",
+  "platform": "ios_for_quickbrick",
+  "ui_builder_support": true,
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "dependency_name": "ZappAnalyticsPluginFirebase",
+  "dependency_version": "8.2.1",
+  "whitelisted_account_ids": [],
+  "react_native": false,
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
+  "custom_configuration_fields": [
+    {
+      "type": "checkbox",
+      "key": "Send_User_Data",
+      "label": "Send User Data",
+      "default": 1,
+      "tooltip_text": "Sends any user data collected in the app. Per Google&apos;s policies, we will not send any user data identified as PII (Personally Identifiable Information)."
+    },
+    {
+      "type": "text",
+      "key": "user_id",
+      "label": "User ID",
+      "tooltip_text": "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
+    }
+  ],
+  "targets": ["mobile"],
+  "ui_frameworks": ["quickbrick"]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@applicaster/zapp-analytics-plugin-firebase",
+  "version": "8.2.99",
+  "description": "Google Analytics For Firebase",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "firebase",
+    "analytics"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "android_for_quickbrick",
+      "ios_for_quickbrick",
+      "ios",
+      "android"
+    ],
+    "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
+  },
+  "files": [
+    "apple",
+    "android"
+  ]
+}

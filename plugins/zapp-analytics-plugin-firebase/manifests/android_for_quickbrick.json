@@ -1,0 +1,52 @@
+{
+  "api": {
+    "class_name": "applicaster.analytics.firebase.FirebaseAgent",
+    "proguard_rules": "-keep public class applicaster.analytics.firebase.FirebaseAgent{public <fields>;public <methods>;} -keep public class com.akamai.** {public <fields>; public <methods>;}",
+    "require_startup_execution": false
+  },
+  "dependency_repository_url": [
+    {
+      "url": "https://dl.bintray.com/applicaster-ltd/maven_plugins/"
+    }
+  ],
+  "name": "Google Analytics for Firebase",
+  "type": "analytics",
+  "platform": "android_for_quickbrick",
+  "identifier": "firebase_android",
+  "author_name": "Merav Zanany",
+  "description": "Google’s free, robust, and deeply-integrated analytics tool for mobile apps.\nPlease do not populate the user id field unless your app is legally authorised (for further information, please reach support)",
+  "author_email": "m.zanany@applicaster.com",
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "react_native": false,
+  "ui_builder_support": true,
+  "dependency_name": "com.applicaster:FirebaseAnalyticsPlugin",
+  "manifest_version": "3.1.2",
+  "dependency_version": "3.1.2",
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
+  "whitelisted_account_ids": [
+    
+  ],
+  "custom_configuration_fields": [
+    {
+      "type": "checkbox",
+      "label": "Send User Data",
+      "key": "Send_User_Data",
+      "default": 1,
+      "tooltip_text": "Sends any user data collected in the app. Per Google&apos;s policies, we will not send any user data identified as PII (Personally Identifiable Information)."
+    },
+    {
+      "type": "text",
+      "label": "User Id",
+      "key": "user_id",
+      "tooltip_text": "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ]
+}
