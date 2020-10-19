@@ -10,6 +10,6 @@ import UIKit
 
 extension SplashViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return UIDevice.current.userInterfaceIdiom == .pad ? .landscapeLeft : .portrait
+        return UIDevice.current.userInterfaceIdiom == .pad ? .landscape : .portrait
     }
 }
