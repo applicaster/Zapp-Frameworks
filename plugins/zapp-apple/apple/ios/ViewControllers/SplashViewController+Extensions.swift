@@ -1,15 +1,12 @@
 //
-//  SplashViewController.swift
-//  ZappTvOS
+//  SplashViewController+Extensions.swift
+//  ZappApple
 //
-//  Created by Anton Kononenko on 11/13/18.
-//  Copyright © 2018 Applicaster LTD. All rights reserved.
+//  Created by Anton Kononenko on 10/19/20.
+//  Copyright © 2020 Applicaster LTD. All rights reserved.
 //
 
-import AVKit
 import UIKit
-import XrayLogger
-import ZappCore
 
 extension SplashViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
