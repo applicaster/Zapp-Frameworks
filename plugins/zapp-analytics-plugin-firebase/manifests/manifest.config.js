@@ -35,6 +35,7 @@ function createManifest({ version, platform }) {
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
+    ui_frameworks: ui_frameworks[platform],
   };
   return manifest;
 }
@@ -79,6 +80,16 @@ const custom_configuration_fields = {
   android_for_quickbrick: custom_configuration_fields_android,
 };
 
+const ui_frameworks_native = ["native"];
+const ui_frameworks_quickbrick = ["quickbrick"];
+
+const ui_frameworks = {
+  android: ui_frameworks_native,
+  ios: ui_frameworks_native,
+  ios_for_quickbrick: ui_frameworks_quickbrick,
+  android_for_quickbrick: ui_frameworks_quickbrick,
+};
+
 const min_zapp_sdk = {
   android: "20.0.0",
   android_for_quickbrick: "1.0.0",
@@ -89,7 +100,7 @@ const min_zapp_sdk = {
 const extra_dependencies_apple = [
   {
     ZappAnalyticsPluginFirebase:
-      ":path => './node_modules/@applicaster/zapp-analytics-plugin-firebase/apple/ZappPushPluginFirebase.podspec'",
+      ":path => './node_modules/@applicaster/zapp-analytics-plugin-firebase/apple/ZappAnalyticsPluginFirebase.podspec'",
   },
 ];
 
