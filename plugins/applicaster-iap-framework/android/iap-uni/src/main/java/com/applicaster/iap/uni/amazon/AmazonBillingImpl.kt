@@ -177,7 +177,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
                 Purchase(
                         receipt.sku,
                         receipt.receiptId,
-                        receipt.toJSON().toString(),
+                        receipt.receiptId,
                         response.userData?.userId
                 )
         )

@@ -42,5 +42,5 @@ open class PurchasePromiseListener(protected val bridge: IAPBridge,
 
     // hack for Amazon: actual purchase for subscriptions will have another SKU (Parent one)
     protected fun fix(purchase: Purchase) =
-            Purchase(sku, purchase.transactionIdentifier, purchase.receipt, purchase.userId)
+            purchase.copy(productIdentifier = sku)
 }
