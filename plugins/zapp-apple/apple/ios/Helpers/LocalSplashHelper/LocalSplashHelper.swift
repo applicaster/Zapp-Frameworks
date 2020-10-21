@@ -53,6 +53,8 @@ public class LocalSplashHelper: NSObject {
     private static let localSplashImageIphone_1242 = "LaunchImage-1200-Portrait-2688h@3x"
     private static let localSplashImageIpadNonRetina_1024 = "LaunchImage-700-Landscape~ipad"
     private static let localSplashImageIpad_1024 = "LaunchImage-700-Landscape@2x~ipad"
+    private static let localSplashImageIpadPortraitNonRetina_1024 = "LaunchImage-700-Portrait~ipad"
+    private static let localSplashImageIpadPortrait_1024 = "LaunchImage-700-Portrait@2x~ipad"
     private static let localSplashImageIpad_1366 = "Default-1366h"
 
     enum FilePostfixForSize: String {
@@ -102,23 +104,28 @@ public class LocalSplashHelper: NSObject {
 
         let devicePortraitWidth = ScreenMultiplierConverter.deviceWidth()
         let devicePortraitHeight = ScreenMultiplierConverter.deviceHeight()
+        let size = UIScreen.main.bounds.size
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             retVal = localSplashImageIpad_1024
 
-            if devicePortraitWidth == 768 {
+            if size.width == 768 {
+                if UIScreen.main.scale >= 2.0 {
+                    retVal = localSplashImageIpadPortrait_1024
+                } else {
+                    retVal = localSplashImageIpadPortraitNonRetina_1024
+                }
+            } else {
                 if UIScreen.main.scale >= 2.0 {
                     retVal = localSplashImageIpad_1024
                 } else {
                     retVal = localSplashImageIpadNonRetina_1024
                 }
-            } else if devicePortraitWidth == 1024 {
-                retVal = localSplashImageIpad_1366
             }
+            
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             retVal = localSplashImageIphone_568
             if devicePortraitWidth == 320 {
-                let size = UIScreen.main.bounds.size
                 if size.width == 568 || size.height == 568 {
                     retVal = localSplashImageIphone_568
                 } else {
