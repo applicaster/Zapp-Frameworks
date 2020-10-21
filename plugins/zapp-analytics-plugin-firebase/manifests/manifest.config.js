@@ -75,8 +75,6 @@ const custom_configuration_fields_android = [
 const custom_configuration_fields = {
   ios: custom_configuration_fields_apple,
   ios_for_quickbrick: custom_configuration_fields_apple,
-  tvos: custom_configuration_fields_apple,
-  tvos_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_android,
 };
 
@@ -84,16 +82,14 @@ const ui_frameworks_native = ["native"];
 const ui_frameworks_quickbrick = ["quickbrick"];
 
 const ui_frameworks = {
-  android: ui_frameworks_native,
   ios: ui_frameworks_native,
   ios_for_quickbrick: ui_frameworks_quickbrick,
   android_for_quickbrick: ui_frameworks_quickbrick,
 };
 
 const min_zapp_sdk = {
-  android: "20.0.0",
   android_for_quickbrick: "1.0.0",
-  ios: "15.0.0-Dev",
+  ios: "15.1.2-Dev",
   ios_for_quickbrick: "1.0.0",
 };
 
@@ -134,7 +130,6 @@ const api_apple = {
 
 const api = {
   android_for_quickbrick: api_android,
-  android: api_android,
   ios: api_apple,
   ios_for_quickbrick: api_apple,
 };
@@ -142,7 +137,6 @@ const api = {
 const mobileTarget = ["mobile"];
 
 const targets = {
-  android: mobileTarget,
   android_for_quickbrick: mobileTarget,
   ios: mobileTarget,
   ios_for_quickbrick: mobileTarget,
