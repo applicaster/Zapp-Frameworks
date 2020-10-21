@@ -23,7 +23,7 @@
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "FRAMEWORK_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Firebase/**",
-    "OTHER_LDFLAGS": "$(inherited) -objc -framework \"FirebaseCore\" -framework \"FirebaseInstanceID\" -framework \"FirebaseAnalytics\"",
+    "OTHER_LDFLAGS": "$(inherited) -objc -framework \"FirebaseCore\" -framework \"FirebaseAnalytics\"",
     "ENABLE_BITCODE": "YES",
     "SWIFT_VERSION": "5.1",
     "USER_HEADER_SEARCH_PATHS": "\"$(inherited)\" \"${PODS_ROOT}\"/Firebase/**"
