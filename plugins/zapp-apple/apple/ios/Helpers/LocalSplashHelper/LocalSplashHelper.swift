@@ -68,7 +68,8 @@ public class LocalSplashHelper: NSObject {
 
         case ipad1024_1x = "_1x-ipad"
         case ipad1024 = "-ipad"
-        case ipad1366 = "-ipad-1366h"
+        case ipad1024_portrait_1x = "_portrait_1x-ipad"
+        case ipad1024_portrait = "_portrait-ipad"
     }
 
     public class func localSplashImage(for presentingViewController: UIViewController) -> UIImage? {
@@ -122,7 +123,7 @@ public class LocalSplashHelper: NSObject {
                     retVal = localSplashImageIpadNonRetina_1024
                 }
             }
-            
+
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             retVal = localSplashImageIphone_568
             if devicePortraitWidth == 320 {
@@ -162,25 +163,30 @@ public class LocalSplashHelper: NSObject {
 
         let devicePortraitWidth = ScreenMultiplierConverter.deviceWidth()
         let devicePortraitHeight = ScreenMultiplierConverter.deviceHeight()
+        let size = UIScreen.main.bounds.size
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             postix = .ipad1024
 
             if devicePortraitWidth == 768 {
-                if UIScreen.main.scale >= 2.0 {
-                    postix = .ipad1024
+                if size.width == 768 {
+                    if UIScreen.main.scale >= 2.0 {
+                        postix = .ipad1024_portrait
+                    } else {
+                        postix = .ipad1024_portrait_1x
+                    }
                 } else {
-                    postix = .ipad1024_1x
+                    if UIScreen.main.scale >= 2.0 {
+                        postix = .ipad1024
+                    } else {
+                        postix = .ipad1024_1x
+                    }
                 }
-
-            } else if devicePortraitWidth == 1024 {
-                postix = .ipad1366
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             postix = .iphone568
 
             if devicePortraitWidth == 320 {
-                let size = UIScreen.main.bounds.size
                 if size.width == 568 || size.height == 568 {
                     postix = .iphone568
                 } else {

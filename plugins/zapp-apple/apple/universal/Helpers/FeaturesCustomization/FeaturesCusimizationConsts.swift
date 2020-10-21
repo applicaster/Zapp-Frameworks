@@ -12,4 +12,5 @@ struct FeaturesCusimizationConsts {
     static let MSAppCenterAppSecret = "MSAppCenterAppSecret"
     static let S3Hostname = "S3Hostname"
     static let DebugEnvironment = "DebugEnvironment"
+    static let isTabletPortrait = "isTabletPortrait"
 }

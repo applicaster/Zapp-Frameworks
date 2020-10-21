@@ -10,6 +10,7 @@ import UIKit
 
 extension SplashViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return UIDevice.current.userInterfaceIdiom == .pad ? .landscape : .portrait
+        let ipadOrientation = FeaturesCustomization.isTabletPortrait() ? [UIInterfaceOrientationMask.portrait, UIInterfaceOrientationMask.portraitUpsideDown] : UIInterfaceOrientationMask.landscape
+        return UIDevice.current.userInterfaceIdiom == .pad ? ipadOrientation : .portrait
     }
 }
