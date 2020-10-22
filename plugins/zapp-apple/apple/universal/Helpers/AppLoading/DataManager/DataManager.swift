@@ -30,8 +30,12 @@ class DataManager {
         var videoPath = AssetsKeys.splashVideoKey
 
         #if os(iOS)
-            videoPath = LocalSplashHelper.localSplashVideoNameForScreenSize()
+            guard let iosVideoPath = LocalSplashHelper.localBackgroundVideoNameForScreenSize() else {
+                return nil
+            }
+            videoPath = iosVideoPath
         #endif
+
         let retVal = Bundle.main.path(forResource: videoPath,
                                       ofType: DataKeysExtensions.mp4)
         logger?.debugLog(template: SplashViewControllerDataManagerLogs.splashVideoPath,
