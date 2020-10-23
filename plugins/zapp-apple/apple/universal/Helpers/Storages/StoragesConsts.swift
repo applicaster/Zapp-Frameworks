@@ -52,6 +52,7 @@ public struct ZappStorageKeys {
     public static let pluginConfigurationUrl = "plugin_configuration_url"
     public static let riversUrl = "rivers_url"
     public static let applicationEnvironment = "application_environment"
+    public static let isTabletPortrait = "isTabletPortrait"
 }
 
 //Example of the expected json

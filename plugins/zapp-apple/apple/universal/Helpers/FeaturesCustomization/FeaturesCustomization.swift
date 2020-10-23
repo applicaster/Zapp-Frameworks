@@ -40,4 +40,13 @@ public class FeaturesCustomization {
         }
         return debugEnvironment
     }
+    
+    public class func isTabletPortrait() -> Bool {
+        guard let isPortrait = featuresCustomizationDict?[FeaturesCusimizationConsts.isTabletPortrait] as? Bool else {
+            return false
+        }
+        return isPortrait
+    }
 }
+
+
