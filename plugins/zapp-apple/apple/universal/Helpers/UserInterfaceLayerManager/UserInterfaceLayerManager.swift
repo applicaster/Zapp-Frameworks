@@ -46,6 +46,7 @@ class UserInterfaceLayerManager {
             "countryLocale": NSLocale.current.regionCode as Any,
             "platform": deviceType as Any,
             "reactNativePackagerRoot": reactNativePackagerRoot as Any,
+            "isTabletPortrait": FeaturesCustomization.isTabletPortrait()
         ]
         
         logger?.debugLog(template: UserInterfaceLayerMangerLogs.canNotCreateUserInterfaceLayer,
