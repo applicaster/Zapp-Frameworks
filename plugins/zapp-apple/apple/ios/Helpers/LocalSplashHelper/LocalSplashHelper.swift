@@ -23,7 +23,7 @@ public class LocalSplashHelper: NSObject {
             if UIScreen.main.scale >= 2.0 {
                 return baseFileName + FilePostfixForSize.ipad_2x.rawValue
             } else {
-                return baseFileName + FilePostfixForSize.ipad_2x.rawValue
+                return baseFileName + FilePostfixForSize.ipad.rawValue
             }
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             if UIScreen.main.scale >= 3.0 {
