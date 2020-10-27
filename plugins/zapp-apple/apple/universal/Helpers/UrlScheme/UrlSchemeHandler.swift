@@ -12,6 +12,7 @@ public class UrlSchemeHandler {
         case generateNewUUID
         case plugin
         case xray
+        case settings
     }
 
     public class func handle(with rootViewController: RootController?,
@@ -32,6 +33,9 @@ public class UrlSchemeHandler {
         case .plugin:
             // This section is experimental, not in use. If not needed in future, please remove it, with handlePluginURLScheme: func
             retValue = handlePluginURLScheme(url: url)
+        case .settings:
+            retValue = handleSettingsChanges(url: url,
+                                  rootController: rootViewController)
         default:
             break
         }

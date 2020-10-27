@@ -18,4 +18,14 @@ import Foundation
         #endif
         return isSim
     }()
+    
+    static var appUrlScheme:String? = {
+        guard let arrUrlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String:AnyObject]],
+            let arrUrlSchemes = arrUrlTypes.first?["CFBundleURLSchemes"] as? [AnyObject],
+            let urlScheme = arrUrlSchemes.first as? String else {
+            return nil
+        }
+
+        return urlScheme
+    }()
 }
