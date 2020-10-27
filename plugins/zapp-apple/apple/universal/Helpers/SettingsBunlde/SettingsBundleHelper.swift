@@ -18,7 +18,6 @@ public class SettingsBundleHelper {
     
     public class func setSettingsBundleBoolValue(forKey key: SettingsBundleParameters, value: Bool) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
-        UserDefaults.standard.synchronize()
     }
 
     public class func handleChangesIfNeeded() {
@@ -51,6 +50,5 @@ extension SettingsBundleHelper {
 
     class func setSettingsBundleLastUsedBoolValue(forKey key: SettingsBundleParametersSavedValues, value: Bool) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
-        UserDefaults.standard.synchronize()
     }
 }

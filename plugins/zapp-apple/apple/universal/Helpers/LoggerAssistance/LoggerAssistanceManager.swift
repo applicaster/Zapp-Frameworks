@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import XrayLogger
 
 public class LoggerAssistanceManager {
+    let logger = Logger.getLogger(for: LoggerAssistanceManagerLogs.subsystem)
+
     public func presentAuthentication(with params: [String: Any],
                                       on rootController: RootController?) {
         guard let rootController = rootController else {
@@ -29,11 +32,11 @@ public class LoggerAssistanceManager {
                                                if let codeTextField = alert.textFields?.first,
                                                    let value = codeTextField.text,
                                                    let intValue = Int(value) {
-                                                
                                                    SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance,
                                                                                                            value: true)
 
-                                                   print("entered value is: \(intValue)")
+                                                   self.logger?.debugLog(template: LoggerAssistanceManagerLogs.passedAuthentication,
+                                                                         data: ["value": "\(intValue)"])
                                                }
                                            })
 
@@ -41,11 +44,8 @@ public class LoggerAssistanceManager {
                                          style: .cancel,
                                          handler: { _ in
                                              alert.dismiss(animated: true, completion: {
-                                                 // set to default
-                                                 SettingsBundleHelper.setSettingsBundleBoolValue(forKey: .loggerAssistance,
-                                                                                                 value: false)
-                                                 SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance,
-                                                                                                         value: false)
+                                                 self.logger?.debugLog(template: LoggerAssistanceManagerLogs.cancelled)
+                                                 self.resetToDefaultState()
                                              })
                                          })
 
@@ -59,5 +59,16 @@ public class LoggerAssistanceManager {
         rootController.userInterfaceLayerViewController?.present(alert,
                                                                  animated: true,
                                                                  completion: nil)
+
+        logger?.debugLog(template: LoggerAssistanceManagerLogs.presentAuthentication)
+    }
+
+    public func resetToDefaultState() {
+        SettingsBundleHelper.setSettingsBundleBoolValue(forKey: .loggerAssistance,
+                                                        value: false)
+        SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance,
+                                                                value: false)
+
+        logger?.debugLog(template: LoggerAssistanceManagerLogs.resetToDefaultState)
     }
 }
