@@ -4,30 +4,22 @@
     "proguard_rules": "-keep public class applicaster.analytics.firebase.FirebaseAgent{public <fields>;public <methods>;} -keep public class com.akamai.** {public <fields>; public <methods>;}",
     "require_startup_execution": false
   },
-  "dependency_repository_url": [
-    {
-      "url": "https://dl.bintray.com/applicaster-ltd/maven_plugins/"
-    }
-  ],
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "Google Analytics for Firebase",
+  "description": "Google's free, deep, and broadly integrated analytics system designed specifically for mobile. Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
   "type": "analytics",
-  "platform": "android_for_quickbrick",
-  "identifier": "firebase_android",
-  "author_name": "Merav Zanany",
-  "description": "Google’s free, robust, and deeply-integrated analytics tool for mobile apps.\nPlease do not populate the user id field unless your app is legally authorised (for further information, please reach support)",
-  "author_email": "m.zanany@applicaster.com",
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "identifier": "firebase",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "react_native": false,
-  "ui_builder_support": true,
-  "dependency_name": "com.applicaster:FirebaseAnalyticsPlugin",
-  "manifest_version": "3.1.2",
-  "dependency_version": "3.1.2",
-  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
-  "whitelisted_account_ids": [
-    
-  ],
+  "preload": true,
   "custom_configuration_fields": [
     {
       "type": "checkbox",
@@ -48,5 +40,15 @@
   ],
   "ui_frameworks": [
     "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "8.3.0",
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-firebase@8.3.0"
+  ],
+  "project_dependencies": [
+    {
+      "zapp-analytics-plugin-firebase": "node_modules/@applicaster/zapp-analytics-plugin-firebase/android"
+    }
   ]
 }

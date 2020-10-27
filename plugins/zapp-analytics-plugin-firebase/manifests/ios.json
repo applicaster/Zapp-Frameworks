@@ -6,24 +6,22 @@
       "ZappAnalyticsPluginFirebase"
     ]
   },
-  "dependency_repository_url": [
-    "git@github.com:applicaster/zapp-analytics-plugin-firebase.git"
-  ],
-  "author_name": "Pablo Rueda",
-  "author_email": "p.rueda@applicaster.com",
-  "manifest_version": "8.2.0",
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "Google Analytics for Firebase",
   "description": "Google's free, deep, and broadly integrated analytics system designed specifically for mobile. Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
-  "identifier": "firebase_ios",
-  "type": "analytics",
-  "platform": "ios",
-  "ui_builder_support": true,
-  "min_zapp_sdk": "13.0.0-Dev",
-  "dependency_name": "ZappAnalyticsPluginFirebase",
-  "dependency_version": "8.2.0",
-  "whitelisted_account_ids": [],
-  "react_native": false,
   "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
+  "type": "analytics",
+  "identifier": "firebase",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "15.1.2-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
   "custom_configuration_fields": [
     {
       "type": "checkbox",
@@ -41,5 +39,18 @@
   ],
   "targets": [
     "mobile"
+  ],
+  "ui_frameworks": [
+    "native"
+  ],
+  "platform": "ios",
+  "manifest_version": "8.3.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginFirebase": ":path => './node_modules/@applicaster/zapp-analytics-plugin-firebase/apple/ZappAnalyticsPluginFirebase.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-firebase@8.3.0"
   ]
 }

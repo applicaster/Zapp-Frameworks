@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-firebase",
-  "version": "8.2.99",
+  "version": "8.3.0",
   "description": "Google Analytics For Firebase",
   "repository": {
     "type": "git",
