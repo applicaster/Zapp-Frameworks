@@ -1,0 +1,78 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+
+        versionCode 4
+        versionName "3.0.1"
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { // Applicaster
+        credentials {
+            username System.getenv("MAVEN_USERNAME")
+            password System.getenv("MAVEN_PASSWORD")
+        }
+        url 'https://dl.bintray.com/applicaster-ltd/maven'
+    }
+}
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+dependencies {
+
+    // Applicaster SDK
+    if (!findProject(':applicaster-android-sdk') || project.hasProperty('forceClosedDependencies')) {
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '6.3.0')
+        api("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
+    } else {
+        api project(':applicaster-android-sdk')
+    }
+
+    // pick consistent Firebase libraries versions using BoM
+    // https://firebase.google.com/docs/android/setup#firebase-bom
+    api platform('com.google.firebase:firebase-bom:24.4.0')
+    api 'com.google.firebase:firebase-core:+'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.assertj:assertj-core:1.7.0"
+    testImplementation 'org.robolectric:robolectric:3.3.2'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.powermock:powermock-api-mockito:1.6.2'
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.2'
+}
