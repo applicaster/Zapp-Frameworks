@@ -44,6 +44,14 @@ function createManifest({ version, platform }) {
 
 const custom_configuration_fields_apple = [
   {
+    key: "enabled",
+    type: "checkbox",
+    default: 1,
+    label: "Plugin enabled",
+    label_tooltip:
+      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+  },
+  {
     type: "checkbox",
     key: "allow_enterprise_rich_push_notifications",
     default: 1,
@@ -56,21 +64,13 @@ const custom_configuration_fields_apple = [
     tooltip_text:
       "Upload Notification Extension Provisioning Profile for Store builds only",
   },
-  {
-    key: "enabled",
-    type: "switch",
-    initial_value: true,
-    label: "Plugin enabled",
-    label_tooltip:
-      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
-  },
 ];
 
 const custom_configuration_fields_android = [
   {
     key: "enabled",
-    type: "switch",
-    initial_value: true,
+    type: "checkbox",
+    default: true,
     label: "Plugin enabled",
     label_tooltip:
       "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
