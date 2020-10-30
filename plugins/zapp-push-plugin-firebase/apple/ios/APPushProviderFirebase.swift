@@ -12,9 +12,10 @@ import FirebaseMessaging
 import XrayLogger
 import ZappPlugins
 import ZappPushPluginsSDK
+import ZappCore
 
 open class APPushProviderFirebase: ZPPushProvider {
-    lazy var logger = Logger.getLogger(for: "ZappPushPluginFirebase")
+    lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappPushPluginFirebase")
 
     var registeredTags: Set<String> = []
     override open func getKey() -> String {
