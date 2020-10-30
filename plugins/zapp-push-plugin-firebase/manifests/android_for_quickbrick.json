@@ -23,6 +23,13 @@
   "preload": true,
   "custom_configuration_fields": [
     {
+      "key": "enabled",
+      "type": "checkbox",
+      "default": true,
+      "label": "Plugin enabled",
+      "label_tooltip": "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start"
+    },
+    {
       "key": "notification_channel_name",
       "type": "text",
       "tooltip_text": "Name of the default notification channel"
@@ -228,9 +235,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "2.0.3",
+  "manifest_version": "2.1.0",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@2.0.3"
+    "@applicaster/zapp-push-plugin-firebase@2.1.0"
   ],
   "project_dependencies": [
     {

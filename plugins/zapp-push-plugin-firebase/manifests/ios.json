@@ -27,6 +27,13 @@
   "preload": true,
   "custom_configuration_fields": [
     {
+      "key": "enabled",
+      "type": "checkbox",
+      "default": 1,
+      "label": "Plugin enabled",
+      "label_tooltip": "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start"
+    },
+    {
       "type": "checkbox",
       "key": "allow_enterprise_rich_push_notifications",
       "default": 1,
@@ -45,7 +52,7 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "manifest_version": "2.0.3",
+  "manifest_version": "2.1.0",
   "extra_dependencies": [
     {
       "ZappPushPluginFirebase": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
@@ -62,6 +69,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@2.0.3"
+    "@applicaster/zapp-push-plugin-firebase@2.1.0"
   ]
 }
