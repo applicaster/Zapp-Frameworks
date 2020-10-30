@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import ZappCore
 import XrayLogger
+import ZappCore
 
 public class PluginsManager: NSObject {
     lazy var logger = Logger.getLogger(for: PluginsManagerLogs.subsystem)
@@ -31,7 +31,7 @@ public class PluginsManager: NSObject {
 
     func intializePlugins(completion: @escaping (_ success: Bool) -> Void) {
         logger?.debugLog(template: PluginsManagerLogs.pluginsInitialization)
-        
+
         pluginLoaderCompletion = completion
         pluginsStateMachine = LoadingStateMachine(dataSource: self,
                                                   withStates: preapareLoadingPluginStates())
@@ -61,7 +61,7 @@ public class PluginsManager: NSObject {
     func prepareAnalyticsPlugins(_ successHandler: @escaping StateCallBack,
                                  _ failHandler: @escaping StateCallBack) {
         logger?.debugLog(template: PluginsManagerLogs.preparingAnalyticsPlugins)
-        
+
         analytics.prepareManager { success in
             success ? successHandler() : failHandler()
         }
@@ -79,7 +79,7 @@ public class PluginsManager: NSObject {
     func prepareGeneralPlugins(_ successHandler: @escaping StateCallBack,
                                _ failHandler: @escaping StateCallBack) {
         logger?.debugLog(template: PluginsManagerLogs.preparingGeneralPlugins)
-        
+
         general.prepareManager { success in
             success ? successHandler() : failHandler()
         }
@@ -90,14 +90,20 @@ public class PluginsManager: NSObject {
         logger?.debugLog(template: PluginsManagerLogs.savingPluginConfigurationToSessionStorage)
 
         func sendConfigurationToSessionStorage(pluginModel: ZPPluginModel) {
-            guard let configationJSON = pluginModel.configurationJSON as? [String: String] else {
+            guard let configationJSON = pluginModel.configurationJSON as? [String: Any] else {
                 return
             }
 
             configationJSON.forEach { arg in
                 let (key, value) = arg
+                var newValue: String?
+                if let stringValue = value as? String {
+                    newValue = stringValue
+                } else if let numberValue = value as? NSNumber {
+                    newValue = numberValue.stringValue
+                }
                 _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: key,
-                                                                               value: value,
+                                                                               value: newValue,
                                                                                namespace: pluginModel.identifier)
             }
         }
