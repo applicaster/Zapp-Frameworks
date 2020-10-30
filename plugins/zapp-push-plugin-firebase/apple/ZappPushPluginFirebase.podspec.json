@@ -33,7 +33,8 @@
         "ZappPushPluginsSDK": [],
         "ZappPlugins": [],
         "Firebase/Messaging": [],
-        "Firebase/Core": []
+        "Firebase/Core": [],
+        "XrayLogger": []
       }
     },
     {

@@ -44,6 +44,14 @@ function createManifest({ version, platform }) {
 
 const custom_configuration_fields_apple = [
   {
+    key: "enabled",
+    type: "checkbox",
+    default: 1,
+    label: "Plugin enabled",
+    label_tooltip:
+      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+  },
+  {
     type: "checkbox",
     key: "allow_enterprise_rich_push_notifications",
     default: 1,
@@ -59,205 +67,194 @@ const custom_configuration_fields_apple = [
 ];
 
 const custom_configuration_fields_android = [
-    {
-      "key": "notification_channel_name",
-      "type": "text",
-      "tooltip_text": "Name of the default notification channel"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound",
-      "tooltip_text": "Sound file from application assets for default notification channel",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ],
-      "default": "system_default"
-    },
-    {
-      "key": "notification_channel_name_1",
-      "type": "text"
-    },
-    {
-      "key": "notification_channel_id_1",
-      "type": "text"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound_1",
-      "tooltip_text": "Sound file from application assets",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ],
-      "default": "push_sound_1"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_importance_1",
-      "tooltip_text": "Importance of the notification. See <a href=\"https://developer.android.com/training/notify-user/channels\">Android developer documentation</a>",
-      "multiple": false,
-      "options": [
-        "high",
-        "default",
-        "low",
-        "min"
-      ],
-      "default": "default"
-    },
-    {
-      "key": "notification_channel_name_2",
-      "type": "text"
-    },
-    {
-      "key": "notification_channel_id_2",
-      "type": "text"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound_2",
-      "tooltip_text": "Sound file from application assets",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ]
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_importance_2",
-      "tooltip_text": "Importance of the notification. See <a href=\"https://developer.android.com/training/notify-user/channels\">Android developer documentation</a>",
-      "multiple": false,
-      "options": [
-        "high",
-        "default",
-        "low",
-        "min"
-      ]
-    },
-    {
-      "key": "notification_channel_name_3",
-      "type": "text"
-    },
-    {
-      "key": "notification_channel_id_3",
-      "type": "text"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound_3",
-      "tooltip_text": "Sound file from application assets",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ]
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_importance_3",
-      "tooltip_text": "Importance of the notification. See <a href=\"https://developer.android.com/training/notify-user/channels\">Android developer documentation</a>",
-      "multiple": false,
-      "options": [
-        "high",
-        "default",
-        "low",
-        "min"
-      ]
-    },
-    {
-      "key": "notification_channel_name_4",
-      "type": "text"
-    },
-    {
-      "key": "notification_channel_id_4",
-      "type": "text"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound_4",
-      "tooltip_text": "Sound file from application assets",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ]
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_importance_4",
-      "tooltip_text": "Importance of the notification. See <a href=\"https://developer.android.com/training/notify-user/channels\">Android developer documentation</a>",
-      "multiple": false,
-      "options": [
-        "high",
-        "default",
-        "low",
-        "min"
-      ]
-    },
-    {
-      "key": "notification_channel_name_5",
-      "type": "text"
-    },
-    {
-      "key": "notification_channel_id_5",
-      "type": "text"
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_sound_5",
-      "tooltip_text": "Sound file from application assets",
-      "multiple": false,
-      "options": [
-        "system_default",
-        "push_sound_1",
-        "push_sound_2",
-        "push_sound_3",
-        "push_sound_4",
-        "push_sound_5",
-        "silent"
-      ]
-    },
-    {
-      "type": "dropdown",
-      "key": "notification_channel_importance_5",
-      "tooltip_text": "Importance of the notification. See <a href=\"https://developer.android.com/training/notify-user/channels\">Android developer documentation</a>",
-      "multiple": false,
-      "options": [
-        "high",
-        "default",
-        "low",
-        "min"
-      ]
-    }
-  ];
+  {
+    key: "enabled",
+    type: "checkbox",
+    default: true,
+    label: "Plugin enabled",
+    label_tooltip:
+      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+  },
+  {
+    key: "notification_channel_name",
+    type: "text",
+    tooltip_text: "Name of the default notification channel",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound",
+    tooltip_text:
+      "Sound file from application assets for default notification channel",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+    default: "system_default",
+  },
+  {
+    key: "notification_channel_name_1",
+    type: "text",
+  },
+  {
+    key: "notification_channel_id_1",
+    type: "text",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound_1",
+    tooltip_text: "Sound file from application assets",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+    default: "push_sound_1",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_importance_1",
+    tooltip_text:
+      'Importance of the notification. See <a href="https://developer.android.com/training/notify-user/channels">Android developer documentation</a>',
+    multiple: false,
+    options: ["high", "default", "low", "min"],
+    default: "default",
+  },
+  {
+    key: "notification_channel_name_2",
+    type: "text",
+  },
+  {
+    key: "notification_channel_id_2",
+    type: "text",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound_2",
+    tooltip_text: "Sound file from application assets",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_importance_2",
+    tooltip_text:
+      'Importance of the notification. See <a href="https://developer.android.com/training/notify-user/channels">Android developer documentation</a>',
+    multiple: false,
+    options: ["high", "default", "low", "min"],
+  },
+  {
+    key: "notification_channel_name_3",
+    type: "text",
+  },
+  {
+    key: "notification_channel_id_3",
+    type: "text",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound_3",
+    tooltip_text: "Sound file from application assets",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_importance_3",
+    tooltip_text:
+      'Importance of the notification. See <a href="https://developer.android.com/training/notify-user/channels">Android developer documentation</a>',
+    multiple: false,
+    options: ["high", "default", "low", "min"],
+  },
+  {
+    key: "notification_channel_name_4",
+    type: "text",
+  },
+  {
+    key: "notification_channel_id_4",
+    type: "text",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound_4",
+    tooltip_text: "Sound file from application assets",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_importance_4",
+    tooltip_text:
+      'Importance of the notification. See <a href="https://developer.android.com/training/notify-user/channels">Android developer documentation</a>',
+    multiple: false,
+    options: ["high", "default", "low", "min"],
+  },
+  {
+    key: "notification_channel_name_5",
+    type: "text",
+  },
+  {
+    key: "notification_channel_id_5",
+    type: "text",
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_sound_5",
+    tooltip_text: "Sound file from application assets",
+    multiple: false,
+    options: [
+      "system_default",
+      "push_sound_1",
+      "push_sound_2",
+      "push_sound_3",
+      "push_sound_4",
+      "push_sound_5",
+      "silent",
+    ],
+  },
+  {
+    type: "dropdown",
+    key: "notification_channel_importance_5",
+    tooltip_text:
+      'Importance of the notification. See <a href="https://developer.android.com/training/notify-user/channels">Android developer documentation</a>',
+    multiple: false,
+    options: ["high", "default", "low", "min"],
+  },
+];
 
 const custom_configuration_fields = {
   ios: custom_configuration_fields_apple,

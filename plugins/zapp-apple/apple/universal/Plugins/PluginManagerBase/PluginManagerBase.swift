@@ -79,6 +79,12 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     public func createProvider(pluginModel: ZPPluginModel,
                                forceEnable: Bool = false,
                                completion: PluginManagerCompletion) {
+        guard forceEnable == true,
+              isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+            completion?(false)
+            return
+        }
+
         if let adapterClass = PluginsManager.adapterClass(pluginModel),
             adapterClass.conforms(to: pluginProtocol),
             let classType = adapterClass as? PluginAdapterProtocol.Type,
@@ -88,16 +94,14 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
 
             providers[pluginModel.identifier] = provider
 
-            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: kPluginEnabled,
-                                                                           value: kPluginEnabledValue,
-                                                                           namespace: pluginModel.identifier)
-
+            if forceEnable {
+                _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: pluginModel.identifier,
+                                                                             value: kPluginEnabledValue,
+                                                                             namespace: kPluginEnabledNamespace)
+            }
             providerCreated(provider: provider,
                             completion: completion)
         } else {
-            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: kPluginEnabled,
-                                                                           value: kPluginDisabledValue,
-                                                                           namespace: pluginModel.identifier)
             completion?(true)
         }
     }
@@ -109,10 +113,16 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
             completion?(false)
             return
         }
+        
+        guard isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+            completion?(false)
+            return
+        }
+
         provider.disable(completion: completion)
-        _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: kPluginEnabled,
-                                                                       value: kPluginDisabledValue,
-                                                                       namespace: pluginModel.identifier)
+        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: pluginModel.identifier,
+                                                                     value: kPluginDisabledValue,
+                                                                     namespace: kPluginEnabledNamespace)
     }
 
     public func disableProviders(completion: PluginManagerCompletion) {
@@ -123,7 +133,14 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
 
         var counter = providers.count
         providers.forEach { element in
-            element.value.disable { _ in
+            if let identifier = element.value.model?.identifier {
+                disableProvider(identifier: identifier) { _ in
+                    counter -= 1
+                    if counter == 0 {
+                        completion?(true)
+                    }
+                }
+            } else {
                 counter -= 1
                 if counter == 0 {
                     completion?(true)
@@ -164,23 +181,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
             return false
         }
 
-        // Check if configruration JSON exist
-        // If no we want initialize screen in any casee
-        guard let configurationJSON = pluginModel.configurationJSON,
-            let pluginEnabled = configurationJSON[kPluginEnabled] else {
-            return retVal
-        }
-
-        // Check if value bool or string
-        if let pluginEnabled = pluginEnabled as? String {
-            if let pluginEnabledBool = Bool(pluginEnabled) {
-                retVal = pluginEnabledBool
-            } else if let pluginEnabledInt = Int(pluginEnabled) {
-                retVal = Bool(truncating: pluginEnabledInt as NSNumber)
-            }
-        } else if let pluginEnabled = pluginEnabled as? Bool {
-            retVal = pluginEnabled
-        }
+        retVal = isProviderEnabled(pluginModel: pluginModel)
 
         return retVal
     }
@@ -199,12 +200,51 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     }
 
     func isProviderEnabled(provider: PluginAdapterProtocol) -> Bool {
-        guard let identifier = provider.model?.identifier,
-            let enabled = SessionStorage.sharedInstance.get(key: kPluginEnabled,
-                                                            namespace: identifier),
-            let enabledBool = Bool(enabled) else {
+        guard let model = provider.model else {
             return true
         }
-        return enabledBool
+        return isProviderEnabled(pluginModel: model)
+    }
+
+    func isProviderEnabled(pluginModel: ZPPluginModel) -> Bool {
+        var retVal = true
+
+        // Check if configruration JSON exist
+        // If no we want initialize screen in any casee
+        guard let configurationJSON = pluginModel.configurationJSON,
+            let pluginEnabled = configurationJSON[kPluginEnabled] else {
+            return retVal
+        }
+
+        /// Check if plugin was already info in local storage
+        if let pluginEnabled = LocalStorage.sharedInstance.get(key: pluginModel.identifier,
+                                                               namespace: kPluginEnabledNamespace),
+            let enabledBool = Bool(pluginEnabled) {
+            return enabledBool
+        }
+
+        // Check if value bool or string
+        if let pluginEnabled = pluginEnabled as? String {
+            if let pluginEnabledBool = Bool(pluginEnabled) {
+                retVal = pluginEnabledBool
+            } else if let pluginEnabledInt = Int(pluginEnabled) {
+                retVal = Bool(truncating: pluginEnabledInt as NSNumber)
+            }
+        } else if let pluginEnabled = pluginEnabled as? Bool {
+            retVal = pluginEnabled
+        }
+        return retVal
+    }
+
+    /// Checks if plugin provider can handle enable/disable logic
+    ///  Plugin to able to enable/disable logic must has a key in cofiguration json "enabled"
+    /// - Parameter pluginModel: Plugin model instance
+    /// - Returns: true in case can be enabled or disabled on fly, otherwise false
+    func isProviderSupportToggleOnOff(pluginModel: ZPPluginModel) -> Bool {
+        guard let configurationJSON = pluginModel.configurationJSON,
+            configurationJSON[kPluginEnabled] != nil else {
+            return false
+        }
+        return true
     }
 }

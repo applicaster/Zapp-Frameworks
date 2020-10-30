@@ -9,6 +9,7 @@ import Foundation
 import XrayLogger
 import ZappCore
 
+let kPluginEnabledNamespace = "plugin_status"
 public let kPluginEnabled = "enabled"
 public let kPluginEnabledValue = "true"
 public let kPluginDisabledValue = "false"
