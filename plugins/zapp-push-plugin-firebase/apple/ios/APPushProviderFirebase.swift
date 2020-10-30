@@ -1,23 +1,28 @@
 //
 //  APPushProviderFirebase.swift
-//  Pods
+//  ZappPushPluginFirebase
 //
-//  Created by Egor Brel on 2/22/19.
+//  Created by Anton Kononenko on 30/10/20.
+//  Copyright © 2020 Applicaster Ltd.. All rights reserved.
 //
 
 import FirebaseCore
 import FirebaseInstanceID
 import FirebaseMessaging
+import XrayLogger
 import ZappPlugins
 import ZappPushPluginsSDK
 
 open class APPushProviderFirebase: ZPPushProvider {
+    lazy var logger = Logger.getLogger(for: "ZappPushPluginFirebase")
+
     var registeredTags: Set<String> = []
     override open func getKey() -> String {
         return model?.identifier ?? "ZappPushPluginFirebase"
     }
 
     override open func configureProvider() -> Bool {
+        logger?.debugLog(message: "Handle Creation and configure plugin")
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
@@ -35,11 +40,13 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     override open func disable(completion: ((Bool) -> Void)?) {
+        logger?.debugLog(message: "Handle disable plugin logic")
         removeTagsToDevice(Array(registeredTags)) { [weak self] _, _ in
             guard let `self` = self else { return }
             self.unsubscribeUUID()
             Messaging.messaging().delegate = nil
             UIApplication.shared.unregisterForRemoteNotifications()
+            self.logger?.debugLog(message: "Plugin finished disabling")
             completion?(true)
         }
     }
@@ -49,6 +56,10 @@ open class APPushProviderFirebase: ZPPushProvider {
             completion(true, nil)
             return
         }
+
+        logger?.debugLog(message: "Add tags to device",
+                         data: ["tags": tags])
+
         var success = true
         let dispatchGroup = DispatchGroup()
         for tag in tags {
@@ -72,6 +83,9 @@ open class APPushProviderFirebase: ZPPushProvider {
             return
         }
 
+        logger?.debugLog(message: "Remove tags to device",
+                         data: ["tags": tags])
+
         var success = true
         let dispatchGroup = DispatchGroup()
         for tag in tags {
@@ -90,17 +104,25 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     func subscribeUUID() {
-        InstanceID.instanceID().instanceID { _, error in
+        logger?.debugLog(message: "InstanceID.instanceID().instanceID")
+
+        InstanceID.instanceID().instanceID { [weak self] _, error in
+            guard let `self` = self else { return }
+
             if let error = error {
-                print("Error fetching instance ID: \(error.localizedDescription)")
+                self.logger?.errorLog(message: "InstanceID.instanceID().instanceID Error:\(error.localizedDescription)",
+                                      data: ["error": error.localizedDescription])
             }
         }
     }
 
     func unsubscribeUUID() {
-        InstanceID.instanceID().deleteID { error in
+        logger?.debugLog(message: "InstanceID.instanceID().deleteID")
+        InstanceID.instanceID().deleteID { [weak self] error in
+            guard let `self` = self else { return }
             if let error = error {
-                print("Error deleting instance ID: \(error.localizedDescription)")
+                self.logger?.errorLog(message: "InstanceID.instanceID().deleteID Error:\(error.localizedDescription)",
+                                      data: ["error": error.localizedDescription])
             }
         }
     }
@@ -108,6 +130,7 @@ open class APPushProviderFirebase: ZPPushProvider {
 
 extension APPushProviderFirebase: MessagingDelegate {
     open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        NSLog("Firebase registration token %@", fcmToken) // NSLog instead of print so it can be visualized without XCode
+        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(fcmToken)",
+                         data: ["token": fcmToken])
     }
 }
