@@ -79,6 +79,12 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     public func createProvider(pluginModel: ZPPluginModel,
                                forceEnable: Bool = false,
                                completion: PluginManagerCompletion) {
+        guard forceEnable == true,
+              isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+            completion?(false)
+            return
+        }
+
         if let adapterClass = PluginsManager.adapterClass(pluginModel),
             adapterClass.conforms(to: pluginProtocol),
             let classType = adapterClass as? PluginAdapterProtocol.Type,
@@ -107,6 +113,12 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
             completion?(false)
             return
         }
+        
+        guard isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+            completion?(false)
+            return
+        }
+
         provider.disable(completion: completion)
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: pluginModel.identifier,
                                                                      value: kPluginDisabledValue,
@@ -222,5 +234,17 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
             retVal = pluginEnabled
         }
         return retVal
+    }
+
+    /// Checks if plugin provider can handle enable/disable logic
+    ///  Plugin to able to enable/disable logic must has a key in cofiguration json "enabled"
+    /// - Parameter pluginModel: Plugin model instance
+    /// - Returns: true in case can be enabled or disabled on fly, otherwise false
+    func isProviderSupportToggleOnOff(pluginModel: ZPPluginModel) -> Bool {
+        guard let configurationJSON = pluginModel.configurationJSON,
+            configurationJSON[kPluginEnabled] != nil else {
+            return false
+        }
+        return true
     }
 }
