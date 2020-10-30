@@ -79,8 +79,10 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     public func createProvider(pluginModel: ZPPluginModel,
                                forceEnable: Bool = false,
                                completion: PluginManagerCompletion) {
-        guard forceEnable == true,
-              isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+        
+        // In case plugin not support override logic, return false, since "forceEnable" true only when we trying to override
+        if forceEnable == true,
+            isProviderSupportToggleOnOff(pluginModel: pluginModel) == false {
             completion?(false)
             return
         }
@@ -114,7 +116,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
             return
         }
         
-        guard isProviderSupportToggleOnOff(pluginModel: pluginModel) == false else {
+        guard isProviderSupportToggleOnOff(pluginModel: pluginModel) == true else {
             completion?(false)
             return
         }
