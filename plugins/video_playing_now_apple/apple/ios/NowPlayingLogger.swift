@@ -15,7 +15,7 @@ public class NowPlayingLogger: NSObject {
     public override init() {
         super.init()
         #if DEBUG
-        thread = Thread(target: self, selector: #selector(NowPlayingLogger.logger), object: nil)
+        thread = Thread(target: self, selector: #selector(NowPlayingLogger.logEvent), object: nil)
         #endif
     }
 
@@ -31,7 +31,7 @@ public class NowPlayingLogger: NSObject {
         #endif
     }
 
-    @objc func logger() {
+    @objc func logEvent() {
         #if DEBUG
         if let npi = MPNowPlayingInfoCenter.default().nowPlayingInfo as NSDictionary? {
             if npi != lastNowPlayingInfo {
@@ -43,7 +43,9 @@ public class NowPlayingLogger: NSObject {
                 print("[NowPlayingLogger] ERROR: You are not registered for remote commands, which is required. See MPRemoteCommandCenter.")
             }
         }
-
+        else {
+            print("[NowPlayingLogger] INFO: No data available")
+        }
         #endif
 
     }

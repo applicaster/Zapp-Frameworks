@@ -5,38 +5,84 @@
 //  Created by Alex Zchut on 11/02/2020.
 //
 
-import Foundation
 import AVKit
-import ZappCore
+import Foundation
 import MediaPlayer
+import ZappCore
 
 extension ZPAppleVideoNowPlayingInfo {
-
-    public override func playerDidCreate(player: PlayerProtocol) {
-        //docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
-
-        //Registering for Remote Commands
-        registerForRemoteCommands()
-
-        //Disable AVKit Now Playing Updates
-        disableNowPlayingUpdates()
-
-        //Send Now Playing Info
-        sendNowPlayingInitial(player: player)
+    override public func observeValue(forKeyPath keyPath: String?,
+                                      of object: Any?,
+                                      change: [NSKeyValueChangeKey: Any]?,
+                                      context: UnsafeMutableRawPointer?) {
+        if let object = object as? AVPlayer,
+            let player = avPlayer,
+            object == player {
+            // if playing
+            if playbackStalled, player.rate > 0 {
+                updatePlaybackRate(player.rate)
+                playbackStalled = false
+            }
+            // if paused
+            else if !playbackStalled, player.rate == 0 {
+                updatePlaybackRate(player.rate)
+                playbackStalled = true
+            }
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
     }
 
-    public override func playerDidDismiss(player: PlayerProtocol) {
+    override public func playerDidCreate(player: PlayerProtocol) {
+        // docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
+
+        guard let playerObject = playerPlugin?.playerObject as? AVPlayer else {
+            return
+        }
+
+        // Registering for Remote Commands
+        registerForRemoteCommands()
+
+        // Disable AVKit Now Playing Updates
+        disableNowPlayingUpdates()
+
+        // Send Now Playing Info
+        sendNowPlayingInitial(player: player)
+
+        // Register for oobserver for player
+        playerObject.addObserver(self,
+                                 forKeyPath: "rate",
+                                 options: [],
+                                 context: nil)
+    }
+
+    override public func playerDidDismiss(player: PlayerProtocol) {
+        if let playerObject = playerPlugin?.playerObject as? AVPlayer {
+            playerObject.removeObserver(self,
+                                        forKeyPath: "rate",
+                                        context: nil)
+        }
+
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        nowPlayingInfoCenter.nowPlayingInfo = nil
+
+        npiLogger?.logEvent()
+        npiLogger?.stop()
+    }
+
+    func updatePlaybackRate(_ rate: Float) {
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo
-
-        //update playback position for currently played item
-        let playbackProgress = player.playbackPosition() / player.playbackDuration()
-
-        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
-        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
-        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
+        
+        if let player = playerPlugin {
+            // update playback position for currently played item
+            let playbackProgress = player.playbackPosition() / player.playbackDuration()
+            nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
+            nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
+        }
+        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
         
-        logger?.stop()
+        npiLogger?.logEvent()
     }
 }
