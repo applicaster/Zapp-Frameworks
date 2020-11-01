@@ -66,6 +66,7 @@ extension ZPAppleVideoNowPlayingInfo {
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         nowPlayingInfoCenter.nowPlayingInfo = nil
 
+        logger?.debugLog(message: "Stop collecting NPI on playerDidDismiss")
         npiLogger?.logEvent()
         npiLogger?.stop()
     }
@@ -83,6 +84,8 @@ extension ZPAppleVideoNowPlayingInfo {
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
         
+        logger?.debugLog(message: "Update NPI on playback rate change",
+                         data: nowPlayingInfo)
         npiLogger?.logEvent()
     }
 }

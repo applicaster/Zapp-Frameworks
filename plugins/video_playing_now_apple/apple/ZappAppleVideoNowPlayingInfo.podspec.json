@@ -36,7 +36,8 @@
     "ENABLE_BITCODE": "YES"
   },
   "dependencies": {
-    "ZappCore": []
+    "ZappCore": [],
+    "XrayLogger": []
   },
   "testspecs": [
     {

@@ -14,6 +14,8 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     var npiLogger: NowPlayingLogger?
 
     override func disable(completion: ((Bool) -> Void)?) {
+        logger?.debugLog(message: "Disabling plugin")
+
         avPlayer?.removeObserver(self,
                                  forKeyPath: "rate",
                                  context: nil)
@@ -24,22 +26,30 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     }
 
     func registerForRemoteCommands() {
+        logger?.debugLog(message: "Registering for remote commands")
+
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.pauseCommand.isEnabled = true
         commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
             // pause player
+            self.logger?.debugLog(message: "Remote Pause command received")
+
             self.avPlayer?.pause()
             return .success
         }
         commandCenter.playCommand.isEnabled = true
         commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
             // play player
+            self.logger?.debugLog(message: "Remote Play command received")
+
             self.avPlayer?.play()
             return .success
         }
         commandCenter.seekForwardCommand.isEnabled = true
         commandCenter.seekForwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
             // seek forward
+            self.logger?.debugLog(message: "Remote Seek Forward command received")
+
             guard let command = event.command as? MPSkipIntervalCommand,
                   let interval = command.preferredIntervals.first else {
                 return .noSuchContent
@@ -50,6 +60,8 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         commandCenter.seekBackwardCommand.isEnabled = true
         commandCenter.seekBackwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
             // seek backward
+            self.logger?.debugLog(message: "Remote Seek Backward command received")
+
             guard let command = event.command as? MPSkipIntervalCommand,
                   let interval = command.preferredIntervals.first else {
                 return .noSuchContent
@@ -77,6 +89,8 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     }
 
     func unregisterForRemoteCommands() {
+        logger?.debugLog(message: "Unregistering from remote commands")
+
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.pauseCommand.isEnabled = false
         commandCenter.pauseCommand.removeTarget(nil)
@@ -134,6 +148,9 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         }
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+
+        logger?.debugLog(message: "Initial NPI content",
+                         data: nowPlayingInfo)
 
         npiLogger = NowPlayingLogger()
         npiLogger?.start()
