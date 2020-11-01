@@ -149,8 +149,10 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
 
+        var data = nowPlayingInfo
+        data[MPMediaItemPropertyArtwork] = nil
         logger?.debugLog(message: "Initial NPI content",
-                         data: nowPlayingInfo)
+                         data: data)
 
         npiLogger = NowPlayingLogger()
         npiLogger?.start()

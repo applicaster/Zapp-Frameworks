@@ -84,8 +84,10 @@ extension ZPAppleVideoNowPlayingInfo {
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
         
+        var data = nowPlayingInfo
+        data?[MPMediaItemPropertyArtwork] = nil
         logger?.debugLog(message: "Update NPI on playback rate change",
-                         data: nowPlayingInfo)
+                         data: data)
         npiLogger?.logEvent()
     }
 }
