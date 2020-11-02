@@ -77,8 +77,10 @@ extension ZPAppleVideoNowPlayingInfo {
         
         if let player = playerPlugin {
             // update playback position for currently played item
-            let playbackProgress = player.playbackPosition() / player.playbackDuration()
-            nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
+            // Used to indicate the playback progress of the currently playing asset. 0.0 for no progress, 1.0 for completed to credits start.
+            // *** if the credit start time is not known, this metadata item must not be provided at all.
+//            let playbackProgress = player.playbackPosition() / player.playbackDuration()
+//            nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
             nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
         }
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate

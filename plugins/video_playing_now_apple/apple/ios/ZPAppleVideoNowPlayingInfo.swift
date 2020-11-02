@@ -125,7 +125,7 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
         nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = contentId
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackProgress] = 0.0
+        // nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackProgress] = 0.0
 
         // image
         if let mediaGroup = entry[ItemMetadata.media_group] as? [[AnyHashable: Any]],
