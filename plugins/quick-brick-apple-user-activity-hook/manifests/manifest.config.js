@@ -64,7 +64,7 @@ function extra_npm_dependencies(platform) {
 }
 
 const api_apple = {
-  class_name: "UserActivityBridge",
+  class_name: "UserActivityHook",
   modules: ["AppleUserActivityBridge"],
 };
 
