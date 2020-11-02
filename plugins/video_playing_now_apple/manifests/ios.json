@@ -25,7 +25,7 @@
   "custom_configuration_fields": [],
   "identifier": "video_playing_now_apple",
   "npm_dependencies": [
-    "@applicaster/video_playing_now_apple@0.3.8"
+    "@applicaster/video_playing_now_apple@0.3.9"
   ],
   "targets": [
     "mobile"
@@ -34,7 +34,7 @@
     "quickbrick"
   ],
   "platform": "ios",
-  "manifest_version": "0.3.8",
+  "manifest_version": "0.3.9",
   "extra_dependencies": [
     {
       "ZappAppleVideoNowPlayingInfo": ":path => './node_modules/@applicaster/video_playing_now_apple/apple/ZappAppleVideoNowPlayingInfo.podspec'"
