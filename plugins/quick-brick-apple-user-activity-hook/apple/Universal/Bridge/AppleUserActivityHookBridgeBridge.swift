@@ -11,13 +11,13 @@ import React
 import ZappCore
 import MediaPlayer
 
-@objc(AppleUserActivityHook)
-class AppleUserActivityHookBridge: NSObject, RCTBridgeModule {
+@objc(AppleUserActivityBridge)
+class AppleUserActivityBridge: NSObject, RCTBridgeModule {
     let pluginIdentifier = "quick-brick-apple-user-activity-hook"
     var bridge: RCTBridge!
     var userActivity: NSUserActivity?
     static func moduleName() -> String! {
-        return "AppleUserActivityHook"
+        return "AppleUserActivityBridge"
     }
 
     public class func requiresMainQueueSetup() -> Bool {

@@ -8,7 +8,7 @@
 
 @import React;
 
-@interface RCT_EXTERN_MODULE (AppleUserActivityHook, NSObject)
+@interface RCT_EXTERN_MODULE (AppleUserActivityBridge, NSObject)
 
 RCT_EXTERN_METHOD(defineUserActivity:(NSDictionary *)params);
 RCT_EXTERN_METHOD(removeUserActivity);
