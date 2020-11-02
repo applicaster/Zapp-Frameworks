@@ -36,24 +36,34 @@ extension ZPAppleVideoNowPlayingInfo {
     override public func playerDidCreate(player: PlayerProtocol) {
         // docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
 
-        guard let playerObject = playerPlugin?.playerObject as? AVPlayer else {
-            return
-        }
-
         // Registering for Remote Commands
         registerForRemoteCommands()
 
         // Disable AVKit Now Playing Updates
         disableNowPlayingUpdates()
 
+        // Start listening to NPI after player buffered and get the AccessLogs events so we know the playback type of it.
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleAccessLogEntry(notification:)),
+                                               name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
+                                               object: nil)
+    }
+
+    @objc func handleAccessLogEntry(notification: NSNotification) {
+        // Remove listening to the AccessLogs after first log received
+        NotificationCenter.default.removeObserver(self,
+                                                  name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
+                                                  object: nil)
         // Send Now Playing Info
-        sendNowPlayingInitial(player: player)
+        sendNowPlayingInitial()
 
         // Register for oobserver for player
-        playerObject.addObserver(self,
-                                 forKeyPath: "rate",
-                                 options: [],
-                                 context: nil)
+        avPlayer?.addObserver(self,
+                              forKeyPath: "rate",
+                              options: [],
+                              context: nil)
+        
+
     }
 
     override public func playerDidDismiss(player: PlayerProtocol) {
@@ -74,22 +84,25 @@ extension ZPAppleVideoNowPlayingInfo {
     func updatePlaybackRate(_ rate: Float) {
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo
-        
-        if let player = playerPlugin {
-            // update playback position for currently played item
-            // Used to indicate the playback progress of the currently playing asset. 0.0 for no progress, 1.0 for completed to credits start.
-            // *** if the credit start time is not known, this metadata item must not be provided at all.
-//            let playbackProgress = player.playbackPosition() / player.playbackDuration()
-//            nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = playbackProgress
-            nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
+
+        switch playbackType {
+        case .vod:
+            nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin?.playbackPosition()
+
+        case .live:
+            // nothing to add
+            break
         }
+
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-        
+
+        npiLogger?.logEvent()
+        // send logger event
         var data = nowPlayingInfo
         data?[MPMediaItemPropertyArtwork] = nil
+        data?["playbackType"] = playbackType.rawValue
         logger?.debugLog(message: "Update NPI on playback rate change",
                          data: data)
-        npiLogger?.logEvent()
     }
 }

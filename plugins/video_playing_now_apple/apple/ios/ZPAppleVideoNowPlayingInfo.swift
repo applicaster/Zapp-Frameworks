@@ -13,6 +13,11 @@ import ZappCore
 class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     var npiLogger: NowPlayingLogger?
 
+    enum PlaybackType: String {
+        case vod = "VOD"
+        case live = "LIVE"
+    }
+    
     override func disable(completion: ((Bool) -> Void)?) {
         logger?.debugLog(message: "Disabling plugin")
 
@@ -23,6 +28,15 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         unregisterForRemoteCommands()
 
         super.disable(completion: completion)
+    }
+    
+    var playbackType: PlaybackType {
+        var retValue: PlaybackType = .vod
+        if let playbackType = avPlayer?.currentItem?.accessLog()?.events.last?.playbackType,
+           playbackType == PlaybackType.live.rawValue {
+            retValue = .live
+        }
+        return retValue
     }
 
     func registerForRemoteCommands() {
@@ -106,26 +120,39 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         }
     }
 
-    func sendNowPlayingInitial(player: PlayerProtocol) {
-        guard let entry = player.entry else {
+    func sendNowPlayingInitial() {
+        guard let entry = playerPlugin?.entry else {
             return
         }
-
-        guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
-            let contentIdString = entry[ItemMetadata.contentId] as? String,
-            let contentIdInt = Int(contentIdString) else {
-            return
-        }
-        let contentId = NSNumber(value: contentIdInt)
 
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo = [String: Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = title
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player.playbackDuration()
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.playbackPosition()
+        if let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol) {
+            nowPlayingInfo[MPMediaItemPropertyTitle] = title
+        }
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
-        nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = contentId
-        // nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackProgress] = 0.0
+        
+        switch self.playbackType {
+        case .vod:
+            if let contentIdString = entry[ItemMetadata.contentId] as? String,
+               let contentIdInt = Int(contentIdString) {
+                let contentId = NSNumber(value: contentIdInt)
+                nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = contentId
+            }
+            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerPlugin?.playbackDuration()
+            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin?.playbackPosition()
+
+        case .live:
+            nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = 1
+            if let entensions = entry[ItemMetadata.extensions] as? [String: Any],
+               let serviceId = entensions[ItemMetadata.serviceId] {
+                nowPlayingInfo[MPNowPlayingInfoPropertyServiceIdentifier] = serviceId
+            }
+            
+            if #available(iOS 11.1, *) {
+                nowPlayingInfo[MPNowPlayingInfoPropertyCurrentPlaybackDate] = Date()
+            }
+        }
 
         // image
         if let mediaGroup = entry[ItemMetadata.media_group] as? [[AnyHashable: Any]],
@@ -149,7 +176,10 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
 
+        //send logger event
         var data = nowPlayingInfo
+        data["playbackType"] = self.playbackType.rawValue
+        data["MPNowPlayingInfoPropertyCurrentPlaybackDate"] = Date().timeIntervalSince1970
         data[MPMediaItemPropertyArtwork] = nil
         logger?.debugLog(message: "Initial NPI content",
                          data: data)

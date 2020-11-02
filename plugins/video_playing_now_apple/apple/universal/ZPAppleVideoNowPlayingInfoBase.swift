@@ -17,6 +17,8 @@ struct ItemMetadata {
     static let media_item = "media_item"
     static let summary = "summary"
     static let src = "src"
+    static let extensions = "extensions"
+    static let serviceId = "service_id"
 }
 
 class ZPAppleVideoNowPlayingInfoBase: NSObject, GeneralProviderProtocol, PlayerDependantPluginProtocol {
