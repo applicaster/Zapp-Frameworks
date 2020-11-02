@@ -7,6 +7,7 @@ const baseManifest = {
   description: "Enable user activity object for the presented show screen",
   type: "general",
   identifier: "apple-user-activity-hook",
+  dependency_name: "@applicaster/quick-brick-apple-user-activity-hook",
   screen: false,
   react_native: true,
   ui_builder_support: true,
@@ -19,7 +20,6 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   preload: true,
   custom_configuration_fields: [],
-  targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
 };
 
@@ -31,9 +31,9 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies(platform),
     api: api[platform],
-    npm_dependencies: [`@applicaster/quick-brick-apple-user-activity-hook@${version}`].concat(
-      extra_npm_dependencies(platform)
-    ),
+    npm_dependencies: [
+      `@applicaster/quick-brick-apple-user-activity-hook@${version}`,
+    ].concat(extra_npm_dependencies(platform)),
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
   };
@@ -53,10 +53,7 @@ const extra_dependencies_apple = [
 ];
 
 function extra_dependencies(platform) {
-  if (
-    platform === "ios_for_quickbrick" ||
-    platform === "tvos_for_quickbrick"
-  ) {
+  if (platform === "ios_for_quickbrick" || platform === "tvos_for_quickbrick") {
     return extra_dependencies_apple;
   }
   return null;
@@ -67,8 +64,8 @@ function extra_npm_dependencies(platform) {
 }
 
 const api_apple = {
-  class_name: "UserActivityHook",
-  modules: ["AppleUserActivityHook"],
+  class_name: "UserActivityBridge",
+  modules: ["AppleUserActivityBridge"],
 };
 
 const api = {
