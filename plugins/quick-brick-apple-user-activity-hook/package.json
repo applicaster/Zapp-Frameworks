@@ -2,8 +2,8 @@
   "name": "@applicaster/quick-brick-apple-user-activity-hook",
   "version": "0.1.0",
   "description": "Quick Brick Apple user activity hook",
-  "main": "index.js",
-  "types": "",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepack": "npm run build"
@@ -42,6 +42,7 @@
   },
   "files": [
     "apple",
-    "src"
+    "src",
+    "lib"
   ]
 }
