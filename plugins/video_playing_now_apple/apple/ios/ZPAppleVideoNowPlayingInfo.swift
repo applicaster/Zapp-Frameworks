@@ -6,43 +6,91 @@
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
 //
 
-import ZappCore
 import AVKit
 import MediaPlayer
+import ZappCore
 
 class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
-    var logger: NowPlayingLogger?
+    var npiLogger: NowPlayingLogger?
 
     override func disable(completion: ((Bool) -> Void)?) {
+        logger?.debugLog(message: "Disabling plugin")
+
         avPlayer?.removeObserver(self,
                                  forKeyPath: "rate",
                                  context: nil)
-        
+
         unregisterForRemoteCommands()
-        
+
         super.disable(completion: completion)
     }
 
     func registerForRemoteCommands() {
+        logger?.debugLog(message: "Registering for remote commands")
+
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
-             // pause your player
-             return .success
+        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            // pause player
+            self.logger?.debugLog(message: "Remote Pause command received")
+
+            self.avPlayer?.pause()
+            return .success
+        }
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            // play player
+            self.logger?.debugLog(message: "Remote Play command received")
+
+            self.avPlayer?.play()
+            return .success
         }
         commandCenter.seekForwardCommand.isEnabled = true
         commandCenter.seekForwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
-             // seek forward
-             return .success
+            // seek forward
+            self.logger?.debugLog(message: "Remote Seek Forward command received")
+
+            guard let command = event.command as? MPSkipIntervalCommand,
+                  let interval = command.preferredIntervals.first else {
+                return .noSuchContent
+            }
+
+            return self.seek(with: interval.doubleValue) ? .success : .commandFailed
         }
         commandCenter.seekBackwardCommand.isEnabled = true
         commandCenter.seekBackwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
-             // seek backward
-             return .success
+            // seek backward
+            self.logger?.debugLog(message: "Remote Seek Backward command received")
+
+            guard let command = event.command as? MPSkipIntervalCommand,
+                  let interval = command.preferredIntervals.first else {
+                return .noSuchContent
+            }
+
+            return self.seek(with: -interval.doubleValue) ? .success : .commandFailed
         }
+    }
+    
+    func seek(with interval: Double) -> Bool {
+        guard let player = self.avPlayer,
+              let duration  = player.currentItem?.duration else {
+            return false
+        }
+        
+        let playerCurrentTime = CMTimeGetSeconds(player.currentTime())
+        let newTime = playerCurrentTime + interval
+
+        if newTime < CMTimeGetSeconds(duration) {
+            let time = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+            player.seek(to: time)
+        }
+        
+        return true
     }
 
     func unregisterForRemoteCommands() {
+        logger?.debugLog(message: "Unregistering from remote commands")
+
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.pauseCommand.isEnabled = false
         commandCenter.pauseCommand.removeTarget(nil)
@@ -53,7 +101,7 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     }
 
     func disableNowPlayingUpdates() {
-        if let avPlayerViewController = self.playerPlugin?.pluginPlayerViewController as? AVPlayerViewController {
+        if let avPlayerViewController = playerPlugin?.pluginPlayerViewController as? AVPlayerViewController {
             avPlayerViewController.updatesNowPlayingInfoCenter = false
         }
     }
@@ -65,13 +113,10 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
         guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
             let contentIdString = entry[ItemMetadata.contentId] as? String,
-                let contentIdInt = Int(contentIdString) else {
-                return
+            let contentIdInt = Int(contentIdString) else {
+            return
         }
         let contentId = NSNumber(value: contentIdInt)
-
-        logger = NowPlayingLogger()
-        logger?.start()
 
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo = [String: Any]()
@@ -81,28 +126,35 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
         nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = contentId
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackProgress] = 0.0
-        
-        //image
+
+        // image
         if let mediaGroup = entry[ItemMetadata.media_group] as? [[AnyHashable: Any]],
             let mediaItem = mediaGroup.first?[ItemMetadata.media_item] as? [[AnyHashable: Any]],
             let src = mediaItem.first?[ItemMetadata.src] as? String,
             let key = mediaItem.first?["key"] as? String, key == "image_base",
             let url = URL(string: src) {
-            
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
-                    nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { sz in
-                        return image
+                    nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in
+                        image
                     }
                 }
             }
         }
-        
-        //description
+
+        // description
         if let summary = entry[ItemMetadata.summary] as? String {
             nowPlayingInfo[MPMediaItemPropertyComments] = summary
         }
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+
+        var data = nowPlayingInfo
+        data[MPMediaItemPropertyArtwork] = nil
+        logger?.debugLog(message: "Initial NPI content",
+                         data: data)
+
+        npiLogger = NowPlayingLogger()
+        npiLogger?.start()
     }
 }

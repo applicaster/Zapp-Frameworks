@@ -8,6 +8,7 @@
 
 import AVFoundation
 import ZappCore
+import XrayLogger
 
 struct ItemMetadata {
     static let title = "title"
@@ -19,6 +20,8 @@ struct ItemMetadata {
 }
 
 class ZPAppleVideoNowPlayingInfoBase: NSObject, GeneralProviderProtocol, PlayerDependantPluginProtocol {
+    lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/AppleVideoNowPlayingInfo")
+
     var playerPlugin: PlayerProtocol?
     var playbackStalled: Bool = false
 
