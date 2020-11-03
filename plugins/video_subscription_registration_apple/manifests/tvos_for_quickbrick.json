@@ -35,7 +35,7 @@
   ],
   "platform": "tvos_for_quickbrick",
   "manifest_version": "0.5.4",
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "min_zapp_sdk": "1.0.0",
   "extra_dependencies": [
     {
       "ZappAppleVideoSubscriptionRegistration": ":path => './node_modules/@applicaster/video_subscription_registration_apple/apple/ZappAppleVideoSubscriptionRegistration.podspec'"

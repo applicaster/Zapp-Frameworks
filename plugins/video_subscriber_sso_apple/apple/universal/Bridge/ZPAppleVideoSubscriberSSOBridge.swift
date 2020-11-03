@@ -21,6 +21,7 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     static var appleVideoSubscriberSSO: ZPAppleVideoSubscriberSSO?
 
     let pluginIdentifier = "video_subscriber_sso_apple"
+    let videoSubscriptionPluginIdentifier = "video_subscription_registration_apple"
     var bridge: RCTBridge!
 
     static func moduleName() -> String! {
@@ -36,6 +37,10 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
         DispatchQueue.main.async {
             if let videoSubscriber = ZPAppleVideoSubscriberSSOBridge.appleVideoSubscriberSSO {
                 videoSubscriber.performSsoOperation { success in
+                    if success {
+                        FacadeConnector.connector?.pluginManager?.enablePlugin(identifier: self.videoSubscriptionPluginIdentifier,
+                                                                               completion: nil)
+                    }
                     resolver(success)
                 }
             } else {
@@ -48,6 +53,8 @@ class ZPAppleVideoSubscriberSSOBridge: NSObject, RCTBridgeModule {
     @objc public func signOut(_ resolver: @escaping RCTPromiseResolveBlock,
                               rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
+            FacadeConnector.connector?.pluginManager?.disablePlugin(identifier: self.videoSubscriptionPluginIdentifier,
+                                                                    completion: nil)
             resolver(true)
         }
     }
