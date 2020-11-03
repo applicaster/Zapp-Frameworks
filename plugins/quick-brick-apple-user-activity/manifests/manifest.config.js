@@ -28,6 +28,7 @@ function createManifest({ version, platform }) {
     ...baseManifest,
     platform,
     manifest_version: version,
+    dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies(platform),
     api: api[platform],
