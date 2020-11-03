@@ -50,7 +50,6 @@ async function publishPlugin({ pluginFolder, newVersion }) {
   const command = canaryRequested
     ? `yarn publish:plugin:canary ${pluginPath} -v ${newCanaryVersion}`
     : `yarn publish:plugin ${pluginPath} -v ${newVersion}`;
-  console.log({ command });
   try {
     const output = await exec(command);
     console.log({ output });
