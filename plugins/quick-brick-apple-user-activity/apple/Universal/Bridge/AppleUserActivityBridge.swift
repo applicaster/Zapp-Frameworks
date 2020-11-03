@@ -28,7 +28,7 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
         
         guard let bundleIdentifier = FacadeConnector.connector?.storage?.sessionStorageValue(for: "bundleIdentifier",
                                                                                              namespace: nil),
-            let contentId = params["content_id"] as? String else {
+            let contentId = params["apple_umc_show_content_id"] as? String else {
             return
         }
         
