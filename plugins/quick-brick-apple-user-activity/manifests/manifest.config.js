@@ -34,7 +34,6 @@ function createManifest({ version, platform }) {
     npm_dependencies: [
       `@applicaster/quick-brick-apple-user-activity@${version}`,
     ].concat(extra_npm_dependencies(platform)),
-    project_dependencies: project_dependencies[platform],
     targets: targets[platform],
   };
   return manifest;
