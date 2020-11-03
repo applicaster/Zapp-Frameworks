@@ -1,17 +1,17 @@
 {
-  "name": "AppleUserActivityHook",
-  "version": "0.1.1-alpha.1",
+  "name": "AppleUserActivity",
+  "version": "0.1.0",
   "platforms": {
     "ios": "11.0"
   },
-  "summary": "AppleUserActivityHook",
+  "summary": "AppleUserActivity",
   "description": "Apple UserActivity Hook.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
   "license": "Appache 2.0",
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-apple-user-activity/0.1.1-alpha.1"
+    "tag": "@@applicaster/quick-brick-apple-user-activity/0.1.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
