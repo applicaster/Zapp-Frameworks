@@ -1,0 +1,45 @@
+{
+  "api": {
+    "class_name": "UserActivityHandler",
+    "modules": [
+      "AppleUserActivity"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Apple User Activity",
+  "description": "Enable user activity object for the presented show screen",
+  "type": "general",
+  "identifier": "apple-user-activity",
+  "dependency_name": "@applicaster/quick-brick-apple-user-activity",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
+  ],
+  "min_zapp_sdk": "1.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "0.1.1-alpha.5",
+  "dependency_version": "0.1.1-alpha.5",
+  "extra_dependencies": [
+    {
+      "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/quick-brick-apple-user-activity@0.1.1-alpha.5"
+  ],
+  "targets": [
+    "mobile"
+  ]
+}

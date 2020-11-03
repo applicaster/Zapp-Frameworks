@@ -18,7 +18,7 @@ struct ItemMetadata {
     static let summary = "summary"
     static let src = "src"
     static let extensions = "extensions"
-    static let serviceId = "service_id"
+    static let serviceId = "apple_umc_service_id"
 }
 
 class ZPAppleVideoNowPlayingInfoBase: NSObject, GeneralProviderProtocol, PlayerDependantPluginProtocol {

@@ -24,17 +24,29 @@
       "type": "checkbox",
       "key": "enabled",
       "tooltip_text": "Is plugin enabled on app start",
-      "default": 1
+      "default": 0
     },
     {
       "type": "text",
       "key": "access_level",
       "tooltip_text": "Access Level (0 - free, 1 - account, 2 - paid subscription)",
       "default": "0"
+    },
+    {
+      "type": "text",
+      "key": "tier_identifiers",
+      "tooltip_text": "Supported tiers (abc,def,ghi)",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "billing_identifier",
+      "tooltip_text": "Hashed billing identifier if supported",
+      "default": ""
     }
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.5.4",
+  "manifest_version": "0.5.5-alpha.2",
   "min_zapp_sdk": "0.1.0-alpha1",
   "extra_dependencies": [
     {
@@ -55,7 +67,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/video_subscription_registration_apple@0.5.4"
+    "@applicaster/video_subscription_registration_apple@0.5.5-alpha.2"
   ],
   "targets": [
     "tv"

@@ -22,7 +22,7 @@ const baseManifest = {
       type: "checkbox",
       key: "enabled",
       tooltip_text: "Is plugin enabled on app start",
-      default: 1,
+      default: 0,
     },
     {
       type: "text",
@@ -30,6 +30,20 @@ const baseManifest = {
       tooltip_text:
         "Access Level (0 - free, 1 - account, 2 - paid subscription)",
       default: "0",
+    },
+    {
+      type: "text",
+      key: "tier_identifiers",
+      tooltip_text:
+        "Supported tiers (abc,def,ghi)",
+      default: "",
+    },
+    {
+      type: "text",
+      key: "billing_identifier",
+      tooltip_text:
+        "Hashed billing identifier if supported",
+      default: "",
     },
   ],
 };
