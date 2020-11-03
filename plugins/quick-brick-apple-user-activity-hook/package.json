@@ -1,0 +1,48 @@
+{
+  "name": "@applicaster/quick-brick-apple-user-activity-hook",
+  "version": "0.1.0",
+  "description": "Quick Brick Apple user activity hook",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "xray",
+    "logging"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^14.0.26",
+    "@types/react-native": "^0.63.1",
+    "typescript": "^3.9.7"
+  },
+  "peerDependencies": {
+    "@applicaster/x-ray": "0.0.17",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "tvos_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  },
+  "files": [
+    "apple",
+    "src",
+    "lib"
+  ]
+}
