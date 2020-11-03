@@ -19,7 +19,7 @@
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "applicaster": {
     "isPlugin": true,
-    "supportedPlatforms": [
+    "supportedPlatforms": [ 
       "ios_for_quickbrick",
       "tvos_for_quickbrick"
     ],
