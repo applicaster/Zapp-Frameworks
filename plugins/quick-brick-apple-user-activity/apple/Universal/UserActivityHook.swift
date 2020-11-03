@@ -1,6 +1,6 @@
 //
-//  UserActivityHook.swift
-//  AppleUserActivityHook
+//  UserActivityHandler.swift
+//  AppleUserActivity
 //
 //  Created by Alex Zchut on 02/11/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 import ZappCore
 
-public class UserActivityHook: NSObject, GeneralProviderProtocol {
+public class UserActivityHandler: NSObject, GeneralProviderProtocol {
     public var model: ZPPluginModel?
 
     public required init(pluginModel: ZPPluginModel) {
@@ -17,7 +17,7 @@ public class UserActivityHook: NSObject, GeneralProviderProtocol {
     }
     
     public var providerName: String {
-        "UserActivityHook"
+        "AppleUserActivity"
     }
 
     public func prepareProvider(_ defaultParams: [String: Any],
