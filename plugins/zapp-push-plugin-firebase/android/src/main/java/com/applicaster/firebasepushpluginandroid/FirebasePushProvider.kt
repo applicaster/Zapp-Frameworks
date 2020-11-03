@@ -13,14 +13,17 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.applicaster.firebasepushpluginandroid.notification.NotificationUtil
 import com.applicaster.firebasepushpluginandroid.services.APMessagingService
+import com.applicaster.plugin_manager.GenericPluginI
+import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.PluginManager
+import com.applicaster.plugin_manager.delayedplugin.DelayedPlugin
 import com.applicaster.plugin_manager.push_plugin.PushContract
 import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
 import com.applicaster.util.StringUtil
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,7 +33,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class FirebasePushProvider : PushContract {
+class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
 
     private val TAG = FirebasePushProvider::class.java.simpleName
 
@@ -39,22 +42,29 @@ class FirebasePushProvider : PushContract {
     private val channelSounds = mutableMapOf<String, Uri>()
     private val channels = mutableSetOf<String>()
 
+    private var isInitialized = false
+
     override fun initPushProvider(context: Context) {
+
+        if(isInitialized) {
+            return
+        }
+        FirebaseMessaging.getInstance().token
+                .addOnCompleteListener {
+                    if (!it.isSuccessful) {
+                        APLogger.error(TAG, "getToken failed", it.exception)
+                    } else {
+                        val token = it.result
+                        APLogger.info(TAG, "Firebase token $token")
+                    }
+                }
 
         if (Build.VERSION.SDK_INT >= 26) {
             ensureChannels(context)
         }
         buildSoundLookup(context)
-
-        FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener {
-                    if (!it.isSuccessful) {
-                        APLogger.error(TAG, "getInstanceId failed", it.exception)
-                    } else {
-                        val token = it.result?.token
-                        APLogger.info(TAG, "Firebase token $token")
-                    }
-                }
+        // mark as initialized even if there is no token, since its plugin state
+        isInitialized = true
     }
 
     override fun registerPushProvider(context: Context, registerID: String) {
@@ -75,7 +85,6 @@ class FirebasePushProvider : PushContract {
         }
     }
 
-
     override fun removeTagToProvider(
             context: Context?,
             tag: MutableList<String>?,
@@ -87,7 +96,17 @@ class FirebasePushProvider : PushContract {
     }
 
     override fun setPluginParams(params: MutableMap<Any?, Any?>?) {
+        // old PushContract way to deliver plugin options
         pluginsParamsMap = params
+    }
+
+    override fun setPluginModel(plugin: Plugin) {
+        // new generic way to deliver plugin options
+        pluginsParamsMap = plugin.configuration
+        if(!isInitialized) {
+            // happens if plugin was enabled later
+            initPushProvider(AppContext.get())
+        }
     }
 
     override fun getTagList(context: Context?, listener: PushTagLoadedI?) {
@@ -257,4 +276,16 @@ class FirebasePushProvider : PushContract {
             return plugin?.instance as? FirebasePushProvider
         }
     }
+
+    override fun disable(): Boolean {
+        FirebaseMessaging.getInstance().deleteToken()
+                .addOnSuccessListener {
+                    APLogger.info(TAG, "Firebase push token was deleted")
+                }.addOnFailureListener {
+                    APLogger.error(TAG, "Failed to delete Firebase push token")
+                }
+        isInitialized = false // plugin is now not initialized in any case
+        return true
+    }
+
 }
