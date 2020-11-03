@@ -1,7 +1,7 @@
 {
-  "name": "@applicaster/quick-brick-apple-user-activity-hook",
+  "name": "@applicaster/quick-brick-apple-user-activity",
   "version": "0.1.0",
-  "description": "Quick Brick Apple user activity hook",
+  "description": "Quick Brick Apple user activity",
   "main": "lib/index.js",
   "types": "index.d.ts",
   "scripts": {

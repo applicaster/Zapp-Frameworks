@@ -1,4 +1,4 @@
-declare module "@applicaster/quick-brick-apple-user-activity-hook";
+declare module "@applicaster/quick-brick-apple-user-activity";
 
 declare type UserActivityPayload = {
   contentId: string;

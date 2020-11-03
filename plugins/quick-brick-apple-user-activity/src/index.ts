@@ -1,6 +1,6 @@
 /// <reference types=".." />
 
-import { run } from "./AppleUserActivityHook";
+import { run } from "./AppleUserActivity";
 
 export default {
   presentFullScreen: false,

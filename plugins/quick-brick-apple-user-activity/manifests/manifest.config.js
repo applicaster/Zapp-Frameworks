@@ -3,11 +3,11 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Apple User Activity Hook",
+  name: "Apple User Activity",
   description: "Enable user activity object for the presented show screen",
   type: "general",
-  identifier: "apple-user-activity-hook",
-  dependency_name: "@applicaster/quick-brick-apple-user-activity-hook",
+  identifier: "apple-user-activity",
+  dependency_name: "@applicaster/quick-brick-apple-user-activity",
   screen: false,
   react_native: true,
   ui_builder_support: true,
@@ -32,7 +32,7 @@ function createManifest({ version, platform }) {
     extra_dependencies: extra_dependencies(platform),
     api: api[platform],
     npm_dependencies: [
-      `@applicaster/quick-brick-apple-user-activity-hook@${version}`,
+      `@applicaster/quick-brick-apple-user-activity@${version}`,
     ].concat(extra_npm_dependencies(platform)),
     project_dependencies: project_dependencies[platform],
     targets: targets[platform],
@@ -47,8 +47,8 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = [
   {
-    AppleUserActivityHook:
-      ":path => './node_modules/@applicaster/quick-brick-apple-user-activity-hook/apple/AppleUserActivityHook.podspec'",
+    AppleUserActivity:
+      ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'",
   },
 ];
 
@@ -64,8 +64,8 @@ function extra_npm_dependencies(platform) {
 }
 
 const api_apple = {
-  class_name: "UserActivityHook",
-  modules: ["AppleUserActivityBridge"],
+  class_name: "UserActivityHandler",
+  modules: ["AppleUserActivity"],
 };
 
 const api = {

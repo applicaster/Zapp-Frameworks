@@ -13,7 +13,7 @@ import MediaPlayer
 
 @objc(AppleUserActivityBridge)
 class AppleUserActivityBridge: NSObject, RCTBridgeModule {
-    let pluginIdentifier = "quick-brick-apple-user-activity-hook"
+    let pluginIdentifier = "quick-brick-apple-user-activity"
     var bridge: RCTBridge!
     var userActivity: NSUserActivity?
     static func moduleName() -> String! {
