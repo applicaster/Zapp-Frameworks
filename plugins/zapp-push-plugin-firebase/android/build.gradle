@@ -63,13 +63,14 @@ def safeExtGet(prop, fallback) {
 
 def glideVersion = safeExtGet("glideVersion", "4.11.0")
 def firebaseBoMVersion = safeExtGet("firebaseBoMVersion", "26.0.0")
+def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "7.0.0")
 
 dependencies {
     def devSDK = findProject(':applicaster-android-sdk')
     if (devSDK != null) {
         implementation project(':applicaster-android-sdk')
     } else {
-        api "com.applicaster:applicaster-android-sdk:$applicaster_version"
+        api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api platform("com.google.firebase:firebase-bom:$firebaseBoMVersion")
@@ -80,7 +81,6 @@ dependencies {
 }
 
 buildscript {
-    ext.applicaster_version = '6.1.1'
     ext.kotlin_version = '1.3.61'
 
     repositories {
