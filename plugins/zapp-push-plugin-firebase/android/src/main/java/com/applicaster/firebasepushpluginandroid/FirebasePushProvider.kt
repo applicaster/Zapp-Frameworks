@@ -35,7 +35,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
 
-    private val TAG = FirebasePushProvider::class.java.simpleName
+    private val TAG = "FirebasePushProvider"
 
     private var pluginsParamsMap: MutableMap<*, *>? = null
 
@@ -49,13 +49,14 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         if(isInitialized) {
             return
         }
+        // this call is required since we've disabled auto-init in the manifest
         FirebaseMessaging.getInstance().token
                 .addOnCompleteListener {
                     if (!it.isSuccessful) {
                         APLogger.error(TAG, "getToken failed", it.exception)
                     } else {
                         val token = it.result
-                        APLogger.info(TAG, "Firebase token $token")
+                        APLogger.info(TAG, "Firebase push token $token")
                     }
                 }
 
