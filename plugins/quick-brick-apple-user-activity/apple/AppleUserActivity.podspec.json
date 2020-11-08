@@ -12,7 +12,7 @@
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
     "tag": "@@applicaster/quick-brick-apple-user-activity/0.4.0"
-  },
+  }, 
   "requires_arc": true,
   "swift_versions": "5.1",
   "source_files": "universal/**/*.{swift,m}",
