@@ -9,7 +9,7 @@ const baseManifest = {
   cover_image:
     "",
   type: "analytics",
-  identifier: "Appsflyer",
+  identifier: "AppsFlyer-iOS",
   screen: false,
   react_native: false,
   ui_builder_support: true,
