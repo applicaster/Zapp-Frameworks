@@ -1,21 +1,21 @@
 {
   "api": {
     "require_startup_execution": false,
-    "class_name": "APAnalyticsProviderFirebase",
+    "class_name": "APAnalyticsProviderMixpanel",
     "modules": [
-      "ZappAnalyticsPluginFirebase"
+      "ZappAnalyticsPluginMixpanel"
     ]
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "Google Analytics for Firebase",
-  "description": "Google's free, deep, and broadly integrated analytics system designed specifically for mobile. Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
-  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
+  "name": "Mixpanel",
+  "description": "Mixpnel Analytics provider",
+  "cover_image": "",
   "type": "analytics",
-  "identifier": "firebase",
+  "identifier": "mixpanel",
   "screen": false,
-  "react_native": true,
+  "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
   "min_zapp_sdk": "15.1.2-Dev",
@@ -24,17 +24,28 @@
   "preload": true,
   "custom_configuration_fields": [
     {
-      "type": "checkbox",
-      "key": "Send_User_Data",
-      "label": "Send User Data",
-      "default": 1,
-      "tooltip_text": "Sends any user data collected in the app. Per Google&apos;s policies, we will not send any user data identified as PII (Personally Identifiable Information)."
+      "type": "text",
+      "key": "token"
     },
     {
-      "type": "text",
-      "key": "user_id",
-      "label": "User ID",
-      "tooltip_text": "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
+      "type": "checkbox",
+      "key": "people",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "key": "require_people_properties",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "key": "engagement",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "key": "filter_out_pii",
+      "default": 0
     }
   ],
   "targets": [
@@ -44,13 +55,13 @@
     "native"
   ],
   "platform": "ios",
-  "manifest_version": "8.3.0",
+  "manifest_version": "9.0.0",
   "extra_dependencies": [
     {
-      "ZappAnalyticsPluginFirebase": ":path => './node_modules/@applicaster/zapp-analytics-plugin-mixpanel/apple/ZappAnalyticsPluginFirebase.podspec'"
+      "ZappAnalyticsPluginMixpanel": ":path => './node_modules/@applicaster/zapp-analytics-plugin-mixpanel/apple/ZappAnalyticsPluginMixpanel.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-mixpanel@8.3.0"
+    "@applicaster/zapp-analytics-plugin-mixpanel@9.0.0"
   ]
 }

@@ -23,9 +23,7 @@
     "SWIFT_VERSION": "5.1"
   },
   "dependencies": {
-    "ZappAnalyticsPluginsSDK": [
-
-    ],
+    "ZappAnalyticsPluginsSDK": [],
     "Mixpanel-swift": [
       "~> 2.8.0"
     ]

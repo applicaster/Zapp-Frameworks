@@ -1,25 +1,27 @@
 {
   "api": {
+    "require_startup_execution": false,
     "class_name": "APAnalyticsProviderMixpanel",
-    "modules": ["ZappAnalyticsPluginMixpanel"]
+    "modules": [
+      "ZappAnalyticsPluginMixpanel"
+    ]
   },
-  "dependency_repository_url": [
-    "git@github.com:applicaster/ZappAnalyticsPluginMixpanel-iOS.git"
-  ],
-  "whitelisted_account_ids": [],
-  "author_name": "Alex Zchut",
-  "author_email": "a.zchut@applicaster.com",
-  "manifest_version": "9.0.0",
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "Mixpanel",
-  "description": "provide Mixpnel as agent",
-  "identifier": "mixpanel_ios",
+  "description": "Mixpnel Analytics provider",
+  "cover_image": "",
   "type": "analytics",
-  "platform": "ios_for_quickbrick",
-  "ui_builder_support": true,
-  "min_zapp_sdk": "1.0.0",
-  "dependency_name": "ZappAnalyticsPluginMixpanel",
-  "dependency_version": "9.0.0",
+  "identifier": "mixpanel",
+  "screen": false,
   "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "1.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -46,6 +48,20 @@
       "default": 0
     }
   ],
-  "targets": ["mobile"],
-  "ui_frameworks": ["quickbrick"]
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "9.0.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginMixpanel": ":path => './node_modules/@applicaster/zapp-analytics-plugin-mixpanel/apple/ZappAnalyticsPluginMixpanel.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-mixpanel@9.0.0"
+  ]
 }
