@@ -1,0 +1,32 @@
+{
+  "api": {
+    "class_name": "APAnalyticsProviderAppsFlyer",
+    "modules": ["ZappAnalyticsPluginAppsFlyer"]
+  },
+  "dependency_repository_url": [
+    "git@github.com:applicaster/ZappAnalyticsPluginAppsFlyer-iOS.git"
+  ],  
+  "whitelisted_account_ids": [],
+  "author_name": "Alex Zchut",
+  "author_email": "a.zchut@applicaster.com",
+  "manifest_version": "7.0.0",
+  "name": "AppsFlyer",
+  "description": "AppsFlyer Analytics wrapper",
+  "identifier": "AppsFlyer-iOS",
+  "type": "analytics",
+  "platform": "ios",
+  "ui_builder_support": true,
+  "min_zapp_sdk": "15.1.4-Dev",
+  "dependency_name": "ZappAnalyticsPluginAppsFlyer",
+  "dependency_version": "7.0.0",
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "appsflyer_key"
+    },
+    {
+      "type": "text",
+      "key": "apple_app_id"
+    }
+  ]
+}
