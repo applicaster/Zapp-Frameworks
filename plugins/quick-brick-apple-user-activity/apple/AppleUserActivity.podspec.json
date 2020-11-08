@@ -21,11 +21,7 @@
     "ENABLE_BITCODE": "YES"
   },
   "dependencies": {
-    "ZappCore": [],
-    "XrayLogger": [],
-    "XrayLogger/ReactNative": [],
-    "Reporter": [],
-    "LoggerInfo": []
+    "ZappCore": []
   },
   "testspecs": [
     {
