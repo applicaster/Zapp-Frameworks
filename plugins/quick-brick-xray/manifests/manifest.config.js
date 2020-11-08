@@ -161,8 +161,8 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = [
   {
-    QickBrickXray:
-      ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'",
+    QuickBrickXray:
+      ":path => './node_modules/@applicaster/quick-brick-xray/apple/QuickBrickXray.podspec'",
   },
   {
     XrayLogger:
@@ -229,8 +229,8 @@ const project_dependencies = {
 };
 
 const api_apple = {
-  class_name: "QickBrickXray",
-  modules: ["QickBrickXray"],
+  class_name: "QuickBrickXray",
+  modules: ["QuickBrickXray"],
 };
 
 const api_android = {

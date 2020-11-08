@@ -11,7 +11,7 @@
         <!--Min log level to file-->
         <scene sceneID="sTw-th-GWU">
             <objects>
-                <tableViewController id="4m3-yE-KYd" customClass="LogLevelViewController" customModule="QickBrickXray" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="4m3-yE-KYd" customClass="LogLevelViewController" customModule="QuickBrickXray" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="tM9-QB-3h7">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -117,13 +117,13 @@
         <!--Settings-->
         <scene sceneID="Wyd-kA-yyc">
             <objects>
-                <tableViewController id="i17-ax-Zav" customClass="SettingsViewController" customModule="QickBrickXray" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="i17-ax-Zav" customClass="SettingsViewController" customModule="QuickBrickXray" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="bxz-d9-o0q">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SwitchCellIdentifier" id="F5i-5i-Fxb" customClass="SwitchCell" customModule="QickBrickXray" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SwitchCellIdentifier" id="F5i-5i-Fxb" customClass="SwitchCell" customModule="QuickBrickXray" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="414" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="F5i-5i-Fxb" id="9tD-UI-ZYj">
@@ -160,7 +160,7 @@
                                     <outlet property="titleLabel" destination="bia-3F-dN9" id="0WQ-6d-Fr9"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LogLevelCellIdentifier" textLabel="Uxz-qZ-eFi" detailTextLabel="n1J-GN-Db6" style="IBUITableViewCellStyleValue1" id="QnM-r8-ibf" customClass="LogLevelSelectCell" customModule="QickBrickXray" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LogLevelCellIdentifier" textLabel="Uxz-qZ-eFi" detailTextLabel="n1J-GN-Db6" style="IBUITableViewCellStyleValue1" id="QnM-r8-ibf" customClass="LogLevelSelectCell" customModule="QuickBrickXray" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="105.5" width="414" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QnM-r8-ibf" id="fG7-PI-fGM">

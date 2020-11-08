@@ -1,6 +1,6 @@
 //
 //  LogLevelSelectCell.swift
-//  QickBrickXray
+//  QuickBrickXray
 //
 //  Created by Anton Kononenko on 9/6/20.
 //

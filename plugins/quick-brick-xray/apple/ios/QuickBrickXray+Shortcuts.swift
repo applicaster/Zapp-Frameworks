@@ -1,6 +1,6 @@
 //
-//  QickBrickXray.swift
-//  QickBrickXray
+//  QuickBrickXray.swift
+//  QuickBrickXray
 //
 //  Created by Alex Zchut on 27/08/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
@@ -22,7 +22,7 @@ enum ShortcutsActions: String {
     case shareLogs = "xray_logging_plugin_shareLogs"
 }
 
-extension QickBrickXray {
+extension QuickBrickXray {
     var loggerViewShortcut: UIApplicationShortcutItem {
         let loggerViewTitle = "Present Logger View"
 

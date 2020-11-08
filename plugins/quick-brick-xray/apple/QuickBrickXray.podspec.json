@@ -1,11 +1,11 @@
 {
-  "name": "QickBrickXray",
+  "name": "QuickBrickXray",
   "version": "0.5.0",
   "platforms": {
     "ios": "11.0"
   },
-  "summary": "QickBrickXray",
-  "description": "QickBrickXray.",
+  "summary": "QuickBrickXray",
+  "description": "QuickBrickXray.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
   "license": "Appache 2.0",
   "authors": "Applicaster LTD.",
