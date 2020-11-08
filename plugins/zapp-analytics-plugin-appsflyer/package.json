@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-appsflyer",
-  "version": "8.9.99",
+  "version": "9.0.0",
   "description": "Google Analytics For Firebase",
   "repository": {
     "type": "git",

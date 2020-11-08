@@ -1,24 +1,27 @@
 {
   "api": {
+    "require_startup_execution": false,
     "class_name": "APAnalyticsProviderAppsFlyer",
-    "modules": ["ZappAnalyticsPluginAppsFlyer"]
+    "modules": [
+      "ZappAnalyticsPluginAppsFlyer"
+    ]
   },
-  "dependency_repository_url": [
-    "git@github.com:applicaster/ZappAnalyticsPluginAppsFlyer-iOS.git"
-  ],  
-  "whitelisted_account_ids": [],
-  "author_name": "Alex Zchut",
-  "author_email": "a.zchut@applicaster.com",
-  "manifest_version": "7.0.0",
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "AppsFlyer",
-  "description": "AppsFlyer Analytics wrapper",
-  "identifier": "AppsFlyer-iOS",
+  "description": "AppsFlyer Analytics provider",
+  "cover_image": "",
   "type": "analytics",
-  "platform": "ios",
+  "identifier": "AppsFlyer-iOS",
+  "screen": false,
+  "react_native": false,
   "ui_builder_support": true,
-  "min_zapp_sdk": "15.1.4-Dev",
-  "dependency_name": "ZappAnalyticsPluginAppsFlyer",
-  "dependency_version": "7.0.0",
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "15.1.2-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -28,5 +31,21 @@
       "type": "text",
       "key": "apple_app_id"
     }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "native"
+  ],
+  "platform": "ios",
+  "manifest_version": "9.0.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginAppsflyer": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-appsflyer@9.0.0"
   ]
 }
