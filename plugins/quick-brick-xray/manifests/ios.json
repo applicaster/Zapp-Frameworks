@@ -1,8 +1,8 @@
 {
   "api": {
-    "class_name": "QickBrickXray",
+    "class_name": "QuickBrickXray",
     "modules": [
-      "QickBrickXray"
+      "QuickBrickXray"
     ]
   },
   "dependency_repository_url": [],
@@ -64,7 +64,7 @@
   "manifest_version": "0.5.0",
   "extra_dependencies": [
     {
-      "QickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QickBrickXray.podspec'"
+      "QuickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QuickBrickXray.podspec'"
     },
     {
       "XrayLogger": ":path => './node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'"

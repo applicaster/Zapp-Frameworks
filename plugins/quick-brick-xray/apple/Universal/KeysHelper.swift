@@ -1,6 +1,6 @@
 //
-//  QickBrickXray.swift
-//  QickBrickXray
+//  QuickBrickXray.swift
+//  QuickBrickXray
 //
 //  Created by Alex Zchut on 27/08/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.

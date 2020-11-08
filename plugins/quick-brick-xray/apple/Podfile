@@ -15,7 +15,7 @@ end
 target 'FrameworksApp' do
   use_frameworks!
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
-  pod 'QickBrickXray', path: './QickBrickXray.podspec', testspecs: ['UnitTests']
+  pod 'QuickBrickXray', path: './QuickBrickXray.podspec', testspecs: ['UnitTests']
   # pod 'XrayLogger', git: 'https://github.com/applicaster/x-ray.git', branch: 'master'
   # pod 'Reporter', git: 'https://github.com/applicaster/x-ray.git', branch: 'master'
   # pod 'LoggerInfo', git: 'https://github.com/applicaster/x-ray.git', branch: 'master'

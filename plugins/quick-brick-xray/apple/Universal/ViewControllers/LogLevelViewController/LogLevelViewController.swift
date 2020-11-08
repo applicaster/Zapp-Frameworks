@@ -1,6 +1,6 @@
 //
 //  LogLevelViewController.swift
-//  QickBrickXray
+//  QuickBrickXray
 //
 //  Created by Anton Kononenko on 9/6/20.
 //  Copyright © 2020 Applicaster. All rights reserved.

@@ -1,6 +1,6 @@
 //
-//  QickBrickXray.swift
-//  QickBrickXray
+//  QuickBrickXray.swift
+//  QuickBrickXray
 //
 //  Created by Anton Kononenko on 27/08/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
@@ -23,8 +23,8 @@ enum ActionType {
     case shareLogs
 }
 
-public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, PluginAdapterProtocol {
-    private(set) static var sharedInstance: QickBrickXray?
+public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol, PluginAdapterProtocol {
+    private(set) static var sharedInstance: QuickBrickXray?
     private(set) weak var loggerInstance: UITabBarController?
 
     let pluginNameSpace = "xray_logging_plugin"
@@ -90,7 +90,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
                                 logFileSinkDelegate: self,
                                 contexts: [:])
         prepareSettings()
-        QickBrickXray.sharedInstance = self
+        QuickBrickXray.sharedInstance = self
 
         completion?(true)
     }
@@ -112,7 +112,7 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
     }
 }
 
-extension QickBrickXray: StorableSinkDelegate {
+extension QuickBrickXray: StorableSinkDelegate {
     public func getLogFileUrl(_ completion: ((URL?) -> ())?) {
         guard let sink = Xray.sharedInstance.getSink(DefaultSinkIdentifiers.FileJSON) as? Storable else {
             completion?(nil)
@@ -131,7 +131,7 @@ extension QickBrickXray: StorableSinkDelegate {
     }
 }
 
-extension QickBrickXray {
+extension QuickBrickXray {
     func getTabBarViewController() -> UITabBarController? {
         let bundle = Bundle(for: Self.self)
 

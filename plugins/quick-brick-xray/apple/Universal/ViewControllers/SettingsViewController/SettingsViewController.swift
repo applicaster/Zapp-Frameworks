@@ -1,6 +1,6 @@
 //
 //  LoggerViewController.swift
-//  QickBrickXray
+//  QuickBrickXray
 //
 //  Created by Anton Kononenko on 7/20/20.
 //  Copyright © 2020 Applicaster. All rights reserved.
@@ -39,11 +39,11 @@ class SettingsViewController: UITableViewController, SettingsViewControllerProto
         applyNewSettings()
     }
 
-    var settings: Settings = QickBrickXray.sharedInstance!.getLocalStorageSettings()
+    var settings: Settings = QuickBrickXray.sharedInstance!.getLocalStorageSettings()
 
     func applyNewSettings() {
         tableView.reloadData()
-        QickBrickXray.sharedInstance?.applyCustomSettings(settings: settings)
+        QuickBrickXray.sharedInstance?.applyCustomSettings(settings: settings)
     }
 }
 

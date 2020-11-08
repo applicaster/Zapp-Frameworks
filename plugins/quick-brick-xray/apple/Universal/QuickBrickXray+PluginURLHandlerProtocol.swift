@@ -1,6 +1,6 @@
 //
-//  QickBrickXray.swift
-//  QickBrickXray
+//  QuickBrickXray.swift
+//  QuickBrickXray
 //
 //  Created by Anton Kononenko on 27/08/2020.
 //  Copyright © 2020 Applicaster Ltd. All rights reserved.
@@ -12,7 +12,7 @@ import UIKit
 import XrayLogger
 import ZappCore
 
-extension QickBrickXray: PluginURLHandlerProtocol {
+extension QuickBrickXray: PluginURLHandlerProtocol {
     public func handlePluginURLScheme(with rootViewController: UIViewController?,
                                       url: URL) -> Bool {
         guard let params = queryParams(url: url) else {
