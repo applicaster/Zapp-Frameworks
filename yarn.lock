@@ -169,6 +169,11 @@
     ramda "^0.26.1"
     react-native-webview "9.1.1"
 
+"@applicaster/quick-brick-xray@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-xray/-/quick-brick-xray-0.4.1.tgz#64fb6b32549b9ac30ddeb6ff099c090df4f56e3c"
+  integrity sha512-oUyTpgUGWqHZJjrKsBz4+yVXIb5s4fVeS9ibeHFfsB4QWwq8TKQO8Ya2aHYloxSi9eP8ktlmgbqkZVK0mYvBPw==
+
 "@applicaster/react-native-fast-image@8.3.2-1":
   version "8.3.2-1"
   resolved "https://registry.yarnpkg.com/@applicaster/react-native-fast-image/-/react-native-fast-image-8.3.2-1.tgz#b0d565c2b33e3d3a9311fd569869186d942951cd"
