@@ -1,0 +1,56 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderFirebase",
+    "modules": [
+      "ZappAnalyticsPluginFirebase"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Google Analytics for Firebase",
+  "description": "Google's free, deep, and broadly integrated analytics system designed specifically for mobile. Please do not populate the user id field unless your app is legally authorised (for further information, please reach support).",
+  "cover_image": "https://res.cloudinary.com/dtiodujtz/image/upload/v1553522185/Plugins/GAforFirebase.jpg",
+  "type": "analytics",
+  "identifier": "firebase",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "15.1.2-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "checkbox",
+      "key": "Send_User_Data",
+      "label": "Send User Data",
+      "default": 1,
+      "tooltip_text": "Sends any user data collected in the app. Per Google&apos;s policies, we will not send any user data identified as PII (Personally Identifiable Information)."
+    },
+    {
+      "type": "text",
+      "key": "user_id",
+      "label": "User ID",
+      "tooltip_text": "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "native"
+  ],
+  "platform": "ios",
+  "manifest_version": "8.3.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginFirebase": ":path => './node_modules/@applicaster/zapp-analytics-plugin-mixpanel/apple/ZappAnalyticsPluginFirebase.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-mixpanel@8.3.0"
+  ]
+}

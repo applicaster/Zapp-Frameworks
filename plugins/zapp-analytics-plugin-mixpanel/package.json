@@ -1,0 +1,32 @@
+{
+  "name": "@applicaster/zapp-analytics-plugin-mixpanel",
+  "version": "8.9.99",
+  "description": "Google Analytics For Firebase",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "mixpanel",
+    "analytics"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "ios"
+    ],
+    "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
+  },
+  "files": [
+    "apple"
+  ]
+}

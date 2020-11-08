@@ -1,0 +1,33 @@
+{
+  "name": "ZappAnalyticsPluginAppsFlyer",
+  "version": "7.0.0",
+  "summary": "ZappAnalyticsPluginAppsFlyer",
+  "description": "ZappAnalyticsPluginAppsFlyer container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": {
+    "cmps": "a.zchut@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp-analytics-plugin-appsflyer/7.0.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "requires_arc": true,
+  "source_files": "ios/**/*.{swift}",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES",
+    "SWIFT_VERSION": "5.1"
+  },
+  "dependencies": {
+    "ZappAnalyticsPluginsSDK": [
+
+    ],
+    "AppsFlyerFramework": [
+      "~> 6.0.2"
+    ]
+  }
+}
