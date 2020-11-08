@@ -85,9 +85,9 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
         fileJSONSink.maxLogFileSizeInMB = configurationHelper.maxLogFileSizeInMB()
         Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
                                           sink: fileJSONSink)
-        let fileURL = fileJSONSink.fileURL
+        
         Reporter.setDefaultData(emails: emailsForShare,
-                                url: fileURL,
+                                logFileSinkDelegate: self,
                                 contexts: [:])
         prepareSettings()
         QickBrickXray.sharedInstance = self
@@ -109,6 +109,25 @@ public class QickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtocol
 
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
+    }
+}
+
+extension QickBrickXray: StorableSinkDelegate {
+    public func getLogFileUrl(_ completion: ((URL?) -> ())?) {
+        guard let sink = Xray.sharedInstance.getSink(DefaultSinkIdentifiers.FileJSON) as? Storable else {
+            completion?(nil)
+            return
+        }
+        
+        sink.generateLogsToSingleFileUrl(completion)
+    }
+    
+    public func deleteLogFile() {
+        guard let sink = Xray.sharedInstance.getSink(DefaultSinkIdentifiers.FileJSON) as? Storable else {
+            return
+        }
+        
+        sink.deleteSingleFileUrl()
     }
 }
 
