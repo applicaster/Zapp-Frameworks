@@ -121,6 +121,14 @@ extension QickBrickXray: StorableSinkDelegate {
         
         sink.generateLogsToSingleFileUrl(completion)
     }
+    
+    public func deleteLogFile() {
+        guard let sink = Xray.sharedInstance.getSink(DefaultSinkIdentifiers.FileJSON) as? Storable else {
+            return
+        }
+        
+        sink.deleteSingleFileUrl()
+    }
 }
 
 extension QickBrickXray {
