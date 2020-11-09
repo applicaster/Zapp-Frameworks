@@ -70,7 +70,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = [
   {
-    ZappAnalyticsPluginAppsflyer:
+    ZappAnalyticsPluginAppsFlyer:
       ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'",
   },
 ];
