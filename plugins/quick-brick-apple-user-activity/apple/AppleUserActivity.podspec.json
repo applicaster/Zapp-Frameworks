@@ -21,7 +21,8 @@
     "ENABLE_BITCODE": "YES"
   },
   "dependencies": {
-    "ZappCore": []
+    "ZappCore": [],
+    "React": []
   },
   "testspecs": [
     {
