@@ -7,7 +7,7 @@
 //
 
 import FirebaseCore
-import FirebaseInstanceID
+import FirebaseInstallations
 import FirebaseMessaging
 import XrayLogger
 import ZappPlugins
@@ -105,24 +105,23 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     func subscribeUUID() {
-        logger?.debugLog(message: "InstanceID.instanceID().instanceID")
-
-        InstanceID.instanceID().instanceID { [weak self] _, error in
+        logger?.debugLog(message: "Installations.installations().installationID")
+        Installations.installations().installationID { [weak self] _, error in
             guard let `self` = self else { return }
 
             if let error = error {
-                self.logger?.errorLog(message: "InstanceID.instanceID().instanceID Error:\(error.localizedDescription)",
+                self.logger?.errorLog(message: "Installations.installations().installationID Error:\(error.localizedDescription)",
                                       data: ["error": error.localizedDescription])
             }
         }
     }
 
     func unsubscribeUUID() {
-        logger?.debugLog(message: "InstanceID.instanceID().deleteID")
-        InstanceID.instanceID().deleteID { [weak self] error in
+        logger?.debugLog(message: Installations.installations().deleteID")
+        Installations.installations().delete { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {
-                self.logger?.errorLog(message: "InstanceID.instanceID().deleteID Error:\(error.localizedDescription)",
+                self.logger?.errorLog(message: "Installations.installations().deleteID Error:\(error.localizedDescription)",
                                       data: ["error": error.localizedDescription])
             }
         }
@@ -130,8 +129,11 @@ open class APPushProviderFirebase: ZPPushProvider {
 }
 
 extension APPushProviderFirebase: MessagingDelegate {
-    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(fcmToken)",
-                         data: ["token": fcmToken])
+    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        guard let token = fcmToken else {
+            return
+        }
+        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(token)",
+                         data: ["token": token])
     }
 }

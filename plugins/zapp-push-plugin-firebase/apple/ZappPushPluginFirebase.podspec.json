@@ -47,7 +47,8 @@
       },
       "dependencies": {
         "Firebase": [],
-        "Firebase/Messaging": []
+        "Firebase/Messaging": [],
+        "FirebaseInstallations": []
       }
     },
     {
