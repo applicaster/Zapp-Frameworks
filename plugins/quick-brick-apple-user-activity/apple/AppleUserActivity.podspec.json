@@ -2,7 +2,8 @@
   "name": "AppleUserActivity",
   "version": "0.4.2",
   "platforms": {
-    "ios": "11.0"
+    "ios": "11.0",
+    "tvos": "11.0"
   },
   "summary": "AppleUserActivity",
   "description": "Apple UserActivity Hook.",
