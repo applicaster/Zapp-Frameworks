@@ -105,7 +105,7 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     func subscribeUUID() {
-        logger?.debugLog(message: "InstanceID.instanceID().instanceID")
+        logger?.debugLog(message: "Installations.installations().installationID")
         Installations.installations().installationID { [weak self] _, error in
             guard let `self` = self else { return }
 
@@ -117,11 +117,11 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     func unsubscribeUUID() {
-        logger?.debugLog(message: "InstanceID.instanceID().deleteID")
+        logger?.debugLog(message: Installations.installations().deleteID")
         Installations.installations().delete { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {
-                self.logger?.errorLog(message: "InstanceID.instanceID().deleteID Error:\(error.localizedDescription)",
+                self.logger?.errorLog(message: "Installations.installations().deleteID Error:\(error.localizedDescription)",
                                       data: ["error": error.localizedDescription])
             }
         }
