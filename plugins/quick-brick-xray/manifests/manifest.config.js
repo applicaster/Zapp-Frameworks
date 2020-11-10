@@ -150,10 +150,8 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  tvos: "12.1.0-dev",
-  ios: "20.1.0-dev",
-  tvos_for_quickbrick: "0.1.0-alpha1",
-  ios_for_quickbrick: "0.1.0-alpha1",
+  tvos_for_quickbrick: "2.0.0-dev",
+  ios_for_quickbrick: "2.0.0-dev",
   android_for_quickbrick: "0.1.0-alpha1",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
