@@ -117,7 +117,7 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     func unsubscribeUUID() {
-        logger?.debugLog(message: Installations.installations().deleteID")
+        logger?.debugLog(message: "Installations.installations().deleteID")
         Installations.installations().delete { [weak self] error in
             guard let `self` = self else { return }
             if let error = error {
