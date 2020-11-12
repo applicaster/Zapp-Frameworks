@@ -13,6 +13,10 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+
         <service android:name="com.applicaster.firebasepushpluginandroid.services.APMessagingService">
             <intent-filter android:priority="-1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
