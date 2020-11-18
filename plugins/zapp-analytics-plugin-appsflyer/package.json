@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-appsflyer",
-  "version": "9.0.1",
+  "version": "9.0.2",
   "description": "AppsFlyer Analytics provider",
   "repository": {
     "type": "git",
