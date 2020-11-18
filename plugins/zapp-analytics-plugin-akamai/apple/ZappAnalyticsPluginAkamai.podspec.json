@@ -16,7 +16,6 @@
     "tag": "@@applicaster/zapp-analytics-plugin-akamai/8.0.0"
   },
   "requires_arc": true,
-  "static_framework": true,
   "public_header_files": "ios/**/*.h",
   "source_files": "ios/**/*.{h,m,swift}",
   "frameworks": [
