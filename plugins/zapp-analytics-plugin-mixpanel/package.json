@@ -1,7 +1,7 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-mixpanel",
   "version": "9.0.0",
-  "description": "Google Analytics For Firebase",
+  "description": "Mixpanel Analytics provider",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks"
