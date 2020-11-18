@@ -1,5 +1,6 @@
-#import <UIKit/UIKit.h>
 
+@import AVFoundation;
+@import UIKit;
 /**
  Basic keys - You may override them with your delegate with your delegate.
  */
@@ -15,42 +16,32 @@ extern NSString *const kC3; //c3
 */
 extern NSString *kAPStreamSenseManagerItemID;
 extern NSString *kAPStreamSenseManagerItemName;
-extern NSString *kAPStreamSenseManagerItemIsLive;
-extern NSString *kAPStreamSenseManagerItemCurrentPosition;
-extern NSString *kAPStreamSenseManagerItemDuration;
-extern NSString *kAPStreamSenseManagerItemShowName;
+extern NSString *kAPStreamSenseManagerItemUrl;
 
-static NSString *const kAPPlayerControlsPlayingItemID                   = @"kAPPlayerControllerPlayingItemID";
-static NSString *const kAPPlayerControlsPlayingItemUniqueID             = @"kAPPlayerControlsPlayingItemUniqueID";
-static NSString *const kAPPlayerControlsPlayingItemName                 = @"kAPPlayerControlsPlayingItemName";
-static NSString *const kAPPlayerControlsPlayingItemIsLive               = @"kAPPlayerControlsPlayingItemIsLive";
-
+static NSString *const kPlayingItemUniqueID = @"id";
+static NSString *const kPlayingItemName = @"title";
+static NSString *const kPlayingItemContent = @"content";
+static NSString *const kPlayingItemSource = @"src";
+static NSString *const kPlayingItemUrl = @"url";
 
 // --------------------------------------- APStreamSenseManagerDelegate --------------------------------------- //
 
 @protocol APStreamSenseManagerDelegate <NSObject>
 
-@optional
-
-/**
- This method allows you to override or add or remove keys and values from the basic dictionary that is created in this manager.
- */
-- (void)clipDictionary:(NSMutableDictionary *)clipParams
-        andCurrentItem:(NSDictionary *)itemInfo;
-
+- (AVPlayer *)getCurrentPlayerInstance;
 @end
 
 // --------------------------------------- APStreamSenseManager --------------------------------------- //
 
 /**
- 
+
  This class is managing analytics of Comscore's StreamSense.
  In order to have StreamSense analytics - You MUST have ComScore account as well.
 
  In order to start this manager, call the next to lines in your AppDelegate after initiating the comscore account for this app:
  1. [APStreamSenseManager start];
  2. [APStreamSenseManager setDelegate:self]; (optional - only if you want to customize the parameters sent to StreamSense).
- 
+
  */
 
 @interface APStreamSenseManager : NSObject
@@ -88,6 +79,7 @@ static NSString *const kAPPlayerControlsPlayingItemIsLive               = @"kAPP
 - (void)playerDidCreate;
 - (void)playerDidStartPlayItem:(NSDictionary *)playerObject;
 - (void)playerDidPausePlayItem;
+- (void)playerDidResumePlayItem;
 - (void)playerDidBufferPlayItem;
 - (void)playerDidFinishPlayItem;
 

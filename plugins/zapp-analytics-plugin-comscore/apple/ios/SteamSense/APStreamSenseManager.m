@@ -17,30 +17,16 @@ NSDictionary *providerProperties;
 /*
  The next keys comes from Applicaster SDK (player controls)
  */
-extern NSString *const kAPPlayerControlsPlayingItemUniqueID;
-extern NSString *const kAPPlayerControlsPlayingItemName;
-extern NSString *const kAPPlayerControlsPlayingItemIsLive;
-extern NSString *const kAPPlayerControllerPlayingItemCurrentPosition;
-extern NSString *const kAPPlayerControllerPlayingItemDuration;
-extern NSString *const kAPPlayerControllerPlayingItemShowName;
-
-/*
- The next notifications comes from Applicaster SDK (player controller)
- */
-extern NSString *const APPlayerControllerPlayerWasCreatedNotification;
-extern NSString *const APPlayerControllerDidPlayNotification;
-extern NSString *const APPlayerControllerDidPauseNotification;
-extern NSString *const APPlayerControllerPlayerFinishedPlaybackNotification;
+extern NSString *const kPlayingItemUniqueID;
+extern NSString *const kPlayingItemName;
+extern NSString *const kPlayingItemIsLive;
 
 /**
  currentItem info Keys
  */
 NSString *kAPStreamSenseManagerItemID;
 NSString *kAPStreamSenseManagerItemName;
-NSString *kAPStreamSenseManagerItemIsLive;
-NSString *kAPStreamSenseManagerItemCurrentPosition;
-NSString *kAPStreamSenseManagerItemDuration;
-NSString *kAPStreamSenseManagerItemShowName;
+NSString *kAPStreamSenseManagerItemUrl;
 
 SCORContentType contentType;
 NSMutableDictionary *extendedDict;
@@ -74,12 +60,9 @@ static APStreamSenseManager *__sharedInstance;
 #pragma mark - Public
 
 + (void)initialize {
-    kAPStreamSenseManagerItemID = kAPPlayerControlsPlayingItemID;
-    kAPStreamSenseManagerItemName = kAPPlayerControlsPlayingItemName;
-    kAPStreamSenseManagerItemIsLive = kAPPlayerControlsPlayingItemIsLive;
-    kAPStreamSenseManagerItemCurrentPosition = kAPPlayerControllerPlayingItemCurrentPosition;
-    kAPStreamSenseManagerItemDuration = kAPPlayerControllerPlayingItemDuration;
-    kAPStreamSenseManagerItemShowName = kAPPlayerControllerPlayingItemShowName;
+    kAPStreamSenseManagerItemID = kPlayingItemUniqueID;
+    kAPStreamSenseManagerItemName = kPlayingItemName;
+    kAPStreamSenseManagerItemUrl = kPlayingItemUrl;
 }
 
 + (APStreamSenseManager *)sharedInstance {
@@ -132,7 +115,9 @@ static APStreamSenseManager *__sharedInstance;
 }
 
 - (void)playerDidStartPlayItem:(NSDictionary *)playerObject {
-    [self.notificationUserInfoReceived addObject:playerObject];
+    if (playerObject) {
+        [self.notificationUserInfoReceived addObject:playerObject];
+    }
     [self.playerActionReceived addObject:@"didPlay"];
 
     if (eventTimer == nil) {
@@ -142,6 +127,10 @@ static APStreamSenseManager *__sharedInstance;
                                                     userInfo:nil
                                                      repeats:NO];
     }
+}
+
+- (void)playerDidResumePlayItem {
+    [self playerDidStartPlayItem:nil];
 }
 
 - (void)playerDidPausePlayItem {
@@ -205,15 +194,39 @@ static APStreamSenseManager *__sharedInstance;
     [self setupNextItem:previousNotificationUserInfo];
 }
 
+- (BOOL)currentPlayedItemIsLiveStream {
+    BOOL isLive = NO;
+    NSString *lastEvent = (NSString *)[[self.delegate.getCurrentPlayerInstance.currentItem.accessLog events] lastObject];
+    if ([lastEvent isKindOfClass:[NSString class]]) {
+        if ([lastEvent isEqualToString:@"LIVE"]) {
+            isLive = YES;
+        }
+    }
+    return isLive;
+}
+
+- (long)currentPlayedItemDuration {
+    return CMTimeGetSeconds([self.delegate.getCurrentPlayerInstance.currentItem duration]);
+}
+
+- (NSString *)currentPlayedItemUrl:(NSDictionary *)userInfo {
+    NSString *currentStream = nil;
+    NSDictionary *content = [userInfo objectForKey:kPlayingItemContent];
+    if (content) {
+        currentStream = [content objectForKey:kPlayingItemSource];
+    }
+    return currentStream;
+}
+
 - (void)processNotifications {
     NSDictionary *userInfo = [self.notificationUserInfoReceived lastObject];
     if (userInfo == nil) {
         return;
     }
-    
-    long durationLong = (long)[[userInfo objectForKey:kAPStreamSenseManagerItemDuration] longLongValue];
-    NSString *isLive = [userInfo objectForKey:kAPStreamSenseManagerItemIsLive];
-    NSString *currentStream = [userInfo objectForKey:@"kAPPlayerControllerPlayingItemContentUrl"];
+
+    long itemDuration = [self currentPlayedItemDuration];
+    BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
+    NSString *currentStream = [self currentPlayedItemUrl:userInfo];
 
     if (previousNotificationUserInfo) {
         NSString *previousStream = [previousNotificationUserInfo objectForKey:@"kAPPlayerControllerPlayingItemContentUrl"];
@@ -235,31 +248,31 @@ static APStreamSenseManager *__sharedInstance;
                 }
             }
         } else {
-            if ((self.wasNewPlayerCreated == YES && durationLong > 0) || (self.wasNewPlayerCreated == YES && isLive.boolValue)) {
+            if ((self.wasNewPlayerCreated == YES && itemDuration > 0) || (self.wasNewPlayerCreated == YES && itemIsLive)) {
                 // If this is the first play notification after the player was created we need to call setClip with the new item's data.
                 [eventTimer invalidate];
                 self.wasNewPlayerCreated = NO;
                 [self setupNextItem:previousNotificationUserInfo];
-            } else if (durationLong > 0 || (isLive.boolValue && !self.wasNewPlayerCreated)) {
+            } else if (itemDuration > 0 || (itemIsLive && !self.wasNewPlayerCreated)) {
                 [eventTimer invalidate];
                 [self.streamAnalytics playVideoContentPartWithMetadata:extendedDict andMediaType:contentType];
                 self.playerSentToBackground = NO;
             }
         }
     } else {
-        if ((self.wasNewPlayerCreated == YES && durationLong > 0) || (self.wasNewPlayerCreated == YES && isLive.boolValue)) {
+        if ((self.wasNewPlayerCreated == YES && itemDuration > 0) || (self.wasNewPlayerCreated == YES && itemIsLive)) {
             // If this is the first play notification after the player was created we need to call setClip with the new item's data.
             [eventTimer invalidate];
             self.wasNewPlayerCreated = NO;
 
             //when playing live items, we must skip the first didPlay event since when pre-roll ad ends, it will trigger again
-            if (self.skipFirstDidPlay == YES && isLive.boolValue == YES) {
+            if (self.skipFirstDidPlay == YES && itemIsLive == YES) {
                 [self setupExtendedDict:userInfo];
                 self.skipFirstDidPlay = NO;
             } else {
                 [self setupNextItem:userInfo];
             }
-        } else if (durationLong > 0 || (isLive.boolValue && !self.wasNewPlayerCreated)) {
+        } else if (itemDuration > 0 || (itemIsLive && !self.wasNewPlayerCreated)) {
             [eventTimer invalidate];
             [self.streamAnalytics playVideoContentPartWithMetadata:extendedDict andMediaType:contentType];
             self.playerSentToBackground = NO;
@@ -305,25 +318,25 @@ static APStreamSenseManager *__sharedInstance;
 }
 
 - (void)setupExtendedDict:(NSDictionary *)userInfo {
-
     // Add basic parameters (For VOD and Live)
     NSString *publisherName = [self.providerProperties objectForKey:kPublisherName];
     NSString *c3Val = [self.providerProperties objectForKey:kC3];
     NSString *itemId;
     itemId = [userInfo objectForKey:kAPStreamSenseManagerItemID];
     if (itemId == nil) {
-        itemId = [userInfo objectForKey:kAPPlayerControlsPlayingItemUniqueID];
+        itemId = [userInfo objectForKey:kPlayingItemUniqueID];
     }
     NSString *itemName = [userInfo objectForKey:kAPStreamSenseManagerItemName];
-    NSString *isLive = [userInfo objectForKey:kAPStreamSenseManagerItemIsLive];
-    long durationLong = (long)[[userInfo objectForKey:kAPStreamSenseManagerItemDuration] longLongValue];
+    long itemDuration = [self currentPlayedItemDuration];
+    BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
+
     // StreamSense requires this value in milliseconds, so we multiply with 1000
-    NSString *duration = durationLong == 0 ? nil : [NSString stringWithFormat:@"%ld", durationLong * 1000];
+    NSString *duration = itemDuration == 0 ? nil : [NSString stringWithFormat:@"%ld", itemDuration * 1000];
     if (![itemId isNotEmptyOrWhiteSpaces]) {
         itemId = @"null";
     }
 
-    if (isLive.boolValue == YES) {
+    if (itemIsLive) {
         duration = 0;
     }
 
@@ -344,37 +357,27 @@ static APStreamSenseManager *__sharedInstance;
     [basicDict setObject:@"*null" forKey:@"ns_st_ddt"];
     [basicDict setObject:@"*null" forKey:@"ns_st_tdt"];
 
-    NSString *isLiveStr = isLive.boolValue ? @"live" : @"vod";
+    NSString *isLiveStr = itemIsLive ? @"live" : @"vod";
     [basicDict setObject:isLiveStr forKey:@"ns_st_ty"];
 
     extendedDict = [NSMutableDictionary new];
     [extendedDict addEntriesFromDictionary:basicDict];
 
-    if (isLive.boolValue == YES) {
+    if (itemIsLive) {
         // Live
         [extendedDict setValue:@"live" forKey:kAPStreamSenseManagerPlaylistTitle];
         contentType = SCORContentTypeLive;
     } else {
         // VOD
-        NSString *showName = [userInfo objectForKey:kAPStreamSenseManagerItemShowName];
-
-        if (showName == nil || ![showName isNotEmptyOrWhiteSpaces]) {
-            showName = [userInfo objectForKey:kAPStreamSenseManagerItemName];
-        }
+        NSString *showName = [userInfo objectForKey:kAPStreamSenseManagerItemName];
 
         [extendedDict setValue:[showName analyticsString] forKey:kAPStreamSenseManagerPlaylistTitle];
 
-        if (durationLong >= 600) {
+        if (itemDuration >= 600) {
             contentType = SCORContentTypeLongFormOnDemand;
         } else {
             contentType = SCORContentTypeShortFormOnDemand;
         }
-    }
-
-    // Gives the delegate an option to customize the returned dictionary.
-    if ([self.delegate respondsToSelector:@selector(clipDictionary:andCurrentItem:)]) {
-        [self.delegate clipDictionary:extendedDict
-                       andCurrentItem:userInfo];
     }
 }
 
