@@ -1,0 +1,51 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderAkamai",
+    "modules": [
+      "ZappAnalyticsPluginAkamai"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Akamai",
+  "description": "Akamai Analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "identifier": "akamai_ios",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "2.0.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "vod_beacons"
+    },
+    {
+      "type": "text",
+      "key": "live_beacons"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "8.0.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginAkamai": ":path => './node_modules/@applicaster/zapp-analytics-plugin-akamai/apple/ZappAnalyticsPluginAkamai.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-akamai@8.0.0"
+  ]
+}
