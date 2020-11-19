@@ -14,14 +14,6 @@ open class APAnalyticsProviderChartbeat: ZPAnalyticsProvider {
     let kAccountID = "account_id"
     let kDomain = "domain"
 
-    struct Events {
-        static let EventArticleClicked = "Article Clicked"
-        static let EventPlayWasTriggered = "Play was Triggered"
-        static let EventSideMenuAreaSwitched = "Side Menu: Area Switched"
-        static let EventLiveScreenKey = "Live Screen"
-        static let EventKanPlayerPlayItem = "KanPlayerPlayItem"
-    }
-
     override open func getKey() -> String {
         return "chartbeat"
     }
