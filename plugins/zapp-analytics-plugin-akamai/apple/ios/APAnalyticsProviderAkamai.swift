@@ -37,3 +37,4 @@ open class APAnalyticsProviderAkamai: ZPAnalyticsProvider, PlayerDependantPlugin
         return true
     }
 }
+ 

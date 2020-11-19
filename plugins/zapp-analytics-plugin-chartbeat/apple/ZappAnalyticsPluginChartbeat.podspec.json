@@ -1,0 +1,34 @@
+{
+  "name": "ZappAnalyticsPluginChartbeat",
+  "version": "8.0.0",
+  "platforms": {
+    "ios": "11.0"
+  },
+  "summary": "ZappAnalyticsPluginChartbeat",
+  "description": "ZappAnalyticsPluginChartbeat container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": {
+    "cmps": "Applicaster LTD."
+  },
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp-analytics-plugin-chartbeat/8.0.0"
+  },
+  "requires_arc": true,
+  "public_header_files": "ios/**/*.h",
+  "source_files": "ios/**/*.{h,m,swift}",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES",
+    "SWIFT_VERSION": "5.1"
+  },
+  "dependencies": {
+    "ZappAnalyticsPluginsSDK": [
+
+    ],
+    "Chartbeat": [
+      "~> 1.4.2"
+    ]
+  }
+}

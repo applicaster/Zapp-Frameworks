@@ -1,0 +1,53 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderChartbeat",
+    "modules": [
+      "ZappAnalyticsPluginChartbeat"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Chartbeat",
+  "description": "Chartbeat analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "identifier": "Chartbeat",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "2.0.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "account_id",
+      "tooltip_text": "The Chartbeat Account Id provided by the client"
+    },
+    {
+      "type": "text",
+      "key": "domain",
+      "tooltip_text": "The dashboard domain to report analytics"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "8.0.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginChartbeat": ":path => './node_modules/@applicaster/zapp-analytics-plugin-chartbeat/apple/ZappAnalyticsPluginChartbeat.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-chartbeat@8.0.0"
+  ]
+}
