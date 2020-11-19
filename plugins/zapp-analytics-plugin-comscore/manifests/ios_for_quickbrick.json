@@ -1,9 +1,9 @@
 {
   "api": {
     "require_startup_execution": false,
-    "class_name": "APAnalyticsProviderComscore",
+    "class_name": "APAnalyticsProviderComScore",
     "modules": [
-      "ZappAnalyticsPluginComscore"
+      "ZappAnalyticsPluginComScore"
     ]
   },
   "dependency_repository_url": [],
@@ -25,11 +25,33 @@
   "custom_configuration_fields": [
     {
       "type": "text",
-      "key": "vod_beacons"
+      "key": "customer_c2"
     },
     {
       "type": "text",
-      "key": "live_beacons"
+      "key": "app_name"
+    },
+    {
+      "type": "text",
+      "key": "publisher_secret"
+    },
+    {
+      "type": "text",
+      "key": "ns_site"
+    },
+    {
+      "type": "text",
+      "key": "stream_sense"
+    },
+    {
+      "type": "text",
+      "key": "ns_st_pu",
+      "tooltip_text": "publisher name"
+    },
+    {
+      "type": "text",
+      "key": "c3",
+      "tooltip_text": "c3 value"
     }
   ],
   "targets": [
@@ -39,13 +61,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "7.0.0",
+  "manifest_version": "6.100.0",
   "extra_dependencies": [
     {
-      "ZappAnalyticsPluginComscore": ":path => './node_modules/@applicaster/zapp-analytics-plugin-comscore/apple/ZappAnalyticsPluginComscore.podspec'"
+      "ZappAnalyticsPluginComScore": ":path => './node_modules/@applicaster/zapp-analytics-plugin-comscore/apple/ZappAnalyticsPluginComScore.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-comscore@7.0.0"
+    "@applicaster/zapp-analytics-plugin-comscore@6.100.0"
   ]
 }
