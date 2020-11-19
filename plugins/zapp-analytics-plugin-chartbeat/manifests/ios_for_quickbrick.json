@@ -13,7 +13,7 @@
   "description": "Chartbeat Analytics provider",
   "cover_image": "",
   "type": "analytics",
-  "identifier": "Chartbeat",
+  "identifier": "ChartbeatAnalytics",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
@@ -41,13 +41,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "8.0.0",
+  "manifest_version": "8.0.1",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginChartbeat": ":path => './node_modules/@applicaster/zapp-analytics-plugin-chartbeat/apple/ZappAnalyticsPluginChartbeat.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-chartbeat@8.0.0"
+    "@applicaster/zapp-analytics-plugin-chartbeat@8.0.1"
   ]
 }
