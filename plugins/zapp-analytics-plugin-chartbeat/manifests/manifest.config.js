@@ -9,7 +9,7 @@ const baseManifest = {
   cover_image:
     "",
   type: "analytics",
-  identifier: "Chartbeat",
+  identifier: "ChartbeatAnalytics",
   screen: false,
   react_native: false,
   ui_builder_support: true,
@@ -53,7 +53,6 @@ const custom_configuration_fields_apple = [
 ];
 
 const custom_configuration_fields = {
-  ios: custom_configuration_fields_apple,
   ios_for_quickbrick: custom_configuration_fields_apple,
 };
 
