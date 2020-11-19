@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginAkamai",
-  "version": "7.100.0",
+  "version": "8.0.0",
   "platforms": {
     "ios": "11.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-akamai/7.100.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-akamai/8.0.0"
   },
   "requires_arc": true,
   "public_header_files": "ios/**/*.h",
