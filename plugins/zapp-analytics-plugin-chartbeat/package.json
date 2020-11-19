@@ -1,0 +1,31 @@
+{
+  "name": "@applicaster/zapp-analytics-plugin-chartbeat",
+  "version": "7.99.0",
+  "description": "Chartbeat Analytics provider",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "Chartbeat",
+    "analytics"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e4d3752157a050008e973fc"
+  },
+  "files": [
+    "apple"
+  ]
+}
