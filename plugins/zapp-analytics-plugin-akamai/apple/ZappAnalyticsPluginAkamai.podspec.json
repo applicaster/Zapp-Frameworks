@@ -1,0 +1,40 @@
+{
+  "name": "ZappAnalyticsPluginAkamai",
+  "version": "8.0.0",
+  "platforms": {
+    "ios": "11.0"
+  },
+  "summary": "ZappAnalyticsPluginAkamai",
+  "description": "ZappAnalyticsPluginAkamai container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": {
+    "cmps": "Applicaster LTD."
+  },
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp-analytics-plugin-akamai/8.0.0"
+  },
+  "requires_arc": true,
+  "public_header_files": "ios/**/*.h",
+  "source_files": "ios/**/*.{h,m,swift}",
+  "frameworks": [
+    "MediaPlayer",
+    "SystemConfiguration",
+    "CoreMedia"
+  ],
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES",
+    "OTHER_LDFLAGS": "$(inherited) -l\"AKAMMediaExtensions-AV\"",
+    "SWIFT_VERSION": "5.1"
+  },
+  "dependencies": {
+    "ZappAnalyticsPluginsSDK": [
+
+    ],
+    "Akamai-Analytics": [
+      "~> 1.4"
+    ]
+  }
+}
