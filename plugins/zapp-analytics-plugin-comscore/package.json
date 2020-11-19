@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-comscore",
-  "version": "6.99.0",
+  "version": "6.100.0",
   "description": "Comscore Analytics provider",
   "repository": {
     "type": "git",
