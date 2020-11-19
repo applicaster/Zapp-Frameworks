@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-chartbeat",
-  "version": "7.99.0",
+  "version": "8.0.0",
   "description": "Chartbeat Analytics provider",
   "repository": {
     "type": "git",
