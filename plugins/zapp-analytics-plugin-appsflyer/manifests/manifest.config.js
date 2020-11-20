@@ -23,16 +23,18 @@ const baseManifest = {
 function createManifest({ version, platform }) {
   const manifest = {
     ...baseManifest,
-    identifier: "AppsFlyer-iOS",
+    identifier: identifier[platform],
     platform,
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
+    project_dependencies: project_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/zapp-analytics-plugin-appsflyer@${version}`],
     targets: targets[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
     ui_frameworks: ui_frameworks[platform],
+    react_native: platform.includes("android") // needed for Android rake to work properly
   };
   return manifest;
 }
@@ -98,15 +100,33 @@ const extra_dependencies = {
   ios_for_quickbrick: extra_dependencies_apple,
 };
 
+const project_dependencies_android = [
+  {
+    "zapp-analytics-plugin-appsflyer":
+      "node_modules/@applicaster/zapp-analytics-plugin-appsflyer/android",
+  },
+];
+
+const project_dependencies = {
+  android_for_quickbrick: project_dependencies_android,
+  android_tv_for_quickbrick: project_dependencies_android,
+};
+
 const api_apple = {
   require_startup_execution: false,
   class_name: "APAnalyticsProviderAppsFlyer",
   modules: ["ZappAnalyticsPluginAppsFlyer"]
 };
 
+const api_android = {
+  class_name: "com.applicaster.appsflyerplugin.AppsFlyerAnalyticsAgent"
+};
+
 const api = {
   ios: api_apple,
   ios_for_quickbrick: api_apple,
+  android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
