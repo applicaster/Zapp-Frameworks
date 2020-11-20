@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginAppsFlyer",
-  "version": "9.0.2",
+  "version": "9.1.0",
   "summary": "ZappAnalyticsPluginAppsFlyer",
   "description": "ZappAnalyticsPluginAppsFlyer container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-appsflyer/9.0.2"
+    "tag": "@@applicaster/zapp-analytics-plugin-appsflyer/9.1.0"
   },
   "platforms": {
     "ios": "10.0"

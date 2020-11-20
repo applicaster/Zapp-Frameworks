@@ -1,10 +1,6 @@
 {
   "api": {
-    "require_startup_execution": false,
-    "class_name": "APAnalyticsProviderAppsFlyer",
-    "modules": [
-      "ZappAnalyticsPluginAppsFlyer"
-    ]
+    "class_name": "com.applicaster.appsflyerplugin.AppsFlyerAnalyticsAgent"
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
@@ -14,10 +10,10 @@
   "cover_image": "",
   "type": "analytics",
   "screen": false,
-  "react_native": false,
+  "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "15.1.2-Dev",
+  "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -25,24 +21,20 @@
     {
       "type": "text",
       "key": "appsflyer_key"
-    },
-    {
-      "type": "text",
-      "key": "apple_app_id"
     }
   ],
   "targets": [
     "mobile"
   ],
   "ui_frameworks": [
-    "native"
+    "quickbrick"
   ],
-  "identifier": "AppsFlyer-iOS",
-  "platform": "ios",
+  "identifier": "AppsFlyer",
+  "platform": "android_for_quickbrick",
   "manifest_version": "9.1.0",
-  "extra_dependencies": [
+  "project_dependencies": [
     {
-      "ZappAnalyticsPluginAppsFlyer": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
+      "zapp-analytics-plugin-appsflyer": "node_modules/@applicaster/zapp-analytics-plugin-appsflyer/android"
     }
   ],
   "npm_dependencies": [

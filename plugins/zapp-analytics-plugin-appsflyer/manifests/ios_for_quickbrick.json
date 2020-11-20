@@ -13,7 +13,6 @@
   "description": "AppsFlyer Analytics provider",
   "cover_image": "",
   "type": "analytics",
-  "identifier": "AppsFlyer-iOS",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
@@ -38,14 +37,15 @@
   "ui_frameworks": [
     "quickbrick"
   ],
+  "identifier": "AppsFlyer-iOS",
   "platform": "ios_for_quickbrick",
-  "manifest_version": "9.0.2",
+  "manifest_version": "9.1.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAppsFlyer": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-appsflyer@9.0.2"
+    "@applicaster/zapp-analytics-plugin-appsflyer@9.1.0"
   ]
 }
