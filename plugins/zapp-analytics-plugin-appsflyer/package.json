@@ -21,12 +21,14 @@
   "peerDependencies": {},
   "applicaster": {
     "supportedPlatforms": [
+      "android_for_quickbrick",
       "ios_for_quickbrick",
       "ios"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   },
   "files": [
-    "apple"
+    "apple",
+    "android"
   ]
 }
