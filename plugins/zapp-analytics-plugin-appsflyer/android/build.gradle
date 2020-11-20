@@ -61,5 +61,5 @@ dependencies {
         api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
     }
     api 'com.appsflyer:af-android-sdk:6.1.0'
-    //implementation 'com.android.installreferrer:installreferrer:2.1'
+    implementation 'com.android.installreferrer:installreferrer:2.1'
 }

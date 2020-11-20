@@ -6,6 +6,7 @@ import com.applicaster.analytics.BaseAnalyticsAgent;
 import com.applicaster.util.APLogger;
 import com.applicaster.util.AppContext;
 import com.applicaster.util.OSUtil;
+import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 
 import java.util.HashMap;
@@ -38,8 +39,39 @@ public class AppsFlyerAnalyticsAgent extends BaseAnalyticsAgent {
     @Override
     public void initializeAnalyticsAgent(Context context) {
         super.initializeAnalyticsAgent(context);
+
+        // https://support.appsflyer.com/hc/en-us/articles/207032126#integration
+
         AppsFlyerLib.getInstance().setAndroidIdData(OSUtil.getDeviceIdentifier(context));
-        AppsFlyerLib.getInstance().start(context, app_key);
+        AppsFlyerConversionListener conversionListener = new AppsFlyerConversionListener() {
+
+            @Override
+            public void onConversionDataSuccess(Map<String, Object> conversionData) {
+                for (String attrName : conversionData.keySet()) {
+                    APLogger.debug(TAG, "attribute: " + attrName + " = " + conversionData.get(attrName));
+                }
+            }
+
+            @Override
+            public void onConversionDataFail(String errorMessage) {
+                APLogger.warn(TAG, "error getting conversion data: " + errorMessage);
+            }
+
+            @Override
+            public void onAppOpenAttribution(Map<String, String> attributionData) {
+                for (String attrName : attributionData.keySet()) {
+                    APLogger.debug(TAG, "attribute: " + attrName + " = " + attributionData.get(attrName));
+                }
+            }
+
+            @Override
+            public void onAttributionFailure(String errorMessage) {
+                APLogger.warn(TAG, "error onAttributionFailure: " + errorMessage);
+            }
+        };
+
+        AppsFlyerLib.getInstance().init(app_key, conversionListener, context);
+        AppsFlyerLib.getInstance().start(context);
     }
 
     @Override
