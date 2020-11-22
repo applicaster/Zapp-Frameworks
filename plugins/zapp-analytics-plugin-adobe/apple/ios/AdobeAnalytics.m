@@ -79,6 +79,15 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
     return self;
 }
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"videoAdvertisementsOpportunity"
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"watchVideoAdvertisements"
+                                                  object:nil];
+}
+
 - (BOOL)createAnalyticsProviderSettings {
     return true;
 }
