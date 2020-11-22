@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-akamai",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Akamai Analytics provider",
   "repository": {
     "type": "git",
