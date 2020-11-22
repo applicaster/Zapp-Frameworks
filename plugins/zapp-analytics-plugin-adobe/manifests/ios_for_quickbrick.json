@@ -13,7 +13,7 @@
   "description": "Adobe Analytics provider",
   "cover_image": "",
   "type": "analytics",
-  "identifier": "adobe_ios",
+  "identifier": "AdobeAnalyticsAgent",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
@@ -25,11 +25,11 @@
   "custom_configuration_fields": [
     {
       "type": "text",
-      "key": "vod_beacons"
+      "key": "mobile_app_account_id"
     },
     {
       "type": "text",
-      "key": "live_beacons"
+      "key": "mobile_app_account_id_production"
     }
   ],
   "targets": [
@@ -39,13 +39,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "8.0.0",
+  "manifest_version": "0.1.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-adobe@8.0.0"
+    "@applicaster/zapp-analytics-plugin-adobe@0.1.0"
   ]
 }
