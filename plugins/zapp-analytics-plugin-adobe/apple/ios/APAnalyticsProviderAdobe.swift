@@ -53,6 +53,12 @@ open class APAnalyticsProviderAdobe: ZPAnalyticsProvider, PlayerDependantPluginP
         super.trackScreenView(screenName, parameters: parameters)
         adobeAnalytics?.trackScreenView(screenName, parameters: parameters)
     }
+    
+    open override func setUserProfile(genericUserProperties dictGenericUserProperties: [String : NSObject], piiUserProperties dictPiiUserProperties: [String : NSObject]) {
+        super.setUserProfile(genericUserProperties: dictGenericUserProperties, piiUserProperties: dictGenericUserProperties)
+        adobeAnalytics?.setUserProfileWithGenericUserProperties(dictGenericUserProperties,
+                                                                piiUserProperties: dictGenericUserProperties)
+    }
 }
 
 

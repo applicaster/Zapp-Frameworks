@@ -32,6 +32,8 @@ static NSString *const kPlayingItemExtensions = @"extensions";
 - (void)trackEvent:(NSString *)eventName;
 - (void)trackEvent:(NSString *)eventName timed:(BOOL)timed;
 - (void)trackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters;
+- (void)setUserProfileWithGenericUserProperties:(NSDictionary *)dictGenericUserProperties
+                              piiUserProperties:(NSDictionary *)dictPiiUserProperties;
 
 - (void)playerDidCreate;
 - (void)playerDidStartPlayItem;
