@@ -1,0 +1,51 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderCoolaData",
+    "modules": [
+      "ZappAnalyticsPluginCoolaData"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "CoolaData",
+  "description": "CoolaData Analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "identifier": "CoolaDataAnalyticsAgent",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "2.0.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "mobile_app_account_id"
+    },
+    {
+      "type": "text",
+      "key": "mobile_app_account_id_production"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "0.1.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginCoolaData": ":path => './node_modules/@applicaster/zapp-analytics-plugin-cooladata/apple/ZappAnalyticsPluginCoolaData.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-cooladata@0.1.0"
+  ]
+}
