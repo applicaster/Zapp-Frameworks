@@ -116,10 +116,12 @@ public class RootController: NSObject {
     }
 
     func makeInterfaceLayerAsRootViewContoroller() {
-        guard let window = UIApplication.shared.delegate?.window else {
-            return
+        DispatchQueue.main.async { [weak self] in
+            guard let window = UIApplication.shared.delegate?.window else {
+                return
+            }
+            window?.rootViewController = self?.userInterfaceLayerViewController
         }
-        window?.rootViewController = userInterfaceLayerViewController
     }
 
     func showErrorMessage(message: String) {
