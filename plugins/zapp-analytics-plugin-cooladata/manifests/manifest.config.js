@@ -9,7 +9,7 @@ const baseManifest = {
   cover_image:
     "",
   type: "analytics",
-  identifier: "CoolaDataAnalyticsAgent",
+  identifier: "CoolaData-iOS",
   screen: false,
   react_native: false,
   ui_builder_support: true,
