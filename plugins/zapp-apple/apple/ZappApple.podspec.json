@@ -1,6 +1,6 @@
 {
   "name": "ZappApple",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "summary": "Framework that has general logic of the Zapp Apple application",
   "platforms": {
     "ios": "11.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-apple/0.11.1"
+    "tag": "@@applicaster/zapp-apple/0.11.2"
   },
   "static_framework": true,
   "ios": {
