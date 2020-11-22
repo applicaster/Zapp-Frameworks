@@ -8,9 +8,10 @@
 
 @import ZappPlugins;
 @import ZappAnalyticsPluginsSDK;
-@import cooladata-ios-sdk;
 @import AVFoundation;
+
 #import "CoolaDataAnalytics.h"
+#import <cooladata-ios-sdk/CoolaDataTracker.h>
 
 #define STRING_OR_NA(str) (str ? str : @"N/A")
 #define NA_STRING @"N/A"
@@ -26,59 +27,25 @@ NSString *const kCoolaDataMidrollopportunityEventKey   = @"midroll_opportunity_e
 NSString *const kCoolaDataVideoReachEventKey           = @"video_reach_event_name";
 NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_name";
 
-@interface APAnalyticsProviderCoolaData ()
+@interface CoolaDataAnalytics ()
 
-@property (nonatomic, strong)NSString *maxPosition;
+@property (nonatomic, strong) NSString *maxPosition;
+@property (nonatomic, strong) NSDictionary *providerProperties;
 
 @end
 
-@implementation APAnalyticsProviderCoolaData
+@implementation CoolaDataAnalytics
 
 #pragma mark - NSObject
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"kGACellTappedPlayButtonNotification"
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"videoAdvertisementsOpportunity"
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"watchVideoAdvertisements"
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:APPlayerControllerPlayerWasCreatedNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:APPlayerControllerDidPlayNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:APPlayerControllerDidPauseNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:APPlayerControllerPlayerFinishedPlaybackNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"play"
-                                                  object:nil];
-}
-
-- (instancetype)init
-{
+- (instancetype)initWithProviderProperties:(NSDictionary *)providerProperties
+                                  delegate:(id<CoolaDataAnalyticsDelegate>)delegate {
     self = [super init];
     if (self) {
+        self.providerProperties = providerProperties;
+        self.delegate = delegate;
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(videoStart:)
-                                                     name:@"kGACellTappedPlayButtonNotification"
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(videoCancel:)
-                                                     name:APPlayerControllerPlayerFinishedPlaybackNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(VideoAdvertisementsOpportunity:)
+                                                 selector:@selector(videoAdvertisementsOpportunity:)
                                                      name:@"videoAdvertisementsOpportunity"
                                                    object:nil];
         
@@ -86,56 +53,24 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
                                                  selector:@selector(watchVideoAdvertisement:)
                                                      name:@"watchVideoAdvertisements"
                                                    object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerWasCreated:)
-                                                     name:APPlayerControllerPlayerWasCreatedNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateMaxValueFromNotification:)
-                                                     name:APPlayerControllerDidPlayNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateMaxValueFromNotification:)
-                                                     name:APPlayerControllerDidPauseNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateMaxValueFromNotification:)
-                                                     name:APPlayerControllerPlayerFinishedPlaybackNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateMaxValueFromNotification:)
-                                                     name:@"play"
-                                                   object:nil];
+
     }
     return self;
 }
 
-- (NSString*) getKey {
-    return @"cooladata";
-}
-
-- (BOOL)createAnalyticsProviderSettings {
-    BOOL retVal = YES;
-    if ([self.providerProperties isKindOfClass:[NSDictionary class]]) {
-        if ([self.providerProperties[kCoolaDataAppKey] isKindOfClass:[NSString class]]) {
-            [[CoolaDataTracker getInstance] setupWithApiToken:self.providerProperties[kCoolaDataAppKey] userId:[[NSUUID UUID] UUIDString] sessionId:nil serviceEndPoint:nil completion:nil];
-            retVal = YES;
-        }
-    }
-    return retVal;
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"videoAdvertisementsOpportunity"
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"watchVideoAdvertisements"
+                                                  object:nil];
 }
 
 #pragma  mark - Track Events
 
 /* Remember that you can setup a event whitelist via CMS */
 - (void)trackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters {
-    [super trackEvent:eventName parameters:parameters];
-    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         //The first if is been used for react native events
         if([[parameters objectForKey:@"properties"] isKindOfClass:[NSDictionary class]]) {
@@ -152,79 +87,8 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
 }
 
 #pragma mark - Analytics events notifications
-- (void)videoStart:(NSNotification *)notification{
-    id model = notification.object;
-    
-    //change event name if needed
-    NSString *eventName = @"video start";
-    if ([self.providerProperties[kCoolaDataVideoStartEventKey] isNotEmptyOrWhiteSpaces]){
-        eventName = self.providerProperties[kCoolaDataVideoStartEventKey];
-    }
-    
-    //add more analytic params
-    NSDictionary *analyticsParams = [self analyticsParams:[model analyticsParams]];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:model];
-    
-    [self trackEvent:eventName parameters:analyticsParams];
-}
 
-- (void)videoCancel:(NSNotification *)notification{
-    NSDictionary *userInfo = notification.userInfo;
-    [self updateMaxValueFromNotification:notification];
-    NSString *duration = [userInfo objectForKey:kAPPlayerControllerPlayingItemDuration];
-    NSString *isLive = [userInfo objectForKey:@"kAPPlayerControlsPlayingItemIsLive"];
-    
-    if(duration && isLive.boolValue == NO && duration.doubleValue != 0){
-        //calculate the percentage.
-        double videoPercentage = (self.maxPosition.doubleValue / duration.doubleValue) * 100;
-        if (videoPercentage) {
-            NSString *eventName = @"video_reach_";
-            if ([self.providerProperties[kCoolaDataVideoReachEventKey] isNotEmptyOrWhiteSpaces]){
-                eventName = self.providerProperties[kCoolaDataVideoReachEventKey];
-            }
-            
-            NSString *kCoolaDataVideoReach25PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"25"];
-            NSString *kCoolaDataVideoReach50PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"50"];
-            NSString *kCoolaDataVideoReach75PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"75"];
-            NSString *kCoolaDataVideoReach90PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"90"];
-            
-            NSString *videoName = STRING_OR_NA([userInfo objectForKey:@"kAPPlayerControlsPlayingItemName"]);
-            NSString *externalID = STRING_OR_NA([userInfo objectForKey: @"kAPPlayerControllerPlayingItemExternalID"]);
-            NSString *page_url = STRING_OR_NA([userInfo objectForKey: @"kAPPlayerControlsPlayingItemPublicPage"]);
-            NSString *seasonName = STRING_OR_NA([userInfo objectForKey:@"kAPPlayerControllerPlayingItemSeasonName"]);
-            NSString *sourceFileName = [self sourceFileName:[userInfo objectForKey:@"kAPPlayerControllerPlayingItemSourceFile"]];
-            
-            NSDictionary *params = @{@"Video Name" : videoName,
-                                     @"External Vod ID" : externalID,
-                                     @"Full Video Time" : duration,
-                                     @"Season Name" : seasonName,
-                                     @"Source File Name" : sourceFileName,
-                                     @"Page Url" : page_url
-                                     };
-            
-            //Add more analytic params
-            params = [self addExtraAnalyticsParamsForDictionary:params withModel:notification.object];
-            
-            if (videoPercentage >= 99) {
-                [self videoCompleted:params];
-            }
-            if (videoPercentage >= 90) {
-                [self trackEvent:kCoolaDataVideoReach90PercentEventKey parameters:params];
-            }
-            if (videoPercentage >= 75) {
-                [self trackEvent:kCoolaDataVideoReach75PercentEventKey parameters:params];
-            }
-            if (videoPercentage >= 50) {
-                [self trackEvent:kCoolaDataVideoReach50PercentEventKey parameters:params];
-            }
-            if (videoPercentage >= 25) {
-                [self trackEvent:kCoolaDataVideoReach25PercentEventKey parameters:params];
-            }
-        }
-    }
-}
-
-- (void)VideoAdvertisementsOpportunity:(NSNotification *)notification{
+- (void)videoAdvertisementsOpportunity:(NSNotification *)notification{
     id model = notification.object;
     NSDictionary *extraParameters = notification.userInfo;
     NSString *videoAdEventName;
@@ -290,31 +154,17 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
 /*!
  * Add extra analytics params from atom entry extensions
  * @param currentParams a dictionary with params to be sent
- * @param model the model of the object, for exmple in a player event it will be an object the conforms a Playable protocol
+ * @param entry the model of the object, for exmple in a player event it will be an object the conforms a Playable protocol
  * @return a consolidated dictionary structure
  */
-- (NSDictionary *)addExtraAnalyticsParamsForDictionary:(NSDictionary *)currentParams withModel:(id)model {
+- (NSDictionary *)addExtraAnalyticsParamsForDictionary:(NSDictionary *)currentParams withModel:(NSDictionary *)entry {
     NSDictionary *retDic = currentParams;
     
-    /* APChannel has a different extra param key,
-     * in case ch_678_analytics dictionary available, add it to returned dictionary.
-     */
-    if([model isKindOfClass:NSClassFromString(@"APChannel")]) {
-        NSString *channelAnalyticsParams = [[[ZAAppConnector sharedInstance].genericDelegate accountExtensionsDictionary] objectForKey:@"ch_678_analytics"];
-        NSData *data = [channelAnalyticsParams dataUsingEncoding:NSUTF8StringEncoding];
-        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        if([json isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *extraParams = (NSDictionary *)json;
-            NSMutableDictionary *unifiedDictionary = [currentParams mutableCopy];
-            [unifiedDictionary addEntriesFromDictionary:extraParams];
-            retDic = unifiedDictionary;
-        }
-        
-    } else if([model respondsToSelector:NSSelectorFromString(@"extensions")]) {
+    if([entry respondsToSelector:NSSelectorFromString(@"extensions")]) {
         /* This check is for atomEntry, each object has an extensions dicionary,
          * In case analytics_extra_params dictionary available, add it to returned dictionary.
          */
-        NSObject *extensions = [model valueForKey:@"extensions"];
+        NSObject *extensions = [entry valueForKey:@"extensions"];
         if([extensions isKindOfClass:[NSDictionary class]] && [(NSDictionary *)extensions objectForKey:@"analytics_extra_params"]) {
             NSDictionary *extraParams = [(NSDictionary *)extensions objectForKey:@"analytics_extra_params"];
             NSMutableDictionary *unifiedDictionary = [currentParams mutableCopy];
@@ -406,8 +256,8 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
 
 #pragma mark - Device ID addition
 - (NSDictionary *)addDeviceId:(NSDictionary *)currentParams {
-    NSString *deviceId = [ZAAppConnector sharedInstance].identityDelegate.getDeviceId;
-    
+    NSString *deviceId = [self.delegate getDeviceID];
+
     if ([deviceId isNotEmpty]) {
         NSMutableDictionary *mutableModelParams = [currentParams mutableCopy];
         [mutableModelParams setObject:deviceId forKey:@"deviceId"];
@@ -420,18 +270,137 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
 
 #pragma mark - video_reach event helper
 
-- (void)playerWasCreated:(NSNotification *)notification{
+- (void)updatePlayedItemCurrentPosition {
+    long currentPosition = [self currentPlayedItemPosition];
+    if (self.maxPosition.doubleValue < currentPosition) {
+        self.maxPosition = [NSString stringWithFormat:@"%ld", currentPosition];
+    }
+}
+
+- (void)playerDidCreate {
     self.maxPosition = @"0";
 }
 
-- (void)updateMaxValueFromNotification:(NSNotification *)notification{
-    NSDictionary *userInfo = notification.userInfo;
-    NSString *currentPosition = [userInfo objectForKey:kAPPlayerControllerPlayingItemCurrentPosition];
-    if (currentPosition.integerValue) {
-        if (self.maxPosition.doubleValue < currentPosition.doubleValue) {
-            self.maxPosition = currentPosition;
+- (void)playerDidStartPlayItem {
+    [self updatePlayedItemCurrentPosition];
+    NSDictionary *entry = [self currentPlayedItemEntry];
+    
+    //change event name if needed
+    NSString *eventName = @"video start";
+    if ([self.providerProperties[kCoolaDataVideoStartEventKey] isNotEmptyOrWhiteSpaces]){
+        eventName = self.providerProperties[kCoolaDataVideoStartEventKey];
+    }
+    
+    //add more analytic params
+    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
+    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
+    
+    [self trackEvent:eventName parameters:analyticsParams];
+}
+
+- (void)playerDidFinishPlayItem {
+    [self updatePlayedItemCurrentPosition];
+    NSDictionary *entry = [self currentPlayedItemEntry];
+
+    long itemDuration = [self currentPlayedItemDuration];
+    BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
+
+    if (itemDuration && itemIsLive == NO && itemDuration != 0) {
+        //calculate the percentage.
+        double videoPercentage = (self.maxPosition.doubleValue / itemDuration) * 100;
+        if (videoPercentage) {
+            NSString *eventName = @"video_reach_";
+            if ([self.providerProperties[kCoolaDataVideoReachEventKey] isNotEmptyOrWhiteSpaces]){
+                eventName = self.providerProperties[kCoolaDataVideoReachEventKey];
+            }
+            
+            NSString *kCoolaDataVideoReach25PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"25"];
+            NSString *kCoolaDataVideoReach50PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"50"];
+            NSString *kCoolaDataVideoReach75PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"75"];
+            NSString *kCoolaDataVideoReach90PercentEventKey  = [NSString stringWithFormat:@"%@%@",eventName,@"90"];
+            
+            NSString *videoName = STRING_OR_NA([entry objectForKey:@"title"]);
+            NSString *externalID = STRING_OR_NA([entry objectForKey:@"id"]);
+            NSString *page_url = STRING_OR_NA([entry objectForKey:@"kAPPlayerControlsPlayingItemPublicPage"]);
+            NSString *seasonName = STRING_OR_NA([entry objectForKey:@"kAPPlayerControllerPlayingItemSeasonName"]);
+            NSString *sourceFileName = [self sourceFileName:[self currentPlayedItemUrl:entry]];
+            
+            NSDictionary *params = @{@"Video Name" : videoName,
+                                     @"External Vod ID" : externalID,
+                                     @"Full Video Time": @(itemDuration),
+                                     @"Season Name" : seasonName,
+                                     @"Source File Name" : sourceFileName,
+                                     @"Page Url" : page_url
+                                     };
+            
+            //Add more analytic params
+            params = [self addExtraAnalyticsParamsForDictionary:params withModel:entry];
+
+            if (videoPercentage >= 99) {
+                [self videoCompleted:params];
+            }
+            if (videoPercentage >= 90) {
+                [self trackEvent:kCoolaDataVideoReach90PercentEventKey parameters:params];
+            }
+            if (videoPercentage >= 75) {
+                [self trackEvent:kCoolaDataVideoReach75PercentEventKey parameters:params];
+            }
+            if (videoPercentage >= 50) {
+                [self trackEvent:kCoolaDataVideoReach50PercentEventKey parameters:params];
+            }
+            if (videoPercentage >= 25) {
+                [self trackEvent:kCoolaDataVideoReach25PercentEventKey parameters:params];
+            }
         }
     }
+}
+
+- (void)playerDidResumePlayItem {
+    [self updatePlayedItemCurrentPosition];
+}
+
+- (void)playerDidPausePlayItem {
+    [self updatePlayedItemCurrentPosition];
+}
+
+#pragma mark - CoolaDataAnalyticsDelegate
+
+- (long)currentPlayedItemPosition {
+    return CMTimeGetSeconds([self.delegate.getCurrentPlayerInstance.currentItem currentTime]);
+}
+
+- (long)currentPlayedItemDuration {
+    return CMTimeGetSeconds([self.delegate.getCurrentPlayerInstance.currentItem duration]);
+}
+
+- (NSDictionary *)currentPlayedItemEntry {
+    return [self.delegate getCurrentPlayedItemEntry];
+}
+
+- (BOOL)currentPlayedItemIsLiveStream {
+    BOOL isLive = NO;
+    NSString *lastEvent = (NSString *)[[self.delegate.getCurrentPlayerInstance.currentItem.accessLog events] lastObject];
+    if ([lastEvent isKindOfClass:[NSString class]]) {
+        if ([lastEvent isEqualToString:@"LIVE"]) {
+            isLive = YES;
+        }
+    }
+    return isLive;
+}
+
+- (NSString *)currentPlayedItemUrl:(NSDictionary *)userInfo {
+    NSString *currentStream = nil;
+    NSDictionary *content = [userInfo objectForKey:kPlayingItemContent];
+    if (content) {
+        currentStream = [content objectForKey:kPlayingItemSource];
+    }
+    return currentStream;
+}
+
+- (NSDictionary *)currentPlayedItemAnalyticsParams:(NSDictionary *)entry {
+    NSMutableDictionary *params = [NSMutableDictionary new];
+
+    return params;
 }
 
 @end

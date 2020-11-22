@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-cooladata",
-  "version": "0.1.0",
+  "version": "7.0.0",
   "description": "CoolaData Analytics provider",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "supportedPlatforms": [
       "ios_for_quickbrick"
     ],
-    "zappOwnerAccountId": "5e4d3752157a050008e973fc"
+    "zappOwnerAccountId": "5891b9f978f9f300171455e5"
   },
   "files": [
     "apple"

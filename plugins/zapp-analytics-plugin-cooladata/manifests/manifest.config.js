@@ -42,11 +42,43 @@ function createManifest({ version, platform }) {
 const custom_configuration_fields_apple = [
   {
     type: "text",
-    key: "mobile_app_account_id"
+    key: "app_key",
+    tooltip_text: "Application Key"
   },
   {
     type: "text",
-    key: "mobile_app_account_id_production"
+    key: "video_start_event_name",
+    tooltip_text: "Video Start Event Name"
+  },
+  {
+    type: "text",
+    key: "watch_preroll_event_name",
+    tooltip_text: "Watch Preroll Event Name"
+  },
+  {
+    type: "text",
+    key: "watch_midroll_event_name",
+    tooltip_text: "Watch Midroll Event Name"
+  },
+  {
+    type: "text",
+    key: "preroll_opportunity_event_name",
+    tooltip_text: "Preroll Opportunity Event Name"
+  },
+  {
+    type: "text",
+    key: "midroll_opportunity_event_name",
+    tooltip_text: "Midroll Opportunity Event Name"
+  },
+  {
+    type: "text",
+    key: "video_reach_event_name",
+    tooltip_text: "Video Reach Event Name"
+  },
+  {
+    type: "text",
+    key: "video_complete_event_name",
+    tooltip_text: "Video Complete Event Name"
   }
 ];
 

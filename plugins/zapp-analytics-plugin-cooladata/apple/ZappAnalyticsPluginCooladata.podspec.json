@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginCoolaData",
-  "version": "0.9.0",
+  "version": "7.0.0",
   "platforms": {
     "ios": "11.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-cooladata/0.9.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-cooladata/7.0.0"
   },
   "requires_arc": true,
   "public_header_files": "ios/**/*.h",
@@ -24,12 +24,13 @@
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES",
-    "OTHER_LDFLAGS": "'$(inherited) -framework 'cooladata-ios-sdk'",
+    "OTHER_LDFLAGS": "$(inherited) -framework 'cooladata-ios-sdk'",
     "SWIFT_VERSION": "5.1"
   },
   "dependencies": {
     "ZappAnalyticsPluginsSDK": [],
     "CoolaPod": [
+      "2.2"
     ]
   }
 }

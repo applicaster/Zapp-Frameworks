@@ -1,5 +1,5 @@
 //
-//  ZappAnalyticsPluginCoolaData+PlayerObserverProtocol.swift
+//  APAnalyticsProviderCoolaData+PlayerObserverProtocol.swift
 //  ZappAnalyticsPluginCoolaData
 //
 //  Created by Alex Zchut on 22/11/2020.

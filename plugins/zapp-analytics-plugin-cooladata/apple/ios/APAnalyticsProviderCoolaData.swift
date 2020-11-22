@@ -10,8 +10,7 @@ import ZappAnalyticsPluginsSDK
 import ZappCore
 
 open class APAnalyticsProviderCoolaData: ZPAnalyticsProvider, PlayerDependantPluginProtocol {
-    let kDebugAppId = "mobile_app_account_id"
-    let kProductionAddId = "mobile_app_account_id_production"
+    let kAppKey = "app_key"
     public var playerPlugin: PlayerProtocol?
     var cooladataAnalytics: CoolaDataAnalytics?
     var playbackStalled: Bool = false
@@ -21,15 +20,13 @@ open class APAnalyticsProviderCoolaData: ZPAnalyticsProvider, PlayerDependantPlu
     }
 
     override open func configureProvider() -> Bool {
-        guard let debugAppId = providerProperties[kDebugAppId] as? String,
-              debugAppId.isNotEmptyOrWhiteSpaces(),
-              let productionAddId = providerProperties[kProductionAddId] as? String,
-              productionAddId.isNotEmptyOrWhiteSpaces() else {
+        guard let appKey = providerProperties[kAppKey] as? String,
+              appKey.isNotEmptyOrWhiteSpaces() else {
             return false
         }
 
         cooladataAnalytics = CoolaDataAnalytics(providerProperties: providerProperties,
-                                        delegate: self)
+                                                delegate: self)
 
         return true
     }
@@ -53,6 +50,10 @@ open class APAnalyticsProviderCoolaData: ZPAnalyticsProvider, PlayerDependantPlu
         super.trackScreenView(screenName, parameters: parameters)
         cooladataAnalytics?.trackScreenView(screenName, parameters: parameters)
     }
+
+    override open func setUserProfile(genericUserProperties dictGenericUserProperties: [String: NSObject], piiUserProperties dictPiiUserProperties: [String: NSObject]) {
+        super.setUserProfile(genericUserProperties: dictGenericUserProperties, piiUserProperties: dictGenericUserProperties)
+        cooladataAnalytics?.setUserProfileWithGenericUserProperties(dictGenericUserProperties,
+                                                                    piiUserProperties: dictGenericUserProperties)
+    }
 }
-
-
