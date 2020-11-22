@@ -88,14 +88,6 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
                                                   object:nil];
 }
 
-- (BOOL)createAnalyticsProviderSettings {
-    return true;
-}
-
-- (NSString *)getKey {
-    return @"adobe";
-}
-
 #pragma mark - Track Events
 
 /* Remember that you can setup a event whitelist via CMS */
