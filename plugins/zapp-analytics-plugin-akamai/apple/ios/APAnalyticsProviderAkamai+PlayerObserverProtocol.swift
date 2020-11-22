@@ -10,7 +10,7 @@ import ZappCore
 
 extension APAnalyticsProviderAkamai: PlayerObserverProtocol {
     public func playerDidFinishPlayItem(player: PlayerProtocol, completion: @escaping (Bool) -> Void) {
-        akamaiClient?.playerPlaybackCompleted()
+        completion(true)
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
@@ -31,7 +31,7 @@ extension APAnalyticsProviderAkamai: PlayerObserverProtocol {
     }
 
     public func playerDidDismiss(player: PlayerProtocol) {
-        //
+        akamaiClient?.playerPlaybackCompleted()
     }
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {

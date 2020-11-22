@@ -3,10 +3,12 @@
 //  ZappAnalyticsPluginComScore
 //
 //  Created by Alex Zchut on 18/11/2020.
+//  Copyright © 2020 Applicaster. All rights reserved.
 //
 
 import Foundation
 import ZappCore
+import AVFoundation
 
 extension APAnalyticsProviderComScore: PlayerObserverProtocol {
     var avPlayer: AVPlayer? {
