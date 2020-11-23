@@ -1,0 +1,41 @@
+{
+  "name": "ZappAnalyticsPluginAdobe",
+  "version": "0.9.0",
+  "platforms": {
+    "ios": "11.0"
+  },
+  "summary": "ZappAnalyticsPluginAdobe",
+  "description": "ZappAnalyticsPluginAdobe container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": {
+    "cmps": "Applicaster LTD."
+  },
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/zapp-analytics-plugin-adobe/0.9.0"
+  },
+  "requires_arc": true,
+  "public_header_files": "ios/**/*.h",
+  "source_files": "ios/**/*.{h,m,swift}",
+  "frameworks": [
+    "AVFoundation"
+  ],
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES",
+    "SWIFT_VERSION": "5.1"
+  },
+  "dependencies": {
+    "ZappAnalyticsPluginsSDK": [],
+    "ACPAnalytics": [
+      "2.4.0"
+    ],
+    "ACPUserProfile": [
+      "2.1.0"
+    ],
+    "ACPCore": [
+      "2.8.1"
+    ]
+  }
+}
