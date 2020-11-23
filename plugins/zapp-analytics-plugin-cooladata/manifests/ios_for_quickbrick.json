@@ -13,7 +13,7 @@
   "description": "CoolaData Analytics provider",
   "cover_image": "",
   "type": "analytics",
-  "identifier": "CoolaDataAnalyticsAgent",
+  "identifier": "CoolaData-iOS",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
@@ -25,11 +25,43 @@
   "custom_configuration_fields": [
     {
       "type": "text",
-      "key": "mobile_app_account_id"
+      "key": "app_key",
+      "tooltip_text": "Application Key"
     },
     {
       "type": "text",
-      "key": "mobile_app_account_id_production"
+      "key": "video_start_event_name",
+      "tooltip_text": "Video Start Event Name"
+    },
+    {
+      "type": "text",
+      "key": "watch_preroll_event_name",
+      "tooltip_text": "Watch Preroll Event Name"
+    },
+    {
+      "type": "text",
+      "key": "watch_midroll_event_name",
+      "tooltip_text": "Watch Midroll Event Name"
+    },
+    {
+      "type": "text",
+      "key": "preroll_opportunity_event_name",
+      "tooltip_text": "Preroll Opportunity Event Name"
+    },
+    {
+      "type": "text",
+      "key": "midroll_opportunity_event_name",
+      "tooltip_text": "Midroll Opportunity Event Name"
+    },
+    {
+      "type": "text",
+      "key": "video_reach_event_name",
+      "tooltip_text": "Video Reach Event Name"
+    },
+    {
+      "type": "text",
+      "key": "video_complete_event_name",
+      "tooltip_text": "Video Complete Event Name"
     }
   ],
   "targets": [
@@ -39,13 +71,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.1.0",
+  "manifest_version": "7.1.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginCoolaData": ":path => './node_modules/@applicaster/zapp-analytics-plugin-cooladata/apple/ZappAnalyticsPluginCoolaData.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-cooladata@0.1.0"
+    "@applicaster/zapp-analytics-plugin-cooladata@7.1.0"
   ]
 }
