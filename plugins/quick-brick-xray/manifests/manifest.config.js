@@ -77,6 +77,13 @@ const custom_configuration_fields_android_mobile = [
     default: "error",
   },
   {
+    label: "Log File size",
+    type: "number_input",
+    key: "maxLogFileSizeInMb",
+    default: 1,
+    tooltip_text: "Max log file size in MB",
+  },
+  {
     label: "Report Email",
     key: "reportEmail",
     type: "text",
@@ -194,7 +201,7 @@ function extra_npm_dependencies(platform) {
     platform === "android_tv_for_quickbrick" ||
     platform === "amazon_fire_tv_for_quickbrick"
   ) {
-    return ["@applicaster/x-ray@0.0.17"];
+    return ["@applicaster/x-ray@0.0.22"];
   }
   return [];
 }

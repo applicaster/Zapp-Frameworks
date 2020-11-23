@@ -8,6 +8,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
@@ -44,6 +45,7 @@ class XRayPlugin : CrashlogPlugin {
         private const val notificationKey = "showNotification"
         private const val debugRNKey = "reactNativeDebugLogging"
         private const val crashReportingKey = "crashReporting"
+        private const val maxLogFileSizeInMbKey = "maxLogFileSizeInMb"
 
         // public constants
         const val fileSinkFileName = "xray_log.txt"
@@ -55,6 +57,7 @@ class XRayPlugin : CrashlogPlugin {
         private const val TAG = "XRayPlugin"
         private const val notificationId = 101
         private const val storageKey = "settings"
+        private const val shortcutId = "xray"
 
         private val gson = GsonBuilder().create()
     }
@@ -67,7 +70,9 @@ class XRayPlugin : CrashlogPlugin {
     private var localSettings: Settings = Settings()
     private val pluginSettings: Settings = Settings()
 
-    val effectiveSettingsObservable: MutableLiveData<Settings> = MutableLiveData();
+    private var maxLogFileSize: Long = 256 * 1024L // 256 kb of logs by default
+
+    private val effectiveSettingsObservable: MutableLiveData<Settings> = MutableLiveData();
 
     fun applySettings(settings: Settings) {
         localSettings = settings
@@ -133,7 +138,10 @@ class XRayPlugin : CrashlogPlugin {
 
         val fileLogLevel = settings.fileLogLevel?.level
         if(null != fileLogLevel) {
-            val fileSink = PackageFileLogSink(context, fileSinkFileName)
+            val fileSink = when {
+                maxLogFileSize <= 0 -> PackageFileLogSink(context, fileSinkFileName)
+                else -> PackageFileLogSink(context, fileSinkFileName, maxLogFileSize)
+            }
             Core.get()
                     .addSink(fileSinkKey, fileSink)
                     .setFilter(fileSinkKey, "", DefaultSinkFilter(fileLogLevel))
@@ -204,6 +212,11 @@ class XRayPlugin : CrashlogPlugin {
                 && StringUtil.booleanValue(configuration?.get(notificationKey))
 
         pluginSettings.shortcutEnabled = APDebugUtil.getIsInDebugMode()
+
+        val maxLogFileSizeInMb = configuration?.get(maxLogFileSizeInMbKey)
+        if(!TextUtils.isEmpty(maxLogFileSizeInMb) && TextUtils.isDigitsOnly(maxLogFileSizeInMb)) {
+            maxLogFileSize = maxLogFileSizeInMb!!.toLong() * 1024 * 1024
+        }
     }
 
     private fun setupShortcut(showNotification: Boolean) {
@@ -212,12 +225,12 @@ class XRayPlugin : CrashlogPlugin {
         }
         context.getSystemService<ShortcutManager>(ShortcutManager::class.java)?.let { shortcutManager ->
             if (!showNotification) {
-                shortcutManager.removeDynamicShortcuts(listOf("xray"))
+                shortcutManager.removeDynamicShortcuts(listOf(shortcutId))
             } else {
-                if (!shortcutManager.dynamicShortcuts.stream().anyMatch { it.id == "xray" }) {
-                    val shortcut = ShortcutInfo.Builder(context, "xray")
-                            .setShortLabel("XRay")
-                            .setLongLabel("Open XRay log")
+                if (!shortcutManager.dynamicShortcuts.stream().anyMatch { it.id == shortcutId }) {
+                    val shortcut = ShortcutInfo.Builder(context, shortcutId)
+                            .setShortLabel("X-Ray")
+                            .setLongLabel(context.resources.getString(R.string.xray_shortcut_label))
                             .setIcon(Icon.createWithResource(context, R.drawable.ic_xray_settings_24))
                             .setIntent(Intent(context, LogActivity::class.java).setAction(Intent.ACTION_VIEW))
                             .build()
@@ -237,13 +250,14 @@ class XRayPlugin : CrashlogPlugin {
         )!!
 
         // actions order is kept in the UI
-        val actions: HashMap<String, PendingIntent> = linkedMapOf("Show" to showLogIntent)
+        val actions: HashMap<String, PendingIntent> = linkedMapOf(
+                context.resources.getString(R.string.xray_notification_action_show) to showLogIntent)
 
         if (enableLogSharing) {
             // add report sharing button to notification
             // if we have file logging enabled, allow to send it
             val shareLogIntent = SendActivity.getSendPendingIntent(context)
-            actions["Send"] = shareLogIntent
+            actions[context.resources.getString(R.string.xray_notification_action_send)] = shareLogIntent
         }
 
         // here we show Notification UI with custom actions
