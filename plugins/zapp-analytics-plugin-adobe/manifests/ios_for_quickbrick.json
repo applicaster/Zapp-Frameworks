@@ -39,13 +39,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.1.0",
+  "manifest_version": "0.2.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-adobe@0.1.0"
+    "@applicaster/zapp-analytics-plugin-adobe@0.2.0"
   ]
 }
