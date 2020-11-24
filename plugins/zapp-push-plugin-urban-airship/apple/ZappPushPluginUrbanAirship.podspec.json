@@ -32,7 +32,8 @@
           "= 14.1.2"
         ],
         "ZappPushPluginsSDK": [],
-        "ZappPlugins": []
+        "ZappPlugins": [],
+        "ZappCore": []
       }
     },
     {

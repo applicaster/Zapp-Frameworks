@@ -32,6 +32,7 @@
       "dependencies": {
         "ZappPushPluginsSDK": [],
         "ZappPlugins": [],
+        "ZappCore": [],
         "Firebase/Messaging": [],
         "Firebase/Core": [],
         "XrayLogger": []
