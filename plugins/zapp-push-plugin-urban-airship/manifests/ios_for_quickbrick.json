@@ -70,7 +70,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "14.1.0",
+  "manifest_version": "14.1.1",
   "extra_dependencies": [
     {
       "ZappPushPluginUrbanAirship": ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'"
@@ -87,6 +87,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-urban-airship@14.1.0"
+    "@applicaster/zapp-push-plugin-urban-airship@14.1.1"
   ]
 }
