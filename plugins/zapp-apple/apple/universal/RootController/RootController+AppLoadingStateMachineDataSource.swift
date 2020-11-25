@@ -66,9 +66,8 @@ extension RootController: LoadingStateMachineDataSource {
 
     func trackAudience(_ successHandler: @escaping StateCallBack,
                        _ failHandler: @escaping StateCallBack) {
-        audienceManager.track(for: TrackingManager.EventTypes.appPresented) { succeed in
-            succeed ? successHandler() : failHandler()
-        }
+        audienceManager.track(for: TrackingManager.EventTypes.appPresented) { _ in }
+        successHandler()
     }
 
     func hookOnApplicationReady(_ successHandler: @escaping StateCallBack,
