@@ -3,6 +3,7 @@ package com.applicaster.firebasepushpluginandroid.services
 import android.net.Uri
 import android.provider.Settings
 import android.text.TextUtils
+import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationManagerCompat
 import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.FirebasePushProvider
@@ -69,6 +70,7 @@ class APMessagingService : FirebaseMessagingService() {
         APLogger.info(TAG, "onTokenRefresh")
     }
 
+    @WorkerThread
     private fun processMessageSync(message: RemoteMessage) {
 
         var title: String? = ""
@@ -125,9 +127,9 @@ class APMessagingService : FirebaseMessagingService() {
 
     // set up notification manager, create notification and notify
     private fun notify(notificationFactory: DefaultNotificationFactory, pushMessage: PushMessage) {
+        val notification = notificationFactory.createNotification(pushMessage)
         // run on UI thread, since some devices can't publish notifications from background threads
         GlobalScope.launch(Dispatchers.Main) {
-            val notification = notificationFactory.createNotification(pushMessage)
             with(NotificationManagerCompat.from(this@APMessagingService.applicationContext)) {
                 notify(notificationFactory.generateNotificationId(), notification)
             }

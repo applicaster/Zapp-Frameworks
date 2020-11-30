@@ -9,13 +9,12 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
 import android.text.TextUtils
+import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
 import com.applicaster.util.APLogger
 import com.applicaster.util.StringUtil
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 
 class NotificationUtil {
@@ -27,7 +26,8 @@ class NotificationUtil {
         private const val DEFAULT_SND = "system_default"
         private const val SILENT_PUSH_KEY = "silent"
 
-        suspend fun createCustomNotification(
+        @WorkerThread
+        fun createCustomNotification(
                 context: Context,
                 pushMessage: PushMessage,
                 notificationIconId: Int
@@ -82,20 +82,17 @@ class NotificationUtil {
             return notificationBuilder.build()
         }
 
-        // fetch and downscale remote image asynchronously
-        private suspend fun fetchImage(context: Context, url: String): Bitmap? {
-            return withContext(Dispatchers.Default) {
-                try {
-                    @Suppress("BlockingMethodInNonBlockingContext")
-                    return@withContext Glide.with(context.applicationContext)
-                            .asBitmap()
-                            .load(url)
-                            .submit().get()
-                } catch (e: Exception) {
-                    APLogger.error(TAG, "Failed to fetch image $url", e)
-                }
-                return@withContext null
+        @WorkerThread
+        private fun fetchImage(context: Context, url: String): Bitmap? {
+            try {
+                return Glide.with(context.applicationContext)
+                        .asBitmap()
+                        .load(url)
+                        .submit().get()
+            } catch (e: Exception) {
+                APLogger.error(TAG, "Failed to fetch image $url", e)
             }
+            return null
         }
 
         fun getPushSound(message: PushMessage, context: Context): Uri? {
