@@ -28,13 +28,13 @@
   "custom_configuration_fields": [],
   "identifier": "idfa_storing",
   "npm_dependencies": [
-    "@applicaster/session-storage-idfa@0.2.0"
+    "@applicaster/session-storage-idfa@0.2.1"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.2.1",
   "extra_dependencies": [
     {
       "ZappSessionStorageIdfa": ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'"
