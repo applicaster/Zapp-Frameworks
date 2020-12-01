@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginCoolaData",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "platforms": {
     "ios": "11.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-cooladata/7.1.1"
+    "tag": "@@applicaster/zapp-analytics-plugin-cooladata/7.1.2"
   },
   "requires_arc": true,
   "public_header_files": "ios/**/*.h",
