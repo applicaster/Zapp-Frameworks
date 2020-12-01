@@ -74,7 +74,7 @@ const api_apple = {
 };
 
 const api = {
-  ios: api_apple
+  ios: api_apple,
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
 };
