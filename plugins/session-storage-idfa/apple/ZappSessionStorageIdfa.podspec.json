@@ -1,0 +1,29 @@
+{
+  "name": "ZappSessionStorageIdfa",
+  "version": "0.2.0",
+  "summary": "ZappSessionStorageIdfa",
+  "description": "ZappSessionStorageIdfa container.",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "CMPS",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/session-storage-idfa/0.2.0"
+  },
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0"
+  },
+  "requires_arc": true,
+  "static_framework": true,
+  "swift_versions": "5.1",
+  "source_files": "universal/**/*.swift",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": []
+  },
+  "swift_version": "5.1"
+}
