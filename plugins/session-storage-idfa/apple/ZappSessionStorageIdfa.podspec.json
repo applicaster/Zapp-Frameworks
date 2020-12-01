@@ -10,10 +10,6 @@
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
     "tag": "@@applicaster/session-storage-idfa/0.2.0"
   },
-  "platforms": {
-    "ios": "11.0",
-    "tvos": "11.0"
-  },
   "requires_arc": true,
   "swift_versions": "5.1",
   "default_subspecs": "Base",
@@ -29,11 +25,18 @@
   "subspecs": [
     {
       "name": "Base",
-      "source_files": "universal/**/*.swift"
+      "source_files": "universal/**/*.swift",
+      "platforms": {
+        "ios": "11.0",
+        "tvos": "11.0"
+      }
     },
     {
       "name": "Legacy",
-      "source_files": "legacy/**/*.swift"
+      "source_files": "legacy/**/*.swift",
+      "platforms": {
+        "ios": "10.0"
+      }
     }
   ]
 }
