@@ -69,7 +69,6 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
 
 #pragma  mark - Track Events
 
-/* Remember that you can setup a event whitelist via CMS */
 - (void)trackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         //The first if is been used for react native events
@@ -84,6 +83,27 @@ NSString *const kCoolaDataVideoCompleteEventKey        = @"video_complete_event_
             [[CoolaDataTracker getInstance] trackEvent:eventName properties:retDict];
         }
     });
+}
+
+- (void)trackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters timed:(BOOL)timed {
+    [self trackEvent:eventName parameters:parameters];
+}
+
+- (void)trackEvent:(NSString *)eventName {
+    [self trackEvent:eventName parameters:@{}];
+}
+
+- (void)trackEvent:(NSString *)eventName timed:(BOOL)timed {
+    [self trackEvent:eventName parameters:@{} timed:timed];
+}
+
+- (void)trackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters {
+    [self trackEvent:screenName parameters:parameters];
+}
+
+- (void)setUserProfileWithGenericUserProperties:(NSDictionary *)dictGenericUserProperties
+                              piiUserProperties:(NSDictionary *)dictPiiUserProperties {
+    // do nothing
 }
 
 #pragma mark - Analytics events notifications
