@@ -1,88 +1,43 @@
 {
   "api": {
-    "require_startup_execution": false,
-    "class_name": "GoogleInteractiveMediaAdsAdapter",
+    "require_startup_execution": true,
+    "class_name": "ZPSessionStorageIdfa",
     "modules": [
-      "ZappGoogleInteractiveMediaAds"
+      "ZappSessionStorageIdfa"
     ],
     "plist": {
-      "SKAdNetworkItems": [
-        {
-          "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
-        }
-      ]
+      "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
     }
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "Google Interactive Media Ads QuickBrick",
-  "description": "This plugin allow to add Google Interactive Media Ads to supported players.",
-  "type": "video_advertisement",
+  "name": "Storing Idfa",
+  "description": "Add IDFA to session storage",
+  "type": "general",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
-  "whitelisted_account_ids": [
-    "572a0a65373163000b000000",
-    "5ae06cef8fba0f00084bd3c6"
+  "whitelisted_account_ids": [],
+  "ui_frameworks": [
+    "native"
   ],
-  "min_zapp_sdk": "20.0.0-Dev",
+  "min_zapp_sdk": "15.1.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [],
+  "identifier": "idfa_storing",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.7"
+    "@applicaster/session-storage-idfa@0.2.0"
   ],
-  "identifier": "zapp_google_interactive_media_ads",
   "targets": [
     "mobile"
   ],
-  "ui_frameworks": [
-    "native",
-    "quickbrick"
-  ],
-  "custom_configuration_fields": [
-    {
-      "type": "text",
-      "key": "tag_vmap_url",
-      "tooltip_text": "VMAP URL",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "tag_preroll_url",
-      "tooltip_text": "Preroll URL",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "tag_postroll_url",
-      "tooltip_text": "Postroll URL",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "tag_midroll_url",
-      "tooltip_text": "Midroll URL",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "midroll_offset",
-      "tooltip_text": "Midroll offset",
-      "default": ""
-    },
-    {
-      "type": "checkbox",
-      "key": "disable_personalized_advertising",
-      "tooltip_text": "TFUA param to disable personalized advertising",
-      "default": 0
-    }
-  ],
   "platform": "ios",
-  "manifest_version": "0.14.7",
+  "manifest_version": "0.2.0",
   "extra_dependencies": [
     {
-      "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
+      "ZappSessionStorageIdfa/Legacy": ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'"
     }
   ]
 }
