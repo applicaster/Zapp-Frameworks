@@ -3,7 +3,7 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Session Storage Idfa",
+  name: "Storing Idfa",
   description: "Add IDFA to session storage",
   type: "general",
   screen: false,
