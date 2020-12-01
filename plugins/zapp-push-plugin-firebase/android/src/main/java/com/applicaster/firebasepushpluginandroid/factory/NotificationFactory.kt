@@ -5,7 +5,7 @@ import com.applicaster.firebasepushpluginandroid.push.PushMessage
 
 interface NotificationFactory {
 
-    suspend fun createNotification(pushMessage: PushMessage): Notification
+    fun createNotification(pushMessage: PushMessage): Notification
     fun getSmallIconId(): Int
     fun generateNotificationId(): Int
 

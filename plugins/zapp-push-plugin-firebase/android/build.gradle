@@ -70,7 +70,7 @@ dependencies {
     if (devSDK != null) {
         implementation project(':applicaster-android-sdk')
     } else {
-        api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
+        api "com.applicaster:applicaster-android-sdk-core:$applicasterSDKVersion"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api platform("com.google.firebase:firebase-bom:$firebaseBoMVersion")
