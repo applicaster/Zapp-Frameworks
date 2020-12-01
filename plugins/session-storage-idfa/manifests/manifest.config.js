@@ -34,6 +34,7 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 const min_zapp_sdk = {
+  ios: "15.1.0-Dev",
   ios_for_quickbrick: "2.0.0-Dev",
   tvos_for_quickbrick: "2.0.0-Dev",
 };
@@ -51,9 +52,13 @@ const api_apple = {
   require_startup_execution: true,
   class_name: "ZPSessionStorageIdfa",
   modules: ["ZappSessionStorageIdfa"],
+  plist: {
+    NSUserTrackingUsageDescription: "This identifier will be used to deliver personalized ads to you.",
+  },
 };
 
 const api = {
+  ios: api_apple
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
 };
@@ -61,6 +66,7 @@ const api = {
 const mobileTarget = ["mobile"];
 const tvTarget = ["tv"];
 const targets = {
+  ios: mobileTarget,
   ios_for_quickbrick: mobileTarget,
   tvos_for_quickbrick: tvTarget,
 };
