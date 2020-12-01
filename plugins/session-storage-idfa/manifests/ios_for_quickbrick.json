@@ -1,0 +1,48 @@
+{
+  "api": {
+    "require_startup_execution": true,
+    "class_name": "ZPAppleGenericUniversalLinks",
+    "modules": [
+      "ZappAppleGenericUniversalLinks"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Storing Idfa",
+  "description": "Generic Universal Links plugin",
+  "type": "general",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "mapping_url",
+      "tooltip_text": "Mapping Url"
+    }
+  ],
+  "identifier": "generic_universal_links_apple",
+  "npm_dependencies": [
+    "@applicaster/generic_universal_links_apple@0.2.1"
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "0.2.1",
+  "extra_dependencies": [
+    {
+      "ZappAppleGenericUniversalLinks": ":path => './node_modules/@applicaster/generic_universal_links_apple/apple/ZappAppleGenericUniversalLinks.podspec'"
+    }
+  ]
+}
