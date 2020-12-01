@@ -30,6 +30,7 @@ function createManifest({ version, platform }) {
     api: api[platform],
     npm_dependencies: [`@applicaster/session-storage-idfa@${version}`],
     targets: targets[platform],
+    ui_frameworks: ui_frameworks[platform]
   };
   return manifest;
 }
@@ -43,7 +44,22 @@ const extra_dependencies_apple = {
   ZappSessionStorageIdfa:
     ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'",
 };
+
+const extra_dependencies_apple_legacy = {
+  "ZappSessionStorageIdfa/Legacy":
+    ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'",
+};
+
+const ui_frameworks_qb = ["quickbrick"];
+const ui_frameworks_native = ["native"];
+const ui_frameworks = {
+  ios: ui_frameworks_native,
+  ios_for_quickbrick: ui_frameworks_qb,
+  tvos_for_quickbrick: ui_frameworks_qb,
+};
+
 const extra_dependencies = {
+  ios: [extra_dependencies_apple_legacy],
   ios_for_quickbrick: [extra_dependencies_apple],
   tvos_for_quickbrick: [extra_dependencies_apple],
 };
