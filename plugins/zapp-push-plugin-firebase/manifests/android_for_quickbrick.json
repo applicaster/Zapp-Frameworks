@@ -17,7 +17,7 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "min_zapp_sdk": "1.1.0-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -235,9 +235,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "2.3.1",
+  "manifest_version": "2.3.2",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@2.3.1"
+    "@applicaster/zapp-push-plugin-firebase@2.3.2"
   ],
   "project_dependencies": [
     {
