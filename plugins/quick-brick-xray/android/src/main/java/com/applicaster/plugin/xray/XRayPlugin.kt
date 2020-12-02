@@ -264,6 +264,7 @@ class XRayPlugin : CrashlogPlugin {
         XRayNotification.show(
                 context,
                 notificationId,
+                showLogIntent,
                 actions
         )
     }
