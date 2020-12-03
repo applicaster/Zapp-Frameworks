@@ -121,7 +121,6 @@ extension ZPAppleVideoNowPlayingInfo {
             metadataItems.append(playbackProgresItem)
 
             currentItem.externalMetadata = metadataItems
-            print("testAnton \(currentProgress) - \(metadataItems)")
         }
     }
 
