@@ -10,7 +10,8 @@
         {
           "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
         }
-      ]
+      ],
+      "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
     }
   },
   "dependency_repository_url": [],
@@ -30,7 +31,7 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.7"
+    "@applicaster/quick-brick-google-ima-apple@0.14.8"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -79,7 +80,7 @@
     }
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.14.7",
+  "manifest_version": "0.14.8",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
