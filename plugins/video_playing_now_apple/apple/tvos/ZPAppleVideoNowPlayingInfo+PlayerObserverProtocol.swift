@@ -5,83 +5,130 @@
 //  Created by Alex Zchut on 11/02/2020.
 //
 
-import Foundation
 import AVKit
+import Foundation
 import ZappCore
 
 extension ZPAppleVideoNowPlayingInfo {
-    
-    public override func playerDidCreate(player: PlayerProtocol) {
-        //docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
-
+    override public func playerDidCreate(player: PlayerProtocol) {
+        // docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
+        currentProgress = 0
         guard let entry = player.entry,
-            let currentPlayer = player.playerObject as? AVPlayer,
-            let currentItem = currentPlayer.currentItem else {
+              let currentPlayer = player.playerObject as? AVPlayer,
+              let currentItem = currentPlayer.currentItem else {
             return
         }
 
         guard let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol),
-            let contentIdString = entry[ItemMetadata.contentId] as? String,
-                let contentIdInt = Int(contentIdString) else {
-                return
+              let contentId = entry[ItemMetadata.contentId] as? (NSCopying & NSObjectProtocol) else {
+            return
         }
-        let contentId = NSNumber(value: contentIdInt)
-        
+
+        let isLive = isEntryLive(entry: entry)
+
         var metadataItems: [AVMetadataItem] = [AVMetadataItem]()
-        //title
-        let titleItem = self.metadataItem(identifier: AVMetadataIdentifier.commonIdentifierTitle,
-                                          value: title)
+        // title
+        let titleItem = metadataItem(identifier: AVMetadataIdentifier.commonIdentifierTitle,
+                                     value: title)
         metadataItems.append(titleItem)
-        
-        //identifier
-        let identifierItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierExternalContentIdentifier),
-                                               value: contentId)
-        metadataItems.append(identifierItem)
-        
-        //image
+
+        // identifier
+        if isLive {
+            let identifierItem = metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierServiceIdentifier),
+                                              value: contentId)
+            metadataItems.append(identifierItem)
+        } else {
+            let identifierItem = metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierExternalContentIdentifier),
+                                              value: contentId)
+            metadataItems.append(identifierItem)
+        }
+
+        // image
         if let mediaGroup = entry[ItemMetadata.media_group] as? [[AnyHashable: Any]],
-            let mediaItem = mediaGroup.first?[ItemMetadata.media_item] as? [[AnyHashable: Any]],
-            let src = mediaItem.first?[ItemMetadata.src] as? String,
-            let key = mediaItem.first?["key"] as? String, key == "image_base",
-            let url = URL(string: src) {
-            
+           let mediaItem = mediaGroup.first?[ItemMetadata.media_item] as? [[AnyHashable: Any]],
+           let src = mediaItem.first?[ItemMetadata.src] as? String,
+           let key = mediaItem.first?["key"] as? String, key == "image_base",
+           let url = URL(string: src) {
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
-                    metadataItems.append(self.metadataArtworkItem(image: image))
+                    metadataItems.append(metadataArtworkItem(image: image))
                 }
             }
         }
-        
-        //description
+
+        // description
         if let summary = entry[ItemMetadata.summary] as? (NSCopying & NSObjectProtocol) {
-            metadataItems.append(self.metadataItem(identifier: AVMetadataIdentifier.commonIdentifierDescription,
-                                                   value: summary))
+            metadataItems.append(metadataItem(identifier: AVMetadataIdentifier.commonIdentifierDescription,
+                                              value: summary))
         }
-        
+
+        // progress
+        if isEntryLive(entry: entry) == false {
+            metadataItems.append(metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
+                                              value: NSNumber(value: currentProgress)))
+        }
         currentItem.externalMetadata = metadataItems
     }
-    
-    // override func playerDidDismiss(player: PlayerProtocol) {
-    //     //update playback position for currently played item
-        
-    //     guard let currentPlayer = player.playerObject as? AVPlayer,
-    //         let currentItem = currentPlayer.currentItem else {
-    //         return
-    //     }
-    //     //get exising metadata of currently played item
-    //     var metadataItems = currentItem.externalMetadata
-    //     //playback position identifier
-    //     let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
-    //     //remove old value if exists
-    //     metadataItems.removeAll { (item) -> Bool in
-    //         return item.identifier == identifier
-    //     }
-    //     //set new value of current stopped position
-    //     let playbackProgress = player.playbackPosition() / player.playbackDuration()
-    //     let playbackProgresItem = self.metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
-    //                                                 value: NSNumber(value: playbackProgress))
-    //     metadataItems.append(playbackProgresItem)
-        
-    //     currentItem.externalMetadata = metadataItems
-    // }
+
+    func isEntryLive(entry: [String: Any]) -> Bool {
+        guard let extensions = entry[ItemMetadata.extensions] as? [String: Any],
+              PipesDataModelHelperExtensions(extensionsDict: extensions).isLive == true else {
+            return false
+        }
+        return true
+    }
+
+    override func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
+        super.playerProgressUpdate(player: player,
+                                   currentTime: currentTime,
+                                   duration: duration)
+
+        updateProgress(player: player,
+                       currentTime: currentTime,
+                       duration: duration)
+    }
+
+    func updateProgress(player: PlayerProtocol,
+                        currentTime: TimeInterval,
+                        duration: TimeInterval) {
+        guard let entry = player.entry,
+              isEntryLive(entry: entry) == false,
+              let currentPlayer = player.playerObject as? AVPlayer,
+              let currentItem = currentPlayer.currentItem else {
+            return
+        }
+
+        let roundedProgress = progress(currentTime: currentTime,
+                                       duration: duration)
+
+        if roundedProgress > currentProgress {
+            currentProgress = roundedProgress
+
+            // get exising metadata of currently played item
+            var metadataItems = currentItem.externalMetadata
+
+            // playback position identifier
+            let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
+
+            // remove old value if exists
+            metadataItems.removeAll { (item) -> Bool in
+                item.identifier == identifier
+            }
+
+            // set new value of current stopped position
+            let playbackProgresItem = metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
+                                                   value: NSNumber(value: roundedProgress))
+            metadataItems.append(playbackProgresItem)
+
+            currentItem.externalMetadata = metadataItems
+            print("testAnton \(currentProgress) - \(metadataItems)")
+        }
+    }
+
+    func progress(currentTime: TimeInterval,
+                  duration: TimeInterval) -> Double {
+        let persentageDuration = currentTime / duration
+        let result = Double(round(100 * persentageDuration) / 100)
+        return result
+    }
 }

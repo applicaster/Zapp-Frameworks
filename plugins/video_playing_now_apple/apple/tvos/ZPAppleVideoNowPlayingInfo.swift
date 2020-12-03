@@ -10,7 +10,8 @@ import ZappCore
 import AVKit
 
 class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
-
+    var currentProgress: Double = 0
+    
     func metadataItem(identifier : AVMetadataIdentifier, value : (NSCopying & NSObjectProtocol)?) -> AVMetadataItem {
         let item = AVMutableMetadataItem()
         item.value = value
