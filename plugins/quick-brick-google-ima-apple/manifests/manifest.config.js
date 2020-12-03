@@ -101,7 +101,8 @@ const api_apple = {
       {
         "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
       }
-    ]
+    ],
+    "NSUserTrackingUsageDescription" : "This identifier will be used to deliver personalized ads to you."
   }
 };
 
