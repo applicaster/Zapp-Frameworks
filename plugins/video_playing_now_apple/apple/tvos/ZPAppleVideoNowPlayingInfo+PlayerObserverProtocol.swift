@@ -116,7 +116,7 @@ extension ZPAppleVideoNowPlayingInfo {
             }
 
             // set new value of current stopped position
-            let playbackProgresItem = metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
+            let playbackProgresItem = metadataItem(identifier: identifier,
                                                    value: NSNumber(value: roundedProgress))
             metadataItems.append(playbackProgresItem)
 
