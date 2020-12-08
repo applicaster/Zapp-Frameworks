@@ -8,7 +8,7 @@ const baseManifest = {
     "This plugin allow to add Google Interactive Media Ads to supported players.",
   type: "video_advertisement",
   screen: false,
-  react_native: false,
+  react_native: true,
   ui_builder_support: true,
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
