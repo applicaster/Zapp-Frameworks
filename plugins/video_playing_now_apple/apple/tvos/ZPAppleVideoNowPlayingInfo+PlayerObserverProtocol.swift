@@ -12,7 +12,6 @@ import ZappCore
 extension ZPAppleVideoNowPlayingInfo {
     override public func playerDidCreate(player: PlayerProtocol) {
         // docs https://help.apple.com/itc/tvpumcstyleguide/#/itc0c92df7c9
-        currentProgress = 0
         guard let entry = player.entry,
               let currentPlayer = player.playerObject as? AVPlayer,
               let currentItem = currentPlayer.currentItem else {
@@ -62,11 +61,6 @@ extension ZPAppleVideoNowPlayingInfo {
                                               value: summary))
         }
 
-        // progress
-        if isEntryLive(entry: entry) == false {
-            metadataItems.append(metadataItem(identifier: AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress),
-                                              value: NSNumber(value: currentProgress)))
-        }
         currentItem.externalMetadata = metadataItems
     }
 
@@ -76,58 +70,5 @@ extension ZPAppleVideoNowPlayingInfo {
             return false
         }
         return true
-    }
-
-    override func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
-        super.playerProgressUpdate(player: player,
-                                   currentTime: currentTime,
-                                   duration: duration)
-
-        updateProgress(player: player,
-                       currentTime: currentTime,
-                       duration: duration)
-    }
-
-    func updateProgress(player: PlayerProtocol,
-                        currentTime: TimeInterval,
-                        duration: TimeInterval) {
-        guard let entry = player.entry,
-              isEntryLive(entry: entry) == false,
-              let currentPlayer = player.playerObject as? AVPlayer,
-              let currentItem = currentPlayer.currentItem else {
-            return
-        }
-
-        let roundedProgress = progress(currentTime: currentTime,
-                                       duration: duration)
-
-        if roundedProgress > currentProgress {
-            currentProgress = roundedProgress
-
-            // get exising metadata of currently played item
-            var metadataItems = currentItem.externalMetadata
-
-            // playback position identifier
-            let identifier = AVMetadataIdentifier(rawValue: AVKitMetadataIdentifierPlaybackProgress)
-
-            // remove old value if exists
-            metadataItems.removeAll { (item) -> Bool in
-                item.identifier == identifier
-            }
-
-            // set new value of current stopped position
-            let playbackProgresItem = metadataItem(identifier: identifier,
-                                                   value: NSNumber(value: roundedProgress))
-            metadataItems.append(playbackProgresItem)
-
-            currentItem.externalMetadata = metadataItems
-        }
-    }
-
-    func progress(currentTime: TimeInterval,
-                  duration: TimeInterval) -> Double {
-        let persentageDuration = currentTime / duration
-        let result = Double(round(100 * persentageDuration) / 100)
-        return result
     }
 }
