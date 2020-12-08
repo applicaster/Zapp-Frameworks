@@ -21,7 +21,7 @@
   "description": "This plugin allow to add Google Interactive Media Ads to supported players.",
   "type": "video_advertisement",
   "screen": false,
-  "react_native": false,
+  "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [
     "572a0a65373163000b000000",
@@ -31,7 +31,7 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.8"
+    "@applicaster/quick-brick-google-ima-apple@0.14.9"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -80,7 +80,7 @@
     }
   ],
   "platform": "ios",
-  "manifest_version": "0.14.8",
+  "manifest_version": "0.14.9",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
