@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-apple-user-activity",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Quick Brick Apple user activity",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -29,8 +29,8 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
-    "@applicaster/zapp-react-native-utils": "*",
     "@applicaster/x-ray": "0.0.17",
+    "@applicaster/zapp-react-native-utils": "*",
     "react": "16.11.0",
     "react-native": "0.62.2"
   },
