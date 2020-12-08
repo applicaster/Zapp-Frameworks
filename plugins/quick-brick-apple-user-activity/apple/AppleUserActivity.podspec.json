@@ -1,6 +1,6 @@
 {
   "name": "AppleUserActivity",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "platforms": {
     "ios": "11.0",
     "tvos": "11.0"
@@ -12,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-apple-user-activity/0.4.4"
+    "tag": "@@applicaster/quick-brick-apple-user-activity/0.4.5"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
