@@ -29,15 +29,15 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.4.3",
-  "dependency_version": "0.4.3",
+  "manifest_version": "0.4.4",
+  "dependency_version": "0.4.4",
   "extra_dependencies": [
     {
       "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-apple-user-activity@0.4.3"
+    "@applicaster/quick-brick-apple-user-activity@0.4.4"
   ],
   "targets": [
     "mobile"
