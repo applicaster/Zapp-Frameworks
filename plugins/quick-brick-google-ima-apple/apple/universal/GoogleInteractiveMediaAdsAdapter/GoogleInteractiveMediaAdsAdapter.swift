@@ -67,19 +67,6 @@ import ZappCore
 
     var urlTagData: GoogleUrlTagData?
 
-    var containerView: UIView? {
-        guard let playerPlugin = playerPlugin else {
-            return nil
-        }
-        if let playerContainer = playerPlugin.pluginPlayerContainer {
-            return playerContainer
-        } else if let playerViewController = playerPlugin.pluginPlayerViewController,
-            let playerContainer = playerViewController.view {
-            return playerContainer
-        }
-        return nil
-    }
-
     func prepareGoogleIMA() {
         isPlaybackPaused = false
         isVMAPAdsCompleted = false
@@ -181,17 +168,19 @@ import ZappCore
 
     func requestAd(adUrl: String) {
         guard let contentPlayhead = contentPlayhead,
-            let containerView = containerView else {
+              let topViewController = UIApplication.shared.keyWindow?.rootViewController else {
             return
         }
         setupAdsLoader()
 
         #if os(tvOS)
-        adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView,
-                                                   viewController: nil)
+        adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
+                                                   viewController: topViewController)
         #else
-        adDisplayContainer = IMAAdDisplayContainer(adContainer: containerView,
-                                                   viewController: nil,
+        
+
+        adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
+                                                   viewController: topViewController,
                                                    companionSlots: nil)
         #endif
         if let request = IMAAdsRequest(adTagUrl: adUrl,
