@@ -15,6 +15,7 @@
     }
   },
   "dependency_repository_url": [],
+  "dependency_name": "@applicaster/quick-brick-google-ima-apple",
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
   "name": "Google Interactive Media Ads QuickBrick",
@@ -31,7 +32,7 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.9"
+    "@applicaster/quick-brick-google-ima-apple@0.14.10"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -80,7 +81,8 @@
     }
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.14.9",
+  "manifest_version": "0.14.10",
+  "dependency_version": "0.14.10",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
