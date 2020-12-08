@@ -29,6 +29,7 @@
     "typescript": "^3.9.7"
   },
   "peerDependencies": {
+    "@applicaster/zapp-react-native-utils": "*",
     "@applicaster/x-ray": "0.0.17",
     "react": "16.11.0",
     "react-native": "0.62.2"
