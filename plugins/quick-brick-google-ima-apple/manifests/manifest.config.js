@@ -1,6 +1,7 @@
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
+  dependency_name: "@applicaster/quick-brick-google-ima-apple",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Google Interactive Media Ads QuickBrick",
@@ -19,7 +20,7 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   npm_dependencies: [],
   identifier: "zapp_google_interactive_media_ads",
-  targets: ["mobile"], 
+  targets: ["mobile"],
   ui_frameworks: ["native", "quickbrick"],
   custom_configuration_fields: [
     {
@@ -66,6 +67,7 @@ function createManifest({ version, platform }) {
     ...baseManifest,
     platform,
     manifest_version: version,
+    dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
@@ -97,13 +99,14 @@ const api_apple = {
   class_name: "GoogleInteractiveMediaAdsAdapter",
   modules: ["ZappGoogleInteractiveMediaAds"],
   plist: {
-    "SKAdNetworkItems": [
+    SKAdNetworkItems: [
       {
-        "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
-      }
+        SKAdNetworkIdentifier: "cstr6suwn9.skadnetwork",
+      },
     ],
-    "NSUserTrackingUsageDescription" : "This identifier will be used to deliver personalized ads to you."
-  }
+    NSUserTrackingUsageDescription:
+      "This identifier will be used to deliver personalized ads to you.",
+  },
 };
 
 const api = {
