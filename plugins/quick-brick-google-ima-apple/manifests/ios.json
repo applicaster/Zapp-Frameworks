@@ -32,7 +32,7 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@0.14.10"
+    "@applicaster/quick-brick-google-ima-apple@0.14.11"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -81,8 +81,8 @@
     }
   ],
   "platform": "ios",
-  "manifest_version": "0.14.10",
-  "dependency_version": "0.14.10",
+  "manifest_version": "0.14.11",
+  "dependency_version": "0.14.11",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
