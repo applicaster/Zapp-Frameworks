@@ -67,18 +67,20 @@ extension ZPAppleVideoNowPlayingInfo {
     }
 
     override public func playerDidDismiss(player: PlayerProtocol) {
+        npiLogger?.stop()
+        npiLogger = nil
         if let playerObject = playerPlugin?.playerObject as? AVPlayer {
             playerObject.removeObserver(self,
                                         forKeyPath: "rate",
                                         context: nil)
         }
-
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        nowPlayingInfoCenter.nowPlayingInfo = nil
-
+        
+        unregisterForRemoteCommands()
         logger?.debugLog(message: "Stop collecting NPI on playerDidDismiss")
-        npiLogger?.logEvent()
-        npiLogger?.stop()
+        playerPlugin = nil
+        configurationJSON = nil
+        model = nil
+        logger = nil
     }
 
     func updatePlaybackRate(_ rate: Float) {
@@ -87,7 +89,9 @@ extension ZPAppleVideoNowPlayingInfo {
 
         switch playbackType {
         case .vod:
-            nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin?.playbackPosition()
+            if let position = playerPlugin?.playbackPosition() {
+                nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Int(position)
+            }
 
         case .live:
             // nothing to add
@@ -97,8 +101,6 @@ extension ZPAppleVideoNowPlayingInfo {
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = rate
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
 
-        npiLogger?.logEvent()
-        // send logger event
         var data = nowPlayingInfo
         data?[MPMediaItemPropertyArtwork] = nil
         data?["playbackType"] = playbackType.rawValue
