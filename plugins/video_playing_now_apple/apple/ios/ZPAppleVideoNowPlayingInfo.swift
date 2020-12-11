@@ -41,10 +41,10 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
     func registerForRemoteCommands() {
         logger?.debugLog(message: "Registering for remote commands")
-
+        
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+        commandCenter.pauseCommand.addTarget { (event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus in
             // pause player
             self.logger?.debugLog(message: "Remote Pause command received")
 
@@ -52,7 +52,7 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
             return .success
         }
         commandCenter.playCommand.isEnabled = true
-        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+        commandCenter.playCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
             // play player
             self.logger?.debugLog(message: "Remote Play command received")
 
@@ -106,12 +106,16 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         logger?.debugLog(message: "Unregistering from remote commands")
 
         let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = false
+        commandCenter.playCommand.removeTarget(nil)
         commandCenter.pauseCommand.isEnabled = false
         commandCenter.pauseCommand.removeTarget(nil)
         commandCenter.seekBackwardCommand.isEnabled = false
         commandCenter.seekBackwardCommand.removeTarget(nil)
         commandCenter.seekForwardCommand.isEnabled = false
         commandCenter.seekForwardCommand.removeTarget(nil)
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
     }
 
     func disableNowPlayingUpdates() {
@@ -121,7 +125,8 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
     }
 
     func sendNowPlayingInitial() {
-        guard let entry = playerPlugin?.entry else {
+        guard let playerPlugin = playerPlugin,
+              let entry = playerPlugin.entry else {
             return
         }
 
@@ -130,24 +135,26 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
         if let title = entry[ItemMetadata.title] as? (NSCopying & NSObjectProtocol) {
             nowPlayingInfo[MPMediaItemPropertyTitle] = title
         }
+        
+        // Rate - Float According docs
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
         
         switch self.playbackType {
         case .vod:
-            if let contentIdString = entry[ItemMetadata.contentId] as? String,
-               let contentIdInt = Int(contentIdString) {
-                let contentId = NSNumber(value: contentIdInt)
-                nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = contentId
-            }
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerPlugin?.playbackDuration()
-            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerPlugin?.playbackPosition()
+            nowPlayingInfo[MPNowPlayingInfoPropertyExternalContentIdentifier] = itemId(for: ItemMetadata.contentId,
+                                                                                       entry: entry)
+            
+            // Duration - Integer according docs
+            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = Int(playerPlugin.playbackDuration())
+            
+            // Elapsed Time - Integer according docs
+            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Int(playerPlugin.playbackPosition())
 
         case .live:
             nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = 1
-            if let entensions = entry[ItemMetadata.extensions] as? [String: Any],
-               let serviceId = entensions[ItemMetadata.serviceId] {
-                nowPlayingInfo[MPNowPlayingInfoPropertyServiceIdentifier] = serviceId
-            }
+   
+            nowPlayingInfo[MPNowPlayingInfoPropertyServiceIdentifier] = itemId(for: ItemMetadata.serviceId,
+                                                                               entry: entry)
             
             if #available(iOS 11.1, *) {
                 nowPlayingInfo[MPNowPlayingInfoPropertyCurrentPlaybackDate] = Date()
@@ -186,5 +193,24 @@ class ZPAppleVideoNowPlayingInfo: ZPAppleVideoNowPlayingInfoBase {
 
         npiLogger = NowPlayingLogger()
         npiLogger?.start()
+    }
+    
+    func itemId(for key:String,
+                entry:[String: Any]) -> String {
+        if let extensions = entry[ItemMetadata.extensions] as? [String: Any] {
+            if let contentId = extensions[key] as? String {
+                return contentId
+            } else if let contentIdNumber = extensions[key] as? NSNumber  {
+                return contentIdNumber.stringValue
+            }
+        }
+        
+        if let contentId = entry[ItemMetadata.id] as? String {
+            return contentId
+        } else if let contentIdNumber = entry[ItemMetadata.id] as? NSNumber  {
+            return contentIdNumber.stringValue
+        }
+        
+        return "ID_NOT_EXIST"
     }
 }

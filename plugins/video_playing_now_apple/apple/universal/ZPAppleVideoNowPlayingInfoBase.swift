@@ -12,27 +12,28 @@ import XrayLogger
 
 struct ItemMetadata {
     static let title = "title"
-    static let contentId = "id"
+    static let id = "id"
     static let media_group = "media_group"
     static let media_item = "media_item"
     static let summary = "summary"
     static let src = "src"
     static let extensions = "extensions"
     static let serviceId = "apple_umc_service_id"
+    static let contentId = "apple_umc_content_id"
 }
 
 class ZPAppleVideoNowPlayingInfoBase: NSObject, GeneralProviderProtocol, PlayerDependantPluginProtocol {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/AppleVideoNowPlayingInfo")
 
-    var playerPlugin: PlayerProtocol?
+    weak var playerPlugin: PlayerProtocol?
     var playbackStalled: Bool = false
 
     var avPlayer: AVPlayer? {
         return playerPlugin?.playerObject as? AVPlayer
     }
 
-    public var configurationJSON: NSDictionary?
-    public var model: ZPPluginModel?
+    public weak var configurationJSON: NSDictionary?
+    public weak var model: ZPPluginModel?
 
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
