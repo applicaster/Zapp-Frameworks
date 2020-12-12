@@ -1,10 +1,7 @@
 /// <reference types=".." />
 
-import { run } from "./AppleUserActivity";
+import { useScreenHook } from "./AppleUserActivity";
 
 export default {
-  hasPlayerHook: true,
-  presentFullScreen: false,
-  isFlowBlocker: false,
-  run,
+  useScreenHook,
 };

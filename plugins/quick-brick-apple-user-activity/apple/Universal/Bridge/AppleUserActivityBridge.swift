@@ -27,7 +27,7 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
     @objc public func defineUserActivity(_ params: NSDictionary) {
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier,
-            let contentId = params["apple_umc_show_content_id"] as? String else {
+            let contentId = params["apple_user_activity_content_id"] as? String else {
             return
         }
         
