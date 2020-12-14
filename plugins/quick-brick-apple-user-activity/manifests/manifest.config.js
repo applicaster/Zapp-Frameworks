@@ -18,7 +18,6 @@ const baseManifest = {
   min_zapp_sdk: "1.0.0",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  preload: true,
   custom_configuration_fields: [],
   ui_frameworks: ["quickbrick"],
 };
