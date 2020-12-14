@@ -23,21 +23,20 @@
   "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
   "custom_configuration_fields": [],
   "ui_frameworks": [
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.5.0",
-  "dependency_version": "0.5.0",
+  "manifest_version": "0.5.1",
+  "dependency_version": "0.5.1",
   "extra_dependencies": [
     {
       "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-apple-user-activity@0.5.0"
+    "@applicaster/quick-brick-apple-user-activity@0.5.1"
   ],
   "targets": [
     "mobile"
