@@ -114,5 +114,7 @@ describe("AppleUserActivity hook plugin", () => {
     screen.mount();
     screen.unmount();
     expect(AppleUserActivityBridge.removeUserActivity).toHaveBeenCalledTimes(1);
+
+    screen.tearDown();
   });
 });
