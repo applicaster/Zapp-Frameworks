@@ -15,10 +15,11 @@ import XrayLogger
 @objc(AppleUserActivityBridge)
 class AppleUserActivityBridge: NSObject, RCTBridgeModule {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ScreenUserActivity")
-
+    
     let pluginIdentifier = "quick-brick-apple-user-activity"
+    let activityType = "qb.screen.useractivity.details"
     var bridge: RCTBridge!
-    var userActivity: NSUserActivity?
+    var userActivity: NSUserActivity!
     static func moduleName() -> String! {
         return "AppleUserActivityBridge"
     }
@@ -29,16 +30,16 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
 
     @objc public func defineUserActivity(_ params: NSDictionary) {
         
-        guard let bundleIdentifier = Bundle.main.bundleIdentifier,
-            let contentId = params["apple_user_activity_content_id"] as? String else {
+        guard Bundle.main.hasActivity(for: activityType),
+              let contentId = params["apple_user_activity_content_id"] as? String else {
             return
         }
         
         //initialize the activity
-        userActivity = NSUserActivity(activityType: "\(bundleIdentifier).details")
+        userActivity = NSUserActivity(activityType: activityType)
         
         //set external identifier
-        userActivity?.externalMediaContentIdentifier = contentId
+        userActivity.externalMediaContentIdentifier = contentId
         
         DispatchQueue.main.async {
             //get current RN view controller
@@ -56,7 +57,6 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
                                       data: ["activityType": activityType,
                                              "apple_user_activity_content_id" : contentIdentifier])
             }
-            
 
         }
     }
@@ -74,9 +74,18 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
                                       data: ["activityType": activityType,
                                              "apple_user_activity_content_id" : contentIdentifier])
             }
-            
+
             //set and activate user activity
             currentViewController.userActivity?.invalidate()
         }
+    }
+}
+
+extension Bundle {
+    func hasActivity(for type: String) -> Bool {
+        guard let activities = infoDictionary?["NSUserActivityTypes"] as? [String] else {
+            return false
+        }
+        return activities.first { $0 == type } != nil ? true : false
     }
 }
