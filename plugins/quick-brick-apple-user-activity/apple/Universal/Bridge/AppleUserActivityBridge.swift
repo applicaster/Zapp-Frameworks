@@ -10,9 +10,12 @@ import Foundation
 import React
 import ZappCore
 import MediaPlayer
+import XrayLogger
 
 @objc(AppleUserActivityBridge)
 class AppleUserActivityBridge: NSObject, RCTBridgeModule {
+    lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ScreenUserActivity")
+
     let pluginIdentifier = "quick-brick-apple-user-activity"
     var bridge: RCTBridge!
     var userActivity: NSUserActivity?
@@ -46,6 +49,15 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
             //set and activate user activity
             currentViewController.userActivity = self.userActivity
             currentViewController.userActivity?.becomeCurrent()
+            
+            if let contentIdentifier = currentViewController.userActivity?.externalMediaContentIdentifier,
+               let activityType = currentViewController.userActivity?.activityType {
+                self.logger?.debugLog(message: "Setting userActivity for show screen",
+                                      data: ["activityType": activityType,
+                                             "apple_user_activity_content_id" : contentIdentifier])
+            }
+            
+
         }
     }
     
@@ -54,6 +66,13 @@ class AppleUserActivityBridge: NSObject, RCTBridgeModule {
             //get current RN view controller
             guard let currentViewController = RCTPresentedViewController() else {
                 return
+            }
+            
+            if let contentIdentifier = currentViewController.userActivity?.externalMediaContentIdentifier,
+               let activityType = currentViewController.userActivity?.activityType {
+                self.logger?.debugLog(message: "Removing userActivity from dismissed show screen",
+                                      data: ["activityType": activityType,
+                                             "apple_user_activity_content_id" : contentIdentifier])
             }
             
             //set and activate user activity
