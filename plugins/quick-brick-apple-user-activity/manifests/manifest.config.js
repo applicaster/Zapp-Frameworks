@@ -65,6 +65,9 @@ function extra_npm_dependencies(platform) {
 const api_apple = {
   class_name: "UserActivityHandler",
   modules: ["AppleUserActivity"],
+  plist: {
+    NSUserActivityTypes: ["qb.screen.useractivity.details"]
+  }
 };
 
 const api = {
