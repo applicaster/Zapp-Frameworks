@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "ZappCore": [],
-    "React": []
+    "React": [],
+    "XrayLogger": []
   },
   "testspecs": [
     {
