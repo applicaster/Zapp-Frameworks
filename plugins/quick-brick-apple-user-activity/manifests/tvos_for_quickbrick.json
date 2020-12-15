@@ -3,7 +3,12 @@
     "class_name": "UserActivityHandler",
     "modules": [
       "AppleUserActivity"
-    ]
+    ],
+    "plist": {
+      "NSUserActivityTypes": [
+        "qb.screen.useractivity.details"
+      ]
+    }
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
@@ -28,15 +33,15 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "1.0.1",
-  "dependency_version": "1.0.1",
+  "manifest_version": "1.0.2",
+  "dependency_version": "1.0.2",
   "extra_dependencies": [
     {
       "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-apple-user-activity@1.0.1"
+    "@applicaster/quick-brick-apple-user-activity@1.0.2"
   ],
   "targets": [
     "tv"
