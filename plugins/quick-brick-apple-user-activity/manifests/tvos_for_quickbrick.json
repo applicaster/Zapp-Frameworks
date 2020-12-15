@@ -28,15 +28,15 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "1.0.0",
-  "dependency_version": "1.0.0",
+  "manifest_version": "1.0.1",
+  "dependency_version": "1.0.1",
   "extra_dependencies": [
     {
       "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-apple-user-activity@1.0.0"
+    "@applicaster/quick-brick-apple-user-activity@1.0.1"
   ],
   "targets": [
     "tv"
