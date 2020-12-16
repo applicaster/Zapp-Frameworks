@@ -54,6 +54,9 @@ import UIKit
         return connectorProvider as? FacadeConnectorAudioSessionProtocol
     }
     
+    @objc public var offlineContent: FacadeConnectorOfflineContentProtocol? {
+        return UIApplication.shared.delegate as? FacadeConnectorOfflineContentProtocol
+    }
     
     let connectorProvider: NSObject
 
