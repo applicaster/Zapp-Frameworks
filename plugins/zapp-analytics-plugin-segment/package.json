@@ -1,0 +1,33 @@
+{
+  "name": "@applicaster/zapp-analytics-plugin-segment",
+  "version": "1.2.0",
+  "description": "Segment Analytics provider",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "segment",
+    "analytics"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "amazon_fire_tv_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "android_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  },
+  "files": [
+    "android"
+  ]
+}
