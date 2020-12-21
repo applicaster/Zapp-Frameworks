@@ -26,6 +26,7 @@ function createManifest({ version, platform }) {
     manifest_version: version,
     identifier: identifier[platform],
     project_dependencies: project_dependencies[platform],
+    extra_dependencies: extra_dependencies[platform],
     api: api[platform],
     targets: targets[platform],
     npm_dependencies: [
@@ -38,13 +39,29 @@ function createManifest({ version, platform }) {
 const min_zapp_sdk = {
   amazon_fire_tv_for_quickbrick: "2.0.0",
   android_tv_for_quickbrick: "2.0.0",
-  android_for_quickbric: "2.0.0"
+  android_for_quickbrick: "2.0.0",
+  ios_for_quickbrick: "2.0.0",
+  tvos_for_quickbrick: "2.0.0"
 };
 
 const identifier = {
   amazon_fire_tv_for_quickbrick: "segment_analytics_android",
   android_tv_for_quickbrick: "segment_analytics_android",
-  android_for_quickbric: "segment_analytics_android"
+  android_for_quickbrick: "segment_analytics_android",
+  ios_for_quickbrick: "segment_analytics",
+  tvos_for_quickbrick: "segment_analytics"
+};
+
+const extra_dependencies_apple = [
+  {
+    SegmentAnalytics:
+      ":path => './node_modules/@applicaster/zapp-analytics-plugin-segment/apple/SegmentAnalytics.podspec'",
+  },
+];
+
+const extra_dependencies = {
+  tvos_for_quickbrick: extra_dependencies_apple,
+  ios_for_quickbrick: extra_dependencies_apple,
 };
 
 const android_project_dependencies = [
@@ -68,10 +85,18 @@ const api_android = {
   ]
 }
 
+const api_apple = {
+  require_startup_execution: false,
+  class_name: "SegmentAnalytics",
+  modules: ["SegmentAnalytics"]
+};
+
 const api = {
   amazon_fire_tv_for_quickbrick: api_android,
   android_tv_for_quickbrick: api_android,
-  android_for_quickbric: api_android
+  android_for_quickbrick: api_android,
+  ios_for_quickbrick: api_apple,
+  tvos_for_quickbrick: api_apple
 };
 
 const mobileTarget = ["mobile"];
@@ -80,7 +105,9 @@ const tvTarget = ["tv"];
 const targets = {
   amazon_fire_tv_for_quickbrick: tvTarget,
   android_tv_for_quickbrick: tvTarget,
-  android_for_quickbric: mobileTarget
+  android_for_quickbrick: mobileTarget,
+  ios_for_quickbrick: mobileTarget,
+  tvos_for_quickbrick: tvTarget
 };
 
 module.exports = createManifest;

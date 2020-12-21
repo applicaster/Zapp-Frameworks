@@ -28,13 +28,13 @@ let kNotApplicableKey = "N/A"
         return getKey()
     }
 
-    public func prepareProvider(_ defaultParams: [String: Any],
+    open func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
         _ = configureProvider()
         completion?(true)
     }
 
-    public func disable(completion: ((Bool) -> Void)?) {
+    open func disable(completion: ((Bool) -> Void)?) {
         // Implement in child classes
     }
 
@@ -173,10 +173,13 @@ let kNotApplicableKey = "N/A"
 
     static func extraDefaultProperties() -> [String: NSObject] {
         var properties: [String: NSObject] = [:]
+        
+        #if os(iOS)
         // attach current screen name if exists
         if let topViewController = ZAAppConnector.sharedInstance().navigationDelegate?.currentViewController() as? ZPAnalyticsScreenProtocol {
             properties["Triggered From"] = topViewController.analyticsScreenName() as NSObject
         }
+        #endif
         return properties
     }
 
@@ -350,6 +353,7 @@ let kNotApplicableKey = "N/A"
         var dictRetValue: [String: NSObject] = [String: NSObject]()
         let dictParametersSources = getParametersForMatchingWithFirebaseRemoteConfigurationKeys(baseProperties, eventProperties: eventProperties)
 
+        #if os(iOS)
         if let firebaseDelegate = ZAAppConnector.sharedInstance().firebaseRemoteConfigurationDelegate,
             let firebaseRemoteKeys = firebaseDelegate.keys(withPrefix: prefix) {
             for remoteKey in Array(firebaseRemoteKeys) {
@@ -363,6 +367,7 @@ let kNotApplicableKey = "N/A"
                 }
             }
         }
+        #endif
         return dictRetValue
     }
 
@@ -375,10 +380,12 @@ let kNotApplicableKey = "N/A"
             }
         }
 
+        #if os(iOS)
         let params = ZPFirebaseRemoteConfigurationManager.sharedInstance.getParametersForMatchingWithRemoteConfigurationKeys()
         for (key, value) in params {
             dictRetValue[key] = value as? NSObject
         }
+        #endif
         return dictRetValue
     }
 }
