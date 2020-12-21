@@ -1,0 +1,44 @@
+{
+  "name": "SegmentAnalytics",
+  "version": "2.1.0",
+  "platforms": {
+    "tvos": "11.0"
+  },
+  "swift_versions": [
+    "5.0",
+    "5.1"
+  ],
+  "summary": "SegmentAnalytics",
+  "description": "Dependent player plugin for Olympic Channel to support Segment analytics",
+  "homepage": "https://github.com/applicaster-plugins/SegmentAnalytics-iOS",
+  "license": "MIT",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster-plugins/SegmentAnalytics-iOS",
+    "tag": "2.0.0"
+  },
+  "frameworks": [
+    "Foundation",
+    "UIKit"
+  ],
+  "public_header_files": "universal/**/*.h",
+  "source_files": "universal/**/*.{h,m,swift}",
+  "dependencies": {
+    "ZappCore": [],
+    "ZappAnalyticsPluginsSDK": [],
+    "Analytics": [
+      "~> 3.0"
+    ],
+    "React": []
+  },
+  "xcconfig": {
+    "ENABLE_BITCODE": "YES",
+    "OTHER_LDFLAGS": "$(inherited)",
+    "FRAMEWORK_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Analytics/**",
+    "LIBRARY_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Analytics/**",
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_TESTABILITY": "YES",
+    "OTHER_CFLAGS": "-fembed-bitcode"
+  },
+  "swift_version": "5.1"
+}
