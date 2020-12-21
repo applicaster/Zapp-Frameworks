@@ -60,7 +60,7 @@ const extra_dependencies = {
 const android_project_dependencies = [
   {
     "zapp-analytics-plugin-segment":
-      "quick_brick/node_modules/@applicaster/zapp-analytics-plugin-segment/android",
+      "node_modules/@applicaster/zapp-analytics-plugin-segment/android",
   },
 ]
 
