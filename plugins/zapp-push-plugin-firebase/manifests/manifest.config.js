@@ -64,6 +64,12 @@ const custom_configuration_fields_apple = [
     tooltip_text:
       "Upload Notification Extension Provisioning Profile for Store builds only",
   },
+  {
+    key: "ios_assets_bundle",
+    type: "uploader",
+    label: "Custom sound files",
+    label_tooltip: "Please upload a zip file to provide the custom sounds mp3 files to be used with FCM custom sound parameter</a>."
+  },
 ];
 
 const custom_configuration_fields_android = [

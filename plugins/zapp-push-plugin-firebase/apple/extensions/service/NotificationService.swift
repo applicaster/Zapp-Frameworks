@@ -23,6 +23,12 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // add custom sound param
+        if let sound = content.userInfo["sound"] as? String {
+            let soundName = UNNotificationSoundName(sound)
+            content.sound = UNNotificationSound(named: soundName)
+        }
+
         Messaging.serviceExtension().populateNotificationContent(content, withContentHandler: contentHandler)
     }
     
