@@ -5,6 +5,7 @@ const baseManifest = {
   identifier: "segment_analytics",
   description: "Segment Analytics",
   type: "analytics",
+  react_native: true,
   custom_configuration_fields: [
     {
       section: "configuration",
