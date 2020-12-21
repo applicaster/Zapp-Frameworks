@@ -2,6 +2,7 @@ const baseManifest = {
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Segment Analytics",
+  identifier: "segment_analytics",
   description: "Segment Analytics",
   type: "analytics",
   custom_configuration_fields: [
@@ -24,7 +25,6 @@ function createManifest({ version, platform }) {
     platform,
     min_zapp_sdk: min_zapp_sdk[platform],
     manifest_version: version,
-    identifier: identifier[platform],
     project_dependencies: project_dependencies[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
@@ -42,14 +42,6 @@ const min_zapp_sdk = {
   android_for_quickbrick: "2.0.0",
   ios_for_quickbrick: "2.0.0",
   tvos_for_quickbrick: "2.0.0"
-};
-
-const identifier = {
-  amazon_fire_tv_for_quickbrick: "segment_analytics_android",
-  android_tv_for_quickbrick: "segment_analytics_android",
-  android_for_quickbrick: "segment_analytics_android",
-  ios_for_quickbrick: "segment_analytics",
-  tvos_for_quickbrick: "segment_analytics"
 };
 
 const extra_dependencies_apple = [
