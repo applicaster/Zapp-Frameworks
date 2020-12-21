@@ -1,6 +1,6 @@
 {
   "name": "ZappPushPluginFirebase",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "summary": "FirebasePushPlugin for Zapp iOS.",
   "description": "FirebasePushPlugin for Zapp iOS.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-push-plugin-firebase/2.3.2"
+    "tag": "@@applicaster/zapp-push-plugin-firebase/2.3.3"
   },
   "platforms": {
     "ios": "11.0"
