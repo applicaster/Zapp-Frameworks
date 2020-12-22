@@ -18,7 +18,7 @@
   "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "2.0.0-Dev",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -41,13 +41,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "8.0.1",
+  "manifest_version": "9.0.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginChartbeat": ":path => './node_modules/@applicaster/zapp-analytics-plugin-chartbeat/apple/ZappAnalyticsPluginChartbeat.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-chartbeat@8.0.1"
+    "@applicaster/zapp-analytics-plugin-chartbeat@9.0.0"
   ]
 }
