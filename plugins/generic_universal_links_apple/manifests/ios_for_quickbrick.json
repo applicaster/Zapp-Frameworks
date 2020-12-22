@@ -23,7 +23,7 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -35,13 +35,13 @@
   ],
   "identifier": "generic_universal_links_apple",
   "npm_dependencies": [
-    "@applicaster/generic_universal_links_apple@0.2.1"
+    "@applicaster/generic_universal_links_apple@1.0.0"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.2.1",
+  "manifest_version": "1.0.0",
   "extra_dependencies": [
     {
       "ZappAppleGenericUniversalLinks": ":path => './node_modules/@applicaster/generic_universal_links_apple/apple/ZappAppleGenericUniversalLinks.podspec'"

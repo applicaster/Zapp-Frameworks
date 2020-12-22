@@ -1,6 +1,6 @@
 {
   "name": "ZappAppleGenericUniversalLinks",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "summary": "ZappAppleGenericUniversalLinks",
   "description": "ZappAppleGenericUniversalLinks container.",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/generic_universal_links_apple/0.2.1"
+    "tag": "@@applicaster/generic_universal_links_apple/1.0.0"
   },
   "platforms": {
     "ios": "12.0",
