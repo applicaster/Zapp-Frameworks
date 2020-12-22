@@ -14,7 +14,6 @@
     "5ae06cef8fba0f00084bd3c6",
     "572a0a65373163000b000000"
   ],
-  "min_zapp_sdk": "1.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -35,17 +34,18 @@
     "quickbrick"
   ],
   "identifier": "chromecast_qb",
-  "platform": "android_for_quickbrick",
+  "platform": "ios",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
   "dependency_version": "1.0.0",
   "manifest_version": "1.0.0",
   "api": {
-    "require_startup_exectution": false,
-    "class_name": "com.applicaster.chromecast.ChromeCastPlugin",
-    "react_packages": [
-      "com.reactnative.googlecast.GoogleCastPackage"
+    "class_name": "ChromecastAdapter",
+    "modules": [
+      "ZappChromecast"
     ],
-    "roguard_rules": "-keep public class com.reactnative.googlecast.** {*;}"
+    "plist": {
+      "NSLocalNetworkUsageDescription": "App uses the local network to discover Cast-enabled devices on your WiFi network."
+    }
   },
   "npm_dependencies": [
     "@applicaster/zapp-generic-chromecast@1.0.0"
@@ -53,10 +53,9 @@
   "targets": [
     "mobile"
   ],
-  "project_dependencies": [
+  "extra_dependencies": [
     {
-      "react-native-google-cast": "./node_modules/@applicaster/zapp-generic-chromecast/android"
+      "ZappChromecast": ":path => './node_modules/@applicaster/zapp-generic-chromecast/apple/ZappChromecast.podspec'"
     }
-  ],
-  "extra_dependencies": []
+  ]
 }
