@@ -40,7 +40,7 @@ public class StorageHelper {
         var sessionData: [String: Any] = [String: Any]()
         var namespaceToUse = ZappStorageKeys.applicasterNamespace
         if let namespace = namespace,
-            namespace.isEmpty == false {
+           namespace.isEmpty == false {
             namespaceToUse = namespace
         }
 
@@ -71,12 +71,12 @@ public class StorageHelper {
                                   namespace: String?) -> String? {
         var namespaceToUse = ZappStorageKeys.applicasterNamespace
         if let namespace = namespace,
-            namespace.isEmpty == false {
+           namespace.isEmpty == false {
             namespaceToUse = namespace
         }
 
         guard let namespaceDicts = storageDict[ZappStorageKeys.zapp] as? [String: Any],
-            let currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return nil }
+              let currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return nil }
 
         if let retVal = currentNamespaceSessionData[key] as? String {
             return retVal
@@ -86,8 +86,26 @@ public class StorageHelper {
         return nil
     }
 
-    /// Retrieve All Items from storage for namespace domain
+    public class func removeItem(inStorageDict storageDict: [String: Any],
+                                 key: String,
+                                 namespace: String?) -> (storageDict: [String: Any], succeed: Bool) {
+        var namespaceToUse = ZappStorageKeys.applicasterNamespace
+        if let namespace = namespace,
+           namespace.isEmpty == false {
+            namespaceToUse = namespace
+        }
+        var newStorageDict = storageDict
+        guard var namespaceDicts = storageDict[ZappStorageKeys.zapp] as? [String: Any],
+              var currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return (storageDict: storageDict, succeed: false) }
 
+        currentNamespaceSessionData[key] = nil
+        namespaceDicts[namespaceToUse] = currentNamespaceSessionData
+        newStorageDict[ZappStorageKeys.zapp] = namespaceDicts
+
+        return (storageDict: newStorageDict, succeed: true)
+    }
+
+    /// Retrieve All Items from storage for namespace domain
     ///
     /// - Parameters:
     ///   - storageDict: Dictionary where should be samve
@@ -97,12 +115,12 @@ public class StorageHelper {
                              namespace: String?) -> String? {
         var namespaceToUse = ZappStorageKeys.applicasterNamespace
         if let namespace = namespace,
-            namespace.isEmpty == false {
+           namespace.isEmpty == false {
             namespaceToUse = namespace
         }
 
         guard let namespaceDicts = storageDict[ZappStorageKeys.zapp] as? [String: Any],
-            let currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return nil }
+              let currentNamespaceSessionData = namespaceDicts[namespaceToUse] as? [String: Any] else { return nil }
 
         return getJSONStringFrom(dictionary: currentNamespaceSessionData)
     }
