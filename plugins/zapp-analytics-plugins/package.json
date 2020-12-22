@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugins",
-  "version": "12.1.0",
+  "version": "13.0.0",
   "description": "ZappAnalyticsPlugins",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
