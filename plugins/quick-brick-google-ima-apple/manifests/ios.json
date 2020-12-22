@@ -28,7 +28,6 @@
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6"
   ],
-  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
@@ -36,7 +35,7 @@
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
-    "tv"
+    "mobile"
   ],
   "ui_frameworks": [
     "native",
@@ -80,7 +79,7 @@
       "default": 0
     }
   ],
-  "platform": "tvos_for_quickbrick",
+  "platform": "ios",
   "manifest_version": "1.0.0",
   "dependency_version": "1.0.0",
   "extra_dependencies": [
