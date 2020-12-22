@@ -16,7 +16,7 @@
   "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "ui_frameworks": [
@@ -41,14 +41,14 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/google-analytics-web-based-apple@0.9.1"
+    "@applicaster/google-analytics-web-based-apple@1.0.0"
   ],
   "identifier": "zapp_google_analytics",
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.9.1",
+  "manifest_version": "1.0.0",
   "extra_dependencies": [
     {
       "ZappGoogleAnalytics": ":path => './node_modules/@applicaster/google-analytics-web-based-apple/apple/ZappGoogleAnalytics.podspec'"
