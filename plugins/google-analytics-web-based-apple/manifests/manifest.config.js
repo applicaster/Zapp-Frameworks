@@ -56,10 +56,8 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 const min_zapp_sdk = {
-  tvos: "12.0.0-Dev",
-  ios: "20.0.0-Dev",
-  tvos_for_quickbrick: "0.1.0-alpha1",
-  ios_for_quickbrick: "0.1.0-alpha1",
+  tvos_for_quickbrick: "2.0.2-Dev",
+  ios_for_quickbrick: "2.0.2-Dev",
 };
 
 const extra_dependencies_apple = {

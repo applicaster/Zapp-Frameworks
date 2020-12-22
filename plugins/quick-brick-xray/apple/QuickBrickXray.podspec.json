@@ -1,8 +1,8 @@
 {
   "name": "QuickBrickXray",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
   "summary": "QuickBrickXray",
   "description": "QuickBrickXray.",

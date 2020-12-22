@@ -2,7 +2,7 @@
   "name": "ZappAnalyticsPluginComScore",
   "version": "7.0.1",
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
   "summary": "ZappAnalyticsPluginComscore",
   "description": "ZappAnalyticsPluginComscore container.",

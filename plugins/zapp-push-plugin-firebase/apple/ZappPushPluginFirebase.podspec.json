@@ -11,14 +11,13 @@
     "tag": "@@applicaster/zapp-push-plugin-firebase/2.3.3"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
   "source_files": "ios/**/*.{swift}",
   "default_subspecs": "Base",
   "static_framework": true,
-  "prepare_command": "sh Scripts/prepare_service_extension.sh\nsh Scripts/prepare_content_extension.sh",
   "subspecs": [
     {
       "name": "Base",

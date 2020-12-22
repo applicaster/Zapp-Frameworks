@@ -131,12 +131,18 @@
     OSStatus res = SecItemCopyMatching((CFDictionaryRef)keychainQuery, NULL);
     if (res == errSecItemNotFound) {
         NSMutableDictionary *addDict = keychainQuery;
-        [addDict setObject:[NSKeyedArchiver archivedDataWithRootObject:object] forKey:(id)kSecValueData];
+        [addDict setObject:[NSKeyedArchiver archivedDataWithRootObject:object
+                                                 requiringSecureCoding:NO
+                                                                 error:nil]
+                    forKey:(id)kSecValueData];
         res = SecItemAdd((CFDictionaryRef)addDict, NULL);
         NSAssert1(res == errSecSuccess, @"Recieved %ld from SecItemAdd!", (long)res);
     }
     else if (res == errSecSuccess) {
-        NSDictionary *attributeDict = [NSDictionary dictionaryWithObject:[NSKeyedArchiver archivedDataWithRootObject:object] forKey:(id)kSecValueData];
+        NSDictionary *attributeDict = [NSDictionary dictionaryWithObject:[NSKeyedArchiver archivedDataWithRootObject:object
+                                                                                               requiringSecureCoding:NO
+                                                                                                               error:nil]
+                                                                  forKey:(id)kSecValueData];
         SecItemUpdate((CFDictionaryRef)keychainQuery, (CFDictionaryRef)attributeDict);
         NSAssert1(res == errSecSuccess, @"SecItemUpdated returned %ld!", (long)res);
     }
@@ -164,7 +170,9 @@
     
     
     if (res == errSecSuccess) {
-        return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        return [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class]
+                                                 fromData:data
+                                                    error:nil];
     }
     else {
         NSAssert1(res == errSecItemNotFound, @"SecItemCopyMatching returned %ld!", (long)res);

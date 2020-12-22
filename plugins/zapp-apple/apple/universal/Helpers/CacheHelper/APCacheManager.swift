@@ -50,7 +50,7 @@ import UIKit
 
     @objc public func deleteObjectFromCache(_ object: JsonSerializableProtocol, identifier: String?) {
         let cachedModel = APCachedModel(object: object, identifier: identifier ?? "")
-        _ = cachedModel.deleteLocalStorage()
+        cachedModel.deleteLocalStorage()
     }
 
     @objc public func getLocalPath(forUrlString urlString: String, useMd5UrlFilename: Bool) -> URL? {
