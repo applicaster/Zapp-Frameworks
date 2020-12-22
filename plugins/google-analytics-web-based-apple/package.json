@@ -21,9 +21,7 @@
     "isPlugin": true,
     "supportedPlatforms": [
       "ios_for_quickbrick",
-      "ios",
-      "tvos_for_quickbrick",
-      "tvos"
+      "tvos_for_quickbrick"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   }

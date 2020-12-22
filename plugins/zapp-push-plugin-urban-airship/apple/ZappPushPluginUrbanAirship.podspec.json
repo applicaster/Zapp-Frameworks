@@ -11,7 +11,7 @@
     "tag": "@@applicaster/zapp-push-plugin-urban-airship/14.1.1"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
   "requires_arc": true,
   "static_framework": true,
@@ -29,7 +29,7 @@
       },
       "dependencies": {
         "Airship": [
-          "= 14.1.2"
+          "= 14.2.0"
         ],
         "ZappPushPluginsSDK": [],
         "ZappPlugins": [],
@@ -46,7 +46,7 @@
       },
       "dependencies": {
         "AirshipExtensions": [
-          "= 14.1.2"
+          "= 14.2.0"
         ]
       }
     },
@@ -60,7 +60,7 @@
       },
       "dependencies": {
         "AirshipExtensions": [
-          "= 14.1.2"
+          "= 14.2.0"
         ]
       }
     }

@@ -1,6 +1,6 @@
 {
   "name": "ZappPushPluginsSDK",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "summary": "ZappPushPluginsSDK",
   "description": "ZappPushPluginsSDK container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
@@ -11,7 +11,7 @@
     "tag": "@@applicaster/zapp-push-plugins/12.0.0"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "12.0"
   },
   "requires_arc": true,
   "source_files": "universal/**/*.{swift}",

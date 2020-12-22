@@ -11,7 +11,7 @@
     "tag": "@@applicaster/zapp-push-plugin-firebase/2.3.3"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",

@@ -3,8 +3,8 @@
   "version": "0.11.3",
   "summary": "Framework that has general logic of the Zapp Apple application",
   "platforms": {
-    "ios": "11.0",
-    "tvos": "11.0"
+    "ios": "12.0",
+    "tvos": "12.0"
   },
   "swift_versions": "5.1",
   "description": "'Framework that has general logic of the Zapp Apple application'",
@@ -47,7 +47,7 @@
       "= 5.0.0"
     ],
     "DeviceKit": [
-      "= 3.2.0"
+      "= 4.2.1"
     ],
     "XrayLogger": []
   },

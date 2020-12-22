@@ -41,8 +41,8 @@ const min_zapp_sdk = {
   amazon_fire_tv_for_quickbrick: "2.0.0",
   android_tv_for_quickbrick: "2.0.0",
   android_for_quickbrick: "2.0.0",
-  ios_for_quickbrick: "2.0.0",
-  tvos_for_quickbrick: "2.0.0"
+  ios_for_quickbrick: "2.0.2-Dev",
+  tvos_for_quickbrick: "2.0.2-Dev"
 };
 
 const extra_dependencies_apple = [

@@ -1,6 +1,6 @@
 {
   "name": "ZappGoogleInteractiveMediaAds",
-  "version": "0.14.11",
+  "version": "0.15.0",
   "swift_versions": "5.1",
   "summary": "ZappGoogleInteractiveMediaAds",
   "description": "This plugin allow to add Google Interactive Media Ads to supported players.",
@@ -12,8 +12,8 @@
     "tag": "@@applicaster/quick-brick-google-ima-apple/0.14.11"
   },
   "platforms": {
-    "ios": "11.0",
-    "tvos": "11.0"
+    "ios": "12.0",
+    "tvos": "12.0"
   },
   "tvos": {
     "source_files": "universal/**/*.swift",

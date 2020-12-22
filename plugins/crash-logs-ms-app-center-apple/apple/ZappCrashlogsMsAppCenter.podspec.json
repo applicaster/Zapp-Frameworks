@@ -1,6 +1,6 @@
 {
   "name": "ZappCrashlogsMsAppCenter",
-  "version": "4.9.1",
+  "version": "5.0.0",
   "summary": "ZappCrashlogsMsAppCenter",
   "description": "CrashlogsMsAppCenter container.",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
@@ -11,7 +11,7 @@
     "tag": "@@applicaster/crash-logs-ms-app-center-apple/4.9.1"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "12.0"
   },
   "requires_arc": true,
   "static_framework": true,
