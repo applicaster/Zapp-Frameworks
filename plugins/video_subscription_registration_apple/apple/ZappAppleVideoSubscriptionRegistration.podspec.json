@@ -1,6 +1,6 @@
 {
   "name": "ZappAppleVideoSubscriptionRegistration",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "summary": "ZappAppleVideoSubscriptionRegistration",
   "description": "ZappAppleVideoSubscriptionRegistration container.",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/video_subscription_registration_apple/0.7.0"
+    "tag": "@@applicaster/video_subscription_registration_apple/1.0.0"
   },
   "platforms": {
     "tvos": "12.0",
