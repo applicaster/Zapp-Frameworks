@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginComScore",
-  "version": "7.0.1",
+  "version": "8.0.0",
   "platforms": {
     "ios": "12.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-comscore/7.0.1"
+    "tag": "@@applicaster/zapp-analytics-plugin-comscore/8.0.0"
   },
   "requires_arc": true,
   "public_header_files": "ios/**/*.h",
