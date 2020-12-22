@@ -25,7 +25,7 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "1.0.0",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
@@ -33,15 +33,15 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "1.0.2",
-  "dependency_version": "1.0.2",
+  "manifest_version": "2.0.0",
+  "dependency_version": "2.0.0",
   "extra_dependencies": [
     {
       "AppleUserActivity": ":path => './node_modules/@applicaster/quick-brick-apple-user-activity/apple/AppleUserActivity.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-apple-user-activity@1.0.2"
+    "@applicaster/quick-brick-apple-user-activity@2.0.0"
   ],
   "targets": [
     "tv"
