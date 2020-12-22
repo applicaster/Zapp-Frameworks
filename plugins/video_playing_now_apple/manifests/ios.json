@@ -19,7 +19,6 @@
     "5ae06cef8fba0f00084bd3c6",
     "5c20970320f1c500088842dd"
   ],
-  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
@@ -28,12 +27,12 @@
     "@applicaster/video_playing_now_apple@1.0.0"
   ],
   "targets": [
-    "tv"
+    "mobile"
   ],
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "tvos_for_quickbrick",
+  "platform": "ios",
   "manifest_version": "1.0.0",
   "extra_dependencies": [
     {
