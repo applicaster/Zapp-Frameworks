@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-mixpanel",
-  "version": "9.0.1",
+  "version": "10.0.0",
   "description": "Mixpanel Analytics provider",
   "repository": {
     "type": "git",
