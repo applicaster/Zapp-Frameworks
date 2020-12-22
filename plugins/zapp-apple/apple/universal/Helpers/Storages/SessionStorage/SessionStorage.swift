@@ -37,6 +37,15 @@ import Foundation
                                          namespace: namespace)
     }
 
+    public func removeItem(key: String,
+                           namespace: String?) -> Bool {
+        let removeResult = StorageHelper.removeItem(inStorageDict: storage,
+                                                    key: key,
+                                                    namespace: namespace)
+        storage = removeResult.storageDict
+        return removeResult.succeed
+    }
+
     public func getAll(namespace: String?) -> String? {
         return StorageHelper.getAll(inStorageDict:
             storage, namespace: namespace)

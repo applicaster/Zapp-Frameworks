@@ -21,6 +21,11 @@ extension RootController: FacadeConnectorStorageProtocol {
                                                  namespace: namespace)
     }
 
+    public func sessionStorageRemoveValue(for key: String, namespace: String?) -> Bool {
+        return SessionStorage.sharedInstance.removeItem(key: key,
+                                                        namespace: namespace)
+    }
+
     public func sessionStorageAllValues(namespace: String? = nil) -> String? {
         return SessionStorage.sharedInstance.getAll(namespace: namespace)
     }
@@ -34,6 +39,10 @@ extension RootController: FacadeConnectorStorageProtocol {
         return LocalStorage.sharedInstance.set(key: key,
                                                value: value,
                                                namespace: namespace)
+    }
+
+    public func localStorageRemoveValue(for key: String, namespace: String?) -> Bool {
+        return LocalStorage.sharedInstance.removeItem(key: key, namespace: namespace)
     }
 
     @objc public func localStorageAllValues(namespace: String? = nil) -> String? {
