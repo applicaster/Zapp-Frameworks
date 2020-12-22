@@ -23,7 +23,7 @@
   "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "1.1.0-Dev",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -70,7 +70,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "14.1.1",
+  "manifest_version": "15.0.0",
   "extra_dependencies": [
     {
       "ZappPushPluginUrbanAirship": ":path => './node_modules/@applicaster/zapp-push-plugin-urban-airship/apple/ZappPushPluginUrbanAirship.podspec'"
@@ -87,6 +87,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-urban-airship@14.1.1"
+    "@applicaster/zapp-push-plugin-urban-airship@15.0.0"
   ]
 }
