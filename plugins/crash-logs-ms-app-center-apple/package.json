@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/crash-logs-ms-app-center-apple",
-  "version": "4.9.1",
+  "version": "5.0.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
