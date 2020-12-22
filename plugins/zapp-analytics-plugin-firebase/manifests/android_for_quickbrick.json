@@ -42,9 +42,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "8.3.0",
+  "manifest_version": "9.0.0",
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-firebase@8.3.0"
+    "@applicaster/zapp-analytics-plugin-firebase@9.0.0"
   ],
   "project_dependencies": [
     {
