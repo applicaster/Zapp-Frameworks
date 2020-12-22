@@ -16,6 +16,7 @@
   "requires_arc": true,
   "static_framework": true,
   "default_subspecs": "Base",
+  "prepare_command": "sh Scripts/prepare_service_extension.sh\nsh Scripts/prepare_content_extension.sh",
   "subspecs": [
     {
       "name": "Base",
