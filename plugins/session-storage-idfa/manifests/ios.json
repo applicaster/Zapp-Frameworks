@@ -20,9 +20,8 @@
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
   "ui_frameworks": [
-    "quickbrick"
+    "native"
   ],
-  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
@@ -31,13 +30,13 @@
     "@applicaster/session-storage-idfa@1.0.0"
   ],
   "targets": [
-    "tv"
+    "mobile"
   ],
-  "platform": "tvos_for_quickbrick",
+  "platform": "ios",
   "manifest_version": "1.0.0",
   "extra_dependencies": [
     {
-      "ZappSessionStorageIdfa": ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'"
+      "ZappSessionStorageIdfa/Legacy": ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'"
     }
   ]
 }

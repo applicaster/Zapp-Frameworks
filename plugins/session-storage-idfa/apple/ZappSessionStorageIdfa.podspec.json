@@ -1,6 +1,6 @@
 {
   "name": "ZappSessionStorageIdfa",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "summary": "ZappSessionStorageIdfa",
   "description": "ZappSessionStorageIdfa container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/session-storage-idfa/0.2.1"
+    "tag": "@@applicaster/session-storage-idfa/1.0.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",

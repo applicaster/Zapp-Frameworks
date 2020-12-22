@@ -22,19 +22,19 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "min_zapp_sdk": "2.0.0-Dev",
+  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [],
   "identifier": "idfa_storing",
   "npm_dependencies": [
-    "@applicaster/session-storage-idfa@0.2.1"
+    "@applicaster/session-storage-idfa@1.0.0"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.2.1",
+  "manifest_version": "1.0.0",
   "extra_dependencies": [
     {
       "ZappSessionStorageIdfa": ":path => './node_modules/@applicaster/session-storage-idfa/apple/ZappSessionStorageIdfa.podspec'"
