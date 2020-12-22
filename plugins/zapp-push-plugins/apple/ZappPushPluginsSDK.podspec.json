@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "git@github.com:applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-push-plugins/12.0.0"
+    "tag": "@@applicaster/zapp-push-plugins/13.0.0"
   },
   "platforms": {
     "ios": "12.0"

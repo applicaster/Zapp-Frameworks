@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-push-plugins",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "description": "ZappPushPlugins",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
