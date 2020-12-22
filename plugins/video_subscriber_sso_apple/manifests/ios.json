@@ -31,7 +31,6 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "general": {
@@ -325,7 +324,7 @@
   "targets": [
     "mobile"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "ios",
   "dependency_version": "1.0.0",
   "manifest_version": "1.0.0",
   "extra_dependencies": [
