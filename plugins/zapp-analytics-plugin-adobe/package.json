@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-adobe",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Adobe Analytics provider",
   "repository": {
     "type": "git",
