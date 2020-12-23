@@ -11,12 +11,16 @@ import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import com.applicaster.plugin.xray.R
+import com.applicaster.plugin.xray.TimingSink
 import com.applicaster.plugin.xray.XRayPlugin
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
+import com.applicaster.xray.crashreporter.Reporting
 
 class SettingsFragment : Fragment() {
+
+    private lateinit var btnShareTimings: View
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreateView(inflater: LayoutInflater,
@@ -94,7 +98,19 @@ class SettingsFragment : Fragment() {
                 }
             }
 
+            // RN Printer logging
+            view.findViewById<SwitchCompat>(R.id.switchTimingLogging).let {
+                it.isChecked = true == settings.timingLogging
+                it.setOnCheckedChangeListener { _, isChecked ->
+                    settings.timingLogging = isChecked
+                    xRayPlugin.applySettings(settings)
+                    updateTimingsState()
+                }
+            }
         }
+
+        btnShareTimings = view.findViewById(R.id.btn_share_timings)
+        btnShareTimings.setOnClickListener { Reporting.sendLogReport(activity!!, TimingSink.file) }
 
         return view
     }
@@ -116,6 +132,15 @@ class SettingsFragment : Fragment() {
             spinner.setSelection(logLevel.level!!.level)
         }
         spinner.post { spinner.onItemSelectedListener = listener }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTimingsState()
+    }
+
+    private fun updateTimingsState() {
+        btnShareTimings.visibility = if (TimingSink.file.exists()) View.VISIBLE else View.GONE
     }
 
     companion object {

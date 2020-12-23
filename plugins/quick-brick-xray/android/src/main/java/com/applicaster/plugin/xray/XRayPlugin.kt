@@ -178,6 +178,18 @@ class XRayPlugin : CrashlogPlugin {
         // add shortcut
         setupShortcut(true == settings.shortcutEnabled)
 
+        val timingSink = Core.get().getSink("timing")
+        if(true == settings.timingLogging) {
+            if(null == timingSink) {
+                Core.get().addSink("timing", TimingSink())
+            }
+        }
+        else if(null != timingSink) {
+            Core.get().removeSink(timingSink)
+            (timingSink as? TimingSink)?.close()
+            TimingSink.file.delete()
+        }
+
         effectiveSettingsObservable.postValue(settings)
     }
 
@@ -260,7 +272,7 @@ class XRayPlugin : CrashlogPlugin {
             actions[context.resources.getString(R.string.xray_notification_action_send)] = shareLogIntent
         }
 
-        // here we show Notification UI with custom actions
+        // here we show Notification UI with custom agi ctions
         XRayNotification.show(
                 context,
                 notificationId,
