@@ -22,24 +22,15 @@ class UserInterfaceLayerManager {
         let sessionStorage = SessionStorage.sharedInstance
         let bundleIndentifier = sessionStorage.get(key: ZappStorageKeys.bundleIdentifier,
                                                    namespace: nil)
-        let accountId = sessionStorage.get(key: ZappStorageKeys.accountId,
-                                           namespace: nil)
         let accountsAccountId = sessionStorage.get(key: ZappStorageKeys.accountsAccountId,
                                                    namespace: nil)
-        let broadcasterId = sessionStorage.get(key: ZappStorageKeys.broadcasterId,
-                                               namespace: nil)
-        let apiSecretKey = sessionStorage.get(key: ZappStorageKeys.apiSecretKey,
-                                              namespace: nil)
         let deviceType = sessionStorage.get(key: ZappStorageKeys.deviceType,
                                             namespace: nil)
         let reactNativePackagerRoot = sessionStorage.get(key: ZappStorageKeys.reactNativePackagerRoot,
                                                          namespace: nil)
         let applicationData = [
             "bundleIdentifier": bundleIndentifier as Any,
-            "accountId": accountId as Any,
             "accountsAccountId": accountsAccountId as Any,
-            "broadcasterId": broadcasterId as Any,
-            "apiSecretKey": apiSecretKey as Any,
             "os_type": "ios" as Any,
             "uuid": UUIDManager.deviceID as Any,
             "languageLocale": NSLocale.current.languageCode as Any,

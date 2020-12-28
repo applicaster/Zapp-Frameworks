@@ -59,11 +59,6 @@ public class TrackingManager: NSObject {
         var params = [String: Any]()
         let sessionStorage = SessionStorage.sharedInstance
 
-        if let accountsAccountId = sessionStorage.get(key: ZappStorageKeys.accountsAccountId,
-                                                      namespace: nil) {
-            params[EventParameters.accountId] = accountsAccountId
-        }
-
         if let versionId = sessionStorage.get(key: ZappStorageKeys.versionId,
                                               namespace: nil) {
             params[EventParameters.versionId] = versionId
