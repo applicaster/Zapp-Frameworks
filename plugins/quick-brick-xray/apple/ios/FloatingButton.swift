@@ -10,25 +10,33 @@ import UIKit
 
 class FloatingButton: UIButton {
     var buttonLocation: CGPoint = CGPoint(x: 0, y: 0)
-
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(buttonDrag(pan:)))
-        self.addGestureRecognizer(gesture)
 
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(buttonDrag(pan:)))
+        addGestureRecognizer(gesture)
     }
 
     @objc func buttonDrag(pan: UIPanGestureRecognizer) {
-        if pan.state == .began {
+        switch pan.state {
+        case .began:
             buttonLocation = pan.location(in: self)
-        } else {
-            let location = pan.location(in: self.superview) // get pan location
-            self.frame.origin = CGPoint(x: location.x - buttonLocation.x, y: location.y - buttonLocation.y)
+        case .ended:
+            superview?.constraint(withIdentifier: "\(tag)_left")?.constant = frame.origin.x
+            superview?.constraint(withIdentifier: "\(tag)_top")?.constant = frame.origin.y
+        default:
+            let location = pan.location(in: superview) // get pan location
+            frame.origin = CGPoint(x: location.x - buttonLocation.x, y: location.y - buttonLocation.y)
         }
+    }
+}
+
+extension UIView {
+    func constraint(withIdentifier identifier: String) -> NSLayoutConstraint? {
+        return constraints.first { $0.identifier == identifier }
     }
 }
