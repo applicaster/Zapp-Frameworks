@@ -15,6 +15,7 @@ import ZappCore
 extension QuickBrickXray: PluginURLHandlerProtocol {
     public func handlePluginURLScheme(with rootViewController: UIViewController?,
                                       url: URL) -> Bool {
+        var shouldPresentLoggerView = true
         guard let params = queryParams(url: url) else {
             presentLoggerView()
             return true
@@ -23,7 +24,7 @@ extension QuickBrickXray: PluginURLHandlerProtocol {
         var settings = Settings()
 
         if let shortcutEnabledString = params[PluginConfigurationKeys.ShortcutEnabled] as? String,
-            let shortcutEnabled = Bool(shortcutEnabledString) {
+           let shortcutEnabled = Bool(shortcutEnabledString) {
             settings.customSettingsEnabled = true
             settings.shortcutEnabled = shortcutEnabled
         }
@@ -33,15 +34,22 @@ extension QuickBrickXray: PluginURLHandlerProtocol {
             settings.fileLogLevel = LogLevel.logLevel(fromConfigurationKey: fileLogLevelString)
         }
 
+        if let showXrayFloatingButtonEnabledString = params[PluginConfigurationKeys.ShowXrayFloatingButtonEnabled] as? String,
+           let showXrayFloatingButtonEnabled = Bool(showXrayFloatingButtonEnabledString) {
+            settings.customSettingsEnabled = true
+            settings.showXrayFloatingButtonEnabled = showXrayFloatingButtonEnabled
+            shouldPresentLoggerView = false
+        }
+
         if settings.customSettingsEnabled == true {
             applyCustomSettings(settings: settings)
         }
 
         if let sendEmailString = params[PluginConfigurationKeys.ShareLog] as? String,
-            let sendEmail = Bool(sendEmailString),
-            sendEmail == true {
+           let sendEmail = Bool(sendEmailString),
+           sendEmail == true {
             Reporter.requestSendEmail()
-        } else {
+        } else if shouldPresentLoggerView {
             presentLoggerView()
         }
 

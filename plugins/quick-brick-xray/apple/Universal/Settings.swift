@@ -14,6 +14,7 @@ import ZappCore
 
 struct Settings {
     var customSettingsEnabled: Bool = false
+    var showXrayFloatingButtonEnabled: Bool = false
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
 

@@ -70,6 +70,8 @@ extension SettingsViewController {
                 enabled = settings.customSettingsEnabled
             } else if SettingsIndexesHelper.isShortcutAccessEnabled(in: indexPath) {
                 enabled = settings.shortcutEnabled
+            } else if SettingsIndexesHelper.isXRayFloatingButtonEnabled(in: indexPath) {
+                enabled = settings.showXrayFloatingButtonEnabled
             }
 
             cell.update(title: cellData.title,
@@ -112,6 +114,9 @@ extension SettingsViewController: SwitchCellDelegate {
             applyNewSettings()
         } else if SettingsIndexesHelper.isShortcutAccessEnabled(in: indexPath) {
             settings.shortcutEnabled = value
+            applyNewSettings()
+        } else if SettingsIndexesHelper.isXRayFloatingButtonEnabled(in: indexPath) {
+            settings.showXrayFloatingButtonEnabled = value
             applyNewSettings()
         }
     }

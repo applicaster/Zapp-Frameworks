@@ -44,6 +44,7 @@ extension QuickBrickXray {
         if isDebugEnvironment == false {
             settings.fileLogLevel = .error
             settings.shortcutEnabled = false
+            settings.showXrayFloatingButtonEnabled = false
         }
         return settings
     }
@@ -70,6 +71,12 @@ extension QuickBrickXray {
             let fileLogLevel = LogLevel.logLevel(fromConfigurationKey: fileLogLevelString) {
             settings.fileLogLevel = fileLogLevel
         }
+        
+        if let showXrayFloatingButtonEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ShowXrayFloatingButtonEnabled,
+                                                                                          namespace: pluginNameSpace),
+           let showXrayFloatingButtonEnabled = Bool(showXrayFloatingButtonEnabledString) {
+            settings.showXrayFloatingButtonEnabled = showXrayFloatingButtonEnabled
+        }
 
         return settings
     }
@@ -84,10 +91,15 @@ extension QuickBrickXray {
                                                                      namespace: pluginNameSpace)
 
         let customSettingsEnabled = settings?.customSettingsEnabled ?? false ? "true" : "false"
-
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.CustomSettingsEnabled,
                                                                      value: customSettingsEnabled,
                                                                      namespace: pluginNameSpace)
+        
+        let showXrayFloatingButtonEnabled = settings?.showXrayFloatingButtonEnabled ?? false ? "true" : "false"
+        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.ShowXrayFloatingButtonEnabled,
+                                                                     value: showXrayFloatingButtonEnabled,
+                                                                     namespace: pluginNameSpace)
+
     }
 
     func removeLocalStorageSettings() {

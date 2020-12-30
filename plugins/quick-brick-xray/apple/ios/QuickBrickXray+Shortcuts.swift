@@ -50,7 +50,7 @@ extension QuickBrickXray {
         }
         let result = shortcutItems.filter { (shortcutItem) -> Bool in
             guard let identifier = shortcutItem.userInfo?[ShortcutsUserInfoKeys.action] as? String,
-                identifier == ShortcutsActions.presentLoggerInfo.rawValue else {
+                  identifier == ShortcutsActions.presentLoggerInfo.rawValue else {
                 return false
             }
             return identifier != ShortcutsActions.presentLoggerInfo.rawValue && identifier != ShortcutsActions.shareLogs.rawValue
@@ -64,7 +64,7 @@ extension QuickBrickXray {
         }
         let result = shortcutItems.first { (shortcutItem) -> Bool in
             guard let identifier = shortcutItem.userInfo?[ShortcutsUserInfoKeys.action] as? String,
-                identifier == ShortcutsActions.presentLoggerInfo.rawValue else {
+                  identifier == ShortcutsActions.presentLoggerInfo.rawValue else {
                 return false
             }
             return Bool(identifier) ?? false
@@ -96,7 +96,7 @@ extension QuickBrickXray {
 
     @objc func handleAction(notification: Notification) {
         guard let userInfo = notification.userInfo,
-            let action = userInfo[ShortcutsUserInfoKeys.action] as? String else {
+              let action = userInfo[ShortcutsUserInfoKeys.action] as? String else {
             return
         }
 

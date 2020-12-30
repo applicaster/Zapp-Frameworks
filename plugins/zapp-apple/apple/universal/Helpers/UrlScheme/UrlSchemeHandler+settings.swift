@@ -22,21 +22,14 @@ extension UrlSchemeHandler {
         }
 
         switch type {
-        case SettingsBundleParameters.loggerAssistance.rawValue:
-            handleLoggerAssistancePresentationIfNeeded(with: params,
-                                                       on: rootController)
+        case SettingsBundleParameters.loggerAssistanceRemoteEventsLogging.rawValue:
+            rootController.loggerAssistance.presentAuthenticationForRemoteEventsLogging(with: params,
+                                                                                        on: rootController)
             break
         default:
             break
         }
 
         return true
-    }
-
-    fileprivate class func handleLoggerAssistancePresentationIfNeeded(with params: [String: Any],
-                                                                      on rootController: RootController?) {
-        
-        rootController?.loggerAssistance.presentAuthentication(with: params,
-                                                               on: rootController)
     }
 }
