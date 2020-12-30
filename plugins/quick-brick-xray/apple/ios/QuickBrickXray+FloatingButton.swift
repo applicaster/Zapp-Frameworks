@@ -3,6 +3,7 @@
 //  QuickBrickXray
 //
 //  Created by Alex Zchut on 30/12/2020.
+//  Copyright © 2020 Applicaster Ltd. All rights reserved.
 //
 
 import Foundation
