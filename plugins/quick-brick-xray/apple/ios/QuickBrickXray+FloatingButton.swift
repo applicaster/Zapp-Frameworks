@@ -43,8 +43,8 @@ extension QuickBrickXray {
         
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        button.leftAnchor.constraint(equalTo: targetView.leftAnchor, constant: 40).isActive = true
-        button.topAnchor.constraint(equalTo: targetView.topAnchor, constant: 100).isActive = true
+        button.leftAnchor.constraintEqualTo(anchor: targetView.leftAnchor, constant: 40, identifier: "\(button.tag)_left").isActive = true
+        button.topAnchor.constraintEqualTo(anchor: targetView.topAnchor, constant: 100, identifier: "\(button.tag)_top").isActive = true
 
         if #available(iOS 14.0, *) {
             button.addAction(UIAction(handler: xRayButtonPressed), for: .touchUpInside)
@@ -86,5 +86,14 @@ extension QuickBrickXray {
         } else {
             return nil
         }
+    }
+}
+
+
+extension NSLayoutAnchor {
+    @objc func constraintEqualTo(anchor: NSLayoutAnchor!, constant:CGFloat, identifier:String) -> NSLayoutConstraint! {
+        let constraint = self.constraint(equalTo: anchor, constant:constant)
+        constraint.identifier = identifier
+        return constraint
     }
 }
