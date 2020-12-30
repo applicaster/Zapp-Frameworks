@@ -8,7 +8,7 @@
 import Foundation
 
 public enum SettingsBundleParameters: String {
-    case loggerAssistance = "logger_assistance"
+    case loggerAssistanceRemoteEventsLogging = "logger_assistance_remote_events_logging"
 }
 
 public class SettingsBundleHelper {
@@ -21,19 +21,19 @@ public class SettingsBundleHelper {
     }
 
     public class func handleChangesIfNeeded() {
-        handleLoggerAssistance()
+        handleLoggerAssistance(for: .loggerAssistanceRemoteEventsLogging, savedKey: .loggerAssistanceRemoteEventsLogging)
     }
 
-    class func handleLoggerAssistance() {
-        let newValue = getSettingsBundleBoolValue(forKey: .loggerAssistance)
-        let oldValue = getSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance)
+    class func handleLoggerAssistance(for key: SettingsBundleParameters, savedKey: SettingsBundleParametersSavedValues) {
+        let newValue = getSettingsBundleBoolValue(forKey: key)
+        let oldValue = getSettingsBundleLastUsedBoolValue(forKey: savedKey)
         if newValue != oldValue {
             if newValue == true,
                 let urlScheme = APSwiftUtils.appUrlScheme,
-                let url = URL(string: "\(urlScheme)://settings?type=\(SettingsBundleParameters.loggerAssistance.rawValue)") {
+                let url = URL(string: "\(urlScheme)://settings?type=\(key.rawValue)&value=\(newValue)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance, value: newValue)
+                setSettingsBundleLastUsedBoolValue(forKey: savedKey, value: newValue)
             }
         }
     }
@@ -41,7 +41,8 @@ public class SettingsBundleHelper {
 
 extension SettingsBundleHelper {
     public enum SettingsBundleParametersSavedValues: String {
-        case loggerAssistance = "logger_assistance_value"
+        case loggerAssistanceRemoteEventsLogging = "logger_assistance_remote_events_logging_value"
+
     }
 
     public class func getSettingsBundleLastUsedBoolValue(forKey key: SettingsBundleParametersSavedValues) -> Bool {

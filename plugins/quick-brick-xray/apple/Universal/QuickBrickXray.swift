@@ -105,6 +105,7 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
                                             sinkIdentifier: DefaultSinkIdentifiers.FileJSON,
                                             filter: filter)
         prepareShortcuts()
+        prepareXRayFloatingButton()
     }
 
     public func disable(completion: ((Bool) -> Void)?) {

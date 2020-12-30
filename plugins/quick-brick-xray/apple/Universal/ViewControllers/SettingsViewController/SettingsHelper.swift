@@ -23,6 +23,10 @@ struct SettingsIndexesHelper {
     static func isFileLogLevel(in indexPath: IndexPath) -> Bool {
         return indexPath == IndexPath(row: 0, section: 2)
     }
+    
+    static func isXRayFloatingButtonEnabled(in indexPath: IndexPath) -> Bool {
+        return indexPath == IndexPath(row: 0, section: 3)
+    }
 }
 
 struct Cell {
@@ -41,6 +45,7 @@ class SettingsHelper {
             customSettingsData(),
             shortcutAccess(),
             fileLogLevel(),
+            showXrayFloatingButton()
         ]
         return sections
     }
@@ -97,5 +102,13 @@ class SettingsHelper {
                         cellIdentifier: logLevelCellIndentifier)
         fileLogLevel.cells.append(cell)
         return fileLogLevel
+    }
+    
+    static func showXrayFloatingButton() -> Section {
+        var xRayFloatingButton = Section(footterText: "Enables appearance of XRay floating button on screen")
+        let cell = Cell(title: "Show Xray floating button",
+                        cellIdentifier: switchCellIndentifier)
+        xRayFloatingButton.cells.append(cell)
+        return xRayFloatingButton
     }
 }

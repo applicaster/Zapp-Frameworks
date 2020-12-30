@@ -11,8 +11,8 @@ import XrayLogger
 public class LoggerAssistanceManager {
     let logger = Logger.getLogger(for: LoggerAssistanceManagerLogs.subsystem)
 
-    public func presentAuthentication(with params: [String: Any],
-                                      on rootController: RootController?) {
+    public func presentAuthenticationForRemoteEventsLogging(with params: [String: Any],
+                                                            on rootController: RootController?) {
         guard let rootController = rootController else {
             return
         }
@@ -32,10 +32,10 @@ public class LoggerAssistanceManager {
                                                if let codeTextField = alert.textFields?.first,
                                                    let value = codeTextField.text,
                                                    let intValue = Int(value) {
-                                                   SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance,
+                                                   SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistanceRemoteEventsLogging,
                                                                                                            value: true)
 
-                                                   self.logger?.debugLog(template: LoggerAssistanceManagerLogs.passedAuthentication,
+                                                   self.logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingPassedAuthentication,
                                                                          data: ["value": "\(intValue)"])
                                                }
                                            })
@@ -44,8 +44,8 @@ public class LoggerAssistanceManager {
                                          style: .cancel,
                                          handler: { _ in
                                              alert.dismiss(animated: true, completion: {
-                                                 self.logger?.debugLog(template: LoggerAssistanceManagerLogs.cancelled)
-                                                 self.resetToDefaultState()
+                                                 self.logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingCancelled)
+                                                 self.resetToDefaultRemoteLoggingState()
                                              })
                                          })
 
@@ -60,15 +60,23 @@ public class LoggerAssistanceManager {
                                                                  animated: true,
                                                                  completion: nil)
 
-        logger?.debugLog(template: LoggerAssistanceManagerLogs.presentAuthentication)
+        logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingPresentAuthentication)
+    }
+    
+    public func showXrayButtonOnScreen(with params: [String: Any],
+                                       on rootController: RootController?) {
+        guard let rootController = rootController else {
+            return
+        }
+        
     }
 
-    public func resetToDefaultState() {
-        SettingsBundleHelper.setSettingsBundleBoolValue(forKey: .loggerAssistance,
+    fileprivate func resetToDefaultRemoteLoggingState() {
+        SettingsBundleHelper.setSettingsBundleBoolValue(forKey: .loggerAssistanceRemoteEventsLogging,
                                                         value: false)
-        SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistance,
+        SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistanceRemoteEventsLogging,
                                                                 value: false)
 
-        logger?.debugLog(template: LoggerAssistanceManagerLogs.resetToDefaultState)
+        logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingResetToDefaultState)
     }
 }
