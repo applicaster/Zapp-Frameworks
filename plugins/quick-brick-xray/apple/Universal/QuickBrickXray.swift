@@ -148,7 +148,7 @@ extension QuickBrickXray {
         guard let viewController = getTabBarViewController() else {
             return
         }
-        let presenter = UIApplication.shared.windows.first?.rootViewController
+        let presenter = UIApplication.shared.keyWindow?.rootViewController
         if let oldLogger = loggerInstance {
             loggerInstance = viewController
 
