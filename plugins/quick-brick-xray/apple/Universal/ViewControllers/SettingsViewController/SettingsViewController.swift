@@ -21,6 +21,11 @@ protocol SettingsViewControllerDelegate: class {
 }
 
 class SettingsViewController: UITableViewController, SettingsViewControllerProtocol {
+    @IBAction func close(_ sender: UIBarButtonItem) {
+        let presenter = UIApplication.shared.keyWindow?.rootViewController
+        presenter?.presentedViewController?.dismiss(animated: true, completion: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
