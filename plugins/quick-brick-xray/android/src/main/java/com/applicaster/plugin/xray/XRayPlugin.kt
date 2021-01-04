@@ -11,11 +11,13 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.applicaster.identityservice.UUIDUtil
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
 import com.applicaster.plugin.xray.logadapters.FLogAdapter
 import com.applicaster.plugin.xray.logadapters.PrinterAdapter
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.model.Settings
+import com.applicaster.plugin.xray.remote.RemoteReporter
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.*
@@ -98,6 +100,10 @@ class XRayPlugin : CrashlogPlugin {
 
         // default in memory sink (should be optional and configurable!)
         Core.get().addSink(inMemorySinkName, InMemoryLogSink())
+
+        Core.get().addSink("remote", RemoteReporter(
+                "http://applicaster-device-log-prod.herokuapp.com/api/account123/",
+                UUIDUtil.getUUID()))
 
         // override default SDK Logger
         hookApplicasterLogger()

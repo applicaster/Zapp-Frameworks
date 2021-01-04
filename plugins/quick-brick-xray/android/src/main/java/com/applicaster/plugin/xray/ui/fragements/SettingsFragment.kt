@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.XRayPlugin
+import com.applicaster.plugin.xray.model.Constants
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
@@ -109,7 +110,7 @@ class SettingsFragment : Fragment() {
         spinner.adapter = ArrayAdapter(
                 spinner.context,
                 android.R.layout.simple_list_item_1,
-                listOf(*(LogLevel.values().map { it.name }.toTypedArray()), "off"))
+                listOf(*(LogLevel.values().map { it.name }.toTypedArray()), Constants.LOG_LEVEL_OFF))
         if (logLevel?.level == null) {
             spinner.setSelection(LogLevel.values().size) // "off" position
         } else {
