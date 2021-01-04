@@ -20,15 +20,27 @@ extension QuickBrickXray {
             applyNewSettings(settings: settingsParams)
             return
         }
-        applyNewSettings(settings: settingsFromLocalStorage)
+
+        if settingsFromLocalStorage.isCustomSettingsExpired {
+            applyCustomSettings(settings: settingsFromLocalStorage)
+
+        } else {
+            applyNewSettings(settings: settingsFromLocalStorage)
+        }
     }
 
     func applyCustomSettings(settings: Settings) {
-        saveSettingsToLocalStorage(settings: settings)
-        if settings.customSettingsEnabled == false {
+        var newSettings = settings
+
+        if newSettings.isCustomSettingsExpired == true {
+            newSettings.customSettingsEnabled = false
+        }
+
+        saveSettingsToLocalStorage(settings: newSettings)
+        if newSettings.customSettingsEnabled == false {
             prepareSettings()
         } else {
-            applyNewSettings(settings: settings)
+            applyNewSettings(settings: newSettings)
         }
     }
 
@@ -60,6 +72,12 @@ extension QuickBrickXray {
             settings.customSettingsEnabled = customSettingsEnabled
         }
 
+        if let customSettingsOffsetToDisableString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.CustomSettingsOffsetToDisable,
+                                                                                                           namespace: pluginNameSpace),
+            let customSettingsOffsetToDisable = TimeInterval(customSettingsOffsetToDisableString) {
+            settings.customSettingsOffsetToDisable = Date(timeIntervalSinceReferenceDate: customSettingsOffsetToDisable)
+        }
+
         if let shortcutEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ShortcutEnabled,
                                                                                              namespace: pluginNameSpace),
             let shortcutEnabled = Bool(shortcutEnabledString) {
@@ -71,10 +89,10 @@ extension QuickBrickXray {
             let fileLogLevel = LogLevel.logLevel(fromConfigurationKey: fileLogLevelString) {
             settings.fileLogLevel = fileLogLevel
         }
-        
+
         if let showXrayFloatingButtonEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ShowXrayFloatingButtonEnabled,
-                                                                                          namespace: pluginNameSpace),
-           let showXrayFloatingButtonEnabled = Bool(showXrayFloatingButtonEnabledString) {
+                                                                                                           namespace: pluginNameSpace),
+            let showXrayFloatingButtonEnabled = Bool(showXrayFloatingButtonEnabledString) {
             settings.showXrayFloatingButtonEnabled = showXrayFloatingButtonEnabled
         }
 
@@ -94,12 +112,22 @@ extension QuickBrickXray {
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.CustomSettingsEnabled,
                                                                      value: customSettingsEnabled,
                                                                      namespace: pluginNameSpace)
-        
+
+        if settings?.customSettingsEnabled == true,
+           let offsetDate = settings?.customSettingsOffsetToDisable {
+            let offsetDateTimeInterval = offsetDate.timeIntervalSinceNow
+            _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.CustomSettingsOffsetToDisable,
+                                                                         value: String(offsetDateTimeInterval),
+                                                                         namespace: pluginNameSpace)
+        } else {
+            _ = FacadeConnector.connector?.storage?.localStorageRemoveValue(for: PluginConfigurationKeys.CustomSettingsOffsetToDisable,
+                                                                            namespace: pluginNameSpace)
+        }
+
         let showXrayFloatingButtonEnabled = settings?.showXrayFloatingButtonEnabled ?? false ? "true" : "false"
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.ShowXrayFloatingButtonEnabled,
                                                                      value: showXrayFloatingButtonEnabled,
                                                                      namespace: pluginNameSpace)
-
     }
 
     func removeLocalStorageSettings() {

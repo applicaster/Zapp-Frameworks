@@ -13,10 +13,28 @@ import XrayLogger
 import ZappCore
 
 struct Settings {
-    var customSettingsEnabled: Bool = false
+    var customSettingsEnabled: Bool = false {
+        didSet {
+            if customSettingsEnabled == true {
+                let dayOffset: TimeInterval = 60 * 60 * 24
+                customSettingsOffsetToDisable = Date(timeIntervalSinceNow: dayOffset)
+            } else {
+                customSettingsOffsetToDisable = nil
+            }
+        }
+    }
+
+    var customSettingsOffsetToDisable: Date?
     var showXrayFloatingButtonEnabled: Bool = false
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
+
+    var isCustomSettingsExpired: Bool {
+        guard let customSettingsOffsetToDisable = customSettingsOffsetToDisable else {
+            return false
+        }
+        return customSettingsEnabled && customSettingsOffsetToDisable <= Date()
+    }
 
     static func == (lhs: Settings,
                     rhs: Settings) -> Bool {
@@ -25,7 +43,7 @@ struct Settings {
             lhs.shortcutEnabled == rhs.shortcutEnabled &&
             lhs.fileLogLevel == rhs.fileLogLevel
     }
-    
+
     static func != (lhs: Settings,
                     rhs: Settings) -> Bool {
         return (lhs == rhs) == false
