@@ -12,6 +12,7 @@ import XrayLogger
 import ZappCore
 
 struct PluginConfigurationKeys {
+    static let CustomSettingsOffsetToDisable = "customSettingsOffsetToDisable"
     static let CustomSettingsEnabled = "customSettingsEnabled"
     static let FileLogLevel = "fileLogLevel"
     static let ShortcutEnabled = "shortcutEnabled"

@@ -62,7 +62,11 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
         addSessionStorageObserver()
-
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToForeground),
+                                       name: UIApplication.willEnterForegroundNotification,
+                                       object: nil)
+    
         let emailsForShare = configurationHelper.emailsToShare()
 
         if isDebugEnvironment {
@@ -89,10 +93,18 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
         Reporter.setDefaultData(emails: emailsForShare,
                                 logFileSinkDelegate: self,
                                 contexts: [:])
+
         prepareSettings()
         QuickBrickXray.sharedInstance = self
 
         completion?(true)
+    }
+
+    @objc func appMovedToForeground() {
+        if let currentSettings = currentSettings,
+           currentSettings.isCustomSettingsExpired {
+            applyCustomSettings(settings: currentSettings)
+        }
     }
 
     func commitSettings() {
