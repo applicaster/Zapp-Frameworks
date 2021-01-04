@@ -16,6 +16,9 @@ data class Settings(val dummy: Any? = null) {
     // intercept internal react native messages from Printer
     var reactNativeDebugLogging: Boolean? = null
 
+    // enable TimingSink csv output
+    var timingLogging: Boolean? = null
+
     companion object {
         fun merge(base: Settings, overrides: Settings): Settings {
             val merged = base.copy()
@@ -25,6 +28,7 @@ data class Settings(val dummy: Any? = null) {
             merged.showNotification = overrides.showNotification ?: base.showNotification
             merged.reactNativeLogLevel = overrides.reactNativeLogLevel ?: base.reactNativeLogLevel
             merged.reactNativeDebugLogging = overrides.reactNativeDebugLogging ?: base.reactNativeDebugLogging
+            merged.timingLogging = overrides.timingLogging ?: base.timingLogging
             return merged
         }
 
