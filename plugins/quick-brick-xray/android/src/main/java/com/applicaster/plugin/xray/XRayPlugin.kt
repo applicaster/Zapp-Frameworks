@@ -272,7 +272,7 @@ class XRayPlugin : CrashlogPlugin {
             actions[context.resources.getString(R.string.xray_notification_action_send)] = shareLogIntent
         }
 
-        // here we show Notification UI with custom agi ctions
+        // here we show Notification UI with custom actions
         XRayNotification.show(
                 context,
                 notificationId,
