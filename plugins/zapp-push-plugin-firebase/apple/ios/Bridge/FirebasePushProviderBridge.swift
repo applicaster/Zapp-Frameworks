@@ -7,15 +7,15 @@
 //
 
 import Foundation
-import React
-import ZappCore
 import MediaPlayer
+import React
 import XrayLogger
+import ZappCore
 
 @objc(FirebasePushProviderBridge)
 class FirebasePushProviderBridge: NSObject, RCTBridgeModule {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappPushPluginFirebase")
-    
+
     let pluginIdentifier = "ZappPushPluginFirebase"
     var bridge: RCTBridge!
     var userActivity: NSUserActivity!
@@ -26,32 +26,30 @@ class FirebasePushProviderBridge: NSObject, RCTBridgeModule {
     public class func requiresMainQueueSetup() -> Bool {
         return true
     }
-    
-    lazy var providerInstance:APPushProviderFirebase? = {
-        return FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? APPushProviderFirebase
+
+    lazy var providerInstance: APPushProviderFirebase? = {
+        FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? APPushProviderFirebase
     }()
 
     @objc public func subscribeToTopic(_ topic: NSString) {
         providerInstance?.subscribeToTopic(with: topic as String)
     }
-    
+
     @objc public func subscribeToTopics(_ topics: NSArray) {
         guard let topics = topics as? [String] else {
             return
         }
         providerInstance?.subscribeToTopics(with: topics)
     }
-    
+
     @objc public func unsubscribeFromTopic(_ topic: NSString) {
         providerInstance?.unsubscribeFromTopic(with: topic as String)
     }
-    
+
     @objc public func unsubscribeFromTopics(_ topics: NSArray) {
         guard let topics = topics as? [String] else {
             return
         }
         providerInstance?.unsubscribeFromTopics(with: topics)
     }
-    
-
 }
