@@ -22,7 +22,7 @@
 
         <fragment
             android:id="@+id/settings_fragment"
-            android:name="com.applicaster.plugin.xray.ui.fragements.SettingsFragment"
+            android:name="com.applicaster.plugin.xray.ui.fragments.SettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

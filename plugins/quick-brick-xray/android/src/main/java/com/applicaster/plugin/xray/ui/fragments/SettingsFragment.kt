@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray.ui.fragements
+package com.applicaster.plugin.xray.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle

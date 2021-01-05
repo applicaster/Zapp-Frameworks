@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".ui.fragements.SettingsFragment">
+        tools:context=".ui.fragments.SettingsFragment">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchNotification"
