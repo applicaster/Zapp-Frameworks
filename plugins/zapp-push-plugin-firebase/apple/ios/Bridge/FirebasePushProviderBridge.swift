@@ -31,25 +31,31 @@ class FirebasePushProviderBridge: NSObject, RCTBridgeModule {
         FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? APPushProviderFirebase
     }()
 
-    @objc public func subscribeToTopic(_ topic: NSString) {
-        providerInstance?.subscribeToTopic(with: topic as String)
-    }
-
-    @objc public func subscribeToTopics(_ topics: NSArray) {
-        guard let topics = topics as? [String] else {
-            return
+    @objc public func subscribeToTopic(_ topic: NSString,
+                                       resolver: @escaping RCTPromiseResolveBlock,
+                                       rejecter: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            self.providerInstance?.subscribeToTopic(with: topic as String, completion: { success in
+                if success {
+                    resolver(1)
+                } else {
+                    rejecter("0", "unable to subscribe to topic", nil)
+                }
+            })
         }
-        providerInstance?.subscribeToTopics(with: topics)
     }
 
-    @objc public func unsubscribeFromTopic(_ topic: NSString) {
-        providerInstance?.unsubscribeFromTopic(with: topic as String)
-    }
-
-    @objc public func unsubscribeFromTopics(_ topics: NSArray) {
-        guard let topics = topics as? [String] else {
-            return
+    @objc public func unsubscribeFromTopic(_ topic: NSString,
+                                           resolver: @escaping RCTPromiseResolveBlock,
+                                           rejecter: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            self.providerInstance?.unsubscribeFromTopic(with: topic as String, completion: { success in
+                if success {
+                    resolver(1)
+                } else {
+                    rejecter("0", "unable to unsubscribe from topic", nil)
+                }
+            })
         }
-        providerInstance?.unsubscribeFromTopics(with: topics)
     }
 }

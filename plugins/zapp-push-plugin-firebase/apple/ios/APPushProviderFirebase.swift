@@ -54,34 +54,32 @@ open class APPushProviderFirebase: ZPPushProvider {
         }
     }
 
-    open func subscribeToTopic(with topic: String) {
-        subscribeToTopics(with: [topic])
-    }
-
-    open func unsubscribeFromTopic(with topic: String) {
-        unsubscribeFromTopics(with: [topic])
-    }
-
-    open func subscribeToTopics(with topics: [String]) {
-        for topic in topics {
-            Messaging.messaging().subscribe(toTopic: topic) { error in
-                if error == nil {
-                    self.logger?.debugLog(message: "Successfully subscribed to topic: \(topic)")
-                } else {
-                    self.logger?.debugLog(message: "Failed to subscribe to topic: \(topic)")
-                }
+    open func subscribeToTopic(with topic: String, completion: ((_ success: Bool) -> Void)?) {
+        Messaging.messaging().subscribe(toTopic: topic) { error in
+            if error == nil {
+                self.logger?.debugLog(message: "Successfully subscribed to topic: \(topic)")
+                completion?(true)
+            } else {
+                self.logger?.debugLog(message: "Failed to subscribe to topic: \(topic)")
+                completion?(false)
             }
         }
     }
 
-    open func unsubscribeFromTopics(with topics: [String]) {
+    func subscribeToTopics(with topics: [String]) {
         for topic in topics {
-            Messaging.messaging().unsubscribe(fromTopic: topic) { error in
-                if error == nil {
-                    self.logger?.debugLog(message: "Successfully unsubscribed from topic: \(topic)")
-                } else {
-                    self.logger?.debugLog(message: "Failed to unsubscribe from topic: \(topic)")
-                }
+            subscribeToTopic(with: topic, completion: nil)
+        }
+    }
+
+    open func unsubscribeFromTopic(with topic: String, completion: ((_ success: Bool) -> Void)?) {
+        Messaging.messaging().unsubscribe(fromTopic: topic) { error in
+            if error == nil {
+                self.logger?.debugLog(message: "Successfully unsubscribed from topic: \(topic)")
+                completion?(true)
+            } else {
+                self.logger?.debugLog(message: "Failed to unsubscribe from topic: \(topic)")
+                completion?(false)
             }
         }
     }

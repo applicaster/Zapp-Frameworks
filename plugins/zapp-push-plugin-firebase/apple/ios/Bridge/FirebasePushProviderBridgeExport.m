@@ -10,9 +10,6 @@
 
 @interface RCT_EXTERN_MODULE (FirebasePushProviderBridge, NSObject)
 
-RCT_EXTERN_METHOD(subscribeToTopic:(NSString *)topic);
-RCT_EXTERN_METHOD(subscribeToTopics:(NSArray *)topics);
-RCT_EXTERN_METHOD(unsubscribeFromTopic:(NSString *)topic);
-RCT_EXTERN_METHOD(unsubscribeFromTopics:(NSArray *)topics);
-
+RCT_EXTERN_METHOD(subscribeToTopic:(NSString *)topic resolver:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
+RCT_EXTERN_METHOD(unsubscribeFromTopic:(NSString *)topic resolver:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
 @end
