@@ -147,6 +147,7 @@ extension APPushProviderFirebase: MessagingDelegate {
         if let additionalTopicsString = configurationJSON?["topics"] as? String {
             let additionalTopics = additionalTopicsString.components(separatedBy: ",")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { $0.isEmpty == false}
             for topic in additionalTopics {
                 subscribe(messaging, toTopic: topic)
             }
