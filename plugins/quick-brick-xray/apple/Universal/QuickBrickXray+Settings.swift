@@ -75,7 +75,7 @@ extension QuickBrickXray {
         if let customSettingsOffsetToDisableString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.CustomSettingsOffsetToDisable,
                                                                                                            namespace: pluginNameSpace),
             let customSettingsOffsetToDisable = TimeInterval(customSettingsOffsetToDisableString) {
-            settings.customSettingsOffsetToDisable = Date(timeIntervalSinceReferenceDate: customSettingsOffsetToDisable)
+            settings.customSettingsOffsetToDisable = Date(timeIntervalSince1970: customSettingsOffsetToDisable)
         }
 
         if let shortcutEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.ShortcutEnabled,
@@ -115,7 +115,7 @@ extension QuickBrickXray {
 
         if settings?.customSettingsEnabled == true,
            let offsetDate = settings?.customSettingsOffsetToDisable {
-            let offsetDateTimeInterval = offsetDate.timeIntervalSinceNow
+            let offsetDateTimeInterval = offsetDate.timeIntervalSince1970
             _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.CustomSettingsOffsetToDisable,
                                                                          value: String(offsetDateTimeInterval),
                                                                          namespace: pluginNameSpace)
