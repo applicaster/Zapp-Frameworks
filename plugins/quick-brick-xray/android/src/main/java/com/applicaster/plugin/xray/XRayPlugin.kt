@@ -4,11 +4,13 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.text.TextUtils
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
@@ -34,6 +36,8 @@ import com.facebook.common.logging.FLogDefaultLoggingDelegate
 import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
 import com.google.gson.GsonBuilder
+import java.util.*
+import kotlin.collections.HashMap
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
@@ -57,6 +61,9 @@ class XRayPlugin : CrashlogPlugin {
         private const val TAG = "XRayPlugin"
         private const val notificationId = 101
         private const val storageKey = "settings"
+        private const val storageValidUntilKey = "timeout"
+        private const val settingsTimeout = DateUtils.DAY_IN_MILLIS
+
         private const val shortcutId = "xray"
 
         private val gson = GsonBuilder().create()
@@ -77,10 +84,11 @@ class XRayPlugin : CrashlogPlugin {
     fun applySettings(settings: Settings) {
         localSettings = settings
         apply(Settings.merge(pluginSettings, localSettings))
-        // todo: dirty. Local storage is not initialized yet
-        context.getSharedPreferences(pluginId, 0)
+        // Local storage is not initialized yet
+        sharedPreferences()
                 .edit()
                 .putString(storageKey, gson.toJson(localSettings))
+                .putLong(storageValidUntilKey, Date().time + settingsTimeout)
                 .apply()
     }
 
@@ -102,9 +110,24 @@ class XRayPlugin : CrashlogPlugin {
         // override default SDK Logger
         hookApplicasterLogger()
 
-        // todo: dirty.
-        val sharedPreferences = context.getSharedPreferences(pluginId, 0)
-        sharedPreferences.getString(storageKey, null)?.let {
+        restoreLocalSettings()
+
+        apply(Settings.merge(pluginSettings, localSettings))
+
+        activated = true
+        pluginLogger.i(TAG).message("X-Ray logging was activated")
+    }
+
+    private fun restoreLocalSettings() {
+        val preferences = sharedPreferences()
+        if (preferences.contains(storageValidUntilKey)) {
+            val now = Date().time
+            if (preferences.getLong(storageValidUntilKey, now) <= now) {
+                deletePreferences(preferences)
+                return
+            }
+        }
+        preferences.getString(storageKey, null)?.let {
             try {
                 gson.fromJson(it, Settings::class.java)?.let {
                     localSettings = it
@@ -112,18 +135,20 @@ class XRayPlugin : CrashlogPlugin {
             } catch (ex: Exception) {
                 // usually format change, just remove stored setting
                 ex.printStackTrace()
-                sharedPreferences
-                        .edit()
-                        .remove(storageKey)
-                        .apply()
+                deletePreferences(preferences)
             }
         }
-
-        apply(Settings.merge(pluginSettings, localSettings))
-
-        activated = true
-        pluginLogger.i(TAG).message("X-Ray logging was activated")
     }
+
+    private fun deletePreferences(preferences: SharedPreferences = sharedPreferences()) {
+        preferences
+                .edit()
+                .remove(storageKey)
+                .remove(storageValidUntilKey)
+                .apply()
+    }
+
+    private fun sharedPreferences() = context.getSharedPreferences(pluginId, 0)
 
     private fun hookApplicasterLogger() {
         APLogger.setLogger(APLoggerAdapter())
