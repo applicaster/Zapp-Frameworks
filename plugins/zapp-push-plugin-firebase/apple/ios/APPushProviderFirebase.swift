@@ -10,9 +10,9 @@ import FirebaseCore
 import FirebaseInstallations
 import FirebaseMessaging
 import XrayLogger
+import ZappCore
 import ZappPlugins
 import ZappPushPluginsSDK
-import ZappCore
 
 open class APPushProviderFirebase: ZPPushProvider {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappPushPluginFirebase")
@@ -129,11 +129,21 @@ open class APPushProviderFirebase: ZPPushProvider {
 }
 
 extension APPushProviderFirebase: MessagingDelegate {
-    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        guard let token = fcmToken else {
+    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        guard !fcmToken.isEmpty else {
             return
         }
-        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(token)",
-                         data: ["token": token])
+
+        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(fcmToken)",
+                         data: ["token": fcmToken])
+
+        let defaultTopic = "general"
+        messaging.subscribe(toTopic: defaultTopic) { error in
+            if error == nil {
+                self.logger?.debugLog(message: "Subscribed to topic: \(defaultTopic)")
+            } else {
+                self.logger?.debugLog(message: "Failed to subscribe to topic: \(defaultTopic)")
+            }
+        }
     }
 }
