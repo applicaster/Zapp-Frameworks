@@ -137,12 +137,28 @@ extension APPushProviderFirebase: MessagingDelegate {
         logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(fcmToken)",
                          data: ["token": fcmToken])
 
+        subscribeToTopics(with: messaging)
+    }
+
+    func subscribeToTopics(with messaging: Messaging) {
         let defaultTopic = "general"
-        messaging.subscribe(toTopic: defaultTopic) { error in
+        subscribe(messaging, toTopic: defaultTopic)
+
+        if let additionalTopicsString = configurationJSON?["topics"] as? String {
+            let additionalTopics = additionalTopicsString.components(separatedBy: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            for topic in additionalTopics {
+                subscribe(messaging, toTopic: topic)
+            }
+        }
+    }
+
+    func subscribe(_ messaging: Messaging, toTopic topic: String) {
+        messaging.subscribe(toTopic: topic) { error in
             if error == nil {
-                self.logger?.debugLog(message: "Subscribed to topic: \(defaultTopic)")
+                self.logger?.debugLog(message: "Subscribed to topic: \(topic)")
             } else {
-                self.logger?.debugLog(message: "Failed to subscribe to topic: \(defaultTopic)")
+                self.logger?.debugLog(message: "Failed to subscribe to topic: \(topic)")
             }
         }
     }
