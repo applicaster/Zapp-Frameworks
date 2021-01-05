@@ -21,6 +21,7 @@ import com.applicaster.plugin_manager.push_plugin.PushContract
 import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
 import com.applicaster.util.StringUtil
@@ -64,6 +65,10 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             ensureChannels(context)
         }
         buildSoundLookup(context)
+
+        GlobalScope.launch ( Dispatchers.Main ) {
+            registerDefaultTopics()
+        }
         // mark as initialized even if there is no token, since its plugin state
         isInitialized = true
     }
@@ -82,7 +87,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             pushTagRegistrationListener: PushTagRegistrationI?
     ) {
         GlobalScope.launch(Dispatchers.Main) {
-            registerAll(tag, pushTagRegistrationListener)
+            registerAll(tag!!, pushTagRegistrationListener)
         }
     }
 
@@ -108,6 +113,9 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             // happens if plugin was enabled later
             initPushProvider(AppContext.get())
         }
+        if(pluginId != plugin.identifier) {
+            APLogger.error(TAG, "Plugin id mismatch: $pluginId expected, ${plugin.identifier} received")
+        }
     }
 
     override fun getTagList(context: Context?, listener: PushTagLoadedI?) {
@@ -131,15 +139,16 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     }
 
     private suspend fun registerAll(
-            tag: MutableList<String>?,
+            tag: List<String>,
             pushTagRegistrationListener: PushTagRegistrationI?
-    ){
+    ): Boolean {
         var totalResult = true;
-        tag?.forEach {
+        tag.forEach {
             val result = register(it)
             totalResult = totalResult && result
         }
         pushTagRegistrationListener?.pushRregistrationTagComplete(PushPluginsType.applicaster, totalResult)
+        return totalResult
     }
 
     private suspend fun register(topic: String): Boolean =
@@ -152,13 +161,14 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private suspend fun unregisterAll(
             tag: MutableList<String>?,
             pushTagRegistrationListener: PushTagRegistrationI?
-    ){
+    ): Boolean {
         var totalResult = true;
         tag?.forEach {
             val result = unregister(it)
             totalResult = totalResult && result
         }
         pushTagRegistrationListener?.pushRregistrationTagComplete(PushPluginsType.applicaster, totalResult)
+        return totalResult
     }
 
     private suspend fun unregister(topic: String): Boolean =
@@ -167,6 +177,28 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                     cont.resume(task.isSuccessful)
                 }
             }
+
+    private suspend fun registerDefaultTopics() {
+        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
+        if (!TextUtils.isEmpty(stored)) {
+            return // something was already registered, do not try change it
+        }
+        val defaultTopics = getPluginParamByKey(defaultTopicKey)
+        if (TextUtils.isEmpty(defaultTopics)) {
+            return
+        }
+        // cleanup user input
+        val topics = defaultTopics
+                .split(",")
+                .map { it.trim().toLowerCase(Locale.ENGLISH) }
+                .filter { it.isNotEmpty() }
+        if (topics.isEmpty()) {
+            return
+        }
+        if(registerAll(topics, null)) {
+            LocalStorage.set(localStorageTopicsParam, topics.joinToString { "," }, pluginId)
+        }
+    }
 
     //endregion
 
@@ -276,6 +308,11 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             val plugin = PluginManager.getInstance().getInitiatedPlugin(PLUGIN_ID)
             return plugin?.instance as? FirebasePushProvider
         }
+
+        private const val defaultTopicKey = "default_topic"
+        private const val localStorageTopicsParam = "topics"
+        // this field is available in Plugin model now, but for now we keep a copy and check it
+        private const val pluginId = "ZappPushPluginFirebase"
     }
 
     override fun disable(): Boolean {

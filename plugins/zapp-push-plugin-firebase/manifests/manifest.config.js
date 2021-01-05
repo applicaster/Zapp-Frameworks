@@ -89,6 +89,13 @@ const custom_configuration_fields_android = [
       "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
   },
   {
+    key: "default_topic",
+    type: "text",
+    label: "Default topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma"
+  },
+  {
     key: "notification_channel_name",
     type: "text",
     tooltip_text: "Name of the default notification channel",
