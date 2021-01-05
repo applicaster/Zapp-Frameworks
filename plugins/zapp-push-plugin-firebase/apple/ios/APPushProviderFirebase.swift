@@ -16,6 +16,7 @@ import ZappPushPluginsSDK
 
 open class APPushProviderFirebase: ZPPushProvider {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappPushPluginFirebase")
+    let localStorageTopicsParam = "topics"
 
     var registeredTags: Set<String> = []
     override open func getKey() -> String {
@@ -28,6 +29,7 @@ open class APPushProviderFirebase: ZPPushProvider {
             FirebaseApp.configure()
         }
         Messaging.messaging().delegate = self
+        setDefaultTopicIfNeeded()
 
         // Don't assign the UNUserNotificationCenter delegate because we are already handling the logic in the SDK
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -49,6 +51,38 @@ open class APPushProviderFirebase: ZPPushProvider {
             UIApplication.shared.unregisterForRemoteNotifications()
             self.logger?.debugLog(message: "Plugin finished disabling")
             completion?(true)
+        }
+    }
+
+    open func subscribeToTopic(with topic: String) {
+        subscribeToTopics(with: [topic])
+    }
+
+    open func unsubscribeFromTopic(with topic: String) {
+        unsubscribeFromTopics(with: [topic])
+    }
+
+    open func subscribeToTopics(with topics: [String]) {
+        for topic in topics {
+            Messaging.messaging().subscribe(toTopic: topic) { error in
+                if error == nil {
+                    self.logger?.debugLog(message: "Successfully subscribed to topic: \(topic)")
+                } else {
+                    self.logger?.debugLog(message: "Failed to subscribe to topic: \(topic)")
+                }
+            }
+        }
+    }
+
+    open func unsubscribeFromTopics(with topics: [String]) {
+        for topic in topics {
+            Messaging.messaging().unsubscribe(fromTopic: topic) { error in
+                if error == nil {
+                    self.logger?.debugLog(message: "Successfully unsubscribed from topic: \(topic)")
+                } else {
+                    self.logger?.debugLog(message: "Failed to unsubscribe from topic: \(topic)")
+                }
+            }
         }
     }
 
@@ -126,41 +160,46 @@ open class APPushProviderFirebase: ZPPushProvider {
             }
         }
     }
+
+    fileprivate func setDefaultTopicIfNeeded() {
+        if let _ = activeTopics {
+            // topics already defined, no changes needed
+        } else {
+            // add default value
+            if let defaultTopic = configurationJSON?["default_topic"] as? String,
+               defaultTopic.isEmpty == false {
+                _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: localStorageTopicsParam,
+                                                                             value: defaultTopic,
+                                                                             namespace: namespace)
+            }
+        }
+    }
+
+    fileprivate var namespace: String? {
+        return model?.identifier
+    }
+
+    fileprivate var activeTopics: [String]? {
+        let topicsString = FacadeConnector.connector?.storage?.localStorageValue(for: localStorageTopicsParam,
+                                                                                 namespace: namespace)
+
+        return topicsString?.components(separatedBy: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { $0.isEmpty == false }
+    }
 }
 
 extension APPushProviderFirebase: MessagingDelegate {
     open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         guard !fcmToken.isEmpty else {
+            logger?.debugLog(message: "didReceiveRegistrationToken: token is empty")
             return
         }
 
-        logger?.debugLog(message: "messaging:didReceiveRegistrationToken: token:\(fcmToken)",
+        logger?.debugLog(message: "didReceiveRegistrationToken: token:\(fcmToken)",
                          data: ["token": fcmToken])
 
-        subscribeToTopics(with: messaging)
-    }
-
-    func subscribeToTopics(with messaging: Messaging) {
-        let defaultTopic = "general"
-        subscribe(messaging, toTopic: defaultTopic)
-
-        if let additionalTopicsString = configurationJSON?["topics"] as? String {
-            let additionalTopics = additionalTopicsString.components(separatedBy: ",")
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { $0.isEmpty == false}
-            for topic in additionalTopics {
-                subscribe(messaging, toTopic: topic)
-            }
-        }
-    }
-
-    func subscribe(_ messaging: Messaging, toTopic topic: String) {
-        messaging.subscribe(toTopic: topic) { error in
-            if error == nil {
-                self.logger?.debugLog(message: "Subscribed to topic: \(topic)")
-            } else {
-                self.logger?.debugLog(message: "Failed to subscribe to topic: \(topic)")
-            }
-        }
+        // subscribe to active topics
+        subscribeToTopics(with: activeTopics ?? [])
     }
 }
