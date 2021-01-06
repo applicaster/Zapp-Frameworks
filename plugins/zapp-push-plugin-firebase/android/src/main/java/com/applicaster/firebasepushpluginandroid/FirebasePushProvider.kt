@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -44,6 +45,8 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private val channels = mutableSetOf<String>()
 
     private var isInitialized = false
+
+    private val topics = mutableSetOf<String>()
 
     override fun initPushProvider(context: Context) {
 
@@ -65,6 +68,11 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             ensureChannels(context)
         }
         buildSoundLookup(context)
+
+        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
+        if (!stored.isNullOrEmpty()) {
+            topics.addAll(stored.split(","))
+        }
 
         GlobalScope.launch ( Dispatchers.Main ) {
             registerDefaultTopics()
@@ -119,7 +127,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     }
 
     override fun getTagList(context: Context?, listener: PushTagLoadedI?) {
-
+        listener?.tagLoaded(pluginType, ArrayList(topics))
     }
 
     override fun setPushEnabled(context: Context?, isEnabled: Boolean) {
@@ -154,6 +162,10 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private suspend fun register(topic: String): Boolean =
             suspendCoroutine { cont ->
                 FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        topics.add(topic)
+                        storeTopics()
+                    }
                     cont.resume(task.isSuccessful)
                 }
             }
@@ -174,13 +186,16 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private suspend fun unregister(topic: String): Boolean =
             suspendCoroutine { cont ->
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(topic).addOnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        topics.remove(topic)
+                        storeTopics()
+                    }
                     cont.resume(task.isSuccessful)
                 }
             }
 
     private suspend fun registerDefaultTopics() {
-        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
-        if (!TextUtils.isEmpty(stored)) {
+        if (topics.isNotEmpty()) {
             return // something was already registered, do not try change it
         }
         val defaultTopics = getPluginParamByKey(defaultTopicKey)
@@ -188,16 +203,18 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             return
         }
         // cleanup user input
-        val topics = defaultTopics
+        val normalized = defaultTopics
                 .split(",")
                 .map { it.trim().toLowerCase(Locale.ENGLISH) }
                 .filter { it.isNotEmpty() }
-        if (topics.isEmpty()) {
+        if (normalized.isEmpty()) {
             return
         }
-        if(registerAll(topics, null)) {
-            LocalStorage.set(localStorageTopicsParam, topics.joinToString { "," }, pluginId)
-        }
+        registerAll(normalized, null)
+    }
+
+    private fun storeTopics() {
+        LocalStorage.set(localStorageTopicsParam, topics.joinToString { "," }, pluginId)
     }
 
     //endregion
@@ -312,7 +329,8 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         private const val defaultTopicKey = "default_topic"
         private const val localStorageTopicsParam = "topics"
         // this field is available in Plugin model now, but for now we keep a copy and check it
-        private const val pluginId = "ZappPushPluginFirebase"
+        // also we need it for ReactNative
+        const val pluginId = "ZappPushPluginFirebase"
     }
 
     override fun disable(): Boolean {
