@@ -338,6 +338,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                 }.addOnFailureListener {
                     APLogger.error(Companion.TAG, "Failed to delete Firebase push token")
                 }
+        LocalStorage.remove(localStorageTopicsParam, pluginId)
         isInitialized = false // plugin is now not initialized in any case
         return true
     }
