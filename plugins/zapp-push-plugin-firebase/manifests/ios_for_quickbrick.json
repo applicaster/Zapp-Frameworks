@@ -49,6 +49,13 @@
       "type": "uploader",
       "label": "Custom sound files",
       "label_tooltip": "Please upload a zip file to provide the custom sounds mp3 files to be used with FCM custom sound parameter</a>."
+    },
+    {
+      "key": "default_topic",
+      "type": "text",
+      "label": "Default topic",
+      "default": "general",
+      "tooltip_text": "Topics to subscribe to, separated with comma"
     }
   ],
   "targets": [
@@ -58,7 +65,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "3.0.0",
+  "manifest_version": "3.1.0",
   "extra_dependencies": [
     {
       "ZappPushPluginFirebase": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
@@ -75,6 +82,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.0.0"
+    "@applicaster/zapp-push-plugin-firebase@3.1.0"
   ]
 }

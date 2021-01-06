@@ -30,6 +30,13 @@
       "label_tooltip": "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start"
     },
     {
+      "key": "default_topic",
+      "type": "text",
+      "label": "Default topics",
+      "default": "general",
+      "tooltip_text": "Topics to subscribe to, separated with comma"
+    },
+    {
       "key": "notification_channel_name",
       "type": "text",
       "tooltip_text": "Name of the default notification channel"
@@ -235,9 +242,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "3.0.0",
+  "manifest_version": "3.1.0",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.0.0"
+    "@applicaster/zapp-push-plugin-firebase@3.1.0"
   ],
   "project_dependencies": [
     {
