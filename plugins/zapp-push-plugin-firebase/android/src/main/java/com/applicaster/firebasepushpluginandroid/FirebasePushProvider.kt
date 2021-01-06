@@ -329,7 +329,6 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         private const val defaultTopicKey = "default_topic"
         private const val localStorageTopicsParam = "topics"
         // this field is available in Plugin model now, but for now we keep a copy and check it
-        // also we need it for ReactNative
         const val pluginId = "ZappPushPluginFirebase"
     }
 
