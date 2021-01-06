@@ -21,6 +21,7 @@ import com.applicaster.plugin_manager.push_plugin.PushContract
 import com.applicaster.plugin_manager.push_plugin.helper.PushPluginsType
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagLoadedI
 import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
 import com.applicaster.util.StringUtil
@@ -29,13 +30,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
 class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
-
-    private val TAG = "FirebasePushProvider"
 
     private var pluginsParamsMap: MutableMap<*, *>? = null
 
@@ -43,6 +43,8 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private val channels = mutableSetOf<String>()
 
     private var isInitialized = false
+
+    private val topics = mutableSetOf<String>()
 
     override fun initPushProvider(context: Context) {
 
@@ -53,10 +55,13 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         FirebaseMessaging.getInstance().token
                 .addOnCompleteListener {
                     if (!it.isSuccessful) {
-                        APLogger.error(TAG, "getToken failed", it.exception)
+                        APLogger.error(Companion.TAG, "getToken failed", it.exception)
                     } else {
                         val token = it.result
-                        APLogger.info(TAG, "Firebase push token $token")
+                        APLogger.info(Companion.TAG, "Firebase push token $token")
+                        GlobalScope.launch ( Dispatchers.Main ) {
+                            registerDefaultTopics()
+                        }
                     }
                 }
 
@@ -64,6 +69,12 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             ensureChannels(context)
         }
         buildSoundLookup(context)
+
+        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
+        if (!stored.isNullOrEmpty()) {
+            topics.addAll(stored.split(","))
+        }
+
         // mark as initialized even if there is no token, since its plugin state
         isInitialized = true
     }
@@ -82,7 +93,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             pushTagRegistrationListener: PushTagRegistrationI?
     ) {
         GlobalScope.launch(Dispatchers.Main) {
-            registerAll(tag, pushTagRegistrationListener)
+            registerAll(tag!!, pushTagRegistrationListener)
         }
     }
 
@@ -108,10 +119,13 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             // happens if plugin was enabled later
             initPushProvider(AppContext.get())
         }
+        if(pluginId != plugin.identifier) {
+            APLogger.error(Companion.TAG, "Plugin id mismatch: $pluginId expected, ${plugin.identifier} received")
+        }
     }
 
     override fun getTagList(context: Context?, listener: PushTagLoadedI?) {
-
+        listener?.tagLoaded(pluginType, ArrayList(topics))
     }
 
     override fun setPushEnabled(context: Context?, isEnabled: Boolean) {
@@ -119,7 +133,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         context.packageManager.setComponentEnabledSetting(componentName,
                 if (isEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP)
-        APLogger.info(TAG, "Firebase push receiver is now ${if (isEnabled) "enabled" else "disabled"}")
+        APLogger.info(Companion.TAG, "Firebase push receiver is now ${if (isEnabled) "enabled" else "disabled"}")
     }
 
     //region Private methods
@@ -131,20 +145,25 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     }
 
     private suspend fun registerAll(
-            tag: MutableList<String>?,
+            tag: List<String>,
             pushTagRegistrationListener: PushTagRegistrationI?
-    ){
+    ): Boolean {
         var totalResult = true;
-        tag?.forEach {
+        tag.forEach {
             val result = register(it)
             totalResult = totalResult && result
         }
         pushTagRegistrationListener?.pushRregistrationTagComplete(PushPluginsType.applicaster, totalResult)
+        return totalResult
     }
 
     private suspend fun register(topic: String): Boolean =
             suspendCoroutine { cont ->
                 FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        topics.add(topic)
+                        storeTopics()
+                    }
                     cont.resume(task.isSuccessful)
                 }
             }
@@ -152,21 +171,50 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     private suspend fun unregisterAll(
             tag: MutableList<String>?,
             pushTagRegistrationListener: PushTagRegistrationI?
-    ){
+    ): Boolean {
         var totalResult = true;
         tag?.forEach {
             val result = unregister(it)
             totalResult = totalResult && result
         }
         pushTagRegistrationListener?.pushRregistrationTagComplete(PushPluginsType.applicaster, totalResult)
+        return totalResult
     }
 
     private suspend fun unregister(topic: String): Boolean =
             suspendCoroutine { cont ->
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(topic).addOnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        topics.remove(topic)
+                        storeTopics()
+                    }
                     cont.resume(task.isSuccessful)
                 }
             }
+
+    private suspend fun registerDefaultTopics() {
+        if (topics.isNotEmpty()) {
+            return // something was already registered, do not try change it
+        }
+        val defaultTopics = getPluginParamByKey(defaultTopicKey)
+        if (TextUtils.isEmpty(defaultTopics)) {
+            return
+        }
+        // cleanup user input
+        val normalized = defaultTopics
+                .split(",")
+                .map { it.trim().toLowerCase(Locale.ENGLISH) }
+                .filter { it.isNotEmpty() }
+        if (normalized.isEmpty()) {
+            return
+        }
+        APLogger.info(TAG, "Registering default topics: $defaultTopics")
+        registerAll(normalized, null)
+    }
+
+    private fun storeTopics() {
+        LocalStorage.set(localStorageTopicsParam, topics.joinToString ( "," ), pluginId)
+    }
 
     //endregion
 
@@ -263,7 +311,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         return when (channelId) {
             in channels -> channelId
             else -> {
-                APLogger.error(TAG, "Channel $channelId is not registered, default will be used")
+                APLogger.error(Companion.TAG, "Channel $channelId is not registered, default will be used")
                 FIREBASE_DEFAULT_CHANNEL_ID
             }
         }
@@ -276,15 +324,21 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             val plugin = PluginManager.getInstance().getInitiatedPlugin(PLUGIN_ID)
             return plugin?.instance as? FirebasePushProvider
         }
+        private const val TAG = "FirebasePushProvider"
+        private const val defaultTopicKey = "default_topic"
+        private const val localStorageTopicsParam = "topics"
+        // this field is available in Plugin model now, but for now we keep a copy and check it
+        const val pluginId = "ZappPushPluginFirebase"
     }
 
     override fun disable(): Boolean {
         FirebaseMessaging.getInstance().deleteToken()
                 .addOnSuccessListener {
-                    APLogger.info(TAG, "Firebase push token was deleted")
+                    APLogger.info(Companion.TAG, "Firebase push token was deleted")
                 }.addOnFailureListener {
-                    APLogger.error(TAG, "Failed to delete Firebase push token")
+                    APLogger.error(Companion.TAG, "Failed to delete Firebase push token")
                 }
+        LocalStorage.remove(localStorageTopicsParam, pluginId)
         isInitialized = false // plugin is now not initialized in any case
         return true
     }

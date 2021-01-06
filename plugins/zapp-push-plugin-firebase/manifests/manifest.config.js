@@ -70,6 +70,13 @@ const custom_configuration_fields_apple = [
     label: "Custom sound files",
     label_tooltip: "Please upload a zip file to provide the custom sounds mp3 files to be used with FCM custom sound parameter</a>."
   },
+  {
+    key: "default_topic",
+    type: "text",
+    label: "Default topic",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma"
+  }
 ];
 
 const custom_configuration_fields_android = [
@@ -80,6 +87,13 @@ const custom_configuration_fields_android = [
     label: "Plugin enabled",
     label_tooltip:
       "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+  },
+  {
+    key: "default_topic",
+    type: "text",
+    label: "Default topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma"
   },
   {
     key: "notification_channel_name",
