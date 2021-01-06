@@ -37,8 +37,6 @@ import kotlin.coroutines.suspendCoroutine
 
 class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
 
-    private val TAG = "FirebasePushProvider"
-
     private var pluginsParamsMap: MutableMap<*, *>? = null
 
     private val channelSounds = mutableMapOf<String, Uri>()
@@ -57,10 +55,13 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         FirebaseMessaging.getInstance().token
                 .addOnCompleteListener {
                     if (!it.isSuccessful) {
-                        APLogger.error(TAG, "getToken failed", it.exception)
+                        APLogger.error(Companion.TAG, "getToken failed", it.exception)
                     } else {
                         val token = it.result
-                        APLogger.info(TAG, "Firebase push token $token")
+                        APLogger.info(Companion.TAG, "Firebase push token $token")
+                        GlobalScope.launch ( Dispatchers.Main ) {
+                            registerDefaultTopics()
+                        }
                     }
                 }
 
@@ -74,9 +75,6 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             topics.addAll(stored.split(","))
         }
 
-        GlobalScope.launch ( Dispatchers.Main ) {
-            registerDefaultTopics()
-        }
         // mark as initialized even if there is no token, since its plugin state
         isInitialized = true
     }
@@ -122,7 +120,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             initPushProvider(AppContext.get())
         }
         if(pluginId != plugin.identifier) {
-            APLogger.error(TAG, "Plugin id mismatch: $pluginId expected, ${plugin.identifier} received")
+            APLogger.error(Companion.TAG, "Plugin id mismatch: $pluginId expected, ${plugin.identifier} received")
         }
     }
 
@@ -135,7 +133,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         context.packageManager.setComponentEnabledSetting(componentName,
                 if (isEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP)
-        APLogger.info(TAG, "Firebase push receiver is now ${if (isEnabled) "enabled" else "disabled"}")
+        APLogger.info(Companion.TAG, "Firebase push receiver is now ${if (isEnabled) "enabled" else "disabled"}")
     }
 
     //region Private methods
@@ -210,11 +208,12 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         if (normalized.isEmpty()) {
             return
         }
+        APLogger.info(TAG, "Registering default topics: $defaultTopics")
         registerAll(normalized, null)
     }
 
     private fun storeTopics() {
-        LocalStorage.set(localStorageTopicsParam, topics.joinToString { "," }, pluginId)
+        LocalStorage.set(localStorageTopicsParam, topics.joinToString ( "," ), pluginId)
     }
 
     //endregion
@@ -312,7 +311,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         return when (channelId) {
             in channels -> channelId
             else -> {
-                APLogger.error(TAG, "Channel $channelId is not registered, default will be used")
+                APLogger.error(Companion.TAG, "Channel $channelId is not registered, default will be used")
                 FIREBASE_DEFAULT_CHANNEL_ID
             }
         }
@@ -325,7 +324,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             val plugin = PluginManager.getInstance().getInitiatedPlugin(PLUGIN_ID)
             return plugin?.instance as? FirebasePushProvider
         }
-
+        private const val TAG = "FirebasePushProvider"
         private const val defaultTopicKey = "default_topic"
         private const val localStorageTopicsParam = "topics"
         // this field is available in Plugin model now, but for now we keep a copy and check it
@@ -335,9 +334,9 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     override fun disable(): Boolean {
         FirebaseMessaging.getInstance().deleteToken()
                 .addOnSuccessListener {
-                    APLogger.info(TAG, "Firebase push token was deleted")
+                    APLogger.info(Companion.TAG, "Firebase push token was deleted")
                 }.addOnFailureListener {
-                    APLogger.error(TAG, "Failed to delete Firebase push token")
+                    APLogger.error(Companion.TAG, "Failed to delete Firebase push token")
                 }
         isInitialized = false // plugin is now not initialized in any case
         return true
