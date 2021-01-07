@@ -17,7 +17,7 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "1.1.0-dev",
+  "min_zapp_sdk": "2.0.1-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -27,7 +27,7 @@
       "type": "checkbox",
       "default": true,
       "label": "Plugin enabled",
-      "label_tooltip": "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start"
+      "label_tooltip": "Disable plugin if you do not want to use plugin or require enable plugin after application start"
     },
     {
       "key": "default_topic",
@@ -44,7 +44,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound",
-      "tooltip_text": "Sound file from application assets for default notification channel",
+      "tooltip_text": "Sound file name from the application assets for default notification channel",
       "multiple": false,
       "options": [
         "system_default",
@@ -68,7 +68,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound_1",
-      "tooltip_text": "Sound file from application assets",
+      "tooltip_text": "Sound file name from the application assets",
       "multiple": false,
       "options": [
         "system_default",
@@ -105,7 +105,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound_2",
-      "tooltip_text": "Sound file from application assets",
+      "tooltip_text": "Sound file name from the application assets",
       "multiple": false,
       "options": [
         "system_default",
@@ -140,7 +140,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound_3",
-      "tooltip_text": "Sound file from application assets",
+      "tooltip_text": "Sound file name from the application assets",
       "multiple": false,
       "options": [
         "system_default",
@@ -175,7 +175,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound_4",
-      "tooltip_text": "Sound file from application assets",
+      "tooltip_text": "Sound file name from the application assets",
       "multiple": false,
       "options": [
         "system_default",
@@ -210,7 +210,7 @@
     {
       "type": "dropdown",
       "key": "notification_channel_sound_5",
-      "tooltip_text": "Sound file from application assets",
+      "tooltip_text": "Sound file name from the application assets",
       "multiple": false,
       "options": [
         "system_default",
@@ -242,9 +242,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "3.1.0",
+  "manifest_version": "3.1.1",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.1.0"
+    "@applicaster/zapp-push-plugin-firebase@3.1.1"
   ],
   "project_dependencies": [
     {
