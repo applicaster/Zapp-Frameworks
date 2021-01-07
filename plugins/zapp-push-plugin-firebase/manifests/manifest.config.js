@@ -104,7 +104,7 @@ const custom_configuration_fields_android = [
     type: "dropdown",
     key: "notification_channel_sound",
     tooltip_text:
-      "Sound file from the application assets for default notification channel",
+      "Sound file name from the application assets for default notification channel",
     multiple: false,
     options: [
       "system_default",
@@ -128,7 +128,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_1",
-    tooltip_text: "Sound file from the application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -161,7 +161,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_2",
-    tooltip_text: "Sound file from the application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -192,7 +192,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_3",
-    tooltip_text: "Sound file from the application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -223,7 +223,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_4",
-    tooltip_text: "Sound file from the application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -254,7 +254,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_5",
-    tooltip_text: "Sound file from the application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
