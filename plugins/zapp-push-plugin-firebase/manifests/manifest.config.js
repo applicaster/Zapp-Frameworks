@@ -285,7 +285,7 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  android_for_quickbrick: "1.1.0-dev",
+  android_for_quickbrick: "2.0.1-dev",
   ios_for_quickbrick: "2.0.2-Dev",
 };
 
