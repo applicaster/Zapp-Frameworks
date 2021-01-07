@@ -63,7 +63,7 @@ def safeExtGet(prop, fallback) {
 
 def glideVersion = safeExtGet("glideVersion", "4.11.0")
 def firebaseBoMVersion = safeExtGet("firebaseBoMVersion", "26.0.0")
-def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "7.0.0")
+def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.1.0")
 
 dependencies {
     def devSDK = findProject(':applicaster-android-sdk')

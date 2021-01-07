@@ -49,7 +49,7 @@ const custom_configuration_fields_apple = [
     default: 1,
     label: "Plugin enabled",
     label_tooltip:
-      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+      "Disable plugin if you do not want to use plugin or require enable plugin after application start",
   },
   {
     type: "checkbox",
@@ -86,7 +86,7 @@ const custom_configuration_fields_android = [
     default: true,
     label: "Plugin enabled",
     label_tooltip:
-      "Disable plugin if you do not want to use plugin or require enable plugnin after applicatioin start",
+      "Disable plugin if you do not want to use plugin or require enable plugin after application start",
   },
   {
     key: "default_topic",
@@ -104,7 +104,7 @@ const custom_configuration_fields_android = [
     type: "dropdown",
     key: "notification_channel_sound",
     tooltip_text:
-      "Sound file from application assets for default notification channel",
+      "Sound file name from the application assets for default notification channel",
     multiple: false,
     options: [
       "system_default",
@@ -128,7 +128,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_1",
-    tooltip_text: "Sound file from application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -161,7 +161,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_2",
-    tooltip_text: "Sound file from application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -192,7 +192,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_3",
-    tooltip_text: "Sound file from application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -223,7 +223,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_4",
-    tooltip_text: "Sound file from application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -254,7 +254,7 @@ const custom_configuration_fields_android = [
   {
     type: "dropdown",
     key: "notification_channel_sound_5",
-    tooltip_text: "Sound file from application assets",
+    tooltip_text: "Sound file name from the application assets",
     multiple: false,
     options: [
       "system_default",
@@ -285,7 +285,7 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  android_for_quickbrick: "1.1.0-dev",
+  android_for_quickbrick: "2.0.1-dev",
   ios_for_quickbrick: "2.0.2-Dev",
 };
 
