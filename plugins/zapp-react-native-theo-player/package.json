@@ -7,8 +7,7 @@
   "main": "lib/index.js",
   "types": "index.d.ts",
   "dependencies": {
-    "ramda": "^0.26.1",
-    "@applicaster/applicaster-types": "*"
+    "ramda": "^0.26.1"
   },
   "peerDependencies": {
     "@applicaster/applicaster-types": "*",
@@ -32,6 +31,6 @@
       "ios_for_quickbrick",
       "android_for_quickbrick"
     ],
-    "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   }
 }

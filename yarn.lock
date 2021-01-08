@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@applicaster/applicaster-types@*":
+"@applicaster/applicaster-types@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@applicaster/applicaster-types/-/applicaster-types-4.1.5.tgz#d744e0bfdb74feee7f84db992fc060da9457bee3"
   integrity sha512-V86PxNFKYgrcI3ez1CdwBmfdxTy3GgsVQXun+Zn3rpbWSKTramiWzVYZqAS5VV1I2ZC8+23DDl/CCI+53VCzHg==
