@@ -1,21 +1,21 @@
 {
-  "name": "ZappApple",
-  "version": "1.1.0",
-  "summary": "Framework that has general logic of the Zapp Apple application",
+  "name": "ZappTHEOplayer",
+  "version": "0.0.1",
+  "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0"
   },
   "swift_versions": "5.1",
-  "description": "'Framework that has general logic of the Zapp Apple application'",
+  "description": "THEOplayer",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
   "license": "Appache 2.0",
   "authors": {
     "a.kononenko@applicaster.com": "a.kononenko@applicaster.com"
   },
   "source": {
-    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-apple/1.1.0"
+    "git": "https://github.com/applicaster/Zapp-Frameworks",
+    "tag": "@applicaster/zapp-react-native-theo-player/0.0.1"
   },
   "static_framework": true,
   "ios": {
@@ -26,9 +26,7 @@
       "OTHER_LDFLAGS": "$(inherited) -objc -framework \"AppCenter\" -framework \"AppCenterDistribute\" "
     },
     "dependencies": {
-      "AppCenter/Distribute": [
-        "= 3.0.0"
-      ]
+      "AppCenter/Distribute": ["= 3.0.0"]
     },
     "source_files": "ios/**/*.{swift}"
   },
@@ -43,12 +41,8 @@
   },
   "dependencies": {
     "ZappCore": [],
-    "ReachabilitySwift": [
-      "= 5.0.0"
-    ],
-    "DeviceKit": [
-      "= 4.2.1"
-    ],
+    "ReachabilitySwift": ["= 5.0.0"],
+    "DeviceKit": ["= 4.2.1"],
     "XrayLogger": []
   },
   "source_files": "universal/**/*.{h,m,swift}",
