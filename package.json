@@ -1,5 +1,5 @@
 {
-  "name": "appleframeworks",
+  "name": "Zapp-Frameworks",
   "version": "1.0.0",
   "description": "All Core Framework for Zapp Team",
   "main": "index.js",
@@ -34,7 +34,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "@applicaster/zapplicaster-cli": "4.2.0-alpha.1316119b",
+    "@applicaster/zapplicaster-cli": "^4.1.5",
     "@babel/plugin-transform-flow-strip-types": "^7.10.4",
     "@babel/plugin-transform-object-assign": "^7.10.4",
     "@babel/plugin-transform-react-display-name": "^7.10.4",
