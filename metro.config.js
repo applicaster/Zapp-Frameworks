@@ -6,13 +6,13 @@ const packages = ["zapp-react-native-theo-player"];
 const buildExtraNodeModules = (extraNodeModules, packageName) => {
   return R.assoc(
     `@applicaster/${packageName}`,
-    resolve(__dirname, "./packages/", packageName),
+    resolve(__dirname, "./plugins/", packageName),
     extraNodeModules
   );
 };
 
 const resolveLocalPackages = (packageName) =>
-  resolve(__dirname, `./packages/${packageName}`);
+  resolve(__dirname, `./plugins/${packageName}`);
 
 const config = {
   resolver: {
