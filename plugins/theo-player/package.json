@@ -1,0 +1,36 @@
+{
+  "name": "@applicaster/theo-player",
+  "version": "0.0.1",
+  "author": "Zapp Team",
+  "license": "ISC",
+  "description": "THEOplayer with React Native wrapper",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "ramda": "^0.26.1"
+  },
+  "peerDependencies": {
+    "@applicaster/applicaster-types": "*",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "files": [
+    "manifests/**/*.json",
+    "apple",
+    "android",
+    "src",
+    "lib"
+  ],
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fe6948ca8800083c4116"
+  }
+}
