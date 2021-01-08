@@ -36,9 +36,8 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 const api = {
-  ios: {},
-  tvos: {},
-  android: {},
+  ios_for_quickbrick: {},
+  android_for_quickbrick: {},
 };
 
 const min_zapp_sdk = {
@@ -47,28 +46,31 @@ const min_zapp_sdk = {
 };
 
 const dependency_repository_url = {
-  ios: [],
-  tvos: [],
-  android: [],
+  ios_for_quickbrick: {},
+  android_for_quickbrick: {},
 };
+
 const project_dependencies = {
-  ios: [],
-  tvos: [],
-  android: [],
+  ios_for_quickbrick: {},
+  android_for_quickbrick: {},
 };
 
 const npm_dependencies = {
-  ios: [],
-  tvos: [],
-  android: [],
+  ios_for_quickbrick: {},
+  android_for_quickbrick: {},
 };
 
 const custom_configuration_fields = {
-  ios: [],
-  tvos: [],
-  android: [],
+  ios_for_quickbrick: {},
+  android_for_quickbrick: {},
 };
 const extra_dependencies = {
-  ios: [],
+  ios_for_quickbrick: [
+    {
+      ZappTHEOplayer:
+        ":path => './node_modules/@applicaster/zapp-react-native-theo-player/apple/ZappTHEOplayer.podspec'",
+    },
+  ],
+  android_for_quickbrick: null,
 };
 module.exports = createManifest;
