@@ -16,5 +16,11 @@
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
-  "applicaster": {}
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "tvos_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
 }
