@@ -63,7 +63,12 @@ const custom_configuration_fields = {
   android_for_quickbrick: [],
 };
 const extra_dependencies = {
-  ios_for_quickbrick: [],
+  ios_for_quickbrick: [
+    {
+      ZappTHEOplayer:
+        ":path => './node_modules/@applicaster/zapp-react-native-theo-player/apple/ZappTHEOplayer.podspec'",
+    },
+  ],
   android_for_quickbrick: null,
 };
 module.exports = createManifest;
