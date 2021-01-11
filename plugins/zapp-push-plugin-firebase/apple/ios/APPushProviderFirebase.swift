@@ -173,8 +173,9 @@ open class APPushProviderFirebase: ZPPushProvider {
 }
 
 extension APPushProviderFirebase: MessagingDelegate {
-    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        guard !fcmToken.isEmpty else {
+    open func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        guard let fcmToken = fcmToken,
+              fcmToken.isEmpty == false else {
             logger?.debugLog(message: "didReceiveRegistrationToken: token is empty")
             return
         }
