@@ -6,7 +6,7 @@
     "ios": "12.0",
     "tvos": "12.0"
   },
-  "swift_versions": "5.1",
+  "swift_versions": "5.3",
   "description": "THEOplayer",
   "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
   "license": "Appache 2.0",
