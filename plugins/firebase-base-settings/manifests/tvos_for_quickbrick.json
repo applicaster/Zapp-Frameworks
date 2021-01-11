@@ -1,0 +1,64 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "",
+    "modules": []
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Firebase Base Settings 2.0",
+  "description": "Firebase Base Settings 2.0",
+  "cover_image": "",
+  "type": "general",
+  "identifier": "firebase_base_settings",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "3.0.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "type": "uploader",
+      "key": "enterprise_app_config",
+      "tooltip_text": "Upload GoogleService-Info.plist of enterprise app"
+    },
+    {
+      "type": "uploader",
+      "key": "production_app_config",
+      "tooltip_text": "Upload GoogleService-Info.plist of production app"
+    },
+    {
+      "key": "plist.FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED",
+      "type": "select",
+      "options": [
+        {
+          "text": "Deactivate",
+          "value": "YES"
+        },
+        {
+          "text": "Enabled",
+          "value": "NO"
+        }
+      ],
+      "label": "Deactivate analytics collection",
+      "initial_value": "NO",
+      "tooltip_text": "If you need to deactivate Analytics collection permanently in a version of your app set value to Deactivate"
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "tvos_for_quickbrick",
+  "manifest_version": "2.1.0",
+  "extra_dependencies": [
+    {
+      "Firebase": "= '7.3.0'"
+    }
+  ]
+}
