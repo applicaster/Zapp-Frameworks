@@ -1,5 +1,5 @@
-import * as R from "ramda";
-import { pickByKey, splitInputTypeStyles } from "../";
+// import * as R from "ramda";
+// import { pickByKey, splitInputTypeStyles } from "../";
 
 // describe("Customization utils", () => {
 //   const objStub = {
