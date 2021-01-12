@@ -10,8 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-
-    "@inplayer-org/inplayer.js": "2.13.3",
+    "react-native-app-auth": "6.0.1",
     "@react-native-community/blur": "3.4.1",
     "axios": "^0.19.1",
     "moment": "^2.24.0",

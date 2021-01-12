@@ -3,15 +3,15 @@ const Localizations = require("./localizations.config");
 
 const baseManifest = {
   dependency_repository_url: [],
-  dependency_name: "@applicaster/quick-brick-inplayer",
+  dependency_name: "@applicaster/zapp_login_plugin_oauth2.0",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "inPlayer Login & Payments",
-  description: "inPlayer Login & Payments",
+  name: "Oauth 2.0 Login",
+  description: "Oauth 2.0 Login",
   type: "login",
   screen: true,
   react_native: true,
-  identifier: "quick-brick-inplayer",
+  identifier: "zapp_login_plugin_oauth2.0",
   ui_builder_support: true,
   whitelisted_account_ids: ["5c9ce7917b225c000f02dfbc"],
   deprecated_since_zapp_sdk: "",
@@ -1919,17 +1919,13 @@ const api = {
   default: {},
   web: {
     excludedNodeModules: [
-      "@applicaster/applicaster-iap",
       "react-native-dropdownalert",
       "react-native-keyboard-aware-scroll-view",
     ],
   },
   android: {
     class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-    react_packages: [
-      "com.applicaster.iap.reactnative.IAPPackage",
-      "com.cmcewen.blurview.BlurViewPackage",
-    ],
+    react_packages: ["com.cmcewen.blurview.BlurViewPackage"],
     proguard_rules:
       "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }",
   },
@@ -1957,10 +1953,6 @@ const project_dependencies = {
 const extra_dependencies = {
   apple: [
     {
-      ApplicasterIAP:
-        ":path => 'node_modules/@applicaster/applicaster-iap/apple/ApplicasterIAP.podspec'",
-    },
-    {
       "react-native-blur":
         ":path => 'node_modules/@react-native-community/blur/react-native-blur.podspec'",
     },
@@ -1969,10 +1961,7 @@ const extra_dependencies = {
 };
 
 const npm_dependencies = {
-  default: [
-    "@applicaster/applicaster-iap@0.3.3",
-    "@react-native-community/blur@3.4.1",
-  ],
+  default: ["@react-native-community/blur@3.4.1"],
   web: [],
 };
 
