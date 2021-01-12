@@ -13,7 +13,7 @@ const baseManifest = {
   react_native: true,
   identifier: "zapp_login_plugin_oauth2.0",
   ui_builder_support: true,
-  whitelisted_account_ids: ["5c9ce7917b225c000f02dfbc"],
+  whitelisted_account_ids: [],
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
