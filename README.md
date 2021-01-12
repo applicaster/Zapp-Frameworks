@@ -54,7 +54,7 @@ This Repo is a monorepo that contains open source Zapp Projects
 ## How to prepare environment for development?
 
 1. Clone repo to your working directory
-2. Request ZappToken from support or Zapp-Team
+2. Request <ZAPP_TOKEN> from support or Zapp-Team.
 3. In the root directory execute `yarn` to install dependencies
 4. In the root of working directory execute `npx @applicaster/zapplicaster-cli init` from terminal
 5. Finish CLI initialization
