@@ -55,15 +55,17 @@ This Repo is a monorepo that contains open source Zapp Projects
 
 1. Clone repo to your working directory
 2. In the root of working directory execute `npx @applicaster/zapplicaster-cli init` from terminal
-3. Finish CLI initialization completed requested data from the script
+3. Finish CLI initialization
 
 ##### Prepare application
 
-1. In the root directory execute `yarn prepare_app -a ZAPP_APPLICATION_ID -b` from terminal
+1. In the root directory execute `yarn prepare_app -a <ZAPP_APP_VERSION_ID> -b` from terminal. <ZAPP_APP_VERSION_ID> could be obtained in Zapp portal
 2. Run `yarn start` to start local server
-prepare_app script will prepare local environmment for plugins that exists in `plugins` folder.
+`yarn prepare_app` script will prepare local environmment for plugins that exists in `plugins` folder.
 Also it will prepare the directory for a builder of the selected platform
 Note: please check `package.json` file in `scripts` section for possible command line options
+
+#### Optional
 
 ##### Start iOS
 1. Clone repo https://github.com/applicaster/ZappAppleBuilder, make sure that folder that you are using same folder provided in cli tool during initialization
