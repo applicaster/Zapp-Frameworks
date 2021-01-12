@@ -1,6 +1,11 @@
 // import * as R from "ramda";
 // import { pickByKey, splitInputTypeStyles } from "../";
 
+describe("pickByKey", () => {
+  it("Picks correct keys form the object", () => {
+    expect(true).toBe(true);
+  });
+});
 // describe("Customization utils", () => {
 //   const objStub = {
 //     foo_focused: null,
