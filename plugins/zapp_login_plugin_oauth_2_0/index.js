@@ -1,6 +1,3 @@
-// This needs to be as early as possible since it assigns a global
-import "./src/LocalStorageHack";
-
 import Component from "./src/Components/InPlayer";
 import globalSessionManager from "./src/globalSessionManager";
 import * as R from "ramda";

@@ -7,7 +7,6 @@ import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { localStorage as defaultStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import { initFromNativeLocalStorage } from "../LocalStorageHack";
 import { getLocalizations } from "../Utils/Localizations";
 import {
   isVideoEntry,
@@ -43,7 +42,7 @@ const getRiversProp = (key, rivers = {}) => {
   );
 
   return getPropByKey(rivers);
-}
+};
 
 const InPlayer = (props) => {
   const HookTypeData = {
@@ -60,8 +59,8 @@ const InPlayer = (props) => {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const { callback, payload, rivers } = props;
-  const localizations = getRiversProp('localizations', rivers);
-  const styles = getRiversProp('styles', rivers);
+  const localizations = getRiversProp("localizations", rivers);
+  const styles = getRiversProp("styles", rivers);
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
@@ -75,7 +74,6 @@ const InPlayer = (props) => {
   }, []);
 
   const checkIdToken = async () => {
-    await initFromNativeLocalStorage();
     const token = await isTokenInStorage("idToken");
 
     logger
@@ -264,14 +262,21 @@ const InPlayer = (props) => {
   };
 
   const renderLogoutScreen = () => {
-    return <LogoutFlow screenStyles={screenStyles} screenLocalizations={screenLocalizations} {...props} />;
+    return (
+      <LogoutFlow
+        screenStyles={screenStyles}
+        screenLocalizations={screenLocalizations}
+        {...props}
+      />
+    );
   };
 
   const renderUACFlow = () => {
     return idToken ? renderLogoutScreen() : renderScreenHook();
   };
 
-  const shouldShowParentLock = (parentLockWasPresented) => !(parentLockWasPresented || !showParentLock);
+  const shouldShowParentLock = (parentLockWasPresented) =>
+    !(parentLockWasPresented || !showParentLock);
 
   const renderFlow = () => {
     switch (hookType) {

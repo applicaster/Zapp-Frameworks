@@ -3,7 +3,7 @@ const Localizations = require("./localizations.config");
 
 const baseManifest = {
   dependency_repository_url: [],
-  dependency_name: "@applicaster/zapp_login_plugin_oauth2.0",
+  dependency_name: "@applicaster/zapp_login_plugin_oauth_2_0",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Oauth 2.0 Login",
@@ -11,7 +11,7 @@ const baseManifest = {
   type: "login",
   screen: true,
   react_native: true,
-  identifier: "zapp_login_plugin_oauth2.0",
+  identifier: "zapp_login_plugin_oauth_2_0",
   ui_builder_support: true,
   whitelisted_account_ids: [],
   deprecated_since_zapp_sdk: "",
