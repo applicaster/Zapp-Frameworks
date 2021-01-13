@@ -113,7 +113,7 @@ const stylesMobile = {
       key: "back_button_font_ios",
       type: "ios_font_selector",
       label: "iOS back button font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "back_button_font_android",
@@ -136,25 +136,25 @@ const stylesMobile = {
     {
       key: "action_button_font_ios",
       type: "ios_font_selector",
-      label: "iOS back button font",
-      initial_value: "Roboto-Bold",
+      label: "iOS Action button font",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "action_button_font_android",
       type: "android_font_selector",
-      label: "Android back button font",
+      label: "Android Action button font",
       initial_value: "Roboto-Bold",
     },
     {
       key: "action_button_font_size",
       type: "number_input",
-      label: "Back button font size",
+      label: "Action button font size",
       initial_value: 15,
     },
     {
       key: "action_button_font_color",
       type: "color_picker",
-      label: "Back button font color",
+      label: "Action button font color",
       initial_value: "#ffffffff",
     },
   ],
@@ -246,23 +246,25 @@ const iAndroid = R.includes(R.__, androidPlatforms);
 const isWeb = R.includes(R.__, webPlatforms);
 
 const withFallback = (obj, platform) => obj[platform] || obj["default"];
-const localizations = [
-  {
-    key: "title_text",
-    label: "Title label text",
-    initial_value: "My Company",
-  },
-  {
-    key: "login_text",
-    label: "Login button text",
-    initial_value: "Login",
-  },
-  {
-    key: "logout_text",
-    label: "Logout button text",
-    initial_value: "Login",
-  },
-];
+const localizations = {
+  fields: [
+    {
+      key: "title_text",
+      label: "Title label text",
+      initial_value: "My Company",
+    },
+    {
+      key: "login_text",
+      label: "Login button text",
+      initial_value: "Login",
+    },
+    {
+      key: "logout_text",
+      label: "Logout button text",
+      initial_value: "Login",
+    },
+  ],
+};
 
 function createManifest({ version, platform }) {
   const basePlatform = R.cond([
