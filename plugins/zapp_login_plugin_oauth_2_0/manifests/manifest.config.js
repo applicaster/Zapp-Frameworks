@@ -1,6 +1,4 @@
 const R = require("ramda");
-const Localizations = require("./localizations.config");
-
 const baseManifest = {
   dependency_repository_url: [],
   dependency_name: "@applicaster/zapp_login_plugin_oauth_2_0",
