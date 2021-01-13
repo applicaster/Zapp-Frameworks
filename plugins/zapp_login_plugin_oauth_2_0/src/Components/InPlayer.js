@@ -1,20 +1,14 @@
 import React, { useState, useLayoutEffect } from "react";
 
 import AccountFlow from "./AccountFlow";
-import AssetFlow from "./AssetFlow";
 import LogoutFlow from "./LogoutFlow";
 import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { localStorage as defaultStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import { getLocalizations } from "../Utils/Localizations";
-import {
-  isVideoEntry,
-  inPlayerAssetId,
-  isAuthenticationRequired,
-} from "../Utils/PayloadUtils";
+import { isVideoEntry, isAuthenticationRequired } from "../Utils/PayloadUtils";
 import { showAlert } from "../Utils/Account";
-import { setConfig } from "../Services/inPlayerService";
 import {
   getStyles,
   isHomeScreen,
@@ -65,8 +59,6 @@ const InPlayer = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
 
-  const { import_parent_lock: showParentLock } = screenStyles;
-
   let stillMounted = true;
 
   useLayoutEffect(() => {
@@ -101,24 +93,18 @@ const InPlayer = (props) => {
 
     await checkIdToken();
 
-    setConfig(in_player_environment);
-
     const videoEntry = isVideoEntry(payload);
     let event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
     if (videoEntry) {
-      const authenticationRequired = isAuthenticationRequired({ payload });
-      const assetId = inPlayerAssetId({
-        payload,
-        configuration: props.configuration,
-      });
+      const authenticationRequired = true;
+      // isAuthenticationRequired({ payload });
 
       event.addData({
         authentication_required: authenticationRequired,
-        inplayer_asset_id: assetId,
         is_video_entry: videoEntry,
       });
-      if (authenticationRequired || assetId) {
+      if (authenticationRequired) {
         event
           .setMessage(`Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`)
           .addData({
@@ -158,33 +144,6 @@ const InPlayer = (props) => {
     };
   };
 
-  const assetFlowCallback = ({ success, payload, error }) => {
-    let eventMessage = `Asset Flow completion: success ${success}`;
-    const event = logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({ payload, success });
-
-    if (error) {
-      const message = getMessageOrDefault(error, screenLocalizations);
-      event
-        .addData({ message })
-        .attachError(error)
-        .setLevel(XRayLogLevel.error);
-      eventMessage = `${eventMessage} error:${message}`;
-      showAlert("General Error!", message);
-    }
-
-    event.setMessage(eventMessage).send();
-
-    callback &&
-      callback({
-        success,
-        error,
-        payload,
-      });
-  };
-
   const accountFlowCallback = async ({ success }) => {
     let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
@@ -222,17 +181,7 @@ const InPlayer = (props) => {
   };
 
   const renderPlayerHook = () => {
-    return isUserAuthenticated ? (
-      <AssetFlow
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        assetFlowCallback={assetFlowCallback}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    ) : (
+    return (
       <AccountFlow
         setParentLockWasPresented={setParentLockWasPresented}
         parentLockWasPresented={parentLockWasPresented}

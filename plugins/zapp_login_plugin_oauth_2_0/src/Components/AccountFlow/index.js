@@ -11,7 +11,6 @@ import SetNewPassword from "../SetNewPassword";
 import LoadingScreen from "../LoadingScreen";
 import SignUp from "../SignUp";
 import { container } from "../Styles";
-import * as InPlayerService from "../../Services/inPlayerService";
 import { showAlert } from "../../Utils/Account";
 import {
   createLogger,
@@ -67,43 +66,42 @@ const AccountFlow = (props) => {
   } = props;
 
   useLayoutEffect(() => {
-    InPlayerService.isAuthenticated(clientId)
-      .then(async (isAuthenticated) => {
-        let eventMessage = "Account Flow:";
-        const event = logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .addData({ is_authenticated: isAuthenticated });
+    // InPlayerService.isAuthenticated(clientId)
+    //   .then(async (isAuthenticated) => {
+    //     let eventMessage = "Account Flow:";
+    //     const event = logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.debug)
+    //       .addData({ is_authenticated: isAuthenticated });
 
-        if (stillMounted) {
-          if (isAuthenticated) {
-            eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
-          } else {
-            if (
-              shouldShowParentLock &&
-              shouldShowParentLock(props.parentLockWasPresented)
-            ) {
-              eventMessage = `${eventMessage} not granted, present parent lock`;
-              presentParentLock();
-            } else {
-              eventMessage = `${eventMessage} not granted, present login screen`;
-              await authenticateUser();
-            }
-          }
-        }
-        event.setMessage(eventMessage).send();
-      })
-      .finally(() => {
-        stillMounted && setLoading(false);
-      });
+    //     if (stillMounted) {
+    //       if (isAuthenticated) {
+    //         eventMessage = `${eventMessage} access granted, flow completed`;
+    //         accountFlowCallback({ success: true });
+    //       } else {
+    //         if (
+    //           shouldShowParentLock &&
+    //           shouldShowParentLock(props.parentLockWasPresented)
+    //         ) {
+    //           eventMessage = `${eventMessage} not granted, present parent lock`;
+    //           presentParentLock();
+    //         } else {
+    //           eventMessage = `${eventMessage} not granted, present login screen`;
+    //           await authenticateUser();
+    //         }
+    //       }
+    //     }
+    //     event.setMessage(eventMessage).send();
+    //   })
+    //   .finally(() => {
+    //     stillMounted && setLoading(false);
+    //   });
     return () => {
       stillMounted = false;
     };
   }, []);
 
   const authenticateUser = async () => {
-    setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
     setScreen(ScreensData.LOGIN);
   };
 
@@ -172,36 +170,36 @@ const AccountFlow = (props) => {
       .addData({ email: trimmedEmail, password })
       .send();
 
-    InPlayerService.login({
-      email: trimmedEmail,
-      password,
-      clientId,
-      referrer,
-    })
-      .then(() => {
-        logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .setMessage(
-            `Login succeed, email: ${trimmedEmail}, password: ${password}`
-          )
-          .addData({ email: trimmedEmail, password })
-          .send();
-        accountFlowCallback({ success: true });
-      })
-      .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
-      .catch((error) => {
-        logger
-          .createEvent()
-          .setLevel(XRayLogLevel.error)
-          .setMessage(
-            `Login failed, email: ${trimmedEmail}, password: ${password}`
-          )
-          .attachError(error)
-          .addData({ email: trimmedEmail, password })
-          .send();
-        stillMounted && setLoading(false);
-      });
+    // InPlayerService.login({
+    //   email: trimmedEmail,
+    //   password,
+    //   clientId,
+    //   referrer,
+    // })
+    //   .then(() => {
+    //     logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.debug)
+    //       .setMessage(
+    //         `Login succeed, email: ${trimmedEmail}, password: ${password}`
+    //       )
+    //       .addData({ email: trimmedEmail, password })
+    //       .send();
+    //     accountFlowCallback({ success: true });
+    //   })
+    //   .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
+    //   .catch((error) => {
+    //     logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.error)
+    //       .setMessage(
+    //         `Login failed, email: ${trimmedEmail}, password: ${password}`
+    //       )
+    //       .attachError(error)
+    //       .addData({ email: trimmedEmail, password })
+    //       .send();
+    //     stillMounted && setLoading(false);
+    //   });
   };
 
   const createAccount = ({ fullName, email, password }) => {
@@ -219,38 +217,38 @@ const AccountFlow = (props) => {
       .addData({ email: trimmedEmail, password })
       .send();
 
-    InPlayerService.signUp({
-      fullName,
-      email: trimmedEmail,
-      password,
-      clientId,
-      referrer,
-      brandingId,
-    })
-      .then(() => {
-        logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .setMessage(
-            `Account Creation succeed, fullName: ${fullName}, email: ${trimmedEmail}, password: ${password}`
-          )
-          .addData({ email: trimmedEmail, password, fullName })
-          .send();
-        accountFlowCallback({ success: true });
-      })
-      .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
-      .catch((error) => {
-        logger
-          .createEvent()
-          .setLevel(XRayLogLevel.error)
-          .setMessage(
-            `Account Creation failed, fullName: ${fullName}, email: ${trimmedEmail}, password: ${password}`
-          )
-          .attachError(error)
-          .addData({ email: trimmedEmail, password, fullName })
-          .send();
-        stillMounted && setLoading(false);
-      });
+    // InPlayerService.signUp({
+    //   fullName,
+    //   email: trimmedEmail,
+    //   password,
+    //   clientId,
+    //   referrer,
+    //   brandingId,
+    // })
+    //   .then(() => {
+    //     logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.debug)
+    //       .setMessage(
+    //         `Account Creation succeed, fullName: ${fullName}, email: ${trimmedEmail}, password: ${password}`
+    //       )
+    //       .addData({ email: trimmedEmail, password, fullName })
+    //       .send();
+    //     accountFlowCallback({ success: true });
+    //   })
+    //   .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
+    //   .catch((error) => {
+    //     logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.error)
+    //       .setMessage(
+    //         `Account Creation failed, fullName: ${fullName}, email: ${trimmedEmail}, password: ${password}`
+    //       )
+    //       .attachError(error)
+    //       .addData({ email: trimmedEmail, password, fullName })
+    //       .send();
+    //     stillMounted && setLoading(false);
+    //   });
   };
 
   const setNewPasswordCallback = ({ password, token }) => {
@@ -267,46 +265,46 @@ const AccountFlow = (props) => {
 
     if (token && password) {
       stillMounted && setLoading(true);
-      InPlayerService.setNewPassword({
-        password,
-        token,
-        brandingId,
-      })
-        .then(() => {
-          logger
-            .createEvent()
-            .setLevel(XRayLogLevel.debug)
-            .setMessage(
-              `Set new password task succeed, password: ${password}, token: ${token}`
-            )
-            .addData({ password, token })
-            .send();
-          showAlertToUser({
-            title: screenLocalizations.reset_password_success_title,
-            message: screenLocalizations.reset_password_success_text,
-            type: "success",
-          });
-          stillMounted && setLoading(false);
-          stillMounted && setScreen(ScreensData.LOGIN);
-        })
-        .catch((error) => {
-          logger
-            .createEvent()
-            .setLevel(XRayLogLevel.error)
-            .setMessage(
-              `Set new password task failed, password: ${password}, token: ${token}`
-            )
-            .attachError(error)
-            .addData({ password, token })
-            .send();
+      // InPlayerService.setNewPassword({
+      //   password,
+      //   token,
+      //   brandingId,
+      // })
+      //   .then(() => {
+      //     logger
+      //       .createEvent()
+      //       .setLevel(XRayLogLevel.debug)
+      //       .setMessage(
+      //         `Set new password task succeed, password: ${password}, token: ${token}`
+      //       )
+      //       .addData({ password, token })
+      //       .send();
+      //     showAlertToUser({
+      //       title: screenLocalizations.reset_password_success_title,
+      //       message: screenLocalizations.reset_password_success_text,
+      //       type: "success",
+      //     });
+      //     stillMounted && setLoading(false);
+      //     stillMounted && setScreen(ScreensData.LOGIN);
+      //   })
+      //   .catch((error) => {
+      //     logger
+      //       .createEvent()
+      //       .setLevel(XRayLogLevel.error)
+      //       .setMessage(
+      //         `Set new password task failed, password: ${password}, token: ${token}`
+      //       )
+      //       .attachError(error)
+      //       .addData({ password, token })
+      //       .send();
 
-          stillMounted && setLoading(false);
+      //     stillMounted && setLoading(false);
 
-          showAlertToUser({
-            title: screenLocalizations.reset_password_error_title,
-            message: screenLocalizations.reset_password_error_text,
-          });
-        });
+      //     showAlertToUser({
+      //       title: screenLocalizations.reset_password_error_title,
+      //       message: screenLocalizations.reset_password_error_text,
+      //     });
+      //   });
     } else {
       stillMounted && setScreen(ScreensData.FORGOT_PASSWORD);
     }
@@ -327,42 +325,42 @@ const AccountFlow = (props) => {
 
     if (email) {
       stillMounted && setLoading(true);
-      InPlayerService.requestPassword({
-        email,
-        clientId: in_player_client_id,
-        brandingId,
-      })
-        .then((result) => {
-          const { message } = result;
-          logger
-            .createEvent()
-            .setLevel(XRayLogLevel.debug)
-            .setMessage(`Request password change task, email: ${email}`)
-            .addData({ email })
-            .send();
-          showAlertToUser({
-            title: screenLocalizations.request_password_success_title,
-            message,
-            type: "success",
-          });
-          stillMounted && setLoading(false);
-          stillMounted && setScreen(ScreensData.SET_NEW_PASSWORD);
-        })
-        .catch((error) => {
-          logger
-            .createEvent()
-            .setLevel(XRayLogLevel.error)
-            .setMessage(`Request password change task failed, email: ${email}`)
-            .attachError(error)
-            .addData({ email })
-            .send();
-          stillMounted && setLoading(false);
-          showAlertToUser({
-            title: screenLocalizations.request_password_error_title,
-            message: screenLocalizations.request_password_error_text,
-          });
-          stillMounted && setScreen(ScreensData.LOGIN);
-        });
+      // InPlayerService.requestPassword({
+      //   email,
+      //   clientId: in_player_client_id,
+      //   brandingId,
+      // })
+      //   .then((result) => {
+      //     const { message } = result;
+      //     logger
+      //       .createEvent()
+      //       .setLevel(XRayLogLevel.debug)
+      //       .setMessage(`Request password change task, email: ${email}`)
+      //       .addData({ email })
+      //       .send();
+      //     showAlertToUser({
+      //       title: screenLocalizations.request_password_success_title,
+      //       message,
+      //       type: "success",
+      //     });
+      //     stillMounted && setLoading(false);
+      //     stillMounted && setScreen(ScreensData.SET_NEW_PASSWORD);
+      //   })
+      //   .catch((error) => {
+      //     logger
+      //       .createEvent()
+      //       .setLevel(XRayLogLevel.error)
+      //       .setMessage(`Request password change task failed, email: ${email}`)
+      //       .attachError(error)
+      //       .addData({ email })
+      //       .send();
+      //     stillMounted && setLoading(false);
+      //     showAlertToUser({
+      //       title: screenLocalizations.request_password_error_title,
+      //       message: screenLocalizations.request_password_error_text,
+      //     });
+      //     stillMounted && setScreen(ScreensData.LOGIN);
+      //   });
     } else {
       stillMounted && setScreen(ScreensData.LOGIN);
     }
