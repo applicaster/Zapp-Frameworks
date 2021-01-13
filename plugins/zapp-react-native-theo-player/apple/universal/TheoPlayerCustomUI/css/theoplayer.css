@@ -1,0 +1,16 @@
+.custom-icon-forward,
+.custom-icon-rewind {
+  font-family: THEOplayer;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.custom-icon-forward:before {
+  content: "\f11f";
+  font-size: 2em;
+}
+
+.custom-icon-rewind:before {
+  content: "\f120";
+  font-size: 2em;
+}

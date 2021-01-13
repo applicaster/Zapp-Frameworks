@@ -51,6 +51,39 @@ This Repo is a monorepo that contains open source Zapp Projects
 * Create podspec file in json format `ModuleName.podspec.json` and fill it
 * Create a `podfile` for your plugin to able to test it locally
 
+## How to prepare environment for development?
+
+1. Clone repo to your working directory
+2. Request <ZAPP_TOKEN> from support or Zapp-Team.
+3. In the root directory execute `yarn` to install dependencies
+4. In the root of working directory execute `npx @applicaster/zapplicaster-cli init` from terminal
+5. Finish CLI initialization
+
+##### Prepare application
+
+1. In the root directory execute `yarn prepare_app -a <ZAPP_APP_VERSION_ID> -b` from terminal. <ZAPP_APP_VERSION_ID> could be obtained in Zapp portal
+2. Run `yarn start` to start local server
+`yarn prepare_app` script will prepare local environmment for plugins that exists in `plugins` folder.
+Also it will prepare the directory for a builder of the selected platform
+Note: please check `package.json` file in `scripts` section for possible command line options
+
+#### Optional
+
+##### Start iOS
+1. Clone repo https://github.com/applicaster/ZappAppleBuilder, make sure that folder that you are using same folder provided in cli tool during initialization
+2. Go inside folder `ZappiOS/ZappTvOS`
+3. Call `zapptool -pu -vi 404d00ed-6d7b-4e21-89d5-d65771dc3cce -rn localhost:8081` where local host use your IP-adress if you want to use dev environment with your device.
+3. Build application from XCode in the directory that was provided during cli initialization
+
+##### Start Android
+
+1. Start Android Simulator
+2. Call `./gradlew installMobileGoogleDebug -PREACT_NATIVE_PACKAGER_ROOT=localhost:8081` in the Android builder folder to build and attach application to simulator
+3. Call `adb reverse tcp:8081 tcp:8081` to connect local server
+4. Call `adb shell input keyevent 82` when application is running to show RN debug dialog
+3. CLI script will ask configuration options and set up the environment
+
+
 ## Update existing plugin
 
 * Make changes inside your plugin

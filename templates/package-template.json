@@ -1,0 +1,40 @@
+{
+  "name": "@applicaster/my-plugin-name",
+  "version": "0.0.1",
+  "description": "My React Native Plugin,
+  "main": "src/index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "chromecast",
+    "cast"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@applicaster/zapplicaster-cli": "4.0.0",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "peerDependencies": {
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick",
+      "ios",
+      "android"
+    ],
+    "zappOwnerAccountId": "ZAPP_OWNER_ID"
+  }
+}

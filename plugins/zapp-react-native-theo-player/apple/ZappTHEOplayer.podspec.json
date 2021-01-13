@@ -1,0 +1,53 @@
+{
+  "name": "ZappTHEOplayer",
+  "version": "0.0.1",
+  "summary": "THEOplayer",
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "swift_versions": "5.3",
+  "description": "THEOplayer",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "Appache 2.0",
+  "authors": {
+    "a.kononenko@applicaster.com": "a.kononenko@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks",
+    "tag": "@applicaster/zapp-react-native-theo-player/0.0.1"
+  },
+  "static_framework": true,
+  "ios": {
+    "xcconfig": {
+      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode",
+      "OTHER_LDFLAGS": "$(inherited)"
+    },
+    "dependencies": {},
+    "source_files": "ios/**/*.{swift}"
+  },
+  "tvos": {
+    "xcconfig": {
+      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode",
+      "OTHER_LDFLAGS": "$(inherited)"
+    },
+    "source_files": "tvos/**/*.{swift}"
+  },
+  "vendored_frameworks": "universal/THEOplayerSDK.framework",
+  "dependencies": {
+    "XrayLogger": []
+  },
+  "source_files": "universal/**/*.{h,m,swift}",
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "source_files": "Tests/**"
+    }
+  ],
+  "swift_version": "5.1"
+}

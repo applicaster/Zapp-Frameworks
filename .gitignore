@@ -100,3 +100,7 @@ CircleArtifacts
 plugins/**/package-lock.json
 lib
 test-report.html
+
+# ignoring updates in the development app
+development-app/**/*
+*.log
