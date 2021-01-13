@@ -28,7 +28,7 @@ class ZPGenericDrm: NSObject, PluginAdapterProtocol {
         static let extensions = "extensions"
         static let drm = "drm"
         static let fairplay = "fairplay"
-        static let licenseServerUrl = "ksm_server_url"
+        static let licenseServerUrl = "license_url"
         static let certificateUrl = "certificate_url"
     }
 
