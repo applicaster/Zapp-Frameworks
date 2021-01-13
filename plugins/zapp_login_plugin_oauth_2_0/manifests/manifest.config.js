@@ -1,4 +1,6 @@
 const R = require("ramda");
+const Localizations = require("./localizations.config");
+
 const baseManifest = {
   dependency_repository_url: [],
   dependency_name: "@applicaster/zapp_login_plugin_oauth_2_0",
@@ -216,7 +218,7 @@ const extra_dependencies = {
     },
     {
       "react-native-app-auth":
-        ":path => 'node_modules/react-native-app-auth.podspec'",
+        ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'",
     },
   ],
   default: [],
@@ -246,25 +248,6 @@ const iAndroid = R.includes(R.__, androidPlatforms);
 const isWeb = R.includes(R.__, webPlatforms);
 
 const withFallback = (obj, platform) => obj[platform] || obj["default"];
-const localizations = {
-  fields: [
-    {
-      key: "title_text",
-      label: "Title label text",
-      initial_value: "My Company",
-    },
-    {
-      key: "login_text",
-      label: "Login button text",
-      initial_value: "Login",
-    },
-    {
-      key: "logout_text",
-      label: "Logout button text",
-      initial_value: "Login",
-    },
-  ],
-};
 
 function createManifest({ version, platform }) {
   const basePlatform = R.cond([
@@ -286,7 +269,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
     npm_dependencies: withFallback(npm_dependencies, basePlatform),
     styles: isTV ? stylesTv : stylesMobile,
-    localizations: localizations,
+    localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
   };
 }
