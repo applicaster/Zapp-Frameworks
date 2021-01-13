@@ -9,6 +9,7 @@ import AVKit
 import Foundation
 
 let errorDomain = "com.zapp.generic.drm.error"
+let validUrlScheme = "skd"
 
 extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
 
@@ -79,7 +80,7 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
         //        #EXTINF:8, no desc
 
         // request the Server Playback Context (SPC)
-        guard url.scheme == "skd",
+        guard url.scheme == validUrlScheme,
               let contentId = url.host, let contentIdData = contentId.data(using: .utf8) else {
             logger?.debugLog(message: "Request url scheme is not valid")
             loadingRequest.finishLoading(with: NSError(domain: errorDomain, code: ErrorCodes.requestUrlSchemeIsNotValid, userInfo: nil))
