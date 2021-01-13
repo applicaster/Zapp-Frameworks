@@ -1,4 +1,4 @@
-import Component from "./src/Components/InPlayer";
+import Component from "./src/Components/OAuth";
 import globalSessionManager from "./src/globalSessionManager";
 import * as R from "ramda";
 

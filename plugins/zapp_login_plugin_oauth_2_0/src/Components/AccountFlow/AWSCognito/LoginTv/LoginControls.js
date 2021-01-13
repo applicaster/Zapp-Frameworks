@@ -5,10 +5,10 @@ import PropTypes from "prop-types";
 import { identity } from "ramda";
 import { FocusableGroup } from "@applicaster/zapp-react-native-ui-components/Components/FocusableGroup";
 import { focusManager } from "@applicaster/zapp-react-native-utils/appUtils";
-
-import FocusableTextInput from "../../UIComponents/FocusableTextInput";
 import { findNextEmptyLabel } from "../../../Utils/Forms";
 import { isWebBasedPlatform } from "../../../Utils/Platform";
+
+import FocusableTextInput from "../../UIComponents/FocusableTextInput";
 import Button from "../../UIComponents/Buttons/FocusableButton";
 import colors from "../../../colors";
 import {
@@ -30,19 +30,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLocalizations }) => {
-  const [emailValue, setEmailValue] = useState("");
-  const [fullNameValue, setFullNameValue] = useState("");
+const LoginControls = ({ style, errorMessage, onLogin, screenStyles, screenLocalizations }) => {
+  const [usernameValue, setUsername] = useState("");
   const [passwordValue, setPassword] = useState("");
 
-  const groupId = "signup-form";
+  const groupId = "login-form";
 
   const onPress = () => {
-    onSignup({
-      email: emailValue,
-      password: passwordValue,
-      fullName: fullNameValue,
-    });
+    onLogin({ email: usernameValue, password: passwordValue });
   };
 
   const handleInputChange = (setter) => (text) => {
@@ -52,49 +47,47 @@ const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLoc
   const handleEditingEnd = (label) => () => {
     // TODO: implement focus switching on Samsung TV
     if (isWebBasedPlatform) return null;
-    const labels = [
-      { label: "full-name-input", value: fullNameValue },
-      { label: "email-input", value: emailValue },
-      { label: "password-input", value: passwordValue },
-    ];
     /**
      * Wait for the focus manager to finish previous focusing job
      * (Bit of the hack but it works well from the UX point of view)
      */
     setTimeout(() => {
-      const signupButtonId = `${groupId}-button`;
+      const usernameInputId = "login-input";
+      const passwordInputId = "password-input";
+      const loginButtonId = `${groupId}-LOGIN`;
       const focusOnItem = (item) =>
         focusManager.forceFocusOnFocusable({ itemId: item });
 
-      const nextEmpty = findNextEmptyLabel(label, labels);
+      const labels = [
+        { label: "login-input", value: usernameValue },
+        { label: "password-input", value: passwordValue },
+      ];
 
-      if (nextEmpty) {
-        focusOnItem(nextEmpty);
-      } else {
-        focusOnItem(signupButtonId);
+      const nextEmptyLabel = findNextEmptyLabel(label, labels);
+
+      switch (nextEmptyLabel) {
+        case "login-input":
+          focusOnItem(usernameInputId);
+          break;
+        case "password-input":
+          focusOnItem(passwordInputId);
+          break;
+        default:
+          focusOnItem(loginButtonId);
       }
     }, 1000);
   };
 
   const buttonTextStyles = React.useMemo(
-    () => mapKeyToStyle("signup_action_button", screenStyles),
+    () => mapKeyToStyle("login_action_button", screenStyles),
     []
   );
 
-  const fullNameInputStyles = React.useMemo(
+  const loginInputStyles = React.useMemo(
     () =>
       R.compose(
         splitInputTypeStyles,
-        mapKeyToStyle("signup_full_name_input")
-      )(screenStyles),
-    []
-  );
-
-  const emailInputStyles = React.useMemo(
-    () =>
-      R.compose(
-        splitInputTypeStyles,
-        mapKeyToStyle("signup_email_input")
+        mapKeyToStyle("email_input")
       )(screenStyles),
     []
   );
@@ -103,7 +96,7 @@ const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLoc
     () =>
       R.compose(
         splitInputTypeStyles,
-        mapKeyToStyle("signup_password_input")
+        mapKeyToStyle("password_input")
       )(screenStyles),
     []
   );
@@ -114,23 +107,13 @@ const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLoc
       <FocusableGroup id={groupId} shouldUsePreferredFocus isParallaxDisabled>
         <FocusableTextInput
           groupId={groupId}
-          placeholder={screenLocalizations.fields_name_text}
-          value={fullNameValue}
-          onChangeText={handleInputChange(setFullNameValue)}
-          label="full-name-input"
-          onEndEditing={handleEditingEnd("full-name-input")}
-          preferredFocus
-          textInputStyles={fullNameInputStyles}
-        />
-        <FocusableTextInput
-          groupId={groupId}
           placeholder={screenLocalizations.fields_email_text}
-          value={emailValue}
-          onChangeText={handleInputChange(setEmailValue)}
-          label="email-input"
-          onEndEditing={handleEditingEnd("email-input")}
+          value={usernameValue}
+          onChangeText={handleInputChange(setUsername)}
+          label="login-input"
+          onEndEditing={handleEditingEnd("login-input")}
           preferredFocus
-          textInputStyles={emailInputStyles}
+          textInputStyles={loginInputStyles}
         />
         <FocusableTextInput
           groupId={groupId}
@@ -144,14 +127,16 @@ const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLoc
         />
         <Button
           {...{
-            label: screenLocalizations.action_button_signup_text,
+            label: screenLocalizations.action_button_login_text,
             onPress,
             groupId,
-            backgroundColor: screenStyles.signup_action_button_background,
-            backgroundColorFocused: screenStyles.signup_action_button_background_focused,
-            textColorFocused: screenStyles.signup_action_button_fontcolor_focused,
+            backgroundColor: screenStyles.login_action_button_background,
+            backgroundColorFocused:
+              screenStyles.login_action_button_background_focused,
+            textColorFocused:
+              screenStyles.login_action_button_fontcolor_focused,
             textStyles: buttonTextStyles,
-            borderRadius: screenStyles.signup_action_button_border_radius,
+            borderRadius: screenStyles.login_action_button_border_radius,
           }}
         />
       </FocusableGroup>
@@ -159,29 +144,27 @@ const SignupControls = ({ style, errorMessage, onSignup, screenStyles, screenLoc
   );
 };
 
-SignupControls.propTypes = {
+LoginControls.propTypes = {
   style: ViewPropTypes.style,
   onLogin: PropTypes.func,
-  onSignup: PropTypes.func,
   errorMessage: PropTypes.string,
   screenStyles: PropTypes.shape({
-    signup_action_button_background: PropTypes.string,
-    signup_action_button_background_focused: PropTypes.string,
-    signup_action_button_fontcolor_focused: PropTypes.string,
-    signup_action_button_border_radius: PropTypes.number,
+    login_action_button_background: PropTypes.string,
+    login_action_button_background_focused: PropTypes.string,
+    login_action_button_fontcolor_focused: PropTypes.string,
+    login_action_button_border_radius: PropTypes.number,
   }),
   screenLocalizations: PropTypes.shape({
-    fields_name_text: PropTypes.string,
     fields_email_text: PropTypes.string,
     fields_password_text: PropTypes.string,
-    action_button_signup_text: PropTypes.string,
+    action_button_login_text: PropTypes.string,
   }),
 };
 
-SignupControls.defaultProps = {
+LoginControls.defaultProps = {
   onLogin: identity,
   screenStyles: {},
   screenLocalizations: {},
 };
 
-export default SignupControls;
+export default LoginControls;

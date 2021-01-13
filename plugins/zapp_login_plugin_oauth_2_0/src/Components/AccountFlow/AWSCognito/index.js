@@ -1,11 +1,11 @@
 import React from "react";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-import SignUpMobile from "./SignUpMobile";
-import SignUpTV from "./SignUpTV";
+import AWSCognitoMobile from "./AWSCognitoMobile";
+import AWSCognitoTv from "./AWSCognitoTv";
 
-export default function SignUp(props) {
-  const mobile = <SignUpMobile {...props} />;
-  const tv = <SignUpTV {...props} />;
+export default function AWSCognito(props) {
+  const mobile = <AWSCognitoMobile {...props} />;
+  const tv = <AWSCognitoTv {...props} />;
 
   return platformSelect({
     tvos: tv,

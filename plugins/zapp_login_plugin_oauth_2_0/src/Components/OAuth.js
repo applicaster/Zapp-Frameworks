@@ -38,7 +38,7 @@ const getRiversProp = (key, rivers = {}) => {
   return getPropByKey(rivers);
 };
 
-const InPlayer = (props) => {
+const OAuth = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
     PLAYER_HOOK: "PlayerHook",
@@ -243,4 +243,4 @@ const InPlayer = (props) => {
   return renderFlow();
 };
 
-export default InPlayer;
+export default OAuth;
