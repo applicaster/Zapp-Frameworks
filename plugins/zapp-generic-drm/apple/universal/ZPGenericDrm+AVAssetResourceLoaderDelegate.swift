@@ -51,11 +51,12 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
 
         // load the certificate
         var certificateUrlString: String?
-        if let certificateUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
-            certificateUrlString = certificateUrlStringFromConfig
-        }
-        else if let certificateUrlStringFromItemParams = fairplay[ItemParamsKeys.certificateUrl] as? String {
+        
+        if let certificateUrlStringFromItemParams = fairplay[ItemParamsKeys.certificateUrl] as? String {
             certificateUrlString = certificateUrlStringFromItemParams
+        }
+        else if let certificateUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
+            certificateUrlString = certificateUrlStringFromConfig
         }
 
         guard let updatedCertificateUrlString = certificateUrlString,
@@ -109,11 +110,11 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
         
         // request the content key context from the server
         var licenseServerUrlString: String?
-        if let licenseServerUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
-            licenseServerUrlString = licenseServerUrlStringFromConfig
-        }
-        else if let licenseServerUrlStringFromItemParams = fairplay[ItemParamsKeys.licenseServerUrl] as? String {
+        if let licenseServerUrlStringFromItemParams = fairplay[ItemParamsKeys.licenseServerUrl] as? String {
             licenseServerUrlString = licenseServerUrlStringFromItemParams
+        }
+        else if let licenseServerUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
+            licenseServerUrlString = licenseServerUrlStringFromConfig
         }
         
         guard let updatedLicenseServerUrlString = licenseServerUrlString,
