@@ -15,12 +15,21 @@ class ZPGenericDrm: NSObject, PluginAdapterProtocol {
 
     public var configurationJSON: NSDictionary?
     public var model: ZPPluginModel?
+    public var params: [String: Any]?
 
     /// Plugin configuration keys
     struct PluginKeys {
         static let certificateUrl = "certificate_url"
         static let licenseServerUrl = "license_url"
-
+    }
+    
+    struct ItemParamsKeys {
+        static let entry = "entry"
+        static let extensions = "extensions"
+        static let drm = "drm"
+        static let fairplay = "fairplay"
+        static let licenseServerUrl = "ksm_server_url"
+        static let certificateUrl = "certificate_url"
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -34,7 +43,7 @@ class ZPGenericDrm: NSObject, PluginAdapterProtocol {
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
-
+            params = defaultParams
             completion?(true)
     }
 

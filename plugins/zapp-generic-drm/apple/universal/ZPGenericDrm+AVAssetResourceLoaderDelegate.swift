@@ -13,12 +13,13 @@ let errorDomain = "com.zapp.generic.drm.error"
 extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
 
     struct ErrorCodes {
-        static let unableToReadRequestUrl = -1
-        static let unableToReadCertificateData = -2
-        static let requestUrlSchemeIsNotValid = -3
-        static let unableToReadSPCdata = -4
-        static let licenseServerUrlIsNotProvided = -5
-        static let unableToFetchCKC = -6
+        static let noDrmParametersProvided = -1
+        static let unableToReadRequestUrl = -2
+        static let unableToReadCertificateData = -3
+        static let requestUrlSchemeIsNotValid = -4
+        static let unableToReadSPCdata = -5
+        static let licenseServerUrlIsNotProvided = -6
+        static let unableToFetchCKC = -7
     }
 
     // swiftlint:disable:next function_body_length
@@ -29,10 +30,18 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
         // 2. Send SPC request to your Key Server
         // 3. Provide CKC response (or error) to AVAssetResourceLoadingRequest
 
+        guard let entry = params?[ItemParamsKeys.entry] as? [String: Any],
+                 let extensions = entry[ItemParamsKeys.extensions] as? [String: Any],
+                 let drm = extensions[ItemParamsKeys.drm] as? [String: Any],
+                 let fairplay = drm[ItemParamsKeys.fairplay] as? [String: Any] else {
+            logger?.debugLog(message: "Drm related parameters are not provided as a part of item entry extensions")
+            loadingRequest.finishLoading(with: NSError(domain: errorDomain, code: ErrorCodes.noDrmParametersProvided, userInfo: nil))
+            return false
+        }
+        
         // check if the url is set in the manifest
         guard let url = loadingRequest.request.url else {
             logger?.debugLog(message: "Unable to read the URL/HOST data")
-
             loadingRequest.finishLoading(with: NSError(domain: errorDomain, code: ErrorCodes.unableToReadRequestUrl, userInfo: nil))
             return false
         }
@@ -40,9 +49,17 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
         logger?.verboseLog(message: "Printing the url",
                            data: ["url" : url.absoluteString])
 
-        // load the certificate from the server
-        guard let certificateUrlString = configurationJSON?[PluginKeys.certificateUrl] as? String,
-              let certificateUrl = URL(string: certificateUrlString),
+        // load the certificate
+        var certificateUrlString: String?
+        if let certificateUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
+            certificateUrlString = certificateUrlStringFromConfig
+        }
+        else if let certificateUrlStringFromItemParams = fairplay[ItemParamsKeys.certificateUrl] as? String {
+            certificateUrlString = certificateUrlStringFromItemParams
+        }
+
+        guard let updatedCertificateUrlString = certificateUrlString,
+              let certificateUrl = URL(string: updatedCertificateUrlString),
               let certificateData = try? Data(contentsOf: certificateUrl) else {
             logger?.debugLog(message: "Unable to read the certificate data")
 
@@ -91,8 +108,16 @@ extension ZPGenericDrm: AVAssetResourceLoaderDelegate {
                          data: ["spc" : spcDataOutput.base64EncodedString()])
         
         // request the content key context from the server
-        guard let licenseServerUrlString = configurationJSON?[PluginKeys.licenseServerUrl] as? String,
-              let licenseServerUrl = URL(string: licenseServerUrlString) else {
+        var licenseServerUrlString: String?
+        if let licenseServerUrlStringFromConfig = configurationJSON?[PluginKeys.certificateUrl] as? String {
+            licenseServerUrlString = licenseServerUrlStringFromConfig
+        }
+        else if let licenseServerUrlStringFromItemParams = fairplay[ItemParamsKeys.licenseServerUrl] as? String {
+            licenseServerUrlString = licenseServerUrlStringFromItemParams
+        }
+        
+        guard let updatedLicenseServerUrlString = licenseServerUrlString,
+              let licenseServerUrl = URL(string: updatedLicenseServerUrlString) else {
             logger?.debugLog(message: "License server url is not provided")
             loadingRequest.finishLoading(with: NSError(domain: errorDomain, code: ErrorCodes.licenseServerUrlIsNotProvided, userInfo: nil))
             return false
