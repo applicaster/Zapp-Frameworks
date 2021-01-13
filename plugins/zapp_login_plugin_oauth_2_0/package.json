@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp_login_plugin_oauth_2_0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,13 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react-native-app-auth": "6.0.1",
     "@react-native-community/blur": "3.4.1",
     "axios": "^0.19.1",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react-native-actionsheet": "^2.4.0",
+    "react-native-app-auth": "6.0.1",
     "react-native-dropdownalert": "^4.2.1",
     "react-native-keyboard-aware-scroll-view": "0.9.1",
     "react-redux": "^7.2.1"
