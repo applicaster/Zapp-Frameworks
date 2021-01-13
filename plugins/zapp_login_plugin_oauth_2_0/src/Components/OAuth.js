@@ -1,7 +1,8 @@
 import React, { useState, useLayoutEffect } from "react";
+import { View, SafeAreaView, Platform, Text } from "react-native";
 
-import AccountFlow from "./AccountFlow";
-import LogoutFlow from "./LogoutFlow";
+// import AccountFlow from "./AccountFlow";
+// import LogoutFlow from "./LogoutFlow";
 import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -9,6 +10,12 @@ import { localStorage as defaultStorage } from "@applicaster/zapp-react-native-b
 import { getLocalizations } from "../Utils/Localizations";
 import { isVideoEntry, isAuthenticationRequired } from "../Utils/PayloadUtils";
 import { showAlert } from "../Utils/Account";
+import LoadingScreen from "./LoadingScreen";
+import { container } from "./Styles";
+import TitleLabel from "./UIComponents/TitleLabel";
+import ClientLogo from "./UIComponents/ClientLogo";
+import ActionButton from "./UIComponents/Buttons/ActionButton.js";
+
 import {
   getStyles,
   isHomeScreen,
@@ -31,11 +38,19 @@ export const logger = createLogger({
 const getRiversProp = (key, rivers = {}) => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("type", "zapp_login_plugin_oauth_2_0")),
     R.values
   );
 
   return getPropByKey(rivers);
+};
+
+const clientLogoView = {
+  height: 100,
+  width: 350,
+  position: "absolute",
+  alignSelf: "center",
+  top: 200,
 };
 
 const OAuth = (props) => {
@@ -51,6 +66,7 @@ const OAuth = (props) => {
   const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
@@ -58,6 +74,13 @@ const OAuth = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
+
+  const containerStyle = (screenStyles) => {
+    return {
+      ...container,
+      backgroundColor: screenStyles?.background_color,
+    };
+  };
 
   let stillMounted = true;
 
@@ -80,7 +103,13 @@ const OAuth = (props) => {
 
   const setupEnvironment = async () => {
     const {
-      configuration: { in_player_environment },
+      configuration: {
+        clientId,
+        redirectUrl,
+        authorizationEndpoint,
+        tokenEndpoint,
+        revocationEndpoint,
+      },
     } = props;
     addContext({ configuration: props.configuration, payload });
 
@@ -88,7 +117,7 @@ const OAuth = (props) => {
       .createEvent()
       .setLevel(XRayLogLevel.debug)
       .setMessage(`Starting InPlayer Plugin`)
-      .addData({ in_player_environment })
+      .addData()
       .send();
 
     await checkIdToken();
@@ -180,45 +209,33 @@ const OAuth = (props) => {
     }
   };
 
-  const renderPlayerHook = () => {
-    return (
-      <AccountFlow
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        accountFlowCallback={accountFlowCallback}
-        backButton={!isHomeScreen(navigator)}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
-  };
-
   const renderScreenHook = () => {
-    return (
-      <AccountFlow
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        accountFlowCallback={accountFlowCallback}
-        backButton={!isHomeScreen(navigator)}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
+    return <View style={{ flex: 1, backgroundColor: "red" }} />;
+    // return (
+    //   <AccountFlow
+    //     setParentLockWasPresented={setParentLockWasPresented}
+    //     parentLockWasPresented={parentLockWasPresented}
+    //     shouldShowParentLock={shouldShowParentLock}
+    //     accountFlowCallback={accountFlowCallback}
+    //     backButton={!isHomeScreen(navigator)}
+    //     screenStyles={screenStyles}
+    //     screenLocalizations={screenLocalizations}
+    //     {...props}
+    //   />
+    // );
   };
 
-  const renderLogoutScreen = () => {
-    return (
-      <LogoutFlow
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
-  };
+  // const renderLogoutScreen = () => {
+  //   return (
+  //     <LogoutFlow
+  //       screenStyles={screenStyles}
+  //       screenLocalizations={screenLocalizations}
+  //       {...props}
+  //     />
+  //   );
+  // };
+
+  const onPressActionButton = () => {};
 
   const renderUACFlow = () => {
     return idToken ? renderLogoutScreen() : renderScreenHook();
@@ -230,17 +247,34 @@ const OAuth = (props) => {
   const renderFlow = () => {
     switch (hookType) {
       case HookTypeData.PLAYER_HOOK:
-        return renderPlayerHook();
+        return renderScreenHook();
       case HookTypeData.SCREEN_HOOK:
         return renderScreenHook();
       case HookTypeData.USER_ACCOUNT:
-        return renderUACFlow();
+        return renderScreenHook();
       case HookTypeData.UNDEFINED:
         return null;
     }
   };
-
-  return renderFlow();
+  const SafeArea = Platform.isTV ? View : SafeAreaView;
+  const { logout_text, login_text, title_text } = screenLocalizations;
+  console.log({ screenStyles, styles });
+  return (
+    // <View style={containerStyle(screenStyles)}>
+    <SafeArea style={containerStyle(screenStyles)}>
+      {/* {loading && <LoadingScreen />} */}
+      <TitleLabel screenStyles={screenStyles} title={title_text} />
+      <View style={clientLogoView}>
+        <ClientLogo imageSrc={screenStyles.client_logo} />
+      </View>
+      <ActionButton
+        screenStyles={screenStyles}
+        title={isUserAuthenticated ? logout_text : login_text}
+        onPress={onPressActionButton}
+      />
+    </SafeArea>
+    // </View>
+  );
 };
 
 export default OAuth;

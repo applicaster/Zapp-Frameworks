@@ -159,6 +159,12 @@ const stylesMobile = {
       label: "Action button font color",
       initial_value: "#ffffffff",
     },
+    {
+      key: "action_button_background_color",
+      type: "color_picker",
+      label: "Action button font color",
+      initial_value: "#F1AD12ff",
+    },
   ],
 };
 

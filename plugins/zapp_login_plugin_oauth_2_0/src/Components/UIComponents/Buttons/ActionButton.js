@@ -6,11 +6,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 const actionButtonContainerStyle = (screenStyles, customStyle) => {
   const defaultStyle = {
     height: 40,
-    width: 230,
+    width: 300,
+
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: screenStyles?.action_button_background_color || "#F1AD12",
-    borderRadius: 50,
+    borderRadius: 10,
     alignSelf: "center",
   };
 
@@ -41,9 +42,14 @@ const ActionButton = (props) => {
   } = props;
 
   const textStyle = labelStyle || actionButtonTextStyle(screenStyles);
-
+  console.log({
+    buttonStyle: actionButtonContainerStyle(screenStyles, buttonStyle),
+  });
   return (
-    <TouchableOpacity onPress={onPress} style={{ paddingTop: paddingTop }}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{ paddingTop: paddingTop, bottom: 100, position: "absolute" }}
+    >
       <View style={actionButtonContainerStyle(screenStyles, buttonStyle)}>
         <Text style={textStyle}>{title}</Text>
       </View>
