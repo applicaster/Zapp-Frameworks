@@ -1,0 +1,32 @@
+{
+  "dependency_name": "@applicaster/zapp-react-native-theo-player",
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "THEOplayer QuickBrick",
+  "description": "Quick Brick THEOplayer plugin",
+  "type": "player",
+  "react_native": true,
+  "identifier": "zapp-react-native-theo-player",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    ""
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "dependency_version": "0.0.2",
+  "manifest_version": "0.0.2",
+  "api": {},
+  "npm_dependencies": {},
+  "dependency_repository_url": {},
+  "min_zapp_sdk": "20.0.0",
+  "extra_dependencies": null,
+  "project_dependencies": {},
+  "custom_configuration_fields": []
+}
