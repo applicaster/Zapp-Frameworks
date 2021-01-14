@@ -18,4 +18,9 @@ import Foundation
     @objc func localStorageSetValue(for key: String, value: String?, namespace: String?) -> Bool
     @objc func localStorageRemoveValue(for key: String, namespace: String?) -> Bool
     @objc func localStorageAllValues(namespace: String?) -> String?
+    
+    @objc func keychainStorageValue(for key: String, namespace: String?) -> String?
+    @objc func keychainStorageSetValue(for key: String, value: String?, namespace: String?) -> Bool
+    @objc func keychainStorageRemoveValue(for key: String, namespace: String?) -> Bool
+    
 }

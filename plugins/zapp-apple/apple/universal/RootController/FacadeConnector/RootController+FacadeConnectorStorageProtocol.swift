@@ -45,7 +45,23 @@ extension RootController: FacadeConnectorStorageProtocol {
         return LocalStorage.sharedInstance.removeItem(key: key, namespace: namespace)
     }
 
-    @objc public func localStorageAllValues(namespace: String? = nil) -> String? {
+    public func localStorageAllValues(namespace: String? = nil) -> String? {
         return LocalStorage.sharedInstance.getAll(namespace: namespace)
+    }
+
+    public func keychainStorageValue(for key: String, namespace: String?) -> String? {
+        return LocalStorage.sharedInstance.getKeychain(key: key,
+                                                       namespace: namespace)
+    }
+
+    public func keychainStorageSetValue(for key: String, value: String?, namespace: String?) -> Bool {
+        return LocalStorage.sharedInstance.setKeychain(key: key,
+                                                       value: value,
+                                                       namespace: namespace)
+    }
+
+    public func keychainStorageRemoveValue(for key: String, namespace: String?) -> Bool {
+        return LocalStorage.sharedInstance.removeKeychainItem(key: key,
+                                                              namespace: namespace)
     }
 }

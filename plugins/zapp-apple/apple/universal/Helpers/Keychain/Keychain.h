@@ -16,10 +16,13 @@
 @interface Keychain : NSObject
 
 + (BOOL)setString:(NSString *)string forKey:(NSString *)key;
++ (BOOL)setString:(NSString *)string forKey:(NSString *)key andNameSpace:(NSString *)nameSpace;
 + (BOOL)setObject:(id)object forKey:(NSString *)key;
 + (BOOL)deleteStringForKey:(NSString *)key;
++ (BOOL)deleteStringForKey:(NSString *)key andNameSpace:(NSString *)nameSpace;
 + (BOOL)removeValueForKey:(NSString *)key;
 + (NSString *)getStringForKey:(NSString *)key;
++ (NSString *)getStringForKey:(NSString *)key andNameSpace:(NSString *)nameSpace;
 + (id)objectForKey:(NSString *)forKey;
 + (NSString *)bundleIdentifier;
 @end
