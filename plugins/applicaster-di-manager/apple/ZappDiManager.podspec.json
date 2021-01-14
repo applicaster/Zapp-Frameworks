@@ -1,0 +1,41 @@
+{
+  "name": "ZappDiManager",
+  "version": "2.0.0",
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "summary": "ZappDiManager",
+  "description": "ZappDiManager",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "Appache 2.0",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/quick-brick-apple-user-activity/2.0.0"
+  },
+  "requires_arc": true,
+  "swift_versions": "5.1",
+  "source_files": "universal/**/*.{swift}",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "dependencies": {
+    "ZappCore": [],
+    "XrayLogger": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "ios": {
+        "source_files": "tests/**/*.{swift}"
+      },
+      "tvos": {
+        "source_files": "tests/**/Dummy.swift"
+      }
+    }
+  ],
+  "swift_version": "5.1"
+}
