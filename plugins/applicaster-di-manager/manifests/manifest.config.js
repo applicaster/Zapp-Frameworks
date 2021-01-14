@@ -77,7 +77,7 @@ const extra_dependencies = {
 };
 
 const api_apple = {
-  require_startup_execution: true,
+  require_startup_execution: false,
   class_name: "ZPDiManager",
   modules: ["ZappDiManager"],
 };

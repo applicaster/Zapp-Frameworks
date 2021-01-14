@@ -7,13 +7,24 @@
 //
 
 import AdSupport
-import ZappCore
 import XrayLogger
+import ZappCore
 
 @objc public class ZPDiManager: NSObject, GeneralProviderProtocol {
     public var model: ZPPluginModel?
     public var configurationJSON: NSDictionary?
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappDiManager")
+
+    enum DiError: String, Error {
+        case NoDataReturnedFromServer = "Error: no data"
+        case JsonParsingFailed = "Error: conversion from JSON failed"
+        case NoJWTvalue = "Error: JWT param can not be fetched"
+    }
+
+    struct Params {
+        static let jwtJsonKey = "jwt"
+        static let jwtStorageKey = "signedDeviceInfoToken"
+    }
 
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
@@ -26,66 +37,49 @@ import XrayLogger
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
+        makeDiServerCall()
         completion?(true)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
-        
-        
+        _ = FacadeConnector.connector?.storage?.localStorageRemoveValue(for: Params.jwtStorageKey,
+                                                                        namespace: nil)
         completion?(true)
     }
-}
 
-extension ZPDiManager: AppLoadingHookProtocol {
-    enum JSONError: String, Error {
-        case NoData = "Error: no data"
-        case ConversionFailed = "Error: conversion from JSON failed"
-        case NoJWTvalue = "Error: JWT param can not be fetched"
-    }
-    
-    struct Params {
-        static let jwtJsonKey = "jwt"
-        static let jwtStorageKey = "signedDeviceInfoToken"
-
-    }
-    
-    public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        
+    public func makeDiServerCall() {
         guard let urlString = configurationJSON?["di_server_url"] as? String,
               let url = URL(string: urlString) else {
-            self.logger?.errorLog(message: "Server Url not defined")
-            completion?()
+            logger?.errorLog(message: "Server Url not defined")
             return
         }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
             do {
                 guard let data = data else {
-                    throw JSONError.NoData
+                    throw DiError.NoDataReturnedFromServer
                 }
-                
+
                 guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    throw JSONError.ConversionFailed
+                    throw DiError.JsonParsingFailed
                 }
-                
+
                 guard let jwt = json[Params.jwtJsonKey] as? String else {
-                    throw JSONError.NoJWTvalue
+                    throw DiError.NoJWTvalue
                 }
-                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.jwtStorageKey,
-                                                                               value: jwt,
-                                                                               namespace: nil)
-                
-            } catch let error as JSONError {
+                _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: Params.jwtStorageKey,
+                                                                             value: jwt,
+                                                                             namespace: nil)
+
+            } catch let error as DiError {
                 self.logger?.errorLog(message: "DI Server error",
-                                 data: ["url": urlString,
-                                        "error": error.localizedDescription])
+                                      data: ["url": urlString,
+                                             "error": error.localizedDescription])
             } catch let error as NSError {
                 self.logger?.errorLog(message: "DI Server error",
-                                 data: ["url": urlString,
-                                        "error": error.localizedDescription])
+                                      data: ["url": urlString,
+                                             "error": error.localizedDescription])
             }
-            
-            completion?()
 
         }.resume()
     }
