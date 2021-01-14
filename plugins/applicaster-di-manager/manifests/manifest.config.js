@@ -44,9 +44,8 @@ const custom_configuration_fields_apple = [
     label_tooltip:
       "Disable plugin if you do not want to use plugin",
   },
-  ,
   {
-    key: "default_server",
+    key: "di_server_url",
     type: "text",
     label: "Di Server url",
     default: "https://di.applicaster.com",
@@ -60,7 +59,7 @@ const min_zapp_sdk = {
 };
 
 const extra_dependencies_apple = {
-  ZappSessionStorageIdfa:
+  ZappDiManager:
     ":path => './node_modules/@applicaster/applicaster-di-manager/apple/ZappDiManager.podspec'",
 };
 
