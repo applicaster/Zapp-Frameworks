@@ -67,3 +67,28 @@ import Foundation
                                     namespace: namespace)
     }
 }
+
+extension LocalStorage: ZappKeychainStorageProtocol {
+    public func setKeychain(key: String,
+                            value: String?,
+                            namespace: String?) -> Bool {
+        guard let value = value else {
+            return false
+        }
+
+        return Keychain.setString(value,
+                                  forKey: key,
+                                  andNameSpace: namespace)
+    }
+
+    public func getKeychain(key: String,
+                            namespace: String?) -> String? {
+        return Keychain.getStringForKey(key,
+                                        andNameSpace: namespace)
+    }
+
+    public func removeKeychainItem(key: String,
+                                   namespace: String?) -> Bool {
+        return Keychain.deleteString(forKey: key, andNameSpace: namespace)
+    }
+}
