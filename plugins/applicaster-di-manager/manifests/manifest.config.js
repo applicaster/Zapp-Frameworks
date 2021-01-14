@@ -15,7 +15,7 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [],
-  identifier: "di_server_call",
+  identifier: "di_manager_call",
   npm_dependencies: [],
   targets: ["mobile"],
 };
