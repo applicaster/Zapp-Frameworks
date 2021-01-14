@@ -45,6 +45,14 @@ const custom_configuration_fields_apple = [
       "Disable plugin if you do not want to use plugin",
   },
   {
+    key: "wait_for_completion",
+    type: "checkbox",
+    default: 1,
+    label: "Block UI until completed",
+    label_tooltip:
+      "Disable if you dont want to block UI until process completions",
+  },
+  {
     key: "di_server_url",
     type: "text",
     label: "Di Server url",

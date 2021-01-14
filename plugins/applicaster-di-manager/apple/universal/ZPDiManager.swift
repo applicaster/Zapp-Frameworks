@@ -37,8 +37,7 @@ import ZappCore
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
-        makeDiServerCall()
-        completion?(true)
+        makeDiServerCall(completion)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
@@ -47,7 +46,7 @@ import ZappCore
         completion?(true)
     }
 
-    public func makeDiServerCall() {
+    public func makeDiServerCall(_ completion: ((_ success: Bool) -> Void)?) {
         guard let urlString = configurationJSON?["di_server_url"] as? String,
               let url = URL(string: urlString) else {
             logger?.errorLog(message: "Server Url not defined")
@@ -81,6 +80,34 @@ import ZappCore
                                              "error": error.localizedDescription])
             }
 
+            if self.shouldWaitForCompletion {
+                completion?(true)
+            }
+
         }.resume()
+
+        if shouldWaitForCompletion == false {
+            completion?(true)
+        }
     }
+
+    lazy var shouldWaitForCompletion: Bool = {
+        var retValue: Bool = true
+
+        guard let value = configurationJSON?["wait_for_completion"] else {
+            return retValue
+        }
+
+        // Check if value bool or string
+        if let stringValue = value as? String {
+            if let boolValue = Bool(stringValue) {
+                retValue = boolValue
+            } else if let intValue = Int(stringValue) {
+                retValue = Bool(truncating: intValue as NSNumber)
+            }
+        } else if let boolValue = value as? Bool {
+            retValue = boolValue
+        }
+        return retValue
+    }()
 }
