@@ -1,8 +1,6 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { View, SafeAreaView, Platform, Text } from "react-native";
 
-// import AccountFlow from "./AccountFlow";
-// import LogoutFlow from "./LogoutFlow";
 import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -15,6 +13,12 @@ import { container } from "./Styles";
 import TitleLabel from "./UIComponents/TitleLabel";
 import ClientLogo from "./UIComponents/ClientLogo";
 import ActionButton from "./UIComponents/Buttons/ActionButton.js";
+import {
+  configFromPlugin,
+  authorizeService,
+  revokeService,
+  checkUserAuthorization,
+} from "../Services/OAuth2Service";
 
 import {
   getStyles,
@@ -63,7 +67,6 @@ const OAuth = (props) => {
 
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
-  const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -74,6 +77,7 @@ const OAuth = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
+  const oAuthConfig = configFromPlugin(props?.configuration);
 
   const containerStyle = (screenStyles) => {
     return {
@@ -85,55 +89,44 @@ const OAuth = (props) => {
   let stillMounted = true;
 
   useLayoutEffect(() => {
+    const configuration = props?.configuration;
+    addContext({ configuration, payload });
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.debug)
+      .setMessage(`Starting Auth Plugin`)
+      .addData({ configuration })
+      .send();
+
     setupEnvironment();
+    return () => {
+      stillMounted = false;
+    };
   }, []);
 
-  const checkIdToken = async () => {
-    const token = await isTokenInStorage("idToken");
-
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .setMessage(`User token is in local storage: ${token}`)
-      .addData({ token_exists: token })
-      .send();
-
-    setIdtoken(token);
-  };
-
   const setupEnvironment = async () => {
-    const {
-      configuration: {
-        clientId,
-        redirectUrl,
-        authorizationEndpoint,
-        tokenEndpoint,
-        revocationEndpoint,
-      },
-    } = props;
-    addContext({ configuration: props.configuration, payload });
-
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .setMessage(`Starting InPlayer Plugin`)
-      .addData()
-      .send();
-
-    await checkIdToken();
-
     const videoEntry = isVideoEntry(payload);
-    let event = logger.createEvent().setLevel(XRayLogLevel.debug);
+    const authenticated = await checkUserAuthorization();
+
+    const authenthicationRequired = true;
+    // isAuthenticationRequired({ payload });
+    let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
+      is_video_entry: videoEntry,
+    });
 
     if (videoEntry) {
-      const authenticationRequired = true;
-      // isAuthenticationRequired({ payload });
-
-      event.addData({
-        authentication_required: authenticationRequired,
-        is_video_entry: videoEntry,
-      });
-      if (authenticationRequired) {
+      if (authenthicationRequired === false || isUserAuthenticated) {
+        event
+          .setMessage(`Plugin finished work`)
+          .addData({
+            hook_type: HookTypeData.PLAYER_HOOK,
+            is_video_entry: true,
+            is_authorized: isAuthorized,
+            is_authentication_required,
+          })
+          .send();
+        callback && callback({ success: true, error: null, payload: payload });
+      } else if (oAuthConfig) {
         event
           .setMessage(`Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`)
           .addData({
@@ -142,12 +135,20 @@ const OAuth = (props) => {
           .send();
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
-        event
-          .setMessage(
-            "Data source not support InPlayer plugin invocation, finishing hook with: success"
-          )
+        const error = Error(
+          "OAuth plugin required configuration keys not defined, please check plugin configuration in Zapp"
+        );
+
+        logger
+          .createEvent()
+          .setLevel(XRayLogLevel.error)
+          .setMessage("OAuth finishing, config parameters was not difined")
+          .addData({
+            error,
+          })
           .send();
-        callback && callback({ success: true, error: null, payload });
+
+        callback && callback({ success: false, error, payload });
       }
     } else {
       if (!isHook(navigator)) {
@@ -168,45 +169,8 @@ const OAuth = (props) => {
         stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
       }
     }
-    return () => {
-      stillMounted = false;
-    };
-  };
-
-  const accountFlowCallback = async ({ success }) => {
-    let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
-
-    const event = logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({ success, payload, hook_type: hookType });
-
-    if (success) {
-      const token = localStorage.getItem("inplayer_token");
-      event.addData({ token });
-      await defaultStorage.setItem("idToken", token);
-    }
-
-    if (hookType === HookTypeData.SCREEN_HOOK && success) {
-      const { callback } = props;
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-      callback && callback({ success, error: null, payload: payload });
-    } else if (hookType === HookTypeData.PLAYER_HOOK) {
-      if (success) {
-        event.setMessage(`${eventMessage}, next: Asset Flow`).send();
-        stillMounted && setIsUserAuthenticated(true);
-      } else {
-        event.setMessage(`${eventMessage}, plugin finished task`).send();
-        callback && callback({ success, error: null, payload: payload });
-      }
-    } else if (hookType === HookTypeData.USER_ACCOUNT) {
-      event.setMessage(`${eventMessage}, plugin finished task: go back`).send();
-      navigator.goBack();
-    } else {
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-
-      callback && callback({ success: success, error: null, payload: payload });
-    }
+    stillMounted && setIsUserAuthenticated(authenticated);
+    stillMounted && setLoading(false);
   };
 
   const renderScreenHook = () => {
@@ -225,44 +189,37 @@ const OAuth = (props) => {
     // );
   };
 
-  // const renderLogoutScreen = () => {
-  //   return (
-  //     <LogoutFlow
-  //       screenStyles={screenStyles}
-  //       screenLocalizations={screenLocalizations}
-  //       {...props}
-  //     />
-  //   );
-  // };
+  const onPressActionButton = React.useCallback(async () => {
+    setLoading(true);
+    console.log("onPress");
+    if (isUserAuthenticated) {
+      const success = await revokeService(oAuthConfig);
+      console.log("onPress", { success });
 
-  const onPressActionButton = () => {};
+      setIsUserAuthenticated(success);
+    } else {
+      const success = await authorizeService(oAuthConfig);
+      console.log("onPress", { success });
 
-  const renderUACFlow = () => {
-    return idToken ? renderLogoutScreen() : renderScreenHook();
-  };
+      setIsUserAuthenticated(success);
+      if (success) {
+        if (hookType === HookTypeData.PLAYER_HOOK) {
+          callback &&
+            callback({ success: true, error: null, payload: payload });
+        }
+      }
+    }
+    setLoading(false);
+  }, []);
 
   const shouldShowParentLock = (parentLockWasPresented) =>
     !(parentLockWasPresented || !showParentLock);
 
-  const renderFlow = () => {
-    switch (hookType) {
-      case HookTypeData.PLAYER_HOOK:
-        return renderScreenHook();
-      case HookTypeData.SCREEN_HOOK:
-        return renderScreenHook();
-      case HookTypeData.USER_ACCOUNT:
-        return renderScreenHook();
-      case HookTypeData.UNDEFINED:
-        return null;
-    }
-  };
   const SafeArea = Platform.isTV ? View : SafeAreaView;
   const { logout_text, login_text, title_text } = screenLocalizations;
-  console.log({ screenStyles, styles });
+  console.log({ isUserAuthenticated, screenLocalizations });
   return (
-    // <View style={containerStyle(screenStyles)}>
     <SafeArea style={containerStyle(screenStyles)}>
-      {/* {loading && <LoadingScreen />} */}
       <TitleLabel screenStyles={screenStyles} title={title_text} />
       <View style={clientLogoView}>
         <ClientLogo imageSrc={screenStyles.client_logo} />
@@ -272,8 +229,8 @@ const OAuth = (props) => {
         title={isUserAuthenticated ? logout_text : login_text}
         onPress={onPressActionButton}
       />
+      {loading && <LoadingScreen />}
     </SafeArea>
-    // </View>
   );
 };
 

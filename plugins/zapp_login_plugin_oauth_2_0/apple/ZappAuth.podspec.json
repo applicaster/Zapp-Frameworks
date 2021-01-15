@@ -1,0 +1,44 @@
+{
+  "name": "ZappAuth",
+  "version": "0.0.1",
+  "summary": "General Applicaster iOS and tvOS framework that provides protocol",
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "swift_versions": "5.1",
+  "description": "'General Applicaster iOS and tvOS framework that provides protocol and this lowest hierarchy layer'",
+  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+  "license": "Appache 2.0",
+  "authors": {
+    "a.kononenko@applicaster.com": "a.kononenko@applicaster.com"
+  },
+  "source": {
+    "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
+    "tag": "@applicaster/zapp-core/1.1.0"
+  },
+  "source_files": "universal/**/*.{swift}",
+  "ios": {
+    "source_files": "ios/**/*.{swift}"
+  },
+  "tvos": {
+    "source_files": "tvos/**/*.{swift}"
+  },
+  "dependencies": {
+    "react-native-app-auth": [],
+    "ZappApple": []
+  },
+  "testspecs": [
+    {
+      "name": "UnitTests",
+      "test_type": "unit",
+      "ios": {
+        "source_files": "tests/iOS/**/*.{swift}"
+      },
+      "tvos": {
+        "source_files": "tests/Dummy.swift"
+      }
+    }
+  ],
+  "swift_version": "5.1"
+}
