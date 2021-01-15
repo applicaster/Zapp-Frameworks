@@ -71,7 +71,7 @@ export async function revokeService(config) {
         sendClientId: true,
       });
       console.log({ result });
-      return result;
+      return true;
     }
     return false;
   } catch (error) {

@@ -17,7 +17,7 @@ export const logger = createLogger({
 
 export async function saveKeychainData(data) {
   const stringifiedData = JSON.stringify(data);
-
+  console.log({ localStorage });
   try {
     await localStorage.setKeychainItem(authDataKey, stringifiedData, namespace);
   } catch (error) {
