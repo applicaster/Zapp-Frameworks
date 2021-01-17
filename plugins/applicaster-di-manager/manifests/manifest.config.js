@@ -31,10 +31,16 @@ function createManifest({ version, platform }) {
     api: api[platform],
     npm_dependencies: [`@applicaster/applicaster-di-manager@${version}`],
     targets: targets[platform],
-    ui_frameworks: ui_frameworks[platform]
+    ui_frameworks: ui_frameworks[platform],
+    custom_configuration_fields: custom_configuration_fields[platform],
   };
   return manifest;
 }
+
+const custom_configuration_fields = {
+  ios_for_quickbrick: [custom_configuration_fields_apple],
+  tvos_for_quickbrick: [custom_configuration_fields_apple],
+};
 
 const custom_configuration_fields_apple = [
   {
