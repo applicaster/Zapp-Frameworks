@@ -8,7 +8,10 @@ import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
+import com.applicaster.util.OSUtil
 import com.applicaster.util.server.ConnectionManager
+import com.google.gson.JsonElement
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -23,15 +26,28 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
         if (null == configuration || configuration.isEmpty()) {
             return
         }
-        waitForCompletion = true == configuration["wait_for_completion"]?.asBoolean
+        waitForCompletion = asBool(configuration["wait_for_completion"])
         serverUrl = configuration["di_server_url"]?.asString
         if (serverUrl.isNullOrBlank()) {
             APLogger.error(TAG, "DIManager plugin di_server_url url is not configured")
         }
     }
 
+    private fun asBool(jsonElement: JsonElement?): Boolean {
+        if(null == jsonElement)
+            return false
+        return jsonElement.toString().let {
+            it == "true" || it == "1"
+        }
+    }
+
     override fun executeOnApplicationReady(context: Context, listener: HookListener) {
         if (serverUrl.isNullOrBlank()) {
+            listener.onHookFinished()
+            return
+        }
+        if(!OSUtil.hasNetworkConnection(AppContext.get())) {
+            APLogger.error(TAG, "No internet connection, DIManager plugin will skip token fetching")
             listener.onHookFinished()
             return
         }

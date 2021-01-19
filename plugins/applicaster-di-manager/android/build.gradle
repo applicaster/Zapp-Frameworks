@@ -1,13 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+import org.gradle.util.VersionNumber
 
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 28
-
+        minSdkVersion 19
         consumerProguardFiles 'proguard-rules.pro'
     }
 
@@ -32,22 +33,12 @@ android {
     }
 }
 
-repositories {
-    google()
-    jcenter()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven {
-        credentials {
-            username System.getenv("MAVEN_USERNAME")
-            password System.getenv("MAVEN_PASSWORD")
-        }
-        url 'https://dl.bintray.com/applicaster-ltd/maven'
-    }
-}
-
 def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
 }
 
 def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.0.0")
