@@ -68,8 +68,8 @@ const custom_configuration_fields_apple = [
 const custom_configuration_fields_android = custom_configuration_fields_apple
 
 const custom_configuration_fields = {
-  ios_for_quickbrick: [custom_configuration_fields_apple],
-  tvos_for_quickbrick: [custom_configuration_fields_apple],
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_android,
   android_tv_for_quickbrick: custom_configuration_fields_android,
   amazon_fire_tv_for_quickbrick: custom_configuration_fields_android,
@@ -130,9 +130,9 @@ const api_android = {
 const api = {
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
-    android_for_quickbrick: api_android,
-    android_tv_for_quickbrick: api_android,
-    amazon_fire_tv_for_quickbrick: api_android,
+  android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  amazon_fire_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
