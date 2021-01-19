@@ -36,7 +36,13 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
     private fun asBool(jsonElement: JsonElement?): Boolean {
         if(null == jsonElement)
             return false
-        return jsonElement.toString().let {
+        if(!jsonElement.isJsonPrimitive) {
+            APLogger.error(TAG, "DIManager plugin wait_for_completion field has unexpected type $jsonElement")
+            return false
+        }
+        if(jsonElement.asJsonPrimitive.isBoolean)
+            return jsonElement.asJsonPrimitive.asBoolean
+        return jsonElement.asJsonPrimitive.asString.let {
             it == "true" || it == "1"
         }
     }
