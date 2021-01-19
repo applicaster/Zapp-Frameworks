@@ -61,8 +61,8 @@ export async function refreshService(config, refreshToken) {
 export async function revokeService(config) {
   try {
     const data = await loadKeychainData();
-    const tokenToRevoke = data?.tokenToRevoke;
-    console.log({ data });
+    const tokenToRevoke = data?.accessToken;
+    console.log("revokeService", { data, tokenToRevoke });
     if (config && tokenToRevoke) {
       await removeKeychainData();
       const result = await revoke(config, {
@@ -70,7 +70,7 @@ export async function revokeService(config) {
         includeBasicAuth: true,
         sendClientId: true,
       });
-      console.log({ result });
+      console.log("revoke", { result });
       return true;
     }
     return false;
@@ -86,6 +86,8 @@ export async function checkUserAuthorization(config) {
   const idToken = data?.idToken;
   const accessTokenExpirationDate = data?.accessTokenExpirationDate;
   const refreshToken = data?.refreshToken;
+  console.log({ data });
+
   if (idToken && accessTokenExpirationDate && refreshToken) {
     if (isTokenValid(accessTokenExpirationDate)) {
       return true;
@@ -94,7 +96,6 @@ export async function checkUserAuthorization(config) {
       return result;
     }
   }
-  console.log({ data });
 
   return false;
   //TODO: check is user authorized in case no return false

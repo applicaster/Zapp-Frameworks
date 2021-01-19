@@ -165,6 +165,30 @@ const stylesMobile = {
       label: "Action button font color",
       initial_value: "#F1AD12ff",
     },
+    {
+      key: "back_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS back button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "back_button_font_android",
+      type: "android_font_selector",
+      label: "Android back button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "back_button_font_size",
+      type: "number_input",
+      label: "Back button font size",
+      initial_value: 15,
+    },
+    {
+      key: "back_button_font_color",
+      type: "color_picker",
+      label: "Back button font color",
+      initial_value: "#ffffffff",
+    },
   ],
 };
 
@@ -225,6 +249,10 @@ const extra_dependencies = {
     {
       "react-native-app-auth":
         ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'",
+    },
+    {
+      ZappAuth:
+        ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappAuth.podspec'",
     },
   ],
   default: [],

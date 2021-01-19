@@ -40,7 +40,11 @@ export async function loadKeychainData() {
 
 export async function removeKeychainData() {
   try {
-    await localStorage.removeKeychainItem(authDataKey, namespace);
+    const result = await localStorage.removeKeychainItem(
+      authDataKey,
+      namespace
+    );
+    console.log("removeKeychainData", { result });
   } catch (error) {
     console.log(error);
   }

@@ -16,6 +16,11 @@ const common = [
     label: "Logout button text",
     initial_value: "Login",
   },
+  {
+    key: "back_button_text",
+    label: "Back button title",
+    initial_value: "Back",
+  },
 ];
 
 const mobile = [];
