@@ -146,10 +146,11 @@ const targets = {
 };
 
 function isAndroidPlatform(platform) {
-    return
-         "android_for_quickbrick" == platform ||
-         "android_tv_for_quickbrick" == platform ||
-         "amazon_fire_tv_for_quickbrick" == platform;
+  return (
+    "android_for_quickbrick" === platform ||
+    "android_tv_for_quickbrick" === platform ||
+    "amazon_fire_tv_for_quickbrick" === platform
+  );
 }
 
 module.exports = createManifest;
