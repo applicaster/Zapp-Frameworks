@@ -7,7 +7,7 @@ import DropdownAlert from "react-native-dropdownalert";
 import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
 import Login from "../Login";
 import LoadingScreen from "../LoadingScreen";
-=import { container } from "../Styles";
+import { container } from "../Styles";
 import { showAlert } from "../../Utils/Account";
 import {
   createLogger,
