@@ -65,7 +65,7 @@ const custom_configuration_fields_apple = [
   }
 ];
 
-const custom_configuration_fields_android = [custom_configuration_fields_apple]
+const custom_configuration_fields_android = custom_configuration_fields_apple
 
 const custom_configuration_fields = {
   ios_for_quickbrick: [custom_configuration_fields_apple],
