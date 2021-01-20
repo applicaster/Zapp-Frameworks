@@ -4,6 +4,7 @@ import {
   loadKeychainData,
   removeKeychainData,
 } from "../KeychainService";
+import { showAlert } from "./Utils/Account";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.OAUTH_SERVICE}`,
@@ -290,4 +291,10 @@ function isTokenValid(tokenExpiredDate) {
     })
     .send();
   return result;
+}
+
+function showAlert(title, message) {
+  isWebBasedPlatform
+    ? window.alert(`${title} \n${message}`)
+    : Alert.alert(title, message);
 }

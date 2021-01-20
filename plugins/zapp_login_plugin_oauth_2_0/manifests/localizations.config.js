@@ -21,6 +21,26 @@ const common = [
     label: "Back button title",
     initial_value: "Back",
   },
+  {
+    key: "alert_fail_title",
+    label: "Alert title user fail to authenteficate",
+    initial_value: "Error",
+  },
+  {
+    key: "alert_fail_message",
+    label: "Alert message user fail to authenteficate",
+    initial_value: "Authentefication failed",
+  },
+  {
+    key: "alert_succeed_title",
+    label: "Alert title user succeed to authenteficate",
+    initial_value: "Warning",
+  },
+  {
+    key: "alert_succeed_message",
+    label: "Alert message user succeed to authenteficate",
+    initial_value: "Authentefication succeed",
+  },
 ];
 
 const mobile = [];

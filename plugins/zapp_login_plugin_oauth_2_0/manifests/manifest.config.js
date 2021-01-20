@@ -33,24 +33,25 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "authorizationEndpoint",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth authorization endpoint",
+      key: "domenName",
+      tooltip_text: "REQUIRED: Domain name",
       default: "",
     },
     {
-      type: "text",
-      key: "tokenEndpoint",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth token exchange endpoint",
-      default: "",
-    },
-    {
-      type: "text",
-      key: "revocationEndpoint",
-      tooltip_text:
-        "fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
-      default: "",
+      type: "tag_select",
+      key: "is_test_environment",
+      tooltip_text: "If On all video entries will be marked as required login",
+      options: [
+        {
+          text: "On",
+          value: "on",
+        },
+        {
+          text: "Off",
+          value: "off",
+        },
+      ],
+      initial_value: "off",
     },
   ],
   hooks: {
