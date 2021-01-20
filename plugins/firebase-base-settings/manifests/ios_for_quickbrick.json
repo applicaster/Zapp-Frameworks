@@ -55,10 +55,10 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "2.1.0",
+  "manifest_version": "2.1.1",
   "extra_dependencies": [
     {
-      "Firebase": "= '7.3.0'"
+      "Firebase": "= '6.25.0'"
     }
   ]
 }
