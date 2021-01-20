@@ -6,12 +6,10 @@
 //
 
 import Foundation
-import ZappCore
 import XrayLogger
+import ZappCore
 
 public class PushPluginsManager: PluginManagerBase {
-    lazy var logger = Logger.getLogger(for: PushPluginsManagerLogs.subsystem)
-
     typealias pluginTypeProtocol = PushProviderProtocol
     var _providers: [String: PushProviderProtocol] {
         return providers as? [String: PushProviderProtocol] ?? [:]
@@ -20,16 +18,19 @@ public class PushPluginsManager: PluginManagerBase {
     required init() {
         super.init()
         pluginType = .Push
+        logger = Logger.getLogger(for: PushPluginsManagerLogs.subsystem)
     }
 
-    public override func providerCreated(provider: PluginAdapterProtocol,
+    override public func providerCreated(provider: PluginAdapterProtocol,
                                          completion: PluginManagerCompletion) {
         if let provider = provider as? PushProviderProtocol,
-            let uuid = SessionStorage.sharedInstance.get(key: ZappStorageKeys.uuid,
-                                                             namespace: nil) {
+           let uuid = SessionStorage.sharedInstance.get(key: ZappStorageKeys.uuid,
+                                                        namespace: nil) {
             provider.prepareProvider(["identity_client_device_id": uuid]) { succed in
                 completion?(succed)
             }
+        } else {
+            completion?(false)
         }
     }
 

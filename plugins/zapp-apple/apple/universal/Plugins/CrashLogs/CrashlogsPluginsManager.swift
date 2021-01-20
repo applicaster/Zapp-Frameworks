@@ -6,6 +6,7 @@
 //  Copyright © 2019 Applicaster. All rights reserved.
 //
 
+import XrayLogger
 import ZappCore
 
 public class CrashlogsPluginsManager: PluginManagerBase {
@@ -17,6 +18,6 @@ public class CrashlogsPluginsManager: PluginManagerBase {
     required init() {
         super.init()
         pluginType = .Crashlogs
+        logger = Logger.getLogger(for: CrashlogsPluginsManagerLogs.subsystem)
     }
 }
-

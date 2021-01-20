@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import XrayLogger
 import ZappCore
 
 public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowProtocol {
     open var pluginType: ZPPluginType
-
+    open var logger: Logger?
     required init() {
         pluginType = .Unknown
     }
@@ -79,19 +80,20 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     public func createProvider(pluginModel: ZPPluginModel,
                                forceEnable: Bool = false,
                                completion: PluginManagerCompletion) {
+        var createProviderCompletion = completion
         
         // In case plugin not support override logic, return false, since "forceEnable" true only when we trying to override
         if forceEnable == true,
-            isProviderSupportToggleOnOff(pluginModel: pluginModel) == false {
+           isProviderSupportToggleOnOff(pluginModel: pluginModel) == false {
             completion?(false)
             return
         }
 
         if let adapterClass = PluginsManager.adapterClass(pluginModel),
-            adapterClass.conforms(to: pluginProtocol),
-            let classType = adapterClass as? PluginAdapterProtocol.Type,
-            isEnabled(pluginModel: pluginModel,
-                      forceEnable: forceEnable) {
+           adapterClass.conforms(to: pluginProtocol),
+           let classType = adapterClass as? PluginAdapterProtocol.Type,
+           isEnabled(pluginModel: pluginModel,
+                     forceEnable: forceEnable) {
             let provider = classType.init(pluginModel: pluginModel)
 
             providers[pluginModel.identifier] = provider
@@ -101,8 +103,17 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
                                                                              value: kPluginEnabledValue,
                                                                              namespace: kPluginEnabledNamespace)
             }
-            providerCreated(provider: provider,
-                            completion: completion)
+
+            let timer = TimeoutTimer {
+                self.logger?.errorLog(message: "\(type(of: provider)) execution timeout",
+                                      data: provider.model?.object as? [String: Any])
+                createProviderCompletion = nil
+                completion?(false)
+            }
+            providerCreated(provider: provider) { success in
+                timer.cancel()
+                createProviderCompletion?(success)
+            }
         } else {
             completion?(true)
         }
@@ -111,11 +122,11 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     public func disableProvider(identifier: String,
                                 completion: PluginManagerCompletion) {
         guard let provider = providers[identifier],
-            let pluginModel = provider.model else {
+              let pluginModel = provider.model else {
             completion?(false)
             return
         }
-        
+
         guard isProviderSupportToggleOnOff(pluginModel: pluginModel) == true else {
             completion?(false)
             return
@@ -192,8 +203,8 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
         var retVal: [AppLoadingHookProtocol] = []
         providers.forEach { _, provider in
             if let model = provider.model,
-                model.pluginRequireStartupExecution == true,
-                let hookProvider = provider as? AppLoadingHookProtocol {
+               model.pluginRequireStartupExecution == true,
+               let hookProvider = provider as? AppLoadingHookProtocol {
                 retVal.append(hookProvider)
             }
         }
@@ -214,7 +225,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
         // Check if configruration JSON exist
         // If no we want initialize screen in any casee
         guard let configurationJSON = pluginModel.configurationJSON,
-            let pluginEnabled = configurationJSON[kPluginEnabled] else {
+              let pluginEnabled = configurationJSON[kPluginEnabled] else {
             return retVal
         }
 
@@ -244,7 +255,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
     /// - Returns: true in case can be enabled or disabled on fly, otherwise false
     func isProviderSupportToggleOnOff(pluginModel: ZPPluginModel) -> Bool {
         guard let configurationJSON = pluginModel.configurationJSON,
-            configurationJSON[kPluginEnabled] != nil else {
+              configurationJSON[kPluginEnabled] != nil else {
             return false
         }
         return true
