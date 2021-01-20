@@ -14,8 +14,6 @@ public typealias AnalyticManagerPreparationCompletion = () -> Void
 public typealias ProviderSendAnalyticsCompletion = (_ provider: AnalyticsProviderProtocol,
                                                     _ success: Bool) -> Void
 public class AnalyticsManager: PluginManagerBase {
-    lazy var logger = Logger.getLogger(for: AnalyticsPluginsManagerLogs.subsystem)
-
     typealias pluginTypeProtocol = AnalyticsProviderProtocol
     var _providers: [AnalyticsProviderProtocol] {
         let providersArray = providers.map { $0.value }
@@ -25,6 +23,7 @@ public class AnalyticsManager: PluginManagerBase {
     public required init() {
         super.init()
         pluginType = .Analytics
+        logger = Logger.getLogger(for: AnalyticsPluginsManagerLogs.subsystem)
     }
 
     @objc public private(set) var currentScreenViewTitle: String?
@@ -34,7 +33,6 @@ public class AnalyticsManager: PluginManagerBase {
         provider.prepareProvider(defaultParams()) { succeed in
             completion?(succeed)
         }
-        // Must be implemented on subclass if needed
     }
 
     func defaultParams() -> [String: Any] {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import XrayLogger
 import ZappCore
 
 public typealias GeneralManagerPreparationCompletion = () -> Void
@@ -20,5 +21,6 @@ public class GeneralPluginsManager: PluginManagerBase {
     public required init() {
         super.init()
         pluginType = .General
+        logger = Logger.getLogger(for: GeneralPluginsManagerLogs.subsystem)
     }
 }
