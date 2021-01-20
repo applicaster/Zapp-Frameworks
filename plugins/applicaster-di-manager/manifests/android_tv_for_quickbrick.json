@@ -1,10 +1,7 @@
 {
   "api": {
-    "require_startup_execution": false,
-    "class_name": "ZPDiManager",
-    "modules": [
-      "ZappDiManager"
-    ]
+    "require_startup_execution": true,
+    "class_name": "com.applicaster.plugin.dimanager.DIManager"
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
@@ -13,14 +10,14 @@
   "description": "The DI plugin allows, when enabled, to send the device country for Pipes2 endpoints that  require it. Its main purpose is to hide/show content on feed according to the user's country (Geo-Blocking).",
   "type": "general",
   "screen": false,
-  "react_native": false,
+  "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
   "ui_frameworks": [
     "quickbrick"
   ],
   "core_plugin": true,
-  "min_zapp_sdk": "3.0.0-Dev",
+  "min_zapp_sdk": "2.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -51,13 +48,13 @@
     "@applicaster/applicaster-di-manager@0.3.0"
   ],
   "targets": [
-    "mobile"
+    "tv"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "android_tv_for_quickbrick",
   "manifest_version": "0.3.0",
-  "extra_dependencies": [
+  "project_dependencies": [
     {
-      "ZappDiManager": ":path => './node_modules/@applicaster/applicaster-di-manager/apple/ZappDiManager.podspec'"
+      "applicaster-di-manager": "node_modules/@applicaster/applicaster-di-manager/android"
     }
   ]
 }
