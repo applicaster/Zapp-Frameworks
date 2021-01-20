@@ -259,14 +259,16 @@ const extra_dependencies = {
   default: [],
 };
 
-const npm_dependencies = {
-  default: [
-    "@react-native-community/blur@3.4.1",
-    "react-native-app-auth@6.0.1",
-    `@applicaster/zapp_login_plugin_oauth_2_0@${version}`,
-  ],
-  web: [],
-};
+function npm_dependencies(version) {
+  return {
+    default: [
+      "@react-native-community/blur@3.4.1",
+      "react-native-app-auth@6.0.1",
+      `@applicaster/zapp_login_plugin_oauth_2_0@${version}`,
+    ],
+    web: [],
+  };
+}
 
 const min_zapp_sdk = {
   ios: "20.2.0-Dev",
@@ -303,7 +305,7 @@ function createManifest({ version, platform }) {
     project_dependencies: withFallback(project_dependencies, basePlatform),
     extra_dependencies: withFallback(extra_dependencies, basePlatform),
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
-    npm_dependencies: withFallback(npm_dependencies, basePlatform),
+    npm_dependencies: withFallback(npm_dependencies(version), basePlatform),
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
