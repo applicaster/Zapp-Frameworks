@@ -263,6 +263,7 @@ const npm_dependencies = {
   default: [
     "@react-native-community/blur@3.4.1",
     "react-native-app-auth@6.0.1",
+    `@applicaster/zapp_login_plugin_oauth_2_0@${version}`,
   ],
   web: [],
 };
