@@ -62,9 +62,7 @@
       }
     ]
   },
-  "ui_frameworks": [
-    "quickbrick"
-  ],
+  "ui_frameworks": ["quickbrick"],
   "platform": "ios_for_quickbrick",
   "dependency_version": "0.0.4",
   "manifest_version": "0.0.4",
@@ -78,7 +76,7 @@
       "react-native-app-auth": ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'"
     },
     {
-      "ZappAuth": ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappAuth.podspec'"
+      "ZappOAuth": ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappOAuth.podspec'"
     }
   ],
   "min_zapp_sdk": "0.1.0-alpha1",
@@ -229,7 +227,5 @@
       }
     ]
   },
-  "targets": [
-    "mobile"
-  ]
+  "targets": ["mobile"]
 }

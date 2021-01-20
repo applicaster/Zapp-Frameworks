@@ -252,8 +252,8 @@ const extra_dependencies = {
         ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'",
     },
     {
-      ZappAuth:
-        ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappAuth.podspec'",
+      ZappOAuth:
+        ":path => 'node_modules/@applicaster/zapp_login_plugin_oauth_2_0/apple/ZappOAuth.podspec'",
     },
   ],
   default: [],
