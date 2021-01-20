@@ -4,107 +4,290 @@ import {
   loadKeychainData,
   removeKeychainData,
 } from "../KeychainService";
+
+export const logger = createLogger({
+  subsystem: `${BaseSubsystem}/${BaseCategories.OAUTH_SERVICE}`,
+  category: BaseCategories.OAUTH_SERVICE,
+});
+
 export function configFromPlugin(configuration) {
   const clientId = configuration?.clientId;
   const redirectUrl = configuration?.redirectUrl;
-  const authorizationEndpoint = configuration?.authorizationEndpoint;
-  const tokenEndpoint = configuration?.tokenEndpoint;
-  const revocationEndpoint = configuration?.revocationEndpoint;
-  if (clientId && redirectUrl && authorizationEndpoint && tokenEndpoint) {
-    return {
-      clientId: "3chiv791dnc9ljom3bi9aumvco",
-      redirectUrl: "miami://oauth_test",
+  const domenName = configuration?.domenName;
+  if (clientId && redirectUrl && domenName) {
+    const oauthConfig = {
+      clientId,
+      redirectUrl,
       serviceConfiguration: {
-        authorizationEndpoint: `https://applicaster-test.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
-        tokenEndpoint: `https://applicaster-test.auth.us-east-1.amazoncognito.com/oauth2/token`,
-        revocationEndpoint: `https://applicaster-test.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
+        authorizationEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
+        tokenEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/token`,
+        revocationEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
       },
     };
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.debug)
+      .setMessage(`configFromPlugin:`)
+      .addData({ oauth_config: oauthConfig, configuration })
+      .send();
+
+    return oauthConfig;
   } else {
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(
+        `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domenName`
+      )
+      .addData({ configuration })
+      .send();
+
     return null;
   }
 }
 
-export async function authorizeService(config) {
-  console.log("authorizeService", { config });
-  if (!config) {
+export async function authorizeService(oauthConfig) {
+  console.log("authorizeService", { oauthConfig });
+
+  if (!oauthConfig) {
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`authorizeService: AuthConfig not exist`)
+      .addData({ oauth_config: oauthConfig })
+      .send();
     return false;
   }
   try {
-    const result = await authorize(config);
+    const result = await authorize(oauthConfig);
     saveKeychainData(result);
-    console.log({ result });
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.debug)
+      .setMessage(`authorizeService: Success`)
+      .addData({ oauth_config: oauthConfig, result })
+      .send();
     return true;
   } catch (error) {
-    console.log({ error });
-
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`authorizeService: Error`)
+      .addData({ oauth_config: oauthConfig, error })
+      .send();
     return false;
   }
 }
 
-export async function refreshService(config, refreshToken) {
+export async function refreshService(oauthConfig, refreshToken) {
   try {
-    if (config && refreshToken) {
-      const result = await refresh(config, { refreshToken });
+    if (oauthConfig && refreshToken) {
+      const result = await refresh(oauthConfig, { refreshToken });
       saveKeychainData(result);
-
-      console.log({ result });
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.debug)
+        .setMessage(`refreshService: Success`)
+        .addData({
+          oauth_config: oauthConfig,
+          refresh_token: refreshToken,
+          result,
+        })
+        .send();
       return result;
     }
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`refreshService: oauthConfig or refreshToken not exist`)
+      .addData({
+        oauth_config: oauthConfig,
+        error,
+        refresh_token: refreshToken,
+      })
+      .send();
     return false;
   } catch (error) {
-    console.log(error);
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`refreshService: Error`)
+      .addData({
+        oauth_config: oauthConfig,
+        refresh_token: refreshToken,
+        error,
+      })
+      .send();
     return false;
   }
 }
 
-export async function revokeService(config) {
+export async function revokeService(oauthConfig) {
   try {
     const data = await loadKeychainData();
     const tokenToRevoke = data?.accessToken;
-    console.log("revokeService", { data, tokenToRevoke });
-    if (config && tokenToRevoke) {
+    if (oauthConfig && tokenToRevoke) {
       await removeKeychainData();
-      const result = await revoke(config, {
+      const result = await revoke(oauthConfig, {
         tokenToRevoke,
         includeBasicAuth: true,
         sendClientId: true,
       });
-      console.log("revoke", { result });
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.debug)
+        .setMessage(`revokeService: Success`)
+        .addData({
+          oauth_config: oauthConfig,
+          data: data,
+          token_to_revoke: tokenToRevoke,
+          result,
+        })
+        .send();
       return true;
     }
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`revokeService: oauth_config or tokenToRevoke not exists`)
+      .addData({
+        oauth_config: oauthConfig,
+        token_to_revoke: tokenToRevoke,
+        data,
+        error,
+      })
+      .send();
     return false;
   } catch (error) {
-    console.log(error);
-
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`revokeService: Error`)
+      .addData({
+        oauth_config: oauthConfig,
+        token_to_revoke: tokenToRevoke,
+        data,
+        error,
+      })
+      .send();
     return false;
   }
 }
 
-export async function checkUserAuthorization(config) {
-  const data = await loadKeychainData();
-  const idToken = data?.idToken;
-  const accessTokenExpirationDate = data?.accessTokenExpirationDate;
-  const refreshToken = data?.refreshToken;
-  console.log({ data });
+export async function checkUserAuthorization(oauthConfig) {
+  try {
+    const data = await loadKeychainData();
+    const idToken = data?.idToken;
+    const accessTokenExpirationDate = data?.accessTokenExpirationDate;
+    const refreshToken = data?.refreshToken;
+    console.log({ data });
 
-  if (idToken && accessTokenExpirationDate && refreshToken) {
-    if (isTokenValid(accessTokenExpirationDate)) {
-      return true;
+    if (idToken && accessTokenExpirationDate) {
+      if (isTokenValid(accessTokenExpirationDate)) {
+        logger
+          .createEvent()
+          .setLevel(XRayLogLevel.debug)
+          .setMessage(`checkUserAuthorization: Is user authorized: true`)
+          .addData({
+            oauth_config: oauthConfig,
+            id_token: idToken,
+            accesst_еoken_expiration_date: accessTokenExpirationDate,
+            refresh_token: refreshToken,
+            data,
+            error,
+            is_authorized: true,
+          })
+          .send();
+        return true;
+      } else {
+        if (refreshToken) {
+          logger
+            .createEvent()
+            .setLevel(XRayLogLevel.debug)
+            .setMessage(
+              `checkUserAuthorization: Access token expired, try to call refreshService:`
+            )
+            .addData({
+              oauth_config: oauthConfig,
+              id_token: idToken,
+              accesst_еoken_expiration_date: accessTokenExpirationDate,
+              refresh_token: refreshToken,
+              data,
+              error,
+              is_authorized: true,
+            })
+            .send();
+          const result = await refreshService(oauthConfig, refreshToken);
+          return result;
+        } else {
+          logger
+            .createEvent()
+            .setLevel(XRayLogLevel.debug)
+            .setMessage(
+              `checkUserAuthorization: Access token expired, no refreshToken token exist, try to call authorizeService:`
+            )
+            .addData({
+              oauth_config: oauthConfig,
+              id_token: idToken,
+              accesst_еoken_expiration_date: accessTokenExpirationDate,
+              refresh_token: refreshToken,
+              data,
+              error,
+              is_authorized: true,
+            })
+            .send();
+          const result = await authorizeService(oauthConfig);
+          return result;
+        }
+      }
     } else {
-      const result = await refreshService(config, refreshToken);
-      return result;
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.error)
+        .setMessage(
+          `checkUserAuthorization: idToken, accessTokenExpirationDate or refreshToken not exist`
+        )
+        .addData({
+          oauth_config: oauthConfig,
+          id_token: idToken,
+          accesst_еoken_expiration_date: accessTokenExpirationDate,
+          refresh_token: refreshToken,
+          data,
+          error,
+        })
+        .send();
+      return false;
     }
+  } catch (error) {
+    logger
+      .createEvent()
+      .setLevel(XRayLogLevel.error)
+      .setMessage(`checkUserAuthorization: Error`)
+      .addData({
+        oauth_config: oauthConfig,
+        id_token: idToken,
+        accesst_еoken_expiration_date: accessTokenExpirationDate,
+        refresh_token: refreshToken,
+        data,
+        error,
+      })
+      .send();
+    return false;
   }
-
-  return false;
-  //TODO: check is user authorized in case no return false
-  // in case token exist and not expired true
-  // in case token expired try to refresh
 }
 
 function isTokenValid(tokenExpiredDate) {
   const tokenDate = new Date(tokenExpiredDate);
   const nowDate = new Date();
-  return tokenDate > nowDate;
+  const result = tokenDate > nowDate;
+  logger
+    .createEvent()
+    .setLevel(XRayLogLevel.debug)
+    .setMessage(`isTokenValid: ${result}`)
+    .addData({
+      token_expired_date: tokenExpiredDate,
+      result,
+    })
+    .send();
+  return result;
 }

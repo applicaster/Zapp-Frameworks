@@ -11,41 +11,6 @@ export const logger = createLogger({
   category: BaseCategories.PAYLOAD_HELPER,
 });
 
-export const externalAssetData = ({ payload }) => {
-  const { id: externalAssetId } = payload;
-  const inplayerAssetType = R.path(["extensions", "inplayer_asset_type"])(
-    payload
-  );
-  let eventMessage = "External Asset Data from Payload:";
-
-  if (externalAssetId && inplayerAssetType) {
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({
-        external_asset_id: externalAssetId,
-        inplayer_asset_type: inplayerAssetType,
-      })
-      .setMessage(
-        `${eventMessage} external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType} from payload`
-      )
-      .send();
-
-    return { externalAssetId, inplayerAssetType };
-  }
-
-  logger
-    .createEvent()
-    .setLevel(XRayLogLevel.debug)
-    .addData({
-      external_asset_id: externalAssetId,
-      inplayer_asset_type: inplayerAssetType,
-    })
-    .setMessage(`${eventMessage} data not availible`)
-    .send();
-  return null;
-};
-
 export const isAuthenticationRequired = ({ payload }) => {
   const requires_authentication = R.path([
     "extensions",
@@ -81,8 +46,3 @@ export const isVideoEntry = (payload) => {
 
   return retVal;
 };
-
-export const assetPaymentRequired = R.compose(
-  R.equals(402),
-  R.path(["response", "status"])
-);

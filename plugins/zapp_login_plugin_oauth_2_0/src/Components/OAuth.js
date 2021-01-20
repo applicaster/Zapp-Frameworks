@@ -92,7 +92,7 @@ const OAuth = (props) => {
 
   useLayoutEffect(() => {
     const configuration = props?.configuration;
-    addContext({ configuration, payload });
+    addContext({ configuration });
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
@@ -110,8 +110,7 @@ const OAuth = (props) => {
     const videoEntry = isVideoEntry(payload);
     const authenticated = await checkUserAuthorization();
 
-    const authenthicationRequired = true;
-    // isAuthenticationRequired({ payload });
+    const authenthicationRequired = isAuthenticationRequired({ payload });
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
