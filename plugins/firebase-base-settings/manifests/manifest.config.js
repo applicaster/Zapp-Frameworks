@@ -78,7 +78,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = [
   {
-    Firebase: "= '7.3.0'"
+    Firebase: "= '6.25.0'"
   },
 ];
 
