@@ -28,11 +28,13 @@ function createManifest({ version, platform }) {
     manifest_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
+    project_dependencies: project_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/applicaster-di-manager@${version}`],
     targets: targets[platform],
     ui_frameworks: ui_frameworks[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
+    react_native: isAndroidPlatform(platform), // hack since otherwise rake won't add project
   };
   return manifest;
 }
@@ -52,7 +54,7 @@ const custom_configuration_fields_apple = [
     default: 1,
     label: "Block UI until completed",
     label_tooltip:
-      "Disable if you dont want to block UI until process completions",
+      "Disable if you don't want to block UI until process completions",
   },
   {
     key: "di_server_url",
@@ -63,14 +65,22 @@ const custom_configuration_fields_apple = [
   }
 ];
 
+const custom_configuration_fields_android = custom_configuration_fields_apple
+
 const custom_configuration_fields = {
-  ios_for_quickbrick: [custom_configuration_fields_apple],
-  tvos_for_quickbrick: [custom_configuration_fields_apple],
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
+  android_for_quickbrick: custom_configuration_fields_android,
+  android_tv_for_quickbrick: custom_configuration_fields_android,
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android,
 };
 
 const min_zapp_sdk = {
   ios_for_quickbrick: "3.0.0-Dev",
   tvos_for_quickbrick: "3.0.0-Dev",
+  android_for_quickbrick: "2.0.0",
+  android_tv_for_quickbrick: "2.0.0",
+  amazon_fire_tv_for_quickbrick: "2.0.0",
 };
 
 const extra_dependencies_apple = {
@@ -84,11 +94,26 @@ const ui_frameworks = {
   ios: ui_frameworks_native,
   ios_for_quickbrick: ui_frameworks_qb,
   tvos_for_quickbrick: ui_frameworks_qb,
+  android_for_quickbrick: ui_frameworks_qb,
+  android_tv_for_quickbrick: ui_frameworks_qb,
+  amazon_fire_tv_for_quickbrick: ui_frameworks_qb,
 };
 
 const extra_dependencies = {
   ios_for_quickbrick: [extra_dependencies_apple],
   tvos_for_quickbrick: [extra_dependencies_apple],
+};
+
+const project_dependencies_android = [
+  {
+    "applicaster-di-manager": "node_modules/@applicaster/applicaster-di-manager/android",
+  },
+];
+
+const project_dependencies = {
+  android_for_quickbrick: project_dependencies_android,
+  android_tv_for_quickbrick: project_dependencies_android,
+  amazon_fire_tv_for_quickbrick: project_dependencies_android,
 };
 
 const api_apple = {
@@ -97,9 +122,17 @@ const api_apple = {
   modules: ["ZappDiManager"],
 };
 
+const api_android = {
+    require_startup_execution: true,
+    class_name: "com.applicaster.plugin.dimanager.DIManager",
+}
+
 const api = {
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
+  android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  amazon_fire_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
@@ -107,6 +140,17 @@ const tvTarget = ["tv"];
 const targets = {
   ios_for_quickbrick: mobileTarget,
   tvos_for_quickbrick: tvTarget,
+  android_for_quickbrick: mobileTarget,
+  android_tv_for_quickbrick: tvTarget,
+  amazon_fire_tv_for_quickbrick: tvTarget,
 };
+
+function isAndroidPlatform(platform) {
+  return (
+    "android_for_quickbrick" === platform ||
+    "android_tv_for_quickbrick" === platform ||
+    "amazon_fire_tv_for_quickbrick" === platform
+  );
+}
 
 module.exports = createManifest;
