@@ -1,18 +1,26 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { View, SafeAreaView, Platform, Alert } from "react-native";
-
-import * as R from "ramda";
+import React, { useState, useLayoutEffect } from "react";
+import { View, SafeAreaView, Platform } from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import { isVideoEntry, isAuthenticationRequired } from "../Utils/PayloadUtils";
 import LoadingScreen from "./LoadingScreen";
-import { container } from "./Styles";
+import {
+  container,
+  clientLogoView,
+  containerStyle,
+  safeAreaStyle,
+} from "./Styles";
 import TitleLabel from "./UIComponents/TitleLabel";
 import ClientLogo from "./UIComponents/ClientLogo";
 import ActionButton from "./UIComponents/Buttons/ActionButton.js";
 import BackButton from "./UIComponents/Buttons/BackButton";
-
+import {
+  showAlertLogout,
+  showAlertLogin,
+  getRiversProp,
+  HookTypeData,
+} from "../Utils/Helpers";
 import {
   configFromPlugin,
   authorizeService,
@@ -35,64 +43,7 @@ export const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
-  const getPropByKey = R.compose(
-    R.prop(key),
-    R.find(R.propEq("type", "zapp_login_plugin_oauth_2_0")),
-    R.values
-  );
-
-  return getPropByKey(rivers);
-};
-
-const clientLogoView = {
-  height: 100,
-  width: 350,
-  position: "absolute",
-  alignSelf: "center",
-  top: 200,
-};
-
-function showAlertLogout(
-  success,
-  {
-    alert_fail_title,
-    alert_logout_fail_message,
-    alert_succeed_title,
-    alert_logout_succeed_message,
-  }
-) {
-  if (success) {
-    Alert.alert(alert_succeed_title, alert_logout_succeed_message);
-  } else {
-    Alert.alert(alert_fail_title, alert_logout_fail_message);
-  }
-}
-
-function showAlertLogin(
-  success,
-  {
-    alert_fail_title,
-    alert_login_fail_message,
-    alert_succeed_title,
-    alert_login_succeed_message,
-  }
-) {
-  if (success) {
-    Alert.alert(alert_succeed_title, alert_login_succeed_message);
-  } else {
-    Alert.alert(alert_fail_title, alert_login_fail_message);
-  }
-}
-
 const OAuth = (props) => {
-  const HookTypeData = {
-    UNDEFINED: "Undefined",
-    PLAYER_HOOK: "PlayerHook",
-    SCREEN_HOOK: "ScreenHook",
-    USER_ACCOUNT: "UserAccount",
-  };
-
   const navigator = useNavigation();
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -110,18 +61,7 @@ const OAuth = (props) => {
     login_text,
     title_text,
     back_button_text,
-    alert_fail_title,
-    alert_fail_message,
-    alert_succeed_title,
-    alert_succeed_message,
   } = screenLocalizations;
-  const containerStyle = (screenStyles) => {
-    return {
-      ...container,
-      backgroundColor: screenStyles?.background_color,
-      flex: 1,
-    };
-  };
 
   let stillMounted = true;
 
@@ -275,12 +215,8 @@ const OAuth = (props) => {
 
   const SafeArea = Platform.isTV ? View : SafeAreaView;
 
-  const safeZoneBackgroundColor =
-    hookType === HookTypeData.UNDEFINED
-      ? "black"
-      : screenStyles?.background_color;
   return (
-    <SafeArea style={{ flex: 1, backgroundColor: safeZoneBackgroundColor }}>
+    <SafeArea style={safeAreaStyle(screenStyles, hookType)}>
       {hookType === HookTypeData.UNDEFINED ? null : (
         <View style={containerStyle(screenStyles)}>
           <BackButton
