@@ -52,7 +52,7 @@ const min_zapp_sdk = {
 };
 
 const extra_dependencies_apple = {
-  ZappAppleGenericUniversalLinks:
+  ZappGenericDrm:
     ":path => './node_modules/@applicaster/zapp-generic-drm/apple/ZappGenericDrm.podspec'",
 };
 const extra_dependencies = {
