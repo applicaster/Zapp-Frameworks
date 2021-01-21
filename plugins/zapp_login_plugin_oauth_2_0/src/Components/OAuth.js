@@ -93,7 +93,7 @@ const OAuth = (props) => {
     const videoEntry = isVideoEntry(payload);
     const authenticated = await checkUserAuthorization(oAuthConfig);
     const testEnvironmentEnabled =
-      props?.configuration?.is_test_environment || false;
+      props?.configuration?.force_authentication_on_all || false;
     const authenthicationRequired =
       testEnvironmentEnabled === true || isAuthenticationRequired({ payload });
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({

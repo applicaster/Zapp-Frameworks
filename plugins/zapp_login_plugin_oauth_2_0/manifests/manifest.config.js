@@ -40,21 +40,31 @@ const baseManifest = {
       tooltip_text: "REQUIRED: Domain name",
       default: "",
     },
+
     {
-      type: "tag_select",
-      key: "is_test_environment",
-      tooltip_text: "If On all video entries will be marked as required login",
-      options: [
+      group: true,
+      label: "Debug",
+      tooltip: "Only for developers",
+      folded: true,
+      fields: [
         {
-          text: "On",
-          value: "on",
-        },
-        {
-          text: "Off",
-          value: "off",
+          type: "tag_select",
+          key: "force_authentication_on_all",
+          tooltip_text:
+            "If On all video entries will be marked as required login",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          initial_value: "off",
         },
       ],
-      initial_value: "off",
     },
   ],
   hooks: {
@@ -245,8 +255,7 @@ const project_dependencies = {
   default: [],
   android: [
     {
-      "react-native-app-auth":
-        "node_modules/react-native-app-auth/android",
+      "react-native-app-auth": "node_modules/react-native-app-auth/android",
     },
   ],
 };
