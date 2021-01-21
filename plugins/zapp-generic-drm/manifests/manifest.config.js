@@ -24,8 +24,8 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "license_url",
-      tooltip_text: "License Url",
+      key: "license_server_url",
+      tooltip_text: "License Server Url",
     },
     {
       type: "text",
