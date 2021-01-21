@@ -235,7 +235,7 @@ const api = {
   },
   android: {
     class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-    react_packages: ["com.cmcewen.blurview.BlurViewPackage"],
+    react_packages: ["com.rnappauth.RNAppAuthPackage"],
     proguard_rules:
       "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }",
   },
@@ -245,8 +245,8 @@ const project_dependencies = {
   default: [],
   android: [
     {
-      "react-native-community_blur":
-        "node_modules/@react-native-community/blur/android",
+      "react-native-app-auth":
+        "node_modules/react-native-app-auth/android",
     },
   ],
 };
@@ -284,10 +284,10 @@ const min_zapp_sdk = {
   ios: "20.2.0-Dev",
   android: "20.0.0",
   ios_for_quickbrick: "0.1.0-alpha1",
-  android_for_quickbrick: "0.1.0-alpha1",
   tvos_for_quickbrick: "0.1.0-alpha1",
-  android_tv_for_quickbrick: "0.1.0-alpha1",
-  amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
+  android_for_quickbrick: "3.0.0-dev",
+  android_tv_for_quickbrick: "3.0.0-dev",
+  amazon_fire_tv_for_quickbrick: "3.0.0-dev",
   samsung_tv: "1.2.2",
 };
 
