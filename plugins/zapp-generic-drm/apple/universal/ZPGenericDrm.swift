@@ -6,31 +6,36 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import ZappCore
 import AVKit
 import XrayLogger
+import ZappCore
 
-class ZPGenericDrm: NSObject, PluginAdapterProtocol {
+/// Plugin configuration keys
+struct PluginKeys {
+    static let certificateUrl = "certificate_url"
+    static let licenseServerUrl = "license_server_url"
+    static let licenseServerRequestContentType = "license_server_request_content_type"
+    static let licenseServerRequestJsonObjectKey = "license_server_request_json_object_key"
+}
+
+struct ItemParamsKeys {
+    static let avasseturl = "avasseturl"
+    static let entry = "entry"
+    static let extensions = "extensions"
+    static let drm = "drm"
+    static let fairplay = "fairplay"
+    static let key = "key"
+    static let licenseServerUrl = "license_server_url"
+    static let licenseServerRequestContentType = "license_server_request_content_type"
+    static let licenseServerRequestJsonObjectKey = "license_server_request_json_object_key"
+    static let certificateUrl = "certificate_url"
+}
+
+class ZPGenericDrm: NSObject, PluginAdapterProtocol, AVAssetResourceLoaderDelegate {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappGenericDrm")
 
     public var configurationJSON: NSDictionary?
     public var model: ZPPluginModel?
-    public var params: [String: Any]?
-
-    /// Plugin configuration keys
-    struct PluginKeys {
-        static let certificateUrl = "certificate_url"
-        static let licenseServerUrl = "license_url"
-    }
-    
-    struct ItemParamsKeys {
-        static let entry = "entry"
-        static let extensions = "extensions"
-        static let drm = "drm"
-        static let fairplay = "fairplay"
-        static let licenseServerUrl = "license_server_url"
-        static let certificateUrl = "certificate_url"
-    }
 
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
@@ -43,8 +48,19 @@ class ZPGenericDrm: NSObject, PluginAdapterProtocol {
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
-            params = defaultParams
-            completion?(true)
+
+        if let assetUrl = defaultParams[ItemParamsKeys.avasseturl] as? AVURLAsset {
+            ContentKeyManager.shared.contentKeySession.addContentKeyRecipient(assetUrl)
+            ContentKeyManager.shared.setCurrentItemSource(with: defaultParams)
+            
+            assetUrl.resourceLoader.preloadsEligibleContentKeys = true
+        }
+        else {
+            ContentKeyManager.shared.configurationJSON = configurationJSON
+            ContentKeyManager.shared.logger = logger
+        }
+        
+        completion?(true)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {

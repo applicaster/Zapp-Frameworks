@@ -27,6 +27,18 @@ const baseManifest = {
       key: "license_url",
       tooltip_text: "License Url",
     },
+    {
+      type: "text",
+      key: "license_server_request_content_type",
+      tooltip_text: "License server request content type",
+      default: "application/json",
+    },
+    {
+      type: "text",
+      key: "license_server_request_json_object_key",
+      tooltip_text: "License server request json object key",
+      default: "server_playback_context",
+    },
   ],
   identifier: "generic_drm_apple",
   npm_dependencies: [],
