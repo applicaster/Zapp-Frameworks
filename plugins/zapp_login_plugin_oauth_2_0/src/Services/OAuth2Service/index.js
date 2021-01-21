@@ -4,7 +4,13 @@ import {
   loadKeychainData,
   removeKeychainData,
 } from "../KeychainService";
-import { showAlert } from "./Utils/Account";
+
+import {
+  createLogger,
+  BaseSubsystem,
+  BaseCategories,
+  XRayLogLevel,
+} from "../LoggerService";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.OAUTH_SERVICE}`,
@@ -15,8 +21,9 @@ export function configFromPlugin(configuration) {
   const clientId = configuration?.clientId;
   const redirectUrl = configuration?.redirectUrl;
   const domenName = configuration?.domenName;
+
   if (clientId && redirectUrl && domenName) {
-    const oauthConfig = {
+    const oAuthConfig = {
       clientId,
       redirectUrl,
       serviceConfiguration: {
@@ -29,10 +36,10 @@ export function configFromPlugin(configuration) {
       .createEvent()
       .setLevel(XRayLogLevel.debug)
       .setMessage(`configFromPlugin:`)
-      .addData({ oauth_config: oauthConfig, configuration })
+      .addData({ oauth_config: oAuthConfig, configuration })
       .send();
 
-    return oauthConfig;
+    return oAuthConfig;
   } else {
     logger
       .createEvent()
@@ -47,26 +54,24 @@ export function configFromPlugin(configuration) {
   }
 }
 
-export async function authorizeService(oauthConfig) {
-  console.log("authorizeService", { oauthConfig });
-
-  if (!oauthConfig) {
+export async function authorizeService(oAuthConfig) {
+  if (!oAuthConfig) {
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
-      .setMessage(`authorizeService: AuthConfig not exist`)
-      .addData({ oauth_config: oauthConfig })
+      .setMessage(`authorizeService: OAuthConfig not exist`)
+      .addData({ oauth_config: oAuthConfig })
       .send();
     return false;
   }
   try {
-    const result = await authorize(oauthConfig);
+    const result = await authorize(oAuthConfig);
     saveKeychainData(result);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
       .setMessage(`authorizeService: Success`)
-      .addData({ oauth_config: oauthConfig, result })
+      .addData({ oauth_config: oAuthConfig, result })
       .send();
     return true;
   } catch (error) {
@@ -74,23 +79,23 @@ export async function authorizeService(oauthConfig) {
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(`authorizeService: Error`)
-      .addData({ oauth_config: oauthConfig, error })
+      .addData({ oauth_config: oAuthConfig, error })
       .send();
     return false;
   }
 }
 
-export async function refreshService(oauthConfig, refreshToken) {
+export async function refreshService(oAuthConfig, refreshToken) {
   try {
-    if (oauthConfig && refreshToken) {
-      const result = await refresh(oauthConfig, { refreshToken });
+    if (oAuthConfig && refreshToken) {
+      const result = await refresh(oAuthConfig, { refreshToken });
       saveKeychainData(result);
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)
         .setMessage(`refreshService: Success`)
         .addData({
-          oauth_config: oauthConfig,
+          oauth_config: oAuthConfig,
           refresh_token: refreshToken,
           result,
         })
@@ -100,10 +105,9 @@ export async function refreshService(oauthConfig, refreshToken) {
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
-      .setMessage(`refreshService: oauthConfig or refreshToken not exist`)
+      .setMessage(`refreshService: oAuthConfig or refreshToken not exist`)
       .addData({
-        oauth_config: oauthConfig,
-        error,
+        oauth_config: oAuthConfig,
         refresh_token: refreshToken,
       })
       .send();
@@ -114,7 +118,7 @@ export async function refreshService(oauthConfig, refreshToken) {
       .setLevel(XRayLogLevel.error)
       .setMessage(`refreshService: Error`)
       .addData({
-        oauth_config: oauthConfig,
+        oauth_config: oAuthConfig,
         refresh_token: refreshToken,
         error,
       })
@@ -123,13 +127,13 @@ export async function refreshService(oauthConfig, refreshToken) {
   }
 }
 
-export async function revokeService(oauthConfig) {
+export async function revokeService(oAuthConfig) {
   try {
     const data = await loadKeychainData();
     const tokenToRevoke = data?.accessToken;
-    if (oauthConfig && tokenToRevoke) {
+    if (oAuthConfig && tokenToRevoke) {
       await removeKeychainData();
-      const result = await revoke(oauthConfig, {
+      const result = await revoke(oAuthConfig, {
         tokenToRevoke,
         includeBasicAuth: true,
         sendClientId: true,
@@ -139,7 +143,7 @@ export async function revokeService(oauthConfig) {
         .setLevel(XRayLogLevel.debug)
         .setMessage(`revokeService: Success`)
         .addData({
-          oauth_config: oauthConfig,
+          oauth_config: oAuthConfig,
           data: data,
           token_to_revoke: tokenToRevoke,
           result,
@@ -152,10 +156,9 @@ export async function revokeService(oauthConfig) {
       .setLevel(XRayLogLevel.error)
       .setMessage(`revokeService: oauth_config or tokenToRevoke not exists`)
       .addData({
-        oauth_config: oauthConfig,
+        oauth_config: oAuthConfig,
         token_to_revoke: tokenToRevoke,
         data,
-        error,
       })
       .send();
     return false;
@@ -165,7 +168,7 @@ export async function revokeService(oauthConfig) {
       .setLevel(XRayLogLevel.error)
       .setMessage(`revokeService: Error`)
       .addData({
-        oauth_config: oauthConfig,
+        oauth_config: oAuthConfig,
         token_to_revoke: tokenToRevoke,
         data,
         error,
@@ -175,27 +178,25 @@ export async function revokeService(oauthConfig) {
   }
 }
 
-export async function checkUserAuthorization(oauthConfig) {
+export async function checkUserAuthorization(oAuthConfig) {
   try {
     const data = await loadKeychainData();
     const idToken = data?.idToken;
     const accessTokenExpirationDate = data?.accessTokenExpirationDate;
     const refreshToken = data?.refreshToken;
-    console.log({ data });
 
-    if (idToken && accessTokenExpirationDate) {
+    if (idToken && accessTokenExpirationDate && oAuthConfig) {
       if (isTokenValid(accessTokenExpirationDate)) {
         logger
           .createEvent()
           .setLevel(XRayLogLevel.debug)
           .setMessage(`checkUserAuthorization: Is user authorized: true`)
           .addData({
-            oauth_config: oauthConfig,
+            oauth_config: oAuthConfig,
             id_token: idToken,
-            accesst_еoken_expiration_date: accessTokenExpirationDate,
+            access_token_expiration_date: accessTokenExpirationDate,
             refresh_token: refreshToken,
             data,
-            error,
             is_authorized: true,
           })
           .send();
@@ -209,16 +210,15 @@ export async function checkUserAuthorization(oauthConfig) {
               `checkUserAuthorization: Access token expired, try to call refreshService:`
             )
             .addData({
-              oauth_config: oauthConfig,
+              oauth_config: oAuthConfig,
               id_token: idToken,
-              accesst_еoken_expiration_date: accessTokenExpirationDate,
+              access_token_expiration_date: accessTokenExpirationDate,
               refresh_token: refreshToken,
               data,
-              error,
-              is_authorized: true,
+              is_authorized: false,
             })
             .send();
-          const result = await refreshService(oauthConfig, refreshToken);
+          const result = await refreshService(oAuthConfig, refreshToken);
           return result;
         } else {
           logger
@@ -228,33 +228,31 @@ export async function checkUserAuthorization(oauthConfig) {
               `checkUserAuthorization: Access token expired, no refreshToken token exist, try to call authorizeService:`
             )
             .addData({
-              oauth_config: oauthConfig,
+              oauth_config: oAuthConfig,
               id_token: idToken,
-              accesst_еoken_expiration_date: accessTokenExpirationDate,
+              access_token_expiration_date: accessTokenExpirationDate,
               refresh_token: refreshToken,
               data,
-              error,
-              is_authorized: true,
+              is_authorized: false,
             })
             .send();
-          const result = await authorizeService(oauthConfig);
+          const result = await authorizeService(oAuthConfig);
           return result;
         }
       }
     } else {
       logger
         .createEvent()
-        .setLevel(XRayLogLevel.error)
+        .setLevel(XRayLogLevel.debug)
         .setMessage(
-          `checkUserAuthorization: idToken, accessTokenExpirationDate or refreshToken not exist`
+          `checkUserAuthorization: idToken, accessTokenExpirationDate or oAuthConfig not exist`
         )
         .addData({
-          oauth_config: oauthConfig,
+          oauth_config: oAuthConfig,
           id_token: idToken,
-          accesst_еoken_expiration_date: accessTokenExpirationDate,
+          access_token_expiration_date: accessTokenExpirationDate,
           refresh_token: refreshToken,
           data,
-          error,
         })
         .send();
       return false;
@@ -265,11 +263,7 @@ export async function checkUserAuthorization(oauthConfig) {
       .setLevel(XRayLogLevel.error)
       .setMessage(`checkUserAuthorization: Error`)
       .addData({
-        oauth_config: oauthConfig,
-        id_token: idToken,
-        accesst_еoken_expiration_date: accessTokenExpirationDate,
-        refresh_token: refreshToken,
-        data,
+        oauth_config: oAuthConfig,
         error,
       })
       .send();
@@ -291,10 +285,4 @@ function isTokenValid(tokenExpiredDate) {
     })
     .send();
   return result;
-}
-
-function showAlert(title, message) {
-  isWebBasedPlatform
-    ? window.alert(`${title} \n${message}`)
-    : Alert.alert(title, message);
 }

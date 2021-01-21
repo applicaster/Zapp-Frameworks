@@ -43,6 +43,7 @@ export async function saveKeychainData(data) {
         data,
         namespace,
         auth_data_key: authDataKey,
+        error,
       })
       .send();
     return false;
@@ -73,6 +74,7 @@ export async function loadKeychainData() {
       .setLevel(XRayLogLevel.error)
       .setMessage(`loadKeychainData: Error`)
       .addData({
+        error,
         data,
         namespace,
         auth_data_key: authDataKey,
@@ -95,15 +97,16 @@ export async function removeKeychainData() {
       .addData({
         auth_data_key: authDataKey,
         namespace,
+        result,
       })
       .send();
-    console.log("removeKeychainData", { result });
   } catch (error) {
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(`removeKeychainData: Error`)
       .addData({
+        error,
         namespace,
         auth_data_key: authDataKey,
       })

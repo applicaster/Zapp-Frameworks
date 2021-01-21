@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { View, SafeAreaView, Platform } from "react-native";
+import { View, SafeAreaView, Platform, Alert } from "react-native";
 
 import * as R from "ramda";
 
@@ -53,6 +53,38 @@ const clientLogoView = {
   top: 200,
 };
 
+function showAlertLogout(
+  success,
+  {
+    alert_fail_title,
+    alert_logout_fail_message,
+    alert_succeed_title,
+    alert_logout_succeed_message,
+  }
+) {
+  if (success) {
+    Alert.alert(alert_succeed_title, alert_logout_succeed_message);
+  } else {
+    Alert.alert(alert_fail_title, alert_logout_fail_message);
+  }
+}
+
+function showAlertLogin(
+  success,
+  {
+    alert_fail_title,
+    alert_login_fail_message,
+    alert_succeed_title,
+    alert_login_succeed_message,
+  }
+) {
+  if (success) {
+    Alert.alert(alert_succeed_title, alert_login_succeed_message);
+  } else {
+    Alert.alert(alert_fail_title, alert_login_fail_message);
+  }
+}
+
 const OAuth = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
@@ -73,7 +105,16 @@ const OAuth = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
   const oAuthConfig = configFromPlugin(props?.configuration);
-
+  const {
+    logout_text,
+    login_text,
+    title_text,
+    back_button_text,
+    alert_fail_title,
+    alert_fail_message,
+    alert_succeed_title,
+    alert_succeed_message,
+  } = screenLocalizations;
   const containerStyle = (screenStyles) => {
     return {
       ...container,
@@ -102,7 +143,9 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    const authenticated = await checkUserAuthorization();
+    console.log({ oAuthConfig, authenthicationRequired, authenticated });
+
+    const authenticated = await checkUserAuthorization(oAuthConfig);
     const testEnvironmentEnabled =
       props?.configuration?.is_test_environment || false;
     const authenthicationRequired =
@@ -174,7 +217,7 @@ const OAuth = (props) => {
     setLoading(true);
     if (isUserAuthenticated) {
       const success = await revokeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization();
+      const authenticated = await checkUserAuthorization(oAuthConfig);
 
       logger
         .createEvent()
@@ -186,12 +229,11 @@ const OAuth = (props) => {
           hookType,
         })
         .send();
-      console.log("onPress Rev", { authenticated });
-
+      showAlertLogout(success, screenLocalizations);
       setIsUserAuthenticated(authenticated);
     } else {
       const success = await authorizeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization();
+      const authenticated = await checkUserAuthorization(oAuthConfig);
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)
@@ -202,9 +244,8 @@ const OAuth = (props) => {
           hookType,
         })
         .send();
-
       setIsUserAuthenticated(authenticated);
-      if (success) {
+      if (authenticated) {
         if (hookType === HookTypeData.PLAYER_HOOK) {
           logger
             .createEvent()
@@ -218,7 +259,11 @@ const OAuth = (props) => {
             .send();
           callback &&
             callback({ success: true, error: null, payload: payload });
+        } else {
+          showAlertLogin(success, screenLocalizations);
         }
+      } else {
+        showAlertLogin(success, screenLocalizations);
       }
     }
     setLoading(false);
@@ -229,12 +274,7 @@ const OAuth = (props) => {
   };
 
   const SafeArea = Platform.isTV ? View : SafeAreaView;
-  const {
-    logout_text,
-    login_text,
-    title_text,
-    back_button_text,
-  } = screenLocalizations;
+
   const safeZoneBackgroundColor =
     hookType === HookTypeData.UNDEFINED
       ? "black"

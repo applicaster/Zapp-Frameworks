@@ -527,10 +527,10 @@
     ramda "0.26.1"
     react-native-handlebars "^5.0.0-alpha.1"
 
-"@applicaster/zapp_login_plugin_oauth_2_0@0.0.5-alpha.0":
-  version "0.0.5-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp_login_plugin_oauth_2_0/-/zapp_login_plugin_oauth_2_0-0.0.5-alpha.0.tgz#4ba5248901bfe14d67161d78e17d624b4ff7122d"
-  integrity sha512-63TqJJlPzwK9T3Lw8u25oT/4NouUTKWGsLnbJREbvHUCEm45Rc7KfxNd2dpmRIMAfSPZGU1d/sPDSZ5OOcVijg==
+"@applicaster/zapp_login_plugin_oauth_2_0@0.0.5-alpha.1":
+  version "0.0.5-alpha.1"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp_login_plugin_oauth_2_0/-/zapp_login_plugin_oauth_2_0-0.0.5-alpha.1.tgz#33d8d4c915986bc24135d323334cbf6570121c76"
+  integrity sha512-nWXI71OTOTLBmRdDdugZtVq2gEKq+FgRH8dOrolqaeIEUPi1eGLeFC9Sj9QG/lFOqKtbJvr/Hqv/oh2cjApVKg==
   dependencies:
     "@react-native-community/blur" "3.4.1"
     axios "^0.19.1"

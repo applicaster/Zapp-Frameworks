@@ -4,7 +4,7 @@ export const BaseSubsystem = "plugins/zapp_login_plugin_oauth_2_0";
 export const BaseCategories = {
   GENERAL: "general",
   KEYCHAIN_STORAGE: "keychainStorage",
-  OAUTH_SERVICE: "oauthSerivice",
+  OAUTH_SERVICE: "oauthService",
 };
 
 let loggers = {};
