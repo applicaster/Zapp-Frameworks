@@ -21,19 +21,22 @@ const baseManifest = {
     {
       type: "text",
       key: "clientId",
+      label: "Client ID",
       tooltip_text: "REQUIRED: your client id on the auth server",
       default: "",
     },
     {
       type: "text",
       key: "redirectUrl",
+      label: "Redirect URL",
       tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code",
+        "REQUIRED: the url that links back to your app with the auth code. Note:  URL has to follow the app url schemes structure 'myapp://'",
       default: "",
     },
     {
       type: "text",
-      key: "domenName",
+      key: "domainName",
+      label: "Domain Name",
       tooltip_text: "REQUIRED: Domain name",
       default: "",
     },
@@ -75,6 +78,13 @@ const baseManifest = {
 
 const stylesMobile = {
   fields: [
+    {
+      key: "background_image",
+      type: "uploader",
+      label: "Background Image",
+      label_tooltip:
+        "Background image. Please use that can be centered in the different device screens",
+    },
     {
       key: "background_color",
       type: "color_picker",

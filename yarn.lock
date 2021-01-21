@@ -191,6 +191,14 @@
     "@miblanchard/react-native-slider" "^1.5.0"
     react-native-linear-gradient "2.5.6"
 
+"@applicaster/quick-brick-mobile-transport-controls@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-mobile-transport-controls/-/quick-brick-mobile-transport-controls-1.1.2.tgz#09aa59a9ff05633f1f92d426edbaad1e4fcd0796"
+  integrity sha512-KpZiBvciDhjIHU9gVSaRO3QAh+QqPLQ8f+V4XwSDvYlrhEVLs5V2HaW3nMPIiOWuvXt7C3vAaRF/RHpSgvZEyg==
+  dependencies:
+    "@miblanchard/react-native-slider" "^1.5.0"
+    react-native-linear-gradient "2.5.6"
+
 "@applicaster/quick-brick-native-share-action@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-native-share-action/-/quick-brick-native-share-action-1.0.0.tgz#4a0f4dfa65e04f6074e5c74c6983f36cb2642d9a"
@@ -436,6 +444,14 @@
     "@applicaster/quick-brick-mobile-transport-controls" "1.1.1"
     keymirror "^0.1.1"
 
+"@applicaster/zapp-react-native-default-player@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-default-player/-/zapp-react-native-default-player-4.0.0.tgz#54e09dcc98fd3f169e307fea66308de6bac2a8de"
+  integrity sha512-G15tbPkNUtscJC6EenIpH1LZ2RGgWcvud11yoqmduPVVp7ycwyo8A+9xwWaAXzGPBFgh5QWNm08+p8Rwg760ag==
+  dependencies:
+    "@applicaster/quick-brick-mobile-transport-controls" "1.1.2"
+    keymirror "^0.1.1"
+
 "@applicaster/zapp-react-native-redux@4.1.6-rc.5":
   version "4.1.6-rc.5"
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-redux/-/zapp-react-native-redux-4.1.6-rc.5.tgz#41f7594f2b984088dca789fee1aa530a37813bb8"
@@ -454,13 +470,6 @@
     redux-devtools-extension "^2.13.8"
     redux-thunk "^2.3.0"
     reselect "4.0.0"
-
-"@applicaster/zapp-react-native-theo-player@0.0.2-alpha.4":
-  version "0.0.2-alpha.4"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-theo-player/-/zapp-react-native-theo-player-0.0.2-alpha.4.tgz#1b206c87960bdf74cf55c9480fd6373bfbec6151"
-  integrity sha512-8evI4EacMDdIA7iV64Y2DGvm6B2ekuEpKGOm9FpQqQtLRq4w3JHzR+8TpQtGDA9k0N546if4hqyN/KJUzb40FA==
-  dependencies:
-    ramda "^0.26.1"
 
 "@applicaster/zapp-react-native-tvos-app@4.1.6-rc.6":
   version "4.1.6-rc.6"
@@ -527,10 +536,10 @@
     ramda "0.26.1"
     react-native-handlebars "^5.0.0-alpha.1"
 
-"@applicaster/zapp_login_plugin_oauth_2_0@0.0.5-alpha.1":
-  version "0.0.5-alpha.1"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp_login_plugin_oauth_2_0/-/zapp_login_plugin_oauth_2_0-0.0.5-alpha.1.tgz#33d8d4c915986bc24135d323334cbf6570121c76"
-  integrity sha512-nWXI71OTOTLBmRdDdugZtVq2gEKq+FgRH8dOrolqaeIEUPi1eGLeFC9Sj9QG/lFOqKtbJvr/Hqv/oh2cjApVKg==
+"@applicaster/zapp_login_plugin_oauth_2_0@0.0.5-alpha.2":
+  version "0.0.5-alpha.2"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp_login_plugin_oauth_2_0/-/zapp_login_plugin_oauth_2_0-0.0.5-alpha.2.tgz#9d47186e50ac95c285b4aca70869c6607740718c"
+  integrity sha512-dxacdFRRlkOp5NvkRcYlQDKO6dWLf9Yz7FcOg3uA7igs/vwaXITQVqvh8fcplKA8tOls0S065Q3V0RuPE2dhVA==
   dependencies:
     "@react-native-community/blur" "3.4.1"
     axios "^0.19.1"

@@ -1,21 +1,26 @@
 import { HookTypeData } from "../../Utils/Helpers";
 
-export function containerStyle(screenStyles) {
-  return {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: screenStyles?.background_color,
-  };
-}
+export const containerStyle = {
+  flex: 1,
+  alignItems: "center",
+};
 
-export function safeAreaStyle(screenStyles, hookType) {
-  const backgroundColor =
-    hookType === HookTypeData.UNDEFINED
-      ? "black"
-      : screenStyles?.background_color;
+export const safeAreaStyle = {
+  flex: 1,
+  backgroundColor: "clear",
+};
+
+export function backgroundImageStyle(screenStyles, hookType, width, height) {
   return {
     flex: 1,
-    backgroundColor,
+    width,
+    height,
+    resizeMode: "center",
+    backgroundColor:
+      hookType === HookTypeData.UNDEFINED
+        ? "black"
+        : screenStyles?.background_color,
+    position: "absolute",
   };
 }
 

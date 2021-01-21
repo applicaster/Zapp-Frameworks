@@ -20,32 +20,25 @@ export const logger = createLogger({
 export function configFromPlugin(configuration) {
   const clientId = configuration?.clientId;
   const redirectUrl = configuration?.redirectUrl;
-  const domenName = configuration?.domenName;
+  const domainName = configuration?.domainName;
 
-  if (clientId && redirectUrl && domenName) {
+  if (clientId && redirectUrl && domainName) {
     const oAuthConfig = {
       clientId,
       redirectUrl,
       serviceConfiguration: {
-        authorizationEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
-        tokenEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/token`,
-        revocationEndpoint: `https://${domenName}.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
+        authorizationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
+        tokenEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/token`,
+        revocationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
       },
     };
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .setMessage(`configFromPlugin:`)
-      .addData({ oauth_config: oAuthConfig, configuration })
-      .send();
-
     return oAuthConfig;
   } else {
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(
-        `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domenName`
+        `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domainName`
       )
       .addData({ configuration })
       .send();
@@ -180,7 +173,8 @@ export async function revokeService(oAuthConfig) {
 
 export async function checkUserAuthorization(oAuthConfig) {
   try {
-    const data = await loadKeychainData();
+    let data = await loadKeychainData();
+
     const idToken = data?.idToken;
     const accessTokenExpirationDate = data?.accessTokenExpirationDate;
     const refreshToken = data?.refreshToken;

@@ -1,15 +1,21 @@
 import React, { useState, useLayoutEffect } from "react";
-import { View, SafeAreaView, Platform } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Platform,
+  ImageBackground,
+  useWindowDimensions,
+} from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import { isVideoEntry, isAuthenticationRequired } from "../Utils/PayloadUtils";
 import LoadingScreen from "./LoadingScreen";
 import {
-  container,
   clientLogoView,
   containerStyle,
   safeAreaStyle,
+  backgroundImageStyle,
 } from "./Styles";
 import TitleLabel from "./UIComponents/TitleLabel";
 import ClientLogo from "./UIComponents/ClientLogo";
@@ -44,6 +50,8 @@ export const logger = createLogger({
 });
 
 const OAuth = (props) => {
+  const windowWidth = useWindowDimensions().width;
+  const windowHeight = useWindowDimensions().height;
   const navigator = useNavigation();
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -67,7 +75,7 @@ const OAuth = (props) => {
 
   useLayoutEffect(() => {
     const configuration = props?.configuration;
-    addContext({ configuration });
+    addContext({ configuration, oauth_config: oAuthConfig });
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
@@ -83,8 +91,6 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    console.log({ oAuthConfig, authenthicationRequired, authenticated });
-
     const authenticated = await checkUserAuthorization(oAuthConfig);
     const testEnvironmentEnabled =
       props?.configuration?.is_test_environment || false;
@@ -216,28 +222,39 @@ const OAuth = (props) => {
   const SafeArea = Platform.isTV ? View : SafeAreaView;
 
   return (
-    <SafeArea style={safeAreaStyle(screenStyles, hookType)}>
-      {hookType === HookTypeData.UNDEFINED ? null : (
-        <View style={containerStyle(screenStyles)}>
-          <BackButton
-            title={back_button_text}
-            disabled={hookType !== HookTypeData.PLAYER_HOOK}
-            screenStyles={screenStyles}
-            onPress={onBackButton}
-          />
-          <TitleLabel screenStyles={screenStyles} title={title_text} />
-          <View style={clientLogoView}>
-            <ClientLogo imageSrc={screenStyles.client_logo} />
+    <>
+      <ImageBackground
+        style={backgroundImageStyle(
+          screenStyles,
+          hookType,
+          windowWidth,
+          windowHeight
+        )}
+        source={{ uri: screenStyles.background_image }}
+      />
+      <SafeArea style={safeAreaStyle}>
+        {hookType === HookTypeData.UNDEFINED ? null : (
+          <View style={containerStyle}>
+            <BackButton
+              title={back_button_text}
+              disabled={hookType !== HookTypeData.PLAYER_HOOK}
+              screenStyles={screenStyles}
+              onPress={onBackButton}
+            />
+            <TitleLabel screenStyles={screenStyles} title={title_text} />
+            <View style={clientLogoView}>
+              <ClientLogo imageSrc={screenStyles.client_logo} />
+            </View>
+            <ActionButton
+              screenStyles={screenStyles}
+              title={isUserAuthenticated ? logout_text : login_text}
+              onPress={onPressActionButton}
+            />
           </View>
-          <ActionButton
-            screenStyles={screenStyles}
-            title={isUserAuthenticated ? logout_text : login_text}
-            onPress={onPressActionButton}
-          />
-        </View>
-      )}
-      {loading && <LoadingScreen />}
-    </SafeArea>
+        )}
+        {loading && <LoadingScreen />}
+      </SafeArea>
+    </>
   );
 };
 
