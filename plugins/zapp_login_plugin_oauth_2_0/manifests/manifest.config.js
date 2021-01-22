@@ -259,7 +259,7 @@ const url_custom_configuration_fields = {
       key: "redirectUrl",
       label: "Redirect URL",
       tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.openid.': 'com.openid.myapp://'",
+        "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.oauth2.': 'com.oauth2.myapp://'",
       default: "",
     },
   ],
