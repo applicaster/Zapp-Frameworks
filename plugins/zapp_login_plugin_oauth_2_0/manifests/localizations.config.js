@@ -28,27 +28,27 @@ const common = [
   },
   {
     key: "alert_login_fail_message",
-    label: "Alert message user fail to authenteficate",
-    initial_value: "Authentefication failed",
+    label: "Alert message on user failed to authenticate",
+    initial_value: "Authentication failed",
   },
   {
     key: "alert_logout_fail_message",
-    label: "Alert message user fail to revoke access",
+    label: "Alert message on user failed to revoke access",
     initial_value: "Logout failed",
   },
   {
     key: "alert_succeed_title",
     label: "Alert succeed title",
-    initial_value: "Warning",
+    initial_value: "Success",
   },
   {
     key: "alert_login_succeed_message",
-    label: "Alert message user succeed to authenteficate",
-    initial_value: "Authentefication completed",
+    label: "Alert message on successful authentication",
+    initial_value: "Authentication completed",
   },
   {
     key: "alert_logout_succeed_message",
-    label: "Alert message user succeed to authenteficate",
+    label: "Alert message on successful authentication",
     initial_value: "Logout completed",
   },
 ];
