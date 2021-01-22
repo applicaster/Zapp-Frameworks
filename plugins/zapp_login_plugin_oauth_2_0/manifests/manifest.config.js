@@ -27,20 +27,11 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "redirectUrl",
-      label: "Redirect URL",
-      tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code. Note:  URL has to follow the app url schemes structure 'myapp://'",
-      default: "",
-    },
-    {
-      type: "text",
       key: "domainName",
       label: "Domain Name",
       tooltip_text: "REQUIRED: Domain name",
       default: "",
     },
-
     {
       group: true,
       label: "Debug",
@@ -251,6 +242,30 @@ const api = {
   },
 };
 
+const url_custom_configuration_fields = {
+  apple: [
+    {
+      type: "text",
+      key: "redirectUrl",
+      label: "Redirect URL",
+      tooltip_text:
+        "REQUIRED: the url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://'",
+      default: "",
+    },
+  ],
+  android: [
+    {
+      type: "text",
+      key: "redirectUrl",
+      label: "Redirect URL",
+      tooltip_text:
+        "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.openid.': 'com.openid.myapp://'",
+      default: "",
+    },
+  ],
+  default: [],
+};
+
 const project_dependencies = {
   default: [],
   android: [
@@ -315,6 +330,9 @@ function createManifest({ version, platform }) {
 
   const isTV = R.includes(platform, tvPlatforms);
 
+  custom_configuration_fields = withFallback(url_custom_configuration_fields, basePlatform)
+    .concat(baseManifest.custom_configuration_fields)
+
   return {
     ...baseManifest,
     platform,
@@ -325,6 +343,7 @@ function createManifest({ version, platform }) {
     extra_dependencies: withFallback(extra_dependencies, basePlatform),
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
     npm_dependencies: withFallback(npm_dependencies(version), basePlatform),
+    custom_configuration_fields,
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
