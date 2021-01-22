@@ -17,33 +17,48 @@
   "custom_configuration_fields": [
     {
       "type": "text",
+      "key": "redirectUrl",
+      "label": "Redirect URL",
+      "tooltip_text": "REQUIRED: the url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://'",
+      "default": ""
+    },
+    {
+      "type": "text",
       "key": "clientId",
+      "label": "Client ID",
       "tooltip_text": "REQUIRED: your client id on the auth server",
       "default": ""
     },
     {
       "type": "text",
-      "key": "redirectUrl",
-      "tooltip_text": "REQUIRED: the url that links back to your app with the auth code",
+      "key": "domainName",
+      "label": "Domain Name",
+      "tooltip_text": "REQUIRED: Domain name",
       "default": ""
     },
     {
-      "type": "text",
-      "key": "authorizationEndpoint",
-      "tooltip_text": "REQUIRED: fully formed url to the OAuth authorization endpoint",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "tokenEndpoint",
-      "tooltip_text": "REQUIRED: fully formed url to the OAuth token exchange endpoint",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "revocationEndpoint",
-      "tooltip_text": "fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
-      "default": ""
+      "group": true,
+      "label": "Debug",
+      "tooltip": "Only for developers",
+      "folded": true,
+      "fields": [
+        {
+          "type": "tag_select",
+          "key": "force_authentication_on_all",
+          "tooltip_text": "If On all video entries will be marked as required login",
+          "options": [
+            {
+              "text": "On",
+              "value": "on"
+            },
+            {
+              "text": "Off",
+              "value": "off"
+            }
+          ],
+          "initial_value": "off"
+        }
+      ]
     }
   ],
   "hooks": {
@@ -62,10 +77,12 @@
       }
     ]
   },
-  "ui_frameworks": ["quickbrick"],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.0.4",
-  "manifest_version": "0.0.4",
+  "dependency_version": "0.0.5",
+  "manifest_version": "0.0.5",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -76,16 +93,23 @@
       "react-native-app-auth": ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'"
     },
     {
-      "ZappOAuth": ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappOAuth.podspec'"
+      "ZappOAuth": ":path => 'node_modules/@applicaster/zapp_login_plugin_oauth_2_0/apple/ZappOAuth.podspec'"
     }
   ],
   "min_zapp_sdk": "0.1.0-alpha1",
   "npm_dependencies": [
     "@react-native-community/blur@3.4.1",
-    "react-native-app-auth@6.0.1"
+    "react-native-app-auth@6.0.1",
+    "@applicaster/zapp_login_plugin_oauth_2_0@0.0.5"
   ],
   "styles": {
     "fields": [
+      {
+        "key": "background_image",
+        "type": "uploader",
+        "label": "Background Image",
+        "label_tooltip": "Background image. Please use that can be centered in the different device screens"
+      },
       {
         "key": "background_color",
         "type": "color_picker",
@@ -224,8 +248,40 @@
         "key": "back_button_text",
         "label": "Back button title",
         "initial_value": "Back"
+      },
+      {
+        "key": "alert_fail_title",
+        "label": "Alert fail title",
+        "initial_value": "Error"
+      },
+      {
+        "key": "alert_login_fail_message",
+        "label": "Alert message on user failed to authenticate",
+        "initial_value": "Authentication failed"
+      },
+      {
+        "key": "alert_logout_fail_message",
+        "label": "Alert message on user failed to revoke access",
+        "initial_value": "Logout failed"
+      },
+      {
+        "key": "alert_succeed_title",
+        "label": "Alert succeed title",
+        "initial_value": "Success"
+      },
+      {
+        "key": "alert_login_succeed_message",
+        "label": "Alert message on successful authentication",
+        "initial_value": "Authentication completed"
+      },
+      {
+        "key": "alert_logout_succeed_message",
+        "label": "Alert message on successful authentication",
+        "initial_value": "Logout completed"
       }
     ]
   },
-  "targets": ["mobile"]
+  "targets": [
+    "mobile"
+  ]
 }
