@@ -21,36 +21,41 @@ const baseManifest = {
     {
       type: "text",
       key: "clientId",
+      label: "Client ID",
       tooltip_text: "REQUIRED: your client id on the auth server",
       default: "",
     },
     {
       type: "text",
-      key: "redirectUrl",
-      tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code",
+      key: "domainName",
+      label: "Domain Name",
+      tooltip_text: "REQUIRED: Domain name",
       default: "",
     },
     {
-      type: "text",
-      key: "authorizationEndpoint",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth authorization endpoint",
-      default: "",
-    },
-    {
-      type: "text",
-      key: "tokenEndpoint",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth token exchange endpoint",
-      default: "",
-    },
-    {
-      type: "text",
-      key: "revocationEndpoint",
-      tooltip_text:
-        "fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
-      default: "",
+      group: true,
+      label: "Debug",
+      tooltip: "Only for developers",
+      folded: true,
+      fields: [
+        {
+          type: "tag_select",
+          key: "force_authentication_on_all",
+          tooltip_text:
+            "If On all video entries will be marked as required login",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          initial_value: "off",
+        },
+      ],
     },
   ],
   hooks: {
@@ -74,6 +79,13 @@ const baseManifest = {
 
 const stylesMobile = {
   fields: [
+    {
+      key: "background_image",
+      type: "uploader",
+      label: "Background Image",
+      label_tooltip:
+        "Background image. Please use that can be centered in the different device screens",
+    },
     {
       key: "background_color",
       type: "color_picker",
@@ -224,18 +236,41 @@ const api = {
   },
   android: {
     class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-    react_packages: ["com.cmcewen.blurview.BlurViewPackage"],
+    react_packages: ["com.rnappauth.RNAppAuthPackage"],
     proguard_rules:
       "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }",
   },
+};
+
+const url_custom_configuration_fields = {
+  apple: [
+    {
+      type: "text",
+      key: "redirectUrl",
+      label: "Redirect URL",
+      tooltip_text:
+        "REQUIRED: the url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://'",
+      default: "",
+    },
+  ],
+  android: [
+    {
+      type: "text",
+      key: "redirectUrl",
+      label: "Redirect URL",
+      tooltip_text:
+        "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.oauth2.': 'com.oauth2.myapp://'",
+      default: "",
+    },
+  ],
+  default: [],
 };
 
 const project_dependencies = {
   default: [],
   android: [
     {
-      "react-native-community_blur":
-        "node_modules/@react-native-community/blur/android",
+      "react-native-app-auth": "node_modules/react-native-app-auth/android",
     },
   ],
 };
@@ -251,29 +286,32 @@ const extra_dependencies = {
         ":path => 'node_modules/react-native-app-auth/react-native-app-auth.podspec'",
     },
     {
-      ZappAuth:
-        ":path => 'node_modules/zapp_login_plugin_oauth_2_0/apple/ZappAuth.podspec'",
+      ZappOAuth:
+        ":path => 'node_modules/@applicaster/zapp_login_plugin_oauth_2_0/apple/ZappOAuth.podspec'",
     },
   ],
   default: [],
 };
 
-const npm_dependencies = {
-  default: [
-    "@react-native-community/blur@3.4.1",
-    "react-native-app-auth@6.0.1",
-  ],
-  web: [],
-};
+function npm_dependencies(version) {
+  return {
+    default: [
+      "@react-native-community/blur@3.4.1",
+      "react-native-app-auth@6.0.1",
+      `@applicaster/zapp_login_plugin_oauth_2_0@${version}`,
+    ],
+    web: [],
+  };
+}
 
 const min_zapp_sdk = {
   ios: "20.2.0-Dev",
   android: "20.0.0",
   ios_for_quickbrick: "0.1.0-alpha1",
-  android_for_quickbrick: "0.1.0-alpha1",
   tvos_for_quickbrick: "0.1.0-alpha1",
-  android_tv_for_quickbrick: "0.1.0-alpha1",
-  amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
+  android_for_quickbrick: "3.0.0-dev",
+  android_tv_for_quickbrick: "3.0.0-dev",
+  amazon_fire_tv_for_quickbrick: "3.0.0-dev",
   samsung_tv: "1.2.2",
 };
 
@@ -292,6 +330,9 @@ function createManifest({ version, platform }) {
 
   const isTV = R.includes(platform, tvPlatforms);
 
+  custom_configuration_fields = withFallback(url_custom_configuration_fields, basePlatform)
+    .concat(baseManifest.custom_configuration_fields)
+
   return {
     ...baseManifest,
     platform,
@@ -301,7 +342,8 @@ function createManifest({ version, platform }) {
     project_dependencies: withFallback(project_dependencies, basePlatform),
     extra_dependencies: withFallback(extra_dependencies, basePlatform),
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
-    npm_dependencies: withFallback(npm_dependencies, basePlatform),
+    npm_dependencies: withFallback(npm_dependencies(version), basePlatform),
+    custom_configuration_fields,
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],

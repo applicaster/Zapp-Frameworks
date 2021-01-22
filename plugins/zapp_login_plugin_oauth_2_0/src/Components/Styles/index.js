@@ -1,33 +1,33 @@
-export const container = {
+import { HookTypeData } from "../../Utils/Helpers";
+
+export const containerStyle = {
   flex: 1,
   alignItems: "center",
 };
-export const title = {
-  fontSize: 15,
-  color: "white",
-  marginTop: 100,
-  marginBottom: 80,
+
+export const safeAreaStyle = {
+  flex: 1,
+  backgroundColor: "clear",
 };
-export const input = {
-  backgroundColor: "transparent",
-  fontSize: 13,
-  color: "white",
-  width: 250,
-  height: 50,
-  borderBottomWidth: 1,
-  borderBottomColor: "#A9A9A9",
-  marginBottom: 10,
-  paddingHorizontal: 15,
-};
-export const button = {
-  height: 50,
-  width: 250,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#F1AD12",
-  borderRadius: 50,
-};
-export const buttonText = {
-  color: "white",
-  fontSize: 15,
+
+export function backgroundImageStyle(screenStyles, hookType, width, height) {
+  return {
+    flex: 1,
+    width,
+    height,
+    resizeMode: "center",
+    backgroundColor:
+      hookType === HookTypeData.UNDEFINED
+        ? "black"
+        : screenStyles?.background_color,
+    position: "absolute",
+  };
+}
+
+export const clientLogoView = {
+  height: 100,
+  width: 350,
+  position: "absolute",
+  alignSelf: "center",
+  top: 200,
 };

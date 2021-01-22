@@ -42,9 +42,6 @@ const ActionButton = (props) => {
   } = props;
 
   const textStyle = labelStyle || actionButtonTextStyle(screenStyles);
-  console.log({
-    buttonStyle: actionButtonContainerStyle(screenStyles, buttonStyle),
-  });
   return (
     <TouchableOpacity
       onPress={onPress}

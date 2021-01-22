@@ -1,5 +1,5 @@
 {
-  "name": "ZappAuth",
+  "name": "ZappOAuth",
   "version": "0.0.4",
   "summary": "General Applicaster iOS and tvOS framework that provides protocol",
   "platforms": {

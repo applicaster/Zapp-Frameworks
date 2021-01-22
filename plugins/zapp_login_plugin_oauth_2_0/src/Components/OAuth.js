@@ -1,19 +1,32 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { View, SafeAreaView, Platform } from "react-native";
-
-import * as R from "ramda";
+import React, { useState, useLayoutEffect } from "react";
+import {
+  View,
+  SafeAreaView,
+  Platform,
+  ImageBackground,
+  useWindowDimensions,
+} from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import { isVideoEntry, isAuthenticationRequired } from "../Utils/PayloadUtils";
-import { showAlert } from "../Utils/Account";
 import LoadingScreen from "./LoadingScreen";
-import { container } from "./Styles";
+import {
+  clientLogoView,
+  containerStyle,
+  safeAreaStyle,
+  backgroundImageStyle,
+} from "./Styles";
 import TitleLabel from "./UIComponents/TitleLabel";
 import ClientLogo from "./UIComponents/ClientLogo";
 import ActionButton from "./UIComponents/Buttons/ActionButton.js";
 import BackButton from "./UIComponents/Buttons/BackButton";
-
+import {
+  showAlertLogout,
+  showAlertLogin,
+  getRiversProp,
+  HookTypeData,
+} from "../Utils/Helpers";
 import {
   configFromPlugin,
   authorizeService,
@@ -21,12 +34,8 @@ import {
   checkUserAuthorization,
 } from "../Services/OAuth2Service";
 
-import {
-  getStyles,
-  isHomeScreen,
-  getMessageOrDefault,
-} from "../Utils/Customization";
-import { isHook, isTokenInStorage } from "../Utils/UserAccount";
+import { getStyles } from "../Utils/Customization";
+import { isHook } from "../Utils/UserAccount";
 import {
   createLogger,
   BaseSubsystem,
@@ -40,34 +49,10 @@ export const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
-  const getPropByKey = R.compose(
-    R.prop(key),
-    R.find(R.propEq("type", "zapp_login_plugin_oauth_2_0")),
-    R.values
-  );
-
-  return getPropByKey(rivers);
-};
-
-const clientLogoView = {
-  height: 100,
-  width: 350,
-  position: "absolute",
-  alignSelf: "center",
-  top: 200,
-};
-
 const OAuth = (props) => {
-  const HookTypeData = {
-    UNDEFINED: "Undefined",
-    PLAYER_HOOK: "PlayerHook",
-    SCREEN_HOOK: "ScreenHook",
-    USER_ACCOUNT: "UserAccount",
-  };
-
+  const windowWidth = useWindowDimensions().width;
+  const windowHeight = useWindowDimensions().height;
   const navigator = useNavigation();
-  const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -79,24 +64,22 @@ const OAuth = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
   const oAuthConfig = configFromPlugin(props?.configuration);
-
-  const containerStyle = (screenStyles) => {
-    return {
-      ...container,
-      backgroundColor: screenStyles?.background_color,
-      flex: 1,
-    };
-  };
+  const {
+    logout_text,
+    login_text,
+    title_text,
+    back_button_text,
+  } = screenLocalizations;
 
   let stillMounted = true;
 
   useLayoutEffect(() => {
     const configuration = props?.configuration;
-    addContext({ configuration, payload });
+    addContext({ configuration, oauth_config: oAuthConfig });
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
-      .setMessage(`Starting Auth Plugin`)
+      .setMessage(`Starting OAuth Plugin`)
       .addData({ configuration })
       .send();
 
@@ -108,18 +91,15 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    const authenticated = await checkUserAuthorization();
-
-    const authenthicationRequired = true;
-    // isAuthenticationRequired({ payload });
+    const authenticated = await checkUserAuthorization(oAuthConfig);
+    const testEnvironmentEnabled =
+      props?.configuration?.force_authentication_on_all || false;
+    const authenthicationRequired =
+      testEnvironmentEnabled === true || isAuthenticationRequired({ payload });
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
-    console.log({
-      authenticated,
-      authenthicationRequired,
-      videoEntry,
-    });
+
     if (videoEntry) {
       if (authenthicationRequired === false || authenticated) {
         event
@@ -179,48 +159,57 @@ const OAuth = (props) => {
     stillMounted && setLoading(false);
   }, [isUserAuthenticated]);
 
-  const renderScreenHook = () => {
-    return <View style={{ flex: 1, backgroundColor: "red" }} />;
-    // return (
-    //   <AccountFlow
-    //     setParentLockWasPresented={setParentLockWasPresented}
-    //     parentLockWasPresented={parentLockWasPresented}
-    //     shouldShowParentLock={shouldShowParentLock}
-    //     accountFlowCallback={accountFlowCallback}
-    //     backButton={!isHomeScreen(navigator)}
-    //     screenStyles={screenStyles}
-    //     screenLocalizations={screenLocalizations}
-    //     {...props}
-    //   />
-    // );
-  };
-
   const onPressActionButton = React.useCallback(async () => {
     setLoading(true);
-    console.log("onPress", { isUserAuthenticated });
     if (isUserAuthenticated) {
       const success = await revokeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization();
+      const authenticated = await checkUserAuthorization(oAuthConfig);
 
-      console.log("onPress Rev", { authenticated });
-
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.debug)
+        .setMessage(`onPressActionButton: Logout Success`)
+        .addData({
+          success,
+          authenticated,
+          hookType,
+        })
+        .send();
+      showAlertLogout(success, screenLocalizations);
       setIsUserAuthenticated(authenticated);
     } else {
       const success = await authorizeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization();
-      console.log("onPress Login", {
-        success,
-        authenticated,
-        hookType,
-        callback,
-      });
-
+      const authenticated = await checkUserAuthorization(oAuthConfig);
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.debug)
+        .setMessage(`onPressActionButton: Login Success`)
+        .addData({
+          success,
+          authenticated,
+          hookType,
+        })
+        .send();
       setIsUserAuthenticated(authenticated);
-      if (success) {
+      if (authenticated) {
         if (hookType === HookTypeData.PLAYER_HOOK) {
+          logger
+            .createEvent()
+            .setLevel(XRayLogLevel.debug)
+            .setMessage(`onPressActionButton: OAuth finished`)
+            .addData({
+              success,
+              authenticated,
+              hookType,
+            })
+            .send();
           callback &&
             callback({ success: true, error: null, payload: payload });
+        } else {
+          showAlertLogin(success, screenLocalizations);
         }
+      } else {
+        showAlertLogin(success, screenLocalizations);
       }
     }
     setLoading(false);
@@ -230,44 +219,43 @@ const OAuth = (props) => {
     callback && callback({ success: false, error: null, payload });
   };
 
-  const shouldShowParentLock = (parentLockWasPresented) =>
-    !(parentLockWasPresented || !showParentLock);
-
   const SafeArea = Platform.isTV ? View : SafeAreaView;
-  const {
-    logout_text,
-    login_text,
-    title_text,
-    back_button_text,
-  } = screenLocalizations;
-  console.log({ isUserAuthenticated, screenLocalizations });
-  const safeZoneBackgroundColor =
-    hookType === HookTypeData.UNDEFINED
-      ? "black"
-      : screenStyles?.background_color;
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: safeZoneBackgroundColor }}>
+    <>
       {hookType === HookTypeData.UNDEFINED ? null : (
-        <View style={containerStyle(screenStyles)}>
-          <BackButton
-            title={back_button_text}
-            disabled={hookType !== HookTypeData.PLAYER_HOOK}
-            screenStyles={screenStyles}
-            onPress={onBackButton}
-          />
-          <TitleLabel screenStyles={screenStyles} title={title_text} />
-          <View style={clientLogoView}>
-            <ClientLogo imageSrc={screenStyles.client_logo} />
-          </View>
-          <ActionButton
-            screenStyles={screenStyles}
-            title={isUserAuthenticated ? logout_text : login_text}
-            onPress={onPressActionButton}
-          />
-        </View>
+        <ImageBackground
+          style={backgroundImageStyle(
+            screenStyles,
+            hookType,
+            windowWidth,
+            windowHeight
+          )}
+          source={{ uri: screenStyles.background_image }}
+        />
       )}
-      {loading && <LoadingScreen />}
-    </SafeAreaView>
+      <SafeArea style={safeAreaStyle}>
+        {hookType === HookTypeData.UNDEFINED ? null : (
+          <View style={containerStyle}>
+            <BackButton
+              title={back_button_text}
+              disabled={hookType !== HookTypeData.PLAYER_HOOK}
+              screenStyles={screenStyles}
+              onPress={onBackButton}
+            />
+            <TitleLabel screenStyles={screenStyles} title={title_text} />
+            <View style={clientLogoView}>
+              <ClientLogo imageSrc={screenStyles.client_logo} />
+            </View>
+            <ActionButton
+              screenStyles={screenStyles}
+              title={isUserAuthenticated ? logout_text : login_text}
+              onPress={onPressActionButton}
+            />
+          </View>
+        )}
+        {loading && <LoadingScreen />}
+      </SafeArea>
+    </>
   );
 };
 
