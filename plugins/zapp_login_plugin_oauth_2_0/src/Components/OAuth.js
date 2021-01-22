@@ -220,18 +220,19 @@ const OAuth = (props) => {
   };
 
   const SafeArea = Platform.isTV ? View : SafeAreaView;
-
   return (
     <>
-      <ImageBackground
-        style={backgroundImageStyle(
-          screenStyles,
-          hookType,
-          windowWidth,
-          windowHeight
-        )}
-        source={{ uri: screenStyles.background_image }}
-      />
+      {hookType === HookTypeData.UNDEFINED ? null : (
+        <ImageBackground
+          style={backgroundImageStyle(
+            screenStyles,
+            hookType,
+            windowWidth,
+            windowHeight
+          )}
+          source={{ uri: screenStyles.background_image }}
+        />
+      )}
       <SafeArea style={safeAreaStyle}>
         {hookType === HookTypeData.UNDEFINED ? null : (
           <View style={containerStyle}>
