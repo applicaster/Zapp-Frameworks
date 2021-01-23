@@ -59,7 +59,7 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
             request.httpBody = spcData
         }
         let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = session.dataTask(with: request) { data, _, _ in
             if let data = data {
                 retValue = data
             }
