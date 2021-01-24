@@ -21,6 +21,7 @@ struct PluginKeys {
 struct ItemParamsKeys {
     static let avasseturl = "avasseturl"
     static let entry = "entry"
+    static let content = "content"   
     static let extensions = "extensions"
     static let drm = "drm"
     static let src = "src"
@@ -104,7 +105,7 @@ extension ZPGenericDrm {
     }
     
     func offlineContentKeyRequestParams(from params: [String: Any]?) -> ContentKeyRequestParams? {
-        guard let entry = params?[ItemParamsKeys.entry] as? [String: Any],
+        guard let entry = params?[ItemParamsKeys.content] as? [String: Any],
               let src = entry[ItemParamsKeys.src] as? String,
               let drm = entry[ItemParamsKeys.drm] as? [String: Any],
               let fairplay = drm[ItemParamsKeys.fairplay] as? [String: Any] else {
