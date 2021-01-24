@@ -41,7 +41,6 @@ class ContentKeyManager {
         contentKeySession.setDelegate(contentKeyDelegate, queue: contentKeyDelegateQueue)
     }
 
-    var configurationJSON: NSDictionary?
     var logger: Logger? {
         didSet {
             contentKeyDelegate.logger = logger
@@ -50,5 +49,13 @@ class ContentKeyManager {
 
     func setContentKeyRequestParams(_ params: ContentKeyRequestParams) {
         contentKeyDelegate.contentKeyRequestParams = params
+    }
+    
+    func setContentKeyStorageNamespace(_ namespace: String?) {
+        contentKeyDelegate.contentKeyStorageNamespace = namespace
+    }
+    
+    func requestPersistableContentKeys(for contentKeyRequestParams: ContentKeyRequestParams, completion: ((_ isReady: Bool) -> Void)?) {
+        contentKeyDelegate.requestPersistableContentKeys(for: contentKeyRequestParams, completion: completion)
     }
 }

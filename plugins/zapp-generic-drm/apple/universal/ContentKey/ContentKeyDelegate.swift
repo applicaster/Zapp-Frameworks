@@ -11,6 +11,9 @@
 
 import AVFoundation
 import XrayLogger
+import ZappCore
+
+typealias ContentKeyToRequestCompletion = (_ isReady: Bool) -> Void
 
 class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
     // MARK: Types
@@ -19,11 +22,18 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
         case missingApplicationCertificate
         case missingLicenseServerUrl
         case noCKCReturnedByKSM
+        case failedToRetrieveContentId
     }
 
     // MARK: Properties
 
+    /// A set containing the currently pending content key identifiers associated with persistable content key requests that have not been completed.
+    var pendingPersistableContentKeyIdentifiers = Set<String>()
+    /// A dictionary mapping content key identifiers to comletions.
+    var contentKeyToRequestCompletionsMap = [String: [ContentKeyToRequestCompletion?]]()
+
     var contentKeyRequestParams: ContentKeyRequestParams?
+    var contentKeyStorageNamespace: String?
     var logger: Logger?
 
     func requestApplicationCertificate() throws -> Data {
@@ -74,6 +84,79 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
         return data
     }
 
+    /// Preloads all the content keys associated with an Asset for persisting on disk.
+    ///
+    /// It is recommended you use AVContentKeySession to initiate the key loading process
+    /// for online keys too. Key loading time can be a significant portion of your playback
+    /// startup time because applications normally load keys when they receive an on-demand
+    /// key request. You can improve the playback startup experience for your users if you
+    /// load keys even before the user has picked something to play. AVContentKeySession allows
+    /// you to initiate a key loading process and then use the key request you get to load the
+    /// keys independent of the playback session. This is called key preloading. After loading
+    /// the keys you can request playback, so during playback you don't have to load any keys,
+    /// and the playback decryption can start immediately.
+    ///
+    /// - Parameter asset: The `Asset` to preload keys for.
+    func requestPersistableContentKeys(for contentKeyRequestParams: ContentKeyRequestParams, completion: ContentKeyToRequestCompletion?) {
+        guard let contentKeyUrlString = contentKeyRequestParams.contentKeyUrlString,
+              let assetIDString = host(fromUrlString: contentKeyUrlString) else {
+            completion?(false)
+            return
+        }
+
+        pendingPersistableContentKeyIdentifiers.insert(assetIDString)
+
+        let currentCompletions = contentKeyToRequestCompletionsMap[assetIDString]
+        var updatedCompletions = currentCompletions
+        if updatedCompletions == nil {
+            updatedCompletions = [ContentKeyToRequestCompletion]()
+        }
+        updatedCompletions?.append(completion)
+        contentKeyToRequestCompletionsMap[assetIDString] = updatedCompletions
+
+        ContentKeyManager.shared.contentKeySession.processContentKeyRequest(withIdentifier: contentKeyUrlString,
+                                                                            initializationData: nil,
+                                                                            options: nil)
+    }
+
+    func processPendingCompletionsForContentKeyRequest(for keyRequest: AVContentKeyRequest, isReady: Bool) {
+        guard let contentKey = host(fromContentKeyRequest: keyRequest) else {
+            return
+        }
+        processPendingCompletionsForContentKey(for: contentKey, isReady: isReady)
+    }
+    
+    func processPendingCompletionsForContentKey(for contentKey: String, isReady: Bool) {
+        guard let completions = contentKeyToRequestCompletionsMap.removeValue(forKey: contentKey),
+              completions.count > 0 else {
+            return
+        }
+        for completion in completions {
+            completion?(isReady)
+        }
+    }
+
+    /// Returns whether or not a content key should be persistable on disk.
+    ///
+    /// - Parameter identifier: The asset ID associated with the content key request.
+    /// - Returns: `true` if the content key request should be persistable, `false` otherwise.
+    func shouldRequestPersistableContentKey(withIdentifier identifier: String) -> Bool {
+        return pendingPersistableContentKeyIdentifiers.contains(identifier)
+    }
+
+    func host(fromContentKeyRequest keyRequest: AVContentKeyRequest) -> String? {
+        guard let contentKeyIdentifierString = keyRequest.identifier as? String else {
+            return nil
+        }
+        return host(fromUrlString: contentKeyIdentifierString)
+    }
+    
+    func host(fromUrlString urlString: String) -> String? {
+        guard let contentKeyIdentifierURL = URL(string: urlString) else {
+            return nil
+        }
+        return contentKeyIdentifierURL.host
+    }
     // MARK: AVContentKeySessionDelegate Methods
 
     /*
@@ -144,25 +227,38 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
             logger?.errorLog(message: "License server url is not provided")
         case ProcessError.noCKCReturnedByKSM:
             logger?.errorLog(message: "Unable to fetch the CKC")
+        case ProcessError.failedToRetrieveContentId:
+            logger?.errorLog(message: "Failed to retrieve the assetID from the keyRequest")
         default:
+            logger?.errorLog(message: (err as NSError).description)
             break
         }
+
+        processPendingCompletionsForContentKeyRequest(for: keyRequest, isReady: false)
     }
 
     func contentKeySession(_ session: AVContentKeySession, contentKeyRequestDidSucceed keyRequest: AVContentKeyRequest) {
         logger?.debugLog(message: "Success fetching protected content")
     }
-
+    
     // MARK: API
 
     func handleStreamingContentKeyRequest(keyRequest: AVContentKeyRequest) {
-        guard let contentKeyIdentifierString = keyRequest.identifier as? String,
-              let contentKeyIdentifierURL = URL(string: contentKeyIdentifierString),
-              let assetIDString = contentKeyIdentifierURL.host,
+        guard let assetIDString = host(fromContentKeyRequest: keyRequest),
               let assetIDData = assetIDString.data(using: .utf8)
         else {
             logger?.errorLog(message: "Failed to retrieve the assetID from the keyRequest")
             return
+        }
+
+        // saving contentKey url for content url for future use if needed by offline content
+        if let contentUrlString = contentKeyRequestParams?.contentUrlString,
+           let contentKeyIdentifierString = keyRequest.identifier as? String {
+            DispatchQueue.main.async {
+                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: contentUrlString,
+                                                                               value: contentKeyIdentifierString,
+                                                                               namespace: self.contentKeyStorageNamespace)
+            }
         }
 
         let provideOnlinekey: () -> Void = { () -> Void in
@@ -170,8 +266,7 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
             do {
                 let applicationCertificate = try self.requestApplicationCertificate()
 
-                let completionHandler = { [weak self] (spcData: Data?, error: Error?) in
-                    guard let strongSelf = self else { return }
+                let completionHandler = { (spcData: Data?, error: Error?) in
                     if let error = error {
                         keyRequest.processContentKeyResponseError(error)
                         return
@@ -181,7 +276,7 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
 
                     do {
                         // Send SPC to Key Server and obtain CKC
-                        let ckcData = try strongSelf.requestContentKeyFromKeySecurityModule(spcData: spcData, assetID: assetIDString)
+                        let ckcData = try self.requestContentKeyFromKeySecurityModule(spcData: spcData, assetID: assetIDString)
 
                         /*
                          AVContentKeyResponse is used to represent the data returned from the key server when requesting a key for
@@ -207,6 +302,32 @@ class ContentKeyDelegate: NSObject, AVContentKeySessionDelegate {
                 keyRequest.processContentKeyResponseError(error)
             }
         }
+
+        #if os(iOS)
+            /*
+             When you receive an AVContentKeyRequest via -contentKeySession:didProvideContentKeyRequest:
+             and you want the resulting key response to produce a key that can persist across multiple
+             playback sessions, you must invoke -respondByRequestingPersistableContentKeyRequest on that
+             AVContentKeyRequest in order to signal that you want to process an AVPersistableContentKeyRequest
+             instead. If the underlying protocol supports persistable content keys, in response your
+             delegate will receive an AVPersistableContentKeyRequest via -contentKeySession:didProvidePersistableContentKeyRequest:.
+             */
+            if shouldRequestPersistableContentKey(withIdentifier: assetIDString) ||
+                persistableContentKeyExists(withContentKeyIdentifier: assetIDString) {
+                // Request a Persistable Key Request.
+                do {
+                    try keyRequest.respondByRequestingPersistableContentKeyRequestAndReturnError()
+                } catch {
+                    /*
+                     This case will occur when the client gets a key loading request from an AirPlay Session.
+                     You should answer the key request using an online key from your key server.
+                     */
+                    provideOnlinekey()
+                }
+
+                return
+            }
+        #endif
 
         provideOnlinekey()
     }
