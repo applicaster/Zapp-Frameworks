@@ -11,7 +11,7 @@ end
 
 target 'FrameworksApp' do
   use_frameworks!
-  pod 'ZappAppleGenericDrm', :path => './ZappAppleGenericDrm.podspec', :testspecs => ['UnitTests']
+  pod 'ZappFairPlayDrm', :path => './ZappFairPlayDrm.podspec', :testspecs => ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
 
   target 'FrameworksAppTests' do
