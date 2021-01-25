@@ -55,7 +55,7 @@ const baseManifest = {
       conditional_fields: [
         {
           condition_value: ["aws_cognito"],
-          key: "custom_configuration_fields/provider_selector",
+          key: "data/provider_selector",
         },
       ],
     },
