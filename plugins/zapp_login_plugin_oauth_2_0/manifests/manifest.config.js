@@ -19,18 +19,53 @@ const baseManifest = {
   preload: true,
   custom_configuration_fields: [
     {
-      type: "text",
-      key: "clientId",
-      label: "Client ID",
-      tooltip_text: "REQUIRED: your client id on the auth server",
-      default: "",
-    },
-    {
-      type: "text",
-      key: "domainName",
-      label: "Domain Name",
-      tooltip_text: "REQUIRED: Domain name",
-      default: "",
+      group: true,
+      label: "Providers",
+      tooltip: "Select your OAuth 2.0 provider",
+      folded: true,
+      fields: [
+        {
+          key: "provider_selector",
+          type: "select",
+          initial_value: "aws_cognito",
+          options: [
+            {
+              label: "AWS Cognito",
+              value: "aws_cognito",
+            },
+            {
+              label: "Custom",
+              value: "custom",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "clientId",
+          label: "Client ID",
+          tooltip_text: "REQUIRED: your client id on the auth server",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["aws_cognito", "custom"],
+              key: "data/provider_selector",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "domainName",
+          label: "Domain Name",
+          tooltip_text: "REQUIRED: Domain name",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["aws_cognito"],
+              key: "data/provider_selector",
+            },
+          ],
+        },
+      ],
     },
     {
       group: true,
@@ -330,8 +365,10 @@ function createManifest({ version, platform }) {
 
   const isTV = R.includes(platform, tvPlatforms);
 
-  custom_configuration_fields = withFallback(url_custom_configuration_fields, basePlatform)
-    .concat(baseManifest.custom_configuration_fields)
+  custom_configuration_fields = withFallback(
+    url_custom_configuration_fields,
+    basePlatform
+  ).concat(baseManifest.custom_configuration_fields);
 
   return {
     ...baseManifest,
