@@ -1,4 +1,6 @@
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
+import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
+
 import { parseJsonIfNeeded } from "@applicaster/zapp-react-native-utils/functionUtils";
 import {
   createLogger,
@@ -23,6 +25,7 @@ export async function saveKeychainData(data) {
       stringifiedData,
       namespace
     );
+    await sessionStorage.setItem(authDataKey, stringifiedData, namespace);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
@@ -90,6 +93,7 @@ export async function removeKeychainData() {
       authDataKey,
       namespace
     );
+    await sessionStorage.removeItem(authDataKey, namespace);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
