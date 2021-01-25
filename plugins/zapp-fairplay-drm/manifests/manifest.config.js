@@ -3,8 +3,8 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Generic Drm provider",
-  description: "Generic Drm provider",
+  name: "FairPlay DRM",
+  description: "FairPlay DRM provider",
   type: "general",
   screen: false,
   react_native: false,
@@ -53,7 +53,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: [`@applicaster/zapp-generic-drm@${version}`],
+    npm_dependencies: [`@applicaster/zapp-fairplay-drm@${version}`],
     targets: targets[platform],
   };
   return manifest;
@@ -64,8 +64,8 @@ const min_zapp_sdk = {
 };
 
 const extra_dependencies_apple = {
-  ZappGenericDrm:
-    ":path => './node_modules/@applicaster/zapp-generic-drm/apple/ZappGenericDrm.podspec'",
+  ZappFairPlayDrm:
+    ":path => './node_modules/@applicaster/zapp-fairplay-drm/apple/ZappFairPlayDrm.podspec'",
 };
 const extra_dependencies = {
   ios_for_quickbrick: [extra_dependencies_apple],
@@ -74,8 +74,8 @@ const extra_dependencies = {
 
 const api_apple = {
   require_startup_execution: false,
-  class_name: "ZPGenericDrm",
-  modules: ["ZappGenericDrm"],
+  class_name: "ZPFairPlayDrm",
+  modules: ["ZappFairPlayDrm"],
 };
 
 const api = {

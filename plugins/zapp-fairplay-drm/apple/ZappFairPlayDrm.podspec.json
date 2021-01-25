@@ -1,14 +1,14 @@
 {
-  "name": "ZappGenericDrm",
+  "name": "ZappFairPlayDrm",
   "version": "0.1.0",
-  "summary": "ZappGenericDrm",
-  "description": "ZappGenericDrm container.",
+  "summary": "ZappFairPlayDrm",
+  "description": "ZappFairPlayDrm container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
   "license": "CMPS",
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-generic-drm/0.1.0"
+    "tag": "@@applicaster/zapp-fairplay-drm/0.1.0"
   },
   "platforms": {
     "ios": "12.0",

@@ -1,7 +1,7 @@
 {
-  "name": "@applicaster/zapp-generic-drm",
+  "name": "@applicaster/zapp-fairplay-drm",
   "version": "0.1.0",
-  "description": "Generic drm provider",
+  "description": "FairPlay DRM provider",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks"

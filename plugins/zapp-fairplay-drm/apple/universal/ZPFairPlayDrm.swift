@@ -1,6 +1,6 @@
 //
-//  ZPGenericDrm.swift
-//  ZappGenericDrm
+//  ZPFairPlayDrm.swift
+//  ZappFairPlayDrm
 //
 //  Created by Alex Zchut on 12/01/2021.
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
@@ -44,8 +44,8 @@ public struct ContentKeyRequestParams {
     var contentUrlString: String?
 }
 
-public class ZPGenericDrm: NSObject, PluginAdapterProtocol, AVAssetResourceLoaderDelegate {
-    lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappGenericDrm")
+public class ZPFairPlayDrm: NSObject, PluginAdapterProtocol, AVAssetResourceLoaderDelegate {
+    lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/ZappFairPlayDrm")
     lazy var contentKeyManager: ContentKeyManager = {
         var manager = ContentKeyManager.shared
         manager.logger = logger
@@ -93,7 +93,7 @@ public class ZPGenericDrm: NSObject, PluginAdapterProtocol, AVAssetResourceLoade
     }
 }
 
-extension ZPGenericDrm {
+extension ZPFairPlayDrm {
     func contentKeyRequestParams(from params: [String: Any]?) -> ContentKeyRequestParams? {
         guard let entry = params?[ItemParamsKeys.entry] as? [String: Any],
               let extensions = entry[ItemParamsKeys.extensions] as? [String: Any],
