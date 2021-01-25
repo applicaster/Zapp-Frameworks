@@ -19,51 +19,43 @@ const baseManifest = {
   preload: true,
   custom_configuration_fields: [
     {
-      group: true,
-      label: "Providers",
-      tooltip: "Select your OAuth 2.0 provider",
-      folded: true,
-      fields: [
+      key: "provider_selector",
+      type: "select",
+      initial_value: "aws_cognito",
+      options: [
         {
-          key: "provider_selector",
-          type: "select",
-          initial_value: "aws_cognito",
-          options: [
-            {
-              label: "AWS Cognito",
-              value: "aws_cognito",
-            },
-            {
-              label: "Custom",
-              value: "custom",
-            },
-          ],
+          label: "AWS Cognito",
+          value: "aws_cognito",
         },
         {
-          type: "text",
-          key: "clientId",
-          label: "Client ID",
-          tooltip_text: "REQUIRED: your client id on the auth server",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["aws_cognito", "custom"],
-              key: "custom_configuration_fields/provider_selector",
-            },
-          ],
+          label: "Custom",
+          value: "custom",
         },
+      ],
+    },
+    {
+      type: "text",
+      key: "clientId",
+      label: "Client ID",
+      tooltip_text: "REQUIRED: your client id on the auth server",
+      default: "",
+      conditional_fields: [
         {
-          type: "text",
-          key: "domainName",
-          label: "Domain Name",
-          tooltip_text: "REQUIRED: Domain name",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["aws_cognito"],
-              key: "custom_configuration_fields/provider_selector",
-            },
-          ],
+          condition_value: ["aws_cognito", "custom"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text",
+      key: "domainName",
+      label: "Domain Name",
+      tooltip_text: "REQUIRED: Domain name",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito"],
+          key: "custom_configuration_fields/provider_selector",
         },
       ],
     },
