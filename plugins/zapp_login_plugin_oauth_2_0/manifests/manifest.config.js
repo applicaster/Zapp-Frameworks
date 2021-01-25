@@ -48,7 +48,7 @@ const baseManifest = {
           conditional_fields: [
             {
               condition_value: ["aws_cognito", "custom"],
-              key: "data/provider_selector",
+              key: "custom_configuration_fields/provider_selector",
             },
           ],
         },
@@ -61,7 +61,7 @@ const baseManifest = {
           conditional_fields: [
             {
               condition_value: ["aws_cognito"],
-              key: "data/provider_selector",
+              key: "custom_configuration_fields/provider_selector",
             },
           ],
         },
