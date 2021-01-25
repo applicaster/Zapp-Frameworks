@@ -17,36 +17,6 @@ export const logger = createLogger({
   category: BaseCategories.OAUTH_SERVICE,
 });
 
-export function configFromPlugin(configuration) {
-  const clientId = configuration?.clientId;
-  const redirectUrl = configuration?.redirectUrl;
-  const domainName = configuration?.domainName;
-
-  if (clientId && redirectUrl && domainName) {
-    const oAuthConfig = {
-      clientId,
-      redirectUrl,
-      serviceConfiguration: {
-        authorizationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
-        tokenEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/token`,
-        revocationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
-      },
-    };
-    return oAuthConfig;
-  } else {
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.error)
-      .setMessage(
-        `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domainName`
-      )
-      .addData({ configuration })
-      .send();
-
-    return null;
-  }
-}
-
 export async function authorizeService(oAuthConfig) {
   if (!oAuthConfig) {
     logger

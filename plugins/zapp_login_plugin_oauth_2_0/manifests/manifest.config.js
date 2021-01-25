@@ -34,7 +34,7 @@ const baseManifest = {
       ],
     },
     {
-      type: "text",
+      type: "text_input",
       key: "clientId",
       label: "Client ID",
       tooltip_text: "REQUIRED: your client id on the auth server",
@@ -47,7 +47,7 @@ const baseManifest = {
       ],
     },
     {
-      type: "text",
+      type: "text_input",
       key: "domainName",
       label: "Domain Name",
       tooltip_text: "REQUIRED: Domain name",

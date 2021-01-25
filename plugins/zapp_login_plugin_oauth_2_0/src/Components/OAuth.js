@@ -28,7 +28,6 @@ import {
   HookTypeData,
 } from "../Utils/Helpers";
 import {
-  configFromPlugin,
   authorizeService,
   revokeService,
   checkUserAuthorization,
@@ -43,6 +42,7 @@ import {
   XRayLogLevel,
   addContext,
 } from "../Services/LoggerService";
+import { getConfig } from "../Services/Providers";
 
 export const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -63,7 +63,7 @@ const OAuth = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-  const oAuthConfig = configFromPlugin(props?.configuration);
+  const oAuthConfig = getConfig(props?.configuration);
   const {
     logout_text,
     login_text,
