@@ -3,7 +3,6 @@ import { other } from "./Other";
 
 export function getConfig({ configuration }) {
   const provider_selector = configuration?.provider_selector;
-  console.log({ configuration, provider_selector, other });
 
   if (provider_selector) {
     switch (provider_selector) {

@@ -54,31 +54,75 @@ export const other = {
 
     const skipCodeExchange = configuration?.skipCodeExchange || false;
 
-    // const additionalParameters =
-    //   (configuration?.additionalParameters &&
-    //     JSON.parse(configuration?.additionalParameters)) ||
-    //   null;
+    const additionalParameters =
+      (configuration?.additionalParameters &&
+        JSON.parse(configuration?.additionalParameters)) ||
+      null;
 
     if (clientId && redirectUrl) {
-      const oAuthConfig = {
-        issuer,
-        clientId,
-        redirectUrl,
-        clientSecret,
-        scopes,
-        clientAuthMethod,
-        dangerouslyAllowInsecureHttpRequests,
+      let oAuthConfig = {
         useNonce,
         usePKCE,
         skipCodeExchange,
-        serviceConfiguration: {
-          authorizationEndpoint,
-          tokenEndpoint,
-          revocationEndpoint,
-          registrationEndpoint,
-        },
       };
-      console.log({ oAuthConfig });
+
+      if (additionalParameters) {
+        oAuthConfig.additionalParameters = additionalParameters;
+      }
+
+      if (issuer) {
+        oAuthConfig.issuer = issuer;
+      }
+
+      if (clientId) {
+        oAuthConfig.clientId = clientId;
+      }
+
+      if (redirectUrl) {
+        oAuthConfig.redirectUrl = redirectUrl;
+      }
+
+      if (clientSecret) {
+        oAuthConfig.clientSecret = clientSecret;
+      }
+
+      if (scopes) {
+        oAuthConfig.scopes = scopes;
+      }
+
+      if (clientAuthMethod) {
+        oAuthConfig.clientAuthMethod = clientAuthMethod;
+      }
+
+      if (dangerouslyAllowInsecureHttpRequests) {
+        oAuthConfig.dangerouslyAllowInsecureHttpRequests = dangerouslyAllowInsecureHttpRequests;
+      }
+
+      if (dangerouslyAllowInsecureHttpRequests) {
+        oAuthConfig.dangerouslyAllowInsecureHttpRequests = dangerouslyAllowInsecureHttpRequests;
+      }
+
+      let serviceConfiguration = {};
+
+      if (authorizationEndpoint) {
+        serviceConfiguration.authorizationEndpoint = authorizationEndpoint;
+      }
+
+      if (tokenEndpoint) {
+        serviceConfiguration.tokenEndpoint = tokenEndpoint;
+      }
+
+      if (revocationEndpoint) {
+        serviceConfiguration.revocationEndpoint = revocationEndpoint;
+      }
+
+      if (registrationEndpoint) {
+        serviceConfiguration.registrationEndpoint = registrationEndpoint;
+      }
+
+      if (!R.isEmpty(serviceConfiguration)) {
+        oAuthConfig.serviceConfiguration = serviceConfiguration;
+      }
 
       return oAuthConfig;
     } else {
@@ -97,7 +141,6 @@ export const other = {
 };
 
 function getFieldOrNull({ key, configuration }) {
-  console.log({ key });
   const retVal = configuration?.[key];
   return R.isEmpty(retVal) ? null : retVal;
 }
@@ -106,5 +149,3 @@ function getArrayOrNull({ key, configuration }) {
   const textValue = getFieldOrNull({ key, configuration });
   return textValue && R.map(R.trim, R.split(",", textValue));
 }
-
-// skipCodeExchange - (boolean) (default: false) just return the authorization response, instead of automatically exchanging the authorization code. This is useful if this exchange needs to be done manually (not client-side)

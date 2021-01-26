@@ -119,14 +119,6 @@ const baseManifest = {
         },
         {
           type: "text_input",
-          key: "registrationEndpoint",
-          label: "Registration End Point",
-          tooltip_text:
-            "Fully formed url to your OAuth/OpenID Connect registration endpoint. Only necessary for servers that require client registration.",
-          default: "",
-        },
-        {
-          type: "text_input",
           key: "clientSecret",
           label: "Client Secret",
           tooltip_text: "Client secret to pass to token exchange requests.",
