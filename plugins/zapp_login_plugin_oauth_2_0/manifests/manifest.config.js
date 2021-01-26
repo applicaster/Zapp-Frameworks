@@ -194,12 +194,12 @@ const baseManifest = {
       ],
     },
     {
-      type: "switch",
+      type: "checkbox",
       key: "dangerouslyAllowInsecureHttpRequests",
       label: "Dangerously Allow Insecure Http Requests",
       tooltip_text:
         "ANDROID whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
-      initial_value: false,
+      default: false,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -208,12 +208,12 @@ const baseManifest = {
       ],
     },
     {
-      type: "switch",
+      type: "checkbox",
       key: "useNonce",
       label: "Use Nonce",
       tooltip_text:
         "IOS (default: true) optionally allows not sending the nonce parameter, to support non-compliant providers",
-      initial_value: true,
+      default: true,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -222,12 +222,12 @@ const baseManifest = {
       ],
     },
     {
-      type: "switch",
+      type: "checkbox",
       key: "usePKCE",
       label: "Use PKCE",
       tooltip_text:
         "(default: true) optionally allows not sending the code_challenge parameter and skipping PKCE code verification, to support non-compliant providers.",
-      initial_value: true,
+      default: true,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -236,7 +236,7 @@ const baseManifest = {
       ],
     },
     {
-      type: "switch",
+      type: "checkbox",
       key: "skipCodeExchange",
       label: "Skip Code Exchange",
       tooltip_text:
