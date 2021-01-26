@@ -63,7 +63,7 @@ const OAuth = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-  const oAuthConfig = getConfig(props?.configuration);
+  const oAuthConfig = getConfig({ configuration: props?.configuration });
   const {
     logout_text,
     login_text,
