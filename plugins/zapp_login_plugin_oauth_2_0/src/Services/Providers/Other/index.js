@@ -57,14 +57,29 @@ export const other = {
       configuration,
     });
 
-    const dangerouslyAllowInsecureHttpRequests =
-      configuration?.dangerouslyAllowInsecureHttpRequests || false;
+    const dangerouslyAllowInsecureHttpRequests = getBooleanOrDefault({
+      key: "dangerouslyAllowInsecureHttpRequests",
+      configuration,
+      defaultValue: false,
+    });
 
-    const useNonce = configuration?.useNonce || true;
+    const useNonce = getBooleanOrDefault({
+      key: "useNonce",
+      configuration,
+      defaultValue: true,
+    });
 
-    const usePKCE = configuration?.usePKCE || true;
+    const usePKCE = getBooleanOrDefault({
+      key: "usePKCE",
+      configuration,
+      defaultValue: true,
+    });
 
-    const skipCodeExchange = configuration?.skipCodeExchange || false;
+    const skipCodeExchange = getBooleanOrDefault({
+      key: "skipCodeExchange",
+      configuration,
+      defaultValue: false,
+    });
 
     const additionalParameters =
       (configuration?.additionalParameters &&
@@ -76,6 +91,7 @@ export const other = {
         useNonce,
         usePKCE,
         skipCodeExchange,
+        dangerouslyAllowInsecureHttpRequests,
       };
 
       if (additionalParameters) {
@@ -104,14 +120,6 @@ export const other = {
 
       if (clientAuthMethod) {
         oAuthConfig.clientAuthMethod = clientAuthMethod;
-      }
-
-      if (dangerouslyAllowInsecureHttpRequests) {
-        oAuthConfig.dangerouslyAllowInsecureHttpRequests = dangerouslyAllowInsecureHttpRequests;
-      }
-
-      if (dangerouslyAllowInsecureHttpRequests) {
-        oAuthConfig.dangerouslyAllowInsecureHttpRequests = dangerouslyAllowInsecureHttpRequests;
       }
 
       let serviceConfiguration = {};
@@ -151,6 +159,19 @@ export const other = {
     }
   },
 };
+
+function getBooleanOrDefault({ key, configuration, defaultValue = false }) {
+  const retVal = configuration?.[key];
+  if (retVal == "1") {
+    return true;
+  } else if (retVal == "0") {
+    return false;
+  } else if (retVal == true) {
+    return true;
+  }
+
+  return defaultValue;
+}
 
 function getFieldOrNull({ key, configuration }) {
   const retVal = configuration?.[key];

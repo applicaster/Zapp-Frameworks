@@ -84,6 +84,7 @@ export async function refreshService(
       .send();
     return false;
   } catch (error) {
+    console.log({ error });
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
