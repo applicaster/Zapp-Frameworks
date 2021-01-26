@@ -64,6 +64,8 @@ const OAuth = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
   const oAuthConfig = getConfig({ configuration: props?.configuration });
+  const session_storage_key = props?.session_storage_key;
+
   const {
     logout_text,
     login_text,
@@ -91,7 +93,10 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    const authenticated = await checkUserAuthorization(oAuthConfig);
+    const authenticated = await checkUserAuthorization(
+      oAuthConfig,
+      session_storage_key
+    );
     const testEnvironmentEnabled =
       props?.configuration?.force_authentication_on_all || false;
     const authenthicationRequired =
@@ -162,8 +167,11 @@ const OAuth = (props) => {
   const onPressActionButton = React.useCallback(async () => {
     setLoading(true);
     if (isUserAuthenticated) {
-      const success = await revokeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization(oAuthConfig);
+      const success = await revokeService(oAuthConfig, session_storage_key);
+      const authenticated = await checkUserAuthorization(
+        oAuthConfig,
+        session_storage_key
+      );
 
       logger
         .createEvent()
@@ -178,8 +186,11 @@ const OAuth = (props) => {
       showAlertLogout(success, screenLocalizations);
       setIsUserAuthenticated(authenticated);
     } else {
-      const success = await authorizeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization(oAuthConfig);
+      const success = await authorizeService(oAuthConfig, session_storage_key);
+      const authenticated = await checkUserAuthorization(
+        oAuthConfig,
+        session_storage_key
+      );
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)

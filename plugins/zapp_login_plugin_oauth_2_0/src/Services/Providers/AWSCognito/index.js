@@ -1,3 +1,16 @@
+import {
+  createLogger,
+  BaseSubsystem,
+  ProvidersCategories,
+  XRayLogLevel,
+  BaseCategories,
+} from "../../LoggerService";
+
+export const logger = createLogger({
+  subsystem: `${BaseSubsystem}/${BaseCategories.PROVIDER_SERVICE}`,
+  category: ProvidersCategories.OAUTH_SERVICE,
+});
+
 export const awsConfig = {
   getConfig({ configuration }) {
     const clientId = configuration?.clientId;
@@ -16,14 +29,14 @@ export const awsConfig = {
       };
       return oAuthConfig;
     } else {
-      // logger
-      //   .createEvent()
-      //   .setLevel(XRayLogLevel.error)
-      //   .setMessage(
-      //     `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domainName`
-      //   )
-      //   .addData({ configuration })
-      //   .send();
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.error)
+        .setMessage(
+          `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domainName`
+        )
+        .addData({ configuration })
+        .send();
 
       return null;
     }

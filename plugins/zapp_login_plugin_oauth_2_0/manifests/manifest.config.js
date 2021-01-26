@@ -49,14 +49,6 @@ const baseManifest = {
       default: "",
     },
     {
-      type: "text_input",
-      key: "logoutURL",
-      label: "Logout URL",
-      tooltip_text:
-        "If defined will be called during user will logout, allow to clear browser cache",
-      default: "",
-    },
-    {
       group: true,
       label: "AWS Cognito",
       tooltip: "AWS Cognito",

@@ -1,4 +1,16 @@
 import * as R from "ramda";
+import {
+  createLogger,
+  BaseSubsystem,
+  ProvidersCategories,
+  XRayLogLevel,
+  BaseCategories,
+} from "../../LoggerService";
+
+export const logger = createLogger({
+  subsystem: `${BaseSubsystem}/${BaseCategories.PROVIDER_SERVICE}`,
+  category: ProvidersCategories.OTHER,
+});
 
 export const other = {
   getConfig({ configuration }) {
@@ -126,14 +138,14 @@ export const other = {
 
       return oAuthConfig;
     } else {
-      // logger
-      //   .createEvent()
-      //   .setLevel(XRayLogLevel.error)
-      //   .setMessage(
-      //     `configFromPlugin: Reuired keys not exist clientId, redirectUrl`
-      //   )
-      //   .addData({ configuration })
-      //   .send();
+      logger
+        .createEvent()
+        .setLevel(XRayLogLevel.error)
+        .setMessage(
+          `configFromPlugin: Reuired keys not exist clientId, redirectUrl`
+        )
+        .addData({ configuration })
+        .send();
 
       return null;
     }

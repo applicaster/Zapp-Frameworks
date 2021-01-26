@@ -5,6 +5,12 @@ export const BaseCategories = {
   GENERAL: "general",
   KEYCHAIN_STORAGE: "keychainStorage",
   OAUTH_SERVICE: "oauthService",
+  PROVIDER_SERVICE: "oauthService",
+};
+
+export const ProvidersCategories = {
+  OTHER: "other",
+  AWSCognito: "awscognito",
 };
 
 let loggers = {};
