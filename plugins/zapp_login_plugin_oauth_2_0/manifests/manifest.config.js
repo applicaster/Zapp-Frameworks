@@ -20,13 +20,6 @@ const baseManifest = {
   custom_configuration_fields: [
     {
       type: "text_input",
-      key: "clientId",
-      label: "Client ID",
-      tooltip_text: "REQUIRED: your client id on the auth server",
-      default: "",
-    },
-    {
-      type: "text_input",
       key: "session_storage_key",
       label: "Session Storage Key",
       tooltip_text:
@@ -57,6 +50,19 @@ const baseManifest = {
       conditional_fields: [
         {
           condition_value: ["aws_cognito"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "clientId",
+      label: "Client ID",
+      tooltip_text: "REQUIRED: your client id on the auth server",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito", "other"],
           key: "custom_configuration_fields/provider_selector",
         },
       ],
@@ -124,6 +130,12 @@ const baseManifest = {
       tooltip_text:
         "Fully formed url to your OAuth/OpenID Connect registration endpoint. Only necessary for servers that require client registration.",
       default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
     },
     {
       type: "text_input",
@@ -187,7 +199,7 @@ const baseManifest = {
       label: "Dangerously Allow Insecure Http Requests",
       tooltip_text:
         "ANDROID whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
-      default: false,
+      initial_value: false,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -201,7 +213,7 @@ const baseManifest = {
       label: "Use Nonce",
       tooltip_text:
         "IOS (default: true) optionally allows not sending the nonce parameter, to support non-compliant providers",
-      default: true,
+      initial_value: true,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -215,7 +227,7 @@ const baseManifest = {
       label: "Use PKCE",
       tooltip_text:
         "(default: true) optionally allows not sending the code_challenge parameter and skipping PKCE code verification, to support non-compliant providers.",
-      default: true,
+      initial_value: true,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -234,31 +246,6 @@ const baseManifest = {
         {
           condition_value: ["other"],
           key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      group: true,
-      label: "Debug",
-      tooltip: "Only for developers",
-      folded: true,
-      fields: [
-        {
-          type: "tag_select",
-          key: "force_authentication_on_all",
-          tooltip_text:
-            "If On all video entries will be marked as required login",
-          options: [
-            {
-              text: "On",
-              value: "on",
-            },
-            {
-              text: "Off",
-              value: "off",
-            },
-          ],
-          initial_value: "off",
         },
       ],
     },
@@ -456,6 +443,12 @@ const url_custom_configuration_fields = {
       tooltip_text:
         "REQUIRED: the url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://'",
       default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito", "other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
     },
   ],
   android: [
@@ -466,6 +459,12 @@ const url_custom_configuration_fields = {
       tooltip_text:
         "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.oauth2.': 'com.oauth2.myapp://'",
       default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito", "other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
     },
   ],
   default: [],
@@ -540,6 +539,31 @@ function createManifest({ version, platform }) {
     basePlatform
   ).concat(baseManifest.custom_configuration_fields);
 
+  custom_configuration_fields.push({
+    group: true,
+    label: "Debug",
+    tooltip: "Only for developers",
+    folded: true,
+    fields: [
+      {
+        type: "tag_select",
+        key: "force_authentication_on_all",
+        tooltip_text:
+          "If On all video entries will be marked as required login",
+        options: [
+          {
+            text: "On",
+            value: "on",
+          },
+          {
+            text: "Off",
+            value: "off",
+          },
+        ],
+        initial_value: "off",
+      },
+    ],
+  });
   return {
     ...baseManifest,
     platform,
