@@ -19,14 +19,6 @@ const baseManifest = {
   preload: true,
   custom_configuration_fields: [
     {
-      type: "text_input",
-      key: "session_storage_key",
-      label: "Session Storage Key",
-      tooltip_text:
-        "Session storage key that will be used to save oauth token data",
-      default: "access_token",
-    },
-    {
       key: "provider_selector",
       type: "select",
       initial_value: "aws_cognito",
@@ -43,19 +35,6 @@ const baseManifest = {
     },
     {
       type: "text_input",
-      key: "domainName",
-      label: "Domain Name",
-      tooltip_text: "REQUIRED: Domain name",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["aws_cognito"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
       key: "clientId",
       label: "Client ID",
       tooltip_text: "REQUIRED: your client id on the auth server",
@@ -67,6 +46,20 @@ const baseManifest = {
         },
       ],
     },
+    {
+      type: "text_input",
+      key: "domainName",
+      label: "Domain Name",
+      tooltip_text: "REQUIRED: Domain name",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+
     {
       type: "text_input",
       key: "issuer",
@@ -248,6 +241,14 @@ const baseManifest = {
           key: "custom_configuration_fields/provider_selector",
         },
       ],
+    },
+    {
+      type: "text_input",
+      key: "session_storage_key",
+      label: "Session Storage Key",
+      tooltip_text:
+        "Session storage key that will be used to save oauth token data",
+      default: "access_token",
     },
   ],
   hooks: {
@@ -534,36 +535,36 @@ function createManifest({ version, platform }) {
 
   const isTV = R.includes(platform, tvPlatforms);
 
-  custom_configuration_fields = withFallback(
-    url_custom_configuration_fields,
-    basePlatform
-  ).concat(baseManifest.custom_configuration_fields);
+  custom_configuration_fields = baseManifest.custom_configuration_fields;
 
-  custom_configuration_fields.push({
-    group: true,
-    label: "Debug",
-    tooltip: "Only for developers",
-    folded: true,
-    fields: [
-      {
-        type: "tag_select",
-        key: "force_authentication_on_all",
-        tooltip_text:
-          "If On all video entries will be marked as required login",
-        options: [
-          {
-            text: "On",
-            value: "on",
-          },
-          {
-            text: "Off",
-            value: "off",
-          },
-        ],
-        initial_value: "off",
-      },
-    ],
-  });
+  custom_configuration_fields.push(
+    ...withFallback(url_custom_configuration_fields, basePlatform),
+    {
+      group: true,
+      label: "Debug",
+      tooltip: "Only for developers",
+      folded: true,
+      fields: [
+        {
+          type: "tag_select",
+          key: "force_authentication_on_all",
+          tooltip_text:
+            "If On all video entries will be marked as required login",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          initial_value: "off",
+        },
+      ],
+    }
+  );
   return {
     ...baseManifest,
     platform,
