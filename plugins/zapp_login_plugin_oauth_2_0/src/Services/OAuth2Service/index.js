@@ -1,5 +1,4 @@
 import { authorize, refresh, revoke } from "react-native-app-auth";
-import { Linking } from "react-native";
 
 import {
   saveKeychainData,
@@ -66,7 +65,6 @@ export async function refreshService(
         .setMessage(`refreshService: Success`)
         .addData({
           oauth_config: oAuthConfig,
-          refresh_token: refreshToken,
           result,
           session_storage_key,
         })
@@ -79,7 +77,6 @@ export async function refreshService(
       .setMessage(`refreshService: oAuthConfig or refreshToken not exist`)
       .addData({
         oauth_config: oAuthConfig,
-        refresh_token: refreshToken,
         session_storage_key,
       })
       .send();
@@ -93,7 +90,6 @@ export async function refreshService(
       .setMessage(`refreshService: Error`)
       .addData({
         oauth_config: oAuthConfig,
-        refresh_token: refreshToken,
         error,
         session_storage_key,
       })
@@ -142,7 +138,6 @@ export async function revokeService(oAuthConfig, session_storage_key) {
       .addData({
         oauth_config: oAuthConfig,
         token_to_revoke: tokenToRevoke,
-        data,
         session_storage_key,
       })
       .send();
@@ -178,10 +173,7 @@ export async function checkUserAuthorization(oAuthConfig, session_storage_key) {
           .setMessage(`checkUserAuthorization: Is user authorized: true`)
           .addData({
             oauth_config: oAuthConfig,
-            id_token: idToken,
             access_token_expiration_date: accessTokenExpirationDate,
-            refresh_token: refreshToken,
-            data,
             is_authorized: true,
             session_storage_key,
           })
@@ -197,10 +189,8 @@ export async function checkUserAuthorization(oAuthConfig, session_storage_key) {
             )
             .addData({
               oauth_config: oAuthConfig,
-              id_token: idToken,
               access_token_expiration_date: accessTokenExpirationDate,
               refresh_token: refreshToken,
-              data,
               is_authorized: false,
               session_storage_key,
             })
@@ -220,10 +210,7 @@ export async function checkUserAuthorization(oAuthConfig, session_storage_key) {
             )
             .addData({
               oauth_config: oAuthConfig,
-              id_token: idToken,
               access_token_expiration_date: accessTokenExpirationDate,
-              refresh_token: refreshToken,
-              data,
               is_authorized: false,
               session_storage_key,
             })
@@ -247,7 +234,6 @@ export async function checkUserAuthorization(oAuthConfig, session_storage_key) {
           id_token: idToken,
           access_token_expiration_date: accessTokenExpirationDate,
           refresh_token: refreshToken,
-          data,
         })
         .send();
       return false;

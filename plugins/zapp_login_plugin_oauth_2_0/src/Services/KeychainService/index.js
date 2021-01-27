@@ -37,7 +37,6 @@ export async function saveKeychainData(
       .setLevel(XRayLogLevel.debug)
       .setMessage(`saveKeychainData: Success`)
       .addData({
-        data,
         namespace,
         auth_data_key: authDataKey,
         session_storage_key,
@@ -50,7 +49,6 @@ export async function saveKeychainData(
       .setLevel(XRayLogLevel.error)
       .setMessage(`saveKeychainData: Error`)
       .addData({
-        data,
         namespace,
         auth_data_key: authDataKey,
         error,
@@ -73,7 +71,6 @@ export async function loadKeychainData() {
       .setLevel(XRayLogLevel.debug)
       .setMessage(`loadKeychainData: Success`)
       .addData({
-        data,
         namespace,
         auth_data_key: authDataKey,
       })
@@ -86,7 +83,6 @@ export async function loadKeychainData() {
       .setMessage(`loadKeychainData: Error`)
       .addData({
         error,
-        data,
         namespace,
         auth_data_key: authDataKey,
       })
