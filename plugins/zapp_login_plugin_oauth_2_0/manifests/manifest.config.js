@@ -17,240 +17,7 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-  custom_configuration_fields: [
-    {
-      key: "provider_selector",
-      type: "select",
-      initial_value: "aws_cognito",
-      options: [
-        {
-          label: "AWS Cognito",
-          value: "aws_cognito",
-        },
-        {
-          label: "Other",
-          value: "other",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "clientId",
-      label: "Client ID",
-      tooltip_text: "REQUIRED: your client id on the auth server",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["aws_cognito", "other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "domainName",
-      label: "Domain Name",
-      tooltip_text: "REQUIRED: Domain name",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["aws_cognito"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
 
-    {
-      type: "text_input",
-      key: "issuer",
-      label: "Issuer",
-      tooltip_text:
-        "base URI of the authentication server. If no serviceConfiguration (below) is provided, issuer is a mandatory field, so that the configuration can be fetched from the issuer's OIDC discovery endpoint.",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "authorizationEndpoint",
-      label: "Authorization End Point",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth authorization endpoint",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "tokenEndpoint",
-      label: "Token End Point",
-      tooltip_text:
-        "REQUIRED: fully formed url to the OAuth token exchange endpoint",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "revocationEndpoint",
-      label: "Revocation End Point",
-      tooltip_text:
-        "Fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "registrationEndpoint",
-      label: "Registration End Point",
-      tooltip_text:
-        "Fully formed url to your OAuth/OpenID Connect registration endpoint. Only necessary for servers that require client registration.",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "clientSecret",
-      label: "Client Secret",
-      tooltip_text: "Client secret to pass to token exchange requests.",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "scopes",
-      label: "Scopes",
-      tooltip_text:
-        "The scopes for your token, e.g. ['email', 'offline_access']. Please add values comma seperated like email,offline_access",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "additionalParameters",
-      multiline: true,
-      label: "Additional Parameters",
-      tooltip_text:
-        "Additional parameters that will be passed in the authorization request. Must be string values! E.g. setting additionalParameters: { hello: 'world', foo: 'bar' } would add hello=world&foo=bar to the authorization request. Add in this feild data in json format",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "clientAuthMethod",
-      label: "Client Auth Method",
-      tooltip_text:
-        "ANDROID Client Authentication Method. Can be either basic (default) for Basic Authentication or post for HTTP POST body Authentication",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "checkbox",
-      key: "dangerouslyAllowInsecureHttpRequests",
-      label: "Dangerously Allow Insecure Http Requests",
-      tooltip_text:
-        "ANDROID whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
-      default: false,
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "checkbox",
-      key: "useNonce",
-      label: "Use Nonce",
-      tooltip_text:
-        "IOS (default: true) optionally allows not sending the nonce parameter, to support non-compliant providers",
-      default: true,
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "checkbox",
-      key: "usePKCE",
-      label: "Use PKCE",
-      tooltip_text:
-        "(default: true) optionally allows not sending the code_challenge parameter and skipping PKCE code verification, to support non-compliant providers.",
-      default: true,
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "checkbox",
-      key: "skipCodeExchange",
-      label: "Skip Code Exchange",
-      tooltip_text:
-        "(default: false) just return the authorization response, instead of automatically exchanging the authorization code. This is useful if this exchange needs to be done manually (not client-side)",
-      default: false,
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "session_storage_key",
-      label: "Session Storage Key",
-      tooltip_text:
-        "Session storage key that will be used to save oauth token data",
-      default: "access_token",
-    },
-  ],
   hooks: {
     fields: [
       {
@@ -535,9 +302,238 @@ function createManifest({ version, platform }) {
 
   const isTV = R.includes(platform, tvPlatforms);
 
-  custom_configuration_fields = baseManifest.custom_configuration_fields;
-
-  custom_configuration_fields.push(
+  const custom_configuration_fields = [
+    {
+      key: "provider_selector",
+      type: "select",
+      initial_value: "aws_cognito",
+      options: [
+        {
+          label: "AWS Cognito",
+          value: "aws_cognito",
+        },
+        {
+          label: "Other",
+          value: "other",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "clientId",
+      label: "Client ID",
+      tooltip_text: "REQUIRED: your client id on the auth server",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito", "other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "domainName",
+      label: "Domain Name",
+      tooltip_text: "REQUIRED: Domain name",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["aws_cognito"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "issuer",
+      label: "Issuer",
+      tooltip_text:
+        "base URI of the authentication server. If no serviceConfiguration (below) is provided, issuer is a mandatory field, so that the configuration can be fetched from the issuer's OIDC discovery endpoint.",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "authorizationEndpoint",
+      label: "Authorization End Point",
+      tooltip_text:
+        "REQUIRED: fully formed url to the OAuth authorization endpoint",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "tokenEndpoint",
+      label: "Token End Point",
+      tooltip_text:
+        "REQUIRED: fully formed url to the OAuth token exchange endpoint",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "revocationEndpoint",
+      label: "Revocation End Point",
+      tooltip_text:
+        "Fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "registrationEndpoint",
+      label: "Registration End Point",
+      tooltip_text:
+        "Fully formed url to your OAuth/OpenID Connect registration endpoint. Only necessary for servers that require client registration.",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "clientSecret",
+      label: "Client Secret",
+      tooltip_text: "Client secret to pass to token exchange requests.",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "scopes",
+      label: "Scopes",
+      tooltip_text:
+        "The scopes for your token, e.g. ['email', 'offline_access']. Please add values comma seperated like email,offline_access",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "additionalParameters",
+      multiline: true,
+      label: "Additional Parameters",
+      tooltip_text:
+        "Additional parameters that will be passed in the authorization request. Must be string values! E.g. setting additionalParameters: { hello: 'world', foo: 'bar' } would add hello=world&foo=bar to the authorization request. Add in this feild data in json format",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "clientAuthMethod",
+      label: "Client Auth Method",
+      tooltip_text:
+        "ANDROID Client Authentication Method. Can be either basic (default) for Basic Authentication or post for HTTP POST body Authentication",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "checkbox",
+      key: "dangerouslyAllowInsecureHttpRequests",
+      label: "Dangerously Allow Insecure Http Requests",
+      tooltip_text:
+        "ANDROID whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
+      default: false,
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "checkbox",
+      key: "useNonce",
+      label: "Use Nonce",
+      tooltip_text:
+        "IOS (default: true) optionally allows not sending the nonce parameter, to support non-compliant providers",
+      default: true,
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "checkbox",
+      key: "usePKCE",
+      label: "Use PKCE",
+      tooltip_text:
+        "(default: true) optionally allows not sending the code_challenge parameter and skipping PKCE code verification, to support non-compliant providers.",
+      default: true,
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "checkbox",
+      key: "skipCodeExchange",
+      label: "Skip Code Exchange",
+      tooltip_text:
+        "(default: false) just return the authorization response, instead of automatically exchanging the authorization code. This is useful if this exchange needs to be done manually (not client-side)",
+      default: false,
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "session_storage_key",
+      label: "Session Storage Key",
+      tooltip_text:
+        "Session storage key that will be used to save oauth token data",
+      default: "access_token",
+    },
     ...withFallback(url_custom_configuration_fields, basePlatform),
     {
       group: true,
@@ -563,8 +559,9 @@ function createManifest({ version, platform }) {
           initial_value: "off",
         },
       ],
-    }
-  );
+    },
+  ];
+
   return {
     ...baseManifest,
     platform,
