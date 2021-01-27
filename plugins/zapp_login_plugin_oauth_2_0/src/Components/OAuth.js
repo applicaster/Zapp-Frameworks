@@ -98,6 +98,9 @@ const OAuth = (props) => {
     const authenticationRequired =
       testEnvironmentEnabled === "on" || isAuthenticationRequired({ payload });
 
+    let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
+      is_video_entry: videoEntry,
+    });
     if (videoEntry && authenticationRequired === false) {
       event
         .setMessage(`Plugin finished work, authentication not required`)
@@ -107,16 +110,14 @@ const OAuth = (props) => {
         })
         .send();
       callback && callback({ success: true, error: null, payload: payload });
+      return;
     }
-    
+
     const authenticated = await checkUserAuthorization(
       oAuthConfig,
       session_storage_key
     );
 
-    let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
-      is_video_entry: videoEntry,
-    });
     if (videoEntry) {
       if (authenticated) {
         event
