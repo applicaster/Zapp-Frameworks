@@ -40,6 +40,7 @@ export async function authorizeService(oAuthConfig, session_storage_key) {
       .send();
     return true;
   } catch (error) {
+    await removeKeychainData(session_storage_key);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
@@ -85,6 +86,7 @@ export async function refreshService(
     return false;
   } catch (error) {
     console.log({ error });
+    await removeKeychainData(session_storage_key);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
@@ -111,7 +113,6 @@ export async function revokeService(oAuthConfig, session_storage_key) {
         includeBasicAuth: true,
         sendClientId: true,
       });
-      console.log("revoke complete", { result });
 
       logger
         .createEvent()

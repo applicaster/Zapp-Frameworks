@@ -93,19 +93,32 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    const authenticated = await checkUserAuthorization(
-      oAuthConfig,
-      session_storage_key
-    );
     const testEnvironmentEnabled =
       props?.configuration?.force_authentication_on_all || "off";
     const authenticationRequired =
       testEnvironmentEnabled === "on" || isAuthenticationRequired({ payload });
+
+    if (videoEntry && authenticationRequired === false) {
+      event
+        .setMessage(`Plugin finished work, authentication not required`)
+        .addData({
+          is_video_entry: true,
+          is_authentication_required: authenticationRequired,
+        })
+        .send();
+      callback && callback({ success: true, error: null, payload: payload });
+    }
+    
+    const authenticated = await checkUserAuthorization(
+      oAuthConfig,
+      session_storage_key
+    );
+
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
     if (videoEntry) {
-      if (authenticationRequired === false || authenticated) {
+      if (authenticated) {
         event
           .setMessage(`Plugin finished work`)
           .addData({
