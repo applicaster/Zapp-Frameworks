@@ -104,7 +104,6 @@ const OAuth = (props) => {
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
-
     if (videoEntry) {
       if (authenthicationRequired === false || authenticated) {
         event

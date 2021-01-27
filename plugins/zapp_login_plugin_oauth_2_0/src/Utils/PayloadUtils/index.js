@@ -26,7 +26,7 @@ export const isAuthenticationRequired = ({ payload }) => {
       `Payload entry is requires_authentication: ${requires_authentication}`
     )
     .send();
-  return requires_authentication;
+  return requires_authentication ? true : false;
 };
 
 export const isVideoEntry = (payload) => {
