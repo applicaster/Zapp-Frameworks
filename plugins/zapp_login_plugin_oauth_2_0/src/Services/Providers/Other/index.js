@@ -12,7 +12,7 @@ export const logger = createLogger({
   category: ProvidersCategories.OTHER,
 });
 
-export const other = {
+export const Other = {
   getConfig({ configuration }) {
     const issuer = getFieldOrNull({ key: "issuer", configuration });
     const authorizationEndpoint = getFieldOrNull({

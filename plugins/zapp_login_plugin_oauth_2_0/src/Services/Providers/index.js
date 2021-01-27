@@ -1,5 +1,5 @@
-import { awsCognito } from "./AWSCognito";
-import { other } from "./Other";
+import { AWSCognito } from "./AWSCognito";
+import { Other } from "./Other";
 
 export function getConfig({ configuration }) {
   const provider_selector = configuration?.provider_selector;
@@ -7,10 +7,10 @@ export function getConfig({ configuration }) {
   if (provider_selector) {
     switch (provider_selector) {
       case "aws_cognito":
-        return awsCognito.getConfig({ configuration });
+        return AWSCognito.getConfig({ configuration });
 
       case "other":
-        return other.getConfig({ configuration });
+        return Other.getConfig({ configuration });
 
       default:
         break;

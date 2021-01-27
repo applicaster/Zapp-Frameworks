@@ -11,7 +11,7 @@ export const logger = createLogger({
   category: ProvidersCategories.OAUTH_SERVICE,
 });
 
-export const awsConfig = {
+export const AWSCognito = {
   getConfig({ configuration }) {
     const clientId = configuration?.clientId;
     const redirectUrl = configuration?.redirectUrl;
