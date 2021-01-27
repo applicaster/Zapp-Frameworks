@@ -44,7 +44,7 @@ const stylesMobile = {
       type: "uploader",
       label: "Background Image",
       label_tooltip:
-        "Background image. Please use that can be centered in the different device screens",
+        "Background image. It is recommended to use an image that could be centered in the different screen sizes.",
     },
     {
       key: "background_color",
@@ -55,8 +55,8 @@ const stylesMobile = {
     {
       key: "client_logo",
       type: "uploader",
-      label: "Client Logo",
-      label_tooltip: "Client logo image. Dimension 200 x44.",
+      label: "Logo",
+      label_tooltip: "Logo image. Dimension 200x44 pixels.",
       placeholder: "W 200px x H 44px",
     },
     {
@@ -209,7 +209,7 @@ const url_custom_configuration_fields = {
       key: "redirectUrl",
       label: "Redirect URL",
       tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://'",
+        "REQUIRED: The url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://', and must be declared in the app settings.",
       default: "",
       conditional_fields: [
         {
@@ -225,7 +225,7 @@ const url_custom_configuration_fields = {
       key: "redirectUrl",
       label: "Redirect URL",
       tooltip_text:
-        "REQUIRED: the url that links back to your app with the auth code. Note: URL scheme must be app url scheme with prefix 'com.oauth2.': 'com.oauth2.myapp://'",
+        "REQUIRED: The url that links back to your app with the auth code. Note: URL scheme as to follow the app url scheme with prefix 'com.oauth2.': 'com.oauth2.myapp://'",
       default: "",
       conditional_fields: [
         {
@@ -322,7 +322,7 @@ function createManifest({ version, platform }) {
       type: "text_input",
       key: "clientId",
       label: "Client ID",
-      tooltip_text: "REQUIRED: your client id on the auth server",
+      tooltip_text: "REQUIRED: Client id on the auth server",
       default: "",
       conditional_fields: [
         {
@@ -349,7 +349,7 @@ function createManifest({ version, platform }) {
       key: "issuer",
       label: "Issuer",
       tooltip_text:
-        "base URI of the authentication server. If no serviceConfiguration (below) is provided, issuer is a mandatory field, so that the configuration can be fetched from the issuer's OIDC discovery endpoint.",
+        "Base URI of the authentication server. Issuer is a mandatory field in case you do not provide Authoriztion, Token and Revocation endpoints, so that the configuration can be fetched from the issuer's OIDC discovery endpoint.",
       default: "",
       conditional_fields: [
         {
@@ -361,9 +361,9 @@ function createManifest({ version, platform }) {
     {
       type: "text_input",
       key: "authorizationEndpoint",
-      label: "Authorization End Point",
+      label: "Authorization Endpoint",
       tooltip_text:
-        "REQUIRED: fully formed url to the OAuth authorization endpoint",
+        "REQUIRED: Fully formed url to the OAuth authorization endpoint",
       default: "",
       conditional_fields: [
         {
@@ -375,9 +375,9 @@ function createManifest({ version, platform }) {
     {
       type: "text_input",
       key: "tokenEndpoint",
-      label: "Token End Point",
+      label: "Token Endpoint",
       tooltip_text:
-        "REQUIRED: fully formed url to the OAuth token exchange endpoint",
+        "REQUIRED: Fully formed url to the OAuth token exchange endpoint",
       default: "",
       conditional_fields: [
         {
@@ -389,7 +389,7 @@ function createManifest({ version, platform }) {
     {
       type: "text_input",
       key: "revocationEndpoint",
-      label: "Revocation End Point",
+      label: "Revocation Endpoint",
       tooltip_text:
         "Fully formed url to the OAuth token revocation endpoint. If you want to be able to revoke a token and no issuer is specified, this field is mandatory.",
       default: "",
@@ -403,7 +403,7 @@ function createManifest({ version, platform }) {
     {
       type: "text_input",
       key: "registrationEndpoint",
-      label: "Registration End Point",
+      label: "Registration Endpoint",
       tooltip_text:
         "Fully formed url to your OAuth/OpenID Connect registration endpoint. Only necessary for servers that require client registration.",
       default: "",
@@ -418,7 +418,7 @@ function createManifest({ version, platform }) {
       type: "text_input",
       key: "clientSecret",
       label: "Client Secret",
-      tooltip_text: "Client secret to pass to token exchange requests.",
+      tooltip_text: "Client secret to pass to token exchange requests. It is recommended not to be used in side mobile apps. Please consult your autorization provider.",
       default: "",
       conditional_fields: [
         {
@@ -432,51 +432,8 @@ function createManifest({ version, platform }) {
       key: "scopes",
       label: "Scopes",
       tooltip_text:
-        "The scopes for your token, e.g. ['email', 'offline_access']. Please add values comma seperated like email,offline_access",
+        "The scopes for your token, use comma seperated like email,offline_access",
       default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "additionalParameters",
-      multiline: true,
-      label: "Additional Parameters",
-      tooltip_text:
-        "Additional parameters that will be passed in the authorization request. Must be string values! E.g. setting additionalParameters: { hello: 'world', foo: 'bar' } would add hello=world&foo=bar to the authorization request. Add in this feild data in json format",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "text_input",
-      key: "clientAuthMethod",
-      label: "Client Auth Method",
-      tooltip_text:
-        "ANDROID Client Authentication Method. Can be either basic (default) for Basic Authentication or post for HTTP POST body Authentication",
-      default: "",
-      conditional_fields: [
-        {
-          condition_value: ["other"],
-          key: "custom_configuration_fields/provider_selector",
-        },
-      ],
-    },
-    {
-      type: "checkbox",
-      key: "dangerouslyAllowInsecureHttpRequests",
-      label: "Dangerously Allow Insecure Http Requests",
-      tooltip_text:
-        "ANDROID whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
-      default: false,
       conditional_fields: [
         {
           condition_value: ["other"],
@@ -513,6 +470,49 @@ function createManifest({ version, platform }) {
       ],
     },
     {
+      type: "text_input",
+      key: "additionalParameters",
+      multiline: true,
+      label: "Additional Parameters",
+      tooltip_text:
+        "Additional parameters that will be passed in the authorization request. Must be string values. E.g. setting additionalParameters: { hello: 'world', foo: 'bar' } would add hello=world&foo=bar to the authorization request. Add in this field data in json format",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "text_input",
+      key: "clientAuthMethod",
+      label: "Client Auth Method",
+      tooltip_text:
+        "ANDROID ONLY: Client Authentication Method. Can be either basic (default) for Basic Authentication or post for HTTP POST body Authentication",
+      default: "",
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
+      type: "checkbox",
+      key: "dangerouslyAllowInsecureHttpRequests",
+      label: "Dangerously Allow Insecure Http Requests",
+      tooltip_text:
+        "ANDROID Only: whether to allow requests over plain HTTP or with self-signed SSL certificates. ⚠️ Can be useful for testing against local server, should not be used in production. This setting has no effect on iOS; to enable insecure HTTP requests, add a NSExceptionAllowsInsecureHTTPLoads exception to your App Transport Security settings.",
+      default: false,
+      conditional_fields: [
+        {
+          condition_value: ["other"],
+          key: "custom_configuration_fields/provider_selector",
+        },
+      ],
+    },
+    {
       type: "checkbox",
       key: "skipCodeExchange",
       label: "Skip Code Exchange",
@@ -531,21 +531,21 @@ function createManifest({ version, platform }) {
       key: "session_storage_key",
       label: "Session Storage Key",
       tooltip_text:
-        "Session storage key that will be used to save oauth token data",
+        "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
       default: "access_token",
     },
     ...withFallback(url_custom_configuration_fields, basePlatform),
     {
       group: true,
       label: "Debug",
-      tooltip: "Only for developers",
+      tooltip: "For development purposes",
       folded: true,
       fields: [
         {
           type: "tag_select",
           key: "force_authentication_on_all",
           tooltip_text:
-            "If On all video entries will be marked as required login",
+            "If On, all video entries will be marked as required login",
           options: [
             {
               text: "On",
