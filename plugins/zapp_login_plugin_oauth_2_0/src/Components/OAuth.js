@@ -98,9 +98,9 @@ const OAuth = (props) => {
       session_storage_key
     );
     const testEnvironmentEnabled =
-      props?.configuration?.force_authentication_on_all || false;
+      props?.configuration?.force_authentication_on_all || "off";
     const authenthicationRequired =
-      testEnvironmentEnabled === true || isAuthenticationRequired({ payload });
+      testEnvironmentEnabled === "on" || isAuthenticationRequired({ payload });
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
