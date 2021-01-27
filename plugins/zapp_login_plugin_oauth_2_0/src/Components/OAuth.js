@@ -99,20 +99,20 @@ const OAuth = (props) => {
     );
     const testEnvironmentEnabled =
       props?.configuration?.force_authentication_on_all || "off";
-    const authenthicationRequired =
+    const authenticationRequired =
       testEnvironmentEnabled === "on" || isAuthenticationRequired({ payload });
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
     if (videoEntry) {
-      if (authenthicationRequired === false || authenticated) {
+      if (authenticationRequired === false || authenticated) {
         event
           .setMessage(`Plugin finished work`)
           .addData({
             hook_type: HookTypeData.PLAYER_HOOK,
             is_video_entry: true,
             authenticated: authenticated,
-            is_authentication_required: authenthicationRequired,
+            is_authentication_required: authenticationRequired,
           })
           .send();
         callback && callback({ success: true, error: null, payload: payload });
