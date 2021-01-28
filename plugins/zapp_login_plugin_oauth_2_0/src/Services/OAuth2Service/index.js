@@ -1,4 +1,5 @@
 import { authorize, refresh, revoke } from "react-native-app-auth";
+
 import {
   saveKeychainData,
   loadKeychainData,
@@ -17,43 +18,13 @@ export const logger = createLogger({
   category: BaseCategories.OAUTH_SERVICE,
 });
 
-export function configFromPlugin(configuration) {
-  const clientId = configuration?.clientId;
-  const redirectUrl = configuration?.redirectUrl;
-  const domainName = configuration?.domainName;
-
-  if (clientId && redirectUrl && domainName) {
-    const oAuthConfig = {
-      clientId,
-      redirectUrl,
-      serviceConfiguration: {
-        authorizationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/authorize`,
-        tokenEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/token`,
-        revocationEndpoint: `https://${domainName}.auth.us-east-1.amazoncognito.com/oauth2/revoke`,
-      },
-    };
-    return oAuthConfig;
-  } else {
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.error)
-      .setMessage(
-        `configFromPlugin: Reuired keys not exist clientId, redirectUrl, domainName`
-      )
-      .addData({ configuration })
-      .send();
-
-    return null;
-  }
-}
-
-export async function authorizeService(oAuthConfig) {
+export async function authorizeService(oAuthConfig, session_storage_key) {
   if (!oAuthConfig) {
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(`authorizeService: OAuthConfig not exist`)
-      .addData({ oauth_config: oAuthConfig })
+      .addData({ oauth_config: oAuthConfig, session_storage_key })
       .send();
     return false;
   }
@@ -64,33 +35,38 @@ export async function authorizeService(oAuthConfig) {
       .createEvent()
       .setLevel(XRayLogLevel.debug)
       .setMessage(`authorizeService: Success`)
-      .addData({ oauth_config: oAuthConfig, result })
+      .addData({ oauth_config: oAuthConfig, result, session_storage_key })
       .send();
     return true;
   } catch (error) {
+    await removeKeychainData(session_storage_key);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(`authorizeService: Error`)
-      .addData({ oauth_config: oAuthConfig, error })
+      .addData({ oauth_config: oAuthConfig, error, session_storage_key })
       .send();
     return false;
   }
 }
 
-export async function refreshService(oAuthConfig, refreshToken) {
+export async function refreshService(
+  oAuthConfig,
+  refreshToken,
+  session_storage_key
+) {
   try {
     if (oAuthConfig && refreshToken) {
       const result = await refresh(oAuthConfig, { refreshToken });
-      saveKeychainData(result);
+      saveKeychainData(result, session_storage_key);
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)
         .setMessage(`refreshService: Success`)
         .addData({
           oauth_config: oAuthConfig,
-          refresh_token: refreshToken,
           result,
+          session_storage_key,
         })
         .send();
       return result;
@@ -101,36 +77,39 @@ export async function refreshService(oAuthConfig, refreshToken) {
       .setMessage(`refreshService: oAuthConfig or refreshToken not exist`)
       .addData({
         oauth_config: oAuthConfig,
-        refresh_token: refreshToken,
+        session_storage_key,
       })
       .send();
     return false;
   } catch (error) {
+    console.log({ error });
+    await removeKeychainData(session_storage_key);
     logger
       .createEvent()
       .setLevel(XRayLogLevel.error)
       .setMessage(`refreshService: Error`)
       .addData({
         oauth_config: oAuthConfig,
-        refresh_token: refreshToken,
         error,
+        session_storage_key,
       })
       .send();
     return false;
   }
 }
 
-export async function revokeService(oAuthConfig) {
+export async function revokeService(oAuthConfig, session_storage_key) {
   try {
     const data = await loadKeychainData();
     const tokenToRevoke = data?.accessToken;
+
     if (oAuthConfig && tokenToRevoke) {
-      await removeKeychainData();
       const result = await revoke(oAuthConfig, {
         tokenToRevoke,
         includeBasicAuth: true,
         sendClientId: true,
       });
+
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)
@@ -140,8 +119,16 @@ export async function revokeService(oAuthConfig) {
           data: data,
           token_to_revoke: tokenToRevoke,
           result,
+          session_storage_key,
         })
         .send();
+      await removeKeychainData(session_storage_key);
+
+      //TODO: In case logout we want to clear cache in the browser
+      // const url =
+      //   "https://applicaster-test.auth.us-east-1.amazoncognito.com/logout?client_id=3chiv791dnc9ljom3bi9aumvco&logout_uri=miami://oauth_test&response_type=code&state=STATE&scope=openid+profile+aws.cognito.signin.user.admin";
+      // Linking.openURL(url);
+
       return true;
     }
     logger
@@ -151,7 +138,7 @@ export async function revokeService(oAuthConfig) {
       .addData({
         oauth_config: oAuthConfig,
         token_to_revoke: tokenToRevoke,
-        data,
+        session_storage_key,
       })
       .send();
     return false;
@@ -162,16 +149,15 @@ export async function revokeService(oAuthConfig) {
       .setMessage(`revokeService: Error`)
       .addData({
         oauth_config: oAuthConfig,
-        token_to_revoke: tokenToRevoke,
-        data,
         error,
+        session_storage_key,
       })
       .send();
     return false;
   }
 }
 
-export async function checkUserAuthorization(oAuthConfig) {
+export async function checkUserAuthorization(oAuthConfig, session_storage_key) {
   try {
     let data = await loadKeychainData();
 
@@ -187,11 +173,9 @@ export async function checkUserAuthorization(oAuthConfig) {
           .setMessage(`checkUserAuthorization: Is user authorized: true`)
           .addData({
             oauth_config: oAuthConfig,
-            id_token: idToken,
             access_token_expiration_date: accessTokenExpirationDate,
-            refresh_token: refreshToken,
-            data,
             is_authorized: true,
+            session_storage_key,
           })
           .send();
         return true;
@@ -205,14 +189,17 @@ export async function checkUserAuthorization(oAuthConfig) {
             )
             .addData({
               oauth_config: oAuthConfig,
-              id_token: idToken,
               access_token_expiration_date: accessTokenExpirationDate,
               refresh_token: refreshToken,
-              data,
               is_authorized: false,
+              session_storage_key,
             })
             .send();
-          const result = await refreshService(oAuthConfig, refreshToken);
+          const result = await refreshService(
+            oAuthConfig,
+            refreshToken,
+            session_storage_key
+          );
           return result;
         } else {
           logger
@@ -223,14 +210,15 @@ export async function checkUserAuthorization(oAuthConfig) {
             )
             .addData({
               oauth_config: oAuthConfig,
-              id_token: idToken,
               access_token_expiration_date: accessTokenExpirationDate,
-              refresh_token: refreshToken,
-              data,
               is_authorized: false,
+              session_storage_key,
             })
             .send();
-          const result = await authorizeService(oAuthConfig);
+          const result = await authorizeService(
+            oAuthConfig,
+            session_storage_key
+          );
           return result;
         }
       }
@@ -246,7 +234,6 @@ export async function checkUserAuthorization(oAuthConfig) {
           id_token: idToken,
           access_token_expiration_date: accessTokenExpirationDate,
           refresh_token: refreshToken,
-          data,
         })
         .send();
       return false;

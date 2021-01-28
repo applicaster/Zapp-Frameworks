@@ -28,7 +28,6 @@ import {
   HookTypeData,
 } from "../Utils/Helpers";
 import {
-  configFromPlugin,
   authorizeService,
   revokeService,
   checkUserAuthorization,
@@ -43,6 +42,7 @@ import {
   XRayLogLevel,
   addContext,
 } from "../Services/LoggerService";
+import { getConfig } from "../Services/Providers";
 
 export const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -63,7 +63,9 @@ const OAuth = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-  const oAuthConfig = configFromPlugin(props?.configuration);
+  const oAuthConfig = getConfig({ configuration: props?.configuration });
+  const session_storage_key = props?.session_storage_key;
+
   const {
     logout_text,
     login_text,
@@ -91,24 +93,40 @@ const OAuth = (props) => {
 
   const setupEnvironment = React.useCallback(async () => {
     const videoEntry = isVideoEntry(payload);
-    const authenticated = await checkUserAuthorization(oAuthConfig);
     const testEnvironmentEnabled =
-      props?.configuration?.force_authentication_on_all || false;
-    const authenthicationRequired =
-      testEnvironmentEnabled === true || isAuthenticationRequired({ payload });
+      props?.configuration?.force_authentication_on_all || "off";
+    const authenticationRequired =
+      testEnvironmentEnabled === "on" || isAuthenticationRequired({ payload });
+
     let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
       is_video_entry: videoEntry,
     });
+    if (videoEntry && authenticationRequired === false) {
+      event
+        .setMessage(`Plugin finished work, authentication not required`)
+        .addData({
+          is_video_entry: true,
+          is_authentication_required: authenticationRequired,
+        })
+        .send();
+      callback && callback({ success: true, error: null, payload: payload });
+      return;
+    }
+
+    const authenticated = await checkUserAuthorization(
+      oAuthConfig,
+      session_storage_key
+    );
 
     if (videoEntry) {
-      if (authenthicationRequired === false || authenticated) {
+      if (authenticated) {
         event
           .setMessage(`Plugin finished work`)
           .addData({
             hook_type: HookTypeData.PLAYER_HOOK,
             is_video_entry: true,
             authenticated: authenticated,
-            is_authentication_required: authenthicationRequired,
+            is_authentication_required: authenticationRequired,
           })
           .send();
         callback && callback({ success: true, error: null, payload: payload });
@@ -162,8 +180,11 @@ const OAuth = (props) => {
   const onPressActionButton = React.useCallback(async () => {
     setLoading(true);
     if (isUserAuthenticated) {
-      const success = await revokeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization(oAuthConfig);
+      const success = await revokeService(oAuthConfig, session_storage_key);
+      const authenticated = await checkUserAuthorization(
+        oAuthConfig,
+        session_storage_key
+      );
 
       logger
         .createEvent()
@@ -178,8 +199,11 @@ const OAuth = (props) => {
       showAlertLogout(success, screenLocalizations);
       setIsUserAuthenticated(authenticated);
     } else {
-      const success = await authorizeService(oAuthConfig);
-      const authenticated = await checkUserAuthorization(oAuthConfig);
+      const success = await authorizeService(oAuthConfig, session_storage_key);
+      const authenticated = await checkUserAuthorization(
+        oAuthConfig,
+        session_storage_key
+      );
       logger
         .createEvent()
         .setLevel(XRayLogLevel.debug)
