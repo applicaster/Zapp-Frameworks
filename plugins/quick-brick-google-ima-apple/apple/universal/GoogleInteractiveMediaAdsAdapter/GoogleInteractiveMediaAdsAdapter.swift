@@ -40,6 +40,9 @@ import ZappCore
     var isPrerollAdLoading = false {
         didSet {
             showActivityIndicator(isPrerollAdLoading)
+            if isPrerollAdLoading {
+                pausePlayback()
+            }
         }
     }
     /// Player plugin instance that currently presented
