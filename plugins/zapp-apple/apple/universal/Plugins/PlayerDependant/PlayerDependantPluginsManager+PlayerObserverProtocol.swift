@@ -14,11 +14,11 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
                                         completion: @escaping (_ completion: Bool) -> Void) {
         var finishedProviderCount = 0
         guard let providers = providers(playerPlugin: player),
-            providers.count > 0 else {
+              providers.count > 0 else {
             completion(true)
             return
         }
-        
+
         providers.forEach { providerDict in
             let provider = providerDict.value
             if let provider = provider as? PlayerObserverProtocol {
@@ -52,6 +52,33 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
         }
     }
 
+    public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return false
+        }
+
+        unRegisterProviders(playerPlugin: player)
+        let dependantPlayerProviders = createPlayerDependantProviders(for: player)
+        if dependantPlayerProviders.count > 0 {
+            providers["\(player.hash)"] = dependantPlayerProviders
+        }
+
+        playerDidCreate(player: player)
+        var shouldContinuePlaying = false
+
+        if let providers = providers(playerPlugin: player) {
+            shouldContinuePlaying = true
+            providers.forEach { providerDict in
+                let provider = providerDict.value
+                if let provider = provider as? PlayerObserverProtocol {
+                    shouldContinuePlaying = provider.playerReadyToPlay(player: player)
+                }
+            }
+        }
+        return shouldContinuePlaying
+    }
+
     public func playerDidDismiss(player: PlayerProtocol) {
         if let providersForPlayer = providers(playerPlugin: player) {
             providersForPlayer.forEach { providerDict in
@@ -65,13 +92,5 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-
-        unRegisterProviders(playerPlugin: player)
-
-        let dependantPlayerProviders = createPlayerDependantProviders(for: player)
-
-        if dependantPlayerProviders.count > 0 {
-            providers["\(player.hash)"] = dependantPlayerProviders
-        }
     }
 }
