@@ -37,9 +37,13 @@ import ZappCore
     var activityIndicator = UIActivityIndicatorView()
     var isVMAPAdsCompleted = false
     var isPlaybackPaused = false
+    var shouldPresentActivityIndicator = false
     var isPrerollAdLoading = false {
         didSet {
-            showActivityIndicator(isPrerollAdLoading)
+            shouldPresentActivityIndicator = isPrerollAdLoading
+            if isPrerollAdLoading {
+                pausePlayback()
+            }
         }
     }
     /// Player plugin instance that currently presented
@@ -128,12 +132,18 @@ import ZappCore
         isPlaybackPaused = false
         playerPlugin?.pluggablePlayerResume()
         
+        //removing the activity indicator on separate thread after resuming the playback to avoid blickering of info overlay
+        DispatchQueue.main.async {
+            self.updatePresentationOfActivityIndicator()
+        }
+
         if adDisplayContainer == adDisplayContainer {
             adDisplayContainer?.adContainer.accessibilityIdentifier = ""
         }
     }
     
     func pausePlayback() {
+        updatePresentationOfActivityIndicator()
         isPlaybackPaused = true
         playerPlugin?.pluggablePlayerPause()
         
@@ -142,8 +152,8 @@ import ZappCore
         }
     }
     
-    func showActivityIndicator(_ show: Bool) {
-        if show {
+    func updatePresentationOfActivityIndicator() {
+        if shouldPresentActivityIndicator {
             guard let contentOverlay = (playerPlugin?.pluginPlayerViewController as? AVPlayerViewController)?.contentOverlayView else {
                 return
             }
