@@ -67,11 +67,12 @@ import ZappCore
 
     var urlTagData: GoogleUrlTagData?
 
-    func prepareGoogleIMA() {
+    func prepareGoogleIMA() -> Bool {
+        var completed = true
         isPlaybackPaused = false
         isVMAPAdsCompleted = false
         isPrerollAdLoading = false
-        guard let player = avPlayer else { return }
+        guard let player = avPlayer else { return completed }
         addNotificationsObserver()
         addRateObserver()
         
@@ -81,13 +82,14 @@ import ZappCore
 
         if let urlToPresent = urlTagData?.prerollUrlString() {
             isPrerollAdLoading = true
-            
+            completed = false
             GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization {
                 DispatchQueue.main.async {
                     self.requestAd(adUrl: urlToPresent)
                 }
             }
         }
+        return completed
     }
 
     func addNotificationsObserver() {

@@ -10,6 +10,10 @@ import Foundation
 import ZappCore
 
 extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
+    public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        return prepareGoogleIMA()
+    }
+    
     public func playerDidFinishPlayItem(player: PlayerProtocol,
                                         completion: @escaping (_ finished: Bool) -> Void) {
         adsLoader?.contentComplete()
@@ -64,6 +68,6 @@ extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        prepareGoogleIMA()
+
     }
 }
