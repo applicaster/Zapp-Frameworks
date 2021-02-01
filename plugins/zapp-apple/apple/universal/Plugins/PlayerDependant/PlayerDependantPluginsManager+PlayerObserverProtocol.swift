@@ -53,19 +53,16 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     }
 
     public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        // provider can prevent from starting to play when player is ready to play
+        // provider should call player.pluggablePlayerResume() when finished its operations
+        var shouldContinuePlaying = false
+
         // should continue on first iteration when providers are not yet created
         guard providers(playerPlugin: player) == nil else {
             return false
         }
 
-        unRegisterProviders(playerPlugin: player)
-        let dependantPlayerProviders = createPlayerDependantProviders(for: player)
-        if dependantPlayerProviders.count > 0 {
-            providers["\(player.hash)"] = dependantPlayerProviders
-        }
-
-        playerDidCreate(player: player)
-        var shouldContinuePlaying = false
+        createProvidersIfNeeded(with: player)
 
         if let providers = providers(playerPlugin: player) {
             shouldContinuePlaying = true
@@ -92,5 +89,21 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
+        createProvidersIfNeeded(with: player)
+    }
+
+    private func createProvidersIfNeeded(with player: PlayerProtocol) {
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return
+        }
+
+        unRegisterProviders(playerPlugin: player)
+
+        let dependantPlayerProviders = createPlayerDependantProviders(for: player)
+
+        if dependantPlayerProviders.count > 0 {
+            providers["\(player.hash)"] = dependantPlayerProviders
+        }
     }
 }
