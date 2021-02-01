@@ -58,6 +58,23 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
     lazy var isDebugEnvironment: Bool = {
         FacadeConnector.connector?.applicationData?.isDebugEnvironment() ?? true
     }()
+    
+    lazy var defaultContext: [String: String] = {
+        let na = "N/A"
+        return [
+            "App name": FacadeConnector.connector?.storage?.sessionStorageValue(for: "app_name", namespace: nil) ?? na,
+            "App version": FacadeConnector.connector?.storage?.sessionStorageValue(for: "version_name", namespace: nil) ?? na,
+            "App version build": FacadeConnector.connector?.storage?.sessionStorageValue(for: "build_version", namespace: nil) ?? na,
+            "SDK version": FacadeConnector.connector?.storage?.sessionStorageValue(for: "sdk_version", namespace: nil) ?? na,
+            "Platform": FacadeConnector.connector?.storage?.sessionStorageValue(for: "platform", namespace: nil) ?? na,
+            "Platform version": "\(UIDevice.current.systemVersion)",
+            "Device model": FacadeConnector.connector?.storage?.sessionStorageValue(for: "device_model", namespace: nil) ?? na,
+            "Device type": FacadeConnector.connector?.storage?.sessionStorageValue(for: "device_make", namespace: nil) ?? na,
+            "Language": FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) ?? na,
+            "Region": FacadeConnector.connector?.storage?.sessionStorageValue(for: "regionCode", namespace: nil) ?? na,
+            "IsRTL": FacadeConnector.connector?.storage?.sessionStorageValue(for: "is_rtl", namespace: nil) ?? na,
+        ]
+    }()
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((Bool) -> Void)?) {
@@ -92,7 +109,7 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
         
         Reporter.setDefaultData(emails: emailsForShare,
                                 logFileSinkDelegate: self,
-                                contexts: [:])
+                                contexts: defaultContext)
 
         prepareSettings()
         QuickBrickXray.sharedInstance = self
