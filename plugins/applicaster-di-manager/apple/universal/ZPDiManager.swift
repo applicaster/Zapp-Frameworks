@@ -19,11 +19,14 @@ import ZappCore
         case NoDataReturnedFromServer = "Error: no data"
         case JsonParsingFailed = "Error: conversion from JSON failed"
         case NoJWTvalue = "Error: JWT param can not be fetched"
+        case NoCountryCodevalue = "Error: Country code param can not be fetched"
     }
 
     struct Params {
         static let jwtJsonKey = "jwt"
+        static let countryCodeKey = "country-code"
         static let jwtStorageKey = "signedDeviceInfoToken"
+        static let countryCodeStorageKey = "country_code"
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -54,30 +57,38 @@ import ZappCore
         }
 
         URLSession.shared.dataTask(with: url) { data, _, error in
-            do {
-                guard let data = data else {
-                    throw DiError.NoDataReturnedFromServer
-                }
+            DispatchQueue.main.async {
+                do {
+                    guard let data = data else {
+                        throw DiError.NoDataReturnedFromServer
+                    }
 
-                guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    throw DiError.JsonParsingFailed
-                }
+                    guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                        throw DiError.JsonParsingFailed
+                    }
 
-                guard let jwt = json[Params.jwtJsonKey] as? String else {
-                    throw DiError.NoJWTvalue
-                }
-                _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: Params.jwtStorageKey,
-                                                                             value: jwt,
-                                                                             namespace: nil)
+                    guard let jwt = json[Params.jwtJsonKey] as? String else {
+                        throw DiError.NoJWTvalue
+                    }
+                    _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.jwtStorageKey,
+                                                                                   value: jwt,
+                                                                                   namespace: nil)
 
-            } catch let error as DiError {
-                self.logger?.errorLog(message: "DI Server error",
-                                      data: ["url": urlString,
-                                             "error": error.localizedDescription])
-            } catch let error as NSError {
-                self.logger?.errorLog(message: "DI Server error",
-                                      data: ["url": urlString,
-                                             "error": error.localizedDescription])
+                    guard let countryCode = json[Params.countryCodeKey] as? String else {
+                        throw DiError.NoCountryCodevalue
+                    }
+                    _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.countryCodeStorageKey,
+                                                                                   value: countryCode,
+                                                                                   namespace: nil)
+                } catch let error as DiError {
+                    self.logger?.errorLog(message: "DI Server error",
+                                          data: ["url": urlString,
+                                                 "error": error.localizedDescription])
+                } catch let error as NSError {
+                    self.logger?.errorLog(message: "DI Server error",
+                                          data: ["url": urlString,
+                                                 "error": error.localizedDescription])
+                }
             }
 
             if self.shouldWaitForCompletion {
