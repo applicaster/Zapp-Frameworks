@@ -41,5 +41,5 @@ import Foundation
     /// Player instance is ready to play
     ///
     ///  - player: instance of the player that conform PlayerProtocol protocol
-    func playerReadyToPlay(player: PlayerProtocol) -> Bool
+    @objc optional func playerReadyToPlay(player: PlayerProtocol) -> Bool
 }

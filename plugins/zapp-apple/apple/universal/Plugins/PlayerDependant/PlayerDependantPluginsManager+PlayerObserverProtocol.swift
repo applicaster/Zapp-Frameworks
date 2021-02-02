@@ -69,7 +69,7 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
             providers.forEach { providerDict in
                 let provider = providerDict.value
                 if let provider = provider as? PlayerObserverProtocol {
-                    shouldContinuePlaying = provider.playerReadyToPlay(player: player)
+                    shouldContinuePlaying = provider.playerReadyToPlay?(player: player) ?? true
                 }
             }
         }
