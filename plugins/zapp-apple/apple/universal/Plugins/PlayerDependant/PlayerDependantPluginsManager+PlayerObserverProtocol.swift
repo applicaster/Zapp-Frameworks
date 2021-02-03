@@ -14,11 +14,11 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
                                         completion: @escaping (_ completion: Bool) -> Void) {
         var finishedProviderCount = 0
         guard let providers = providers(playerPlugin: player),
-            providers.count > 0 else {
+              providers.count > 0 else {
             completion(true)
             return
         }
-        
+
         providers.forEach { providerDict in
             let provider = providerDict.value
             if let provider = provider as? PlayerObserverProtocol {
@@ -52,6 +52,30 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
         }
     }
 
+    public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        // provider can prevent from starting to play when player is ready to play
+        // provider should call player.pluggablePlayerResume() when finished its operations
+        var shouldContinuePlaying = false
+
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return false
+        }
+
+        createProvidersIfNeeded(with: player)
+
+        if let providers = providers(playerPlugin: player) {
+            shouldContinuePlaying = true
+            providers.forEach { providerDict in
+                let provider = providerDict.value
+                if let provider = provider as? PlayerObserverProtocol {
+                    shouldContinuePlaying = provider.playerReadyToPlay?(player: player) ?? true
+                }
+            }
+        }
+        return shouldContinuePlaying
+    }
+
     public func playerDidDismiss(player: PlayerProtocol) {
         if let providersForPlayer = providers(playerPlugin: player) {
             providersForPlayer.forEach { providerDict in
@@ -65,6 +89,14 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
+        createProvidersIfNeeded(with: player)
+    }
+
+    private func createProvidersIfNeeded(with player: PlayerProtocol) {
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return
+        }
 
         unRegisterProviders(playerPlugin: player)
 

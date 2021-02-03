@@ -37,4 +37,9 @@ import Foundation
     func playerProgressUpdate(player: PlayerProtocol,
                               currentTime: TimeInterval,
                               duration: TimeInterval)
+
+    /// Player instance is ready to play
+    ///
+    ///  - player: instance of the player that conform PlayerProtocol protocol
+    @objc optional func playerReadyToPlay(player: PlayerProtocol) -> Bool
 }
