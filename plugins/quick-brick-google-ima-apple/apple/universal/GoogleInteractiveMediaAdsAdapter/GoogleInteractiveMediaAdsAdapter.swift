@@ -39,7 +39,7 @@ import ZappCore
     var isPlaybackPaused = false
     var isPrerollAdLoading = false {
         didSet {
-            showActivityIndicator(isPrerollAdLoading)
+            updatePresentationOfActivityIndicatorIfNeeded()
         }
     }
 
@@ -145,20 +145,29 @@ import ZappCore
         }
     }
 
-    func showActivityIndicator(_ show: Bool) {
-        if show {
-            guard let contentOverlay = (playerPlugin?.pluginPlayerViewController as? AVPlayerViewController)?.contentOverlayView else {
-                return
-            }
-            contentOverlay.addSubview(activityIndicator)
-            activityIndicator.startAnimating()
+    func updatePresentationOfActivityIndicatorIfNeeded() {
+        if isPrerollAdLoading {
             activityIndicator.color = .gray
             activityIndicator.backgroundColor = .black
-            activityIndicator.widthAnchor.constraint(equalTo: contentOverlay.widthAnchor, multiplier: 1.0).isActive = true
-            activityIndicator.heightAnchor.constraint(equalTo: contentOverlay.heightAnchor, multiplier: 1.0).isActive = true
-            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            
+            if let contentOverlay = (self.playerPlugin?.pluginPlayerViewController as? AVPlayerViewController)?.contentOverlayView,
+               self.activityIndicator.superview == nil {
+                contentOverlay.addSubview(self.activityIndicator)
+                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+                activityIndicator.widthAnchor.constraint(equalTo: contentOverlay.widthAnchor, multiplier: 1.0).isActive = true
+                activityIndicator.heightAnchor.constraint(equalTo: contentOverlay.heightAnchor, multiplier: 1.0).isActive = true
+                activityIndicator.startAnimating()
+            }
+            else if let playerView = self.playerPlugin as? UIView,
+                    let playerLayer = playerView.layer.sublayers?.first(where: { $0 is AVPlayerLayer}) {
+                activityIndicator.frame = playerLayer.bounds
+                playerLayer.addSublayer(activityIndicator.layer)
+                activityIndicator.startAnimating()
+            }
+
         } else {
-            activityIndicator.removeFromSuperview()
+            self.activityIndicator.removeFromSuperview()
+            self.activityIndicator.layer.removeFromSuperlayer()
         }
     }
 

@@ -68,5 +68,6 @@ extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
+        updatePresentationOfActivityIndicatorIfNeeded()
     }
 }
