@@ -54,7 +54,6 @@ import XrayLogger
                 //add provider if created or found in already created instances
                 if let provider = provider {
                     provider.playerPlugin = player
-                    provider.playerDidCreate(player: player)
                     retVal[pluginModel.identifier] = provider
                 }
             }
