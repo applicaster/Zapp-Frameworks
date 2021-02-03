@@ -55,17 +55,16 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
         // provider can prevent from starting to play when player is ready to play
         // provider should call player.pluggablePlayerResume() when finished its operations
-        var shouldContinuePlaying = false
+        var shouldContinuePlaying = true
 
         // should continue on first iteration when providers are not yet created
         guard providers(playerPlugin: player) == nil else {
-            return false
+            return shouldContinuePlaying
         }
 
         createProvidersIfNeeded(with: player)
 
         if let providers = providers(playerPlugin: player) {
-            shouldContinuePlaying = true
             providers.forEach { providerDict in
                 let provider = providerDict.value
                 if let provider = provider as? PlayerObserverProtocol {
