@@ -48,13 +48,13 @@
   ],
   "identifier": "di_manager_call",
   "npm_dependencies": [
-    "@applicaster/applicaster-di-manager@0.3.0"
+    "@applicaster/applicaster-di-manager@0.3.1"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.3.0",
+  "manifest_version": "0.3.1",
   "extra_dependencies": [
     {
       "ZappDiManager": ":path => './node_modules/@applicaster/applicaster-di-manager/apple/ZappDiManager.podspec'"
