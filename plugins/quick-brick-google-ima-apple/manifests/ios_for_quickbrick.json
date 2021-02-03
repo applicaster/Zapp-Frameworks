@@ -28,11 +28,11 @@
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6"
   ],
-  "min_zapp_sdk": "2.0.2-Dev",
+  "min_zapp_sdk": "4.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "npm_dependencies": [
-    "@applicaster/quick-brick-google-ima-apple@1.0.2"
+    "@applicaster/quick-brick-google-ima-apple@1.1.0"
   ],
   "identifier": "zapp_google_interactive_media_ads",
   "targets": [
@@ -81,8 +81,8 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "1.0.2",
-  "dependency_version": "1.0.2",
+  "manifest_version": "1.1.0",
+  "dependency_version": "1.1.0",
   "extra_dependencies": [
     {
       "ZappGoogleInteractiveMediaAds": ":path => './node_modules/@applicaster/quick-brick-google-ima-apple/apple/ZappGoogleInteractiveMediaAds.podspec'"
