@@ -37,15 +37,12 @@ import ZappCore
     var activityIndicator = UIActivityIndicatorView()
     var isVMAPAdsCompleted = false
     var isPlaybackPaused = false
-    var shouldPresentActivityIndicator = false
     var isPrerollAdLoading = false {
         didSet {
-            shouldPresentActivityIndicator = isPrerollAdLoading
-            if isPrerollAdLoading {
-                pausePlayback()
-            }
+            showActivityIndicator(isPrerollAdLoading)
         }
     }
+
     /// Player plugin instance that currently presented
     public weak var playerPlugin: PlayerProtocol?
     var postrollCompletion: ((_ finished: Bool) -> Void)?
@@ -60,9 +57,9 @@ import ZappCore
 
     /// Main point of interaction with the SDK. Created by the SDK as the result of an ad request.
     internal var adsManager: IMAAdsManager?
-    
+
     internal var adDisplayContainer: IMAAdDisplayContainer?
-    
+
     internal var advAccessibilityIdentifier: String?
 
     var avPlayer: AVPlayer? {
@@ -71,89 +68,85 @@ import ZappCore
 
     var urlTagData: GoogleUrlTagData?
 
-    func prepareGoogleIMA() {
+    func prepareGoogleIMA() -> Bool {
+        var completed = true
         isPlaybackPaused = false
         isVMAPAdsCompleted = false
         isPrerollAdLoading = false
-        guard let player = avPlayer else { return }
+        guard let player = avPlayer else { return completed }
         addNotificationsObserver()
         addRateObserver()
-        
+
         urlTagData = GoogleUrlTagData(entry: playerPlugin?.entry,
                                       pluginParams: configurationJSON)
         contentPlayhead = IMAAVPlayerContentPlayhead(avPlayer: player)
 
         if let urlToPresent = urlTagData?.prerollUrlString() {
             isPrerollAdLoading = true
-            
+            completed = false
             GoogleInteractiveMediaAdsAdapterTrackingIdentifier.requestTrackingAuthorization {
                 DispatchQueue.main.async {
                     self.requestAd(adUrl: urlToPresent)
                 }
             }
         }
+        return completed
     }
 
     func addNotificationsObserver() {
         let defaultCenter = NotificationCenter.default
-        
+
         defaultCenter.addObserver(self,
-                                  selector: #selector(self.applicationWillResignActive(notification:)),
+                                  selector: #selector(applicationWillResignActive(notification:)),
                                   name: UIApplication.willResignActiveNotification,
                                   object: nil)
-        
+
         defaultCenter.addObserver(self,
-                                  selector: #selector(self.applicationDidBecomeActive(notification:)),
+                                  selector: #selector(applicationDidBecomeActive(notification:)),
                                   name: UIApplication.didBecomeActiveNotification,
                                   object: nil)
     }
-    
-    @objc func applicationWillResignActive(notification:Notification) {
+
+    @objc func applicationWillResignActive(notification: Notification) {
         adsManager?.pause()
     }
-    
-    @objc func applicationDidBecomeActive(notification:Notification) {
+
+    @objc func applicationDidBecomeActive(notification: Notification) {
         adsManager?.resume()
     }
 
     func addRateObserver() {
         avPlayer?.addObserver(self, forKeyPath: MediaAdsConstants.playerPlaybackRate, options: NSKeyValueObservingOptions.new, context: nil)
     }
-    
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == MediaAdsConstants.playerPlaybackRate {
             if let player = avPlayer, player.rate > 0 && isPlaybackPaused {
                 avPlayer?.pause()
             }
         }
     }
-    
+
     func resumePlayback() {
         isPlaybackPaused = false
         playerPlugin?.pluggablePlayerResume()
-        
-        //removing the activity indicator after resuming the playback to avoid blickering of info overlay
-        DispatchQueue.main.async {
-            self.updatePresentationOfActivityIndicator()
-        }
 
         if adDisplayContainer == adDisplayContainer {
             adDisplayContainer?.adContainer.accessibilityIdentifier = ""
         }
     }
-    
+
     func pausePlayback() {
-        updatePresentationOfActivityIndicator()
         isPlaybackPaused = true
         playerPlugin?.pluggablePlayerPause()
-        
+
         if adDisplayContainer == adDisplayContainer {
             adDisplayContainer?.adContainer.accessibilityIdentifier = advAccessibilityIdentifier
         }
     }
-    
-    func updatePresentationOfActivityIndicator() {
-        if shouldPresentActivityIndicator {
+
+    func showActivityIndicator(_ show: Bool) {
+        if show {
             guard let contentOverlay = (playerPlugin?.pluginPlayerViewController as? AVPlayerViewController)?.contentOverlayView else {
                 return
             }
@@ -168,7 +161,7 @@ import ZappCore
             activityIndicator.removeFromSuperview()
         }
     }
-    
+
     func setupAdsLoader() {
         let settings = IMASettings()
         settings.enableDebugMode = false
@@ -184,14 +177,13 @@ import ZappCore
         setupAdsLoader()
 
         #if os(tvOS)
-        adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
-                                                   viewController: topViewController)
+            adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
+                                                       viewController: topViewController)
         #else
-        
 
-        adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
-                                                   viewController: topViewController,
-                                                   companionSlots: nil)
+            adDisplayContainer = IMAAdDisplayContainer(adContainer: topViewController.view,
+                                                       viewController: topViewController,
+                                                       companionSlots: nil)
         #endif
         if let request = IMAAdsRequest(adTagUrl: adUrl,
                                        adDisplayContainer: adDisplayContainer,
@@ -199,7 +191,7 @@ import ZappCore
                                        userContext: nil) {
             adRequest = request
             adsLoader?.requestAds(with: adRequest)
-            
+
             // Storing accessibility identifier for UI automation tests needs
             advAccessibilityIdentifier = adUrl
         }

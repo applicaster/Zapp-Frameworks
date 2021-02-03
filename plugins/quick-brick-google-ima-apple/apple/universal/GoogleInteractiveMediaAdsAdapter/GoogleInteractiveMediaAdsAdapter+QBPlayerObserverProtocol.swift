@@ -10,6 +10,10 @@ import Foundation
 import ZappCore
 
 extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
+    public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        return prepareGoogleIMA()
+    }
+
     public func playerDidFinishPlayItem(player: PlayerProtocol,
                                         completion: @escaping (_ finished: Bool) -> Void) {
         adsLoader?.contentComplete()
@@ -42,12 +46,12 @@ extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
             requestAd(adUrl: postrollUrl)
         }
     }
-    
+
     public func playerProgressUpdate(player: PlayerProtocol,
                                      currentTime: TimeInterval,
                                      duration: TimeInterval) {
         if let currentVideoTime = playerPlugin?.playbackPosition(),
-            let url = urlTagData?.requestMiddroll(currentVideoTime: currentVideoTime) {
+           let url = urlTagData?.requestMiddroll(currentVideoTime: currentVideoTime) {
             requestAd(adUrl: url)
         }
     }
@@ -64,6 +68,5 @@ extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        prepareGoogleIMA()
     }
 }
