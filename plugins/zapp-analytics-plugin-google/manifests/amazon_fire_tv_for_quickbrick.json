@@ -1,0 +1,59 @@
+{
+  "api": {
+    "class_name": "com.applicaster.analytics.google.GoogleAnalyticsAgent"
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Google Analytics",
+  "description": "Google Analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "2.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "key": "mobile_app_account_id",
+      "type": "text"
+    },
+    {
+      "key": "do_not_set_client_id",
+      "type": "checkbox",
+      "default": 0,
+      "tooltip_text": "Check this box if you want to prevent the Applicaster SDK from explicitly setting a client ID for the user. This prevents double-counting in cases where a plugin or another source may be setting a client ID as well."
+    },
+    {
+      "key": "anonymize_user_ip",
+      "type": "checkbox",
+      "default": 0
+    },
+    {
+      "key": "screen_views",
+      "type": "checkbox",
+      "default": 0
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "identifier": "google_analytics_android",
+  "platform": "amazon_fire_tv_for_quickbrick",
+  "manifest_version": "4.1.0",
+  "project_dependencies": [
+    {
+      "zapp-analytics-plugin-google": "node_modules/@applicaster/zapp-analytics-plugin-google/android"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-google@4.1.0"
+  ]
+}
