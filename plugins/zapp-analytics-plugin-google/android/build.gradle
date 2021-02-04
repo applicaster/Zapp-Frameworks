@@ -1,0 +1,76 @@
+import org.gradle.util.VersionNumber
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 28
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { // Applicaster
+        credentials {
+            username System.getenv("MAVEN_USERNAME")
+            password System.getenv("MAVEN_PASSWORD")
+        }
+        url 'https://dl.bintray.com/applicaster-ltd/maven'
+    }
+}
+
+def safeExtGet(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
+}
+
+dependencies {
+
+    // Check if an open SDK is defined - if not use the closed one.
+    // Applicaster SDK
+    def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '8.0.0')
+    def applicasterSDKPath = "com.applicaster:applicaster-android-sdk-core:$sdkVersion"
+
+    // Check if an open SDK is defined - if not use the closed one.
+    def devSDK = findProject(':applicaster-android-sdk')
+    if (devSDK != null) {
+        implementation (project(':applicaster-android-sdk'))
+    } else {
+        api(applicasterSDKPath)
+    }
+
+    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+
+}
