@@ -1,0 +1,6 @@
+framework module AgamaSDK {
+  umbrella header "AgamaSDK.h"
+
+  export *
+  module * { export * }
+}

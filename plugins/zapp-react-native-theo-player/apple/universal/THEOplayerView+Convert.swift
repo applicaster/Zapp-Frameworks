@@ -1,4 +1,5 @@
 import THEOplayerSDK
+import React
 
 @objc extension RCTConvert {
     @objc(TypedSource:)
