@@ -16,7 +16,7 @@ import java.util.List;
 public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
 
     private static final String RCT_MODULE_NAME = "THEOplayerViewManager";
-    private TheoPlayerViewManager theoPlayerViewManager;
+    private final TheoPlayerViewManager theoPlayerViewManager;
 
     TheoPlayerViewModule(ReactApplicationContext reactContext, TheoPlayerViewManager theoPlayerViewManager) {
         super(reactContext);

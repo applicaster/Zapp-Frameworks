@@ -1,38 +1,25 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: "com.android.library"
 
-buildscript {
-    ext {
-        buildToolsVersion = "28.0.3"
-        minSdkVersion = 21
-        compileSdkVersion = 28
-        targetSdkVersion = 28
-    }
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:3.4.2")
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        debug {
+        }
+        release {
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
     }
 }
 
-allprojects {
-    repositories {
-        mavenLocal()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url("$rootDir/../node_modules/react-native/android")
-        }
-        maven {
-            // Android JSC is installed from npm
-            url("$rootDir/../node_modules/jsc-android/dist")
-        }
-
-        google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
+dependencies {
+    implementation fileTree(dir: "./src/main/libs/", include: ["*.jar", "*.aar"])
+    implementation "com.facebook.react:react-native:+"
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "androidx.annotation:annotation:1.1.0"
 }
