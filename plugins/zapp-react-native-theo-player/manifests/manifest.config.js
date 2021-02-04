@@ -33,14 +33,20 @@ function createManifest({ version, platform }) {
 
   return manifest;
 }
+
 const api = {
   ios_for_quickbrick: {},
-  android_for_quickbrick: {},
+  android_for_quickbrick: {
+    class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
+    react_packages: [
+      "com.theoplayerreactnative.TheoPlayerPackage",
+    ],
+  },
 };
 
 const min_zapp_sdk = {
   ios_for_quickbrick: "3.0.0-Dev",
-  android_for_quickbrick: "20.0.0",
+  android_for_quickbrick: "3.0.0-dev",
 };
 
 const dependency_repository_url = {
@@ -50,18 +56,21 @@ const dependency_repository_url = {
 
 const project_dependencies = {
   ios_for_quickbrick: {},
-  android_for_quickbrick: {},
+  android_for_quickbrick: [
+    { "zapp-react-native-theo-player": "./quick_brick/node_modules/@applicaster/zapp-react-native-theo-player/android"},
+  ],
 };
 
 const npm_dependencies = {
-  ios_for_quickbrick: {},
-  android_for_quickbrick: {},
+  ios_for_quickbrick: [],
+  android_for_quickbrick: []
 };
 
 const custom_configuration_fields = {
   ios_for_quickbrick: [],
   android_for_quickbrick: [],
 };
+
 const extra_dependencies = {
   ios_for_quickbrick: [
     {
@@ -71,4 +80,5 @@ const extra_dependencies = {
   ],
   android_for_quickbrick: null,
 };
+
 module.exports = createManifest;
