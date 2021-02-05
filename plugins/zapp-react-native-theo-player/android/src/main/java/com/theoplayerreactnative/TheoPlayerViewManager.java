@@ -1,15 +1,16 @@
 package com.theoplayerreactnative;
 
-import android.util.Log;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -17,24 +18,18 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-
-import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.THEOplayerConfig;
-import com.theoplayer.android.api.event.EventListener;
-import com.theoplayer.android.api.event.player.PauseEvent;
-import com.theoplayer.android.api.event.player.PlayEvent;
+import com.theoplayer.android.api.THEOplayerView;
+import com.theoplayer.android.api.ads.AdsConfiguration;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
-import com.theoplayer.android.api.event.player.SeekedEvent;
-import com.theoplayer.android.api.event.player.PresentationModeChange;
+import com.theoplayer.android.api.message.MessageListener;
 import com.theoplayer.android.api.source.SourceDescription;
-import com.theoplayer.android.api.source.analytics.YouboraOptions;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
+import com.theoplayer.android.api.source.analytics.YouboraOptions;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -62,11 +57,13 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     THEOplayerView playerView;
 
     @Override
+    @NonNull
     public String getName() {
         return RCT_MODULE_NAME;
     }
 
     @Override
+    @NonNull
     protected THEOplayerView createViewInstance(final ThemedReactContext reactContext) {
         /*
           Example conviva usage, add account code & uncomment analytics config declaration, if you need
@@ -74,7 +71,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         */
         HashMap<String, String> customConvivaMetadata = new HashMap<>();
         //customConvivaMetadata.put("<KEY>", "<VALUE>");
-
 
          /*
           Example youbora usage, add account code & uncomment analytics config declaration
@@ -104,14 +100,15 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
           You can declarate in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
         */
         THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
-                // .googleIma(true)
-                // .analytics(youbora)
+                .ads(new AdsConfiguration.Builder().build())
+                //.analytics(youbora)
                 .jsPaths("file:///android_asset/js/theoplayer.js")
                 .cssPaths("file:///android_asset/css/theoplayer.css")
                 .build();
 
         playerView = new THEOplayerView(reactContext.getCurrentActivity(), playerConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        playerView.addJavaScriptMessageListener("FIRE", this::onJSEvent);
         playerView.evaluateJavaScript("init({player: player})", null);
 
         addPropertyChangeListeners(reactContext);
@@ -121,70 +118,59 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     }
 
     private void addPropertyChangeListeners(final ThemedReactContext reactContext) {
-        playerView.getPlayer().addEventListener(PlayerEventTypes.SEEKED, new EventListener<SeekedEvent>() {
-            @Override
-            public void handleEvent(final SeekedEvent seekedEvent) {
-                Log.d(TAG, "seeked native: " + seekedEvent);
-                WritableMap event = Arguments.createMap();
-                event.putDouble("currentTime", seekedEvent.getCurrentTime());
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        playerView.getId(),
-                        InternalAndGlobalEventPair.onSeek.internalEvent,
-                        event);
-            }
+        playerView.getPlayer().addEventListener(PlayerEventTypes.SEEKED, seekedEvent -> {
+            Log.d(TAG, "seeked native: " + seekedEvent);
+            WritableMap event = Arguments.createMap();
+            event.putDouble("currentTime", seekedEvent.getCurrentTime());
+            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                    playerView.getId(),
+                    InternalAndGlobalEventPair.onSeek.internalEvent,
+                    event);
         });
 
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, new EventListener<PlayEvent>() {
-            @Override
-            public void handleEvent(final PlayEvent playEvent) {
-                Log.d(TAG, "play native");
-                WritableMap event = Arguments.createMap();
+        playerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, playEvent -> {
+            Log.d(TAG, "play native");
+            WritableMap event = Arguments.createMap();
 
-                //local property change
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        playerView.getId(),
-                        InternalAndGlobalEventPair.onPlay.internalEvent,
-                        event);
-            }
+            //local property change
+            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                    playerView.getId(),
+                    InternalAndGlobalEventPair.onPlay.internalEvent,
+                    event);
         });
 
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PAUSE, new EventListener<PauseEvent>() {
-            @Override
-            public void handleEvent(final PauseEvent pauseEvent) {
-                Log.d(TAG, "pause native");
-                WritableMap event = Arguments.createMap();
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        playerView.getId(),
-                        InternalAndGlobalEventPair.onPause.internalEvent,
-                        event);
-            }
+        playerView.getPlayer().addEventListener(PlayerEventTypes.PAUSE, pauseEvent -> {
+            Log.d(TAG, "pause native");
+            WritableMap event = Arguments.createMap();
+            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                    playerView.getId(),
+                    InternalAndGlobalEventPair.onPause.internalEvent,
+                    event);
         });
 
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PRESENTATIONMODECHANGE, new EventListener<PresentationModeChange>() {
-            @Override
-            public void handleEvent(final PresentationModeChange presentationModeChangeEvent) {
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                reactContext.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                // Orientation detection
-                int orientation = reactContext.getResources().getConfiguration().orientation;
+        playerView.getPlayer().addEventListener(PlayerEventTypes.PRESENTATIONMODECHANGE, presentationModeChangeEvent -> {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            reactContext.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            // Orientation detection
+            int orientation = reactContext.getResources().getConfiguration().orientation;
 
-                if(playerView.getFullScreenManager().isFullScreen()) {
-                    /*
-                        If needed set additional functionality when fullscreen is on, examples below
-                    */
-                    //playerView.getPlayer().pause();
-                    //playerView.getPlayer().play();
-                } else {
-                    /*
-                        If needed set additional functionality when fullscreen is on, examples below
-                    */
-                    //playerView.getPlayer().pause();
-                    //playerView.getPlayer().play();
-                }
-
-                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                        .emit(InternalAndGlobalEventPair.onPresentationModeChange.internalEvent, playerView.getFullScreenManager().isFullScreen());
+            if(playerView.getFullScreenManager().isFullScreen()) {
+                /*
+                    If needed set additional functionality when fullscreen is on, examples below
+                */
+                //playerView.getPlayer().pause();
+                //playerView.getPlayer().play();
+            } else {
+                /*
+                    If needed set additional functionality when fullscreen is on, examples below
+                */
+                //playerView.getPlayer().pause();
+                //playerView.getPlayer().play();
             }
+
+            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(InternalAndGlobalEventPair.onPresentationModeChange.internalEvent,
+                            playerView.getFullScreenManager().isFullScreen());
         });
     }
 
@@ -206,30 +192,18 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         }
     }
 
+    private void onJSEvent(@NonNull String event) {
 
-    public Map getExportedCustomBubblingEventTypeConstants() {
-        return MapBuilder.builder()
-                .put(
-                        InternalAndGlobalEventPair.onSeek.internalEvent,
-                        MapBuilder.of(
-                                "phasedRegistrationNames",
-                                MapBuilder.of("bubbled", InternalAndGlobalEventPair.onSeek.globalEvent)))
-                .put(
-                        InternalAndGlobalEventPair.onPlay.internalEvent,
-                        MapBuilder.of(
-                                "phasedRegistrationNames",
-                                MapBuilder.of("bubbled", InternalAndGlobalEventPair.onPlay.globalEvent)))
-                .put(
-                        InternalAndGlobalEventPair.onPause.internalEvent,
-                        MapBuilder.of(
-                                "phasedRegistrationNames",
-                                MapBuilder.of("bubbled", InternalAndGlobalEventPair.onPause.globalEvent)))
-                .put(
-                        InternalAndGlobalEventPair.onPresentationModeChange.internalEvent,
-                        MapBuilder.of(
-                                "phasedRegistrationNames",
-                                MapBuilder.of("bubbled", InternalAndGlobalEventPair.onPresentationModeChange.globalEvent)))
-                .build();
+    }
+
+    public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+        MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+        for (InternalAndGlobalEventPair e : InternalAndGlobalEventPair.values())
+            builder.put(e.internalEvent,
+                    MapBuilder.of(
+                            "phasedRegistrationNames",
+                            MapBuilder.of("bubbled", e.globalEvent)));
+        return builder.build();
     }
 
     //lifecycle events

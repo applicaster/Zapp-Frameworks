@@ -2,6 +2,8 @@ package com.theoplayerreactnative;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -31,24 +33,24 @@ import java.util.concurrent.TimeUnit;
 public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
 
     //static
-    public static final String RCT_MODULE_NAME = "ReactNativeEventEmitterHelper";
+    private static final String RCT_MODULE_NAME = "ReactNativeEventEmitterHelper";
     private static final String TAG = ReactNativeEventEmitter.class.getSimpleName();
 
-    private class Events {
+    private static class Events {
         static final String DURATION_CHANGE = "durationchange";
         static final String TIME_UPDATE = "timeupdate";
         static final String PLAY = "play";
         //static final String PRESENTATIONMODECHANGE = "presentationmodechange";
     }
 
-    private TheoPlayerViewManager theoPlayerViewManager;
+    private final TheoPlayerViewManager theoPlayerViewManager;
 
     //event listener scheduling
-    private Set<String> lateInitEventListeners = Collections.synchronizedSet(new TreeSet<String>());
+    private final Set<String> lateInitEventListeners = Collections.synchronizedSet(new TreeSet<String>());
     private final ScheduledExecutorService eventListenerScheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture scheduledFutureTaskForEventRegistration;
 
-    protected HashMap<String, EventListener> listeners = new HashMap<String, EventListener>();
+    protected HashMap<String, EventListener> listeners = new HashMap<>();
 
     public ReactNativeEventEmitterHelper(ReactApplicationContext reactContext, TheoPlayerViewManager theoPlayerViewManager) {
         super(reactContext);
@@ -56,6 +58,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
     }
 
     @Override
+    @NonNull
     public String getName() {
         return RCT_MODULE_NAME;
     }
@@ -70,12 +73,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
         if (theoPlayerViewManager.playerView == null) {
             //if the view is null, the player is not yet ready, so store the event and reschedule the event listener registration
             lateInitEventListeners.add(event);
-            scheduledFutureTaskForEventRegistration = eventListenerScheduler.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    registerListenerForEvent(event);
-                }
-            }, 1000, TimeUnit.MILLISECONDS);
+            scheduledFutureTaskForEventRegistration = eventListenerScheduler.schedule(() -> registerListenerForEvent(event), 1000, TimeUnit.MILLISECONDS);
             return;
         }
 
@@ -87,9 +85,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
         }
 
         //maybe a registration event came earlier then the reschedule timer, so make sure this also will be initialised
-        if (!lateInitEventListeners.contains(event)) {
-            lateInitEventListeners.add(event);
-        }
+        lateInitEventListeners.add(event);
         //and init the stored event listeners
         if (!lateInitEventListeners.isEmpty()) {
             for (String eventName : lateInitEventListeners) {
@@ -102,18 +98,15 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
     private void initEventListener(String event) {
         switch (event) {
             case Events.DURATION_CHANGE :
-                final EventListener durationChangeListener = new EventListener<DurationChangeEvent>() {
-                    @Override
-                    public void handleEvent(final DurationChangeEvent timeUpdateEvent) {
-                        //emit global event
-                        WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
-                        Double duration = timeUpdateEvent.getDuration();
-                        if (duration != null && (duration.isNaN() || duration.isInfinite())) {
-                            duration = -1.;
-                        }
-                        eventGlobal.putDouble("duration", duration);
-                        sendEvent(getReactApplicationContext(), Events.DURATION_CHANGE, eventGlobal);
+                final EventListener<DurationChangeEvent> durationChangeListener = (EventListener<DurationChangeEvent>) timeUpdateEvent -> {
+                    //emit global event
+                    WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
+                    Double duration = timeUpdateEvent.getDuration();
+                    if (duration != null && (duration.isNaN() || duration.isInfinite())) {
+                        duration = -1.;
                     }
+                    eventGlobal.putDouble("duration", duration);
+                    sendEvent(getReactApplicationContext(), Events.DURATION_CHANGE, eventGlobal);
                 };
 
                 listeners.put(Events.DURATION_CHANGE, durationChangeListener);
@@ -122,18 +115,15 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
                 break;
 
             case Events.TIME_UPDATE :
-                final EventListener timeUpdateChangeListener = new EventListener<TimeUpdateEvent>() {
-                    @Override
-                    public void handleEvent(final TimeUpdateEvent timeUpdateEvent) {
-                        //emit global event
-                        WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
-                        Double timeUpdate = timeUpdateEvent.getCurrentTime();
-                        if (timeUpdate != null && (timeUpdate.isInfinite() || timeUpdate.isNaN())) {
-                            timeUpdate = -1.;
-                        }
-                        eventGlobal.putDouble("currentTime", timeUpdate);
-                        sendEvent(getReactApplicationContext(), Events.TIME_UPDATE, eventGlobal);
+                final EventListener<TimeUpdateEvent> timeUpdateChangeListener = (EventListener<TimeUpdateEvent>) timeUpdateEvent -> {
+                    //emit global event
+                    WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
+                    Double timeUpdate = timeUpdateEvent.getCurrentTime();
+                    if (timeUpdate != null && (timeUpdate.isInfinite() || timeUpdate.isNaN())) {
+                        timeUpdate = -1.;
                     }
+                    eventGlobal.putDouble("currentTime", timeUpdate);
+                    sendEvent(getReactApplicationContext(), Events.TIME_UPDATE, eventGlobal);
                 };
                 listeners.put(Events.TIME_UPDATE, timeUpdateChangeListener);
                 theoPlayerViewManager.playerView.getPlayer().addEventListener(PlayerEventTypes.TIMEUPDATE, timeUpdateChangeListener);
@@ -141,13 +131,10 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
                 break;
 
             case Events.PLAY :
-                final EventListener playListener = new EventListener<PlayEvent>() {
-                    @Override
-                    public void handleEvent(final PlayEvent playEvent) {
-                        //emit global event
-                        WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
-                        sendEvent(getReactApplicationContext(), Events.PLAY, eventGlobal);
-                    }
+                final EventListener<PlayEvent> playListener = (EventListener<PlayEvent>) playEvent -> {
+                    //emit global event
+                    WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
+                    sendEvent(getReactApplicationContext(), Events.PLAY, eventGlobal);
                 };
                 listeners.put(Events.PLAY, playListener);
                 theoPlayerViewManager.playerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, playListener);
@@ -173,7 +160,6 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
         }
     }
 
-
     //emit
     private void sendEvent(ReactContext reactContext,
                            String eventName,
@@ -182,6 +168,5 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
-
 
 }

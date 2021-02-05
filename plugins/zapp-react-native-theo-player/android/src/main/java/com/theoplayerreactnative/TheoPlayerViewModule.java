@@ -1,5 +1,7 @@
 package com.theoplayerreactnative;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -18,12 +20,14 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
     private static final String RCT_MODULE_NAME = "THEOplayerViewManager";
     private final TheoPlayerViewManager theoPlayerViewManager;
 
-    TheoPlayerViewModule(ReactApplicationContext reactContext, TheoPlayerViewManager theoPlayerViewManager) {
+    TheoPlayerViewModule(@NonNull ReactApplicationContext reactContext,
+                         @NonNull TheoPlayerViewManager theoPlayerViewManager) {
         super(reactContext);
         this.theoPlayerViewManager = theoPlayerViewManager;
     }
 
     @Override
+    @NonNull
     public String getName() {
         return RCT_MODULE_NAME;
     }

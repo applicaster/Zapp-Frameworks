@@ -20,6 +20,5 @@ android {
 dependencies {
     implementation fileTree(dir: "./src/main/libs/", include: ["*.jar", "*.aar"])
     implementation "com.facebook.react:react-native:+"
-    implementation 'com.google.code.gson:gson:2.8.2'
     implementation "androidx.annotation:annotation:1.1.0"
 }
