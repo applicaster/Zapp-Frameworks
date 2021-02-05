@@ -21,7 +21,7 @@ type Props = {
   entry: object;
   source: object;
   pluginConfiguration: object;
-  onFullscreenPlayerDidDismiss: (arg: any) => void;
+  onFullscreenPlayerDidDismiss: () => void;
   playableItem: object;
   controls: boolean;
   onLoad: (arg: any) => void;
@@ -137,8 +137,6 @@ export default class THEOPlayer extends Component<Props, State> {
     const { duration } = this.state;
     const { currentTime } = nativeEvent;
     this.props?.onLoad({ duration, currentTime });
-
-    console.log("onPlayerLoadedData", { nativeEvent, duration });
   };
 
   onPlayerLoadStart = ({ nativeEvent }) => {};
@@ -150,7 +148,6 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
     this.setState({ duration });
-    console.log("onPlayerDurationChange", { nativeEvent: nativeEvent });
   };
 
   onPlayerSourceChange = ({ nativeEvent }) => {};
@@ -172,6 +169,12 @@ export default class THEOPlayer extends Component<Props, State> {
     this.props?.onError(nativeEvent);
   };
 
+  onJSWindowEvent = ({ nativeEvent }) => {
+    const type = nativeEvent?.type;
+    if (type === "onCloseButtonHandle") {
+      this.props?.onFullscreenPlayerDidDismiss();
+    }
+  };
   getPluginConfiguration() {
     const {
       pluginConfiguration,
@@ -197,7 +200,6 @@ export default class THEOPlayer extends Component<Props, State> {
 
   render() {
     const { entry, style: videoStyle, inline, source } = this.props;
-    console.log({ source, entry });
     return (
       <View
         style={
@@ -206,7 +208,7 @@ export default class THEOPlayer extends Component<Props, State> {
         }
       >
         <THEOplayerView
-          ref={this._assignRoot}
+          // ref={this._assignRoot}
           style={{ flex: 1 }}
           fullscreenOrientationCoupling={true}
           autoplay={true}
@@ -234,6 +236,7 @@ export default class THEOPlayer extends Component<Props, State> {
           onPlayerDestroy={this.onPlayerDestroy}
           onPlayerEnded={this.onPlayerEnded}
           onPlayerError={this.onPlayerError}
+          onJSWindowEvent={this.onJSWindowEvent}
           source={{
             sources: [
               {

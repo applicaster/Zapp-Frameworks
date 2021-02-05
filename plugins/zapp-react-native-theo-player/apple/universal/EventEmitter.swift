@@ -60,7 +60,7 @@ class EventEmitter {
 
       case "timeupdate":
         listeners[eventName] = EventEmitter.player.addEventListener(type: PlayerEventTypes.TIME_UPDATE) { event in
-          EventEmitter.sharedInstance.dispatch(name: event.type, body: ["currentTime": event.currentTime])
+//          EventEmitter.sharedInstance.dispatch(name: event.type, body: ["currentTime": event.currentTime])
         }
 
       default:

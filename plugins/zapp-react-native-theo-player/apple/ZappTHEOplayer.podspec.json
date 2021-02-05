@@ -17,7 +17,7 @@
     "git": "https://github.com/applicaster/Zapp-Frameworks",
     "tag": "@@applicaster/zapp-react-native-theo-player/0.0.2"
   },
-  "static_framework": false,
+  "static_framework": true,
   "ios": {
     "xcconfig": {
       "ENABLE_BITCODE": "YES",
@@ -45,7 +45,9 @@
   "dependencies": {
     "XrayLogger": []
   },
-  "source_files": "universal/**/*.{h,m,swift}",
+  "source_files": ["universal/**/*.{h,m,swift}"],
+  "resources": ["ui_customization/**/*"],
+
   "testspecs": [
     {
       "name": "UnitTests",

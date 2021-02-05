@@ -1,0 +1,21 @@
+.vjs-icon-close {
+    font-family: THEOplayer;
+    font-weight: normal;
+    font-style: normal;
+    top: 50;
+    left:150;
+    position: absolute;
+}
+
+.vjs-icon-close:before {
+  content: "\f125";
+  font-size: 3em;
+  top: 50;
+  left:150;
+  position: absolute;
+}
+
+.vjs-fullscreen-control {
+    display: none !important;
+}
+

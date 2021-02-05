@@ -30,6 +30,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPlayerResize, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPlayerDestroy, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPlayerEnded, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPlayerError, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onJSWindowEvent, RCTBubblingEventBlock);
 
 RCT_EXTERN_METHOD(play);
 RCT_EXTERN_METHOD(pause);

@@ -1,7 +1,7 @@
 import Foundation
+import React
 import THEOplayerSDK
 import UIKit
-import React
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -36,10 +36,11 @@ class THEOplayerView: UIView {
     @objc var onPlayerDestroy: RCTBubblingEventBlock?
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
+    @objc var onJSWindowEvent: RCTBubblingEventBlock?
 
     @objc var source: SourceDescription? {
         didSet {
-            player.source = source
+            player?.source = source
         }
     }
 
@@ -56,7 +57,8 @@ class THEOplayerView: UIView {
     }
 
     deinit {
-        unloadTheoPlayer()
+//        unloadTheoPlayer()
+        print("fgff")
     }
 
     override init(frame: CGRect) {
@@ -71,9 +73,17 @@ class THEOplayerView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
- 
     }
 
+    override public func removeReactSubview(_ subview: UIView?) {
+        subview?.removeFromSuperview()
+    }
+    
+    public override func removeFromSuperview() {
+        self.unloadTheoPlayer()
+        super.removeFromSuperview()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         player.frame = frame
@@ -85,27 +95,63 @@ class THEOplayerView: UIView {
         backgroundColor = .black
     }
 
-    // TODO: check who is calling
     private func unloadTheoPlayer() {
+        removeJSEventListeners()
         removeEventListeners()
         player.stop()
         player.destroy()
+        player = nil
+        onPlayerPlay = nil
+        onPlayerPlaying = nil
+        onPlayerPause = nil
+        onPlayerProgress = nil
+        onPlayerSeeking = nil
+        onPlayerSeeked = nil
+        onPlayerWaiting = nil
+        onPlayerTimeUpdate = nil
+        onPlayerRateChange = nil
+        onPlayerReadyStateChange = nil
+        onPlayerLoadedMetaData = nil
+        onPlayerLoadedData = nil
+        onPlayerLoadStart = nil
+        onPlayerCanPlay = nil
+        onPlayerCanPlayThrough = nil
+        onPlayerDurationChange = nil
+        onPlayerSourceChange = nil
+        onPlayerVolumeChange = nil
+        onPlayerResize = nil
+        onPlayerDestroy = nil
+        onPlayerEnded = nil
+        onPlayerError = nil
+        onJSWindowEvent = nil
+        onPlayerPresentationModeChange = nil
+        source = nil
     }
 
     // MARK: - THEOplayer setup and unload
 
     private func setupTheoPlayer() {
-        
 //        let playerConfig = THEOplayerConfiguration(chromeless: true, pip: nil)
 //        player = THEOplayer(configuration: playerConfig)
-        player = THEOplayer()
+//        player = THEOplayer()
+        let bundle = Bundle(for: THEOplayerView.self)
+        let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
+        let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
+        let playerConfig = THEOplayerConfiguration(
+            chromeless: false,
+            cssPaths: stylePaths,
+            jsPathsPre: scripthPaths,
+            googleIMA: false
+        )
+        player = THEOplayer(configuration: playerConfig)
         /*
             Evaluate main script function declarated in theoplayer.js(custom js)
             You can init pure js code without file by evaluateJavaScript.
          */
         player.evaluateJavaScript("init({player: player})")
-        player.presentationMode = .fullscreen
-
+        player.presentationMode = .inline
+        
+        attachJSEventListeners()
         attachEventListeners()
         player.addAsSubview(of: self)
     }
