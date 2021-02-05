@@ -3,6 +3,7 @@ package com.theoplayerreactnative;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -98,7 +99,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
     private void initEventListener(String event) {
         switch (event) {
             case Events.DURATION_CHANGE :
-                final EventListener<DurationChangeEvent> durationChangeListener = (EventListener<DurationChangeEvent>) timeUpdateEvent -> {
+                final EventListener<DurationChangeEvent> durationChangeListener = timeUpdateEvent -> {
                     //emit global event
                     WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
                     Double duration = timeUpdateEvent.getDuration();
@@ -115,7 +116,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
                 break;
 
             case Events.TIME_UPDATE :
-                final EventListener<TimeUpdateEvent> timeUpdateChangeListener = (EventListener<TimeUpdateEvent>) timeUpdateEvent -> {
+                final EventListener<TimeUpdateEvent> timeUpdateChangeListener = timeUpdateEvent -> {
                     //emit global event
                     WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
                     Double timeUpdate = timeUpdateEvent.getCurrentTime();
@@ -131,7 +132,7 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
                 break;
 
             case Events.PLAY :
-                final EventListener<PlayEvent> playListener = (EventListener<PlayEvent>) playEvent -> {
+                final EventListener<PlayEvent> playListener = playEvent -> {
                     //emit global event
                     WritableMap eventGlobal = Arguments.createMap(); //new map, because the other one get consumed!
                     sendEvent(getReactApplicationContext(), Events.PLAY, eventGlobal);
@@ -161,9 +162,9 @@ public class ReactNativeEventEmitterHelper extends ReactContextBaseJavaModule {
     }
 
     //emit
-    private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @androidx.annotation.Nullable WritableMap params) {
+    private void sendEvent(@NonNull ReactContext reactContext,
+                           @NonNull String eventName,
+                           @Nullable WritableMap params) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);

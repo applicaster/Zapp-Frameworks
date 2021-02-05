@@ -2,7 +2,6 @@ package com.theoplayerreactnative;
 
 import androidx.annotation.Nullable;
 
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
@@ -20,20 +19,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
- * Source parsing helper class, because we don't support GSON object deserialization currently
+ * Source parsing helper class
  */
 public class SourceHelper {
 
     public static SourceDescription parseSourceFromJS(ReadableMap source) {
-        HashMap<String, Object> hashmap = eliminateReadables(source);
-
         try {
-            JSONObject jsonSourceObject = new JSONObject(hashmap);
+            JSONObject jsonSourceObject = new JSONObject(source.toHashMap());
             JSONArray jsonSources = jsonSourceObject.getJSONArray("sources");
 
             //typed sources
@@ -118,10 +113,8 @@ public class SourceHelper {
     }
 
     public static THEOplayerAdDescription parseTheoAdFromJS(ReadableMap adDescription) {
-        HashMap<String, Object> hashmap = eliminateReadables(adDescription);
-
         try {
-            JSONObject jsonAdObject = new JSONObject(hashmap);
+            JSONObject jsonAdObject = new JSONObject(adDescription.toHashMap());
             return parseTheoAdFromJS(jsonAdObject);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -152,54 +145,6 @@ public class SourceHelper {
         return GoogleImaAdDescription.Builder
                 .googleImaAdDescription(jsonAdDescription.getString("sources"))
                 .build();
-    }
-
-    /**
-     * Eliminate all the Readable* classes from the map
-     *
-     * @param readableMap
-     * @return
-     */
-    protected static HashMap<String, Object> eliminateReadables(ReadableMap readableMap) {
-        HashMap<String, Object> hashMap = readableMap.toHashMap();
-        HashMap<String, Object> eliminatedHashMap = new HashMap<>();
-
-        for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
-            Object value = entry.getValue();
-            if (value instanceof ReadableMap) {
-                value = eliminateReadables((ReadableMap) value);
-            } else if (value instanceof ReadableArray) {
-                value = eliminateReadables((ReadableArray) value);
-            }
-            eliminatedHashMap.put(entry.getKey(), value);
-        }
-        return eliminatedHashMap;
-    }
-
-    /**
-     * Eliminate all the Readable* classes from the array
-     *
-     * @param readableArray
-     * @return
-     */
-    protected static ArrayList<Object> eliminateReadables(ReadableArray readableArray) {
-        ArrayList<Object> arrayList = readableArray.toArrayList();
-        ArrayList<Object> eliminatedArrayList = new ArrayList<>();
-
-        for (Object o : arrayList) {
-            Object value = o;
-
-            if (value instanceof ReadableMap) {
-                value = eliminateReadables((ReadableMap) value);
-            } else if (value instanceof ReadableArray) {
-                value = eliminateReadables((ReadableArray) value);
-            }
-
-            eliminatedArrayList.add(value);
-        }
-
-        return eliminatedArrayList;
-
     }
 
 }

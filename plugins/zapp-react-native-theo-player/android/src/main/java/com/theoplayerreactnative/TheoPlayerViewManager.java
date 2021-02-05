@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -22,7 +21,6 @@ import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
-import com.theoplayer.android.api.message.MessageListener;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
@@ -43,7 +41,8 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         onSeek("onSeekEventInternal", "onSeek"),
         onPlay("onPlayEventInternal", "onPlay"),
         onPause("onPauseEventInternal", "onPause"),
-        onPresentationModeChange("onPresentationModeChangeEventInternal", "onPresentationModeChange");
+        onPresentationModeChange("onPresentationModeChangeEventInternal", "onPresentationModeChange"),
+        onJSWindowEvent("onJSWindowEventInternal", "onJSWindowEvent");
 
         String internalEvent;
         String globalEvent;
@@ -97,7 +96,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         /*
           If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
           in js ads source declaration.
-          You can declarate in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
+          You can declare in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
         */
         THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
                 .ads(new AdsConfiguration.Builder().build())
@@ -108,7 +107,10 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
         playerView = new THEOplayerView(reactContext.getCurrentActivity(), playerConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        playerView.addJavaScriptMessageListener("FIRE", this::onJSEvent);
+        playerView.addJavaScriptMessageListener("FIRE", (event) ->
+                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent,
+                                event));
         playerView.evaluateJavaScript("init({player: player})", null);
 
         addPropertyChangeListeners(reactContext);
@@ -190,10 +192,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         if (sourceDescription != null) {
             playerView.getPlayer().setSource(sourceDescription);
         }
-    }
-
-    private void onJSEvent(@NonNull String event) {
-
     }
 
     public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
