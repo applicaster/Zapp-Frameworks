@@ -1,30 +1,29 @@
 package com.theoplayerreactnative;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
+import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
+import com.theoplayerreactnative.events.EventRouter;
+import com.theoplayerreactnative.events.EventsBinder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,22 +33,51 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> implements LifecycleEventListener {
 
     //static
-    private static final String TAG = TheoPlayerViewManager.class.getSimpleName();
     private static final String RCT_MODULE_NAME = "THEOplayerView";
+    private static final String JavaScriptMessageListener = "FIRE";
 
     private enum InternalAndGlobalEventPair {
-        onSeek("onSeekEventInternal", "onSeek"),
-        onPlay("onPlayEventInternal", "onPlay"),
-        onPause("onPauseEventInternal", "onPause"),
-        onPresentationModeChange("onPresentationModeChangeEventInternal", "onPresentationModeChange"),
-        onJSWindowEvent("onJSWindowEventInternal", "onJSWindowEvent");
+        onPlayerPlay("onPlayerPlayInternal", "onPlayerPlay", new EventRouter<>(PlayerEventTypes.PLAY, EventsBinder::toRN)),
+        onPlayerPlaying("onPlayerPlayingInternal", "onPlayerPlaying", new EventRouter<>(PlayerEventTypes.PLAY, EventsBinder::toRN)),
+        onPlayerPause("onPlayerPauseInternal", "onPlayerPause", new EventRouter<>(PlayerEventTypes.PAUSE, EventsBinder::toRN)),
+        onPlayerProgress("onPlayerProgressInternal", "onPlayerProgress", new EventRouter<>(PlayerEventTypes.PROGRESS, EventsBinder::toRN)),
+        onPlayerSeeking("onPlayerSeekingInternal", "onPlayerSeeking", new EventRouter<>(PlayerEventTypes.SEEKING, EventsBinder::toRN)),
+        onPlayerSeeked("onPlayerSeekedInternal", "onPlayerSeeked", new EventRouter<>(PlayerEventTypes.SEEKED, EventsBinder::toRN)),
+        onPlayerWaiting("onPlayerWaitingInternal", "onPlayerWaiting", new EventRouter<>(PlayerEventTypes.WAITING, EventsBinder::toRN)),
+        onPlayerTimeUpdate("onPlayerTimeUpdateInternal", "onPlayerTimeUpdate", new EventRouter<>(PlayerEventTypes.TIMEUPDATE, EventsBinder::toRN)),
+        onPlayerRateChange("onPlayerRateChangeInternal", "onPlayerRateChange", new EventRouter<>(PlayerEventTypes.RATECHANGE, EventsBinder::toRN)),
+        onPlayerReadyStateChange("onPlayerReadyStateChangeInternal", "onPlayerReadyStateChange", new EventRouter<>(PlayerEventTypes.READYSTATECHANGE, EventsBinder::toRN)),
+        onPlayerLoadedMetaData("onPlayerLoadedMetaDataInternal", "onPlayerLoadedMetaData", new EventRouter<>(PlayerEventTypes.LOADEDMETADATA, EventsBinder::toRN)),
+        onPlayerLoadedData("onPlayerLoadedDataInternal", "onPlayerLoadedData", new EventRouter<>(PlayerEventTypes.LOADEDDATA, EventsBinder::toRN)),
+        onPlayerLoadStart("onPlayerLoadStartInternal", "onPlayerLoadStart", new EventRouter<>(PlayerEventTypes.LOADSTART, EventsBinder::toRN)),
+        onPlayerCanPlay("onPlayerCanPlayInternal", "onPlayerCanPlay", new EventRouter<>(PlayerEventTypes.CANPLAY, EventsBinder::toRN)),
+        onPlayerCanPlayThrough("onPlayerCanPlayThroughInternal", "onPlayerCanPlayThrough", new EventRouter<>(PlayerEventTypes.CANPLAYTHROUGH, EventsBinder::toRN)),
+        onPlayerDurationChange("onPlayerDurationChangeInternal", "onPlayerDurationChange", new EventRouter<>(PlayerEventTypes.DURATIONCHANGE, EventsBinder::toRN)),
+        onPlayerSourceChange("onPlayerSourceChangeInternal", "onPlayerSourceChange", new EventRouter<>(PlayerEventTypes.SOURCECHANGE, EventsBinder::toRN)),
+        onPlayerPresentationModeChange("onPlayerPresentationModeChangeInternal", "onPlayerPresentationModeChange", new EventRouter<>(PlayerEventTypes.PRESENTATIONMODECHANGE, EventsBinder::toRN)),
+        onPlayerVolumeChange("onPlayerVolumeChangeInternal", "onPlayerVolumeChange", new EventRouter<>(PlayerEventTypes.VOLUMECHANGE, EventsBinder::toRN)),
+        onPlayerDestroy("onPlayerDestroyInternal", "onPlayerDestroy", new EventRouter<>(PlayerEventTypes.DESTROY, EventsBinder::toRN)),
+        onPlayerEnded("onPlayerEndedInternal", "onPlayerEnded", new EventRouter<>(PlayerEventTypes.ENDED, EventsBinder::toRN)),
+        onPlayerError("onPlayerErrorInternal", "onPlayerError", new EventRouter<>(PlayerEventTypes.ERROR, EventsBinder::toRN)),
 
+        // non-player events
+        onPlayerResize("onPlayerResizeInternal", "onPlayerResize", null),
+        onJSWindowEvent("onJSWindowEventInternal", "onJSWindowEvent", null);
+
+        @NonNull
         String internalEvent;
+        @NonNull
         String globalEvent;
+        @Nullable
+        EventRouter<?> router;
 
-        InternalAndGlobalEventPair(String internalEvent, String globalEvent) {
+        InternalAndGlobalEventPair(@NonNull String internalEvent,
+                                   @NonNull String globalEvent,
+                                   @Nullable EventRouter<?> router
+        ) {
             this.internalEvent = internalEvent;
             this.globalEvent = globalEvent;
+            this.router = router;
         }
     }
 
@@ -107,10 +135,10 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
         playerView = new THEOplayerView(reactContext.getCurrentActivity(), playerConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        playerView.addJavaScriptMessageListener("FIRE", (event) ->
-                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                        .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent,
-                                event));
+        playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event ->
+                reactContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, event));
         playerView.evaluateJavaScript("init({player: player})", null);
 
         addPropertyChangeListeners(reactContext);
@@ -120,60 +148,11 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     }
 
     private void addPropertyChangeListeners(final ThemedReactContext reactContext) {
-        playerView.getPlayer().addEventListener(PlayerEventTypes.SEEKED, seekedEvent -> {
-            Log.d(TAG, "seeked native: " + seekedEvent);
-            WritableMap event = Arguments.createMap();
-            event.putDouble("currentTime", seekedEvent.getCurrentTime());
-            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    playerView.getId(),
-                    InternalAndGlobalEventPair.onSeek.internalEvent,
-                    event);
-        });
-
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, playEvent -> {
-            Log.d(TAG, "play native");
-            WritableMap event = Arguments.createMap();
-
-            //local property change
-            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    playerView.getId(),
-                    InternalAndGlobalEventPair.onPlay.internalEvent,
-                    event);
-        });
-
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PAUSE, pauseEvent -> {
-            Log.d(TAG, "pause native");
-            WritableMap event = Arguments.createMap();
-            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    playerView.getId(),
-                    InternalAndGlobalEventPair.onPause.internalEvent,
-                    event);
-        });
-
-        playerView.getPlayer().addEventListener(PlayerEventTypes.PRESENTATIONMODECHANGE, presentationModeChangeEvent -> {
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            reactContext.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            // Orientation detection
-            int orientation = reactContext.getResources().getConfiguration().orientation;
-
-            if(playerView.getFullScreenManager().isFullScreen()) {
-                /*
-                    If needed set additional functionality when fullscreen is on, examples below
-                */
-                //playerView.getPlayer().pause();
-                //playerView.getPlayer().play();
-            } else {
-                /*
-                    If needed set additional functionality when fullscreen is on, examples below
-                */
-                //playerView.getPlayer().pause();
-                //playerView.getPlayer().play();
-            }
-
-            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(InternalAndGlobalEventPair.onPresentationModeChange.internalEvent,
-                            playerView.getFullScreenManager().isFullScreen());
-        });
+        Player player = playerView.getPlayer();
+        for(InternalAndGlobalEventPair p :InternalAndGlobalEventPair.values()){
+            if(null != p.router)
+                p.router.subscribe(player, playerView, reactContext, p.internalEvent);
+        }
     }
 
     @ReactProp(name = "autoplay", defaultBoolean = false)
