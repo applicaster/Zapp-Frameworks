@@ -17,8 +17,17 @@ const styles = StyleSheet.create({
   },
 });
 
+type Content = {
+  type: string;
+  src: string;
+};
+
+type Entry = {
+  content: Content;
+};
+
 type Props = {
-  entry: object;
+  entry: Entry;
   source: object;
   pluginConfiguration: object;
   onFullscreenPlayerDidDismiss: () => void;
@@ -175,27 +184,29 @@ export default class THEOPlayer extends Component<Props, State> {
       this.props?.onFullscreenPlayerDidDismiss();
     }
   };
-  getPluginConfiguration() {
-    const {
-      pluginConfiguration,
-      entry: { targetScreen: { styles, general } = {} } = {},
-    } = this.props;
 
-    const configuration = { ...pluginConfiguration, ...styles, ...general };
+  // getPluginConfiguration() {
+  //   const {
+  //     pluginConfiguration,
+  //     entry: { targetScreen: { styles, general } = {} } = {},
+  //   } = this.props;
 
-    try {
-      const manifestConfig = getStyles();
+  //   const configuration = { ...pluginConfiguration, ...styles, ...general };
 
-      return populateConfigurationValues(manifestConfig)(configuration);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn("could not sanitize the player controls");
+  //   try {
+  //     const manifestConfig = getStyles();
 
-      return configuration;
-    }
-  }
+  //     return populateConfigurationValues(manifestConfig)(configuration);
+  //   } catch (error) {
+  //     // eslint-disable-next-line no-console
+  //     console.warn("could not sanitize the player controls");
+
+  //     return configuration;
+  //   }
+  // }
+
   _assignRoot = (component) => {
-    this._root = component;
+    //this._root = component;
   };
 
   render() {

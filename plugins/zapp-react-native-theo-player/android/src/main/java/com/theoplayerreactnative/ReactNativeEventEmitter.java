@@ -1,5 +1,7 @@
 package com.theoplayerreactnative;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import javax.annotation.Nullable;
@@ -7,6 +9,6 @@ import javax.annotation.Nullable;
 public interface ReactNativeEventEmitter extends DeviceEventManagerModule.RCTDeviceEventEmitter {
 
     @Override
-    public void emit(String eventName, @Nullable Object data);
+    void emit(@NonNull String eventName, @Nullable Object data);
 
 }

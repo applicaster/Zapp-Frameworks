@@ -1,5 +1,7 @@
 package com.theoplayerreactnative;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -11,21 +13,21 @@ import java.util.List;
 
 public class TheoPlayerPackage implements ReactPackage {
 
-    private TheoPlayerViewManager theoPlayerViewManager = new TheoPlayerViewManager();
+    private final TheoPlayerViewManager theoPlayerViewManager = new TheoPlayerViewManager();
 
     @Override
-    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Arrays.<NativeModule>asList(
+    @NonNull
+    public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
+        return Arrays.asList(
                 new ReactNativeEventEmitterHelper(reactContext, theoPlayerViewManager),
                 new TheoPlayerViewModule(reactContext, theoPlayerViewManager)
         );
     }
 
     @Override
-    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.<ViewManager>singletonList(
-                theoPlayerViewManager
-        );
+    @NonNull
+    public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
+        return Collections.singletonList(theoPlayerViewManager);
     }
 
 
