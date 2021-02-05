@@ -23,7 +23,7 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     manifest_version: version,
     api: api[platform],
-    npm_dependencies: npm_dependencies[platform],
+    npm_dependencies: npm_dependencies(version)[platform],
     dependency_repository_url: dependency_repository_url[platform],
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
@@ -38,9 +38,7 @@ const api = {
   ios_for_quickbrick: {},
   android_for_quickbrick: {
     class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-    react_packages: [
-      "com.theoplayerreactnative.TheoPlayerPackage",
-    ],
+    react_packages: ["com.theoplayerreactnative.TheoPlayerPackage"],
   },
 };
 
@@ -57,14 +55,21 @@ const dependency_repository_url = {
 const project_dependencies = {
   ios_for_quickbrick: {},
   android_for_quickbrick: [
-    { "zapp-react-native-theo-player": "./quick_brick/node_modules/@applicaster/zapp-react-native-theo-player/android"},
+    {
+      "zapp-react-native-theo-player":
+        "./quick_brick/node_modules/@applicaster/zapp-react-native-theo-player/android",
+    },
   ],
 };
 
-const npm_dependencies = {
-  ios_for_quickbrick: [],
-  android_for_quickbrick: []
-};
+function npm_dependencies(version) {
+  return {
+    ios_for_quickbrick: [
+      `@applicaster/zapp-react-native-theo-player@${version}`,
+    ],
+    android_for_quickbrick: [],
+  };
+}
 
 const custom_configuration_fields = {
   ios_for_quickbrick: [],
