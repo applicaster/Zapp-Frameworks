@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import TransportControls from "@applicaster/quick-brick-mobile-transport-controls";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
-
+import { fetchImageFromMetaByKey } from "./Utils";
 import { StyleSheet, View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
 console.disableYellowBox = true;
@@ -24,6 +24,7 @@ type Content = {
 
 type Entry = {
   content: Content;
+  media_group: any;
 };
 
 type Props = {
@@ -120,7 +121,6 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerProgress = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const { duration } = this.state;
-    console.log({ currentTime, duration });
     this.props?.onProgress({ currentTime, duration });
   };
 
@@ -211,6 +211,8 @@ export default class THEOPlayer extends Component<Props, State> {
 
   render() {
     const { entry, style: videoStyle, inline, source } = this.props;
+
+    const posterImage = fetchImageFromMetaByKey(entry);
     return (
       <View
         style={
@@ -222,7 +224,7 @@ export default class THEOPlayer extends Component<Props, State> {
           // ref={this._assignRoot}
           style={{ flex: 1 }}
           fullscreenOrientationCoupling={true}
-          autoplay={true}
+          autoplay={false}
           entry={entry}
           onPlayerPlay={this.onPlayerPlay}
           onPlayerPlaying={this.onPlayerPlaying}
@@ -255,8 +257,7 @@ export default class THEOPlayer extends Component<Props, State> {
                 src: entry?.content?.src,
               },
             ],
-            poster:
-              "https://cdn.theoplayer.com/video/big_buck_bunny/poster.jpg",
+            poster: posterImage,
           }}
         />
       </View>
