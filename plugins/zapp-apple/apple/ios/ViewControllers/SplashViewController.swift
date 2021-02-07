@@ -28,8 +28,8 @@ class SplashViewController: UIViewController {
         var retVal: URL?
         let localMoviePath = DataManager.splashVideoPath()
         if let localMoviePath = localMoviePath,
-            FileManager.default.fileExists(atPath: localMoviePath),
-            String.isNotEmptyOrWhitespace(localMoviePath) {
+           FileManager.default.fileExists(atPath: localMoviePath),
+           String.isNotEmptyOrWhitespace(localMoviePath) {
             retVal = URL(fileURLWithPath: localMoviePath)
         }
 
@@ -59,10 +59,11 @@ class SplashViewController: UIViewController {
         loadingView?.stopAnimating()
         loadingCompletion = completion
         self.rootViewController = rootViewController
-        
+
         logger?.debugLog(template: SplashViewControllerLogs.splashViewConrollerStartAppLoadingTask)
-        
+
         if let player = playerViewController.player {
+            setPlayerItemIfNeeded()
             rootViewController.facadeConnector.audioSession?.enablePlaybackCategoryIfNeededToMuteBackgroundAudio(forItem: player.currentItem)
             player.play()
         } else {
@@ -71,10 +72,19 @@ class SplashViewController: UIViewController {
         }
     }
 
+    private func setPlayerItemIfNeeded() {
+        if let player = playerViewController.player,
+           player.currentItem == nil,
+           let url = videoURL {
+            playerViewController.player?.replaceCurrentItem(with: AVPlayerItem(url: url))
+            addCurrentPlayedItemObservers()
+        }
+    }
+
     public func prepareController() {
         if let url = videoURL,
-            let playerContainer = playerContainer,
-            playerContainer.subviews.count == 0 {
+           let playerContainer = playerContainer,
+           playerContainer.subviews.count == 0 {
             playerViewController.view.backgroundColor = UIColor.clear
             playerViewController.player = AVPlayer(url: url)
             playerViewController.player?.pause()
@@ -107,15 +117,8 @@ class SplashViewController: UIViewController {
     }
 
     func addVideoObservers() {
-        playerViewController.player?.currentItem?.addObserver(self,
-                                                              forKeyPath: "status",
-                                                              options: .new,
-                                                              context: nil)
+        addCurrentPlayedItemObservers()
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerDidFinishPlaying(_:)),
-                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-                                               object: playerViewController.player?.currentItem)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(willEnterForeground(_:)),
                                                name: UIApplication.willEnterForegroundNotification,
@@ -124,6 +127,17 @@ class SplashViewController: UIViewController {
                                                selector: #selector(didEnterBackground(_:)),
                                                name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
+    }
+
+    func addCurrentPlayedItemObservers() {
+        playerViewController.player?.currentItem?.addObserver(self,
+                                                              forKeyPath: "status",
+                                                              options: .new,
+                                                              context: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerDidFinishPlaying(_:)),
+                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                               object: playerViewController.player?.currentItem)
     }
 
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
