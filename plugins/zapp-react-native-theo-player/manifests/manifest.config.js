@@ -114,10 +114,10 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     project_dependencies: project_dependencies[platform],
-    custom_configuration_fields: {
+    custom_configuration_fields: [
       ...baseManifest.custom_configuration_fields,
       ...custom_configuration_fields[platform],
-    },
+    ],
   };
 
   return manifest;
