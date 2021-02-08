@@ -18,14 +18,14 @@ extension UIViewController {
         }
         return retVal
     }
-    
-    func addChildViewController(childController:UIViewController, to view:UIView) {
+
+    func addChildViewController(childController: UIViewController, to view: UIView) {
         addChild(childController)
         view.addSubview(childController.view)
         childController.view.matchParent()
         childController.didMove(toParent: self)
     }
-    
+
     func removeViewControllerFromParent() {
         willMove(toParent: nil)
         view.removeFromSuperview()

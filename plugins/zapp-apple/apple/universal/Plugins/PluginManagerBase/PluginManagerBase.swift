@@ -81,7 +81,7 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
                                forceEnable: Bool = false,
                                completion: PluginManagerCompletion) {
         var createProviderCompletion = completion
-        
+
         // In case plugin not support override logic, return false, since "forceEnable" true only when we trying to override
         if forceEnable == true,
            isProviderSupportToggleOnOff(pluginModel: pluginModel) == false {

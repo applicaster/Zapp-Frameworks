@@ -16,12 +16,10 @@ import UIKit
 extension JsonSerializableProtocol {
     /// Converts a JSONSerializable conforming class to a JSON object.
     func jsonData() -> Data? {
-        var retValue:Data?
+        var retValue: Data?
         do {
-            retValue = try JSONSerialization.data(withJSONObject: self.dictForJsonSerialization, options: [.prettyPrinted])
-        }
-        catch {
-
+            retValue = try JSONSerialization.data(withJSONObject: dictForJsonSerialization, options: [.prettyPrinted])
+        } catch {
         }
         return retValue
     }

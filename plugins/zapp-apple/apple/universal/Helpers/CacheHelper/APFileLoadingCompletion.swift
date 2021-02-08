@@ -10,16 +10,16 @@ import Foundation
 
 class APFileLoadingCompletion: NSObject {
     let file: APFile
-    var completionArray: [((_ success:Bool) -> Void)]
+    var completionArray: [(_ success: Bool) -> Void]
     var didFinish: Bool
-    
+
     init(file: APFile) {
         self.file = file
-        self.completionArray = []
-        self.didFinish = false
+        completionArray = []
+        didFinish = false
     }
-    
-    convenience init(file: APFile, completion: ((_ success:Bool) -> Void)?) {
+
+    convenience init(file: APFile, completion: ((_ success: Bool) -> Void)?) {
         self.init(file: file)
         if let completion = completion {
             completionArray.append(completion)

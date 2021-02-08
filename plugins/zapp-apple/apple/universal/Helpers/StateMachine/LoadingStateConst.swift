@@ -10,18 +10,18 @@ import Foundation
 
 public typealias StateCallBack = () -> Void
 public typealias StateHandler = (_ successHandler: @escaping StateCallBack,
-    _ failHandler:@escaping StateCallBack) -> Void
+                                 _ failHandler: @escaping StateCallBack) -> Void
 
 public enum LoadingStateTypes {
     case initial
     case loading
     case success
     case failed
-    
+
     public func isStateFinishedTask() -> Bool {
         return self == .success || self == .failed
     }
-    
+
     public func toString() -> String {
         switch self {
         case .initial:

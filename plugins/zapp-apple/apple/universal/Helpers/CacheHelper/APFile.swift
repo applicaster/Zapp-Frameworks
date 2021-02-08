@@ -15,8 +15,8 @@ import Foundation
     var searchPathDirectory: FileManager.SearchPathDirectory = .documentDirectory
 
     public convenience init(filename: String,
-                url: String,
-                cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+                            url: String,
+                            cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
         self.init(filename: filename,
                   url: url,
                   searchPathDirectory: .documentDirectory,
@@ -31,8 +31,8 @@ import Foundation
         self.searchPathDirectory = searchPathDirectory
         self.url = url
         if let fileURL = URL(string: url) {
-            self.request = URLRequest(url: fileURL,
-                                      cachePolicy: cachePolicy)
+            request = URLRequest(url: fileURL,
+                                 cachePolicy: cachePolicy)
         }
     }
 
@@ -41,19 +41,19 @@ import Foundation
      */
     public func localURLPath() -> URL? {
         var retVal: URL?
-  
-        var path = NSSearchPathForDirectoriesInDomains(self.searchPathDirectory, .userDomainMask, true)
-        //https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/index.html#//apple_ref/doc/uid/TP40015241
+
+        var path = NSSearchPathForDirectoriesInDomains(searchPathDirectory, .userDomainMask, true)
+        // https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/index.html#//apple_ref/doc/uid/TP40015241
         // tvOS can not have local storage
         #if os(tvOS)
             path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
         #endif
-        if let documentDirectoryPath:String = path.first {
+        if let documentDirectoryPath: String = path.first {
             retVal = URL(fileURLWithPath: documentDirectoryPath.appendingFormat("/\(filename)"))
         }
         return retVal
     }
-    
+
     /*
      * Check if the File exists in localstorage
      */
@@ -63,7 +63,7 @@ import Foundation
         }
         return FileManager.default.fileExists(atPath: localURL.path)
     }
-    
+
     /*
      * Save a temp URL in local memory of an app
      */
@@ -75,7 +75,7 @@ import Foundation
                 if isInLocalStorage() {
                     try fileManager.removeItem(at: localURLPath)
                 }
-                
+
                 try data.write(to: localURLPath, options: .atomic)
                 success = true
             } catch let error {
@@ -84,11 +84,11 @@ import Foundation
         }
         return success
     }
-    
+
     override public var description: String {
         return "File -> filename: \(filename) url: \(url)"
     }
-    
+
     func getCachedData() -> Data? {
         guard let localURLPath = localURLPath() else {
             return nil
@@ -98,13 +98,12 @@ import Foundation
 
     public func deleteCachedData() {
         guard let localURL = localURLPath(),
-            self.isInLocalStorage() else {
+              self.isInLocalStorage() else {
             return
         }
 
         do {
             try FileManager.default.removeItem(atPath: localURL.path)
-        }
-        catch {}
+        } catch {}
     }
 }

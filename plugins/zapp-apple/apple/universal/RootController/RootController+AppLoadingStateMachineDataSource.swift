@@ -14,7 +14,7 @@ public let kMSAppCenterCheckForUpdatesNotification = "kMSAppCenterCheckForUpdate
 
 extension RootController: LoadingStateMachineDataSource {
     func loadSplashScreenGroup(_ successHandler: @escaping StateCallBack,
-                                     _ failHandler: @escaping StateCallBack) {
+                               _ failHandler: @escaping StateCallBack) {
         splashViewController?.startAppLoading(rootViewController: self, completion: {
             successHandler()
         })

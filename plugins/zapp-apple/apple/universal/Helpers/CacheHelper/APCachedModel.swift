@@ -11,8 +11,9 @@ import UIKit
     var object: JsonSerializableProtocol
     var identifier: String
     var filename: String {
-        return (className+identifier).toMd5hash()+".dat"
+        return (className + identifier).toMd5hash() + ".dat"
     }
+
     var className: String {
         return NSStringFromClass(type(of: object))
     }
@@ -29,12 +30,12 @@ import UIKit
         var retVal: URL?
 
         var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        //https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/index.html#//apple_ref/doc/uid/TP40015241
+        // https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/index.html#//apple_ref/doc/uid/TP40015241
         // tvOS can not have local storage
         #if os(tvOS)
-        path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+            path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
         #endif
-        if let documentDirectoryPath:String = path.first {
+        if let documentDirectoryPath: String = path.first {
             let dirPath = documentDirectoryPath.appendingFormat("/Objects")
             if !FileManager.default.fileExists(atPath: dirPath) {
                 do {
@@ -83,13 +84,13 @@ import UIKit
     public func loadObjectFromStorage() -> Bool {
         var success = false
         guard let localURL = localURLPath(),
-            let data = FileManager.default.contents(atPath: localURL.path) else {
+              let data = FileManager.default.contents(atPath: localURL.path) else {
             return success
         }
         do {
             if let dict = try JSONSerialization.jsonObject(with: data, options: [.mutableContainers]) as? Dictionary<String, AnyObject>,
-                let classType = NSClassFromString(className) as? JsonSerializableProtocol.Type {
-                self.object = classType.init(dictionary: dict)
+               let classType = NSClassFromString(className) as? JsonSerializableProtocol.Type {
+                object = classType.init(dictionary: dict)
                 success = true
             }
         } catch let error {
@@ -99,7 +100,7 @@ import UIKit
     }
 
     override public var description: String {
-        return "JsonObject -> filename: \(filename) className: \(className), identifier: \(self.identifier)"
+        return "JsonObject -> filename: \(filename) className: \(className), identifier: \(identifier)"
     }
 
     public func deleteLocalStorage() {
@@ -109,7 +110,6 @@ import UIKit
 
         do {
             try FileManager.default.removeItem(atPath: localURL.path)
-        }
-        catch {}
+        } catch {}
     }
 }

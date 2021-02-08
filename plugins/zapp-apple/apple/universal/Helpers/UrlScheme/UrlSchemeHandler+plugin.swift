@@ -15,9 +15,9 @@ struct PluginURLSchemeKeys {
 extension UrlSchemeHandler {
     class func handlePluginURLScheme(url: URL) -> Bool {
         guard let params = queryParams(url: url),
-            let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String,
-            let pluginModel = PluginsManager.pluginModelById(pluginIdentifier),
-            let classType = PluginsManager.adapterClass(pluginModel) as? PluginAdapterProtocol.Type else {
+              let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String,
+              let pluginModel = PluginsManager.pluginModelById(pluginIdentifier),
+              let classType = PluginsManager.adapterClass(pluginModel) as? PluginAdapterProtocol.Type else {
             return false
         }
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
@@ -28,6 +28,4 @@ extension UrlSchemeHandler {
         }
         return false
     }
-
-
 }

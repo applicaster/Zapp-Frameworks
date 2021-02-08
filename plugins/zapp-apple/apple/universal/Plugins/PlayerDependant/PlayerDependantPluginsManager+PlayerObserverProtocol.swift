@@ -70,7 +70,7 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
                 if let provider = provider as? PlayerObserverProtocol,
                    let value = provider.playerReadyToPlay?(player: player),
                    value == false {
-                    //update only if false as player dependent plugins may have different value and we need single false to stop playback
+                    // update only if false as player dependent plugins may have different value and we need single false to stop playback
                     shouldContinuePlaying = value
                 }
             }
@@ -92,7 +92,7 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
 
     public func playerDidCreate(player: PlayerProtocol) {
         createProvidersIfNeeded(with: player)
-        
+
         if let providersForPlayer = providers(playerPlugin: player) {
             providersForPlayer.forEach { providerDict in
                 let provider = providerDict.value
