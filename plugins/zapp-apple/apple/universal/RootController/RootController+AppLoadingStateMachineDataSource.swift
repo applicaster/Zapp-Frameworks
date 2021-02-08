@@ -13,7 +13,7 @@ import ZappCore
 public let kMSAppCenterCheckForUpdatesNotification = "kMSAppCenterCheckForUpdatesNotification"
 
 extension RootController: LoadingStateMachineDataSource {
-    func loadApplicationLoadingGroup(_ successHandler: @escaping StateCallBack,
+    func loadSplashScreenGroup(_ successHandler: @escaping StateCallBack,
                                      _ failHandler: @escaping StateCallBack) {
         splashViewController?.startAppLoading(rootViewController: self, completion: {
             successHandler()

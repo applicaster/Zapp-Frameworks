@@ -58,7 +58,7 @@ public class RootController: NSObject {
             guard let self = self else { return }
             if success {
                 self.loadingStateMachine = LoadingStateMachine(dataSource: self,
-                                                               withStates: self.preapreLoadingStates())
+                                                               withStates: self.prepareLoadingStates())
                 self.loadingStateMachine.startStatesInvocation()
             } else {
                 self.showErrorMessage(message: "Can not intialize application!")
@@ -66,9 +66,9 @@ public class RootController: NSObject {
         }
     }
 
-    func preapreLoadingStates() -> [LoadingState] {
+    func prepareLoadingStates() -> [LoadingState] {
         let splashState = LoadingState()
-        splashState.stateHandler = loadApplicationLoadingGroup
+        splashState.stateHandler = loadSplashScreenGroup
         splashState.readableName = "<app-loader-state-machine> Show Splash Screen"
 
         let plugins = LoadingState()
