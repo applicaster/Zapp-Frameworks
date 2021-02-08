@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import ZappCore
 import XrayLogger
+import ZappCore
 
 @objc public class PlayerDependantPluginsManager: NSObject, PluginManagerControlFlowProtocol {
     lazy var logger = Logger.getLogger(for: PlayerDependantPluginsManangerLogs.subsystem)
@@ -39,19 +39,18 @@ import XrayLogger
         if let pluginModels = FacadeConnector.connector?.pluginManager?.getAllPlugins() {
             for pluginModel in pluginModels {
                 var provider: (PlayerObserverProtocol & PlayerDependantPluginProtocol)?
-                //find provider in already iniaialized plugins
+                // find provider in already iniaialized plugins
                 if let providerInstance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginModel.identifier) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
                     provider = providerInstance
                 }
-                //create new plugin instance
+                // create new plugin instance
                 else if let classType = FacadeConnector.connector?.pluginManager?.adapterClass(pluginModel) as? PlayerDependantPluginProtocol.Type,
-                    let providerInstance = classType.init(pluginModel: pluginModel) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
+                        let providerInstance = classType.init(pluginModel: pluginModel) as? (PlayerObserverProtocol & PlayerDependantPluginProtocol) {
                     provider = providerInstance
                     provider?.prepareProvider([:], completion: nil)
-
                 }
-                
-                //add provider if created or found in already created instances
+
+                // add provider if created or found in already created instances
                 if let provider = provider {
                     provider.playerPlugin = player
                     retVal[pluginModel.identifier] = provider
@@ -84,14 +83,14 @@ import XrayLogger
 
         completion?(true)
     }
-    
+
     func getProviderInstance(identifier: String) -> PluginAdapterProtocol? {
         logger?.debugLog(template: PlayerDependantPluginsManangerLogs.getProviderInstance,
                          data: ["identifier": identifier])
-        
+
         return nil
     }
-    
+
     func getProviderInstance(condition: (Any) -> Any?) -> PluginAdapterProtocol? {
         return nil
     }

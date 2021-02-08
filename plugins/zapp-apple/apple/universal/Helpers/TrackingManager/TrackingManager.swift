@@ -91,7 +91,6 @@ public class TrackingManager: NSObject {
 
         if let platform = sessionStorage.get(key: ZappStorageKeys.platform,
                                              namespace: nil) {
-            
             if platform == ZappStorageKeys.iOS {
                 params[EventParameters.zappPlatform] = PlatformType.mobile
             } else if platform == ZappStorageKeys.tvOS {
@@ -111,14 +110,13 @@ public class TrackingManager: NSObject {
 
     private func send(_ params: [String: Any],
                       completion: @escaping (_ succeed: Bool) -> Void) {
-
         logger?.verboseLog(template: TrackingManagerLogs.sendEvent,
                            data: params)
 
         let events = ["events": [params]]
 
         // vallidate url
-        guard let url = URL(string: self.endPoint) else {
+        guard let url = URL(string: endPoint) else {
             logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedNoEndpoint,
                                data: params)
             return
@@ -131,7 +129,7 @@ public class TrackingManager: NSObject {
 
         // vallidate params
         guard let jsonString = StorageHelper.getJSONStringFrom(dictionary: events),
-            let jsonData = jsonString.data(using: .utf8) else {
+              let jsonData = jsonString.data(using: .utf8) else {
             logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedJson,
                                data: params)
             return
@@ -142,7 +140,7 @@ public class TrackingManager: NSObject {
         URLSession.shared.dataTask(with: request) { _, _, error in
             if error != nil {
                 self.logger?.verboseLog(template: TrackingManagerLogs.sendEventFailedResponse,
-                                   data: ["error": error.debugDescription])
+                                        data: ["error": error.debugDescription])
             }
             completion(error == nil)
         }.resume()

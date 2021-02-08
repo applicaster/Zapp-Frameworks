@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-open class ScreenMultiplierConverter:NSObject {
+open class ScreenMultiplierConverter: NSObject {
     private static let iPhone_667h = "LaunchImage-800-667h"
     private static let iPhone_736h = "LaunchImage-800-Portrait-736h"
     private static let iPhone_812h = "LaunchImage-1100-Portrait-2436h"
     private static let iPhone_896h = "LaunchImage-1200-Portrait-1792h"
     private static let iPhone_1242h = "LaunchImage-1200-Portrait-2688h"
-    private static let iPad_1366h  = "Default-1366h"
+    private static let iPad_1366h = "Default-1366h"
 
     private static let filesToDisableZoomMode = [iPhone_667h, iPhone_736h, iPhone_812h, iPhone_896h, iPhone_896h, iPhone_1242h]
-    private static var isZoomModeDisabled:Bool = {
+    private static var isZoomModeDisabled: Bool = {
         var retVal = true
 
         for file in filesToDisableZoomMode {
@@ -38,16 +38,16 @@ open class ScreenMultiplierConverter:NSObject {
         return retVal
     }()
 
-    static let iPhoneMinPortraitWidth:CGFloat = 320.0
-    static let iPadMinPortraitWidth:CGFloat = 768.0
+    static let iPhoneMinPortraitWidth: CGFloat = 320.0
+    static let iPadMinPortraitWidth: CGFloat = 768.0
 
-    public class func convertedValueForScreenMultiplier(value:CGFloat) -> CGFloat {
+    public class func convertedValueForScreenMultiplier(value: CGFloat) -> CGFloat {
         let multiplier = screenMultiplier()
         return (value * multiplier).rounded(.down)
     }
 
     open class func screenMultiplier() -> CGFloat {
-        var retVal:CGFloat = 1.0
+        var retVal: CGFloat = 1.0
         if isZoomModeDisabled {
             let deviceRealWidth = deviceWidth()
 
@@ -61,7 +61,7 @@ open class ScreenMultiplierConverter:NSObject {
     }
 
     public class func deviceWidth() -> CGFloat {
-        var retVal:CGFloat = 0
+        var retVal: CGFloat = 0
         let screenBounds = UIScreen.main.bounds
         let statusBarOrientation = UIApplication.shared.statusBarOrientation
         if statusBarOrientation.isPortrait {
@@ -74,7 +74,7 @@ open class ScreenMultiplierConverter:NSObject {
     }
 
     public class func deviceHeight() -> CGFloat {
-        var retVal:CGFloat = 0
+        var retVal: CGFloat = 0
         let screenBounds = UIScreen.main.bounds
         let statusBarOrientation = UIApplication.shared.statusBarOrientation
         if statusBarOrientation.isPortrait {

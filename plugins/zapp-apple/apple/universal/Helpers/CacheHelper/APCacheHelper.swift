@@ -9,27 +9,25 @@
 import Foundation
 
 class APCacheHelper: NSObject {
-    
     class func download(file: APFile,
-                        completion:@escaping (_ success:Bool) -> Void) {
+                        completion: @escaping (_ success: Bool) -> Void) {
         guard let request = file.request else {
             return completion(false)
         }
-        
-        //Request Header configuration:
+
+        // Request Header configuration:
         let configuration = URLSessionConfiguration.default
-        
-        //Set download cache
+
+        // Set download cache
         configuration.urlCache = APCacheManager.urlCache
-        
+
         let session = URLSession(configuration: configuration)
 
-        let task = session.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { data, response, error in
             var success = false
             if let data = data,
-                let httpResponse = response as? HTTPURLResponse {
+               let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
-                   
                     if file.getCachedData() == nil || data != file.getCachedData() {
                         success = file.saveToStorage(data: data)
                     } else if file.isInLocalStorage() {
@@ -39,12 +37,10 @@ class APCacheHelper: NSObject {
             } else if let error = error {
                 debugPrint("Failed to load with error: \(error.localizedDescription)")
             }
-            
+
             completion(success)
         }
-        
+
         task.resume()
     }
-  
 }
-

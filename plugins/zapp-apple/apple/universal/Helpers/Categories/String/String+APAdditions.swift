@@ -6,16 +6,16 @@
 //  Copyright © 2017 Applicaster Ltd. All rights reserved.
 //
 
+import CommonCrypto
 import Foundation
 import UIKit
-import CommonCrypto
 
 public extension String {
     func toMd5hash() -> String {
         let length = Int(CC_MD5_DIGEST_LENGTH)
         var digest = [UInt8](repeating: 0, count: length)
 
-        if let d = self.data(using: .utf8) {
+        if let d = data(using: .utf8) {
             _ = d.withUnsafeBytes { body -> String in
                 CC_MD5(body.baseAddress, CC_LONG(d.count), &digest)
 
@@ -64,10 +64,10 @@ public extension String {
     static func tryAddHost(to urlString: String) -> String? {
         let urlWithHost = "https://" + urlString
         if let url = URL(string: urlString),
-            UIApplication.shared.canOpenURL(url) == true {
+           UIApplication.shared.canOpenURL(url) == true {
             return urlString
         } else if let url = URL(string: urlWithHost),
-            UIApplication.shared.canOpenURL(url) == true {
+                  UIApplication.shared.canOpenURL(url) == true {
             return urlWithHost
         }
 

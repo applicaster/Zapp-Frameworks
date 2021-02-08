@@ -91,7 +91,7 @@ public class LoadingState {
     /// Start load state if state has not dependant states
     @discardableResult func setStartLoadState() -> Bool {
         if dependantStates.count == 0,
-            loadingState == .initial {
+           loadingState == .initial {
             loadState()
             return true
         }
@@ -124,13 +124,13 @@ public class LoadingState {
     /// - Parameter stateType: state that finished job
     func stateDidFinishedJob(stateId: String) {
         if name != stateId,
-            dependantStates.contains(stateId),
-            willSkipingStateAutoInvocation == false {
+           dependantStates.contains(stateId),
+           willSkipingStateAutoInvocation == false {
             var isDependantStatesReady = true
 
             for currentStateId in dependantStates {
                 if let dependentState = delegate?.state(by: currentStateId),
-                    dependentState.loadingState.isStateFinishedTask() == false {
+                   dependentState.loadingState.isStateFinishedTask() == false {
                     isDependantStatesReady = false
                     break
                 } else if delegate?.state(by: currentStateId) == nil {
@@ -140,7 +140,7 @@ public class LoadingState {
             }
 
             if isDependantStatesReady == true,
-                loadingState == .initial {
+               loadingState == .initial {
                 loadState()
             }
         }

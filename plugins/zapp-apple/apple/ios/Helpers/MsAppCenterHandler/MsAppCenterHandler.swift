@@ -27,7 +27,7 @@ public class MsAppCenterHandler: NSObject {
             logger?.warningLog(template: AppCenterLogs.appCenterConfigureNoSecret)
             return
         }
-        
+
         var services: [MSServiceAbstract.Type] = [MSDistribute.self]
 
         if let crashes = crashesService() {
@@ -37,12 +37,12 @@ public class MsAppCenterHandler: NSObject {
         if let analytics = analyticsService() {
             services.append(analytics)
         }
-        
+
         MSAppCenter.start(appSecret,
                           withServices: services)
 
         configureDistribution()
-        
+
         let analyticsLogsMessage = analyticsService() != nil ? true : false
         let crashLogsMessage = crashesService() != nil ? true : false
         logger?.debugLog(template: AppCenterLogs.appCenterConfigure,
@@ -75,7 +75,7 @@ public class MsAppCenterHandler: NSObject {
         #endif
     }
 
- func analyticsService() -> MSServiceAbstract.Type? {
+    func analyticsService() -> MSServiceAbstract.Type? {
         #if canImport(AppCenterAnalytics)
             return MSAnalytics.self
         #else

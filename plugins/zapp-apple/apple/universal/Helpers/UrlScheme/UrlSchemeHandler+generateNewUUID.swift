@@ -20,19 +20,19 @@ extension UrlSchemeHandler {
                                       preferredStyle: .alert)
 
         let yesButton = UIAlertAction(title: yesTitle,
-                                         style: .destructive,
-                                         handler: { _ in
-                                            UUIDManager.regenerateUUID()
-                                            rootViewController?.reloadApplication()
-        })
+                                      style: .destructive,
+                                      handler: { _ in
+                                          UUIDManager.regenerateUUID()
+                                          rootViewController?.reloadApplication()
+                                      })
 
         let noButton = UIAlertAction(title: noTitle,
-                                         style: .default,
-                                         handler: { _ in
-                                            alert.dismiss(animated: true, completion: {
-                                                rootViewController?.makeInterfaceLayerAsRootViewContoroller()
-                                            })
-        })
+                                     style: .default,
+                                     handler: { _ in
+                                         alert.dismiss(animated: true, completion: {
+                                             rootViewController?.makeInterfaceLayerAsRootViewContoroller()
+                                         })
+                                     })
 
         alert.addAction(yesButton)
         alert.addAction(noButton)

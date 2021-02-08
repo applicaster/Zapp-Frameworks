@@ -35,7 +35,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
         loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.disableAllPlugins)
 
         guard let pluginType = ZPPluginType(rawValue: pluginType),
-            let manager = pluginManager(type: pluginType) else {
+              let manager = pluginManager(type: pluginType) else {
             loggerControlFlow?.warningLog(template: PluginsManagerControlFlowLogs.disableAllPluginsFailed)
 
             completion?(false)
@@ -64,7 +64,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
         loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.enableAllPlugins)
 
         guard let pluginType = ZPPluginType(rawValue: pluginType),
-            let manager = pluginManager(type: pluginType) else {
+              let manager = pluginManager(type: pluginType) else {
             loggerControlFlow?.warningLog(template: PluginsManagerControlFlowLogs.enableAllPluginsFailed)
 
             completion?(false)
@@ -78,7 +78,7 @@ extension PluginsManager: FacadeConnectorPluginManagerControlFlow {
         loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.getPluginManagerRelatedToSpecificPlugin,
                                     data: ["identifier": identifier])
         guard let plugin = PluginsManager.pluginModelById(identifier),
-            let pluginType = plugin.pluginType else {
+              let pluginType = plugin.pluginType else {
             loggerControlFlow?.debugLog(template: PluginsManagerControlFlowLogs.getPluginManagerRelatedToSpecificPluginFailed,
                                         data: ["identifier": identifier])
             return nil

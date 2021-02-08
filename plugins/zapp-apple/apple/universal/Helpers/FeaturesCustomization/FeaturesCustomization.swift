@@ -28,7 +28,7 @@ public class FeaturesCustomization {
 
     public class func s3Hostname() -> String {
         guard let hostname = featuresCustomizationDict?[FeaturesCusimizationConsts.S3Hostname] as? String,
-            hostname.isEmpty == false else {
+              hostname.isEmpty == false else {
             return "assets-secure.applicaster.com"
         }
         return hostname
@@ -40,7 +40,7 @@ public class FeaturesCustomization {
         }
         return debugEnvironment
     }
-    
+
     public class func isTabletPortrait() -> Bool {
         guard let isPortrait = featuresCustomizationDict?[FeaturesCusimizationConsts.isTabletPortrait] as? Bool else {
             return false
@@ -48,5 +48,3 @@ public class FeaturesCustomization {
         return isPortrait
     }
 }
-
-
