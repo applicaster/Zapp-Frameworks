@@ -121,7 +121,9 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerProgress = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const { duration } = this.state;
-    this.props?.onProgress({ currentTime, duration });
+    if(this.props?.onProgress) {
+      this.props?.onProgress({ currentTime, duration });
+    }
   };
 
   onPlayerSeeking = ({ nativeEvent }) => {};
