@@ -13,6 +13,92 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  custom_configuration_fields: [
+    {
+      group: true,
+      label: "Google IMA",
+      tooltip: "Google IMA Settings",
+      folded: true,
+      fields: [
+        {
+          type: "select",
+          key: "advertisment_type",
+          tooltip_text: "Ads type",
+          options: [
+            {
+              text: "VMAP",
+              value: "VMAP",
+            },
+            {
+              text: "VAST",
+              value: "VAST",
+            },
+          ],
+          initial_value: "VMAP",
+        },
+        {
+          type: "text",
+          key: "tag_vmap_url",
+          tooltip_text: "VMAP URL",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["VMAP"],
+              key: "custom_configuration_fields/advertisment_type",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "tag_preroll_url",
+          tooltip_text: "Preroll URL",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["VAST"],
+              key: "custom_configuration_fields/advertisment_type",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "tag_postroll_url",
+          tooltip_text: "Postroll URL",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["VAST"],
+              key: "custom_configuration_fields/advertisment_type",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "tag_midroll_url",
+          tooltip_text: "Midroll URL",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["VAST"],
+              key: "custom_configuration_fields/advertisment_type",
+            },
+          ],
+        },
+        {
+          type: "text",
+          key: "midroll_offset",
+          tooltip_text: "Midroll offset in percentage",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["VAST"],
+              key: "custom_configuration_fields/advertisment_type",
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 function createManifest({ version, platform }) {
@@ -28,7 +114,10 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     project_dependencies: project_dependencies[platform],
-    custom_configuration_fields: custom_configuration_fields[platform],
+    custom_configuration_fields: {
+      ...baseManifest.custom_configuration_fields,
+      ...custom_configuration_fields[platform],
+    },
   };
 
   return manifest;

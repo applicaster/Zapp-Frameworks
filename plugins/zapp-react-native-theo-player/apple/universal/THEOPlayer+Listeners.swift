@@ -241,6 +241,10 @@ extension THEOplayerView {
                                RNTHEOplayerKeys.volume: event.volume])
     }
 
+    private func playerResize(event: ResizeEvent) {
+        onPlayerResize?([RNTHEOplayerKeys.type: event.type])
+    }
+    
     private func resize(event: ResizeEvent) {
         os_log("RESIZE")
         onPlayerCanPlayThrough?([RNTHEOplayerKeys.type: event.type])

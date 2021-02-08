@@ -141,7 +141,7 @@ class THEOplayerView: UIView {
             chromeless: false,
             cssPaths: stylePaths,
             jsPathsPre: scripthPaths,
-            googleIMA: false
+            googleIMA: true
         )
         player = THEOplayer(configuration: playerConfig)
         /*
