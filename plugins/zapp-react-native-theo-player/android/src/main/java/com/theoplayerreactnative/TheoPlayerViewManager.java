@@ -136,13 +136,35 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .cssPaths("file:///android_asset/css/theoplayer.css")
                 .build();
 
-        playerView = new THEOplayerView(reactContext.getCurrentActivity(), playerConfig);
+        final Activity currentActivity = reactContext.getCurrentActivity();
+        playerView = new THEOplayerView(currentActivity, playerConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event ->
                 reactContext
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                         .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, event));
         playerView.evaluateJavaScript("init({player: player})", null);
+        playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    currentActivity
+                            .getWindow()
+                            .getAttributes()
+                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    currentActivity
+                            .getWindow()
+                            .getAttributes()
+                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
+                }
+            }
+        });
 
         addPropertyChangeListeners(reactContext);
         reactContext.addLifecycleEventListener(this);
