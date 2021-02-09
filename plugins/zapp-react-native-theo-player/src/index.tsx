@@ -125,7 +125,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerProgress = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const { duration } = this.state;
-    if (this.props?.onProgress) {
+    if (!R.isNil(this.props?.onProgress)) {
       this.props?.onProgress({ currentTime, duration });
     }
   };
@@ -141,7 +141,9 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerRateChange = ({ nativeEvent }) => {
     const { playbackRate } = nativeEvent;
     this.setState({ playbackRate });
-    this.props?.onPlaybackRateChange({ playbackRate });
+    if (!R.isNil(this.props?.onPlaybackRateChange)) {
+      this.props?.onPlaybackRateChange({ playbackRate });
+    }
   };
 
   onPlayerReadyStateChange = ({ nativeEvent }) => {};
@@ -151,7 +153,9 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerLoadedData = ({ nativeEvent }) => {
     const { duration } = this.state;
     const { currentTime } = nativeEvent;
-    this.props?.onLoad({ duration, currentTime });
+    if (!R.isNil(this.props?.onLoad)) {
+      this.props?.onLoad({ duration, currentTime });
+    }
   };
 
   onPlayerLoadStart = ({ nativeEvent }) => {};
@@ -186,13 +190,17 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerError = ({ nativeEvent }) => {
-    this.props?.onError(nativeEvent);
+    if (!R.isNil(this.props?.onError)) {
+      this.props?.onError(nativeEvent);
+    }
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
     const type = nativeEvent?.type;
     if (type === "onCloseButtonHandle") {
-      this.props?.onFullscreenPlayerDidDismiss();
+      if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
+        this.props?.onFullscreenPlayerDidDismiss();
+      }
     }
   };
 

@@ -57,8 +57,7 @@ class THEOplayerView: UIView {
     }
 
     deinit {
-//        unloadTheoPlayer()
-        print("fgff")
+
     }
 
     override init(frame: CGRect) {
@@ -78,12 +77,12 @@ class THEOplayerView: UIView {
     override public func removeReactSubview(_ subview: UIView?) {
         subview?.removeFromSuperview()
     }
-    
-    public override func removeFromSuperview() {
-        self.unloadTheoPlayer()
+
+    override public func removeFromSuperview() {
+        unloadTheoPlayer()
         super.removeFromSuperview()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         player.frame = frame
@@ -131,27 +130,27 @@ class THEOplayerView: UIView {
     // MARK: - THEOplayer setup and unload
 
     private func setupTheoPlayer() {
-//        let playerConfig = THEOplayerConfiguration(chromeless: true, pip: nil)
-//        player = THEOplayer(configuration: playerConfig)
-//        player = THEOplayer()
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
         let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
-        let playerConfig = THEOplayerConfiguration(
-            chromeless: false,
-            cssPaths: stylePaths,
-            jsPathsPre: scripthPaths,
-            googleIMA: true
-        )
-        
+
+        let playerConfig = THEOplayerConfiguration(chromeless: false,
+                                                   cssPaths: stylePaths,
+                                                   jsPathsPre: scripthPaths,
+                                                   pip: PiPConfiguration(retainPresentationModeOnSourceChange: true),
+                                                   ads: AdsConfiguration(showCountdown: true, preload: .NONE,
+                                                                         googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)),
+                                                   cast: CastConfiguration(strategy: .auto))
+
         player = THEOplayer(configuration: playerConfig)
+
         /*
             Evaluate main script function declarated in theoplayer.js(custom js)
             You can init pure js code without file by evaluateJavaScript.
          */
         player.evaluateJavaScript("init({player: player})")
         player.presentationMode = .inline
-        
+
         attachJSEventListeners()
         attachEventListeners()
         player.addAsSubview(of: self)

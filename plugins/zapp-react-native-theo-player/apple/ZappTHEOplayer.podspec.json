@@ -25,7 +25,8 @@
     },
     "dependencies": {
       "GoogleAds-IMA-iOS-SDK": ["= 3.13.0"],
-      "React": []
+      "React": [],
+      "ZappCore": []
     },
     "source_files": "ios/**/*.{swift}"
   },

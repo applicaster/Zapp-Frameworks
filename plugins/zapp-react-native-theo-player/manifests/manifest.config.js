@@ -34,6 +34,10 @@ const baseManifest = {
               text: "VAST",
               value: "VAST",
             },
+            {
+              text: "OFF",
+              value: "OFF",
+            },
           ],
           initial_value: "VMAP",
         },
@@ -99,6 +103,26 @@ const baseManifest = {
         },
       ],
     },
+    {
+      group: true,
+      label: "Google IMA",
+      tooltip: "Google IMA Settings",
+      folded: true,
+      fields: [
+        {
+          type: "text",
+          key: "chromecast_app_id",
+          tooltip_text: "Chromecast application ID",
+          default: "",
+        },
+        {
+          type: "text",
+          key: "plist.array.NSBonjourServices",
+          tooltip_text: "Please replace ABCD1234 with Chromecast appId",
+          default: "_ABCD1234._googlecast._tcp, _googlecast._tcp",
+        },
+      ],
+    },
   ],
 };
 
@@ -125,7 +149,14 @@ function createManifest({ version, platform }) {
 }
 
 const api = {
-  ios_for_quickbrick: {},
+  ios_for_quickbrick: {
+    class_name: "THEOplayerAdapter",
+    modules: ["ZappTHEOplayer"],
+    plist: {
+      NSLocalNetworkUsageDescription:
+        "App uses the local network to discover Cast-enabled devices on your WiFi network.",
+    },
+  },
   android_for_quickbrick: {
     class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     react_packages: ["com.theoplayerreactnative.TheoPlayerPackage"],
