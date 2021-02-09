@@ -111,7 +111,7 @@ const baseManifest = {
       fields: [
         {
           type: "text",
-          key: "chromecast_app_id",
+          key: "chromecast_reciever_application_id",
           tooltip_text: "Chromecast application ID",
           default: "",
         },
