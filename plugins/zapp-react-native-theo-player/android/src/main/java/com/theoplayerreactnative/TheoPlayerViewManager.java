@@ -2,6 +2,7 @@ package com.theoplayerreactnative;
 
 import android.app.Activity;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -22,6 +23,7 @@ import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
+import com.theoplayer.android.api.player.DoneCallback;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
