@@ -300,7 +300,7 @@ extension DurationChangeEvent {
     /// - Returns: -1 in case infinite value
     var getPatchedDuration: Double? {
         guard let duration = self.duration,
-              duration.isInfinite else {
+              duration.isInfinite == false else {
             return 0
         }
         return self.duration

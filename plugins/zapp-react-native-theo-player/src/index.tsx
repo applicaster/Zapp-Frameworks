@@ -1,5 +1,6 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
+import { Platform } from "react-native";
 import TransportControls from "@applicaster/quick-brick-mobile-transport-controls";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
@@ -7,6 +8,8 @@ import { fetchImageFromMetaByKey } from "./Utils";
 import { StyleSheet, View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
+import * as R from "ramda";
+
 console.disableYellowBox = true;
 const styles = StyleSheet.create({
   containerBase: {
@@ -122,7 +125,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerProgress = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const { duration } = this.state;
-    if(this.props?.onProgress) {
+    if (this.props?.onProgress) {
       this.props?.onProgress({ currentTime, duration });
     }
   };
@@ -173,8 +176,13 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerDestroy = ({ nativeEvent }) => {};
 
   onPlayerEnded = ({ nativeEvent }) => {
-    this.props?.onEnd();
-    this.props?.onEnded();
+    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
+      this.props?.onEnd();
+    }
+
+    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
+      this.props?.onEnded();
+    }
   };
 
   onPlayerError = ({ nativeEvent }) => {
