@@ -143,6 +143,7 @@ class THEOplayerView: UIView {
             jsPathsPre: scripthPaths,
             googleIMA: true
         )
+        
         player = THEOplayer(configuration: playerConfig)
         /*
             Evaluate main script function declarated in theoplayer.js(custom js)

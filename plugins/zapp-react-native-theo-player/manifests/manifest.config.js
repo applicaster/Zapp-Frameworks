@@ -13,6 +13,7 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  screen: true,
   custom_configuration_fields: [
     {
       group: true,

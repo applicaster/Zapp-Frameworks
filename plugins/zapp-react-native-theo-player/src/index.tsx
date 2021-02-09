@@ -6,6 +6,7 @@ import { populateConfigurationValues } from "@applicaster/zapp-react-native-util
 import { fetchImageFromMetaByKey } from "./Utils";
 import { StyleSheet, View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
+import { getIMAData } from "./Services/GoogleIMA";
 console.disableYellowBox = true;
 const styles = StyleSheet.create({
   containerBase: {
@@ -88,6 +89,7 @@ function getStyles() {
 export default class THEOPlayer extends Component<Props, State> {
   constructor(props) {
     super(props);
+
     this.state = {
       showControls: false,
       showPoster: true,
@@ -114,7 +116,6 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerPause = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const duration = this.state?.duration;
-    console.log({ currentTime, duration, pause: this.props?.onPause });
     // this.props?.onPause({ currentTime, duration });
   };
 
@@ -206,11 +207,17 @@ export default class THEOPlayer extends Component<Props, State> {
   // }
 
   _assignRoot = (component) => {
-    //this._root = component;
+    // this._root = component;
   };
 
   render() {
-    const { entry, style: videoStyle, inline, source } = this.props;
+    const {
+      entry,
+      style: videoStyle,
+      inline,
+      source,
+      pluginConfiguration,
+    } = this.props;
 
     const posterImage = fetchImageFromMetaByKey(entry);
     return (
@@ -221,10 +228,10 @@ export default class THEOPlayer extends Component<Props, State> {
         }
       >
         <THEOplayerView
-          // ref={this._assignRoot}
+          ref={this._assignRoot}
           style={{ flex: 1 }}
           fullscreenOrientationCoupling={true}
-          autoplay={false}
+          autoplay={true}
           entry={entry}
           onPlayerPlay={this.onPlayerPlay}
           onPlayerPlaying={this.onPlayerPlaying}
@@ -257,6 +264,7 @@ export default class THEOPlayer extends Component<Props, State> {
                 src: entry?.content?.src,
               },
             ],
+            ads: getIMAData({ entry, pluginConfiguration }),
             poster: posterImage,
           }}
         />
@@ -264,15 +272,3 @@ export default class THEOPlayer extends Component<Props, State> {
     );
   }
 }
-
-// source={{
-//   sources: [
-//     {
-//       type: "application/x-mpegurl",
-//       src:
-//         "https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8",
-//     },
-//   ],
-//   poster:
-//     "https://cdn.theoplayer.com/video/big_buck_bunny/poster.jpg",
-// }}
