@@ -105,8 +105,8 @@ const baseManifest = {
     },
     {
       group: true,
-      label: "Google IMA",
-      tooltip: "Google IMA Settings",
+      label: "Chromecast",
+      tooltip: "Chromecast Settings",
       folded: true,
       fields: [
         {
