@@ -2,6 +2,7 @@ package com.theoplayerreactnative;
 
 import androidx.annotation.Nullable;
 
+import com.applicaster.util.APLogger;
 import com.facebook.react.bridge.ReadableMap;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
@@ -25,6 +26,8 @@ import java.util.Iterator;
  * Source parsing helper class
  */
 public class SourceHelper {
+
+    private static final String TAG = TheoPlayerViewManager.TAG;
 
     public static SourceDescription parseSourceFromJS(ReadableMap source) {
         try {
@@ -106,7 +109,7 @@ public class SourceHelper {
                     .ads(ads.toArray(new AdDescription[]{}))
                     .build();
         } catch (JSONException e) {
-            e.printStackTrace();
+            APLogger.error(TAG, "Failed to parse source", e);
         }
 
         return null;
@@ -117,7 +120,7 @@ public class SourceHelper {
             JSONObject jsonAdObject = new JSONObject(adDescription.toHashMap());
             return parseTheoAdFromJS(jsonAdObject);
         } catch (JSONException e) {
-            e.printStackTrace();
+            APLogger.error(TAG, "Failed to parse ad", e);
         }
 
         return null;

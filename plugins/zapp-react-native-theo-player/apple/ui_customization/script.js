@@ -9,7 +9,12 @@ function init({ player })
                 /* initialize your button */
             },
             handleClick: () => {
-                window.webkit.messageHandlers.onJSMessageReceived.postMessage({"type" : "onCloseButtonHandle"});
+            var event = {"type" : "onCloseButtonHandle"}
+            if(theoplayerAndroid === undefined) {
+                window.webkit.messageHandlers.onJSMessageReceived.postMessage(event);
+              } else {
+                theoplayerAndroid.sendMessage("onJSMessageReceived", JSON.stringify(event));
+              }
             },
             buildCSSClass: function() {
                 return 'vjs-icon-close'; // insert all class names here
