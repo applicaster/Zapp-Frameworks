@@ -2,17 +2,14 @@
     font-family: THEOplayer;
     font-weight: normal;
     font-style: normal;
-    top: 50;
-    left:150;
-    position: absolute;
+    order: -101
+
 }
 
 .vjs-icon-close:before {
   content: "\f125";
   font-size: 3em;
-  top: 50;
-  left:150;
-  position: absolute;
+  order: -101; /* to the left of the play/pause-button */
 }
 
 .vjs-fullscreen-control {

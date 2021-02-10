@@ -2,6 +2,7 @@ import Foundation
 import React
 import THEOplayerSDK
 import UIKit
+//import DMSMoatMobileAppKit
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {

@@ -123,6 +123,20 @@ const baseManifest = {
         },
       ],
     },
+    {
+      group: true,
+      label: "Moat Analytics",
+      tooltip: "Moat Analytics",
+      folded: true,
+      fields: [
+        {
+          type: "text_input",
+          key: "moat_partner_code",
+          tooltip_text: "Moad partner code",
+          default: "",
+        },
+      ],
+    },
   ],
 };
 
