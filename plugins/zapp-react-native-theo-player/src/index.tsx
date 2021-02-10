@@ -254,7 +254,7 @@ export default class THEOPlayer extends Component<Props, State> {
         <THEOplayerView
           ref={this._assignRoot}
           style={{ flex: 1 }}
-          fullscreenOrientationCoupling={true}
+          fullscreenOrientationCoupling={false}
           autoplay={true}
           entry={entry}
           onPlayerPlay={this.onPlayerPlay}

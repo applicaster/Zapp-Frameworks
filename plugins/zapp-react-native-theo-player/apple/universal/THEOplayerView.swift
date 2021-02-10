@@ -6,9 +6,6 @@ import UIKit
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
-    // TODO: check if need to move to some another place
-    var castContextSet: Bool = false
-
     var listeners: [String: EventListener] = [:]
 //    private static var eventEmitter: ReactNativeEventEmitter!
 
@@ -66,10 +63,6 @@ class THEOplayerView: UIView {
     }
 
     override init(frame: CGRect) {
-        if castContextSet == false {
-            THEOplayerCastHelper.setGCKCastContextSharedInstanceWithDefaultCastOptions()
-            castContextSet = true
-        }
         super.init(frame: frame)
         setupView()
     }
@@ -89,8 +82,8 @@ class THEOplayerView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        player.frame = frame
-        player.autoresizingMask = [.flexibleBottomMargin, .flexibleHeight, .flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleWidth]
+        player?.frame = frame
+        player?.autoresizingMask = [.flexibleBottomMargin, .flexibleHeight, .flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleWidth]
     }
 
     private func setupView() {
@@ -141,7 +134,7 @@ class THEOplayerView: UIView {
             analytics.append(MoatOptions(partnerCode: moatPartnerCode,
                                          debugLoggingEnabled: true))
         }
-        
+
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
         let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
@@ -160,12 +153,8 @@ class THEOplayerView: UIView {
                                                    license: theoplayerLicenseKey,
                                                    licenseUrl: nil,
                                                    verizonMedia: nil)
-        
+
         player = THEOplayer(configuration: playerConfig)
-        player.autoplay = autoplay
-        player.source = source
-        player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
-        
         /*
             Evaluate main script function declarated in theoplayer.js(custom js)
             You can init pure js code without file by evaluateJavaScript.
@@ -176,5 +165,8 @@ class THEOplayerView: UIView {
         attachJSEventListeners()
         attachEventListeners()
         player.addAsSubview(of: self)
+        player.autoplay = autoplay
+        player.source = source
+        player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
     }
 }
