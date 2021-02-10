@@ -38,7 +38,11 @@ class THEOplayerView: UIView {
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
     @objc var onJSWindowEvent: RCTBubblingEventBlock?
-    @objc var licenceData: NSDictionary?
+    @objc var licenceData: NSDictionary? {
+        didSet {
+            setupTheoPlayer()
+        }
+    }
 
     @objc var source: SourceDescription? {
         didSet {
@@ -48,13 +52,13 @@ class THEOplayerView: UIView {
 
     @objc var autoplay: Bool = false {
         didSet {
-            player.autoplay = autoplay
+            player?.autoplay = autoplay
         }
     }
 
     @objc var fullscreenOrientationCoupling: Bool = false {
         didSet {
-            player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
+            player?.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         }
     }
 
@@ -68,7 +72,6 @@ class THEOplayerView: UIView {
         }
         super.init(frame: frame)
         setupView()
-        setupTheoPlayer()
     }
 
     required init?(coder: NSCoder) {
@@ -148,7 +151,7 @@ class THEOplayerView: UIView {
                                                    jsPaths: scripthPaths,
                                                    jsPathsPre: [],
                                                    analytics: analytics,
-                                                   pip: nil,
+                                                   pip: PiPConfiguration(retainPresentationModeOnSourceChange: false),
                                                    ads: AdsConfiguration(showCountdown: true,
                                                                          preload: .NONE,
                                                                          googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)), ui: nil,
@@ -157,17 +160,12 @@ class THEOplayerView: UIView {
                                                    license: theoplayerLicenseKey,
                                                    licenseUrl: nil,
                                                    verizonMedia: nil)
-//        let playerConfig = THEOplayerConfiguration(chromeless: false,
-//                                                   license: "ffdff",
-//                                                   cssPaths: stylePaths,
-//                                                   jsPathsPre: scripthPaths,
-//                                                   pip: nil,
-//                                                   ads: AdsConfiguration(showCountdown: true, preload: .NONE,
-//                                                                         googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)),
-//                                                   cast: CastConfiguration(strategy: .auto))
-
+        
         player = THEOplayer(configuration: playerConfig)
-
+        player.autoplay = autoplay
+        player.source = source
+        player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
+        
         /*
             Evaluate main script function declarated in theoplayer.js(custom js)
             You can init pure js code without file by evaluateJavaScript.

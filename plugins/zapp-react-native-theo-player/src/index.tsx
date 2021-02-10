@@ -243,7 +243,7 @@ export default class THEOPlayer extends Component<Props, State> {
     } = this.props;
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
-
+    console.log({ theoplayer_license_key, moat_partner_code });
     const posterImage = fetchImageFromMetaByKey(entry);
     return (
       <View

@@ -455,10 +455,10 @@
     redux-thunk "^2.3.0"
     reselect "4.0.0"
 
-"@applicaster/zapp-react-native-theo-player@0.0.3-alpha.10":
-  version "0.0.3-alpha.10"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-theo-player/-/zapp-react-native-theo-player-0.0.3-alpha.10.tgz#1b04db1cb06e00fc5deeb99d01bb954360fdde9b"
-  integrity sha512-wo6vGUnmshpTVk9ECLU4pNQsRJhk2plnRTx5pmvKYdXvMFMnJUPqtlhWM/nIk1bno4m9LZlUVDSPUO0StMQBNQ==
+"@applicaster/zapp-react-native-theo-player@0.0.3-alpha.12":
+  version "0.0.3-alpha.12"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-theo-player/-/zapp-react-native-theo-player-0.0.3-alpha.12.tgz#9e2c87029dcefe3304ec8772b67e4326f494d58d"
+  integrity sha512-z8RZQU0PabQMRoaGC26ifxABwhVFWvqhNjoNNguA5gMjQxheYU85kX9vz9+lbF0Lxq0EX1uqmv16l7HvY3O0fA==
   dependencies:
     ramda "^0.26.1"
 
