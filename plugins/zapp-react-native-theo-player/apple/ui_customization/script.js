@@ -22,7 +22,6 @@ function init({ player })
         });
 
         THEOplayer.videojs.registerComponent('CloseButton', CloseButton);
-//        player.ui.addChild('CloseButton', {});
-        player.ui.getChild('controlBar').addChild('CloseButton', {});
+        player.ui.getChild('TopControlBar').addChild('CloseButton', {});
     }
 }

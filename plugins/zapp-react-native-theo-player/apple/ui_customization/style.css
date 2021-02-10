@@ -12,6 +12,19 @@
   order: -101; /* to the left of the play/pause-button */
 }
 
+.theoplayer-skin .theo-player-wrapper .vjs-control-bar.theo-top-controlbar {
+  top: 0;
+  height: 4em;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  flex-direction: row-reverse;
+  margin: 0.75em;
+  padding: 0;
+  width: auto;
+  visibility: visible;
+  color: white;
+}
+
 /*.vjs-fullscreen-control {*/
 /*    display: none !important;*/
 /*}*/
