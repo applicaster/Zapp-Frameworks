@@ -25,10 +25,9 @@
       "tooltip_text": "Chromecast application ID"
     },
     {
-      "type": "text",
+      "type": "hidden",
       "key": "plist.array.NSBonjourServices",
-      "tooltip_text": "Please replace ABCD1234 with Chromecast appId",
-      "default": "_ABCD1234._googlecast._tcp, _googlecast._tcp"
+      "initial_value": "_[chromecast_app_id]._googlecast._tcp, _googlecast._tcp"
     }
   ],
   "ui_frameworks": [
@@ -37,8 +36,8 @@
   "identifier": "chromecast_qb",
   "platform": "android_for_quickbrick",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "1.0.0",
-  "manifest_version": "1.0.0",
+  "dependency_version": "1.0.1",
+  "manifest_version": "1.0.1",
   "api": {
     "require_startup_exectution": false,
     "class_name": "com.applicaster.chromecast.ChromeCastPlugin",
@@ -48,7 +47,7 @@
     "roguard_rules": "-keep public class com.reactnative.googlecast.** {*;}"
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@1.0.0"
+    "@applicaster/zapp-generic-chromecast@1.0.1"
   ],
   "targets": [
     "mobile"
