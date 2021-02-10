@@ -42,7 +42,7 @@ const baseManifest = {
           initial_value: "VMAP",
         },
         {
-          type: "text",
+          type: "text_input",
           key: "tag_vmap_url",
           tooltip_text: "VMAP URL",
           default: "",
