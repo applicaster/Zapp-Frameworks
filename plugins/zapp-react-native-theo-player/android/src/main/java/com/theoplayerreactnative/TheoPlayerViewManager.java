@@ -1,13 +1,18 @@
 package com.theoplayerreactnative;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 
 import com.applicaster.reactnative.utils.ContainersUtil;
 import com.applicaster.util.APLogger;
@@ -20,9 +25,11 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.google.android.gms.cast.framework.CastContext;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
+import com.theoplayer.android.api.cast.CastStrategy;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
@@ -46,6 +53,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     //static
     private static final String RCT_MODULE_NAME = "THEOplayerView";
     private static final String JavaScriptMessageListener = "onJSMessageReceived";
+    private static final String sLicenseKey = "sZP7IYe6T6f_ClfZ3LCz36zLClxKFSa_0oh-TQ3gI6zZTQx63SRzIu5zCof6FOPlUY3zWokgbgjNIOf9flRi3Q3eIKPgFS5Z0lR-3uCoI6k60L1KFShr3l5r3l5z3QfrTmfVfK4_bQgZCYxNWoryIQXzImf90SCcTufZ0SCi0u5i0Oi6Io4pIYP1UQgqWgjeCYxgflEc3l5rTue_3Lhi3SfkFOPeWok1dDrLYtA1Ioh6TgV6UQ1gWtAVCYggb6rlWoz6FOPVWo31WQ1qbta6FOfJfgzVfKxqWDXNWG3ybojkbK3gflNWfGxEIDjiWQXrIYfpCoj-f6i6WQjlCDcEWt3zf6i6v6PUFOPLIQ-LflNWfKXpIwPqdDa6Ymi6bo4pIXjNWYAZIY3LdDjpflNzbG4gya";
     public static final String TAG = RCT_MODULE_NAME;
 
     private enum InternalAndGlobalEventPair {
@@ -102,6 +110,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     @Override
     @NonNull
     protected THEOplayerView createViewInstance(final ThemedReactContext reactContext) {
+        initCast(reactContext);
         /*
           Example conviva usage, add account code & uncomment analytics config declaration, if you need
           custom conviva metadata add customConvivaMetadata with key and value
@@ -131,6 +140,12 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .put("username", "THEO user")
                 .put("content.title", "Demo")
                 .build();
+
+        String license = PluginHelper.getLicense();
+        if(TextUtils.isEmpty(license)) {
+            APLogger.error(TAG, "Empty license key");
+        }
+
         /*
           If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
           in js ads source declaration.
@@ -138,6 +153,8 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         */
         THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
                 .ads(new AdsConfiguration.Builder().build())
+                .license(license)
+                .castStrategy(CastStrategy.AUTO)
                 //.analytics(youbora)
                 .jsPaths("file:///android_asset/script.js")
                 .cssPaths("file:///android_asset/style.css")
@@ -146,13 +163,13 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         final Activity currentActivity = reactContext.getCurrentActivity();
         playerView = new THEOplayerView(currentActivity, playerConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        playerView.evaluateJavaScript("init({player: player})", null);
         playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event -> {
             APLogger.debug(TAG, "Received JS event " + event);
             reactContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, repackEvent(event));
         });
+        playerView.evaluateJavaScript("init({player: player})", null);
         playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -174,7 +191,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 }
             }
         });
-
         addPropertyChangeListeners(reactContext);
         reactContext.addLifecycleEventListener(this);
 
@@ -246,14 +262,26 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     @Override
     public void onHostResume() {
         playerView.onResume();
+        if(null != mSelector) {
+            mMediaRouter.addCallback(mSelector, mScanCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+        }
     }
 
     @Override
-    public void onHostPause() { playerView.onPause(); }
+    public void onHostPause() {
+        playerView.onPause();
+        if(null != mSelector) {
+            mMediaRouter.removeCallback(mScanCallback);
+        }
+    }
 
     @Override
     public void onHostDestroy() {
         playerView.onDestroy();
+        if(null != mSelector) {
+            mMediaRouter.removeCallback(mScanCallback);
+            mSelector = null;
+        }
     }
 
     private void goFullscreen() {
@@ -264,4 +292,27 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
+
+    // region ChromeCast hacks
+    // needed only to force the app to scan
+
+    private MediaRouteSelector mSelector;
+    private MediaRouter mMediaRouter;
+    private CastContext mCastContext;
+
+    private final MediaRouter.Callback mScanCallback = new MediaRouter.Callback() {};
+
+    private void initCast(Context context){
+        if(null == mMediaRouter) {
+            mCastContext = CastContext.getSharedInstance(context);
+            mMediaRouter = MediaRouter.getInstance(context);
+            mSelector = new MediaRouteSelector
+                    .Builder()
+                    .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                    .build();
+            mMediaRouter.addCallback(mSelector, mScanCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+        }
+    }
+
+    // endregion ChromeCast hacks
 }
