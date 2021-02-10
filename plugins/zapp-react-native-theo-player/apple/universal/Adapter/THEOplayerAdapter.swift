@@ -1,6 +1,6 @@
 //
 //  THEOplayerAdapter.swift
-//  ZappChromecast
+//  ZappTHEOplayer
 //
 //  Created by Anton Kononenko on 2/9/2020
 //  Copyright © 2021 Applicaster. All rights reserved.
@@ -9,7 +9,7 @@ import Foundation
 import GoogleCast
 import ZappCore
 
-open class THEOplayerAdapter: NSObject {
+open class THEOplayerAdapter: NSObject, PluginAdapterProtocol {
     public var configurationJSON: NSDictionary?
     public var model: ZPPluginModel?
     public var enabled: Bool = false

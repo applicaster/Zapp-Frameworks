@@ -54,7 +54,7 @@ const baseManifest = {
           ],
         },
         {
-          type: "text",
+          type: "text_input",
           key: "tag_preroll_url",
           tooltip_text: "Preroll URL",
           default: "",
@@ -66,7 +66,7 @@ const baseManifest = {
           ],
         },
         {
-          type: "text",
+          type: "text_input",
           key: "tag_postroll_url",
           tooltip_text: "Postroll URL",
           default: "",
@@ -78,7 +78,7 @@ const baseManifest = {
           ],
         },
         {
-          type: "text",
+          type: "text_input",
           key: "tag_midroll_url",
           tooltip_text: "Midroll URL",
           default: "",
@@ -90,7 +90,7 @@ const baseManifest = {
           ],
         },
         {
-          type: "text",
+          type: "text_input",
           key: "midroll_offset",
           tooltip_text: "Midroll offset in percentage",
           default: "",
@@ -110,16 +110,16 @@ const baseManifest = {
       folded: true,
       fields: [
         {
-          type: "text",
+          type: "text_input",
           key: "chromecast_reciever_application_id",
           tooltip_text: "Chromecast application ID",
           default: "",
         },
         {
-          type: "text",
+          type: "hidden",
           key: "plist.array.NSBonjourServices",
-          tooltip_text: "Please replace ABCD1234 with Chromecast appId",
-          default: "_ABCD1234._googlecast._tcp, _googlecast._tcp",
+          initial_value:
+            "_[chromecast_app_id]._googlecast._tcp, _googlecast._tcp",
         },
       ],
     },
