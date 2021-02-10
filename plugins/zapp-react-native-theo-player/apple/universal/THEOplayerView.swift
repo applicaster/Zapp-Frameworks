@@ -1,8 +1,8 @@
 import Foundation
+import MoPub
 import React
 import THEOplayerSDK
 import UIKit
-//import DMSMoatMobileAppKit
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -38,6 +38,7 @@ class THEOplayerView: UIView {
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
     @objc var onJSWindowEvent: RCTBubblingEventBlock?
+    @objc var licenceData: NSDictionary?
 
     @objc var source: SourceDescription? {
         didSet {
@@ -58,7 +59,6 @@ class THEOplayerView: UIView {
     }
 
     deinit {
-
     }
 
     override init(frame: CGRect) {
@@ -131,17 +131,40 @@ class THEOplayerView: UIView {
     // MARK: - THEOplayer setup and unload
 
     private func setupTheoPlayer() {
+        let theoplayerLicenseKey = licenceData?["theoplayer_license_key"] as? String
+
+        var analytics = [AnalyticsDescription]()
+        if let moatPartnerCode = licenceData?["moat_partner_code"] as? String {
+            analytics.append(MoatOptions(partnerCode: moatPartnerCode,
+                                         debugLoggingEnabled: true))
+        }
+        
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
         let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
-
         let playerConfig = THEOplayerConfiguration(chromeless: false,
+                                                   defaultCSS: true,
                                                    cssPaths: stylePaths,
-                                                   jsPathsPre: scripthPaths,
-                                                   pip:nil,
-                                                   ads: AdsConfiguration(showCountdown: true, preload: .NONE,
-                                                                         googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)),
-                                                   cast: CastConfiguration(strategy: .auto))
+                                                   jsPaths: scripthPaths,
+                                                   jsPathsPre: [],
+                                                   analytics: analytics,
+                                                   pip: nil,
+                                                   ads: AdsConfiguration(showCountdown: true,
+                                                                         preload: .NONE,
+                                                                         googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)), ui: nil,
+                                                   cast: CastConfiguration(strategy: .auto),
+                                                   hlsDateRange: nil,
+                                                   license: theoplayerLicenseKey,
+                                                   licenseUrl: nil,
+                                                   verizonMedia: nil)
+//        let playerConfig = THEOplayerConfiguration(chromeless: false,
+//                                                   license: "ffdff",
+//                                                   cssPaths: stylePaths,
+//                                                   jsPathsPre: scripthPaths,
+//                                                   pip: nil,
+//                                                   ads: AdsConfiguration(showCountdown: true, preload: .NONE,
+//                                                                         googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)),
+//                                                   cast: CastConfiguration(strategy: .auto))
 
         player = THEOplayer(configuration: playerConfig)
 

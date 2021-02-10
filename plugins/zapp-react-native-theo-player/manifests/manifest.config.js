@@ -16,6 +16,12 @@ const baseManifest = {
   screen: true,
   custom_configuration_fields: [
     {
+      type: "text_input",
+      key: "theoplayer_license_key",
+      tooltip_text: "Theoplayer licence key",
+      default: "",
+    },
+    {
       group: true,
       label: "Google IMA",
       tooltip: "Google IMA Settings",

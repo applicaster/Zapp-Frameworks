@@ -12,9 +12,9 @@
   order: -101; /* to the left of the play/pause-button */
 }
 
-.vjs-fullscreen-control {
-    display: none !important;
-}
+/*.vjs-fullscreen-control {*/
+/*    display: none !important;*/
+/*}*/
 
 .theoplayer-skin video {
   /* object-fit: contain;*/ /* default */

@@ -26,7 +26,8 @@
     "dependencies": {
       "GoogleAds-IMA-iOS-SDK": ["= 3.13.0"],
       "React": [],
-      "ZappCore": []
+      "ZappCore": [],
+      "google-cast-sdk": ["= 4.3.0"]
     },
     "source_files": "ios/**/*.{swift}"
   },
@@ -38,11 +39,7 @@
     },
     "source_files": "tvos/**/*.{swift}"
   },
-  "vendored_frameworks": [
-    "THEOplayerSDK.framework",
-    "AgamaSDK.framework",
-    "GoogleCast.framework"
-  ],
+  "vendored_frameworks": ["THEOplayerSDK.framework"],
   "dependencies": {
     "XrayLogger": []
   },

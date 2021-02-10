@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
+type PluginConfiguration = {
+  theoplayer_license_key: string;
+  moat_partner_code: string;
+};
+
 type Content = {
   type: string;
   src: string;
@@ -34,7 +39,7 @@ type Entry = {
 type Props = {
   entry: Entry;
   source: object;
-  pluginConfiguration: object;
+  pluginConfiguration: PluginConfiguration;
   onFullscreenPlayerDidDismiss: () => void;
   playableItem: object;
   controls: boolean;
@@ -236,6 +241,8 @@ export default class THEOPlayer extends Component<Props, State> {
       source,
       pluginConfiguration,
     } = this.props;
+    const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
+    const moat_partner_code = pluginConfiguration?.moat_partner_code;
 
     const posterImage = fetchImageFromMetaByKey(entry);
     return (
@@ -275,6 +282,7 @@ export default class THEOPlayer extends Component<Props, State> {
           onPlayerEnded={this.onPlayerEnded}
           onPlayerError={this.onPlayerError}
           onJSWindowEvent={this.onJSWindowEvent}
+          licenceData={{ theoplayer_license_key, moat_partner_code }}
           source={{
             sources: [
               {
