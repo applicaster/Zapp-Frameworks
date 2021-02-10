@@ -34,6 +34,11 @@ extension PluginsManager: LoadingStateMachineDataSource {
         general.dependantStates = [onLaunchHook.name]
         general.readableName = "<plugins-state-machine> Prepare General Plugins"
 
+        let player = LoadingState()
+        player.stateHandler = preparePlayerPlugins
+        player.dependantStates = [onLaunchHook.name]
+        player.readableName = "<plugins-state-machine> Prepare Player Plugins"
+        
         let pluginsSessionStorageData = LoadingState()
         pluginsSessionStorageData.stateHandler = updatePluginSessionStorageData
         pluginsSessionStorageData.readableName = "<plugins-state-machine> Plugins Session Storage"
@@ -44,6 +49,7 @@ extension PluginsManager: LoadingStateMachineDataSource {
                 analytics,
                 push,
                 general,
+                player,
                 pluginsSessionStorageData]
     }
 
