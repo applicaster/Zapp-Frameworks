@@ -19,6 +19,7 @@ public class PluginsManager: NSObject {
     public lazy var playerDependants = PlayerDependantPluginsManager()
     public lazy var push = PushPluginsManager()
     public lazy var general = GeneralPluginsManager()
+    public lazy var player = PlayerPluginsManager()
     public lazy var crashlogs = CrashlogsPluginsManager()
 
     public lazy var localNotificationManager: FacadeConnectorLocalNotificationProtocol? = {
@@ -84,6 +85,16 @@ public class PluginsManager: NSObject {
             success ? successHandler() : failHandler()
         }
     }
+    
+    func preparePlayerPlugins(_ successHandler: @escaping StateCallBack,
+                               _ failHandler: @escaping StateCallBack) {
+        logger?.debugLog(template: PluginsManagerLogs.preparingPlayerPlugin)
+
+        player.prepareManager { success in
+            success ? successHandler() : failHandler()
+        }
+    }
+
 
     func updatePluginSessionStorageData(_ successHandler: @escaping StateCallBack,
                                         _ failHandler: @escaping StateCallBack) {
