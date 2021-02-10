@@ -138,7 +138,7 @@ class THEOplayerView: UIView {
         let playerConfig = THEOplayerConfiguration(chromeless: false,
                                                    cssPaths: stylePaths,
                                                    jsPathsPre: scripthPaths,
-                                                   pip: PiPConfiguration(retainPresentationModeOnSourceChange: true),
+                                                   pip:nil,
                                                    ads: AdsConfiguration(showCountdown: true, preload: .NONE,
                                                                          googleImaConfiguration: GoogleIMAConfiguration(useNativeIma: true)),
                                                    cast: CastConfiguration(strategy: .auto))
