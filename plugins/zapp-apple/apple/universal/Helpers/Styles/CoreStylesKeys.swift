@@ -12,6 +12,4 @@ struct CoreStylesKeys {
     static let backgroundColor = "background_color"
     static let loadingSpinnerColor = "loading_spinner_color"
     static let loadingErrorLabel = "loading_error_label"
-
 }
-

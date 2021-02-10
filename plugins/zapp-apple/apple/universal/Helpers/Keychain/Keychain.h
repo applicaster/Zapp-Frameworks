@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-// This wrapper helps us deal with Keychain-related things 
+// This wrapper helps us deal with Keychain-related things
 // such as storing API keys and passwords
 
 @interface Keychain : NSObject

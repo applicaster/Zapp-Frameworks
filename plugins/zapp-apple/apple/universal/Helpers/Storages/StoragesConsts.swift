@@ -40,7 +40,7 @@ public struct ZappStorageKeys {
     public static let applicasterVersion = "applicaster2"
     public static let zapp = "zapp"
     public static let applicasterNamespace = "applicaster.v2"
-    
+
     public static let reactNativePackagerRoot = "react_native_package_root"
     public static let riversConfigurationId = "rivers_configuration_id"
     public static let sdkVersion = "sdk_version"
@@ -55,7 +55,7 @@ public struct ZappStorageKeys {
     public static let isTabletPortrait = "isTabletPortrait"
 }
 
-//Example of the expected json
+// Example of the expected json
 /*
  {
      zapp : {
@@ -67,4 +67,4 @@ public struct ZappStorageKeys {
         }
      }
  }
-*/
+ */

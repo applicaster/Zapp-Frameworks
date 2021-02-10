@@ -15,7 +15,7 @@ public class SettingsBundleHelper {
     public class func getSettingsBundleBoolValue(forKey key: SettingsBundleParameters) -> Bool {
         return UserDefaults.standard.bool(forKey: key.rawValue)
     }
-    
+
     public class func setSettingsBundleBoolValue(forKey key: SettingsBundleParameters, value: Bool) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
@@ -29,8 +29,8 @@ public class SettingsBundleHelper {
         let oldValue = getSettingsBundleLastUsedBoolValue(forKey: savedKey)
         if newValue != oldValue {
             if newValue == true,
-                let urlScheme = APSwiftUtils.appUrlScheme,
-                let url = URL(string: "\(urlScheme)://settings?type=\(key.rawValue)&value=\(newValue)") {
+               let urlScheme = APSwiftUtils.appUrlScheme,
+               let url = URL(string: "\(urlScheme)://settings?type=\(key.rawValue)&value=\(newValue)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 setSettingsBundleLastUsedBoolValue(forKey: savedKey, value: newValue)
@@ -42,7 +42,6 @@ public class SettingsBundleHelper {
 extension SettingsBundleHelper {
     public enum SettingsBundleParametersSavedValues: String {
         case loggerAssistanceRemoteEventsLogging = "logger_assistance_remote_events_logging_value"
-
     }
 
     public class func getSettingsBundleLastUsedBoolValue(forKey key: SettingsBundleParametersSavedValues) -> Bool {

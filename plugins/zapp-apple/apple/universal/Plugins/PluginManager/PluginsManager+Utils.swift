@@ -117,7 +117,7 @@ extension PluginsManager {
     /// - Returns: Array of Data
     fileprivate class func latestJSONPluginData() -> NSArray? {
         guard let localURLPath = FacadeConnector.connector?.applicationData?.pluginsURLPath(),
-            let pluginsData = pluginsData(from: localURLPath) else {
+              let pluginsData = pluginsData(from: localURLPath) else {
             return nil
         }
         return pluginsData
@@ -169,7 +169,7 @@ extension PluginsManager {
     }
 
     @objc public class func bundleForModelClass(_ pluginModel: ZPPluginModel) -> Bundle? {
-        if let modelClass = self.adapterClass(pluginModel) {
+        if let modelClass = adapterClass(pluginModel) {
             return Bundle(for: modelClass)
         }
         return nil
@@ -194,8 +194,8 @@ extension PluginsManager {
         let navigationTypeKey = "presentation"
 
         if let plugin = self.plugin(withScreenName: screenName, model: model),
-            let configurationJSON = plugin.configurationJSON,
-            let navigationType = configurationJSON[navigationTypeKey] {
+           let configurationJSON = plugin.configurationJSON,
+           let navigationType = configurationJSON[navigationTypeKey] {
             return navigationType as? String
         } else {
             return nil
@@ -208,8 +208,8 @@ extension PluginsManager {
 
         // We try to find if we defined in our extension the plugin type
         guard let model = model as? [String: Any],
-            let extensions = model[modelExtensionsKey] as? [String: Any],
-            let pluginId = extensions[openWithPluginIdKey] as? String else {
+              let extensions = model[modelExtensionsKey] as? [String: Any],
+              let pluginId = extensions[openWithPluginIdKey] as? String else {
             return nil
         }
         return PluginsManager.pluginModels()?.first(where: { $0.identifier == pluginId })

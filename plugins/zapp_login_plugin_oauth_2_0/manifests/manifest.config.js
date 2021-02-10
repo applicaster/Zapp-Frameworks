@@ -358,6 +358,7 @@ function createManifest({ version, platform }) {
         },
       ],
     },
+    ...withFallback(url_custom_configuration_fields, basePlatform),
     {
       type: "text_input",
       key: "authorizationEndpoint",
@@ -534,7 +535,6 @@ function createManifest({ version, platform }) {
         "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
       default: "access_token",
     },
-    ...withFallback(url_custom_configuration_fields, basePlatform),
     {
       group: true,
       label: "Debug",

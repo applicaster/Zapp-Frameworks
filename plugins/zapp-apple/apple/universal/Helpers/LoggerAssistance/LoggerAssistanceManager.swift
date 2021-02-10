@@ -30,8 +30,8 @@ public class LoggerAssistanceManager {
                                            style: .destructive,
                                            handler: { _ in
                                                if let codeTextField = alert.textFields?.first,
-                                                   let value = codeTextField.text,
-                                                   let intValue = Int(value) {
+                                                  let value = codeTextField.text,
+                                                  let intValue = Int(value) {
                                                    SettingsBundleHelper.setSettingsBundleLastUsedBoolValue(forKey: .loggerAssistanceRemoteEventsLogging,
                                                                                                            value: true)
 
@@ -62,13 +62,12 @@ public class LoggerAssistanceManager {
 
         logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingPresentAuthentication)
     }
-    
+
     public func showXrayButtonOnScreen(with params: [String: Any],
                                        on rootController: RootController?) {
         guard let rootController = rootController else {
             return
         }
-        
     }
 
     fileprivate func resetToDefaultRemoteLoggingState() {

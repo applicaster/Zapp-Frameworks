@@ -10,12 +10,11 @@ import Foundation
 import Reachability
 
 extension RootController: ReachabilityManagerDelegate {
-    
     func reachabilityChanged(connection: Reachability.Connection) {
         switch connection {
         case .wifi, .cellular:
             if let currentConnection = currentConnection,
-                currentConnection == .unavailable {
+               currentConnection == .unavailable {
                 forceReloadApplication()
             }
         case .none:
@@ -27,14 +26,13 @@ extension RootController: ReachabilityManagerDelegate {
 
         updateConnectivityListeners()
     }
-    
+
     func showInternetError() {
         showErrorMessage(message: "You are not connected to a network. Please use your device settings to connect to a network and try again.")
     }
-    
+
     func forceReloadApplication() {
         makeSplashAsRootViewContoroller()
         reloadApplication()
     }
-
 }

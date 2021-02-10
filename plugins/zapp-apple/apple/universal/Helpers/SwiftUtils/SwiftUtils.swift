@@ -8,8 +8,7 @@
 
 import Foundation
 
-@objc public class APSwiftUtils : NSObject {
-    
+@objc public class APSwiftUtils: NSObject {
     /// Detect if simulator enabled
     public static let isSimulator: Bool = {
         var isSim = false
@@ -18,11 +17,11 @@ import Foundation
         #endif
         return isSim
     }()
-    
-    static var appUrlScheme:String? = {
-        guard let arrUrlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String:AnyObject]],
-            let arrUrlSchemes = arrUrlTypes.first?["CFBundleURLSchemes"] as? [AnyObject],
-            let urlScheme = arrUrlSchemes.first as? String else {
+
+    static var appUrlScheme: String? = {
+        guard let arrUrlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String: AnyObject]],
+              let arrUrlSchemes = arrUrlTypes.first?["CFBundleURLSchemes"] as? [AnyObject],
+              let urlScheme = arrUrlSchemes.first as? String else {
             return nil
         }
 

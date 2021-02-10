@@ -16,7 +16,7 @@ extension UIView {
     }
 
     func setInsetsFromParent(insets: UIEdgeInsets) {
-        guard let superView = self.superview else {
+        guard let superView = superview else {
             return
         }
         if translatesAutoresizingMaskIntoConstraints {
@@ -72,7 +72,7 @@ extension UIView {
 
     func clearAllConstraintOfAlignment() {
         var constraints = [NSLayoutConstraint]()
-        if let superView = self.superview {
+        if let superView = superview {
             for constraint in superView.constraints {
                 if (constraint.firstItem as? UIView) == self ||
                     (constraint.secondItem as? UIView) == self {

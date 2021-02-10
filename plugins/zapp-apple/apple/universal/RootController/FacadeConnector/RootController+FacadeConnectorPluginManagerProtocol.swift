@@ -45,11 +45,11 @@ extension RootController: FacadeConnectorPluginManagerProtocol {
         pluginsManager.enableAllPlugins(pluginType: pluginType,
                                         completion: completion)
     }
-    
+
     @objc public func getProviderInstance(identifier: String) -> PluginAdapterProtocol? {
         return pluginsManager.getProviderInstance(identifier: identifier)
     }
-    
+
     @objc public func getProviderInstance(pluginType: String, condition: (Any) -> Any?) -> PluginAdapterProtocol? {
         return pluginsManager.getProviderInstance(pluginType: pluginType, condition: condition)
     }

@@ -25,7 +25,7 @@ import UIKit
 
     // MARK: - Initialization
 
-    private override init() {
+    override private init() {
         super.init()
     }
 
@@ -87,8 +87,8 @@ import UIKit
     public func download(file: APFile,
                          completion: ((_ success: Bool) -> Void)?) {
         // There can be only 2 states here, the same file is already been downloaded or not
-        if let downloadedFile = self.getFileCompletionFromArray(file: file),
-            let completion = completion {
+        if let downloadedFile = getFileCompletionFromArray(file: file),
+           let completion = completion {
             // Check if file download has already been finshed so we can't add a new completion object
             if downloadedFile.didFinish {
                 // Check of file was saved on disk

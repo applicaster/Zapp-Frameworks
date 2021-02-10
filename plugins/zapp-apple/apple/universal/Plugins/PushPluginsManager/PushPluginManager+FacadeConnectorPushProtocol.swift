@@ -10,7 +10,7 @@ import ZappCore
 
 extension PushPluginsManager: FacadeConnectorPushProtocol {
     @objc public func addTagsToDevice(_ tags: [String]?,
-                               completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+                                      completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
         var counter = _providers.count
         var completionSuccess = true
         _providers.forEach { providerDict in
@@ -32,7 +32,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     }
 
     @objc public func removeTagsToDevice(_ tags: [String]?,
-                                  completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+                                         completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
         var counter = _providers.count
         var completionSuccess = true
         _providers.forEach { providerDict in
@@ -58,7 +58,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
         _providers.forEach { providerDict in
             let provider = providerDict.value
             if let deviceTags = provider.getDeviceTags,
-                let pluginIdentifier = provider.model?.identifier {
+               let pluginIdentifier = provider.model?.identifier {
                 retVal[pluginIdentifier] = deviceTags()
             }
         }

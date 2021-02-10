@@ -35,7 +35,7 @@ public class UrlSchemeHandler {
             retValue = handlePluginURLScheme(url: url)
         case .settings:
             retValue = handleSettingsChanges(url: url,
-                                  rootController: rootViewController)
+                                             rootController: rootViewController)
         default:
             break
         }

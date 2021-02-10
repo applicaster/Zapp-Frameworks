@@ -13,8 +13,8 @@ extension UrlSchemeHandler {
                           rootController: RootController?) -> Bool {
         let xrayPluginIdentifier = "xray_logging_plugin"
         guard let rootController = rootController,
-            let adapter = rootController.pluginsManager.crashlogs.getProviderInstance(identifier: xrayPluginIdentifier) as? PluginURLHandlerProtocol,
-            let handleURLScheme = adapter.handlePluginURLScheme else {
+              let adapter = rootController.pluginsManager.crashlogs.getProviderInstance(identifier: xrayPluginIdentifier) as? PluginURLHandlerProtocol,
+              let handleURLScheme = adapter.handlePluginURLScheme else {
             return false
         }
 

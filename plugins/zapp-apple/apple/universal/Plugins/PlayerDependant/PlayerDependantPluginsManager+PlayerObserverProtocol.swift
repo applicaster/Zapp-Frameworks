@@ -14,11 +14,11 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
                                         completion: @escaping (_ completion: Bool) -> Void) {
         var finishedProviderCount = 0
         guard let providers = providers(playerPlugin: player),
-            providers.count > 0 else {
+              providers.count > 0 else {
             completion(true)
             return
         }
-        
+
         providers.forEach { providerDict in
             let provider = providerDict.value
             if let provider = provider as? PlayerObserverProtocol {
@@ -52,6 +52,32 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
         }
     }
 
+    public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
+        // provider can prevent from starting to play when player is ready to play
+        // provider should call player.pluggablePlayerResume() when finished its operations
+        var shouldContinuePlaying = true
+
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return shouldContinuePlaying
+        }
+
+        createProvidersIfNeeded(with: player)
+
+        if let providers = providers(playerPlugin: player) {
+            providers.forEach { providerDict in
+                let provider = providerDict.value
+                if let provider = provider as? PlayerObserverProtocol,
+                   let value = provider.playerReadyToPlay?(player: player),
+                   value == false {
+                    // update only if false as player dependent plugins may have different value and we need single false to stop playback
+                    shouldContinuePlaying = value
+                }
+            }
+        }
+        return shouldContinuePlaying
+    }
+
     public func playerDidDismiss(player: PlayerProtocol) {
         if let providersForPlayer = providers(playerPlugin: player) {
             providersForPlayer.forEach { providerDict in
@@ -65,6 +91,23 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
+        createProvidersIfNeeded(with: player)
+
+        if let providersForPlayer = providers(playerPlugin: player) {
+            providersForPlayer.forEach { providerDict in
+                let provider = providerDict.value
+                if let provider = provider as? PlayerObserverProtocol {
+                    provider.playerDidCreate(player: player)
+                }
+            }
+        }
+    }
+
+    private func createProvidersIfNeeded(with player: PlayerProtocol) {
+        // should continue on first iteration when providers are not yet created
+        guard providers(playerPlugin: player) == nil else {
+            return
+        }
 
         unRegisterProviders(playerPlugin: player)
 

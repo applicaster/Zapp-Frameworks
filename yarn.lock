@@ -120,9 +120,9 @@
     url "^0.11.0"
 
 "@applicaster/quick-brick-default-app-state@latest":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-default-app-state/-/quick-brick-default-app-state-1.0.2.tgz#1726c632abd1f740f38d5faafbdf077c6e3b5301"
-  integrity sha512-c3ifNgZvIxp4SDwc+2I0iWN9sNAcy+mVw4mwUC1IkkyfjYvc5oB8Qlh7Vn5KG+W3t3ZSm0qDc2xrhhDDLOyh9A==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-default-app-state/-/quick-brick-default-app-state-1.0.3.tgz#bbd2aba2a6821f7ce733d0caa4ea629a16da1c19"
+  integrity sha512-HCdZs3EPMtCFcRx1kSNG/GMZV+EcacvKLeBNIHNF71rM7xHW1OMjE5yZEyB/Bjmym5qXAY90nIQ6FkCKGANaYQ==
 
 "@applicaster/quick-brick-default-cell-renderer@latest":
   version "1.0.5"
@@ -455,10 +455,10 @@
     redux-thunk "^2.3.0"
     reselect "4.0.0"
 
-"@applicaster/zapp-react-native-theo-player@0.0.3-alpha.4":
-  version "0.0.3-alpha.4"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-theo-player/-/zapp-react-native-theo-player-0.0.3-alpha.4.tgz#4d6ad3fbc6981118927570eda744d05645364793"
-  integrity sha512-6a2LnddKPSFLFdwW/Caf/R/KCfUDOdfHaeGCfWbr1Z9f+/l2dtrm1I8gY4JeqmLeB+RKRJ7xennUbpSjodpL3g==
+"@applicaster/zapp-react-native-theo-player@0.0.3-alpha.8":
+  version "0.0.3-alpha.8"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-theo-player/-/zapp-react-native-theo-player-0.0.3-alpha.8.tgz#13773e7f5ce2ae6143fc44d08370356ccb80f006"
+  integrity sha512-/sY9h4bGo7qHtZnr5ovBRisl1aYM7LwI1bL890BdrFhsx9WoDC1LPNOF4agRoKSwRa6N3YqfoTUD05+MCqCeDQ==
   dependencies:
     ramda "^0.26.1"
 

@@ -34,8 +34,8 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.0.6",
-  "manifest_version": "0.0.6",
+  "dependency_version": "0.0.7",
+  "manifest_version": "0.0.7",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -53,7 +53,7 @@
   "npm_dependencies": [
     "@react-native-community/blur@3.4.1",
     "react-native-app-auth@6.0.1",
-    "@applicaster/zapp_login_plugin_oauth_2_0@0.0.6"
+    "@applicaster/zapp_login_plugin_oauth_2_0@0.0.7"
   ],
   "custom_configuration_fields": [
     {
@@ -111,6 +111,22 @@
       "conditional_fields": [
         {
           "condition_value": [
+            "other"
+          ],
+          "key": "custom_configuration_fields/provider_selector"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "key": "redirectUrl",
+      "label": "Redirect URL",
+      "tooltip_text": "REQUIRED: The url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://', and must be declared in the app settings.",
+      "default": "",
+      "conditional_fields": [
+        {
+          "condition_value": [
+            "aws_cognito",
             "other"
           ],
           "key": "custom_configuration_fields/provider_selector"
@@ -304,22 +320,6 @@
       "label": "Session Storage Key",
       "tooltip_text": "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
       "default": "access_token"
-    },
-    {
-      "type": "text",
-      "key": "redirectUrl",
-      "label": "Redirect URL",
-      "tooltip_text": "REQUIRED: The url that links back to your app with the auth code. Note: URL has to follow the app url schemes structure 'myapp://', and must be declared in the app settings.",
-      "default": "",
-      "conditional_fields": [
-        {
-          "condition_value": [
-            "aws_cognito",
-            "other"
-          ],
-          "key": "custom_configuration_fields/provider_selector"
-        }
-      ]
     },
     {
       "group": true,

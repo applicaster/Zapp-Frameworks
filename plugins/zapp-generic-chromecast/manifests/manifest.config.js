@@ -28,10 +28,9 @@ const baseManifest = {
       tooltip_text: "Chromecast application ID",
     },
     {
-      type: "text",
+      type: "hidden",
       key: "plist.array.NSBonjourServices",
-      tooltip_text: "Please replace ABCD1234 with Chromecast appId",
-      default: "_ABCD1234._googlecast._tcp, _googlecast._tcp"
+      initial_value: "_[chromecast_app_id]._googlecast._tcp, _googlecast._tcp"
     },
   ],
   ui_frameworks: ["quickbrick"],
@@ -73,8 +72,8 @@ function createManifest({ version, platform }) {
 }
 const min_zapp_sdk = {
   android: "20.0.0",
-  tvos_for_quickbrick: "2.0.2-Dev",
-  ios_for_quickbrick: "2.0.2-Dev",
+  tvos_for_quickbrick: "4.0.0-Dev",
+  ios_for_quickbrick: "4.0.0-Dev",
   android_for_quickbrick: "1.0.0-Dev",
 };
 

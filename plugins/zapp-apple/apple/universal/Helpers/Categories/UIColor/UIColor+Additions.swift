@@ -12,12 +12,12 @@ extension UIColor {
     public convenience init?(ARGBHex: String) {
         let r, g, b, a: CGFloat
         var hexColor = ARGBHex
-        
+
         if ARGBHex.hasPrefix("#") {
             let start = ARGBHex.index(ARGBHex.startIndex, offsetBy: 1)
             hexColor = String(ARGBHex[start...])
         }
-        
+
         if hexColor.count == 8 {
             let scanner = Scanner(string: hexColor)
             var hexNumber: UInt64 = 0
@@ -35,16 +35,16 @@ extension UIColor {
 
         return nil
     }
-    
+
     public convenience init?(RGBAHex: String) {
         let r, g, b, a: CGFloat
         var hexColor = RGBAHex
-        
+
         if RGBAHex.hasPrefix("#") {
             let start = RGBAHex.index(RGBAHex.startIndex, offsetBy: 1)
             hexColor = String(RGBAHex[start...])
         }
-        
+
         if hexColor.count == 8 {
             let scanner = Scanner(string: hexColor)
             var hexNumber: UInt64 = 0

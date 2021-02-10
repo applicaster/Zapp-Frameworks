@@ -46,9 +46,9 @@ class UserInterfaceLayerManager {
             "countryLocale": NSLocale.current.regionCode as Any,
             "platform": deviceType as Any,
             "reactNativePackagerRoot": reactNativePackagerRoot as Any,
-            "isTabletPortrait": FeaturesCustomization.isTabletPortrait()
+            "isTabletPortrait": FeaturesCustomization.isTabletPortrait(),
         ]
-        
+
         logger?.debugLog(template: UserInterfaceLayerMangerLogs.canNotCreateUserInterfaceLayer,
                          data: applicationData)
         // TODO: In case we will have more plugins this implamentation must be rewritten to get first layer plugin not quick brick

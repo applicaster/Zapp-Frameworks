@@ -33,7 +33,7 @@ class LoadingManager {
 
     func fileForUrlString(urlString: String) -> APFile? {
         guard String.isNotEmptyOrWhitespace(urlString) == true,
-            URL(string: urlString) != nil else {
+              URL(string: urlString) != nil else {
             return nil
         }
         let hash = urlString.toMd5hash()
@@ -47,7 +47,7 @@ class LoadingManager {
         if let fileToLoad = file(type: type) {
             APCacheManager.shared.download(file: fileToLoad) { success in
                 if success == false,
-                    fileToLoad.isInLocalStorage() {
+                   fileToLoad.isInLocalStorage() {
                     completion(true)
                 } else {
                     completion(success)
