@@ -29,7 +29,7 @@ public class EventRouter<T extends PlayerEvent<T>> {
                           ThemedReactContext reactContext,
                           String internalEvent) {
         player.addEventListener(type, e -> {
-            APLogger.debug(TAG, "Received player event " + type.getName());
+            APLogger.verbose(TAG, "Received player event " + type.getName());
             WritableMap event = cast.toRN(e);
             reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                     playerView.getId(),

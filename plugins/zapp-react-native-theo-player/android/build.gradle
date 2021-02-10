@@ -1,3 +1,5 @@
+import org.gradle.util.VersionNumber
+
 apply plugin: "com.android.library"
 apply plugin: 'kotlin-android'
 
@@ -23,12 +25,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    sourceSets {
-        main {
-            assets.srcDirs = ['../apple/ui_customization']
-        }
-    }
-
 }
 
 buildscript {
@@ -46,19 +42,26 @@ buildscript {
 }
 
 def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
 }
 
 dependencies {
 
     // Applicaster SDK
     if (!findProject(':applicaster-android-sdk') || project.hasProperty('forceClosedDependencies')) {
-        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '6.3.0')
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '8.3.0')
         api ("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
     }
     else {
         api project(':applicaster-android-sdk')
     }
+
+    api 'androidx.mediarouter:mediarouter:1.2.1'
+    api "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '19.0.0')}"
 
     //implementation fileTree(dir: "./src/main/libs/", include: ["*.jar", "*.aar"])
     implementation files("./src/main/libs/theoplayer-android-dist-56fffd95-3465-4f64-9eaa-9130e9c4b135-2.79.0-minapi21-release.aar")
