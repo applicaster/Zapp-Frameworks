@@ -28,10 +28,9 @@ const baseManifest = {
       tooltip_text: "Chromecast application ID",
     },
     {
-      type: "text",
+      type: "hidden",
       key: "plist.array.NSBonjourServices",
-      tooltip_text: "Please replace ABCD1234 with Chromecast appId",
-      default: "_ABCD1234._googlecast._tcp, _googlecast._tcp"
+      initial_value: "_[chromecast_app_id]._googlecast._tcp, _googlecast._tcp"
     },
   ],
   ui_frameworks: ["quickbrick"],
