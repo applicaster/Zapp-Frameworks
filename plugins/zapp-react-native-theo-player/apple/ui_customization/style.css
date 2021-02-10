@@ -25,9 +25,14 @@
   color: white;
 }
 
-/*.vjs-fullscreen-control {*/
-/*    display: none !important;*/
-/*}*/
+.vjs-fullscreen-control {
+    display: none !important;
+}
+
+.vjs-icon-picture-in-picture-enter {
+    display: none !important;
+
+}
 
 .theoplayer-skin video {
   /* object-fit: contain;*/ /* default */
