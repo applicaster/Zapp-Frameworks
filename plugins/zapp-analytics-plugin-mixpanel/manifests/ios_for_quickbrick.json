@@ -21,7 +21,7 @@
   "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -55,13 +55,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "10.0.0",
+  "manifest_version": "10.1.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginMixpanel": ":path => './node_modules/@applicaster/zapp-analytics-plugin-mixpanel/apple/ZappAnalyticsPluginMixpanel.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-mixpanel@10.0.0"
+    "@applicaster/zapp-analytics-plugin-mixpanel@10.1.0"
   ]
 }

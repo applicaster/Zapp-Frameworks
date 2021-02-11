@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginMixpanel",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "platforms": {
     "ios": "12.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-mixpanel/10.0.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-mixpanel/10.1.0"
   },
   "requires_arc": true,
   "source_files": "ios/**/*.{swift}",
