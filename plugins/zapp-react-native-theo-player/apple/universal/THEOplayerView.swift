@@ -1,5 +1,4 @@
 import Foundation
-import MoPub
 import React
 import THEOplayerSDK
 import UIKit
