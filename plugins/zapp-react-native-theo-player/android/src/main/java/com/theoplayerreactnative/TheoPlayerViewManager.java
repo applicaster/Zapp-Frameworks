@@ -1,7 +1,7 @@
 package com.theoplayerreactnative;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.Application;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,8 +10,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.mediarouter.media.MediaControlIntent;
-import androidx.mediarouter.media.MediaRouteSelector;
 import androidx.mediarouter.media.MediaRouter;
 
 import com.applicaster.reactnative.utils.ContainersUtil;
@@ -25,7 +23,6 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.google.android.gms.cast.framework.CastContext;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
@@ -38,6 +35,7 @@ import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
+import com.theoplayer.android.internal.activity.CurrentActivityHelper;
 import com.theoplayerreactnative.events.EventRouter;
 import com.theoplayerreactnative.events.EventsBinder;
 import com.theoplayerreactnative.utility.JSON2RN;
@@ -46,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,8 +113,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     @Override
     @NonNull
     protected THEOplayerView createViewInstance(@NotNull final ThemedReactContext reactContext) {
-        initCast(reactContext);
-
         String license = PluginHelper.getLicense();
         if(TextUtils.isEmpty(license)) {
             APLogger.error(TAG, "Empty license key");
@@ -151,7 +148,27 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         reactContext.addLifecycleEventListener(this);
         goFullscreen(currentActivity);
 
+        hackChromecast(currentActivity);
         return playerView;
+    }
+
+    private void hackChromecast(Activity currentActivity) {
+        CurrentActivityHelper instance = CurrentActivityHelper.getInstance();
+        try{
+            if(null != instance) {
+                if(null != instance.getLastResumedActivity()) {
+                    return;
+                }
+                Field f = instance.getClass().getDeclaredField("lastResumedActivityHolder");
+                f.setAccessible(true);
+                Application.ActivityLifecycleCallbacks handler = (Application.ActivityLifecycleCallbacks) f.get(instance);
+                if (handler != null) {
+                    handler.onActivityResumed(currentActivity);
+                }
+            }
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @NotNull
@@ -227,26 +244,16 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     @Override
     public void onHostResume() {
         playerView.onResume();
-        if(null != mSelector) {
-            mMediaRouter.addCallback(mSelector, mScanCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-        }
     }
 
     @Override
     public void onHostPause() {
         playerView.onPause();
-        if(null != mSelector) {
-            mMediaRouter.removeCallback(mScanCallback);
-        }
     }
 
     @Override
     public void onHostDestroy() {
         playerView.onDestroy();
-        if(null != mSelector) {
-            mMediaRouter.removeCallback(mScanCallback);
-            mSelector = null;
-        }
     }
 
     private void goFullscreen(Activity currentActivity) {
@@ -310,27 +317,4 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                     .emit(InternalAndGlobalEventPair.onPlayerResize.internalEvent, map);
         });
     }
-
-    // region ChromeCast hacks
-    // needed only to force the app to scan
-
-    private MediaRouteSelector mSelector;
-    private MediaRouter mMediaRouter;
-    private CastContext mCastContext;
-
-    private final MediaRouter.Callback mScanCallback = new MediaRouter.Callback() {};
-
-    private void initCast(Context context){
-        if(null == mMediaRouter) {
-            mCastContext = CastContext.getSharedInstance(context);
-            mMediaRouter = MediaRouter.getInstance(context);
-            mSelector = new MediaRouteSelector
-                    .Builder()
-                    .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-                    .build();
-            mMediaRouter.addCallback(mSelector, mScanCallback, MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-        }
-    }
-
-    // endregion ChromeCast hacks
 }
