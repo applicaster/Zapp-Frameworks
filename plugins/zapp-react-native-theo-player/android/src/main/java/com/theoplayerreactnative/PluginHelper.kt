@@ -15,6 +15,6 @@ object PluginHelper {
     @JvmStatic
     fun getCastApplicationId() : String? {
         val configuration = PluginManager.getInstance().getPlugin(PLUGIN_ID)?.getConfiguration()
-        return configuration?.get("chromecast_reciever_application_id")?.asJsonPrimitive?.asString
+        return configuration?.get("chromecast_app_id")?.asJsonPrimitive?.asString
     }
 }

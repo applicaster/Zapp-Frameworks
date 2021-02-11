@@ -172,6 +172,9 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
     this.setState({ duration });
+    if (!R.isNil(this.props?.onLoad)) {
+      this.props?.onLoad({ duration: duration, currentTime: -1 });
+    }
   };
 
   onPlayerSourceChange = ({ nativeEvent }) => {};

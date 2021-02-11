@@ -117,7 +117,7 @@ const baseManifest = {
       fields: [
         {
           type: "text_input",
-          key: "chromecast_reciever_application_id",
+          key: "chromecast_app_id",
           tooltip_text: "Chromecast application ID",
           default: "",
         },
@@ -175,6 +175,9 @@ const api = {
     plist: {
       NSLocalNetworkUsageDescription:
         "App uses the local network to discover Cast-enabled devices on your WiFi network.",
+    },
+    entitlements: {
+      "com.apple.developer.networking.wifi-info": true,
     },
   },
   android_for_quickbrick: {

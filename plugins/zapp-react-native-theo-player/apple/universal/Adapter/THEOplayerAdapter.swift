@@ -22,7 +22,7 @@ open class THEOplayerAdapter: NSObject, PluginAdapterProtocol {
 
     /// Plugin configuration keys
     struct PluginKeys {
-        static let applicationID = "chromecast_reciever_application_id"
+        static let applicationID = "chromecast_app_id"
     }
 
     var chromecastAppId: String? {
