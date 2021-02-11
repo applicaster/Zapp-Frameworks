@@ -6,6 +6,7 @@ import com.applicaster.util.APLogger;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.theoplayer.android.api.event.EventListener;
 import com.theoplayer.android.api.event.EventType;
 import com.theoplayer.android.api.event.player.PlayerEvent;
 import com.theoplayer.android.api.player.Player;
@@ -28,14 +29,28 @@ public class EventRouter<T extends PlayerEvent<T>> {
                           View playerView,
                           ThemedReactContext reactContext,
                           String internalEvent) {
-        player.addEventListener(type, e -> {
+
+        EventListener<T> eventListener = e -> {
             APLogger.verbose(TAG, "Received player event " + type.getName());
             WritableMap event = cast.toRN(e);
             reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                     playerView.getId(),
                     internalEvent,
                     event);
+        };
+
+        playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener(){
+
+            @Override
+            public void onViewAttachedToWindow(View v) {}
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                player.removeEventListener(type, eventListener);
+            }
         });
+
+        player.addEventListener(type, eventListener);
     }
 
     private final EventCast<T> cast;

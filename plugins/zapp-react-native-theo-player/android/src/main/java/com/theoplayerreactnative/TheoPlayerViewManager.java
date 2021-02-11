@@ -33,17 +33,22 @@ import com.theoplayer.android.api.cast.CastStrategy;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
+import com.theoplayer.android.api.source.analytics.AnalyticsDescription;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
+import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
 import com.theoplayerreactnative.events.EventRouter;
 import com.theoplayerreactnative.events.EventsBinder;
 import com.theoplayerreactnative.utility.JSON2RN;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -53,7 +58,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     //static
     private static final String RCT_MODULE_NAME = "THEOplayerView";
     private static final String JavaScriptMessageListener = "onJSMessageReceived";
-    private static final String sLicenseKey = "sZP7IYe6T6f_ClfZ3LCz36zLClxKFSa_0oh-TQ3gI6zZTQx63SRzIu5zCof6FOPlUY3zWokgbgjNIOf9flRi3Q3eIKPgFS5Z0lR-3uCoI6k60L1KFShr3l5r3l5z3QfrTmfVfK4_bQgZCYxNWoryIQXzImf90SCcTufZ0SCi0u5i0Oi6Io4pIYP1UQgqWgjeCYxgflEc3l5rTue_3Lhi3SfkFOPeWok1dDrLYtA1Ioh6TgV6UQ1gWtAVCYggb6rlWoz6FOPVWo31WQ1qbta6FOfJfgzVfKxqWDXNWG3ybojkbK3gflNWfGxEIDjiWQXrIYfpCoj-f6i6WQjlCDcEWt3zf6i6v6PUFOPLIQ-LflNWfKXpIwPqdDa6Ymi6bo4pIXjNWYAZIY3LdDjpflNzbG4gya";
     public static final String TAG = RCT_MODULE_NAME;
 
     private enum InternalAndGlobalEventPair {
@@ -109,8 +113,56 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
     @Override
     @NonNull
-    protected THEOplayerView createViewInstance(final ThemedReactContext reactContext) {
+    protected THEOplayerView createViewInstance(@NotNull final ThemedReactContext reactContext) {
         initCast(reactContext);
+
+        String license = PluginHelper.getLicense();
+        if(TextUtils.isEmpty(license)) {
+            APLogger.error(TAG, "Empty license key");
+        }
+
+        List<AnalyticsDescription> analytics = getAnalytics();
+
+        /*
+          If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
+          in js ads source declaration.
+          You can declare in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
+        */
+        THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
+                .ads(new AdsConfiguration.Builder().build())
+                .license(license)
+                .castStrategy(CastStrategy.AUTO)
+                .analytics(analytics.toArray(new AnalyticsDescription[0]))
+                .jsPaths("file:///android_asset/script.js")
+                .cssPaths("file:///android_asset/style.css")
+                .build();
+
+        final Activity currentActivity = reactContext.getCurrentActivity();
+        playerView = new THEOplayerView(currentActivity, playerConfig);
+        playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event -> {
+            APLogger.debug(TAG, "Received JS event " + event);
+            reactContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, repackEvent(event));
+        });
+        playerView.evaluateJavaScript("init({player: player})", null);
+        addPropertyChangeListeners(reactContext);
+        reactContext.addLifecycleEventListener(this);
+        goFullscreen(currentActivity);
+
+        return playerView;
+    }
+
+    @NotNull
+    private List<AnalyticsDescription> getAnalytics() {
+        List<AnalyticsDescription> analytics = new ArrayList<>();
+        String moatCode = PluginHelper.getMoat();
+        if(!TextUtils.isEmpty(moatCode)) {
+            // namespace is not used internally, probably removed from Moat SDK
+            analytics.add(new MoatOptions.Builder("", moatCode).build());
+        }
+
         /*
           Example conviva usage, add account code & uncomment analytics config declaration, if you need
           custom conviva metadata add customConvivaMetadata with key and value
@@ -120,7 +172,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
          /*
           Example youbora usage, add account code & uncomment analytics config declaration
-        */   
+        */
         ConvivaConfiguration conviva = new ConvivaConfiguration.Builder("<Your conviva account code>",
                 new ConvivaContentMetadata.Builder("THEOPlayer")
                         .applicationName("THEOPlayer demo")
@@ -140,94 +192,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .put("username", "THEO user")
                 .put("content.title", "Demo")
                 .build();
-
-        String license = PluginHelper.getLicense();
-        if(TextUtils.isEmpty(license)) {
-            APLogger.error(TAG, "Empty license key");
-        }
-
-        /*
-          If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
-          in js ads source declaration.
-          You can declare in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
-        */
-        THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
-                .ads(new AdsConfiguration.Builder().build())
-                .license(license)
-                .castStrategy(CastStrategy.AUTO)
-                //.analytics(youbora)
-                .jsPaths("file:///android_asset/script.js")
-                .cssPaths("file:///android_asset/style.css")
-                .build();
-
-        final Activity currentActivity = reactContext.getCurrentActivity();
-        playerView = new THEOplayerView(currentActivity, playerConfig);
-        playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event -> {
-            APLogger.debug(TAG, "Received JS event " + event);
-            reactContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, repackEvent(event));
-        });
-        playerView.evaluateJavaScript("init({player: player})", null);
-        playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    currentActivity
-                            .getWindow()
-                            .getAttributes()
-                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-                }
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    currentActivity
-                            .getWindow()
-                            .getAttributes()
-                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
-                }
-            }
-        });
-        addPropertyChangeListeners(reactContext);
-        reactContext.addLifecycleEventListener(this);
-
-        goFullscreen();
-
-        return playerView;
-    }
-
-    private Object repackEvent(String eventJSON) {
-        try {
-            // todo: simplify and convert directly from JSONObject to WritableNativeMap
-            JSONObject jsonObject = new JSONObject(eventJSON);
-            Map<String, Object> map = JSON2RN.toMap(jsonObject);
-            return ContainersUtil.INSTANCE.toRN(map);
-        } catch (JSONException e) {
-            APLogger.error(TAG, "failed to load convert JSON event", e);
-            e.printStackTrace();
-        }
-        return eventJSON; // try to pass as primitive
-    }
-
-    private void addPropertyChangeListeners(final ThemedReactContext reactContext) {
-        Player player = playerView.getPlayer();
-        for(InternalAndGlobalEventPair p :InternalAndGlobalEventPair.values()){
-            if(null != p.router)
-                p.router.subscribe(player, playerView, reactContext, p.internalEvent);
-        }
-        playerView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            WritableMap map = Arguments.createMap();
-            map.putInt("left", left);
-            map.putInt("top", top);
-            map.putInt("right", right);
-            map.putInt("bottom", bottom);
-            reactContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(InternalAndGlobalEventPair.onPlayerResize.internalEvent, map);
-        });
+        return analytics;
     }
 
     @ReactProp(name = "autoplay", defaultBoolean = false)
@@ -284,13 +249,66 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         }
     }
 
-    private void goFullscreen() {
+    private void goFullscreen(Activity currentActivity) {
         playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+        playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    currentActivity
+                            .getWindow()
+                            .getAttributes()
+                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    currentActivity
+                            .getWindow()
+                            .getAttributes()
+                            .layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
+                }
+            }
+        });
+    }
+
+    private Object repackEvent(String eventJSON) {
+        try {
+            // todo: simplify and convert directly from JSONObject to WritableNativeMap
+            JSONObject jsonObject = new JSONObject(eventJSON);
+            Map<String, Object> map = JSON2RN.toMap(jsonObject);
+            return ContainersUtil.INSTANCE.toRN(map);
+        } catch (JSONException e) {
+            APLogger.error(TAG, "failed to load convert JSON event", e);
+            e.printStackTrace();
+        }
+        return eventJSON; // try to pass as primitive
+    }
+
+    private void addPropertyChangeListeners(final ThemedReactContext reactContext) {
+        Player player = playerView.getPlayer();
+        for(InternalAndGlobalEventPair p :InternalAndGlobalEventPair.values()){
+            if(null != p.router)
+                p.router.subscribe(player, playerView, reactContext, p.internalEvent);
+        }
+        playerView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            WritableMap map = Arguments.createMap();
+            map.putInt("left", left);
+            map.putInt("top", top);
+            map.putInt("right", right);
+            map.putInt("bottom", bottom);
+            reactContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(InternalAndGlobalEventPair.onPlayerResize.internalEvent, map);
+        });
     }
 
     // region ChromeCast hacks
