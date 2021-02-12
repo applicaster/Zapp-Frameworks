@@ -3,7 +3,7 @@ package com.adobeagent;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.adobe.marketing.mobile.Analytics;
 import com.adobe.marketing.mobile.Identity;
@@ -48,63 +48,19 @@ public class AdobeAnalyticsAgent extends BaseAnalyticsAgent {
     private String mobileAppAccountIdProduction;
 
     // all analytics params that should be tracked goes here in the end
-    private final Map<String, String> tempAnalyticsParams;
+    private final Map<String, String> tempAnalyticsParams = new HashMap<>();
 
+    // copy pasted from legacy SDK
     private static class VideoAdsUtil {
 
-        public static final String PREROLL_INLINE_SMARTPHONE_EXTENSION = "preroll_inline_android_phone";
-        public static final String PREROLL_INLINE_TABLET_EXTENSION = "preroll_inline_android_tablet";
-        public static final String PREROLL_SMARTPHONE_EXTENSION = "preroll_android_phone";
-        public static final String PREROLL_TABLET_EXTENSION = "preroll_android_tablet";
-        public static final String PREROLL_LIVE_SMARTPHONE_EXTENSION = "preroll_live_android_phone";
-        public static final String PREROLL_LIVE_TABLET_EXTENSION = "preroll_live_android_tablet";
-        public static final String PREROLL_INLINE_LIVE_SMARTPHONE_EXTENSION = "preroll_inline_live_android_phone";
-        public static final String PREROLL_INLINE_LIVE_TABLET_EXTENSION = "preroll_inline_live_android_tablet";
-        public static final String DEFAULT_MIDDROLL_SMARTPHONE_EXTENSION = "midroll_android_phone";
-        public static final String DEFAULT_MIDDROLL_TABLET_EXTENSION = "midroll_android_tablet";
-        public static final String DEFAULT_POSTROLL_SMARTPHONE_EXTENSION = "postroll_android_phone";
-        public static final String DEFAULT_POSTROLL_TABLET_EXTENSION = "postroll_android_tablet";
-        public static final String CONTENT_VIDEO_DURATION = "Content Video Duration";
-        public static final String AD_BREAK_TIME = "Ad Break Time";
-        public static final String MIDROLL_INTERVAL = "midroll_interval";
         public static final String VIDEO_AD_TYPE = "Video Ad Type";
-        public static final String AD_PROVIDER = "Ad Provider";
-        public static final String AD_UNIT = "Ad Unit";
-        public static final String SKIPPABLE = "Skippable";
-        public static final String SKIPPED = "Skipped";
-        public static final String TIME_WHEN_SKIPPED = "Time when skipped";
-        public static final String AD_BREAK_DURATION = "Ad Break Duration";
-        public static final String AD_EXIT_METHOD = "Ad Exit Method";
-        public static final String TIME_WHEN_EXITED = "Time when exited";
         public static final String AD_SERVER_ERROR = "Ad Server Error";
-        public static final String CLICKED = "Clicked";
-        public static final String KEY_ATOM_ADS_URL = "ad_url";
-        public static final String KEY_ATOM_ADS_OFFSET = "offset";
-        public static final String KEY_ATOM_ADS_VIDEO_AD_EXTENSION = "video_ads";
-        public static final String KEY_ATOM_ADS_PREROLL = "preroll";
-        public static final String KEY_ATOM_ADS_POSTROLL = "postroll";
-        public static final int SECOND_TO_MILLISECOND = 1000;
 
         public enum AdVideoType {
             Preroll,
             Midroll,
             Postroll
         }
-
-        public enum AdExitMethod {
-            COMPLETED,
-            SKIPPED,
-            SERVER_ERROR,
-            CLOSED_APP,
-            CLICKED,
-            UNSPECIFIED,
-            ANDOID_BACK_BUTTON
-        }
-    }
-
-    public AdobeAnalyticsAgent() {
-        super();
-        tempAnalyticsParams = new HashMap<>();
     }
 
     private String getValue(Map params, String key) {
@@ -120,6 +76,12 @@ public class AdobeAnalyticsAgent extends BaseAnalyticsAgent {
         super.setParams(params);
         mobileAppAccountIdDebug = getValue(params, MOBILE_APP_ACCOUNT_ID_IDENTIFIER);
         mobileAppAccountIdProduction = getValue(params, MOBILE_APP_ACCOUNT_ID_IDENTIFIER_PRODUCTION);
+        if(TextUtils.isEmpty(mobileAppAccountIdDebug)) {
+            APLogger.warn(TAG, "Missing parameter: " + MOBILE_APP_ACCOUNT_ID_IDENTIFIER);
+        }
+        if(TextUtils.isEmpty(mobileAppAccountIdProduction)) {
+            APLogger.warn(TAG, "Missing parameter: " + MOBILE_APP_ACCOUNT_ID_IDENTIFIER_PRODUCTION);
+        }
     }
 
     @Override
@@ -261,7 +223,7 @@ public class AdobeAnalyticsAgent extends BaseAnalyticsAgent {
 
         MobileCore.trackState(state, finalAnalyticsParams);
 
-        Log.d(TAG, "Adobe is tracking state: " + state + " with data: " + finalAnalyticsParams.toString());
+        APLogger.debug(TAG, "Adobe is tracking state: " + state + " with data: " + finalAnalyticsParams.toString());
     }
 
     /**
