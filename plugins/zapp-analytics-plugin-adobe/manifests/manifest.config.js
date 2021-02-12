@@ -3,7 +3,7 @@ const baseManifest = {
   dependency_repository_url: [],
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Adobe",
+  name: "Adobe Analytics",
   description: "Adobe Analytics provider",
   cover_image: "",
   type: "analytics",
