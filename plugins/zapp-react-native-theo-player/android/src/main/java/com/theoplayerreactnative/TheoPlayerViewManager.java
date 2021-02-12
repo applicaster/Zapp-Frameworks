@@ -26,6 +26,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
+import com.theoplayer.android.api.cast.Cast;
 import com.theoplayer.android.api.cast.CastStrategy;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
@@ -253,6 +254,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
     @Override
     public void onHostDestroy() {
+        stopCast();
         playerView.onDestroy();
     }
 
@@ -277,6 +279,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                stopCast();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     currentActivity
                             .getWindow()
@@ -285,6 +288,16 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 }
             }
         });
+    }
+
+    private void stopCast() {
+        // for now we stop the cast and playback when user leaves the screen,
+        // or player will resume playback when user will stop casting from notification bar
+        Cast cast = playerView.getCast();
+        if(null != cast && cast.isCasting()) {
+            cast.getChromecast().stop();
+        }
+        playerView.getPlayer().stop();
     }
 
     private Object repackEvent(String eventJSON) {
