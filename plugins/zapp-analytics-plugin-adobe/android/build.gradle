@@ -1,3 +1,5 @@
+import org.gradle.util.VersionNumber
+
 apply plugin: 'com.android.library'
 
 android {
@@ -50,17 +52,25 @@ repositories {
     google()
 }
 
-dependencies {
+def safeExtGet(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
+}
 
-    // Check if an open SDK is defined - if not use the closed one.
-    def devSDK = findProject(':applicaster-android-sdk')
-    if (devSDK != null) {
-        implementation project(':applicaster-android-sdk')
-    } else {
-        implementation 'com.applicaster:applicaster-android-sdk:5.0.+'
+dependencies {
+    // Applicaster SDK
+    if (!findProject(':applicaster-android-sdk') || project.hasProperty('forceClosedDependencies')) {
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '8.0.0')
+        api ("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
+    }
+    else {
+        api project(':applicaster-android-sdk')
     }
 
-    implementation 'com.adobe.marketing.mobile:analytics:1.+'
-    implementation 'com.adobe.marketing.mobile:userprofile:1.+'
-    implementation 'com.adobe.marketing.mobile:sdk-core:1.+'
+    implementation 'com.adobe.marketing.mobile:analytics:1.2.6'
+    implementation 'com.adobe.marketing.mobile:userprofile:1.1.0'
+    implementation 'com.adobe.marketing.mobile:sdk-core:1.6.0'
 }
