@@ -57,7 +57,6 @@ extension GoogleInteractiveMediaAdsAdapter: PlayerObserverProtocol {
     }
 
     public func playerDidDismiss(player: PlayerProtocol) {
-        avPlayer?.removeObserver(self, forKeyPath: MediaAdsConstants.playerPlaybackRate)
         playerPlugin = nil
         adsLoader?.delegate = nil
         adsLoader = nil
