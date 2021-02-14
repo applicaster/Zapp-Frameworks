@@ -34,6 +34,7 @@ public class RootController: NSObject {
     public var pluginsManager = PluginsManager()
     public let audienceManager = TrackingManager()
     public let loggerAssistance = LoggerAssistanceManager()
+    public let eventsBus = EventsBus()
     var splashViewController: SplashViewController?
 
     public lazy var facadeConnector: FacadeConnector = {
