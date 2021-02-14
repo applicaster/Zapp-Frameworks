@@ -17,7 +17,11 @@ extension RootController: FacadeConnectorEventsBusProtocol {
         NotificationCenter.default.post(name: Notification.Name(rawValue: name), object: sender, userInfo: userInfo)
     }
 
-    public func subscribe(_ target: AnyObject, name: String, sender: Any?, handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
+    @discardableResult public func subscribe(_ target: AnyObject, name: String, handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
+        subscribe(target, name: name, sender: nil, handler: handler)
+    }
+
+    @discardableResult public func subscribe(_ target: AnyObject, name: String, sender: Any?, handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
         eventsBus.subscribe(target, name: name, sender: sender, handler: handler)
     }
 

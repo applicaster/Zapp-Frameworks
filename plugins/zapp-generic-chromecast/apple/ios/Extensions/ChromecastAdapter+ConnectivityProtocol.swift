@@ -11,58 +11,53 @@ import ZappCore
 protocol ConnectivityProtocol {
     func isCastSessionConnected() -> Bool
     func isReachableViaWiFi() -> Bool
-    func addConnectivityListener()
-    func removeConnectivityListener()
+    func updateConnectivityState()
     func updateCastButtonVisibility()
 }
 
 extension ChromecastAdapter: ConnectivityProtocol {
-    
     // MARK: - Cast session connection
+
     func isCastSessionConnected() -> Bool {
-        return isReachableViaWiFi() && self.hasConnectedCastSession() == true
+        return isReachableViaWiFi() && hasConnectedCastSession() == true
     }
 
     func isReachableViaWiFi() -> Bool {
-        self.connectivityState = FacadeConnector.connector?.connectivity?.getCurrentConnectivityState() ?? self.connectivityState
+        if let connectivity = FacadeConnector.connector?.connectivity {
+            connectivityState = connectivity.getCurrentConnectivityState()
+        }
+
         return connectivityState == .wifi
     }
-    
-    func addConnectivityListener() {
-        FacadeConnector.connector?.connectivity?.addConnectivityListener(self)
+
+    func updateConnectivityState() {
+        guard let connectivity = FacadeConnector.connector?.connectivity else {
+            return
+        }
+        connectivityState = connectivity.getCurrentConnectivityState()
     }
-    
-    func removeConnectivityListener() {
-        FacadeConnector.connector?.connectivity?.removeConnectivityListener(self)
-    }
-    
+
     func updateCastButtonVisibility() {
-        switch self.connectivityState {
+        switch connectivityState {
         case .offline, .cellular:
-            if let button = self.castButton,
-                button.isHidden == false {
+            if let button = castButton,
+               button.isHidden == false {
                 button.isHidden = true
             }
-            //send event of no devices
+            // send event of no devices
             RNEventEmitter.sendEvent(for: .CAST_STATE_CHANGED, with: 0)
             break
         default:
-            if let _ = self.castButton {
-                //show cc button if hidden
-                if let button = self.castButton,
-                    button.isHidden == true {
+            if let _ = castButton {
+                // show cc button if hidden
+                if let button = castButton,
+                   button.isHidden == true {
                     button.isHidden = false
                 }
-                //send event of availanle devices
-                RNEventEmitter.sendEvent(for: .CAST_STATE_CHANGED, with: self.getCurrentCastState())
+                // send event of availanle devices
+                RNEventEmitter.sendEvent(for: .CAST_STATE_CHANGED, with: getCurrentCastState())
             }
             break
         }
-    }
-}
-
-extension ChromecastAdapter: ConnectivityListener {
-    public func connectivityStateChanged(_ state: ConnectivityState) {
-        self.connectivityState = state
     }
 }

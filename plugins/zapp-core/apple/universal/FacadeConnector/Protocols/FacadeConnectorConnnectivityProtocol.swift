@@ -13,10 +13,6 @@ import Foundation
     case wifi
 }
 
-@objc public protocol ConnectivityListener {
-    @objc func connectivityStateChanged(_ state: ConnectivityState)
-}
-
 @objc public protocol FacadeConnectorConnnectivityProtocol {
     /**
      Get online status
@@ -30,14 +26,4 @@ import Foundation
      Get current connectivity state
      */
     @objc func getCurrentConnectivityState() -> ConnectivityState
-    
-    /**
-     Add listener to get calls for connectivity state changes
-     */
-    @objc func addConnectivityListener(_ listener: ConnectivityListener)
-    
-    /**
-     Remove listener to get calls for connectivity state changes
-     */
-    @objc func removeConnectivityListener(_ listener: ConnectivityListener)
 }
