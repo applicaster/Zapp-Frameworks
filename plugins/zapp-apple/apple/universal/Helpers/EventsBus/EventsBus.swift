@@ -64,7 +64,8 @@ public class EventsBus {
                 }
             }
         }
-        logger?.debugLog(template: EventsBusManagerLogs.unsubscribedFromAll)
+        logger?.debugLog(template: EventsBusManagerLogs.unsubscribedFromAll,
+                         data: ["target": String(describing: type(of: target))])
     }
 
     public func unsubscribe(_ target: AnyObject, name: String) {
@@ -84,7 +85,8 @@ public class EventsBus {
             }
         }
         logger?.debugLog(template: EventsBusManagerLogs.unsubscribed,
-                         data: ["name" : name])
+                         data: ["name" : name,
+                                "target": String(describing: type(of: target))])
 
     }
 }
