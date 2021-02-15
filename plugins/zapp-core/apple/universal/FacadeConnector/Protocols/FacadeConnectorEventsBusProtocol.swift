@@ -11,6 +11,7 @@ import Foundation
 @objc public protocol FacadeConnectorEventsBusProtocol {
     @objc func post(_ name: String, sender: Any?)
     @objc func post(_ name: String, sender: Any?, userInfo: [AnyHashable: Any]?)
+    @objc func post(_ name: String, userInfo: [AnyHashable: Any]?)
 
     @discardableResult @objc func subscribe(_ target: AnyObject, name: String, sender: Any?, handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol
     @discardableResult @objc func subscribe(_ target: AnyObject, name: String, handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol

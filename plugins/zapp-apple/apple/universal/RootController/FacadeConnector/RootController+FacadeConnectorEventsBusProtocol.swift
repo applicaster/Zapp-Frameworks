@@ -10,11 +10,15 @@ import Foundation
 import ZappCore
 
 extension RootController: FacadeConnectorEventsBusProtocol {
-    public func post(_ name: String, sender: Any? = nil) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: name), object: sender)
+    public func post(_ name: String, sender: Any?) {
+        self.post(name, sender: sender, userInfo: nil)
     }
 
-    public func post(_ name: String, sender: Any? = nil, userInfo: [AnyHashable: Any]?) {
+    public func post(_ name: String, userInfo: [AnyHashable: Any]?) {
+        self.post(name, sender: nil, userInfo: userInfo)
+    }
+    
+    public func post(_ name: String, sender: Any?, userInfo: [AnyHashable: Any]?) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: name), object: sender, userInfo: userInfo)
     }
 

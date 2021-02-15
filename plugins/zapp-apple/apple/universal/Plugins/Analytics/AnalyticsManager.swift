@@ -24,6 +24,8 @@ public class AnalyticsManager: PluginManagerBase {
         super.init()
         pluginType = .Analytics
         logger = Logger.getLogger(for: AnalyticsPluginsManagerLogs.subsystem)
+        
+        subscribeToEventsBus()
     }
 
     @objc public private(set) var currentScreenViewTitle: String?
@@ -68,8 +70,8 @@ public class AnalyticsManager: PluginManagerBase {
 
         return defaultParams
     }
-
-    public func sendEvent(name: String,
+    
+    func sendEvent(name: String,
                           parameters: [String: Any]?) {
         let parameters = parameters ?? [:]
         logger?.verboseLog(template: AnalyticsPluginsManagerLogs.sendEvent,
