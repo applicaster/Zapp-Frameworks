@@ -51,6 +51,7 @@ type Props = {
   onError: (arg: any) => void;
   onPlaybackRateChange: (arg: any) => void;
   onAdChangedState: (arg: any) => void;
+  onClose: () => void;
   style: VideoStyle;
   ignoreSilentSwitch: boolean;
   resizeMode: string;
@@ -206,8 +207,8 @@ export default class THEOPlayer extends Component<Props, State> {
   onJSWindowEvent = ({ nativeEvent }) => {
     const type = nativeEvent?.type;
     if (type === "onCloseButtonHandle") {
-      if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
-        this.props?.onFullscreenPlayerDidDismiss();
+      if (!R.isNil(this.props?.onClose)) {
+        this.props?.onClose();
       }
     }
   };
