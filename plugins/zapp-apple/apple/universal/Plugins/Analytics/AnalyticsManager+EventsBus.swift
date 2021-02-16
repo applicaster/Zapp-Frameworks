@@ -18,20 +18,20 @@ extension AnalyticsManager {
     }
 
     func subscribeToEventsBus() {
-        FacadeConnector.connector?.eventsBus?.subscribe(self,
-                                                       name: EventsBusPredefinedEvent.analytics,
-                                                       handler: { content in
-                                                           self.sendEvent(userInfo: content?.userInfo)
-                                                       })
+        EventsBus.subscribe(self,
+                            name: EventsBusTopics.analytics,
+                            handler: { content in
+                                self.sendEvent(userInfo: content?.userInfo)
+                            })
     }
 
     func sendEvent(userInfo: [AnyHashable: Any]?) {
-        var type: EventsBusAnalyticsTypes = .undefined
+        var type: EventsBusAnalyticsTopicTypes = .undefined
         let parameters = userInfo?[Constants.parameters] as? [String: Any] ?? [:]
 
         if let eventType = userInfo?[Constants.type] as? String {
-            type = EventsBusAnalyticsTypes(rawValue: eventType) ?? .undefined
-        } else if let eventType = userInfo?[Constants.type] as? EventsBusAnalyticsTypes {
+            type = EventsBusAnalyticsTopicTypes(rawValue: eventType) ?? .undefined
+        } else if let eventType = userInfo?[Constants.type] as? EventsBusAnalyticsTopicTypes {
             type = eventType
         }
 

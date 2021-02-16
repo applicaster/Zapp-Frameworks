@@ -22,11 +22,11 @@ extension ChromecastAdapter: GeneralProviderProtocol {
         updateManagerState(enabled: prepared,
                            initialized: true)
 
-        FacadeConnector.connector?.eventsBus?.subscribe(self,
-                                                       name: EventsBusPredefinedEvent.reachabilityChanged,
-                                                       handler: { _ in
-                                                           self.updateConnectivityState()
-                                                       })
+        EventsBus.subscribe(self,
+                            name: EventsBusTopics.reachabilityChanged,
+                            handler: { _ in
+                                self.updateConnectivityState()
+                            })
 
         completion?(true)
     }

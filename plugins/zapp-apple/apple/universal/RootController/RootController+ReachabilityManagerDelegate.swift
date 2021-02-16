@@ -24,11 +24,9 @@ extension RootController: ReachabilityManagerDelegate {
             showInternetError()
         }
         currentConnection = connection
-        
-        facadeConnector.eventsBus?.post(EventsBusPredefinedEvent.reachabilityChanged,
-                                       sender: nil,
-                                       userInfo: ["connection" : connection.description])
 
+        EventsBus.post(EventsBusTopics.reachabilityChanged,
+                       userInfo: ["connection": connection.description])
     }
 
     func showInternetError() {
