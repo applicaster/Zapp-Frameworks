@@ -25,7 +25,7 @@ extension RootController: ReachabilityManagerDelegate {
         }
         currentConnection = connection
         
-        facadeConnector.eventsBus?.post(EventsBusPredefinedEventName.reachabilityChanged,
+        facadeConnector.eventsBus?.post(EventsBusPredefinedEvent.reachabilityChanged,
                                        sender: nil,
                                        userInfo: ["connection" : connection.description])
 

@@ -1,5 +1,5 @@
 //
-//  EventsBusPredefinedEventNames.swift
+//  EventsBusPredefinedEvents.swift
 //  ZappCore
 //
 //  Created by Alex Zchut on 14/02/2021.
@@ -8,7 +8,7 @@
 
 let eventsBusNamePrefix = "c71a8e9f-188a-4596-8b84-f5a9e51d7d9a."
 
-public struct EventsBusPredefinedEventName {
+public struct EventsBusPredefinedEvent {
     /// Uniquie identifier of the local notification
     public static let reachabilityChanged = eventsBusNamePrefix + "reachabilityChanged"
 
