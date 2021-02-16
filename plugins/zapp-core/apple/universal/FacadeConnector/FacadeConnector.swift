@@ -18,10 +18,6 @@ import UIKit
         return connectorProvider as? FacadeConnectorAppDataProtocol
     }
 
-    @objc public var analytics: FacadeConnectorAnalyticsProtocol? {
-        return connectorProvider as? FacadeConnectorAnalyticsProtocol
-    }
-
     @objc public var playerDependant: FacadeConnectorPlayerDependantProtocol? {
         return connectorProvider as? FacadeConnectorPlayerDependantProtocol
     }
