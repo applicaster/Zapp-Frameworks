@@ -26,12 +26,12 @@ extension AnalyticsManager {
     }
 
     func sendEvent(userInfo: [AnyHashable: Any]?) {
-        var type: EventsBusPredefinedEventName.analyticsSubTypes = .undefined
+        var type: EventsBusAnalyticsTypes = .undefined
         let parameters = userInfo?[Constants.parameters] as? [String: Any] ?? [:]
 
         if let eventType = userInfo?[Constants.type] as? String {
-            type = EventsBusPredefinedEventName.analyticsSubTypes(rawValue: eventType) ?? .undefined
-        } else if let eventType = userInfo?[Constants.type] as? EventsBusPredefinedEventName.analyticsSubTypes {
+            type = EventsBusAnalyticsTypes(rawValue: eventType) ?? .undefined
+        } else if let eventType = userInfo?[Constants.type] as? EventsBusAnalyticsTypes {
             type = eventType
         }
 

@@ -13,12 +13,13 @@ public struct EventsBusPredefinedEventName {
     public static let reachabilityChanged = eventsBusNamePrefix + "reachabilityChanged"
 
     public static let analytics = eventsBusNamePrefix + "analytics"
-    public enum analyticsSubTypes: String {
-        case undefined
-        case sendEvent
-        case startObserveTimedEvent
-        case stopObserveTimedEvent
-        case sendScreenEvent
-        case trackURL
-    }
+}
+
+public enum EventsBusAnalyticsTypes: String {
+    case undefined
+    case sendEvent
+    case startObserveTimedEvent
+    case stopObserveTimedEvent
+    case sendScreenEvent
+    case trackURL
 }
