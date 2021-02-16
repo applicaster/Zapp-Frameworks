@@ -1,0 +1,7 @@
+-keep public class com.adobeagent.AdobeAnalyticsAgent {
+   public <fields>;
+   public <methods>;
+}
+-keep class com.adobe.marketing.mobile.* {
+    <init>(...);
+}
