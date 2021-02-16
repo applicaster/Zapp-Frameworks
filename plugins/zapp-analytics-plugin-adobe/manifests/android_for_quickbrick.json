@@ -1,10 +1,6 @@
 {
   "api": {
-    "require_startup_execution": false,
-    "class_name": "APAnalyticsProviderAdobe",
-    "modules": [
-      "ZappAnalyticsPluginAdobe"
-    ]
+    "class_name": "com.adobeagent.AdobeAnalyticsAgent"
   },
   "dependency_repository_url": [],
   "author_name": "Applicaster",
@@ -15,10 +11,10 @@
   "type": "analytics",
   "identifier": "AdobeAnalyticsAgent",
   "screen": false,
-  "react_native": false,
+  "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "2.0.2-Dev",
+  "min_zapp_sdk": "2.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -40,14 +36,14 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "android_for_quickbrick",
   "manifest_version": "1.1.1",
-  "extra_dependencies": [
-    {
-      "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
-    }
-  ],
   "npm_dependencies": [
     "@applicaster/zapp-analytics-plugin-adobe@1.1.1"
+  ],
+  "project_dependencies": [
+    {
+      "zapp-analytics-plugin-adobe": "node_modules/@applicaster/zapp-analytics-plugin-adobe/android"
+    }
   ]
 }
