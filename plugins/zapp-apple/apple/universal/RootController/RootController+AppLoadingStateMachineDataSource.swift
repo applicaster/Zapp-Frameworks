@@ -83,8 +83,12 @@ extension RootController: LoadingStateMachineDataSource {
             appReadyForUse = true
             makeInterfaceLayerAsRootViewContoroller()
 
-            facadeConnector.analytics?.sendEvent?(name: CoreAnalyticsKeys.applicationWasLaunched,
-                                                  parameters: [:])
+            EventsBus.post(EventsBusTopics.analytics,
+                           userInfo: [
+                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
+                               "name": CoreAnalyticsKeys.applicationWasLaunched,
+                               "parameters": [:],
+                           ])
 
             NotificationCenter.default.post(name: Notification.Name(kMSAppCenterCheckForUpdatesNotification),
                                             object: nil)

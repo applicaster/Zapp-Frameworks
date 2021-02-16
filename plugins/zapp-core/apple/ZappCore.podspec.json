@@ -24,6 +24,9 @@
   "tvos": {
     "source_files": "tvos/**/*.{swift}"
   },
+  "dependencies": {
+    "XrayLogger": []
+  },
   "testspecs": [
     {
       "name": "UnitTests",

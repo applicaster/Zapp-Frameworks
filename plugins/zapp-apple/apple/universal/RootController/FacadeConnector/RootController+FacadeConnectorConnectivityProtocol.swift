@@ -44,21 +44,4 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
         }
         return retValue
     }
-
-    public func addConnectivityListener(_ listener: ConnectivityListener) {
-        connectivityListeners.add(listener)
-    }
-
-    public func removeConnectivityListener(_ listener: ConnectivityListener) {
-        connectivityListeners.remove(listener)
-    }
-
-    func updateConnectivityListeners() {
-        let currentConnectionState = getCurrentConnectivityState()
-        for listener in connectivityListeners {
-            if let connectivityListener = listener as? ConnectivityListener {
-                connectivityListener.connectivityStateChanged(currentConnectionState)
-            }
-        }
-    }
 }
