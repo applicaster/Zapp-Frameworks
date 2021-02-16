@@ -8,6 +8,7 @@
 //  Based on example from https://github.com/cesarferreira/SwiftEventBus
 
 import Foundation
+import XrayLogger
 
 struct NamedObserver {
     let observer: NSObjectProtocol
@@ -16,6 +17,7 @@ struct NamedObserver {
 
 public class EventsBus {
     static let shared = EventsBus()
+    let logger = Logger.getLogger(for: EventsBusLogs.subsystem)
 
     lazy var queue: DispatchQueue = {
         let uuid = NSUUID().uuidString
@@ -49,6 +51,10 @@ public class EventsBus {
             }
         }
 
+        shared.logger?.debugLog(message: EventsBusLogs.subscribed.message,
+                                category: EventsBusLogs.subscribed.category,
+                                data: ["name": name])
+
         return observer
     }
 
@@ -63,6 +69,10 @@ public class EventsBus {
                 }
             }
         }
+
+        shared.logger?.debugLog(message: EventsBusLogs.unsubscribedFromAll.message,
+                                category: EventsBusLogs.unsubscribedFromAll.category,
+                                data: ["target": String(describing: type(of: target))])
     }
 
     public static func unsubscribe(_ target: AnyObject, name: String) {
@@ -81,5 +91,10 @@ public class EventsBus {
                 })
             }
         }
+
+        shared.logger?.debugLog(message: EventsBusLogs.unsubscribed.message,
+                                category: EventsBusLogs.unsubscribed.category,
+                                data: ["name": name,
+                                       "target": String(describing: type(of: target))])
     }
 }
