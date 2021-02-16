@@ -28,6 +28,7 @@
 .vjs-fullscreen-control {
     /* display: none !important; */
     opacity: 0 !important;
+    width: 0 !important;
 }
 
 .theoplayer-skin video {
