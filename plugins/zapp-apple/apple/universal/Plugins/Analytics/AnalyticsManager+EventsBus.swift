@@ -18,7 +18,7 @@ extension AnalyticsManager {
     }
 
     func subscribeToEventsBus() {
-        FacadeConnector.connector?.eventBus?.subscribe(self,
+        FacadeConnector.connector?.eventsBus?.subscribe(self,
                                                        name: EventsBusPredefinedEventName.analytics,
                                                        handler: { content in
                                                            self.sendEvent(userInfo: content?.userInfo)

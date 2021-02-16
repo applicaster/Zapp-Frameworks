@@ -58,7 +58,7 @@ import UIKit
         return UIApplication.shared.delegate as? FacadeConnectorOfflineContentProtocol
     }
     
-    @objc public var eventBus: FacadeConnectorEventsBusProtocol? {
+    @objc public var eventsBus: FacadeConnectorEventsBusProtocol? {
         return connectorProvider as? FacadeConnectorEventsBusProtocol
     }
     

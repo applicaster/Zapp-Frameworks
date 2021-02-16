@@ -57,7 +57,7 @@ extension ChromecastAdapter {
                                                   name: NSNotification.Name.gckuiCastDialogWillShow,
                                                   object: nil)
         
-        FacadeConnector.connector?.eventBus?.unsubscribe(self)
+        FacadeConnector.connector?.eventsBus?.unsubscribe(self)
     }
 
     // MARK: - Notifications
