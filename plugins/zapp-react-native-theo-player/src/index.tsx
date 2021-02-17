@@ -2,9 +2,8 @@
 import React, { Component } from "react";
 import { Platform } from "react-native";
 import * as R from "ramda";
-import TransportControls from "@applicaster/quick-brick-mobile-transport-controls";
+
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
 import { fetchImageFromMetaByKey } from "./Utils";
 import { StyleSheet, View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
@@ -12,16 +11,6 @@ import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 
 console.disableYellowBox = true;
-const styles = StyleSheet.create({
-  containerBase: {
-    flex: 1,
-  },
-
-  container: {
-    flex: 1,
-  },
-});
-
 type PluginConfiguration = {
   theoplayer_license_key: string;
   moat_partner_code: string;
@@ -91,12 +80,9 @@ const manifestJson = platformSelect({
   ios: require("../manifests/ios_for_quickbrick.json"),
   android: require("../manifests/android_for_quickbrick.json"),
 });
-
-function getStyles() {
-  return manifestJson.custom_configuration_fields;
-}
-
 export default class THEOPlayer extends Component<Props, State> {
+  _root: THEOplayerView;
+
   constructor(props) {
     super(props);
 
@@ -214,28 +200,8 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  // getPluginConfiguration() {
-  //   const {
-  //     pluginConfiguration,
-  //     entry: { targetScreen: { styles, general } = {} } = {},
-  //   } = this.props;
-
-  //   const configuration = { ...pluginConfiguration, ...styles, ...general };
-
-  //   try {
-  //     const manifestConfig = getStyles();
-
-  //     return populateConfigurationValues(manifestConfig)(configuration);
-  //   } catch (error) {
-  //     // eslint-disable-next-line no-console
-  //     console.warn("could not sanitize the player controls");
-
-  //     return configuration;
-  //   }
-  // }
-
-  _assignRoot = (component) => {
-    // this._root = component;
+  _assignRoot = (component: THEOplayerView) => {
+    this._root = component;
   };
 
   render() {
