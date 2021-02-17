@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-generic-chromecast",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A react native plugin that adds chromecast support to QuickBrick",
   "main": "src/index.js",
   "scripts": {
