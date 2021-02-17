@@ -1,28 +1,36 @@
-import THEOplayerSDK
 import React
+import THEOplayerSDK
 
 @objc extension RCTConvert {
     @objc(TypedSource:)
-    class func typedSource(_ json: [String:AnyObject]) -> TypedSource? {
+    class func typedSource(_ json: [String: AnyObject]) -> TypedSource? {
         if let src = RCTConvert.nsString(json["src"]),
-            let type = RCTConvert.nsString(json["type"]) {
-
+           let type = RCTConvert.nsString(json["type"]) {
             if let drm = RCTConvert.nsDictionary(json["drm"]),
                let fairplay = RCTConvert.nsDictionary(drm["fairplay"]),
                let integrationType = RCTConvert.nsString(drm["integration"]) {
-                let licenseAcquisitionURL = RCTConvert.nsString(fairplay["licenseAcquisitionURL"]);
-                let certificateURL = RCTConvert.nsString(fairplay["certificateURL"]);
-                var baseDrm: THEOplayerSDK.DRMConfiguration? = nil
+                let licenseAcquisitionURL = RCTConvert.nsString(fairplay["licenseAcquisitionURL"])
+                let certificateURL = RCTConvert.nsString(fairplay["certificateURL"])
+                var baseDrm: THEOplayerSDK.DRMConfiguration?
 
                 // If you want other integration add next case and drm configurator supported by theoplayer sdk 
                 switch integrationType {
-                  case "ezdrm":
+                case "ezdrm":
                     baseDrm = EzdrmDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL!, certificateURL: certificateURL!)
                     break
-                  case "uplynk":
+                case "uplynk":
                     baseDrm = UplynkDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL, certificateURL: certificateURL!)
                     break
-                  default:
+                case "keyos":
+                    if let token = RCTConvert.nsString(drm["token"]),
+                       let licenseAcquisitionURL = licenseAcquisitionURL,
+                       let certificateURL = certificateURL {
+                        baseDrm = KeyOSDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL,
+                                                        certificateURL: certificateURL,
+                                                        customdata: token)
+                    }
+                    break
+                default:
                     break
                 }
 
@@ -44,7 +52,7 @@ import React
     }
 
     @objc(AdDescription:)
-    class func adDescription(_ json: [String:AnyObject]) -> THEOAdDescription? {
+    class func adDescription(_ json: [String: AnyObject]) -> THEOAdDescription? {
         if let src = RCTConvert.nsString(json["sources"]) {
             return THEOAdDescription(
                 src: src,
@@ -64,15 +72,15 @@ import React
     }
 
     @objc(TextTrack:)
-    class func textTrack(_ json: [String:AnyObject]) -> TextTrackDescription? {
+    class func textTrack(_ json: [String: AnyObject]) -> TextTrackDescription? {
         if let src = json["src"].flatMap(RCTConvert.nsString),
-            let srclang = json["srclang"].flatMap(RCTConvert.nsString) {
+           let srclang = json["srclang"].flatMap(RCTConvert.nsString) {
             return TextTrackDescription(
                 src: src,
                 srclang: srclang,
                 isDefault: json["default"].flatMap(RCTConvert.bool),
                 kind: json["kind"].flatMap(RCTConvert.nsString).flatMap {
-                    TextTrackKind.init(rawValue: $0)
+                    TextTrackKind(rawValue: $0)
                 },
                 label: json["label"].flatMap(RCTConvert.nsString)
             )
@@ -89,7 +97,7 @@ import React
     }
 
     @objc(SourceDescription:)
-    class func sourceDescription(_ json: [String:AnyObject]) -> SourceDescription? {
+    class func sourceDescription(_ json: [String: AnyObject]) -> SourceDescription? {
         if let sources = (json["sources"] as? [AnyObject]).flatMap(RCTConvert.typedSourceArray) {
             return SourceDescription(
                 sources: sources,
