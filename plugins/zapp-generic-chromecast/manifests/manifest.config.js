@@ -72,8 +72,8 @@ function createManifest({ version, platform }) {
 }
 const min_zapp_sdk = {
   android: "20.0.0",
-  tvos_for_quickbrick: "4.0.0-Dev",
-  ios_for_quickbrick: "4.0.0-Dev",
+  tvos_for_quickbrick: "5.0.0-Dev",
+  ios_for_quickbrick: "5.0.0-Dev",
   android_for_quickbrick: "1.0.0-Dev",
 };
 
