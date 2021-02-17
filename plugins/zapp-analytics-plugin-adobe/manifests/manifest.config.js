@@ -54,8 +54,8 @@ const custom_configuration_fields_apple = [
 ];
 
 const custom_configuration_fields = {
-  ios: custom_configuration_fields_apple,
   ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_apple,
   android_tv_for_quickbrick: custom_configuration_fields_apple,
   amazon_fire_tv_for_quickbrick: custom_configuration_fields_apple,
@@ -65,13 +65,15 @@ const ui_frameworks_quickbrick = ["quickbrick"];
 
 const ui_frameworks = {
   ios_for_quickbrick: ui_frameworks_quickbrick,
+  tvos_for_quickbrick: ui_frameworks_quickbrick,
   android_for_quickbrick: ui_frameworks_quickbrick,
   android_tv_for_quickbrick: ui_frameworks_quickbrick,
   amazon_fire_tv_for_quickbrick: ui_frameworks_quickbrick,
 };
 
 const min_zapp_sdk = {
-  ios_for_quickbrick: "2.0.2-Dev",
+  ios_for_quickbrick: "4.0.0-Dev",
+  tvos_for_quickbrick: "4.0.0-Dev",
   android_for_quickbrick: "2.0.0",
   android_tv_for_quickbrick: "2.0.0",
   amazon_fire_tv_for_quickbrick: "2.0.0",
@@ -86,6 +88,7 @@ const extra_dependencies_apple = [
 
 const extra_dependencies = {
   ios_for_quickbrick: extra_dependencies_apple,
+  tvos_for_quickbrick: extra_dependencies_apple,
 };
 
 const project_dependencies_android = [
@@ -113,6 +116,7 @@ const api_android = {
 
 const api = {
   ios_for_quickbrick: api_apple,
+  tvos_for_quickbrick: api_apple,
   android_for_quickbrick: api_android,
   android_tv_for_quickbrick: api_android,
   amazon_fire_tv_for_quickbrick: api_android,
@@ -123,6 +127,7 @@ const tvTarget = ["tv"];
 
 const targets = {
   ios_for_quickbrick: mobileTarget,
+  tvos_for_quickbrick: tvTarget,
   android_for_quickbrick: mobileTarget,
   android_tv_for_quickbrick: tvTarget,
   amazon_fire_tv_for_quickbrick: tvTarget,
