@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.mediarouter.media.MediaRouter;
 
 import com.applicaster.reactnative.utils.ContainersUtil;
 import com.applicaster.util.APLogger;
@@ -18,11 +17,13 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
@@ -140,9 +141,10 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event -> {
             APLogger.debug(TAG, "Received JS event " + event);
-            reactContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(InternalAndGlobalEventPair.onJSWindowEvent.internalEvent, repackEvent(event));
+            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                    playerView.getId(),
+                    InternalAndGlobalEventPair.onJSWindowEvent.internalEvent,
+                    repackEvent(event));
         });
         playerView.evaluateJavaScript("init({player: player})", null);
         addPropertyChangeListeners(reactContext);
@@ -300,7 +302,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         playerView.getPlayer().stop();
     }
 
-    private Object repackEvent(String eventJSON) {
+    private WritableNativeMap repackEvent(String eventJSON) {
         try {
             // todo: simplify and convert directly from JSONObject to WritableNativeMap
             JSONObject jsonObject = new JSONObject(eventJSON);
@@ -308,9 +310,8 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
             return ContainersUtil.INSTANCE.toRN(map);
         } catch (JSONException e) {
             APLogger.error(TAG, "failed to load convert JSON event", e);
-            e.printStackTrace();
+            throw new RuntimeException("Invalid eventJSON", e);
         }
-        return eventJSON; // try to pass as primitive
     }
 
     private void addPropertyChangeListeners(final ThemedReactContext reactContext) {
