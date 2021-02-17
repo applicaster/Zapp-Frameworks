@@ -6,9 +6,11 @@
 //  Copyright © 2020 Applicaster. All rights reserved.
 //
 
+import ACPAnalytics
+import ACPCore
+import AVFoundation
 import Foundation
 import ZappCore
-import AVFoundation
 
 extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
     var avPlayer: AVPlayer? {
@@ -20,7 +22,7 @@ extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        adobeAnalytics?.playerDidCreate()
+        adobeAnalyticsObjc?.maxPosition = "0"
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleAccessLogEntry(notification:)),
@@ -34,7 +36,10 @@ extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
                                         forKeyPath: "rate",
                                         context: nil)
         }
-        adobeAnalytics?.playerDidFinishPlayItem()
+        adobeAnalyticsObjc?.prepareEventPlayerDidStartPlayItem { eventName, parameters in
+            let trackParameters = parameters as? [String: NSObject] ?? [:]
+            self.trackEvent(eventName, parameters: trackParameters)
+        }
     }
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
@@ -53,7 +58,10 @@ extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
                               options: [],
                               context: nil)
 
-        adobeAnalytics?.playerDidStartPlayItem()
+        adobeAnalyticsObjc?.prepareEventPlayerDidStartPlayItem { eventName, parameters in
+            let trackParameters = parameters as? [String: NSObject] ?? [:]
+            self.trackEvent(eventName, parameters: trackParameters)
+        }
     }
 
     override public func observeValue(forKeyPath keyPath: String?,
@@ -64,14 +72,14 @@ extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
            let player = avPlayer,
            object == player {
             // if playing
-            
+
             if playbackStalled, player.rate > 0 {
-                adobeAnalytics?.playerDidResumePlayItem()
+                adobeAnalyticsObjc?.playerDidResumePlayItem()
                 playbackStalled = false
             }
             // if paused
             else if !playbackStalled, player.rate == 0 {
-                adobeAnalytics?.playerDidPausePlayItem()
+                adobeAnalyticsObjc?.playerDidPausePlayItem()
                 playbackStalled = true
             }
         } else {

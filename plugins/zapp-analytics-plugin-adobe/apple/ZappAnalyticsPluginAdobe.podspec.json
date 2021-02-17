@@ -2,7 +2,8 @@
   "name": "ZappAnalyticsPluginAdobe",
   "version": "1.1.1",
   "platforms": {
-    "ios": "12.0"
+    "ios": "12.0", 
+    "tvos": "12.0"
   },
   "summary": "ZappAnalyticsPluginAdobe",
   "description": "ZappAnalyticsPluginAdobe container.",
@@ -16,8 +17,9 @@
     "tag": "@@applicaster/zapp-analytics-plugin-adobe/1.1.1"
   },
   "requires_arc": true,
-  "public_header_files": "ios/**/*.h",
-  "source_files": "ios/**/*.{h,m,swift}",
+  "public_header_files": "universal/**/*.h",
+  "source_files": "universal/**/*.{h,m,swift}",
+  "static_framework": true,
   "frameworks": [
     "AVFoundation"
   ],
@@ -26,16 +28,29 @@
     "ENABLE_BITCODE": "YES",
     "SWIFT_VERSION": "5.1"
   },
-  "dependencies": {
-    "ZappAnalyticsPluginsSDK": [],
-    "ACPAnalytics": [
-      "2.4.0"
-    ],
-    "ACPUserProfile": [
-      "2.1.0"
-    ],
-    "ACPCore": [
-      "2.8.1"
-    ]
+  "tvos": {
+    "dependencies": {
+      "ZappAnalyticsPluginsSDK": [],
+      "ACPAnalytics": [
+        "2.5.0"
+      ],
+      "ACPCore": [
+        "2.9.1"
+      ]
+    }
+  },
+  "ios": {
+    "dependencies": {
+      "ZappAnalyticsPluginsSDK": [],
+      "ACPAnalytics": [
+        "2.5.0"
+      ],
+      "ACPUserProfile": [
+        
+      ],
+      "ACPCore": [
+        "2.9.1"
+      ]
+    }
   }
 }
