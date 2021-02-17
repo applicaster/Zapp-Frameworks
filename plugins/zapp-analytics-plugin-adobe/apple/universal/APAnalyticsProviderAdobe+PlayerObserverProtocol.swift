@@ -36,7 +36,7 @@ extension APAnalyticsProviderAdobe: PlayerObserverProtocol {
                                         forKeyPath: "rate",
                                         context: nil)
         }
-        adobeAnalyticsObjc?.prepareEventPlayerDidStartPlayItem { eventName, parameters in
+        adobeAnalyticsObjc?.prepareEventPlayerDidFinishPlayItem { eventName, parameters in
             let trackParameters = parameters as? [String: NSObject] ?? [:]
             self.trackEvent(eventName, parameters: trackParameters)
         }
