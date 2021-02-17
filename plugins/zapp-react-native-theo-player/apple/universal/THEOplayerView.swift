@@ -2,6 +2,7 @@ import Foundation
 import React
 import THEOplayerSDK
 import UIKit
+import XrayLogger
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -48,12 +49,16 @@ class THEOplayerView: UIView {
 
     @objc var autoplay: Bool = false {
         didSet {
+            logger?.debugLog(message: "Autoplay enabled: \(autoplay)",
+                             data: ["autoplay": autoplay])
             player?.autoplay = autoplay
         }
     }
 
     @objc var fullscreenOrientationCoupling: Bool = false {
         didSet {
+            logger?.debugLog(message: "Full screen Orientation coupling: \(fullscreenOrientationCoupling)",
+                             data: ["fullscreenOrientationCoupling": fullscreenOrientationCoupling])
             player?.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         }
     }
@@ -91,6 +96,7 @@ class THEOplayerView: UIView {
     }
 
     private func unloadTheoPlayer() {
+        logger?.debugLog(message: "Unload player")
         removeJSEventListeners()
         removeEventListeners()
         player.stop()
@@ -126,6 +132,8 @@ class THEOplayerView: UIView {
     // MARK: - THEOplayer setup and unload
 
     private func setupTheoPlayer() {
+        logger?.debugLog(message: "Initialize player",
+                         data: [:])
         let theoplayerLicenseKey = licenceData?["theoplayer_license_key"] as? String
 
         var analytics = [AnalyticsDescription]()

@@ -53,7 +53,8 @@ extension THEOplayerView {
     // MARK: - THEOplayer listener related functions and closures
 
     func attachEventListeners() {
-        // Listen to event and store references in dictionary
+        logger?.debugLog(message: "Player Add event listeners")
+        
         listeners[PlayerEventTypes.PLAY.name] = player.addEventListener(type: PlayerEventTypes.PLAY, listener: play)
         listeners[PlayerEventTypes.PLAYING.name] = player.addEventListener(type: PlayerEventTypes.PLAYING, listener: playing)
         listeners[PlayerEventTypes.PAUSE.name] = player.addEventListener(type: PlayerEventTypes.PAUSE, listener: pause)
@@ -80,7 +81,9 @@ extension THEOplayerView {
     }
 
     func removeEventListeners() {
-        // Remove event listenrs
+        
+        logger?.debugLog(message: "Player Remove event listeners")
+        
         player.removeEventListener(type: PlayerEventTypes.PLAY, listener: listeners[PlayerEventTypes.PLAY.name]!)
         player.removeEventListener(type: PlayerEventTypes.PLAYING, listener: listeners[PlayerEventTypes.PLAYING.name]!)
         player.removeEventListener(type: PlayerEventTypes.PAUSE, listener: listeners[PlayerEventTypes.PAUSE.name]!)
@@ -109,118 +112,150 @@ extension THEOplayerView {
     }
 
     private func play(event: PlayEvent) {
-        os_log("PLAY event")
-
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerPlay?([RNTHEOplayerKeys.type: event.type,
                        RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func playing(event: PlayingEvent) {
-        os_log("PLAYING event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerPlaying?([RNTHEOplayerKeys.type: event.type,
                           RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func pause(event: PauseEvent) {
-        os_log("PAUSE event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerPause?([RNTHEOplayerKeys.type: event.type,
                         RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func progress(event: ProgressEvent) {
-        os_log("PROGRESS event")
         onPlayerProgress?([RNTHEOplayerKeys.type: event.type,
                            RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func seeking(event: SeekingEvent) {
-        os_log("SEEKING event")
         onPlayerSeeking?([RNTHEOplayerKeys.type: event.type,
                           RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func seeked(event: SeekedEvent) {
-        os_log("SEEKED even")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerSeeked?([RNTHEOplayerKeys.type: event.type,
                          RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func waiting(event: WaitingEvent) {
-        os_log("WAITING event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerWaiting?([RNTHEOplayerKeys.type: event.type,
                           RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func timeUpdate(event: TimeUpdateEvent) {
-        os_log("TIME_UPDATE event")
         var info: [String: Any] = [RNTHEOplayerKeys.type: event.type,
                                    RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime]
 
         if let currentTime = event.currentProgramDateTime?.timeIntervalSince1970 {
             info[RNTHEOplayerKeys.currentProgramDateTime] = currentTime
         }
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: info)
         onPlayerTimeUpdate?(info)
     }
 
     private func rateChange(event: RateChangeEvent) {
-        os_log("RATE_CHANGE event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.playbackRate: event.playbackRate])
         onPlayerRateChange?([RNTHEOplayerKeys.type: event.type,
                              RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                              RNTHEOplayerKeys.playbackRate: event.playbackRate])
     }
 
     private func readyStateChange(event: ReadyStateChangeEvent) {
-        os_log("READY_STATE_CHANGE")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.readyState: event.readyState.toString()])
         onPlayerTimeUpdate?([RNTHEOplayerKeys.type: event.type,
                              RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                              RNTHEOplayerKeys.readyState: event.readyState.toString()])
     }
 
     private func loadedMetaData(event: LoadedMetaDataEvent) {
-        os_log("LOADED_META_DATA")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.readyState: event.readyState.toString()])
         onPlayerLoadedMetaData?([RNTHEOplayerKeys.type: event.type,
                                  RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                                  RNTHEOplayerKeys.readyState: event.readyState.toString()])
     }
 
     private func loadedData(event: LoadedDataEvent) {
-        os_log("LOADED_DATA event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.readyState: event.readyState.toString()])
         onPlayerLoadedData?([RNTHEOplayerKeys.type: event.type,
                              RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                              RNTHEOplayerKeys.readyState: event.readyState.toString()])
     }
 
     private func loadStart(event: LoadStartEvent) {
-        os_log("LOAD_START event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
         onPlayerLoadStart?([RNTHEOplayerKeys.type: event.type,
                             RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
 
     private func canPlay(event: CanPlayEvent) {
-        os_log("CAN_PLAY event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.readyState: event.readyState.toString()])
         onPlayerCanPlay?([RNTHEOplayerKeys.type: event.type,
                           RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                           RNTHEOplayerKeys.readyState: event.readyState.toString()])
     }
 
     private func canPlayThrough(event: CanPlayThroughEvent) {
-        os_log("CAN_PLAY_THROUGH event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.readyState: event.readyState.toString()])
         onPlayerCanPlayThrough?([RNTHEOplayerKeys.type: event.type,
                                  RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                                  RNTHEOplayerKeys.readyState: event.readyState.toString()])
     }
 
     private func durationChange(event: DurationChangeEvent) {
-        os_log("DURATION_CHANGE event")
         var info: [String: Any] = [RNTHEOplayerKeys.type: event.type]
         if let duration = event.getPatchedDuration {
             info[RNTHEOplayerKeys.duration] = duration
         }
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: info)
         onPlayerDurationChange?(info)
     }
 
     private func sourceChange(event: SourceChangeEvent) {
         os_log("SOURCE_CHANGE")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+
         onPlayerSourceChange?([RNTHEOplayerKeys.type: event.type,
                                RNTHEOplayerKeys.source: [
                                ]])
@@ -228,13 +263,18 @@ extension THEOplayerView {
     }
 
     private func presentationModeChange(event: PresentationModeChangeEvent) {
-        os_log("PRESENTATION_MODE_CHANGE")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.presentationMode: event.presentationMode.rawValue])
         onPlayerPresentationModeChange?([RNTHEOplayerKeys.type: event.type,
                                          RNTHEOplayerKeys.presentationMode: event.presentationMode.rawValue])
     }
 
     private func volumeChange(event: VolumeChangeEvent) {
-        os_log("VOLUME_CHANGE event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
+                                RNTHEOplayerKeys.volume: event.volume])
 
         onPlayerVolumeChange?([RNTHEOplayerKeys.type: event.type,
                                RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
@@ -242,28 +282,33 @@ extension THEOplayerView {
     }
 
     private func playerResize(event: ResizeEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
         onPlayerResize?([RNTHEOplayerKeys.type: event.type])
     }
 
     private func resize(event: ResizeEvent) {
-        os_log("RESIZE")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
         onPlayerCanPlayThrough?([RNTHEOplayerKeys.type: event.type])
     }
 
     private func destroy(event: DestroyEvent) {
-        os_log("DESTROY")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
         onPlayerDestroy?([RNTHEOplayerKeys.type: event.type])
     }
 
     private func ended(event: EndedEvent) {
-        os_log("ENDED event")
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
         onPlayerEnded?([RNTHEOplayerKeys.type: event.type])
     }
 
     private func error(event: ErrorEvent) {
-        os_log("ERROR event, error: %@", event.error)
-        // TODO: !!!!!!!!! not finished
-
+        logger?.debugLog(message: "ERROR event, error: \(event.error)",
+                         data: [RNTHEOplayerKeys.type: event.type,
+                                "error": event.error])
         onPlayerError?([RNTHEOplayerKeys.type: event.type,
                         RNTHEOplayerKeys.error: event.error,
             ])
@@ -272,14 +317,19 @@ extension THEOplayerView {
     // MARK: - THEOplayer JS listener sended from JS script
 
     func attachJSEventListeners() {
+        logger?.debugLog(message: "Attach JS Event Listeners")
         player.addJavascriptMessageListener(name: jsEventListenerKey, listener: jsMessageReceived)
     }
 
     func removeJSEventListeners() {
+        logger?.debugLog(message: "Remove JS Event Listeners")
         player.removeJavascriptMessageListener(name: jsEventListenerKey)
     }
 
     func jsMessageReceived(message: [String: Any]) {
+        logger?.debugLog(message: "JS Message recieved",
+                         data: ["message": message])
+
         onJSWindowEvent?(message)
     }
 }
@@ -288,10 +338,10 @@ extension CurrentTimeEvent {
     /// This function was crated to wrapp infinity bug of TheoPlayer returned to current time
     /// - Returns: -1 in case infinite value
     var getPatchedCurrentTime: Double {
-        guard self.currentTime.isInfinite == false else {
+        guard currentTime.isInfinite == false else {
             return 0
         }
-        return self.currentTime
+        return currentTime
     }
 }
 

@@ -4,6 +4,9 @@ import THEOplayerSDK
 @objc extension RCTConvert {
     @objc(TypedSource:)
     class func typedSource(_ json: [String: AnyObject]) -> TypedSource? {
+        logger?.debugLog(message: "New data source recieved",
+                         data: ["source": json])
+        
         if let src = RCTConvert.nsString(json["src"]),
            let type = RCTConvert.nsString(json["type"]) {
             if let drm = RCTConvert.nsDictionary(json["drm"]),
