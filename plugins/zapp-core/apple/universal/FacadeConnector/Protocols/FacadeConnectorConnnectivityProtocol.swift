@@ -13,6 +13,10 @@ import Foundation
     case wifi
 }
 
+@objc public protocol ConnectivityListener {
+    @objc func connectivityStateChanged(_ state: ConnectivityState)
+}
+
 @objc public protocol FacadeConnectorConnnectivityProtocol {
     /**
      Get online status
@@ -26,4 +30,16 @@ import Foundation
      Get current connectivity state
      */
     @objc func getCurrentConnectivityState() -> ConnectivityState
+    
+    /**
+     Add listener to get calls for connectivity state changes
+     */
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
+    @objc func addConnectivityListener(_ listener: ConnectivityListener)
+    
+    /**
+     Remove listener to get calls for connectivity state changes
+     */
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
+    @objc func removeConnectivityListener(_ listener: ConnectivityListener)
 }

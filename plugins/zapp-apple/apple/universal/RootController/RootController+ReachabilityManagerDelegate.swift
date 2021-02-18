@@ -25,6 +25,7 @@ extension RootController: ReachabilityManagerDelegate {
         }
         currentConnection = connection
 
+        updateConnectivityListeners()
         EventsBus.post(EventsBusTopics.reachabilityChanged,
                        userInfo: ["connection": connection.description])
     }

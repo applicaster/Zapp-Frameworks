@@ -21,6 +21,9 @@ public class RootController: NSObject {
     public var appDelegate: AppDelegateProtocol?
     public var appReadyForUse: Bool = false
 
+    // Properties for managing connectivity listeners
+    lazy var connectivityListeners: NSMutableArray = []
+
     var reachabilityManager: ReachabilityManager?
     var currentConnection: Reachability.Connection?
 
