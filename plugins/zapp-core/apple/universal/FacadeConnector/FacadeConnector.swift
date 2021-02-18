@@ -18,7 +18,7 @@ import UIKit
         return connectorProvider as? FacadeConnectorAppDataProtocol
     }
 
-    @available(*, deprecated, message: "Deprecated from QB SDK 5.0.0, use EventsBus instead")
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
     @objc public var analytics: FacadeConnectorAnalyticsProtocol? {
         return connectorProvider as? FacadeConnectorAnalyticsProtocol
     }

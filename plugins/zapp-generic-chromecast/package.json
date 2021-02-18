@@ -40,7 +40,6 @@
     "supportedPlatforms": [
       "ios_for_quickbrick",
       "android_for_quickbrick",
-      "ios",
       "android"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"

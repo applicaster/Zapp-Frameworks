@@ -9,7 +9,7 @@
 import Foundation
 
 // Allows lower layer classes like plugins to send analytics using the analytics providers set for the app
-@available(*, deprecated, message: "Deprecated from QB SDK 5.0.0, use EventsBus instead")
+@available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
 @objc public protocol FacadeConnectorAnalyticsProtocol {
     // The event will be sent using all the analytics providers added as plugins
     // It might be the event is blacklisted in the provider plugin configuration, in that case it will be ignored
