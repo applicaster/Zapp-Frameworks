@@ -18,7 +18,7 @@ function mapDRMToTheoData(drmData) {
   let retVal = {};
 
   retVal["integration"] = drmData?.customParams?.integration;
-  retVal["token"] = drmData?.customParams?.token;
+  retVal["customdata"] = drmData?.customParams?.custom_data;
 
   const fairplay = drmData?.fairplay;
   if (fairplay) {

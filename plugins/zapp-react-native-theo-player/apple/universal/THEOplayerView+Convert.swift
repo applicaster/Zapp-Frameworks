@@ -25,7 +25,7 @@ import THEOplayerSDK
                     baseDrm = UplynkDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL, certificateURL: certificateURL!)
                     break
                 case "keyos":
-                    if let token = RCTConvert.nsString(drm["token"]),
+                    if let token = RCTConvert.nsString(drm["customdata"]),
                        let licenseAcquisitionURL = licenseAcquisitionURL,
                        let certificateURL = certificateURL {
                         baseDrm = KeyOSDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL,
