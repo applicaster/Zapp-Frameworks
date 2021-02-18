@@ -22,6 +22,7 @@
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",
+      "tvos_for_quickbrick",
       "android_for_quickbrick",
       "android_tv_for_quickbrick",
       "amazon_fire_tv_for_quickbrick"
