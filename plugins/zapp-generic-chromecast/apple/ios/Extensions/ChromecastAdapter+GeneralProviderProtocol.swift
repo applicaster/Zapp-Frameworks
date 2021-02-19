@@ -8,24 +8,29 @@
 
 import ZappCore
 
-extension ChromecastAdapter : GeneralProviderProtocol {
+extension ChromecastAdapter: GeneralProviderProtocol {
     open func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
     }
-    
-    open func prepareProvider(_ defaultParams: [String : Any], completion: ((Bool) -> Void)?) {
 
+    open func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
         var prepared = false
-        if !self.initialized {
-            prepared = self.prepareChromecastForUse()
+        if !initialized {
+            prepared = prepareChromecastForUse()
         }
-        
+
         updateManagerState(enabled: prepared,
                            initialized: true)
-        
+
+        EventsBus.subscribe(self,
+                            name: EventsBusTopics.reachabilityChanged,
+                            handler: { _ in
+                                self.updateConnectivityState()
+                            })
+
         completion?(true)
     }
-    
+
     open var providerName: String {
         return "Chromecast"
     }

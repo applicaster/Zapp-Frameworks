@@ -7,16 +7,9 @@
 //
 
 @import ZappPlugins;
-@import ZappAnalyticsPluginsSDK;
 @import AVFoundation;
 
 #import "AdobeAnalytics.h"
-#import "ACPCore.h"
-#import "ACPAnalytics.h"
-#import "ACPUserProfile.h"
-#import "ACPIdentity.h"
-#import "ACPLifecycle.h"
-#import "ACPSignal.h"
 
 #define STRING_OR_NA(str) (str ? str : @"N/A")
 #define NA_STRING @"N/A"
@@ -33,13 +26,12 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
 
 @interface AdobeAnalytics ()
 
-@property (nonatomic, strong) NSString *maxPosition;
+@property (nonatomic, weak) id<AdobeAnalyticsDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *providerProperties;
+
 @end
 
 @implementation AdobeAnalytics
-
-#pragma mark - NSObject
 
 - (instancetype)initWithProviderProperties:(NSDictionary *)providerProperties
                                   delegate:(id<AdobeAnalyticsDelegate>)delegate {
@@ -47,51 +39,14 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
     if (self) {
         self.providerProperties = providerProperties;
         self.delegate = delegate;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(videoAdvertisementsOpportunity:)
-                                                     name:@"videoAdvertisementsOpportunity"
-                                                   object:nil];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(watchVideoAdvertisement:)
-                                                     name:@"watchVideoAdvertisements"
-                                                   object:nil];
-
-        NSString *debugAppId = providerProperties[@"mobile_app_account_id"];
-        NSString *productionAddId = providerProperties[@"mobile_app_account_id_production"];
-
-        BOOL isDebug = [self.delegate isDebug];
-        ACPMobileLogLevel logLevel = isDebug ? ACPMobileLogLevelDebug : ACPMobileLogLevelError;
-        NSString *appID = isDebug ? debugAppId : productionAddId;
-
-        [ACPCore setLogLevel:logLevel];
-        [ACPCore configureWithAppId:appID];
-        [ACPAnalytics registerExtension];
-        [ACPUserProfile registerExtension];
-        [ACPIdentity registerExtension];
-        [ACPLifecycle registerExtension];
-        [ACPSignal registerExtension];
-        [ACPCore start:^{
-            [ACPCore lifecycleStart:nil];
-        }];
     }
-
     return self;
-}
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"videoAdvertisementsOpportunity"
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"watchVideoAdvertisements"
-                                                  object:nil];
 }
 
 #pragma mark - Track Events
 
 /* Remember that you can setup a event whitelist via CMS */
-- (void)trackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters {
+- (void)prepareTrackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters completion:(void (^ __nullable)(NSDictionary *parameters))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         //The first if is been used for react native events
         NSDictionary *parametersWithDeviceID;
@@ -105,23 +60,11 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
 
         NSDictionary *retDict = [self eventManipulation:parametersWithDeviceID];
 
-        [ACPCore trackAction:eventName data:retDict];
+        completion(retDict);
     });
 }
 
-- (void)trackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters timed:(BOOL)timed {
-    [self trackEvent:eventName parameters:parameters];
-}
-
-- (void)trackEvent:(NSString *)eventName {
-    [self trackEvent:eventName parameters:nil];
-}
-
-- (void)trackEvent:(NSString *)eventName timed:(BOOL)timed {
-    [self trackEvent:eventName parameters:nil];
-}
-
-- (void)trackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters {
+- (void)prepareTrackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters completion:(void (^ __nullable)(NSDictionary *parameters))completion {
     NSDictionary *parametersWithDeviceID;
 
     if ([[parameters objectForKey:@"properties"] isKindOfClass:[NSDictionary class]]) {
@@ -133,19 +76,12 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
 
     NSDictionary *retDict = [self eventManipulation:parametersWithDeviceID];
 
-    [ACPCore trackState:screenName data:retDict];
-}
-
-#pragma mark - User Profile and Properties
-
-- (void)setUserProfileWithGenericUserProperties:(NSDictionary *)dictGenericUserProperties
-                              piiUserProperties:(NSDictionary *)dictPiiUserProperties {
-    [ACPCore collectPii:dictPiiUserProperties];
+    completion(retDict);
 }
 
 #pragma mark - Analytics events notifications
 
-- (void)videoAdvertisementsOpportunity:(NSNotification *)notification {
+- (void)prepareVideoAdvertisementsOpportunity:(NSNotification *)notification completion:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
     id model = notification.object;
     NSDictionary *extraParameters = notification.userInfo;
     
@@ -168,11 +104,14 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
         //add more analytic params
         analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:model];
 
-        [self trackEvent:videoAdEventName parameters:analyticsParams];
+        completion(videoAdEventName, analyticsParams);
+    }
+    else {
+        completion(@"", nil);
     }
 }
 
-- (void)watchVideoAdvertisement:(NSNotification *)notification {
+- (void)prepareWatchVideoAdvertisement:(NSNotification *)notification completion:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
     id model = notification.object;
     NSDictionary *extraParameters = notification.userInfo;
     
@@ -193,18 +132,21 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
         NSDictionary *analyticsParams = [self notificationAnalyticsParams: model];
         analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:model];
 
-        [self trackEvent:videoAdEventName parameters:analyticsParams];
+        completion(videoAdEventName, analyticsParams);
+    }
+    else {
+        completion(@"", nil);
     }
 }
 
-- (void)videoCompleted:(NSDictionary *)analyticsParams {
+- (void)videoCompleted:(NSDictionary *)analyticsParams completion:(void (^ __nullable)( NSString * eventName,  NSDictionary * _Nullable parameters))completion {
     NSString *eventName = @"video_complete";
 
     if ([self.providerProperties[kAdobeVideoCompleteEventKey] isNotEmptyOrWhiteSpaces]) {
         eventName = self.providerProperties[kAdobeVideoCompleteEventKey];
     }
 
-    [self trackEvent:eventName parameters:analyticsParams];
+    completion(eventName, analyticsParams);
 }
 
 #pragma mark - Analytics params
@@ -335,7 +277,7 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
     self.maxPosition = @"0";
 }
 
-- (void)playerDidStartPlayItem {
+- (void)prepareEventPlayerDidStartPlayItem:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -349,10 +291,10 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
     analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
 
-    [self trackEvent:eventName parameters:analyticsParams];
+    completion(eventName, analyticsParams);
 }
 
-- (void)playerDidFinishPlayItem {
+- (void)prepareEventPlayerDidFinishPlayItem:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -390,19 +332,19 @@ NSString *const kAdobeVideoCompleteEventKey = @"video_complete_event_name";
             params = [self addExtraAnalyticsParamsForDictionary:params withModel:entry];
 
             if (videoPercentage >= 99) {
-                [self videoCompleted:params];
+                [self videoCompleted:params completion:completion];
             }
-            if (videoPercentage >= 90) {
-                [self trackEvent:kAdobeVideoReach90PercentEventKey parameters:params];
+            else if (videoPercentage >= 90) {
+                completion(kAdobeVideoReach90PercentEventKey, params);
             }
-            if (videoPercentage >= 75) {
-                [self trackEvent:kAdobeVideoReach75PercentEventKey parameters:params];
+            else if (videoPercentage >= 75) {
+                completion(kAdobeVideoReach75PercentEventKey, params);
             }
-            if (videoPercentage >= 50) {
-                [self trackEvent:kAdobeVideoReach50PercentEventKey parameters:params];
+            else if (videoPercentage >= 50) {
+                completion(kAdobeVideoReach50PercentEventKey, params);
             }
-            if (videoPercentage >= 25) {
-                [self trackEvent:kAdobeVideoReach25PercentEventKey parameters:params];
+            else if (videoPercentage >= 25) {
+                completion(kAdobeVideoReach25PercentEventKey, params);
             }
         }
     }

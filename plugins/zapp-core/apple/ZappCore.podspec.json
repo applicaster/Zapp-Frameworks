@@ -1,6 +1,6 @@
 {
   "name": "ZappCore",
-  "version": "1.2.0",
+  "version": "1.3.3",
   "summary": "General Applicaster iOS and tvOS framework that provides protocol",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-core/1.2.0"
+    "tag": "@@applicaster/zapp-core/1.3.3"
   },
   "source_files": "universal/**/*.{swift}",
   "ios": {
@@ -23,6 +23,9 @@
   },
   "tvos": {
     "source_files": "tvos/**/*.{swift}"
+  },
+  "dependencies": {
+    "XrayLogger": []
   },
   "testspecs": [
     {

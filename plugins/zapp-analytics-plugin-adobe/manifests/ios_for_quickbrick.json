@@ -9,7 +9,7 @@
   "dependency_repository_url": [],
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "Adobe",
+  "name": "Adobe Analytics",
   "description": "Adobe Analytics provider",
   "cover_image": "",
   "type": "analytics",
@@ -18,17 +18,19 @@
   "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "2.0.2-Dev",
+  "min_zapp_sdk": "4.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "type": "text",
+      "label": "account id debug",
       "key": "mobile_app_account_id"
     },
     {
       "type": "text",
+      "label": "account id production",
       "key": "mobile_app_account_id_production"
     }
   ],
@@ -39,13 +41,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.2.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-adobe@1.0.0"
+    "@applicaster/zapp-analytics-plugin-adobe@1.2.0"
   ]
 }

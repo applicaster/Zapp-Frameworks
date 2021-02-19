@@ -8,6 +8,7 @@
 
 import Foundation
 import Reachability
+import ZappCore
 
 extension RootController: ReachabilityManagerDelegate {
     func reachabilityChanged(connection: Reachability.Connection) {
@@ -25,6 +26,8 @@ extension RootController: ReachabilityManagerDelegate {
         currentConnection = connection
 
         updateConnectivityListeners()
+        EventsBus.post(EventsBusTopics.reachabilityChanged,
+                       userInfo: ["connection": connection.description])
     }
 
     func showInternetError() {

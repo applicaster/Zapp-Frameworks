@@ -1,0 +1,49 @@
+{
+  "api": {
+    "class_name": "com.adobeagent.AdobeAnalyticsAgent"
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Adobe Analytics",
+  "description": "Adobe Analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "identifier": "AdobeAnalyticsAgent",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "2.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": false,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "label": "account id debug",
+      "key": "mobile_app_account_id"
+    },
+    {
+      "type": "text",
+      "label": "account id production",
+      "key": "mobile_app_account_id_production"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "1.2.0",
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-adobe@1.2.0"
+  ],
+  "project_dependencies": [
+    {
+      "zapp-analytics-plugin-adobe": "node_modules/@applicaster/zapp-analytics-plugin-adobe/android"
+    }
+  ]
+}

@@ -53,6 +53,7 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
         connectivityListeners.remove(listener)
     }
 
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
     func updateConnectivityListeners() {
         let currentConnectionState = getCurrentConnectivityState()
         for listener in connectivityListeners {

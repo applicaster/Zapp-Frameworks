@@ -20,7 +20,7 @@
   "min_zapp_sdk": "2.0.1-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "key": "enabled",
@@ -242,9 +242,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "3.2.1",
+  "manifest_version": "3.3.0",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.2.1"
+    "@applicaster/zapp-push-plugin-firebase@3.3.0"
   ],
   "project_dependencies": [
     {

@@ -24,7 +24,7 @@
   "min_zapp_sdk": "3.0.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "key": "enabled",
@@ -65,7 +65,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "3.2.1",
+  "manifest_version": "3.3.0",
   "extra_dependencies": [
     {
       "ZappPushPluginFirebase": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
@@ -82,6 +82,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.2.1"
+    "@applicaster/zapp-push-plugin-firebase@3.3.0"
   ]
 }

@@ -1,0 +1,66 @@
+{
+  "api": {
+    "require_startup_execution": true,
+    "class_name": "com.applicaster.plugin.remoteinfo.RemoteInfoFetcher"
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Store Remote Info in Session Storage",
+  "description": "Store remote info (key/value (s)) into session storage for specified namespace",
+  "type": "general",
+  "screen": false,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "min_zapp_sdk": "2.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "key": "enabled",
+      "type": "checkbox",
+      "default": 1,
+      "label": "Plugin enabled",
+      "label_tooltip": "Disable plugin if you do not want to use plugin"
+    },
+    {
+      "key": "wait_for_completion",
+      "type": "checkbox",
+      "default": 1,
+      "label": "Block UI until completed",
+      "label_tooltip": "Disable if you don't want to block UI until process completions"
+    },
+    {
+      "key": "remote_url",
+      "type": "text",
+      "label": "Remote Url",
+      "default": "",
+      "tooltip_text": "Set Remote Url"
+    },
+    {
+      "key": "namespace",
+      "type": "text",
+      "label": "Namespace",
+      "default": "",
+      "tooltip_text": "Set namespace for the remote content"
+    }
+  ],
+  "identifier": "remote_info_to_session_storage",
+  "npm_dependencies": [
+    "@applicaster/remote-info-to-session-storage@0.1.0"
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "0.1.0",
+  "project_dependencies": [
+    {
+      "remote-info-to-session-storage": "node_modules/@applicaster/remote-info-to-session-storage/android"
+    }
+  ]
+}
