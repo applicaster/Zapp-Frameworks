@@ -53,7 +53,9 @@
   },
   "identifier": "zapp-default-player-background-mode",
   "npm_dependencies": [],
-  "targets": "ios_for_quickbrick",
+  "targets": [
+    "mobile"
+  ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.0.8"
+  "manifest_version": "0.0.9"
 }
