@@ -42,16 +42,10 @@ const baseManifest = {
           {
             section: "custom_configuration_fields",
             key: "nowPlayingEnabled",
-            min_zapp_sdk: {
-              ios_for_quickbrick: "3.0.0-Dev",
-            },
           },
           {
             section: "pictureInPictureEnabled",
             key: "nowPlayingEnabled",
-            min_zapp_sdk: {
-              ios_for_quickbrick: "3.0.0-Dev",
-            },
           },
         ],
       },
