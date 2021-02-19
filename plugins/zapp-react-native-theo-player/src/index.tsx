@@ -46,6 +46,7 @@ type Props = {
   ignoreSilentSwitch: boolean;
   resizeMode: string;
   inline: boolean;
+  playerEvent: (arg: string) => void;
 };
 
 type VideoStyle = {
@@ -193,9 +194,12 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onJSWindowEvent = ({ nativeEvent }) => {
     const type = nativeEvent?.type;
+
     if (type === "onCloseButtonHandle") {
-      if (!R.isNil(this.props?.onClose)) {
-        this.props?.onClose();
+      if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
+        this.props?.onFullscreenPlayerDidDismiss();
+      } else if (this.props?.playerEvent) {
+        this.props?.playerEvent("close");
       }
     }
   };
