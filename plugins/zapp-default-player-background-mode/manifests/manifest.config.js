@@ -57,6 +57,7 @@ const baseManifest = {
 };
 
 function createManifest({ version, platform }) {
+  console.log({ version, platform });
   const manifest = {
     ...baseManifest,
     platform,

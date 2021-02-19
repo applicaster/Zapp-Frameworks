@@ -41,17 +41,11 @@
         "allowed_fields": [
           {
             "section": "custom_configuration_fields",
-            "key": "nowPlayingEnabled",
-            "min_zapp_sdk": {
-              "ios_for_quickbrick": "3.0.0-Dev"
-            }
+            "key": "nowPlayingEnabled"
           },
           {
             "section": "pictureInPictureEnabled",
-            "key": "nowPlayingEnabled",
-            "min_zapp_sdk": {
-              "ios_for_quickbrick": "3.0.0-Dev"
-            }
+            "key": "nowPlayingEnabled"
           }
         ]
       }
@@ -61,5 +55,5 @@
   "npm_dependencies": [],
   "targets": "ios_for_quickbrick",
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.0.4"
+  "manifest_version": "0.0.5"
 }
