@@ -62,7 +62,6 @@ function createManifest({ version, platform }) {
     ...baseManifest,
     platform,
     manifest_version: version,
-    targets: platform,
   };
   return manifest;
 }
