@@ -124,8 +124,6 @@ open class ChromecastAnalytics: NSObject {
                                             "parameters": eventDictionary,
                                         ])
             EventsBus.post(event)
-//                EventsBusTopics.analytics,
-//                           userInfo: )
         }
     }
 
