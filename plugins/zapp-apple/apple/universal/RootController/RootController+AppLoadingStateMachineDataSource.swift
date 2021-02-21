@@ -86,8 +86,7 @@ extension RootController: LoadingStateMachineDataSource {
             let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
                                         source: "\(type(of: self)).\(#function)",
                                         data: [
-                                            "name": CoreAnalyticsKeys.applicationWasLaunched,
-                                            "parameters": [:]
+                                            "name": CoreAnalyticsKeys.applicationWasLaunched
                                         ])
             EventsBus.post(event)
 
