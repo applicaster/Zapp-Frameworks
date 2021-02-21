@@ -23,7 +23,7 @@ extension ChromecastAdapter: GeneralProviderProtocol {
                            initialized: true)
 
         EventsBus.subscribe(self,
-                            name: EventsBusTopics.reachabilityChanged,
+                            topic: EventsBusTopic(type: .reachabilityChanged),
                             handler: { _ in
                                 self.updateConnectivityState()
                             })

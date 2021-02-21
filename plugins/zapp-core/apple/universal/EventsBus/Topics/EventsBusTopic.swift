@@ -8,9 +8,27 @@
 
 let eventsBusNamePrefix = "c71a8e9f-188a-4596-8b84-f5a9e51d7d9a."
 
-public struct EventsBusTopics {
-    /// Uniquie identifier of the local notification
-    public static let reachabilityChanged = eventsBusNamePrefix + "reachabilityChanged"
-    public static let analytics = eventsBusNamePrefix + "analytics"
+public enum EventsBusTopicTypes {
+    case undefined
+    case reachabilityChanged
+    case analytics(subtype: EventsBusAnalyticsTopicTypes)
 }
 
+public class EventsBusTopic: CustomStringConvertible {
+    var type: EventsBusTopicTypes = .undefined
+
+    public init(type: EventsBusTopicTypes) {
+        self.type = type
+    }
+    
+    public var description: String {
+        var result = eventsBusNamePrefix
+        switch type {
+        case let .analytics(value): result += "analytics." + value.rawValue
+        case .reachabilityChanged: result += "reachabilityChanged"
+        default:
+            break
+        }
+        return result
+    }
+}

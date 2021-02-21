@@ -116,12 +116,16 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary, shouldAddTimeCode: false)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.IconTapped,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "type": EventsBusAnalyticsTopicTypes.sendEvent,
+                                            "name": ChromecastEventName.IconTapped,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
+//                EventsBusTopics.analytics,
+//                           userInfo: )
         }
     }
 
@@ -137,12 +141,13 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.openExpandedControl,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "name": ChromecastEventName.openExpandedControl,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -158,12 +163,13 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.closeExpandedControl,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "name": ChromecastEventName.closeExpandedControl,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -208,12 +214,13 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.startCasting,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "name": ChromecastEventName.startCasting,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -235,12 +242,13 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.stopCasting,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "name": ChromecastEventName.stopCasting,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -269,13 +277,14 @@ open class ChromecastAnalytics: NSObject {
 
             // Chromecast SDK version
             eventDictionary[ChromecastEventProperties.ChromecastFrameworkVersion] = getChromecastSDKVersion()
-            
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.castingError,
-                               "parameters": eventDictionary,
-                           ])
+
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                                        source: "\(type(of: self)).\(#function)",
+                                        data: [
+                                            "name": ChromecastEventName.castingError,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 }

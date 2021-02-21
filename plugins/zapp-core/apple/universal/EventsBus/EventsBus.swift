@@ -16,6 +16,29 @@ struct NamedObserver {
 }
 
 public class EventsBus {
+    public struct Event {
+        var id: UUID = UUID()
+        var time: Date = Date()
+        let type: String
+        let source: String?
+        let subject: String?
+        public let data: [AnyHashable: Any]?
+
+        var content: [AnyHashable: Any] {
+            return ["event": self]
+        }
+
+        public init(topic: EventsBusTopic,
+                    source: String,
+                    subject: String? = nil,
+                    data: [AnyHashable: Any]) {
+            type = topic.description
+            self.source = source
+            self.subject = subject
+            self.data = data
+        }
+    }
+
     static let shared = EventsBus()
     let logger = Logger.getLogger(for: EventsBusLogs.subsystem)
 
@@ -27,10 +50,20 @@ public class EventsBus {
 
     lazy var cache = [UInt: [NamedObserver]]()
 
-    public static func post(_ name: String, sender: Any? = nil, userInfo: [AnyHashable: Any]? = nil) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: name), object: sender, userInfo: userInfo)
+    public static func post(_ event: Event) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: event.type),
+                                        object: nil,
+                                        userInfo: event.content)
     }
 
+    @discardableResult
+    public static func subscribe(_ target: AnyObject,
+                                 topic: EventsBusTopic,
+                                 sender: Any? = nil,
+                                 handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
+        subscribe(target, name: topic.description, sender: sender, handler: handler)
+    }
+    
     @discardableResult
     public static func subscribe(_ target: AnyObject,
                                  name: String,
@@ -53,7 +86,7 @@ public class EventsBus {
 
         shared.logger?.debugLog(message: EventsBusLogs.subscribed.message,
                                 category: EventsBusLogs.subscribed.category,
-                                data: ["name": name])
+                                data: ["topic": name])
 
         return observer
     }
