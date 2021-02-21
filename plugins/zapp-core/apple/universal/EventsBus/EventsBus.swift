@@ -27,6 +27,13 @@ public class EventsBus {
         var content: [AnyHashable: Any] {
             return ["event": self]
         }
+        
+        lazy var timeString: String = {
+            var dateFormatter = DateFormatter()
+            let format = "yyyy-MM-dd'T'HH:mm:ssZ"
+            dateFormatter.dateFormat = format
+            return dateFormatter.string(from: time)
+        }()
 
         public init(topic: EventsBusTopic,
                     source: String,
