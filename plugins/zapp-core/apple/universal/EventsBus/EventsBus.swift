@@ -17,8 +17,9 @@ struct NamedObserver {
 
 public class EventsBus {
     public struct Event {
-        var id: UUID = UUID()
-        var time: Date = Date()
+        let version: String = "1.0"
+        let id: UUID = UUID()
+        let time: Date = Date()
         let type: String
         let source: String?
         let subject: String?
