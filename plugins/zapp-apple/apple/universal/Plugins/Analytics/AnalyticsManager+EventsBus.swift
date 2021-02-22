@@ -31,16 +31,10 @@ extension AnalyticsManager {
     }
 
     func sendEvent(with content: Notification?) {
-        var type: EventsBusAnalyticsTopicSubjects = .undefined
-        guard let eventDetails = fetchEventDetails(from: content) else {
-            return
-        }
-
-        if let eventType = eventDetails.subject {
-            type = EventsBusAnalyticsTopicSubjects(rawValue: eventType) ?? .undefined
-        }
-
-        guard type != .undefined else {
+        guard let eventDetails = fetchEventDetails(from: content),
+              let eventType = eventDetails.subject,
+              let type = EventsBusAnalyticsTopicSubjects(rawValue: eventType),
+              type != .undefined else {
             return
         }
         
