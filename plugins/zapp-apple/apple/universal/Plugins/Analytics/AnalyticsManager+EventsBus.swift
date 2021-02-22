@@ -10,6 +10,7 @@ import ZappCore
 
 extension AnalyticsManager {
     struct Constants {
+        static let event = "event"
         static let type = "type"
         static let parameters = "parameters"
         static let name = "name"
@@ -19,47 +20,44 @@ extension AnalyticsManager {
 
     func subscribeToEventsBus() {
         EventsBus.subscribe(self,
-                            name: EventsBusTopics.analytics,
+                            topic: EventsBusTopic(type: .analytics),
                             handler: { content in
-                                self.sendEvent(userInfo: content?.userInfo)
+                                self.sendEvent(with: content)
                             })
     }
 
-    func sendEvent(userInfo: [AnyHashable: Any]?) {
-        var type: EventsBusAnalyticsTopicTypes = .undefined
-        let parameters = userInfo?[Constants.parameters] as? [String: Any] ?? [:]
+    func fetchEventDetails(from content: Notification?) -> EventsBus.Event? {
+        return content?.userInfo?[Constants.event] as? EventsBus.Event
+    }
 
-        if let eventType = userInfo?[Constants.type] as? String {
-            type = EventsBusAnalyticsTopicTypes(rawValue: eventType) ?? .undefined
-        } else if let eventType = userInfo?[Constants.type] as? EventsBusAnalyticsTopicTypes {
-            type = eventType
+    func sendEvent(with content: Notification?) {
+        guard let eventDetails = fetchEventDetails(from: content),
+              let eventType = eventDetails.subject,
+              let type = EventsBusAnalyticsTopicSubjects(rawValue: eventType),
+              type != .undefined else {
+            return
         }
+        
+        let parameters = eventDetails.data?[Constants.parameters] as? [String: Any]
+        let name = eventDetails.data?[Constants.name] as? String ?? ""
+        let screenTitle = eventDetails.data?[Constants.screenTitle] as? String ?? ""
+        let url = eventDetails.data?[Constants.url] as? URL
 
         switch type {
         case .sendEvent:
-            guard let name = userInfo?[Constants.name] as? String else {
-                return
-            }
-            sendEvent(name: name, parameters: parameters)
+            sendEvent(name: name,
+                      parameters: parameters)
         case .sendScreenEvent:
-            guard let screenTitle = userInfo?[Constants.screenTitle] as? String else {
-                return
-            }
-            sendScreenEvent(screenTitle: screenTitle, parameters: parameters)
+            sendScreenEvent(screenTitle: screenTitle,
+                            parameters: parameters)
         case .startObserveTimedEvent:
-            guard let name = userInfo?[Constants.name] as? String else {
-                return
-            }
-            startObserveTimedEvent(name: name, parameters: parameters)
+            startObserveTimedEvent(name: name,
+                                   parameters: parameters)
         case .stopObserveTimedEvent:
-            guard let name = userInfo?[Constants.name] as? String else {
-                return
-            }
-            stopObserveTimedEvent(name, parameters: parameters)
+            stopObserveTimedEvent(name,
+                                  parameters: parameters)
         case .trackURL:
-            let parameters = userInfo?[Constants.url] as? URL
-            trackURL(url: parameters)
-
+            trackURL(url: url)
         default:
             break
         }

@@ -116,12 +116,14 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary, shouldAddTimeCode: false)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.IconTapped,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.IconTapped,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -137,12 +139,14 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.openExpandedControl,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.openExpandedControl,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -158,12 +162,14 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.closeExpandedControl,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.closeExpandedControl,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -208,12 +214,14 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.startCasting,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.startCasting,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -235,12 +243,14 @@ open class ChromecastAnalytics: NSObject {
                 eventDictionary = fillStreamingParams(to: eventDictionary)
             }
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.stopCasting,
-                               "parameters": eventDictionary,
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.stopCasting,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 
@@ -269,13 +279,15 @@ open class ChromecastAnalytics: NSObject {
 
             // Chromecast SDK version
             eventDictionary[ChromecastEventProperties.ChromecastFrameworkVersion] = getChromecastSDKVersion()
-            
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": ChromecastEventName.castingError,
-                               "parameters": eventDictionary,
-                           ])
+
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: "\(kNativeSubsystemPath)/ZappChromecast",
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": ChromecastEventName.castingError,
+                                            "parameters": eventDictionary,
+                                        ])
+            EventsBus.post(event)
         }
     }
 }

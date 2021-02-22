@@ -26,8 +26,11 @@ extension RootController: ReachabilityManagerDelegate {
         currentConnection = connection
 
         updateConnectivityListeners()
-        EventsBus.post(EventsBusTopics.reachabilityChanged,
-                       userInfo: ["connection": connection.description])
+        
+        let event = EventsBus.Event(topic: EventsBusTopic(type: .reachabilityChanged),
+                                    source: logger?.subsystem,
+                                    data: ["connection": connection.description])
+        EventsBus.post(event)
     }
 
     func showInternetError() {

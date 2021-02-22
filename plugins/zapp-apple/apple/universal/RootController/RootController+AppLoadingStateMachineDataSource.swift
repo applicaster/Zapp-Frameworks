@@ -83,12 +83,13 @@ extension RootController: LoadingStateMachineDataSource {
             appReadyForUse = true
             makeInterfaceLayerAsRootViewContoroller()
 
-            EventsBus.post(EventsBusTopics.analytics,
-                           userInfo: [
-                               "type": EventsBusAnalyticsTopicTypes.sendEvent,
-                               "name": CoreAnalyticsKeys.applicationWasLaunched,
-                               "parameters": [:],
-                           ])
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: logger?.subsystem,
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
+                                        data: [
+                                            "name": CoreAnalyticsKeys.applicationWasLaunched
+                                        ])
+            EventsBus.post(event)
 
             NotificationCenter.default.post(name: Notification.Name(kMSAppCenterCheckForUpdatesNotification),
                                             object: nil)
