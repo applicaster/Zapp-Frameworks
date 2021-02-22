@@ -17,12 +17,12 @@ struct NamedObserver {
 
 public class EventsBus {
     public struct Event {
-        let version: String = "1.0"
-        let id: UUID = UUID()
-        let time: Date = Date()
-        let type: String
-        let source: String?
-        let subject: String?
+        public let version: String = "1.0"
+        public let id: UUID = UUID()
+        public let time: Date = Date()
+        public let type: String
+        public let source: String?
+        public let subject: String?
         public let data: [AnyHashable: Any]?
 
         var content: [AnyHashable: Any] {
@@ -37,7 +37,7 @@ public class EventsBus {
         }()
 
         public init(topic: EventsBusTopic,
-                    source: String,
+                    source: String? = nil,
                     subject: String? = nil,
                     data: [AnyHashable: Any]) {
             type = topic.description

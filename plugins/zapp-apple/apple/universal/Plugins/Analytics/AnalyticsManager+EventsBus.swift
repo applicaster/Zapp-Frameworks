@@ -20,57 +20,48 @@ extension AnalyticsManager {
 
     func subscribeToEventsBus() {
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
+                            topic: EventsBusTopic(type: .analytics),
                             handler: { content in
-                                let eventDetails = self.eventDetails(content)
-                                self.sendEvent(name: eventDetails.name,
-                                               parameters: eventDetails.parameters)
-                            })
-        
-        EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics(subtype: .sendScreenEvent)),
-                            handler: { content in
-                                let eventDetails = self.eventDetails(content)
-                                self.sendScreenEvent(screenTitle: eventDetails.name,
-                                                     parameters: eventDetails.parameters)
-                            })
-        
-        EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics(subtype: .startObserveTimedEvent)),
-                            handler: { content in
-                                let eventDetails = self.eventDetails(content)
-                                self.startObserveTimedEvent(name: eventDetails.name,
-                                                            parameters: eventDetails.parameters)
-                            })
-        
-        EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics(subtype: .stopObserveTimedEvent)),
-                            handler: { content in
-                                let eventDetails = self.eventDetails(content)
-                                self.stopObserveTimedEvent(eventDetails.name,
-                                                           parameters: eventDetails.parameters)
-                            })
-        
-        EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics(subtype: .trackURL)),
-                            handler: { content in
-                                let eventDetails = self.eventDetails(content)
-                                self.trackURL(url: eventDetails.url)
+                                self.sendEvent(with: content)
                             })
     }
 
-    func eventDetails(_ notification: Notification?) -> (name: String,
-                                                         parameters: [String: Any]?,
-                                                         url: URL?)  {
-        guard let event = notification?.userInfo?[Constants.event] as? EventsBus.Event,
-              let data = event.data else {
-            return ("", nil, nil)
+    func fetchEventDetails(from content: Notification?) -> EventsBus.Event? {
+        return content?.userInfo?[Constants.event] as? EventsBus.Event
+    }
+
+    func sendEvent(with content: Notification?) {
+        var type: EventsBusAnalyticsTopicSubjects = .undefined
+        guard let eventDetails = fetchEventDetails(from: content) else {
+            return
         }
-        
-        let parameters = data[Constants.parameters] as? [String: Any]
-        let name = data[Constants.name] as? String ?? ""
-        let url = data[Constants.url] as? URL
-        
-        return (name, parameters, url)
+
+        if let eventType = eventDetails.subject {
+            type = EventsBusAnalyticsTopicSubjects(rawValue: eventType) ?? .undefined
+        }
+
+        let parameters = eventDetails.data?[Constants.parameters] as? [String: Any]
+        let name = eventDetails.data?[Constants.name] as? String ?? ""
+        let screenTitle = eventDetails.data?[Constants.screenTitle] as? String ?? ""
+        let url = eventDetails.data?[Constants.url] as? URL
+
+        switch type {
+        case .sendEvent:
+            sendEvent(name: name,
+                      parameters: parameters)
+        case .sendScreenEvent:
+            sendScreenEvent(screenTitle: screenTitle,
+                            parameters: parameters)
+        case .startObserveTimedEvent:
+            startObserveTimedEvent(name: name,
+                                   parameters: parameters)
+        case .stopObserveTimedEvent:
+            stopObserveTimedEvent(name,
+                                  parameters: parameters)
+        case .trackURL:
+            trackURL(url: url)
+        default:
+            break
+        }
     }
 }

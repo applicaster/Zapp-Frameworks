@@ -11,7 +11,7 @@ let eventsBusNamePrefix = "c71a8e9f-188a-4596-8b84-f5a9e51d7d9a."
 public enum EventsBusTopicTypes {
     case undefined
     case reachabilityChanged
-    case analytics(subtype: EventsBusAnalyticsTopicTypes)
+    case analytics
 }
 
 public class EventsBusTopic: CustomStringConvertible {
@@ -20,12 +20,14 @@ public class EventsBusTopic: CustomStringConvertible {
     public init(type: EventsBusTopicTypes) {
         self.type = type
     }
-    
+
     public var description: String {
         var result = eventsBusNamePrefix
         switch type {
-        case let .analytics(value): result += "analytics." + value.rawValue
-        case .reachabilityChanged: result += "reachabilityChanged"
+        case .analytics:
+            result += "analytics"
+        case .reachabilityChanged:
+            result += "reachabilityChanged"
         default:
             break
         }

@@ -28,7 +28,7 @@ extension RootController: ReachabilityManagerDelegate {
         updateConnectivityListeners()
         
         let event = EventsBus.Event(topic: EventsBusTopic(type: .reachabilityChanged),
-                                    source: "\(type(of: self)).\(#function)",
+                                    source: logger?.subsystem,
                                     data: ["connection": connection.description])
         EventsBus.post(event)
     }

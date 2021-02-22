@@ -83,8 +83,9 @@ extension RootController: LoadingStateMachineDataSource {
             appReadyForUse = true
             makeInterfaceLayerAsRootViewContoroller()
 
-            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics(subtype: .sendEvent)),
-                                        source: "\(type(of: self)).\(#function)",
+            let event = EventsBus.Event(topic: EventsBusTopic(type: .analytics),
+                                        source: logger?.subsystem,
+                                        subject: EventsBusAnalyticsTopicSubjects.sendEvent.value,
                                         data: [
                                             "name": CoreAnalyticsKeys.applicationWasLaunched
                                         ])
