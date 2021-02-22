@@ -40,6 +40,10 @@ extension AnalyticsManager {
             type = EventsBusAnalyticsTopicSubjects(rawValue: eventType) ?? .undefined
         }
 
+        guard type != .undefined else {
+            return
+        }
+        
         let parameters = eventDetails.data?[Constants.parameters] as? [String: Any]
         let name = eventDetails.data?[Constants.name] as? String ?? ""
         let screenTitle = eventDetails.data?[Constants.screenTitle] as? String ?? ""
