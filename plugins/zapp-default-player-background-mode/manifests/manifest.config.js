@@ -37,15 +37,15 @@ const baseManifest = {
     allowed_list: [
       {
         identifier: "QuickBrickPlayerPlugin",
-        section: "styles",
+        section: "custom_configuration_fields",
         allowed_fields: [
           {
             section: "custom_configuration_fields",
             key: "nowPlayingEnabled",
           },
           {
-            section: "pictureInPictureEnabled",
-            key: "nowPlayingEnabled",
+            section: "custom_configuration_fields",
+            key: "pictureInPictureEnabled",
           },
         ],
       },
