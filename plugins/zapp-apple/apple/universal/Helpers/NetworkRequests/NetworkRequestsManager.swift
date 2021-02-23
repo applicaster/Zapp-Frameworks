@@ -17,11 +17,11 @@ public class NetworkRequestsManager {
         Sniffer.onLogger = { (logType: Sniffer.LogType, data: [String: Any]) in
             switch logType {
             case .request:
-                instance.logger?.debugLog(template: NetworkRequestsManagerLogs.request,
-                                          data: data)
+                instance.logger?.verboseLog(template: NetworkRequestsManagerLogs.request,
+                                            data: data)
             case .response:
-                instance.logger?.debugLog(template: NetworkRequestsManagerLogs.response,
-                                          data: data)
+                instance.logger?.verboseLog(template: NetworkRequestsManagerLogs.response,
+                                            data: data)
             }
         }
         Sniffer.start(for: URLSessionConfiguration.default)
