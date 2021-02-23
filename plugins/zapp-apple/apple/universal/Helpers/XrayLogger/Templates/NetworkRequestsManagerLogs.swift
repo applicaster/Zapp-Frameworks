@@ -12,7 +12,7 @@ import ZappCore
 public struct NetworkRequestsManagerLogs: XrayLoggerTemplateProtocol {
     public static var subsystem: String = "\(kNativeSubsystemPath)/network_requests"
     
-    public static var request = LogTemplate(message: "Request")
-    public static var response = LogTemplate(message: "Response")
+    public static var request = LogTemplate(message: "Network Request")
+    public static var response = LogTemplate(message: "Network Response")
 
 }

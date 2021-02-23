@@ -61,11 +61,8 @@ private extension HTTPLogItem {
         static let description = "description"
         static let reason = "reason"
         static let suggestion = "suggestion"
-
     }
-    
-    
-    
+
     func log(_ value: [String: Any], type: Sniffer.LogType) {
         if let logger = Sniffer.onLogger {
             logger(type, value)
@@ -205,7 +202,7 @@ private extension HTTPURLResponse {
         guard !allHeaderFields.isEmpty else {
             return result
         }
-        
+
         for (key, value) in allHeaderFields {
             result["\(key)"] = value
         }

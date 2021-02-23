@@ -14,15 +14,16 @@ public class NetworkRequestsManager {
     lazy var logger = Logger.getLogger(for: NetworkRequestsManagerLogs.subsystem)
 
     public static func startListening() {
-        Sniffer.register()
-
-        let configuration = URLSessionConfiguration.default
-        Sniffer.enable(in: configuration)
-
-        Sniffer.onLogger = { (logType: Sniffer.LogType, log: [String: Any]) in
-            instance.logger?.debugLog(template: logType == .response ?
-                                        NetworkRequestsManagerLogs.response : NetworkRequestsManagerLogs.request,
-                                      data: log)
+        Sniffer.onLogger = { (logType: Sniffer.LogType, data: [String: Any]) in
+            switch logType {
+            case .request:
+                instance.logger?.debugLog(template: NetworkRequestsManagerLogs.request,
+                                          data: data)
+            case .response:
+                instance.logger?.debugLog(template: NetworkRequestsManagerLogs.response,
+                                          data: data)
+            }
         }
+        Sniffer.start(for: URLSessionConfiguration.default)
     }
 }

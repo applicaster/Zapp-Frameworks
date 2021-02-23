@@ -39,6 +39,11 @@ public class Sniffer: URLProtocol {
         clear()
     }
 
+    public class func start(for configuration: URLSessionConfiguration) {
+        self.register()
+        self.enable(in: configuration)
+    }
+    
     public class func register() {
         URLProtocol.registerClass(self)
     }
