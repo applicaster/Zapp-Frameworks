@@ -1,8 +1,8 @@
 package com.applicaster.iap.reactnative
 
-import android.util.Log
 import com.applicaster.iap.reactnative.utils.*
 import com.applicaster.iap.uni.api.*
+import com.applicaster.util.APLogger
 import com.facebook.react.bridge.*
 
 
@@ -54,14 +54,15 @@ class IAPBridge(reactContext: ReactApplicationContext)
 
     @ReactMethod
     fun initialize(vendor: String, result: Promise) {
+        APLogger.debug(TAG, "Initializing Billing client for $vendor")
         api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
         api.init(reactApplicationContext, object : InitializationListener {
             override fun onSuccess() {
-                Log.d(TAG, "Billing client initialized")
+                APLogger.debug(TAG, "Billing client initialized")
                 result.resolve(true)
             }
             override fun onBillingClientError(billingResult: IBillingAPI.IAPResult, description: String) {
-                Log.e(TAG, "Billing client initialization failed $description")
+                APLogger.error(TAG, "Billing client initialization failed $description")
                 result.reject(billingResult.toString(), description)
             }
         })
