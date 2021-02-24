@@ -28,12 +28,12 @@ public class NetworkRequestsManager {
             case .request:
                 instance.pendingRequests[url.absoluteString] = content
             case .response:
-                guard let request = instance.pendingRequests[url.absoluteString],
+                guard let request = instance.pendingRequests.removeValue(forKey: url.absoluteString),
                       let response = content[Params.response] as? [String: Any],
                       let statusCode = response[Params.statusCode] as? String else {
                     return
                 }
-                instance.pendingRequests.removeValue(forKey: url.absoluteString)
+                
                 if shouldSendWarning(response) {
                     instance.logger?.warningLog(message: "\(NetworkRequestsManagerLogs.request.message), status code:\(statusCode)",
                                                 category: NetworkRequestsManagerLogs.request.category,

@@ -15,7 +15,7 @@ class Sniffer: URLProtocol {
     private enum Keys {
         static let request = "Sniffer.request"
     }
-    
+
     private static var bodyDeserializers: [String: BodyDeserializer] = [
         "application/x-www-form-urlencoded": PlainTextBodyDeserializer(),
         "*/json": JSONBodyDeserializer(),
@@ -33,19 +33,19 @@ class Sniffer: URLProtocol {
     var sessionTask: URLSessionDataTask?
     private var urlTask: URLSessionDataTask?
     var logItem: HTTPLogItem?
-    
+
     public class func start() {
         URLSessionConfiguration.setupSwizzledSessionConfiguration()
     }
-    
+
     public class func ignore(domains: [String]) {
         ignoreDomains = domains
     }
-    
+
     public class func ignore(extensions: [String]) {
         ignoreExtensions = extensions
     }
-    
+
     static func find(deserialize contentType: String) -> BodyDeserializer? {
         for (pattern, deserializer) in Sniffer.bodyDeserializers {
             do {
@@ -70,21 +70,18 @@ class Sniffer: URLProtocol {
         }
         return ignoreDomains.first { $0.range(of: host) != nil } != nil
     }
-    
+
     private class func shouldIgnoreExtensions(with url: URL) -> Bool {
         guard let ignoreExtensions = ignoreExtensions,
-              !ignoreExtensions.isEmpty,
-              !url.pathExtension.isEmpty else {
+              !ignoreExtensions.isEmpty else {
             return false
         }
-        if ignoreExtensions.contains(url.pathExtension.lowercased()) {
-            return true
-        }
-        return false
+
+        return ignoreExtensions.contains(url.pathExtension.lowercased()) || url.pathExtension.isEmpty
     }
-    
+
     // MARK: - URLProtocol
-    
+
     override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {
         super.init(request: request, cachedResponse: cachedResponse, client: client)
 
@@ -107,7 +104,7 @@ class Sniffer: URLProtocol {
 
     override public func startLoading() {
         guard let urlRequest = (request as NSURLRequest).mutableCopy() as? NSMutableURLRequest, logItem == nil else { return }
-        
+
         logItem = HTTPLogItem(request: urlRequest as URLRequest)
         Sniffer.setProperty(true, forKey: Keys.request, in: urlRequest)
         sessionTask = session?.dataTask(with: urlRequest as URLRequest)
