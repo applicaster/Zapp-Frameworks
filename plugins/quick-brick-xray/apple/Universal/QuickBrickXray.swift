@@ -96,7 +96,16 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
         prepareSettings()
         QuickBrickXray.sharedInstance = self
 
+        sendInitialLogEventWithDefaultContext()
+        
         completion?(true)
+    }
+    
+    func sendInitialLogEventWithDefaultContext() {
+        let logger = Logger.getLogger()
+        logger?.verboseLog(message: "Xray logger was intialized with context")
+        //clear default context after first use to prevent being added to every event
+        logger?.context = [:]
     }
 
     @objc func appMovedToForeground() {

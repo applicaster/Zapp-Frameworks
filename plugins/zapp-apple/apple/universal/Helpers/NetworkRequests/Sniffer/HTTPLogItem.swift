@@ -61,13 +61,14 @@ private extension HTTPLogItem {
         static let description = "description"
         static let reason = "reason"
         static let suggestion = "suggestion"
+        static let error = "error"
     }
 
-    func log(_ value: [String: Any], type: Sniffer.LogType) {
+    func log(_ url: URL, result: [String: Any], type: Sniffer.LogType) {
         if let logger = Sniffer.onLogger {
-            logger(type, value)
+            logger(url, type, result)
         } else {
-            print(value)
+            print(result)
         }
     }
 
@@ -82,7 +83,7 @@ private extension HTTPLogItem {
         result[Params.httpHeaderFieldsDescription] = urlRequest.httpHeaderFieldsDescription
         result[Params.bodyDescription] = urlRequest.bodyDescription
 
-        log(result, type: .request)
+        log(url, result: result, type: .request)
     }
 
     func logDidComplete() {
@@ -95,7 +96,7 @@ private extension HTTPLogItem {
 
         result[Params.response] = error != nil ? logErrorResponse() : logResponse()
 
-        log(result, type: .response)
+        log(url, result: result, type: .response)
     }
 
     func logResponse() -> [String: Any] {
@@ -117,6 +118,8 @@ private extension HTTPLogItem {
                 contentType = type
                 result[Params.contentType] = contentType
             }
+
+            result[Params.error] = !(200 ... 299).contains(httpResponse.statusCode)
         }
 
         if let body = data,
