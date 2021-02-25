@@ -1,12 +1,8 @@
+/// <reference types="@applicaster/applicaster-types" />
 import Component from "./src/Components/InPlayer";
-import globalSessionManager from "./src/globalSessionManager";
 import * as R from "ramda";
 
 import { connectToStore } from "@applicaster/zapp-react-native-redux";
-
-if (!global.devDemoLogin) {
-  globalSessionManager.setSession();
-}
 
 export default {
   hasPlayerHook: true,

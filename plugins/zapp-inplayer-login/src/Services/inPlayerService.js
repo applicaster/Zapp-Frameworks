@@ -43,7 +43,7 @@ export async function setConfig(environment = "production") {
 }
 
 export async function getAssetByExternalId(payload) {
-  const assetData = externalAssetData({ payload });
+  const assetData = externalAssetData(payload);
   const errorEvent = logger
     .createEvent()
     .setMessage(

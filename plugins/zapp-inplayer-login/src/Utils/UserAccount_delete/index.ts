@@ -7,15 +7,15 @@ export const isHook = (navigator) => {
   return !!R.propOr(false, "hookPlugin")(navigator.screenData);
 };
 
-export async function removeFromLocalStorage(key, namespace) {
+export async function removeFromLocalStorage(key: string, namespace: string) {
   return storage.setItem(key, JSON.stringify({}), namespace);
 }
 
-async function getFromLocalStorage(key, namespace) {
+async function getFromLocalStorage(key: string, namespace: string) {
   return storage.getItem(key, namespace);
 }
 
-export async function isTokenInStorage(key, namespace) {
+export async function isTokenInStorage(key: string, namespace: string) {
   try {
     let token = await getFromLocalStorage(key, namespace);
 

@@ -1,3 +1,6 @@
+/// <reference types="@applicaster/applicaster-types" />
+/// <reference path="../../../index.d.ts" />
+
 import * as R from "ramda";
 import {
   createLogger,
@@ -11,8 +14,8 @@ export const logger = createLogger({
   category: BaseCategories.PAYLOAD_HELPER,
 });
 
-export const externalAssetData = ({ payload }) => {
-  const { id: externalAssetId } = payload;
+export function externalAssetData(payload: ZappEntry): ExternalAssetData {
+  const externalAssetId = payload?.id;
   const inplayerAssetType = R.path(["extensions", "inplayer_asset_type"])(
     payload
   );
@@ -44,10 +47,10 @@ export const externalAssetData = ({ payload }) => {
     .setMessage(`${eventMessage} data not availible`)
     .send();
   return null;
-};
+}
 
-export const isAuthenticationRequired = ({ payload }) => {
-  const requires_authentication = R.path([
+export function isAuthenticationRequired(payload: ZappEntry): boolean {
+  const requires_authentication: boolean = R.path([
     "extensions",
     "requires_authentication",
   ])(payload);
@@ -62,16 +65,19 @@ export const isAuthenticationRequired = ({ payload }) => {
     )
     .send();
   return requires_authentication;
-};
+}
 
-export const inPlayerAssetId = ({ payload, configuration }) => {
+export function inPlayerAssetId(
+  payload: ZappEntry,
+  configuration: PluginConfiguration
+): string {
   let eventMessage = "inplayer_asset_id from payload:";
   const event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
-  const assetIdFromCustomKey = inPlayerAssetIdFromCustomKey({
+  const assetIdFromCustomKey = inPlayerAssetIdFromCustomKey(
     payload,
-    configuration,
-  });
+    configuration
+  );
 
   if (assetIdFromCustomKey) {
     event
@@ -83,7 +89,7 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
     return assetIdFromCustomKey;
   }
 
-  const assetId = R.path(["extensions", "inplayer_asset_id"])(payload);
+  const assetId: string = R.path(["extensions", "inplayer_asset_id"])(payload);
   if (assetId) {
     event
       .addData({ inplayer_asset_id: assetId })
@@ -96,7 +102,7 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
 
   // Legacy keys, should not be used if future.
   // Remove at once we will make sure that not needed
-  const assetIdFallback = R.compose(
+  const assetIdFallback: string = R.compose(
     R.ifElse(Array.isArray, R.head, R.always(null)),
     R.path(["extensions", "ds_product_ids"])
   )(payload);
@@ -110,18 +116,23 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
     .send();
 
   return assetIdFallback;
-};
+}
 
-const inPlayerAssetIdFromCustomKey = ({ payload, configuration }) => {
+function inPlayerAssetIdFromCustomKey(
+  payload: ZappEntry,
+  configuration: PluginConfiguration
+): string {
   const in_player_custom_asset_key = configuration?.in_player_custom_asset_key;
   if (in_player_custom_asset_key) {
-    const devidedArray = R.split(".")(in_player_custom_asset_key);
-    const assetId = R.path(devidedArray)(payload);
+    const devidedArray: Array<number> = R.split(".")(
+      in_player_custom_asset_key
+    );
+    const assetId: string = R.path(devidedArray)(payload);
     return assetId;
   } else {
     return null;
   }
-};
+}
 
 export const assetPaymentRequired = R.compose(
   R.equals(402),

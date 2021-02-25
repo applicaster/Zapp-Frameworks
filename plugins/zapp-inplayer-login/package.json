@@ -2,9 +2,12 @@
   "name": "@applicaster/quick-brick-inplayer",
   "version": "3.0.10",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,7 @@
     "react-redux": "^7.2.1"
   },
   "peerDependencies": {
+    "@applicaster/applicaster-types": "*",
     "@applicaster/quick-brick-xray": "*",
     "@applicaster/zapp-react-native-bridge": "*",
     "@applicaster/zapp-react-native-redux": "*",
@@ -32,6 +36,11 @@
     "react": "16.11.0",
     "react-native": "0.62.2"
   },
+  "files": [
+    "manifests/**/*",
+    "src",
+    "lib"
+  ],
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",

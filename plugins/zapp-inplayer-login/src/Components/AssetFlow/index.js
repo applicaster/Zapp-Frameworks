@@ -110,10 +110,7 @@ const AssetFlow = (props) => {
   const prepareAssetId = async () => {
     const { payload, configuration } = props;
 
-    let newAssetId = inPlayerAssetId({
-      payload,
-      configuration,
-    });
+    let newAssetId = inPlayerAssetId(payload, configuration);
 
     let eventMessage = "Asset Flow:";
     const event = logger.createEvent().setLevel(XRayLogLevel.debug);

@@ -126,11 +126,8 @@ const InPlayer = (props) => {
     let event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
     if (payload) {
-      const authenticationRequired = isAuthenticationRequired({ payload });
-      const assetId = inPlayerAssetId({
-        payload,
-        configuration: props.configuration,
-      });
+      const authenticationRequired = isAuthenticationRequired(payload);
+      const assetId = inPlayerAssetId(payload, props.configuration);
 
       event.addData({
         authentication_required: authenticationRequired,

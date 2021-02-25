@@ -1,11 +1,8 @@
 import { Platform } from "react-native";
 
-export const isWebBasedPlatform =
-  Platform.OS === "web" ||
-  Platform.OS === "samsung_tv" ||
-  Platform.OS === "lg_tv";
+export const isWebBasedPlatform = Platform.OS === "web";
 
-export function isAmazonPlatform(store) {
+export function isAmazonPlatform(store: string) {
   return store && store === "amazon";
 }
 
