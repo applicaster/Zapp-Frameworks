@@ -1,5 +1,5 @@
 /// <reference types="@applicaster/applicaster-types" />
-/// <reference path="../../../index.d.ts" />
+/// <reference path="../../index.d.ts" />
 
 import * as R from "ramda";
 import {

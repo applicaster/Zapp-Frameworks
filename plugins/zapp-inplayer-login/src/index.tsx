@@ -1,5 +1,5 @@
 /// <reference types="@applicaster/applicaster-types" />
-import Component from "./src/Components/InPlayer";
+import Component from "./Components/InPlayer";
 import * as R from "ramda";
 
 import { connectToStore } from "@applicaster/zapp-react-native-redux";
