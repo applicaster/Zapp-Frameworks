@@ -124,7 +124,6 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
         let inMemorySink = InMemory()
         Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.InMemorySink,
                                     sink: inMemorySink)
-        addDisabledFilter(for: DefaultSinkIdentifiers.InMemorySink, subsystem: networkRequestsSubsystem)
     }
 
     func prepareFileJsonSink() {
@@ -132,7 +131,6 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
         fileJSONSink.maxLogFileSizeInMB = configurationHelper.maxLogFileSizeInMB()
         Xray.sharedInstance.addSink(identifier: DefaultSinkIdentifiers.FileJSON,
                                     sink: fileJSONSink)
-        addDisabledFilter(for: DefaultSinkIdentifiers.FileJSON, subsystem: networkRequestsSubsystem)
     }
 
     func prepareNetworkRequestSink() {
@@ -144,7 +142,6 @@ public class QuickBrickXray: NSObject, CrashlogsPluginProtocol, ZPAdapterProtoco
                                       sinkIdentifier: DefaultSinkIdentifiers.InMemoryNetworkRequestsSink,
                                       filter: networkRequestsFilter)
         addDisabledFilter(for: DefaultSinkIdentifiers.InMemoryNetworkRequestsSink, subsystem: "")
-
     }
 
     func addDisabledFilter(for sinkIdentifier: String, subsystem: String) {
