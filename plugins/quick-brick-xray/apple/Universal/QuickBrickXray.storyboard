@@ -46,7 +46,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AXt-Vd-2vG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1993" y="1000"/>
+            <point key="canvasLocation" x="1252" y="1079"/>
         </scene>
         <!--Logger-->
         <scene sceneID="UcX-It-2BA">
@@ -67,12 +67,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UKo-Of-eJA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-30" y="-39"/>
+            <point key="canvasLocation" x="-435" y="-342"/>
         </scene>
-        <!--Logger View Controller-->
+        <!--Default Logger View Controller-->
         <scene sceneID="OOe-8F-CxY">
             <objects>
-                <viewController id="9P1-iB-hoW" customClass="LoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
+                <viewController id="9P1-iB-hoW" customClass="DefaultLoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="odK-QV-Vkk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -91,7 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bj9-Ge-F0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="910" y="-40"/>
+            <point key="canvasLocation" x="387" y="-342"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="dJC-KX-aeO">
@@ -104,12 +104,13 @@
                     </tabBar>
                     <connections>
                         <segue destination="JTR-40-TFm" kind="relationship" relationship="viewControllers" id="2tj-1z-5CN"/>
+                        <segue destination="bra-oA-pew" kind="relationship" relationship="viewControllers" id="MZk-HW-Roh"/>
                         <segue destination="3L4-VW-cNC" kind="relationship" relationship="viewControllers" id="I2L-dP-M69"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QkG-uB-U3D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1396" y="308"/>
+            <point key="canvasLocation" x="-1890" y="354"/>
         </scene>
         <!--Settings-->
         <scene sceneID="WQK-Er-NGz">
@@ -130,7 +131,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aQm-Ew-g5Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-30" y="1000"/>
+            <point key="canvasLocation" x="-436" y="1080"/>
         </scene>
         <!--Settings-->
         <scene sceneID="Wyd-kA-yyc">
@@ -225,12 +226,58 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dje-VB-Mzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="976.81159420289862" y="999.77678571428567"/>
+            <point key="canvasLocation" x="387" y="1079"/>
+        </scene>
+        <!--Network Requests-->
+        <scene sceneID="oDq-tr-aeC">
+            <objects>
+                <navigationController id="bra-oA-pew" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Network Requests" id="PjP-LZ-439">
+                        <imageReference key="image" image="network" catalog="system" symbolScale="default"/>
+                        <imageReference key="landscapeImage" image="network" catalog="system" symbolScale="default"/>
+                        <imageReference key="selectedImage" image="network" catalog="system" symbolScale="default"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="b3c-C8-vuD">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="wB6-gA-zjJ" kind="relationship" relationship="rootViewController" id="VyB-H2-FEM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zcP-31-eX1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-436" y="354"/>
+        </scene>
+        <!--Network Requests Logger View Controller-->
+        <scene sceneID="VYd-o0-3dD">
+            <objects>
+                <viewController id="wB6-gA-zjJ" customClass="NetworkRequestsLoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ETF-4M-t2r">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Z6P-V6-DAU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3GI-cr-zYP">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="UFq-aG-13Y">
+                            <imageReference key="image" image="xmark" catalog="system" symbolScale="default"/>
+                            <imageReference key="landscapeImage" image="xmark" catalog="system" symbolScale="default"/>
+                            <connections>
+                                <action selector="close:" destination="wB6-gA-zjJ" id="Yfo-Xg-oUY"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vwq-yD-gkG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="387" y="354"/>
         </scene>
     </scenes>
     <resources>
         <image name="gearshape.2.fill" catalog="system" width="128" height="100"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
+        <image name="network" catalog="system" width="128" height="121"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

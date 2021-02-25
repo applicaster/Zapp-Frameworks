@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Sniffer: URLProtocol {
+public class Sniffer: URLProtocol {
     public enum LogType: String {
         case request, response
     }
@@ -26,8 +26,8 @@ class Sniffer: URLProtocol {
     ]
 
     public static var onLogger: ((URL, LogType, [String: Any]) -> Void)? // If the handler is registered, the log inside the Sniffer will not be output.
-    private static var ignoreDomains: [String]?
-    private static var ignoreExtensions: [String]?
+    private static var ignoreDomains: [String] = []
+    private static var ignoreExtensions: [String] = []
 
     var session: URLSession?
     var sessionTask: URLSessionDataTask?
@@ -43,9 +43,9 @@ class Sniffer: URLProtocol {
     }
 
     public class func ignore(extensions: [String]) {
-        ignoreExtensions = extensions
+        ignoreExtensions = extensions.map { $0.lowercased() }
     }
-
+    
     static func find(deserialize contentType: String) -> BodyDeserializer? {
         for (pattern, deserializer) in Sniffer.bodyDeserializers {
             do {
@@ -64,7 +64,7 @@ class Sniffer: URLProtocol {
     }
 
     private class func shouldIgnoreDomain(with url: URL) -> Bool {
-        guard let ignoreDomains = ignoreDomains, !ignoreDomains.isEmpty,
+        guard !ignoreDomains.isEmpty,
               let host = url.host else {
             return false
         }
@@ -72,8 +72,7 @@ class Sniffer: URLProtocol {
     }
 
     private class func shouldIgnoreExtensions(with url: URL) -> Bool {
-        guard let ignoreExtensions = ignoreExtensions,
-              !ignoreExtensions.isEmpty else {
+        guard !ignoreExtensions.isEmpty else {
             return false
         }
 

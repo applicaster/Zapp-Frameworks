@@ -8,6 +8,7 @@
 
 import Foundation
 import XrayLogger
+import ZappCore
 
 public class NetworkRequestsManager {
     fileprivate static var instance = NetworkRequestsManager()
@@ -22,7 +23,7 @@ public class NetworkRequestsManager {
     }
     
     public static func startListening() {
-        Sniffer.ignore(extensions: ["png", "jpeg", "jpg", ""])
+        Sniffer.ignore(extensions: ["png", "jpeg", "jpg", "ts"])
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
             switch logType {
             case .request:
@@ -35,12 +36,12 @@ public class NetworkRequestsManager {
                 }
                 
                 if shouldSendWarning(response) {
-                    instance.logger?.warningLog(message: "\(NetworkRequestsManagerLogs.request.message), status code:\(statusCode)",
+                    instance.logger?.warningLog(message: "\(NetworkRequestsManagerLogs.request.message), status code: \(statusCode)",
                                                 category: NetworkRequestsManagerLogs.request.category,
                                                 data: [Params.request: request,
                                                        Params.response: response])
                 } else {
-                    instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message), status code:\(statusCode)",
+                    instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message), status code: \(statusCode)",
                                                 category: NetworkRequestsManagerLogs.request.category,
                                                 data: [Params.request: request,
                                                        Params.response: response])
