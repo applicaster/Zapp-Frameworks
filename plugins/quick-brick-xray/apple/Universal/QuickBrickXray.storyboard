@@ -361,7 +361,13 @@
                             <outlet property="delegate" destination="hsB-Dg-C0K" id="E4T-gX-EG9"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Ignored Domains" id="MYL-Fp-ldD"/>
+                    <navigationItem key="navigationItem" title="Ignored Domains" id="MYL-Fp-ldD">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="EtI-Am-e4A">
+                            <connections>
+                                <action selector="addItem:" destination="hsB-Dg-C0K" id="jmL-bY-3Gm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Inu-XU-H8f" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -399,7 +405,13 @@
                             <outlet property="delegate" destination="TTX-hp-yqJ" id="k1W-VT-f8S"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Ignored Extensions" id="cW5-zR-gQu"/>
+                    <navigationItem key="navigationItem" title="Ignored Extensions" id="cW5-zR-gQu">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="kJN-ZH-W05">
+                            <connections>
+                                <action selector="addItem:" destination="TTX-hp-yqJ" id="Y85-n4-Mze"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7cN-C1-JsW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

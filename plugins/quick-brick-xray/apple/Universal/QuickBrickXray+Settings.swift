@@ -154,7 +154,7 @@ extension QuickBrickXray {
                                                                      namespace: pluginNameSpace)
         
         let networkRequestsIgnoredDomains = settings?.networkRequestsIgnoredDomains.joined(separator: ";") ?? ""
-        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,
+        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredDomains,
                                                                      value: networkRequestsIgnoredDomains,
                                                                      namespace: pluginNameSpace)
     }
