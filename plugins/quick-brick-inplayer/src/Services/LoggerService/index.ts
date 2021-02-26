@@ -31,7 +31,7 @@ export const AssetCategories = {
   GENERAL: "general",
 };
 
-export function createLogger({ category = "", subsystem }) {
+export function createLogger({ category = "", subsystem }: CreateLoggerProps) {
   if (!subsystem) {
     return null;
   }
@@ -43,7 +43,7 @@ export function createLogger({ category = "", subsystem }) {
 
 export function addContext(context) {
   for (const logger of Object.values(loggers)) {
-    logger.addContext(context);
+    // logger.addContext(context);
   }
 }
 

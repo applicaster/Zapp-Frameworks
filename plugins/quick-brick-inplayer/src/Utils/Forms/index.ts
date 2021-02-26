@@ -11,8 +11,7 @@ export const findNextEmptyLabel = (label, labels) => {
   const currentLabelIndex = R.findIndex(R.propEq("label", label), labels);
   if (currentLabelIndex === -1) {
     throw new Error(
-      `Provided label "${label}" doesn't exist in the provided labels list`,
-      labels
+      `Provided label "${label}" doesn't exist in the provided labels list ${labels}`
     );
   }
   const nextLabels = R.compose(

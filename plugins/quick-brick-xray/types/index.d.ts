@@ -70,3 +70,8 @@ declare interface XRayLoggerI {
   addSubsystem(subsystem: string): XRayLoggerI;
   createEvent(): XRayEventI;
 }
+
+declare type CreateLoggerProps = {
+  category: string;
+  subsystem: string;
+};
