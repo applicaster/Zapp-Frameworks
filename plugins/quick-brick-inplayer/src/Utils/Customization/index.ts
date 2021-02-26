@@ -3,6 +3,7 @@ import * as R from "ramda";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
 import MESSAGES from "../../Components/AssetFlow/Config";
+import { TextStyle, ViewStyle } from "react-native";
 
 const manifestJson = platformSelect({
   ios: require("../../../manifests/ios_for_quickbrick.json"),
@@ -47,12 +48,12 @@ const mapInputKeyToStyle = (key, obj) => {
     borderColor: obj?.[`${key}_border_color`],
     borderColor_filled: obj?.[`${key}_border_color_filled`],
     borderColor_focused: obj?.[`${key}_border_color_focused`],
-    placeholderTextColor: obj?.[`${key}_placeholder_color`]
-  }
-}
+    placeholderTextColor: obj?.[`${key}_placeholder_color`],
+  };
+};
 
 export const mapKeyToStyle = R.curry((key, obj) => {
-  const isInputKey = key.includes('input');
+  const isInputKey = key.includes("input");
   const inputStyleObj = isInputKey ? mapInputKeyToStyle(key, obj) : null;
 
   return {
@@ -67,7 +68,7 @@ export const mapKeyToStyle = R.curry((key, obj) => {
     }),
     fontSize: obj?.[`${key}_fontsize`],
     color: obj?.[`${key}_fontcolor`],
-    ... isInputKey && inputStyleObj,
+    ...(isInputKey && inputStyleObj),
   };
 });
 
@@ -75,7 +76,7 @@ export const withEndSpace = (str) => {
   return `${str}\xa0`; // explicitly add space after string
 };
 
-export function inputFieldStyle(screenStyles) {
+export function inputFieldStyle(screenStyles): TextStyle {
   return {
     fontFamily: platformSelect({
       ios: screenStyles?.fields_font_ios,
@@ -98,7 +99,10 @@ export function getMessageOrDefault(error, screenLocalizations) {
   const message = error?.message;
   const defaultMessage = screenLocalizations.general_error_message;
 
-  const isStreamException = isStreamExceptionError(message, screenLocalizations);
+  const isStreamException = isStreamExceptionError(
+    message,
+    screenLocalizations
+  );
   if (isStreamException) return message;
 
   const isUserFriendlyMessage = findInObject(MESSAGES, message);
@@ -106,7 +110,8 @@ export function getMessageOrDefault(error, screenLocalizations) {
 }
 
 function isStreamExceptionError(message, screenLocalizations) {
-  const streamExceptionMessage = screenLocalizations.video_stream_exception_message;
+  const streamExceptionMessage =
+    screenLocalizations.video_stream_exception_message;
   return message === streamExceptionMessage;
 }
 
@@ -124,12 +129,12 @@ export const pickByKey = (key) =>
 
 const normalizeKeys = (obj) => {
   const objEntries = Object.entries(obj).map(([key, val]) => {
-    const keyArr = key.split('_');
+    const keyArr = key.split("_");
     keyArr.pop();
-    return [keyArr.join('_'), val]
+    return [keyArr.join("_"), val];
   });
   return Object.fromEntries(objEntries);
-}
+};
 
 export const splitInputTypeStyles = (styles) => {
   const focused = pickByKey("_focused")(styles);

@@ -1,4 +1,4 @@
-import XRayLogger from "@applicaster/quick-brick-xray";
+import * as XRayLogger from "@applicaster/quick-brick-xray";
 
 export const BaseSubsystem = "plugins/quick-brick-inplayer";
 export const BaseCategories = {
@@ -8,8 +8,10 @@ export const BaseCategories = {
   INPLAYER_SERVICE: "inplayer_service",
   IAP_SERVICE: "in_app_purchase_service",
 };
-
-let loggers = {};
+type Logers = {
+  [name: string]: XRayLoggerI;
+};
+let loggers: Logers = {};
 export const Subsystems = {
   ACCOUNT: `${BaseSubsystem}/account_flow`,
   ASSET: `${BaseSubsystem}/asset_flow`,
@@ -35,7 +37,7 @@ export function createLogger({ category = "", subsystem }: CreateLoggerProps) {
   if (!subsystem) {
     return null;
   }
-  const logger = new XRayLogger(category, subsystem);
+  const logger: XRayLoggerI = new XRayLogger(category, subsystem);
 
   loggers[subsystem] = logger;
   return logger;
@@ -43,7 +45,7 @@ export function createLogger({ category = "", subsystem }: CreateLoggerProps) {
 
 export function addContext(context) {
   for (const logger of Object.values(loggers)) {
-    // logger.addContext(context);
+    logger.addContext(context);
   }
 }
 

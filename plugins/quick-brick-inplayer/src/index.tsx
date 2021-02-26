@@ -1,6 +1,7 @@
 /// <reference types="@applicaster/applicaster-types" />
 /// <reference path="./index.d.ts" />
 /// <reference types="@inplayer-org/inplayer.js" />
+/// <reference types="@types/react" />
 
 import Component from "./Components/InPlayer";
 import * as R from "ramda";
