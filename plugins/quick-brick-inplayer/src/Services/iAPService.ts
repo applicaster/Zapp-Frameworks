@@ -3,6 +3,7 @@ import { ApplicasterIAPModule } from "@applicaster/applicaster-iap";
 import { validateExternalPayment } from "./inPlayerService";
 import { findAsync } from "./InPlayerUtils";
 import * as R from "ramda";
+import { isAndroidPlatform } from "../Utils/Platform";
 import MESSAGES from "../Components/AssetFlow/Config";
 import {
   createLogger,
@@ -16,10 +17,8 @@ export const logger = createLogger({
   category: BaseCategories.IAP_SERVICE,
 });
 
-const isAndroid = Platform.OS === "android";
-
-export async function initialize(store) {
-  if (!isAndroid) {
+export async function initialize(store): Promise<boolean> {
+  if (!isAndroidPlatform) {
     return true;
   }
 
@@ -63,7 +62,7 @@ export async function purchaseAnItem({
   access_fee_id,
   productType,
   store,
-}) {
+}: PurchaseAnItemParams) {
   if (!purchaseID) throw new Error(MESSAGES.validation.productId);
   let currentMessage = `ApplicasterIAPModule.purchase >> Purchasing purchase_id: ${purchaseID}`;
   let currentLogData = {};
@@ -233,7 +232,7 @@ async function externalPaymentValidation({
   item_id,
   access_fee_id,
   store,
-}) {
+}: ExternalPaymentValidationParams) {
   let currentLogMessage = "";
   let currentLogData = {};
   try {
@@ -361,7 +360,7 @@ async function restoreAnItem(
     )
     .send();
 
-  const itemFromStoreResult = isAndroid
+  const itemFromStoreResult = isAndroidPlatform
     ? await findItemInRestoreAndroid(purchaseIdStr, restoreResultFromStore)
     : await findItemInRestoreIos(purchaseIdStr, restoreResultFromStore);
 
@@ -445,7 +444,7 @@ export async function restore(dataFromInPlayer) {
     );
 
     if (isRestoreFailed) throw new Error(MESSAGES.restore.empty);
-    if (isErrorOnAllRestores) throw new Error(restoreProcessedArr[0].message);
+    if (isErrorOnAllRestores) throw new Error("Restoration failed");
 
     logger
       .createEvent()

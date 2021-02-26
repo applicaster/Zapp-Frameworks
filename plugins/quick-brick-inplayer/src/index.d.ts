@@ -49,3 +49,18 @@ declare type ValidateExternalPaymentParams = {
   access_fee_id: number;
   store: string;
 };
+
+declare type PurchaseAnItemParams = {
+  purchaseID: string;
+  item_id: number;
+  access_fee_id: number;
+  productType: string;
+  store: string;
+};
+
+declare type ExternalPaymentValidationParams = {
+  purchaseCompletion: any;
+  item_id: number;
+  access_fee_id: number;
+  store?: string;
+};
