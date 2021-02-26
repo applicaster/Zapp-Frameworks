@@ -3,7 +3,7 @@ import { func } from "prop-types";
 import { findInPlayerMetadata } from "../../InPlayerResponse";
 
 export function getSrcForHTML(
-  inPlayerItemAccess: AxiosResponse<GetItemAccessV1>,
+  inPlayerItemAccess: GetItemAccessV1,
   inPlayerContent
 ) {
   const applicasterAssetType = findInPlayerMetadata(

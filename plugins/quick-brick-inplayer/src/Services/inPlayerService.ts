@@ -1,5 +1,12 @@
 import * as R from "ramda";
-import InPlayer from "@inplayer-org/inplayer.js";
+import InPlayer, {
+  CommonResponse,
+  CreateAccount,
+  GetAccessFee,
+  GetItemAccessV1,
+  ReceiptValidationPlatform,
+  ValidateReceiptData,
+} from "@inplayer-org/inplayer.js";
 
 import {
   localStorageGet,
@@ -22,6 +29,7 @@ import {
   BaseCategories,
   XRayLogLevel,
 } from "../Services/LoggerService";
+import { AxiosError } from "axios";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.INPLAYER_SERVICE}`,
@@ -29,6 +37,12 @@ export const logger = createLogger({
 });
 
 const IN_PLAYER_LAST_EMAIL_USED_KEY = "com.inplayer.lastEmailUsed";
+
+export declare type AssetForAssetResult = {
+  asset: GetItemAccessV1;
+  src: string;
+  cookies: any;
+};
 
 export async function setConfig(environment = "production") {
   logger
@@ -42,7 +56,9 @@ export async function setConfig(environment = "production") {
   await InPlayer.setConfig("development"); //TODO: Remove hard coded value
 }
 
-export async function getAssetByExternalId(payload) {
+export async function getAssetIdByExternalId(
+  payload: ZappEntry
+): Promise<number> {
   const assetData = externalAssetData(payload);
   const errorEvent = logger
     .createEvent()
@@ -68,12 +84,14 @@ export async function getAssetByExternalId(payload) {
         })
         .send();
 
-      const result = await InPlayer.Asset.getExternalAsset(
+      const axiosResult = await InPlayer.Asset.getExternalAsset(
         inplayerAssetType,
-        externalAssetId
+        externalAssetId.toString(),
+        null
       );
+      const result = axiosResult?.data;
 
-      const retVal = result?.data?.id;
+      const retVal = result?.id;
       if (retVal) {
         logger
           .createEvent()
@@ -117,6 +135,7 @@ export async function getAssetByExternalId(payload) {
           `InPlayer.Asset.getExternalAsset >> error message ${error.message}`
         )
         .send();
+      return null;
     }
   } else {
     errorEvent.send();
@@ -126,10 +145,10 @@ export async function getAssetByExternalId(payload) {
 
 export async function checkAccessForAsset({
   assetId,
-  retryInCaseFail = false,
+  retryInCaseFail,
   interval = 1000,
   tries = 5,
-}) {
+}: AssetForAssetParams): Promise<AssetForAssetResult> {
   try {
     logger
       .createEvent()
@@ -141,8 +160,8 @@ export async function checkAccessForAsset({
         inplayer_asset_id: assetId,
       })
       .send();
-
-    const asset = await InPlayer.Asset.checkAccessForAsset(assetId);
+    const axiosAsset = await InPlayer.Asset.checkAccessForAsset(assetId);
+    const asset = axiosAsset?.data;
     console.log({ asset });
     const src = getSrcFromAsset(asset);
     console.log({ src });
@@ -153,7 +172,7 @@ export async function checkAccessForAsset({
     logger
       .createEvent()
       .setMessage(
-        `InPlayer.Asset.checkAccessForAsset Completed >> inplayer_asset_id: ${assetId} >> title: ${asset?.title} src: ${src}`
+        `InPlayer.Asset.checkAccessForAsset Completed >> inplayer_asset_id: ${assetId} >> title: ${asset?.item.title} src: ${src}`
       )
       .setLevel(XRayLogLevel.debug)
       .addData({
@@ -191,7 +210,7 @@ export async function checkAccessForAsset({
         .send();
 
       return await checkAccessForAsset({
-        assetId,
+        assetId: assetId,
         retryInCaseFail: true,
         interval: newInterval,
         tries: newTries,
@@ -223,7 +242,7 @@ export async function checkAccessForAsset({
   }
 }
 
-export async function getAccessFees(assetId) {
+export async function getAccessFees(assetId: number): Promise<GetAccessFee> {
   try {
     logger
       .createEvent()
@@ -236,22 +255,22 @@ export async function getAccessFees(assetId) {
       })
       .send();
 
-    const retVal = await InPlayer.Asset.getAssetAccessFees(assetId);
-    const data = retVal?.data;
-    console.log({ acessFeesResult: data });
-    const descriptions = R.map(R.prop("description"))(data);
+    const axiosAccessFees = await InPlayer.Asset.getAssetAccessFees(assetId);
+    const accessFees = axiosAccessFees?.data;
+    console.log({ acessFeesResult: accessFees });
+    const descriptions = R.map(R.prop("description"))(accessFees);
     logger
       .createEvent()
       .setMessage(
-        `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fees_count: ${data.length}, fee_descriptions: ${descriptions}`
+        `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fee_descriptions: ${descriptions}`
       )
       .setLevel(XRayLogLevel.debug)
       .addData({
-        inplayer_asset_access_fees: data,
+        inplayer_asset_access_fees: accessFees,
         inplayer_asset_id: assetId,
       })
       .send();
-    return data;
+    return accessFees;
   } catch (error) {
     logger
       .createEvent()
@@ -268,12 +287,14 @@ export async function getAccessFees(assetId) {
   }
 }
 
-export async function isAuthenticated(in_player_client_id) {
+export async function isAuthenticated(
+  in_player_client_id: string
+): Promise<boolean> {
   try {
     // InPlayer.Account.isAuthenticated() returns true even if token expired
     // To handle this case InPlayer.Account.getAccount() was used
-    const getAccount = await InPlayer.Account.getAccountInfo();
-    console.log({ getAccount });
+    await InPlayer.Account.getAccountInfo();
+
     logger
       .createEvent()
       .setMessage(`InPlayer.Account.getAccount >> isAuthenticated: true`)
@@ -322,15 +343,21 @@ export async function isAuthenticated(in_player_client_id) {
   }
 }
 
-export async function login({ email, password, clientId, referrer }) {
+export async function login({
+  email,
+  password,
+  clientId,
+  referrer,
+}: LoginParams): Promise<CreateAccount> {
   email && (await localStorageSet(IN_PLAYER_LAST_EMAIL_USED_KEY, email));
   try {
-    const retVal = await InPlayer.Account.signIn({
+    const axiosResponse = await InPlayer.Account.signIn({
       email,
       password,
       clientId,
       referrer,
     });
+    const response = axiosResponse?.data;
     logger
       .createEvent()
       .setMessage(
@@ -345,7 +372,7 @@ export async function login({ email, password, clientId, referrer }) {
         succeed: true,
       })
       .send();
-    return retVal;
+    return response;
   } catch (error) {
     const { response } = error;
 
@@ -368,11 +395,16 @@ export async function login({ email, password, clientId, referrer }) {
   }
 }
 
-export async function signUp(params) {
-  const { fullName, email, password, clientId, referrer, brandingId } = params;
-
+export async function signUp({
+  fullName,
+  email,
+  password,
+  clientId,
+  referrer,
+  brandingId,
+}: SignUpParams): Promise<CreateAccount> {
   try {
-    const retVal = await InPlayer.Account.signUp({
+    const axiosResponse = await InPlayer.Account.signUp({
       fullName,
       email,
       password,
@@ -383,6 +415,7 @@ export async function signUp(params) {
       type: "consumer",
       brandingId,
     });
+    const response = axiosResponse?.data;
     logger
       .createEvent()
       .setMessage(
@@ -401,7 +434,7 @@ export async function signUp(params) {
         succeed: true,
       })
       .send();
-    return retVal;
+    return response;
   } catch (error) {
     console.log({ error });
     logger
@@ -427,13 +460,18 @@ export async function signUp(params) {
   }
 }
 
-export async function requestPassword({ email, clientId, brandingId }) {
+export async function requestPassword({
+  email,
+  clientId,
+  brandingId,
+}: RequestNewPasswordParams): Promise<CommonResponse> {
   try {
-    const retVal = await InPlayer.Account.requestNewPassword({
+    const axiosResponse = await InPlayer.Account.requestNewPassword({
       email,
       merchantUuid: clientId,
       brandingId,
     });
+    const response = axiosResponse?.data;
     logger
       .createEvent()
       .setMessage(
@@ -442,7 +480,7 @@ export async function requestPassword({ email, clientId, brandingId }) {
       .setLevel(XRayLogLevel.debug)
       .addData({ email, in_player_client_id: clientId, succeed: true })
       .send();
-    return retVal;
+    return response;
   } catch (error) {
     logger
       .createEvent()
@@ -463,7 +501,11 @@ export async function requestPassword({ email, clientId, brandingId }) {
   }
 }
 
-export async function setNewPassword({ password, token, brandingId }) {
+export async function setNewPassword({
+  password,
+  token,
+  brandingId,
+}: SetNewPasswordParams) {
   try {
     await InPlayer.Account.setNewPassword(
       {
@@ -524,20 +566,8 @@ export async function signOut() {
   }
 }
 
-export async function getLastEmailUsed() {
+export async function getLastEmailUsed(): Promise<string> {
   return localStorageGet(IN_PLAYER_LAST_EMAIL_USED_KEY);
-}
-
-function platformName(store) {
-  if (isAmazonPlatform(store)) {
-    return "amazon";
-  } else if (isAndroidPlatform) {
-    return "google-play";
-  } else if (isApplePlatform) {
-    return "apple";
-  } else {
-    throw new Error("Platform can not be received");
-  }
 }
 
 //TODO: This func not working with Web, implement proper way in future
@@ -547,7 +577,7 @@ export async function validateExternalPayment({
   item_id,
   access_fee_id,
   store,
-}) {
+}: ValidateExternalPaymentParams) {
   let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
     receipt,
     item_id,
@@ -564,20 +594,41 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
-    console.log({ platformName: platformName(store) });
-    const response = await InPlayer.Payment.validateReceipt({
-      platform: platformName(store),
-      itemId: item_id,
-      accessFeeId: access_fee_id,
-      receipt: receipt,
-      amazonUserId: isAmazonPlatform(store) ? userId : null,
-    });
 
+    const amazonUserId = isAmazonPlatform(store) ? userId : null;
+
+    let recieptData: ValidateReceiptData = null;
     if (isAmazonPlatform(store)) {
+      recieptData = {
+        accessFeeId: access_fee_id,
+        amazonUserId,
+        itemId: item_id,
+        platform: ReceiptValidationPlatform.AMAZON,
+        receipt,
+      };
       event.addData({
         amazon_user_id: userId,
       });
+    } else if (isAndroidPlatform) {
+      recieptData = {
+        accessFeeId: access_fee_id,
+        itemId: item_id,
+        platform: ReceiptValidationPlatform.GOOGLE_PLAY,
+        receipt,
+      };
+    } else if (isApplePlatform) {
+      recieptData = {
+        accessFeeId: access_fee_id,
+        itemId: item_id,
+        platform: ReceiptValidationPlatform.APPLE,
+        receipt,
+      };
+    } else {
+      throw new Error("Platform can not be received");
     }
+
+    const axiosResponse = await InPlayer.Payment.validateReceipt(recieptData);
+    const response = axiosResponse.data;
 
     event
       .addData({

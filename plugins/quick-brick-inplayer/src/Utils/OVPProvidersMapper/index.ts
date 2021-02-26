@@ -8,19 +8,13 @@ const SUPPORTED_ASSET_TYPES = {
   HTML: "html_asset",
 };
 
-export function getCookiesFromAsset(
-  inPlayerItemAccess: AxiosResponse<GetItemAccessV1>
-) {
+export function getCookiesFromAsset(inPlayerItemAccess: GetItemAccessV1) {
   const { cookies = null } =
     inPlayerItemAccess && getInPlayerContent(inPlayerItemAccess);
   return cookies;
 }
 
-export function getSrcFromAsset(
-  inPlayerItemAccess: AxiosResponse<GetItemAccessV1>
-): string {
-  console.log("getSrcFromAsset");
-
+export function getSrcFromAsset(inPlayerItemAccess: GetItemAccessV1): string {
   const inPlayerContent =
     inPlayerItemAccess && getInPlayerContent(inPlayerItemAccess);
   console.log({ inPlayerContent });
@@ -48,7 +42,7 @@ function retrieveSrcFromDefault(inPlayerContent) {
 
 function tryFallBackLogicFromMapping(
   inPlayerContent,
-  inPlayerItemAccess: AxiosResponse<GetItemAccessV1>
+  inPlayerItemAccess: GetItemAccessV1
 ) {
   const inPlayerAssetType = getInPlayerAssetType(inPlayerItemAccess);
   if (inPlayerAssetType) {

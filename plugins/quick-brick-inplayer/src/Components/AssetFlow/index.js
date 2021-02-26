@@ -10,7 +10,7 @@ import { isApplePlatform } from "../../Utils/Platform";
 import * as R from "ramda";
 
 import {
-  getAssetByExternalId,
+  getAssetIdByExternalId,
   checkAccessForAsset,
   getAccessFees,
 } from "../../Services/inPlayerService";
@@ -123,7 +123,7 @@ const AssetFlow = (props) => {
 
       setAssetId(newAssetId);
     } else {
-      newAssetId = await getAssetByExternalId(payload);
+      newAssetId = await getAssetIdByExternalId(payload);
       if (newAssetId && stillMounted) {
         event
           .addData({ inplayer_asset_id: newAssetId })
@@ -226,7 +226,6 @@ const AssetFlow = (props) => {
     const { payload } = props;
 
     const retryInCaseFail = !startPurchaseFlow;
-
     checkAccessForAsset({ assetId, retryInCaseFail })
       .then((data) => {
         const src = data?.src;
