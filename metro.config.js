@@ -1,7 +1,7 @@
 const { resolve } = require("path");
 const R = require("ramda");
 
-const packages = ["zapp-react-native-theo-player"];
+const packages = ["zapp-react-native-theo-player", "quick-brick-inplayer"];
 
 const buildExtraNodeModules = (extraNodeModules, packageName) => {
   return R.assoc(
