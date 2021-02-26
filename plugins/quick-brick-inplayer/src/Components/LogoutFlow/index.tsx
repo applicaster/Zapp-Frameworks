@@ -4,7 +4,6 @@ import { Text, View, ActivityIndicator } from "react-native";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { signOut } from "../../Services/inPlayerService";
-import { removeFromLocalStorage } from "../../Utils/UserAccount";
 import PropTypes from "prop-types";
 
 const LogoutFlow = ({ configuration, screenStyles, screenLocalizations }) => {
@@ -35,15 +34,10 @@ const LogoutFlow = ({ configuration, screenStyles, screenLocalizations }) => {
     }
   };
 
-  // const removeIdToken = async () => {
-  //   await removeFromLocalStorage("idToken");
-  // };
-
   const performSignOut = () => {
     signOut()
       .then(async (didLogout) => {
         if (didLogout) {
-          // await removeIdToken();
         } else {
           navigator.goBack();
         }
