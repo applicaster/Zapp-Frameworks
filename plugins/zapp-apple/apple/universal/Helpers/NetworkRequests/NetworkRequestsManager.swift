@@ -20,8 +20,9 @@ public class NetworkRequestsManager {
         static let response = "response"
         static let error = "error"
         static let statusCode = "statusCode"
+        static let url = "url"
     }
-    
+
     public static func startListening() {
         Sniffer.ignore(extensions: ["png", "jpeg", "jpg", "ts"])
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
@@ -34,29 +35,15 @@ public class NetworkRequestsManager {
                       let statusCode = response[Params.statusCode] as? String else {
                     return
                 }
-                
-                if shouldSendWarning(response) {
-                    instance.logger?.warningLog(message: "\(NetworkRequestsManagerLogs.request.message), status code: \(statusCode)",
-                                                category: NetworkRequestsManagerLogs.request.category,
-                                                data: [Params.request: request,
-                                                       Params.response: response])
-                } else {
-                    instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message), status code: \(statusCode)",
-                                                category: NetworkRequestsManagerLogs.request.category,
-                                                data: [Params.request: request,
-                                                       Params.response: response])
-                }
+
+                instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message): \(url.host ?? "")",
+                                            category: NetworkRequestsManagerLogs.request.category,
+                                            data: [Params.request: request,
+                                                   Params.response: response,
+                                                   Params.statusCode: statusCode,
+                                                   Params.url: url.absoluteString])
             }
         }
         Sniffer.start()
-    }
-    
-    static func shouldSendWarning(_ response: [String: Any]) -> Bool {
-        var retValue = false
-        if let isError = response[Params.error] as? Bool,
-           isError == true {
-            retValue = true
-        }
-        return retValue
     }
 }
