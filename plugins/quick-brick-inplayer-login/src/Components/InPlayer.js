@@ -227,7 +227,7 @@ const InPlayer = (props) => {
   };
 
   const renderUACFlow = () => {
-    return idToken ? renderLogoutScreen() : renderScreenHook();
+    return idToken ? renderLogoutScreen() : renderAccount();
   };
 
   const shouldShowParentLock = (parentLockWasPresented) =>
