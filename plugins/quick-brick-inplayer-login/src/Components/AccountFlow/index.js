@@ -103,7 +103,7 @@ const AccountFlow = (props) => {
   }, []);
 
   const authenticateUser = async () => {
-    // setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
+    setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
     setScreen(ScreensData.LOGIN);
   };
 

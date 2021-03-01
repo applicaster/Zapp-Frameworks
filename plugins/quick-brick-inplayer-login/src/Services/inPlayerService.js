@@ -26,15 +26,11 @@ export const logger = createLogger({
 const IN_PLAYER_LAST_EMAIL_USED_KEY = "com.inplayer.lastEmailUsed";
 
 export async function setConfig(environment = "production") {
-  logger
-    .createEvent()
-    .setLevel(XRayLogLevel.debug)
-    .addData({
-      environment: environment,
-    })
-    .setMessage(`Set InPlayer environment: ${environment}`)
-    .send();
-  await InPlayer.setConfig("development"); //TODO: Remove hard coded value
+  logger.debug({
+    message: `Set InPlayer environment: ${environment}`,
+    data: { environment: environment },
+  });
+  await InPlayer.setConfig("development");
 }
 
 export async function getAssetByExternalId(payload) {
@@ -49,19 +45,15 @@ export async function getAssetByExternalId(payload) {
   if (assetData) {
     const { externalAssetId, inplayerAssetType } = assetData;
     try {
-      logger
-        .createEvent()
-        .setMessage(
-          `InPlayer.Asset.getExternalAsset >> external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType}`
-        )
-        .setLevel(XRayLogLevel.debug)
-        .addData({
+      logger.debug({
+        message: `InPlayer.Asset.getExternalAsset >> external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType}`,
+        data: {
           external_asset_data: {
             external_asset_id: externalAssetId,
             inplayer_asset_type: inplayerAssetType,
           },
-        })
-        .send();
+        },
+      });
 
       const result = await InPlayer.Asset.getExternalAsset(
         inplayerAssetType,
@@ -70,13 +62,9 @@ export async function getAssetByExternalId(payload) {
 
       const retVal = result?.data?.id;
       if (retVal) {
-        logger
-          .createEvent()
-          .setMessage(
-            `InPlayer.Asset.getExternalAsset Completed >> external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType} >> Result: inplayer_asset_id: ${retVal}, title: ${result?.title}`
-          )
-          .setLevel(XRayLogLevel.debug)
-          .addData({
+        logger.debug({
+          message: `InPlayer.Asset.getExternalAsset Completed >> external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType} >> Result: inplayer_asset_id: ${retVal}, title: ${result?.title}`,
+          data: {
             inplayer_asset_id: retVal,
             external_asset: result,
             external_asset_data: {
@@ -84,37 +72,40 @@ export async function getAssetByExternalId(payload) {
               inplayer_asset_type: inplayerAssetType,
             },
             exernal_response: result,
-          })
-          .send();
+          },
+        });
         return retVal;
       } else {
-        errorEvent
-          .addData({
+        logger.error({
+          message: `InPlayer.Asset.getExternalAsset >> Can not retrieve external_asset_id`,
+          data: {
             external_asset_data: {
               external_asset_id: externalAssetId,
               inplayer_asset_type: inplayerAssetType,
             },
             exernal_response: result,
-          })
-          .send();
+          },
+        });
         return null;
       }
     } catch (error) {
-      errorEvent
-        .addData({
+      logger.error({
+        message: `InPlayer.Asset.getExternalAsset >> error message ${error.message}`,
+        data: {
           external_asset_data: {
             external_asset_id: externalAssetId,
             inplayer_asset_type: inplayerAssetType,
           },
+          exernal_response: result,
           error,
-        })
-        .setMessage(
-          `InPlayer.Asset.getExternalAsset >> error message ${error.message}`
-        )
-        .send();
+        },
+      });
     }
   } else {
-    errorEvent.send();
+    logger.error({
+      message: `InPlayer.Asset.getExternalAsset >> Can not retrieve external_asset_id`,
+    });
+
     return null;
   }
 }
@@ -124,51 +115,41 @@ export async function isAuthenticated(in_player_client_id) {
     // InPlayer.Account.isAuthenticated() returns true even if token expired
     // To handle this case InPlayer.Account.getAccount() was used
     const getAccount = await InPlayer.Account.getAccountInfo();
-    console.log({ getAccount });
-    logger
-      .createEvent()
-      .setMessage(`InPlayer.Account.getAccount >> isAuthenticated: true`)
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+
+    logger.debug({
+      message: `InPlayer.Account.getAccount >> isAuthenticated: true`,
+      data: {
         in_player_client_id,
         is_authenticated: true,
-      })
-      .send();
+      },
+    });
     return true;
   } catch (error) {
-    console.log({ error });
-
     const res = await error.response;
     console.log({ res });
     if (res?.status === 403) {
       await InPlayer.Account.refreshToken(in_player_client_id);
-      logger
-        .createEvent()
-        .setMessage(
-          `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`
-        )
-        .setLevel(XRayLogLevel.error)
-        .addData({
+
+      logger.warning({
+        message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`,
+        data: {
           in_player_client_id,
           is_authenticated: true,
           error,
-        })
-        .send();
+        },
+      });
       return true;
     }
 
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.warning({
+      message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`,
+      data: {
         in_player_client_id,
         is_authenticated: false,
         error,
-      })
-      .send();
+      },
+    });
+
     return false;
   }
 }
@@ -182,39 +163,34 @@ export async function login({ email, password, clientId, referrer }) {
       clientId,
       referrer,
     });
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.signIn >> succeed: true, email: ${email}, password: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+
+    logger.debug({
+      message: `InPlayer.Account.signIn >> succeed: true, email: ${email}, password: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer}`,
+      data: {
         email,
         password,
         in_player_client_id: clientId,
         referrer,
         succeed: true,
-      })
-      .send();
+      },
+    });
+
     return retVal;
   } catch (error) {
     const { response } = error;
 
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.signIn >> status: ${response?.status}, url: ${response?.request?.responseURL}, isAuthenticated: true, email: ${email}, password: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer} `
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.warning({
+      message: `InPlayer.Account.signIn >> status: ${response?.status}, url: ${response?.request?.responseURL}, isAuthenticated: true, email: ${email}, password: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer} `,
+      data: {
         email,
         password,
         in_player_client_id: clientId,
         referrer,
         is_authenticated: false,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }
@@ -234,13 +210,9 @@ export async function signUp(params) {
       type: "consumer",
       brandingId,
     });
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.signUp >> succeed: true, fullName:${fullName}, email: ${email}, password: ${password}, password_confirmation: ${password}, in_player_client_id:${clientId}, referrer: ${referrer}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `InPlayer.Account.signUp >> succeed: true, fullName:${fullName}, email: ${email}, password: ${password}, password_confirmation: ${password}, in_player_client_id:${clientId}, referrer: ${referrer}`,
+      data: {
         fullName,
         email,
         password,
@@ -250,18 +222,14 @@ export async function signUp(params) {
         metadata: {},
         type: "consumer",
         succeed: true,
-      })
-      .send();
+      },
+    });
+
     return retVal;
   } catch (error) {
-    console.log({ error });
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.signIn >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, fullName: ${fullName}, email: ${email}, password: ${password}, password_confirmation: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer}`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.warning({
+      message: `InPlayer.Account.signIn >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, fullName: ${fullName}, email: ${email}, password: ${password}, password_confirmation: ${password}, in_player_client_id: ${clientId}, referrer: ${referrer}`,
+      data: {
         fullName,
         email,
         password,
@@ -272,8 +240,9 @@ export async function signUp(params) {
         type: "consumer",
         succeed: false,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }
@@ -285,31 +254,30 @@ export async function requestPassword({ email, clientId, brandingId }) {
       merchantUuid: clientId,
       brandingId,
     });
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.requestNewPassword >> succeed: true, email: ${email}, in_player_client_id: ${clientId}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({ email, in_player_client_id: clientId, succeed: true })
-      .send();
+
+    logger.debug({
+      message: `InPlayer.Account.requestNewPassword >> succeed: true, email: ${email}, in_player_client_id: ${clientId}`,
+      data: {
+        email,
+        in_player_client_id: clientId,
+        succeed: true,
+      },
+    });
+
     return retVal;
   } catch (error) {
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.requestNewPassword >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, email: ${email}, in_player_client_id: ${clientId}`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer.Account.requestNewPassword >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, email: ${email}, in_player_client_id: ${clientId}`,
+      data: {
         email,
         in_player_client_id: clientId,
         metadata: ["Dummy"],
         type: "consumer",
         succeed: false,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }
@@ -324,29 +292,26 @@ export async function setNewPassword({ password, token, brandingId }) {
       },
       token
     );
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.setNewPassword >> succeed: true, password: ${password}, password_confirmation: ${password}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({ password, password_confirmation: password, succeed: true })
-      .send();
+
+    logger.debug({
+      message: `InPlayer.Account.setNewPassword >> succeed: true, password: ${password}, password_confirmation: ${password}`,
+      data: {
+        password,
+        password_confirmation: password,
+        succeed: true,
+      },
+    });
   } catch (error) {
-    console.log({ error });
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.setNewPassword >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, password: ${password}, password_confirmation: ${password}`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer.Account.setNewPassword >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, succeed: false, password: ${password}, password_confirmation: ${password}`,
+      data: {
         password,
         password_confirmation: password,
         succeed: false,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }
@@ -354,23 +319,23 @@ export async function setNewPassword({ password, token, brandingId }) {
 export async function signOut() {
   try {
     const retVal = await InPlayer.Account.signOut();
-    logger
-      .createEvent()
-      .setMessage(`InPlayer.Account.signOut >> succeed: true`)
-      .setLevel(XRayLogLevel.debug)
-      .addData({ succeed: true })
-      .send();
+
+    logger.debug({
+      message: `InPlayer.Account.signOut >> succeed: true`,
+      data: {
+        succeed: true,
+      },
+    });
     return retVal;
   } catch (error) {
-    logger
-      .createEvent()
-      .setMessage(`InPlayer.Account.signOut >> succeed: false`)
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer.Account.signOut >> succeed: false`,
+      data: {
         succeed: false,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }
