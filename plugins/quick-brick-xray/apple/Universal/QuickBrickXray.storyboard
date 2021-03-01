@@ -69,10 +69,10 @@
             </objects>
             <point key="canvasLocation" x="-435" y="-342"/>
         </scene>
-        <!--Default Logger View Controller-->
+        <!--Logger View Controller Default-->
         <scene sceneID="OOe-8F-CxY">
             <objects>
-                <viewController id="9P1-iB-hoW" customClass="DefaultLoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
+                <viewController id="9P1-iB-hoW" customClass="LoggerViewControllerDefault" customModule="LoggerInfo" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="odK-QV-Vkk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -305,10 +305,10 @@
             </objects>
             <point key="canvasLocation" x="-436" y="354"/>
         </scene>
-        <!--Network Requests Logger View Controller-->
+        <!--Logger View Controller Network Requests-->
         <scene sceneID="VYd-o0-3dD">
             <objects>
-                <viewController id="wB6-gA-zjJ" customClass="NetworkRequestsLoggerViewController" customModule="LoggerInfo" sceneMemberID="viewController">
+                <viewController id="wB6-gA-zjJ" customClass="LoggerViewControllerNetworkRequests" customModule="LoggerInfo" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ETF-4M-t2r">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
