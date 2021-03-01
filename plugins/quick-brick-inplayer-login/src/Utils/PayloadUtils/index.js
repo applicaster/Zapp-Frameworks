@@ -19,30 +19,25 @@ export const externalAssetData = ({ payload }) => {
   let eventMessage = "External Asset Data from Payload:";
 
   if (externalAssetId && inplayerAssetType) {
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `${eventMessage} external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType} from payload`,
+      data: {
         external_asset_id: externalAssetId,
         inplayer_asset_type: inplayerAssetType,
-      })
-      .setMessage(
-        `${eventMessage} external_asset_id: ${externalAssetId}, inplayer_asset_type: ${inplayerAssetType} from payload`
-      )
-      .send();
+      },
+    });
 
     return { externalAssetId, inplayerAssetType };
   }
 
-  logger
-    .createEvent()
-    .setLevel(XRayLogLevel.debug)
-    .addData({
+  logger.debug({
+    message: `${eventMessage} data not availible`,
+    data: {
       external_asset_id: externalAssetId,
       inplayer_asset_type: inplayerAssetType,
-    })
-    .setMessage(`${eventMessage} data not availible`)
-    .send();
+    },
+  });
+
   return null;
 };
 
@@ -51,22 +46,18 @@ export const isAuthenticationRequired = ({ payload }) => {
     "extensions",
     "requires_authentication",
   ])(payload);
-  logger
-    .createEvent()
-    .setLevel(XRayLogLevel.debug)
-    .addData({
+
+  logger.debug({
+    message: `Payload entry is requires_authentication: ${requires_authentication}`,
+    data: {
       requires_authentication: requires_authentication,
-    })
-    .setMessage(
-      `Payload entry is requires_authentication: ${requires_authentication}`
-    )
-    .send();
+    },
+  });
   return requires_authentication;
 };
 
 export const inPlayerAssetId = ({ payload, configuration }) => {
   let eventMessage = "inplayer_asset_id from payload:";
-  const event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
   const assetIdFromCustomKey = inPlayerAssetIdFromCustomKey({
     payload,
@@ -74,23 +65,23 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
   });
 
   if (assetIdFromCustomKey) {
-    event
-      .addData({ inplayer_asset_id: assetIdFromCustomKey })
-      .setMessage(
-        `${eventMessage} from in_player_custom_asset_key, inplayer_asset_id: ${assetIdFromCustomKey}`
-      )
-      .send();
+    logger.debug({
+      message: `${eventMessage} from in_player_custom_asset_key, inplayer_asset_id: ${assetIdFromCustomKey}`,
+      data: {
+        inplayer_asset_id: assetIdFromCustomKey,
+      },
+    });
     return assetIdFromCustomKey;
   }
 
   const assetId = R.path(["extensions", "inplayer_asset_id"])(payload);
   if (assetId) {
-    event
-      .addData({ inplayer_asset_id: assetId })
-      .setMessage(
-        `${eventMessage} from extensions.inplayer_asset_id, inplayer_asset_id: ${assetId}`
-      )
-      .send();
+    logger.debug({
+      message: `${eventMessage} from extensions.inplayer_asset_id, inplayer_asset_id: ${assetId}`,
+      data: {
+        inplayer_asset_id: assetId,
+      },
+    });
     return assetId;
   }
 
@@ -104,10 +95,12 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
     ? `${eventMessage} from pathextensions.ds_product_ids, inplayer_asset_id: ${assetId}`
     : `${eventMessage} data not availible`;
 
-  event
-    .addData({ inplayer_asset_id: assetIdFallback })
-    .setMessage(eventMessage)
-    .send();
+  logger.debug({
+    message: eventMessage,
+    data: {
+      inplayer_asset_id: assetIdFallback,
+    },
+  });
 
   return assetIdFallback;
 };

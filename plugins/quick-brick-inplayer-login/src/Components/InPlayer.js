@@ -125,20 +125,11 @@ const InPlayer = (props) => {
         configuration: props?.configuration,
       };
       if (authenticationRequired || assetId) {
-        if (token) {
-          console.log({ success: true, error: null, payload });
-          logger.debug({
-            message: "User authenteficated, finishing hook with: success",
-            data: { ...logData },
-          });
-          callback && callback({ success: true, error: null, payload });
-        } else {
-          logger.debug({
-            message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
-            data: { ...logData, hook_type: HookTypeData.PLAYER_HOOK },
-          });
-          stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
-        }
+        logger.debug({
+          message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
+          data: { ...logData, hook_type: HookTypeData.PLAYER_HOOK },
+        });
+        stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
         logger.debug({
           message:

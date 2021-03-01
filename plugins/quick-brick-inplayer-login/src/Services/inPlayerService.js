@@ -35,12 +35,6 @@ export async function setConfig(environment = "production") {
 
 export async function getAssetByExternalId(payload) {
   const assetData = externalAssetData({ payload });
-  const errorEvent = logger
-    .createEvent()
-    .setMessage(
-      `InPlayer.Asset.getExternalAsset >> Can not retrieve external_asset_id`
-    )
-    .setLevel(XRayLogLevel.error);
 
   if (assetData) {
     const { externalAssetId, inplayerAssetType } = assetData;
@@ -114,7 +108,7 @@ export async function isAuthenticated(in_player_client_id) {
   try {
     // InPlayer.Account.isAuthenticated() returns true even if token expired
     // To handle this case InPlayer.Account.getAccount() was used
-    const getAccount = await InPlayer.Account.getAccountInfo();
+    await InPlayer.Account.getAccountInfo();
 
     logger.debug({
       message: `InPlayer.Account.getAccount >> isAuthenticated: true`,
