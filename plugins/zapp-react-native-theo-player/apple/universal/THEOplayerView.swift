@@ -47,7 +47,7 @@ class THEOplayerView: UIView {
         }
     }
 
-    @objc var autoplay: Bool = false {
+    @objc var autoplay: Bool = true {
         didSet {
             logger?.debugLog(message: "Autoplay enabled: \(autoplay)",
                              data: ["autoplay": autoplay])
@@ -168,12 +168,16 @@ class THEOplayerView: UIView {
          */
         player.evaluateJavaScript("init({player: player})")
         player.presentationMode = .inline
-
+        
         attachJSEventListeners()
         attachEventListeners()
-        player.addAsSubview(of: self)
         player.autoplay = autoplay
         player.source = source
         player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
+        player.addAsSubview(of: self)
+        if (autoplay) {
+            player.play()
+        }
+
     }
 }
