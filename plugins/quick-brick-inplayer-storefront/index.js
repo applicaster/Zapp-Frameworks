@@ -9,6 +9,7 @@ if (!global.devDemoLogin) {
 }
 
 export default {
+  weight: 10,
   hasPlayerHook: true,
   isFlowBlocker: () => true,
   presentFullScreen: true,
