@@ -34,6 +34,10 @@
 
 }
 
+.theoplayer-skin .vjs-big-play-button {
+    display: none !important;
+}
+
 .theoplayer-skin video {
   /* object-fit: contain;*/ /* default */
   object-fit: cover; /* content outside of the container, hence some content might be missing from the container */
