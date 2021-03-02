@@ -59,7 +59,11 @@ public class EventsBus {
     lazy var cache = [UInt: [NamedObserver]]()
 
     public static func post(_ event: Event) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: event.type),
+        var name = event.type
+        if let subject = event.subject {
+            name += "." + subject
+        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: name),
                                         object: nil,
                                         userInfo: event.content)
     }
@@ -68,17 +72,24 @@ public class EventsBus {
     public static func subscribe(_ target: AnyObject,
                                  topic: EventsBusTopic,
                                  sender: Any? = nil,
+                                 subject: String? = nil,
                                  handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
-        subscribe(target, name: topic.description, sender: sender, handler: handler)
+        subscribe(target,
+                  name: topic.description,
+                  sender: sender,
+                  subject: subject,
+                  handler: handler)
     }
     
     @discardableResult
     public static func subscribe(_ target: AnyObject,
                                  name: String,
                                  sender: Any? = nil,
+                                 subject: String? = nil,
                                  handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
         let id = UInt(bitPattern: ObjectIdentifier(target))
-        let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: name),
+        let notificationName = shared.notificationName(withType: name, subject: subject)
+        let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: notificationName),
                                                               object: sender,
                                                               queue: OperationQueue.main,
                                                               using: handler)
@@ -116,14 +127,16 @@ public class EventsBus {
                                 data: ["target": String(describing: type(of: target))])
     }
 
-    public static func unsubscribe(_ target: AnyObject, name: String) {
+    public static func unsubscribe(_ target: AnyObject, type: String, subject: String?) {
         let id = UInt(bitPattern: ObjectIdentifier(target))
         let center = NotificationCenter.default
+        let notificationName = shared.notificationName(withType: type,
+                                                       subject: subject)
 
         shared.queue.sync {
             if let namedObservers = shared.cache[id] {
                 shared.cache[id] = namedObservers.filter({ (namedObserver: NamedObserver) -> Bool in
-                    if namedObserver.name == name {
+                    if namedObserver.name == notificationName {
                         center.removeObserver(namedObserver.observer)
                         return false
                     } else {
@@ -135,7 +148,23 @@ public class EventsBus {
 
         shared.logger?.debugLog(message: EventsBusLogs.unsubscribed.message,
                                 category: EventsBusLogs.unsubscribed.category,
-                                data: ["name": name,
-                                       "target": String(describing: type(of: target))])
+                                data: ["name": notificationName,
+                                       "target": String(describing: shared.getType(of: target))])
+    }
+    
+    func notificationName(from event: Event) -> String {
+        return notificationName(withType: event.type, subject: event.subject)
+    }
+    
+    func notificationName(withType type: String, subject: String? = nil) -> String {
+        var notificationName = type
+        if let subject = subject {
+            notificationName += "." + subject
+        }
+        return notificationName
+    }
+    
+    func getType(of target: AnyObject) -> String {
+        return String(describing: type(of: target))
     }
 }
