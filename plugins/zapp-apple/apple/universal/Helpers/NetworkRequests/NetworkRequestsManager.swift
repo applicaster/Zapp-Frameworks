@@ -24,7 +24,7 @@ public class NetworkRequestsManager {
     }
 
     public static func startListening() {
-        Sniffer.ignore(extensions: ["png", "jpeg", "jpg", "ts"])
+        Sniffer.ignore(extensions: ignoredExtensions)
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
             switch logType {
             case .request:
@@ -45,5 +45,19 @@ public class NetworkRequestsManager {
             }
         }
         Sniffer.start()
+    }
+
+    static var ignoredExtensions: [String] {
+        let pluginNameSpace = "xray_logging_plugin"
+        let key = "networkRequestsIgnoredExtensions"
+        let defaultExtensions = ["png", "jpeg", "jpg", "ts"]
+        guard let networkRequestsIgnoredExtensionsString = FacadeConnector.connector?.storage?.localStorageValue(for: key,
+                                                                                                                 namespace: pluginNameSpace) else {
+            _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: key,
+                                                                         value: defaultExtensions.joined(separator: ";"),
+                                                                         namespace: pluginNameSpace)
+            return defaultExtensions
+        }
+        return networkRequestsIgnoredExtensionsString.components(separatedBy: ";").filter({ !$0.isEmpty })
     }
 }

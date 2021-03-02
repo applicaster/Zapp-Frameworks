@@ -98,14 +98,8 @@ extension QuickBrickXray {
 
         if let networkRequestsIgnoredExtensionsString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,
                                                                                                               namespace: pluginNameSpace) {
-            var extensions = networkRequestsIgnoredExtensionsString.components(separatedBy: ";").filter({ !$0.isEmpty })
+            let extensions = networkRequestsIgnoredExtensionsString.components(separatedBy: ";").filter({ !$0.isEmpty })
             
-            if extensions.isEmpty {
-                extensions = ["png", "jpeg", "jpg", "ts"]
-                _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,
-                                                                             value: extensions.joined(separator: ";"),
-                                                                             namespace: pluginNameSpace)
-            }
             settings.networkRequestsIgnoredExtensions = extensions
         }
 
