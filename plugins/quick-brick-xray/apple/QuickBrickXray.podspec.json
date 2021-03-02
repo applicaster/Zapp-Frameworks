@@ -1,6 +1,6 @@
 {
   "name": "QuickBrickXray",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "platforms": {
     "ios": "12.0"
   },
@@ -11,7 +11,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-xray/1.5.0"
+    "tag": "@@applicaster/quick-brick-xray/1.6.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
