@@ -25,6 +25,7 @@ public class NetworkRequestsManager {
 
     public static func startListening() {
         Sniffer.ignore(extensions: ignoredExtensions)
+        Sniffer.ignore(domains: ignoreDomains)
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
             switch logType {
             case .request:
@@ -59,5 +60,15 @@ public class NetworkRequestsManager {
             return defaultExtensions
         }
         return networkRequestsIgnoredExtensionsString.components(separatedBy: ";").filter({ !$0.isEmpty })
+    }
+
+    static var ignoreDomains: [String] {
+        let pluginNameSpace = "xray_logging_plugin"
+        let key = "networkRequestsIgnoredDomains"
+        guard let networkRequestsIgnoredDomainsString = FacadeConnector.connector?.storage?.localStorageValue(for: key,
+                                                                                                              namespace: pluginNameSpace) else {
+            return []
+        }
+        return networkRequestsIgnoredDomainsString.components(separatedBy: ";").filter({ !$0.isEmpty })
     }
 }
