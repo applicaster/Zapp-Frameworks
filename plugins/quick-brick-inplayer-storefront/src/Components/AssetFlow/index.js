@@ -19,7 +19,7 @@ import {
   purchaseAnItem,
   retrieveProducts,
   restore,
-  initialize,
+  initializxe,
 } from "../../Services/iAPService";
 
 import { inPlayerAssetId } from "../../Utils/PayloadUtils";

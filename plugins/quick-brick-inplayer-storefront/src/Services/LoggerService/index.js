@@ -1,6 +1,6 @@
 import XRayLogger from "@applicaster/quick-brick-xray";
 
-export const BaseSubsystem = "plugins/quick-brick-inplayer";
+export const BaseSubsystem = "plugins/quick-brick-inplayer-storefront";
 export const BaseCategories = {
   GENERAL: "general",
   LOCAL_STORAGE: "local_storage_wrapper",
@@ -12,11 +12,12 @@ export const BaseCategories = {
 let loggers = {};
 export const Subsystems = {
   ACCOUNT: `${BaseSubsystem}/account_flow`,
-  ASSET: `${BaseSubsystem}/asset_flow`,
+  ASSET_LOADER: `${BaseSubsystem}/asset_loader`,
+  STOREFRONT: `${BaseSubsystem}/storefront`,
+  STOREFRONT_VALIDATION: `${BaseSubsystem}/storefront_validation`,
 };
 
 export const AccountSubsystems = {
-  LOGIN: `${Subsystems.ACCOUNT}/login`,
   SIGN_UP: `${Subsystems.ACCOUNT}/signUp`,
   FORGOT_PASSWORD: `${Subsystems.ACCOUNT}/forgot_password`,
   SET_NEW_PASSWORD: `${Subsystems.ACCOUNT}/set_new_password`,
@@ -26,9 +27,6 @@ export const AccountSubsystems = {
 export const AssetSubsystems = {
   STOREFRONT: `${Subsystems.ASSET}/storefront`,
   POLICY: `${Subsystems.ASSET}/licence_policy`,
-};
-export const AssetCategories = {
-  GENERAL: "general",
 };
 
 export function createLogger({ category = "", subsystem }) {

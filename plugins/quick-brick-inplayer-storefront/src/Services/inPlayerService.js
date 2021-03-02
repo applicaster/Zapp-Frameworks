@@ -142,7 +142,8 @@ export async function checkAccessForAsset({
       })
       .send();
 
-    const asset = await InPlayer.Asset.checkAccessForAsset(assetId);
+    const axoisAsset = await InPlayer.Asset.checkAccessForAsset(assetId);
+    const asset = axoisAsset?.data;
     console.log({ asset });
     const src = getSrcFromAsset(asset);
     console.log({ src });

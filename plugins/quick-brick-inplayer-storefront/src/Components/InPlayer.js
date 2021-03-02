@@ -1,8 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 
-import AccountFlow from "./AccountFlow";
 import AssetFlow from "./AssetFlow";
-import LogoutFlow from "./LogoutFlow";
 import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -21,7 +19,7 @@ import {
 import InPlayerSDK from "@inplayer-org/inplayer.js";
 
 import { showAlert } from "../Utils/Account";
-import { setConfig } from "../Services/inPlayerService";
+import { setConfig, isAuthenticated } from "../Services/inPlayerService";
 import {
   getStyles,
   isHomeScreen,
@@ -58,13 +56,10 @@ const InPlayer = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
     PLAYER_HOOK: "PlayerHook",
-    SCREEN_HOOK: "ScreenHook",
-    USER_ACCOUNT: "UserAccount",
   };
 
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
-  const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
@@ -109,10 +104,9 @@ const InPlayer = (props) => {
 
   const setupEnvironment = async () => {
     const {
-      configuration: { in_player_environment },
+      configuration: { in_player_environment, in_player_client_id },
     } = props;
-    const token = await localStorageGet(localStorageTokenKey);
-    setIdtoken(token);
+    const token = await isAuthenticated(in_player_client_id);
 
     logger
       .createEvent()
@@ -126,7 +120,7 @@ const InPlayer = (props) => {
     let event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
     if (payload) {
-      const authenticationRequired = isAuthenticationRequired({ payload });
+      setIsUserAuthenticated(authenticationRequired);
       const assetId = inPlayerAssetId({
         payload,
         configuration: props.configuration,
@@ -137,7 +131,7 @@ const InPlayer = (props) => {
         inplayer_asset_id: assetId,
       });
 
-      if (authenticationRequired || assetId) {
+      if (assetId) {
         event
           .setMessage(`Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`)
           .addData({
@@ -152,24 +146,6 @@ const InPlayer = (props) => {
           )
           .send();
         callback && callback({ success: true, error: null, payload });
-      }
-    } else {
-      if (!isHook(navigator)) {
-        event
-          .setMessage(`Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`)
-          .addData({
-            hook_type: HookTypeData.USER_ACCOUNT,
-          })
-          .send();
-        stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
-      } else {
-        event
-          .setMessage(`Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`)
-          .addData({
-            hook_type: HookTypeData.SCREEN_HOOK,
-          })
-          .send();
-        stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
       }
     }
     return () => {
@@ -201,44 +177,8 @@ const InPlayer = (props) => {
       });
   };
 
-  const accountFlowCallback = async ({ success }) => {
-    let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
-
-    const event = logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({ success, payload, hook_type: hookType });
-
-    if (success) {
-      const token = await localStorageGet(localStorageTokenKey);
-      event.addData({ token });
-    }
-
-    if (hookType === HookTypeData.SCREEN_HOOK && success) {
-      const { callback } = props;
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-      callback && callback({ success, error: null, payload: payload });
-    } else if (hookType === HookTypeData.PLAYER_HOOK) {
-      if (success) {
-        event.setMessage(`${eventMessage}, next: Asset Flow`).send();
-        stillMounted && setIsUserAuthenticated(true);
-      } else {
-        event.setMessage(`${eventMessage}, plugin finished task`).send();
-        callback && callback({ success, error: null, payload: payload });
-      }
-    } else if (hookType === HookTypeData.USER_ACCOUNT) {
-      event.setMessage(`${eventMessage}, plugin finished task: go back`).send();
-      navigator.goBack();
-    } else {
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-
-      callback && callback({ success: success, error: null, payload: payload });
-    }
-  };
-
   const renderPlayerHook = () => {
-    console.log({ isUserAuthenticated });
-    return isUserAuthenticated ? (
+    return (
       <AssetFlow
         setParentLockWasPresented={setParentLockWasPresented}
         parentLockWasPresented={parentLockWasPresented}
@@ -248,48 +188,7 @@ const InPlayer = (props) => {
         screenLocalizations={screenLocalizations}
         {...props}
       />
-    ) : (
-      <AccountFlow
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        accountFlowCallback={accountFlowCallback}
-        backButton={!isHomeScreen(navigator)}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
     );
-  };
-
-  const renderScreenHook = () => {
-    return (
-      <AccountFlow
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        accountFlowCallback={accountFlowCallback}
-        backButton={!isHomeScreen(navigator)}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
-  };
-
-  const renderLogoutScreen = () => {
-    return (
-      <LogoutFlow
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
-  };
-
-  const renderUACFlow = () => {
-    console.log("renderUACFlow", { idToken });
-    return idToken ? renderLogoutScreen() : renderScreenHook();
   };
 
   const shouldShowParentLock = (parentLockWasPresented) =>
@@ -299,10 +198,6 @@ const InPlayer = (props) => {
     switch (hookType) {
       case HookTypeData.PLAYER_HOOK:
         return renderPlayerHook();
-      case HookTypeData.SCREEN_HOOK:
-        return renderScreenHook();
-      case HookTypeData.USER_ACCOUNT:
-        return renderUACFlow();
       case HookTypeData.UNDEFINED:
         return null;
     }
