@@ -81,14 +81,14 @@ public class EventsBus {
     }
 
     public static func subscribe(_ target: AnyObject,
-                                 name: String,
+                                 name type: String,
                                  sender: Any? = nil,
                                  source: String? = nil,
                                  subject: String? = nil,
                                  handler: @escaping ((Notification?) -> Void)) {
         let id = UInt(bitPattern: ObjectIdentifier(target))
 
-        let notificationNames = shared.notificationNames(withType: name, subject: subject, source: source)
+        let notificationNames = shared.notificationNames(withType: type, subject: subject, source: source)
         for notificationName in notificationNames {
             let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: notificationName),
                                                                   object: sender,
@@ -107,7 +107,10 @@ public class EventsBus {
 
         shared.logger?.debugLog(message: EventsBusLogs.subscribed.message,
                                 category: EventsBusLogs.subscribed.category,
-                                data: ["topic": name])
+                                data: ["topic": type,
+                                       "target": String(describing: shared.getType(of: target)),
+                                       "subject": subject ?? "",
+                                       "source": source ?? ""])
     }
 
     public static func unsubscribe(_ target: AnyObject) {
@@ -154,8 +157,10 @@ public class EventsBus {
 
         shared.logger?.debugLog(message: EventsBusLogs.unsubscribed.message,
                                 category: EventsBusLogs.unsubscribed.category,
-                                data: ["notification_names": notificationNames,
-                                       "target": String(describing: shared.getType(of: target))])
+                                data: ["topic": type,
+                                       "target": String(describing: shared.getType(of: target)),
+                                       "subject": subject ?? "",
+                                       "source": source ?? ""])
     }
 
     func notificationNames(from event: Event, isStrict: Bool = true) -> [String] {
@@ -171,7 +176,7 @@ public class EventsBus {
         }
         
         if let subject = subject {
-            notificationName += "." + subject
+            notificationName += "." + subject.md5()
             if isStrict == false { //add notification name for subject
                 notificationNames.append(notificationName)
             }
