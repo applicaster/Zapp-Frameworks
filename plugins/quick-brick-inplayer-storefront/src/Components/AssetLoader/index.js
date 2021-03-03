@@ -1,8 +1,5 @@
 import { createLogger, Subsystems } from "../../Services/LoggerService";
-import {
-  checkAccessForAsset,
-  getAccessFees,
-} from "../../Services/inPlayerService";
+import { checkAccessForAsset, getAccessFees } from "./Services/InPlayerService";
 import { isWebBasedPlatform } from "../../Utils/Platform";
 
 import {
