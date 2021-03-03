@@ -131,40 +131,29 @@ export async function checkAccessForAsset({
   tries = 5,
 }) {
   try {
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Asset.checkAccessForAsset >> inplayer_asset_id: ${assetId}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `InPlayer.Asset.checkAccessForAsset >> inplayer_asset_id: ${assetId}`,
+      data: {
         inplayer_asset_id: assetId,
-      })
-      .send();
+      },
+    });
 
     const axoisAsset = await InPlayer.Asset.checkAccessForAsset(assetId);
     const asset = axoisAsset?.data;
-    console.log({ asset });
     const src = getSrcFromAsset(asset);
-    console.log({ src });
 
     const cookies = getCookiesFromAsset(asset);
-    console.log({ cookies });
 
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Asset.checkAccessForAsset Completed >> inplayer_asset_id: ${assetId} >> title: ${asset?.title} src: ${src}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `InPlayer.Asset.checkAccessForAsset Completed >> inplayer_asset_id: ${assetId} >> title: ${asset?.title} src: ${src}`,
+      data: {
         inplayer_asset_id: assetId,
         inplayer_asset: asset,
         src,
         cookies,
         inplayer_asset_content: getInPlayerContent(asset),
-      })
-      .send();
+      },
+    });
 
     return { asset, src, cookies };
   } catch (error) {
@@ -179,17 +168,18 @@ export async function checkAccessForAsset({
       await new Promise((r) => setTimeout(r, interval));
       const newInterval = interval * 2;
       const newTries = tries - 1;
-      event
-        .setMessage(
-          `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL} >> retry to load`
-        )
-        .setLevel(XRayLogLevel.debug)
-        .addData({
+
+      logger.debug({
+        message: `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL} >> retry to load`,
+        data: {
           inplayer_asset_id: assetId,
           interval: newInterval,
           tries: newTries,
-        })
-        .send();
+          response: error?.response,
+          is_purchase_required: false,
+          error,
+        },
+      });
 
       return await checkAccessForAsset({
         assetId,
@@ -201,24 +191,27 @@ export async function checkAccessForAsset({
       const isPurchaseRequired = assetPaymentRequired(error);
 
       if (isPurchaseRequired) {
-        event
-          .addData({
+        logger.debug({
+          message: `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`,
+          data: {
             is_purchase_required: isPurchaseRequired,
-          })
-          .setMessage(
-            `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`
-          )
-          .setLevel(XRayLogLevel.debug)
-          .send();
+
+            response: error?.response,
+            is_purchase_required: false,
+            error,
+          },
+        });
 
         throw { ...error, requestedToPurchase: isPurchaseRequired };
       }
-      event
-        .setMessage(
-          `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}`
-        )
-        .setLevel(XRayLogLevel.error)
-        .send();
+      logger.error({
+        message: `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}`,
+        data: {
+          response: error?.response,
+          is_purchase_required: false,
+          error,
+        },
+      });
       throw error;
     }
   }
@@ -226,45 +219,34 @@ export async function checkAccessForAsset({
 
 export async function getAccessFees(assetId) {
   try {
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Asset.getAssetAccessFees >> inplayer_asset_id: ${assetId}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `InPlayer.Asset.getAssetAccessFees >> inplayer_asset_id: ${assetId}`,
+      data: {
         inplayer_asset_id: assetId,
-      })
-      .send();
+      },
+    });
 
     const retVal = await InPlayer.Asset.getAssetAccessFees(assetId);
     const data = retVal?.data;
     console.log({ acessFeesResult: data });
     const descriptions = R.map(R.prop("description"))(data);
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fees_count: ${data.length}, fee_descriptions: ${descriptions}`
-      )
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    logger.debug({
+      message: `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fees_count: ${data.length}, fee_descriptions: ${descriptions}`,
+      data: {
         inplayer_asset_access_fees: data,
         inplayer_asset_id: assetId,
-      })
-      .send();
+      },
+    });
     return data;
   } catch (error) {
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Asset.getAssetAccessFees Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, inplayer_asset_id: ${assetId}`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer.Asset.getAssetAccessFees Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, inplayer_asset_id: ${assetId}`,
+      data: {
         inplayer_asset_id: assetId,
         error,
-      })
-      .send();
+      },
+    });
+
     throw error;
   }
 }

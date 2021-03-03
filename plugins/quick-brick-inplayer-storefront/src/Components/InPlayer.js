@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 
-import AssetFlow from "./AssetFlow";
+import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -17,7 +17,7 @@ import {
   isAuthenticationRequired,
 } from "../Utils/PayloadUtils";
 import InPlayerSDK from "@inplayer-org/inplayer.js";
-
+import LoadingScreen from "./LoadingScreen";
 import { showAlert } from "../Utils/Account";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
 import {
@@ -33,6 +33,7 @@ import {
   XRayLogLevel,
   addContext,
 } from "../Services/LoggerService";
+import { useSelector } from "react-redux";
 
 export const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -53,6 +54,8 @@ const localStorageTokenKey = "in_player_token";
 const userAccountStorageTokenKey = "idToken";
 
 const InPlayer = (props) => {
+  const { store } = useSelector(R.prop("appData"));
+
   const HookTypeData = {
     UNDEFINED: "Undefined",
     PLAYER_HOOK: "PlayerHook",
@@ -61,7 +64,6 @@ const InPlayer = (props) => {
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
@@ -104,9 +106,10 @@ const InPlayer = (props) => {
 
   const setupEnvironment = async () => {
     const {
+      payload,
       configuration: { in_player_environment, in_player_client_id },
     } = props;
-    const token = await isAuthenticated(in_player_client_id);
+    const isUserAuthenticated = await isAuthenticated(in_player_client_id);
 
     logger
       .createEvent()
@@ -118,27 +121,30 @@ const InPlayer = (props) => {
     setConfig(in_player_environment);
 
     let event = logger.createEvent().setLevel(XRayLogLevel.debug);
-
+    // Add try catch
     if (payload) {
-      setIsUserAuthenticated(authenticationRequired);
-      const assetId = inPlayerAssetId({
+      const assetId = await inPlayerAssetId({
         payload,
         configuration: props.configuration,
       });
 
+      const authenticationRequired = isAuthenticationRequired({ payload });
+      console.log("Before", { assetId, authenticationRequired });
       event.addData({
-        authentication_required: authenticationRequired,
         inplayer_asset_id: assetId,
       });
-
-      if (assetId) {
-        event
-          .setMessage(`Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`)
-          .addData({
-            hook_type: HookTypeData.PLAYER_HOOK,
-          })
-          .send();
-        stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
+      console.log({
+        isUserAuthenticated,
+        assetId,
+        payload,
+        props,
+        configuration: props.configuration,
+      });
+      console.log({ authenticationRequired, isUserAuthenticated, assetId });
+      if (authenticationRequired && isUserAuthenticated && assetId) {
+        const result = await assetLoader({ props, assetId, store });
+        console.log("assetLoader", { result });
+        //callback && callback({ success: !!result, error: null, payload });
       } else {
         event
           .setMessage(
@@ -178,8 +184,9 @@ const InPlayer = (props) => {
   };
 
   const renderPlayerHook = () => {
+    console.log("REnderPlayer hhook");
     return (
-      <AssetFlow
+      <AssetLoader
         setParentLockWasPresented={setParentLockWasPresented}
         parentLockWasPresented={parentLockWasPresented}
         shouldShowParentLock={shouldShowParentLock}
@@ -203,7 +210,7 @@ const InPlayer = (props) => {
     }
   };
 
-  return renderFlow();
+  return <LoadingScreen />;
 };
 
 export default InPlayer;

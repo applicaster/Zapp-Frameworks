@@ -37,14 +37,12 @@ import MESSAGES from "./Config";
 import {
   createLogger,
   Subsystems,
-  AssetCategories,
   XRayLogLevel,
 } from "../../Services/LoggerService";
 import { useToggleNavBar } from "../../Utils/Hooks";
 
 export const logger = createLogger({
   subsystem: Subsystems.ASSET,
-  category: AssetCategories.GENERAL,
 });
 
 const isAndroid = Platform.OS === "android";

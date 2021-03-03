@@ -5,7 +5,7 @@ import {
   BaseCategories,
   XRayLogLevel,
 } from "../../Services/LoggerService";
-
+import { getAssetByExternalId } from "../../Services/inPlayerService";
 export const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.PAYLOAD_HELPER,
@@ -64,7 +64,7 @@ export const isAuthenticationRequired = ({ payload }) => {
   return requires_authentication;
 };
 
-export const inPlayerAssetId = ({ payload, configuration }) => {
+export async function inPlayerAssetId({ payload, configuration }) {
   let eventMessage = "inplayer_asset_id from payload:";
   const event = logger.createEvent().setLevel(XRayLogLevel.debug);
 
@@ -72,6 +72,8 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
     payload,
     configuration,
   });
+
+  console.log({ assetIdFromCustomKey, payload, configuration });
 
   if (assetIdFromCustomKey) {
     event
@@ -84,6 +86,8 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
   }
 
   const assetId = R.path(["extensions", "inplayer_asset_id"])(payload);
+  console.log({ assetId });
+
   if (assetId) {
     event
       .addData({ inplayer_asset_id: assetId })
@@ -108,9 +112,14 @@ export const inPlayerAssetId = ({ payload, configuration }) => {
     .addData({ inplayer_asset_id: assetIdFallback })
     .setMessage(eventMessage)
     .send();
-
-  return assetIdFallback;
-};
+  if (assetIdFallback) {
+    console.log({ assetIdFallback });
+    return;
+  }
+  const assetIdFromExternalID = await getAssetByExternalId(payload);
+  console.log({ assetIdFromExternalID, getAssetByExternalId });
+  return assetIdFromExternalID;
+}
 
 const inPlayerAssetIdFromCustomKey = ({ payload, configuration }) => {
   const in_player_custom_asset_key = configuration?.in_player_custom_asset_key;
