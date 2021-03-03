@@ -28,7 +28,7 @@ public class EventsBus {
         var content: [AnyHashable: Any] {
             return ["event": self]
         }
-        
+
         lazy var timeString: String = {
             var dateFormatter = DateFormatter()
             let format = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -59,44 +59,58 @@ public class EventsBus {
     lazy var cache = [UInt: [NamedObserver]]()
 
     public static func post(_ event: Event) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: event.type),
-                                        object: nil,
-                                        userInfo: event.content)
+        for notificationName in shared.notificationNames(from: event, isStrict: false) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: notificationName),
+                                            object: nil,
+                                            userInfo: event.content)
+        }
     }
 
-    @discardableResult
     public static func subscribe(_ target: AnyObject,
                                  topic: EventsBusTopic,
                                  sender: Any? = nil,
-                                 handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
-        subscribe(target, name: topic.description, sender: sender, handler: handler)
+                                 source: String? = nil,
+                                 subject: String? = nil,
+                                 handler: @escaping ((Notification?) -> Void)) {
+        subscribe(target,
+                  name: topic.description,
+                  sender: sender,
+                  source: source,
+                  subject: subject,
+                  handler: handler)
     }
-    
-    @discardableResult
-    public static func subscribe(_ target: AnyObject,
-                                 name: String,
-                                 sender: Any? = nil,
-                                 handler: @escaping ((Notification?) -> Void)) -> NSObjectProtocol {
-        let id = UInt(bitPattern: ObjectIdentifier(target))
-        let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: name),
-                                                              object: sender,
-                                                              queue: OperationQueue.main,
-                                                              using: handler)
-        let namedObserver = NamedObserver(observer: observer, name: name)
 
-        shared.queue.sync {
-            if let namedObservers = shared.cache[id] {
-                shared.cache[id] = namedObservers + [namedObserver]
-            } else {
-                shared.cache[id] = [namedObserver]
+    public static func subscribe(_ target: AnyObject,
+                                 name type: String,
+                                 sender: Any? = nil,
+                                 source: String? = nil,
+                                 subject: String? = nil,
+                                 handler: @escaping ((Notification?) -> Void)) {
+        let id = UInt(bitPattern: ObjectIdentifier(target))
+
+        let notificationNames = shared.notificationNames(withType: type, subject: subject, source: source)
+        for notificationName in notificationNames {
+            let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: notificationName),
+                                                                  object: sender,
+                                                                  queue: OperationQueue.main,
+                                                                  using: handler)
+            let namedObserver = NamedObserver(observer: observer, name: notificationName)
+
+            shared.queue.sync {
+                if let namedObservers = shared.cache[id] {
+                    shared.cache[id] = namedObservers + [namedObserver]
+                } else {
+                    shared.cache[id] = [namedObserver]
+                }
             }
         }
 
         shared.logger?.debugLog(message: EventsBusLogs.subscribed.message,
                                 category: EventsBusLogs.subscribed.category,
-                                data: ["topic": name])
-
-        return observer
+                                data: ["topic": type,
+                                       "target": String(describing: shared.getType(of: target)),
+                                       "subject": subject ?? "",
+                                       "source": source ?? ""])
     }
 
     public static func unsubscribe(_ target: AnyObject) {
@@ -116,26 +130,72 @@ public class EventsBus {
                                 data: ["target": String(describing: type(of: target))])
     }
 
-    public static func unsubscribe(_ target: AnyObject, name: String) {
+    public static func unsubscribe(_ target: AnyObject,
+                                   type: String,
+                                   source: String? = nil,
+                                   subject: String? = nil) {
         let id = UInt(bitPattern: ObjectIdentifier(target))
         let center = NotificationCenter.default
+        let notificationNames = shared.notificationNames(withType: type,
+                                                         subject: subject,
+                                                         source: source)
 
         shared.queue.sync {
             if let namedObservers = shared.cache[id] {
-                shared.cache[id] = namedObservers.filter({ (namedObserver: NamedObserver) -> Bool in
-                    if namedObserver.name == name {
-                        center.removeObserver(namedObserver.observer)
-                        return false
-                    } else {
-                        return true
-                    }
-                })
+                for name in notificationNames {
+                    shared.cache[id] = namedObservers.filter({ (namedObserver: NamedObserver) -> Bool in
+                        if namedObserver.name == name {
+                            center.removeObserver(namedObserver.observer)
+                            return false
+                        } else {
+                            return true
+                        }
+                    })
+                }
             }
         }
 
         shared.logger?.debugLog(message: EventsBusLogs.unsubscribed.message,
                                 category: EventsBusLogs.unsubscribed.category,
-                                data: ["name": name,
-                                       "target": String(describing: type(of: target))])
+                                data: ["topic": type,
+                                       "target": String(describing: shared.getType(of: target)),
+                                       "subject": subject ?? "",
+                                       "source": source ?? ""])
+    }
+
+    func notificationNames(from event: Event, isStrict: Bool = true) -> [String] {
+        return notificationNames(withType: event.type, subject: event.subject, source: event.source, isStrict: isStrict)
+    }
+
+    func notificationNames(withType type: String, subject: String? = nil, source: String? = nil, isStrict: Bool = true) -> [String] {
+        var notificationNames: [String] = []
+        var notificationName = type
+        
+        if isStrict == false { //add notification name for type only
+            notificationNames.append(notificationName)
+        }
+        
+        if let subject = subject {
+            notificationName += "." + subject.md5()
+            if isStrict == false { //add notification name for subject
+                notificationNames.append(notificationName)
+            }
+        }
+        
+        if let source = source {
+            notificationName += "." + source.md5()
+            notificationNames.append(notificationName)
+        }
+        
+        //add built notification name if not added
+        if notificationNames.contains(notificationName) == false {
+            notificationNames.append(notificationName)
+        }
+        
+        return notificationNames
+    }
+
+    func getType(of target: AnyObject) -> String {
+        return String(describing: type(of: target))
     }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2021 Applicaster LTD. All rights reserved.
 //
 
-let eventsBusNamePrefix = "c71a8e9f-188a-4596-8b84-f5a9e51d7d9a."
+let eventsBusNamePrefix = "eventsBus."
 
 public enum EventsBusTopicTypes {
     case undefined
