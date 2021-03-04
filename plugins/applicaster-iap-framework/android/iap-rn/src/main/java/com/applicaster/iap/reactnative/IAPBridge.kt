@@ -54,18 +54,20 @@ class IAPBridge(reactContext: ReactApplicationContext)
 
     @ReactMethod
     fun initialize(vendor: String, result: Promise) {
-        APLogger.debug(TAG, "Initializing Billing client for $vendor")
-        api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
-        api.init(reactApplicationContext, object : InitializationListener {
-            override fun onSuccess() {
-                APLogger.debug(TAG, "Billing client initialized")
-                result.resolve(true)
-            }
-            override fun onBillingClientError(billingResult: IBillingAPI.IAPResult, description: String) {
-                APLogger.error(TAG, "Billing client initialization failed $description")
-                result.reject(billingResult.toString(), description)
-            }
-        })
+        reactApplicationContext.runOnUiQueueThread {
+            APLogger.debug(TAG, "Initializing Billing client for $vendor")
+            api = IBillingAPI.create(IBillingAPI.Vendor.valueOf(vendor))
+            api.init(reactApplicationContext, object : InitializationListener {
+                override fun onSuccess() {
+                    APLogger.debug(TAG, "Billing client initialized")
+                    result.resolve(true)
+                }
+                override fun onBillingClientError(billingResult: IBillingAPI.IAPResult, description: String) {
+                    APLogger.error(TAG, "Billing client initialization failed $description")
+                    result.reject(billingResult.toString(), description)
+                }
+            })
+        }
     }
 
     @ReactMethod
@@ -73,7 +75,9 @@ class IAPBridge(reactContext: ReactApplicationContext)
         val productIds = identifiers.toArrayList().map {
             unwrapProductIdentifier(it as HashMap<String, String>)
         }.toMap()
-        api.loadSkuDetailsForAllTypes(productIds, SKUPromiseListener(result, skuDetailsMap))
+        reactApplicationContext.runOnUiQueueThread {
+            api.loadSkuDetailsForAllTypes(productIds, SKUPromiseListener(result, skuDetailsMap))
+        }
     }
 
     /**
@@ -95,10 +99,12 @@ class IAPBridge(reactContext: ReactApplicationContext)
             } else {
                 PurchasePromiseListener(this, result, identifier)
             }
-            api.purchase(
-                    reactApplicationContext.currentActivity!!,
-                    PurchaseRequest(identifier),
-                    listener)
+            reactApplicationContext.runOnUiQueueThread {
+                api.purchase(
+                        reactApplicationContext.currentActivity!!,
+                        PurchaseRequest(identifier),
+                        listener)
+            }
         }
     }
 
@@ -107,7 +113,9 @@ class IAPBridge(reactContext: ReactApplicationContext)
      */
     @ReactMethod
     fun restore(result: Promise) {
-        api.restorePurchasesForAllTypes(RestorePromiseListener(result))
+        reactApplicationContext.runOnUiQueueThread {
+            api.restorePurchasesForAllTypes(RestorePromiseListener(result))
+        }
     }
 
     /**
@@ -119,18 +127,22 @@ class IAPBridge(reactContext: ReactApplicationContext)
         val productType = transaction.getString("productType")!!
         val transactionIdentifier = transaction.getString("transactionIdentifier")!!
         val skuType = skuType(productType)
-        acknowledge(identifier, transactionIdentifier, skuType, result)
+        reactApplicationContext.runOnUiQueueThread {
+            acknowledge(identifier, transactionIdentifier, skuType, result)
+        }
     }
 
     fun acknowledge(identifier: String,
                     transactionIdentifier: String,
                     skuType: IBillingAPI.SkuType,
                     listener: PromiseListener) {
-        if (IBillingAPI.SkuType.consumable == skuType) {
-            api.consume(transactionIdentifier, listener)
-        } else if (IBillingAPI.SkuType.subscription == skuType ||
-                IBillingAPI.SkuType.nonConsumable == skuType) {
-            api.acknowledge(transactionIdentifier, listener)
+        reactApplicationContext.runOnUiQueueThread {
+            if (IBillingAPI.SkuType.consumable == skuType) {
+                api.consume(transactionIdentifier, listener)
+            } else if (IBillingAPI.SkuType.subscription == skuType ||
+                    IBillingAPI.SkuType.nonConsumable == skuType) {
+                api.acknowledge(transactionIdentifier, listener)
+            }
         }
     }
 
