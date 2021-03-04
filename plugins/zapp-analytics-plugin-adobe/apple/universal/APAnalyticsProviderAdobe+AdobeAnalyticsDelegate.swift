@@ -18,11 +18,11 @@ extension APAnalyticsProviderAdobe: AdobeAnalyticsDelegate {
         return Bool(value) ?? false
     }
 
-    public func getDeviceID() -> String! {
+    public func getDeviceID() -> String? {
         return FacadeConnector.connector?.storage?.sessionStorageValue(for: "uuid", namespace: nil) ?? ""
     }
 
-    public func getCurrentPlayedItemEntry() -> [AnyHashable: Any] {
+    public func getCurrentPlayedItemEntry() -> [AnyHashable: Any]? {
         return playerPlugin?.entry ?? [:]
     }
 
