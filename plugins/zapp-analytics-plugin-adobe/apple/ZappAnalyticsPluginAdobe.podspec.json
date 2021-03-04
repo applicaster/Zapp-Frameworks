@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginAdobe",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0"
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-adobe/1.2.1"
+    "tag": "@@applicaster/zapp-analytics-plugin-adobe/1.2.2"
   },
   "requires_arc": true,
   "public_header_files": "universal/**/*.h",
