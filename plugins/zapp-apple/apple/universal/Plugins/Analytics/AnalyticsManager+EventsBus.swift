@@ -20,8 +20,7 @@ extension AnalyticsManager {
 
     func subscribeToEventsBus() {
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics),
-                            subject: EventsBusAnalyticsTopicSubjects.sendEvent.rawValue,
+                            type: EventsBusType(.analytics(.sendEvent)),
                             handler: { content in
                                 guard let eventDetails = self.getEventDetails(from: content) else {
                                     return
@@ -31,8 +30,7 @@ extension AnalyticsManager {
                             })
 
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics),
-                            subject: EventsBusAnalyticsTopicSubjects.sendScreenEvent.rawValue,
+                            type: EventsBusType(.analytics(.sendScreenEvent)),
                             handler: { content in
                                 guard let eventDetails = self.getEventDetails(from: content) else {
                                     return
@@ -42,8 +40,7 @@ extension AnalyticsManager {
                             })
 
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics),
-                            subject: EventsBusAnalyticsTopicSubjects.startObserveTimedEvent.rawValue,
+                            type: EventsBusType(.analytics(.startObserveTimedEvent)),
                             handler: { content in
                                 guard let eventDetails = self.getEventDetails(from: content) else {
                                     return
@@ -53,8 +50,7 @@ extension AnalyticsManager {
                             })
 
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics),
-                            subject: EventsBusAnalyticsTopicSubjects.stopObserveTimedEvent.rawValue,
+                            type: EventsBusType(.analytics(.stopObserveTimedEvent)),
                             handler: { content in
                                 guard let eventDetails = self.getEventDetails(from: content) else {
                                     return
@@ -64,8 +60,7 @@ extension AnalyticsManager {
                             })
 
         EventsBus.subscribe(self,
-                            topic: EventsBusTopic(type: .analytics),
-                            subject: EventsBusAnalyticsTopicSubjects.trackURL.rawValue,
+                            type: EventsBusType(.analytics(.trackURL)),
                             handler: { content in
                                 guard let eventDetails = self.getEventDetails(from: content) else {
                                     return
