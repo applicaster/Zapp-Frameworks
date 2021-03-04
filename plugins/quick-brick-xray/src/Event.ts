@@ -13,7 +13,7 @@ export class Event implements XRayEventI {
   level: XRayLogLevel;
   message: string;
   data: AnyDictionary;
-  error?: Error;
+  exception?: Error;
   jsOnly?: boolean;
 
   constructor(logger: XRayLoggerI) {
@@ -21,7 +21,7 @@ export class Event implements XRayEventI {
     this.level = XRayLogLevel.verbose;
     this.message = "";
     this.data = {};
-    this.error = null;
+    this.exception = null;
   }
 
   setLevel(level: XRayLogLevel): this {
@@ -40,7 +40,7 @@ export class Event implements XRayEventI {
   }
 
   attachError(error: Error): this {
-    this.error = error;
+    this.exception = error;
     return this;
   }
 
@@ -50,11 +50,16 @@ export class Event implements XRayEventI {
   }
 
   send(): void {
-    this.logger[loggerMethods[this.level]]({
+    const event = {
       message: this.message,
       data: this.data,
       context: this.logger.context,
-      error: this.error,
-    });
+    } as XRayEventData;
+
+    if (this.level === XRayLogLevel.error) {
+      event.exception = this.exception;
+    }
+
+    this.logger[loggerMethods[this.level]](event);
   }
 }
