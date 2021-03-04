@@ -36,11 +36,11 @@ public class EventsBus {
             return dateFormatter.string(from: time)
         }()
 
-        public init(topic: EventsBusTopic,
+        public init(type: EventsBusType,
                     source: String? = nil,
                     subject: String? = nil,
                     data: [AnyHashable: Any]) {
-            type = topic.description
+            self.type = type.description
             self.source = source
             self.subject = subject
             self.data = data
@@ -77,13 +77,13 @@ public class EventsBus {
     }
 
     public static func subscribe(_ target: AnyObject,
-                                 topic: EventsBusTopic,
+                                 type: EventsBusType,
                                  sender: Any? = nil,
                                  source: String? = nil,
                                  subject: String? = nil,
                                  handler: @escaping ((Notification?) -> Void)) {
         subscribe(target,
-                  type: topic.description,
+                  type: type.description,
                   sender: sender,
                   source: source,
                   subject: subject,
@@ -141,11 +141,11 @@ public class EventsBus {
     }
 
     public static func unsubscribe(_ target: AnyObject,
-                                   topic: EventsBusTopic,
+                                   type: EventsBusType,
                                    source: String? = nil,
                                    subject: String? = nil) {
         unsubscribe(target,
-                    type: topic.description,
+                    type: type.description,
                     source: source,
                     subject: subject)
     }

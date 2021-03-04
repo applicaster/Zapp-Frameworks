@@ -1,5 +1,5 @@
 //
-//  EventsBusPredefinedEvents.swift
+//  EventsBusPredefinedTypes.swift
 //  ZappCore
 //
 //  Created by Alex Zchut on 14/02/2021.
@@ -8,24 +8,18 @@
 
 let eventsBusNamePrefix = "eventsBus."
 
-public enum EventsBusTopicTypes {
-    case undefined
-    case reachabilityChanged
-    case analytics
-}
+public class EventsBusType: CustomStringConvertible {
+    var type: EventsBusPredefinedType = .undefined
 
-public class EventsBusTopic: CustomStringConvertible {
-    var type: EventsBusTopicTypes = .undefined
-
-    public init(type: EventsBusTopicTypes) {
+    public init(_ type: EventsBusPredefinedType) {
         self.type = type
     }
 
     public var description: String {
         var result = eventsBusNamePrefix
         switch type {
-        case .analytics:
-            result += "analytics"
+        case let .analytics(value):
+            result += "analytics." + value.rawValue
         case .reachabilityChanged:
             result += "reachabilityChanged"
         default:
