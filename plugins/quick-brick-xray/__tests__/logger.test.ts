@@ -176,7 +176,7 @@ describe("logger", () => {
     expect(event).toMatchInlineSnapshot(`
       Event {
         "data": Object {},
-        "error": null,
+        "exception": null,
         "level": 0,
         "logger": Logger {
           "addContext": [Function],
@@ -436,7 +436,8 @@ describe("logger", () => {
               "data": Object {
                 "meaningOfLife": 42,
               },
-              "message": "Error:: this is a log",
+              "exception": "Error:: this is a log",
+              "message": "this is a log",
             },
           ],
         ]
@@ -471,8 +472,8 @@ describe("logger", () => {
               "context": Object {
                 "foo": "bar",
               },
-              "error": [Error: this is an error object],
-              "message": "Error:: this is an error object",
+              "exception": "Error:: this is an error object",
+              "message": "this is an error object",
             },
           ],
         ]

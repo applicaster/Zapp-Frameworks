@@ -1,11 +1,10 @@
+import { Event } from "./Event";
+
 type Predicate<T> = (arg: T) => boolean;
 type Transformer<T> = (arg: T) => any;
 type Condition = [Predicate<any>, Transformer<any>];
 type AnyArray = any[];
 type AnyObject = { [K in string]: any };
-type EventData = {
-  [K in "data" | "context"]?: any;
-};
 
 const REACT_COMPONENT_SYMBOL = "$$typeof";
 
@@ -27,6 +26,14 @@ function isFunction(value: any): boolean {
 
 function isObject(value: any): boolean {
   return typeof value === "object" && !Array.isArray(value) && value !== null;
+}
+
+function isError(prop: any): boolean {
+  try {
+    return prop?.constructor === Error || prop?.__proto__?.name === "Error";
+  } catch (e) {
+    return false;
+  }
 }
 
 function cond(conditions: Condition[]) {
@@ -77,17 +84,24 @@ export const applyConditions = cond([
   [isFunction, sanitizeFunction],
   [isReactClassComponent, sanitizeReactComponentClass],
   [Array.isArray, sanitizeArrayEntries],
+  [isError, (error) => error?.message as string],
   [isObject, sanitizeObjectProperties],
 ]);
 
-export function sanitizeEventPayload(event: EventData) {
+export function sanitizeEventPayload(event: XRayEvent) {
   try {
-    const { data = {} } = event;
+    const { data = {}, exception } = event;
 
-    return {
+    const nativeEvent = {
       ...event,
       data: applyConditions(wrapInObject(data, "data")),
     };
+
+    if (exception) {
+      nativeEvent.exception = applyConditions(exception);
+    }
+
+    return nativeEvent;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(
