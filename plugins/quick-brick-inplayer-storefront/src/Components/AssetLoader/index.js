@@ -7,6 +7,7 @@ import {
   retrieveInPlayerFeesData,
   isRequirePurchaseError,
 } from "./Helper";
+
 export const logger = createLogger({
   subsystem: Subsystems.ASSET_LOADER,
 });
@@ -18,6 +19,8 @@ export async function assetLoader({ props, assetId, store }) {
       "AssetLoader: No Required Data, assetID or payload not exist"
     );
   }
+  const { screenLocalizations } = props;
+
   try {
     const assetData = await checkAccessForAsset({
       assetId,
@@ -44,7 +47,7 @@ export async function assetLoader({ props, assetId, store }) {
         assetId,
         store,
       });
-      console.log({ inPlayerData });
+
       if (inPlayerData) {
         const newPayload = payload;
         newPayload.extensions.in_player_data = { ...inPlayerData, assetId };
@@ -54,7 +57,6 @@ export async function assetLoader({ props, assetId, store }) {
           ),
         };
 
-        console.log({ payload });
         return newPayload;
       }
       return null;
@@ -101,6 +103,7 @@ async function preparePurchaseData({ props, assetId, store }) {
       in_player_environment,
       store,
     });
+
     logger.debug({
       message: "preparePurchaseData: Purchase fee data",
       data: {

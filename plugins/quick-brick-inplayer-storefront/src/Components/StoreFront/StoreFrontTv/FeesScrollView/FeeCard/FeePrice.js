@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Label from "../../../../Label";
-import { mapKeyToStyle } from "../../../../../../Utils/Customization";
+import Label from "../../../../UIComponents/Label";
+import { mapKeyToStyle } from "../../../../../Utils/Customization";
 import PropTypes from "prop-types";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 45,
+    marginTop: 25,
   },
   text: {
     alignSelf: "center",
@@ -14,29 +14,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const FeeTitle = (props) => {
+const FeePrice = (props) => {
   const { paymentOptionItem, screenStyles } = props;
-  const { title } = paymentOptionItem;
+  const { price } = paymentOptionItem;
 
-  const feeTitle = title.toUpperCase();
+  const title = price.toUpperCase();
 
   const titleStyles = React.useMemo(
-    () => mapKeyToStyle("payment_option_title_text", screenStyles),
+    () => mapKeyToStyle("payment_option_fee_text", screenStyles),
     [screenStyles]
   );
   styles.text = React.useMemo(() => [styles.text, titleStyles], []);
 
-  return <Label styles={styles} title={feeTitle} />;
+  return <Label styles={styles} title={title} />;
 };
 
-FeeTitle.propTypes = {
+FeePrice.propTypes = {
   paymentOptionItem: PropTypes.object,
   screenStyles: PropTypes.object,
 };
 
-FeeTitle.defaultProps = {
+FeePrice.defaultProps = {
   paymentOptionItem: {},
   screenStyles: {},
 };
 
-export default FeeTitle;
+export default FeePrice;

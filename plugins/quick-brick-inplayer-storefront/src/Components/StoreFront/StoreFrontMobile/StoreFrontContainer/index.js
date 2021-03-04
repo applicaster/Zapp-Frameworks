@@ -1,12 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, Dimensions } from "react-native";
 import PropTypes from "prop-types";
-import PaymentOptionView from "../../../PaymentOptionView";
-import { container } from "../../../../Styles";
-import {
-  mapKeyToStyle,
-  withEndSpace,
-} from "../../../../../Utils/Customization";
+import PaymentOptionView from "../../../UIComponents/PaymentOptionView";
+import { container } from "../../../Styles";
+import { mapKeyToStyle, withEndSpace } from "../../../../Utils/Customization";
 
 const storefrontStyleKeys = [
   "payment_screen_title",
@@ -33,7 +30,7 @@ export default function StoreFrontContainer(props) {
     restoreTextStyle,
     restoreLinkStyle,
   ] = storefrontStyleKeys.map((key) => mapKeyToStyle(key, screenStyles));
-  console.log({ screenStyles });
+  console.log("Storefront", { props });
   return (
     <View
       style={[

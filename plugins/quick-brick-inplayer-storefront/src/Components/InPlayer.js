@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 
 import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
-
+import Storefront from "./Storefront";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import {
@@ -64,6 +64,7 @@ const InPlayer = (props) => {
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
+  const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
 
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
@@ -74,8 +75,7 @@ const InPlayer = (props) => {
 
   const { import_parent_lock: showParentLock } = screenStyles;
 
-  let stillMounted = true;
-
+  console.log({ screenStyles });
   useLayoutEffect(() => {
     InPlayerSDK.tokenStorage.overrides = {
       setItem: async function (
@@ -106,111 +106,96 @@ const InPlayer = (props) => {
 
   const setupEnvironment = async () => {
     const {
-      payload,
       configuration: { in_player_environment, in_player_client_id },
     } = props;
-    const isUserAuthenticated = await isAuthenticated(in_player_client_id);
 
-    logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .setMessage(`Starting InPlayer Plugin`)
-      .addData({ in_player_environment })
-      .send();
+    try {
+      const isUserAuthenticated = await isAuthenticated(in_player_client_id);
 
-    setConfig(in_player_environment);
-
-    let event = logger.createEvent().setLevel(XRayLogLevel.debug);
-    // Add try catch
-    if (payload) {
-      const assetId = await inPlayerAssetId({
-        payload,
-        configuration: props.configuration,
+      logger.debug({
+        message: "Starting InPlayer Storefront Plugin",
+        data: {
+          in_player_environment,
+          in_player_client_id,
+        },
       });
 
-      const authenticationRequired = isAuthenticationRequired({ payload });
-      console.log("Before", { assetId, authenticationRequired });
-      event.addData({
-        inplayer_asset_id: assetId,
-      });
-      console.log({
-        isUserAuthenticated,
-        assetId,
-        payload,
-        props,
-        configuration: props.configuration,
-      });
-      console.log({ authenticationRequired, isUserAuthenticated, assetId });
-      if (authenticationRequired && isUserAuthenticated && assetId) {
-        const result = await assetLoader({ props, assetId, store });
-        console.log("assetLoader", { result });
-        //callback && callback({ success: !!result, error: null, payload });
-      } else {
-        event
-          .setMessage(
-            "Data source not support InPlayer plugin invocation, finishing hook with: success"
-          )
-          .send();
-        callback && callback({ success: true, error: null, payload });
+      setConfig(in_player_environment);
+
+      if (payload) {
+        const assetId = await inPlayerAssetId({
+          payload,
+          configuration: props.configuration,
+        });
+
+        const authenticationRequired = isAuthenticationRequired({ payload });
+
+        console.log({
+          isUserAuthenticated,
+          assetId,
+          payload,
+          props,
+          configuration: props.configuration,
+        });
+        if (authenticationRequired && isUserAuthenticated && assetId) {
+          const payloadWithAsset = await assetLoader({ props, assetId, store });
+          logger.debug({
+            message: "Asset loader finished task",
+            data: {
+              in_player_environment,
+              in_player_client_id,
+              inplayer_asset_id: assetId,
+              payloadWithAsset,
+            },
+          });
+          if (R.isNil(payloadWithAsset?.extensions?.in_app_purchase_data)) {
+            callback &&
+              callback({ success: true, error: null, payloadWithAsset });
+          } else {
+            setPayloadWithPurchaseData(payloadWithAsset);
+          }
+        } else {
+          logger.debug({
+            message:
+              "Data source not support InPlayer plugin invocation, finishing hook with: success",
+            data: {
+              in_player_environment,
+              in_player_client_id,
+            },
+          });
+
+          callback && callback({ success: true, error: null, payload });
+        }
       }
-    }
-    return () => {
-      stillMounted = false;
-    };
-  };
+    } catch (error) {
+      if (error) {
+        const message = getMessageOrDefault(error, screenLocalizations);
 
-  const assetFlowCallback = ({ success, payload, error }) => {
-    let eventMessage = `Asset Flow completion: success ${success}`;
-    const event = logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({ payload, success });
+        logger.error({
+          message: "InPlayer Storefront Plugin Failed",
+          data: {
+            message,
+            error,
+          },
+        });
 
-    if (error) {
-      const message = getMessageOrDefault(error, screenLocalizations);
-      event.addData({ message, error }).setLevel(XRayLogLevel.error);
-      eventMessage = `${eventMessage} error:${message}`;
-      showAlert("General Error!", message);
-    }
-
-    event.setMessage(eventMessage).send();
-
-    callback &&
-      callback({
-        success,
-        error,
-        payload,
-      });
-  };
-
-  const renderPlayerHook = () => {
-    console.log("REnderPlayer hhook");
-    return (
-      <AssetLoader
-        setParentLockWasPresented={setParentLockWasPresented}
-        parentLockWasPresented={parentLockWasPresented}
-        shouldShowParentLock={shouldShowParentLock}
-        assetFlowCallback={assetFlowCallback}
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        {...props}
-      />
-    );
-  };
-
-  const shouldShowParentLock = (parentLockWasPresented) =>
-    !(parentLockWasPresented || !showParentLock);
-
-  const renderFlow = () => {
-    switch (hookType) {
-      case HookTypeData.PLAYER_HOOK:
-        return renderPlayerHook();
-      case HookTypeData.UNDEFINED:
-        return null;
+        eventMessage = `${eventMessage} error:${message}`;
+        showAlert("General Error!", message);
+      }
+      callback && callback({ success: false, error, payload });
     }
   };
-
-  return <LoadingScreen />;
+  console.log({ payloadWithPurchaseData });
+  return payloadWithPurchaseData ? (
+    <Storefront
+      {...props}
+      screenLocalizations={screenLocalizations}
+      screenStyles={screenStyles}
+      payload={payloadWithPurchaseData}
+    />
+  ) : (
+    <LoadingScreen />
+  );
 };
 
 export default InPlayer;

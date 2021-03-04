@@ -20,7 +20,10 @@ export default function Footer({ screenStyles, screenLocalizations }) {
         ellipsizeMode="tail"
       >
         {withEndSpace(screenLocalizations.terms_of_use_instructions_text)}
-        <OpenURLButton linkStyle={termsOfUseLinkStyle} url={screenLocalizations.terms_of_use_link}>
+        <OpenURLButton
+          linkStyle={termsOfUseLinkStyle}
+          url={screenLocalizations.terms_of_use_link}
+        >
           {screenLocalizations.terms_of_use_link_text}
         </OpenURLButton>
       </Text>

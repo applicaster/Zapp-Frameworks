@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Label from "../../Label";
-import { mapKeyToStyle } from "../../../../Utils/Customization";
+import Label from "../../UIComponents/Label";
+import { mapKeyToStyle } from "../../../Utils/Customization";
 import PropTypes from "prop-types";
 
 const styles = StyleSheet.create({
@@ -17,23 +17,22 @@ const styles = StyleSheet.create({
 });
 
 const PolicyAgreementTitle = (props) => {
-  const {
-    screenStyles,
-    screenLocalizations,
-  } = props;
+  const { screenStyles, screenLocalizations } = props;
 
   const fontStyles = React.useMemo(
     () => mapKeyToStyle("policy_agreement_text", screenStyles),
     [screenStyles]
   );
   styles.text = React.useMemo(() => [styles.text, fontStyles], []);
-  return <Label styles={styles} title={screenLocalizations.policy_agreement_text} />;
+  return (
+    <Label styles={styles} title={screenLocalizations.policy_agreement_text} />
+  );
 };
 
 PolicyAgreementTitle.propTypes = {
   screenStyles: PropTypes.object,
   screenLocalizations: PropTypes.shape({
-    policy_agreement_text: PropTypes.string
+    policy_agreement_text: PropTypes.string,
   }),
 };
 

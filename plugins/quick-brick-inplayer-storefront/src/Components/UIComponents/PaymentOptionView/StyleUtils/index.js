@@ -18,7 +18,7 @@ function getBoxStyles(screenStyles, isLandscape) {
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius,
+    borderRadius: borderRadius || 10,
   };
 }
 

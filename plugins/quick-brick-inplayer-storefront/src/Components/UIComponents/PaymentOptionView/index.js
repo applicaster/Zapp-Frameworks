@@ -42,7 +42,6 @@ function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
   const buttonStyle = getButtonStyle(radius, backgroundColor);
 
   const label = `${actionForLabel} for ${price}`.toUpperCase();
-
   return (
     <View style={getBoxStyles(screenStyles, isLandscape)}>
       <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">

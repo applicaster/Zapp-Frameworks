@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Label from "../../../Label";
+import Label from "../../../../UIComponents/Label";
 import { mapKeyToStyle } from "../../../../../Utils/Customization";
 import PropTypes from "prop-types";
 

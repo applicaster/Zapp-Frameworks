@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     marginBottom: 40,
+    backgroundColor: "red",
   },
   btnContainer: {
     position: "absolute",
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
 });
-
+console.log({ styles });
 export default function NavbarComponent({ buttonUrl, logoUrl, buttonAction }) {
   return (
     <View style={styles.navbar}>

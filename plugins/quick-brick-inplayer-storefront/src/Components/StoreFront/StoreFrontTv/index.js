@@ -8,14 +8,14 @@ import SubscriptionDescription from "./SubscriptionDescription";
 import EventDateTitle from "./EventDateTitle";
 import PolicyAgreementTitle from "./PolicyAgreementTitle";
 import FeesScrollView from "./FeesScrollView";
-import ClientLogo from "../../ClientLogo";
-import Button from "../../Buttons/FocusableButton";
-import ButtonUnderline from "../../Buttons/FocusableButtonUnderline";
-import { mapKeyToStyle } from "../../../../Utils/Customization";
+import ClientLogo from "../../UIComponents/ClientLogo";
+import Button from "../../UIComponents/Buttons/FocusableButton";
+import ButtonUnderline from "../../UIComponents/Buttons/FocusableButtonUnderline";
+import { mapKeyToStyle } from "../../../Utils/Customization";
 import {
   useBackHandler,
   androidOnlySetInitialFocus,
-} from "../../../../Utils/Hooks";
+} from "../../../Utils/Hooks";
 
 const StoreFrontTv = (props) => {
   const {
