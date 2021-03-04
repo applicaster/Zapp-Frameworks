@@ -45,7 +45,7 @@ public class EventsBus {
             self.subject = subject
             self.data = data
         }
-        
+
         public init(type: String,
                     source: String? = nil,
                     subject: String? = nil,
@@ -144,12 +144,12 @@ public class EventsBus {
                                    topic: EventsBusTopic,
                                    source: String? = nil,
                                    subject: String? = nil) {
-        self.unsubscribe(target,
-                         type: topic.description,
-                         source: source,
-                         subject: subject)
+        unsubscribe(target,
+                    type: topic.description,
+                    source: source,
+                    subject: subject)
     }
-    
+
     public static func unsubscribe(_ target: AnyObject,
                                    type: String,
                                    source: String? = nil,
@@ -190,28 +190,28 @@ public class EventsBus {
     func notificationNames(withType type: String, subject: String? = nil, source: String? = nil, isStrict: Bool = true) -> [String] {
         var notificationNames: [String] = []
         var notificationName = type
-        
-        if isStrict == false { //add notification name for type only
+
+        if isStrict == false { // add notification name for type only
             notificationNames.append(notificationName)
         }
-        
+
         if let subject = subject {
             notificationName += "." + subject.md5()
-            if isStrict == false { //add notification name for subject
+            if isStrict == false { // add notification name for subject
                 notificationNames.append(notificationName)
             }
         }
-        
+
         if let source = source {
             notificationName += "." + source.md5()
             notificationNames.append(notificationName)
         }
-        
-        //add built notification name if not added
+
+        // add built notification name if not added
         if notificationNames.contains(notificationName) == false {
             notificationNames.append(notificationName)
         }
-        
+
         return notificationNames
     }
 

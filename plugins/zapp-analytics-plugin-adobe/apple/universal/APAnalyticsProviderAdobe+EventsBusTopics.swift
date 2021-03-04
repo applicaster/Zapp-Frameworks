@@ -12,7 +12,7 @@ extension APAnalyticsProviderAdobe {
     func subscribeToEventsBusTopics() {
         EventsBus.subscribe(self,
                             type: "videoAdvertisementsOpportunity") { notification in
-            self.adobeAnalyticsObjc?.prepareVideoAdvertisementsOpportunity(notification, completion: { (eventName, parameters) in
+            self.adobeAnalyticsObjc?.prepareVideoAdvertisementsOpportunity(notification, completion: { eventName, parameters in
                 let trackParameters = parameters as? [String: NSObject] ?? [:]
                 self.trackEvent(eventName, parameters: trackParameters)
             })
@@ -20,11 +20,10 @@ extension APAnalyticsProviderAdobe {
 
         EventsBus.subscribe(self,
                             type: "watchVideoAdvertisements") { notification in
-            self.adobeAnalyticsObjc?.prepareWatchVideoAdvertisement(notification, completion: { (eventName, parameters) in
+            self.adobeAnalyticsObjc?.prepareWatchVideoAdvertisement(notification, completion: { eventName, parameters in
                 let trackParameters = parameters as? [String: NSObject] ?? [:]
                 self.trackEvent(eventName, parameters: trackParameters)
             })
         }
-        
     }
 }
