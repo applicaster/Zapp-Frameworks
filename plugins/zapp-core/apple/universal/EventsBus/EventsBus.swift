@@ -45,6 +45,16 @@ public class EventsBus {
             self.subject = subject
             self.data = data
         }
+        
+        public init(type: String,
+                    source: String? = nil,
+                    subject: String? = nil,
+                    data: [AnyHashable: Any]) {
+            self.type = type
+            self.source = source
+            self.subject = subject
+            self.data = data
+        }
     }
 
     static let shared = EventsBus()
@@ -73,7 +83,7 @@ public class EventsBus {
                                  subject: String? = nil,
                                  handler: @escaping ((Notification?) -> Void)) {
         subscribe(target,
-                  name: topic.description,
+                  type: topic.description,
                   sender: sender,
                   source: source,
                   subject: subject,
@@ -81,7 +91,7 @@ public class EventsBus {
     }
 
     public static func subscribe(_ target: AnyObject,
-                                 name type: String,
+                                 type: String,
                                  sender: Any? = nil,
                                  source: String? = nil,
                                  subject: String? = nil,
@@ -107,7 +117,7 @@ public class EventsBus {
 
         shared.logger?.debugLog(message: EventsBusLogs.subscribed.message,
                                 category: EventsBusLogs.subscribed.category,
-                                data: ["topic": type,
+                                data: ["type": type,
                                        "target": String(describing: shared.getType(of: target)),
                                        "subject": subject ?? "",
                                        "source": source ?? ""])
@@ -130,6 +140,16 @@ public class EventsBus {
                                 data: ["target": String(describing: type(of: target))])
     }
 
+    public static func unsubscribe(_ target: AnyObject,
+                                   topic: EventsBusTopic,
+                                   source: String? = nil,
+                                   subject: String? = nil) {
+        self.unsubscribe(target,
+                         type: topic.description,
+                         source: source,
+                         subject: subject)
+    }
+    
     public static func unsubscribe(_ target: AnyObject,
                                    type: String,
                                    source: String? = nil,
