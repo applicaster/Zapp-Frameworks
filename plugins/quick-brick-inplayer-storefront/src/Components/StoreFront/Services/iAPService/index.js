@@ -50,6 +50,7 @@ export async function initialize(store) {
 }
 
 export async function purchaseAnItem({ productIdentifier, productType }) {
+  console.log({ productIdentifier, productType });
   if (!productIdentifier) throw new Error(MESSAGES.validation.productId);
   try {
     logger.debug({
@@ -57,7 +58,6 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
       data: {
         productIdentifier,
         productType,
-        store,
       },
     });
 
@@ -68,7 +68,7 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
     });
 
     logger.debug({
-      message: `purchaseAnItem: ApplicasterIAPModule.purchase >> Purchase Completed purchase_id:${productIdentifier}`,
+      message: `purchaseAnItem: ApplicasterIAPModule.purchase >> Purchase Completed product_identifier:${productIdentifier}`,
       data: {
         productIdentifier,
         productType,
@@ -76,20 +76,20 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
       },
     });
 
-    await ApplicasterIAPModule.finishPurchasedTransaction({
+    const result = await ApplicasterIAPModule.finishPurchasedTransaction({
       ...purchaseCompletion,
       productType,
     });
-
+    console.log({ result, purchaseCompletion });
     logger.debug({
-      message: `purchaseAnItem: ApplicasterIAPModule.finishPurchasedTransaction >> Finilizing transaction completed purchase_id:${purchaseID}`,
+      message: `purchaseAnItem: ApplicasterIAPModule.finishPurchasedTransaction >> Finilizing transaction completed product_identifier:${productIdentifier}`,
       data: {
         productIdentifier,
         productType,
         purchase_completion: purchaseCompletion,
       },
     });
-    return result;
+    return purchaseCompletion;
   } catch (error) {
     logger.error({
       message: `purchaseAnItem: >> error message:${error.message}`,
@@ -115,6 +115,7 @@ export async function retrieveProducts(purchasableItems) {
       });
 
       let result = await ApplicasterIAPModule.products(purchasableItems);
+      console.log({ result });
       result = R.prop("products")(result);
 
       logger.debug({

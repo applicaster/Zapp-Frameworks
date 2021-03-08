@@ -9,6 +9,8 @@ import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
 import { useToggleNavBar } from "../../Utils/Hooks";
 import { addInPlayerProductId } from "../AssetFlow/Helper";
+import { isApplePlatform } from "../../Utils/Platform";
+
 import {
   purchaseAnItem,
   retrieveProducts,
@@ -69,7 +71,26 @@ export default function Storefront(props) {
     await initializeIap();
     await preparePurchaseData();
   }
-
+  function syncPurchaseData({ productsToPurchase, storeFeesData }) {
+    let retVal = [];
+    for (let i = 0; i < storeFeesData.length; i++) {
+      const storeFee = storeFeesData[i];
+      for (let i = 0; i < productsToPurchase.length; i++) {
+        const productToPurchase = productsToPurchase[i];
+        if (
+          productToPurchase.productIdentifier === storeFee.productIdentifier
+        ) {
+          storeFee.productType = productToPurchase.productType;
+          if (!storeFee.title && productToPurchase.title) {
+            storeFee.title = productToPurchase.title;
+          }
+          retVal.push(storeFee);
+          break;
+        }
+      }
+    }
+    return retVal;
+  }
   async function preparePurchaseData() {
     try {
       const productsToPurchase =
@@ -77,48 +98,49 @@ export default function Storefront(props) {
       console.log({ productsToPurchase, props });
 
       const storeFeesData = await retrieveProducts(productsToPurchase);
-
+      console.log({ storeFeesData, productsToPurchase });
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);
       }
 
-      //TODO: Title should take from products to purchase if title not exist in products
-      // const mappedFeeData = addInPlayerProductId({
-      //   storeFeesData,
-      //   inPlayerFeesData: productsToPurchase,
-      // });
+      const mappedFeeData = syncPurchaseData({
+        storeFeesData,
+        productsToPurchase,
+      });
       console.log({ storeFeesData, productsToPurchase });
       setScreen(ScreensData.STOREFRONT);
       setLoading(false);
-      setDataSource(storeFeesData);
+      setDataSource(mappedFeeData);
     } catch (error) {
       setLoading(false);
-
       onStorefrontCompleted({ success: false, error });
     }
   }
 
   console.log("Storefront", { props });
 
-  const buyItem = async ({
-    productIdentifier,
-    inPlayerProductId,
-    productType,
-  }) => {
-    if (!productIdentifier || !inPlayerProductId) {
+  const buyItem = async ({ productIdentifier, productType }) => {
+    console.log({ productIdentifier, productType });
+    if (!productIdentifier || !productType) {
       const error = new Error(MESSAGES.validation.productId);
       onStorefrontCompleted({ success: false, error });
     }
-
+    console.log({ productIdentifier, productType });
     try {
-      await purchaseAnItem({
+      const result = await purchaseAnItem({
         productIdentifier,
         productType,
       });
-
+      console.log({ result });
       setDataSource(null);
       setLoading(false);
-      // return loadAsset({ startPurchaseFlow: false });
+      let newPayload = props?.payload;
+      newPayload.extensions.in_app_purchase_data.purchasedProduct = result;
+      onStorefrontCompleted({
+        success: true,
+        error: null,
+        payload: newPayload,
+      });
     } catch (error) {
       setLoading(false);
 
@@ -127,11 +149,15 @@ export default function Storefront(props) {
       isApplePlatform && hideLoader();
     }
   };
+  const hideLoader = () => {
+    setLoading(false);
+  };
 
   const onPressPaymentOption = (index) => {
     isApplePlatform && setLoading(true);
 
     const itemToPurchase = dataSource[index];
+    console.log({ itemToPurchase });
     return buyItem(itemToPurchase);
   };
 

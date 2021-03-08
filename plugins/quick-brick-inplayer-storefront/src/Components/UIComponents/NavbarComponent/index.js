@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     marginBottom: 40,
-    backgroundColor: "red",
   },
   btnContainer: {
     position: "absolute",

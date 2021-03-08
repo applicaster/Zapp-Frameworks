@@ -104,6 +104,9 @@ const InPlayer = (props) => {
     setupEnvironment();
   }, []);
 
+  function completeStorefrontFlow({ success, error, payload }) {
+    callback && callback({ success, error, payload });
+  }
   const setupEnvironment = async () => {
     const {
       configuration: { in_player_environment, in_player_client_id },
@@ -150,7 +153,11 @@ const InPlayer = (props) => {
           });
           if (R.isNil(payloadWithAsset?.extensions?.in_app_purchase_data)) {
             callback &&
-              callback({ success: true, error: null, payloadWithAsset });
+              callback({
+                success: true,
+                error: null,
+                payload: payloadWithAsset,
+              });
           } else {
             setPayloadWithPurchaseData(payloadWithAsset);
           }
@@ -189,6 +196,7 @@ const InPlayer = (props) => {
   return payloadWithPurchaseData ? (
     <Storefront
       {...props}
+      completeStorefrontFlow={completeStorefrontFlow}
       screenLocalizations={screenLocalizations}
       screenStyles={screenStyles}
       payload={payloadWithPurchaseData}
