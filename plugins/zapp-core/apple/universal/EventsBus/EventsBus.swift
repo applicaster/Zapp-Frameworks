@@ -39,7 +39,7 @@ public class EventsBus {
         public init(type: EventsBusType,
                     source: String? = nil,
                     subject: String? = nil,
-                    data: [AnyHashable: Any]) {
+                    data: [AnyHashable: Any] = [:]) {
             self.type = type.description
             self.source = source
             self.subject = subject
@@ -49,7 +49,7 @@ public class EventsBus {
         public init(type: String,
                     source: String? = nil,
                     subject: String? = nil,
-                    data: [AnyHashable: Any]) {
+                    data: [AnyHashable: Any] = [:]) {
             self.type = type
             self.source = source
             self.subject = subject

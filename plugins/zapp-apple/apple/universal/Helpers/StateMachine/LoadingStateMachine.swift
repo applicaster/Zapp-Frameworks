@@ -18,8 +18,6 @@ public class LoadingStateMachine: LoadingStateMachineDelegate {
         self.dataSource = dataSource
     }
 
-    let defaultCenter = NotificationCenter.default
-
     var states: [LoadingState] = []
     var applicastionLoadingState: LoadingStateTypes = .initial
 
