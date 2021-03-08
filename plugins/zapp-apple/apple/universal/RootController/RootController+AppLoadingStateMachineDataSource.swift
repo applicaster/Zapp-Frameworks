@@ -10,8 +10,6 @@ import Foundation
 import os.log
 import ZappCore
 
-public let kMSAppCenterCheckForUpdatesNotification = "kMSAppCenterCheckForUpdatesNotification"
-
 extension RootController: LoadingStateMachineDataSource {
     func loadSplashScreenGroup(_ successHandler: @escaping StateCallBack,
                                _ failHandler: @escaping StateCallBack) {
@@ -90,8 +88,8 @@ extension RootController: LoadingStateMachineDataSource {
                                         ])
             EventsBus.post(event)
 
-            NotificationCenter.default.post(name: Notification.Name(kMSAppCenterCheckForUpdatesNotification),
-                                            object: nil)
+            EventsBus.post(EventsBus.Event(type: EventsBusType(.msAppCenterCheckUpdates)))
+            
             pluginsManager.hookAfterAppRootPresentation(hooksPlugins: nil,
                                                         completion: {})
             // Delay to provide time for QB present view

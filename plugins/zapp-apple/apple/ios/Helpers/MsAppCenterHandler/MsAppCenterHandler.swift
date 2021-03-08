@@ -10,6 +10,7 @@ import AppCenter
 import AppCenterDistribute
 import Foundation
 import XrayLogger
+import ZappCore
 
 #if canImport(AppCenterCrashes)
     import AppCenterCrashes
@@ -56,15 +57,12 @@ public class MsAppCenterHandler: NSObject {
         // disable until app fully loaded
         MSDistribute.setEnabled(false)
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(checkUpdatesForNewVersions),
-            name: NSNotification.Name(kMSAppCenterCheckForUpdatesNotification),
-            object: nil)
+        EventsBus.subscribe(self,
+                            type: EventsBusType(.msAppCenterCheckUpdates),
+                            handler: { content in
+                                MSDistribute.setEnabled(true)
+                            })
 
-        logger?.verboseLog(template: AppCenterLogs.appCenterConfigureDiscribution,
-                           data: ["starting_observe_key": kMSAppCenterCheckForUpdatesNotification,
-                                  "selector": "checkUpdatesForNewVersions:"])
     }
 
     func crashesService() -> MSServiceAbstract.Type? {
@@ -81,9 +79,5 @@ public class MsAppCenterHandler: NSObject {
         #else
             return nil
         #endif
-    }
-
-    @objc func checkUpdatesForNewVersions(notification: Notification) {
-        MSDistribute.setEnabled(true)
     }
 }
