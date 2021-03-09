@@ -31,7 +31,9 @@ public class NetworkRequestsManager {
             case .request:
                 instance.pendingRequests[url.absoluteString] = content
             case .response:
-                guard let request = instance.pendingRequests.removeValue(forKey: url.absoluteString),
+                guard url.absoluteString.isEmpty == false,
+                      instance.pendingRequests.keys.contains(url.absoluteString),
+                      let request = instance.pendingRequests.removeValue(forKey: url.absoluteString),
                       let response = content[Params.response] as? [String: Any],
                       let statusCode = response[Params.statusCode] as? String else {
                     return
