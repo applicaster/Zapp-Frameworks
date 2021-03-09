@@ -40,7 +40,7 @@ export function retrieveInPlayerFeesData({
     });
 
     if (purchaseData) {
-      purchaseDataArray.push(purchaseData);
+      purchaseDataArray.push({ ...purchaseData, fee });
     }
   }
   return purchaseDataArray;

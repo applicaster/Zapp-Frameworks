@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 
 import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
-import Storefront from "./Storefront";
+import Storefront from "./StoreFront";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import {
@@ -34,7 +34,7 @@ import {
   addContext,
 } from "../Services/LoggerService";
 import { useSelector } from "react-redux";
-
+import { validatePayment } from "./StoreFrontValidation";
 export const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
@@ -104,8 +104,31 @@ const InPlayer = (props) => {
     setupEnvironment();
   }, []);
 
-  function completeStorefrontFlow({ success, error, payload }) {
-    callback && callback({ success, error, payload });
+  async function completeStorefrontFlow({ success, error, payload }) {
+    try {
+      console.log({ validatePayment });
+      const newPayload = await validatePayment({ ...props, payload, store });
+      logger.debug({
+        message: "Validation payment completed",
+        data: {
+          payload,
+        },
+      });
+      callback && callback({ success, error, payload: newPayload });
+    } catch (error) {
+      const message = getMessageOrDefault(error, screenLocalizations);
+
+      logger.error({
+        message: `Validation payment failed, error:${message}`,
+        data: {
+          message,
+          error,
+        },
+      });
+
+      showAlert("General Error!", message);
+      callback && callback({ success: false, error, payload });
+    }
   }
   const setupEnvironment = async () => {
     const {
@@ -179,14 +202,13 @@ const InPlayer = (props) => {
         const message = getMessageOrDefault(error, screenLocalizations);
 
         logger.error({
-          message: "InPlayer Storefront Plugin Failed",
+          message: "InPlayer Storefront Plugin Failed, ",
           data: {
             message,
             error,
           },
         });
 
-        eventMessage = `${eventMessage} error:${message}`;
         showAlert("General Error!", message);
       }
       callback && callback({ success: false, error, payload });

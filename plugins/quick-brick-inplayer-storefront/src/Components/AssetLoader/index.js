@@ -42,19 +42,17 @@ export async function assetLoader({ props, assetId, store }) {
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
     } else if (error?.requestedToPurchase) {
-      const inPlayerData = await preparePurchaseData({
+      const inPlayerFeesData = await preparePurchaseData({
         props,
         assetId,
         store,
       });
 
-      if (inPlayerData) {
+      if (inPlayerFeesData) {
         const newPayload = payload;
-        newPayload.extensions.in_player_data = { ...inPlayerData, assetId };
+        newPayload.extensions.in_player_data = { inPlayerFeesData, assetId };
         newPayload.extensions.in_app_purchase_data = {
-          productsToPurchase: prepareInAppPurchaseData(
-            inPlayerData.inPlayerFeesData
-          ),
+          productsToPurchase: prepareInAppPurchaseData(inPlayerFeesData),
         };
 
         return newPayload;
@@ -113,9 +111,7 @@ async function preparePurchaseData({ props, assetId, store }) {
       },
     });
 
-    // should not be heere
-    // const storeFeesData = await retrieveProducts(inPlayerFeesData);
-    return { inPlayerFeesData, accessFees };
+    return inPlayerFeesData;
   } catch (error) {
     logger.error({
       message: "preparePurchaseData: Purchase fee data Failed",

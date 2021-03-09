@@ -2,37 +2,96 @@ import * as R from "ramda";
 import InPlayer from "@inplayer-org/inplayer.js";
 import { inServiceLogger as logger } from "../LoggerService";
 
-export async function getAccessFees(assetId) {
+export async function checkAccessForAsset({
+  assetId,
+  retryInCaseFail = false,
+  interval = 1000,
+  tries = 5,
+}) {
   try {
     logger.debug({
-      message: `InPlayer.Asset.getAssetAccessFees >> inplayer_asset_id: ${assetId}`,
+      message: `InPlayer.Asset.checkAccessForAsset >> inplayer_asset_id: ${assetId}`,
       data: {
         inplayer_asset_id: assetId,
       },
     });
 
-    const retVal = await InPlayer.Asset.getAssetAccessFees(assetId);
-    const data = retVal?.data;
-    console.log({ acessFeesResult: data });
-    const descriptions = R.map(R.prop("description"))(data);
+    const axoisAsset = await InPlayer.Asset.checkAccessForAsset(assetId);
+    const asset = axoisAsset?.data;
+    const src = getSrcFromAsset(asset);
+
+    const cookies = getCookiesFromAsset(asset);
+
     logger.debug({
-      message: `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fees_count: ${data.length}, fee_descriptions: ${descriptions}`,
-      data: {
-        inplayer_asset_access_fees: data,
-        inplayer_asset_id: assetId,
-      },
-    });
-    return data;
-  } catch (error) {
-    logger.error({
-      message: `InPlayer.Asset.getAssetAccessFees Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, inplayer_asset_id: ${assetId}`,
+      message: `InPlayer.Asset.checkAccessForAsset Completed >> inplayer_asset_id: ${assetId} >> title: ${asset?.title} src: ${src}`,
       data: {
         inplayer_asset_id: assetId,
-        error,
+        inplayer_asset: asset,
+        src,
+        cookies,
+        inplayer_asset_content: getInPlayerContent(asset),
       },
     });
 
-    throw error;
+    return { asset, src, cookies };
+  } catch (error) {
+    console.log({ error });
+    const event = logger.createEvent().addData({
+      response: error?.response,
+      is_purchase_required: false,
+      error,
+    });
+
+    if (retryInCaseFail && tries > 0) {
+      await new Promise((r) => setTimeout(r, interval));
+      const newInterval = interval * 2;
+      const newTries = tries - 1;
+
+      logger.debug({
+        message: `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL} >> retry to load`,
+        data: {
+          inplayer_asset_id: assetId,
+          interval: newInterval,
+          tries: newTries,
+          response: error?.response,
+          is_purchase_required: false,
+          error,
+        },
+      });
+
+      return await checkAccessForAsset({
+        assetId,
+        retryInCaseFail: true,
+        interval: newInterval,
+        tries: newTries,
+      });
+    } else {
+      const isPurchaseRequired = assetPaymentRequired(error);
+
+      if (isPurchaseRequired) {
+        logger.debug({
+          message: `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`,
+          data: {
+            is_purchase_required: isPurchaseRequired,
+
+            response: error?.response,
+            is_purchase_required: false,
+            error,
+          },
+        });
+
+        throw { ...error, requestedToPurchase: isPurchaseRequired };
+      }
+      logger.error({
+        message: `InPlayer.Asset.checkAccessForAsset Failed >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}`,
+        data: {
+          response: error?.response,
+          is_purchase_required: false,
+          error,
+        },
+      });
+      throw error;
+    }
   }
 }
 
@@ -40,55 +99,51 @@ export async function isAuthenticated(in_player_client_id) {
   try {
     // InPlayer.Account.isAuthenticated() returns true even if token expired
     // To handle this case InPlayer.Account.getAccount() was used
-    const getAccount = await InPlayer.Account.getAccountInfo();
-    console.log({ getAccount });
-    logger
-      .createEvent()
-      .setMessage(`InPlayer.Account.getAccount >> isAuthenticated: true`)
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    await InPlayer.Account.getAccountInfo();
+
+    logger.debug({
+      message: `InPlayer.Account.getAccount >> isAuthenticated: true`,
+      data: {
         in_player_client_id,
         is_authenticated: true,
-      })
-      .send();
+      },
+    });
     return true;
   } catch (error) {
-    console.log({ error });
-
     const res = await error.response;
     console.log({ res });
     if (res?.status === 403) {
       await InPlayer.Account.refreshToken(in_player_client_id);
-      logger
-        .createEvent()
-        .setMessage(
-          `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`
-        )
-        .setLevel(XRayLogLevel.error)
-        .addData({
+
+      logger.warning({
+        message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`,
+        data: {
           in_player_client_id,
           is_authenticated: true,
           error,
-        })
-        .send();
+        },
+      });
       return true;
     }
 
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.warning({
+      message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`,
+      data: {
         in_player_client_id,
         is_authenticated: false,
         error,
-      })
-      .send();
+      },
+    });
+
     return false;
   }
 }
+
+function isAmazonPlatform(store) {
+  return store && store === "amazon";
+}
+export const isApplePlatform = Platform.OS === "ios";
+export const isAndroidPlatform = Platform.OS === "android";
 
 function platformName(store) {
   if (isAmazonPlatform(store)) {
@@ -101,19 +156,20 @@ function platformName(store) {
     throw new Error("Platform can not be received");
   }
 }
-// const [item_id, access_fee_id] = inPlayerProductId.split("_");
 
 export async function validateExternalPayment({
   receipt,
-  userId,// Currently only avail for amazon, rest platform currently does not support this key
+  amazon_user_id,
   item_id,
   access_fee_id,
   store,
 }) {
-  let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
+  console.log("validateExternalPayment", {
     receipt,
+    amazon_user_id,
     item_id,
     access_fee_id,
+    store,
   });
 
   try {
@@ -126,38 +182,38 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
-    console.log({ platformName: platformName(store) });
     const response = await InPlayer.Payment.validateReceipt({
       platform: platformName(store),
       itemId: item_id,
       accessFeeId: access_fee_id,
       receipt: receipt,
-      amazonUserId: isAmazonPlatform(store) ? userId : null,
+      amazonUserId: isAmazonPlatform(store) ? amazon_user_id : null,
     });
 
-    if (isAmazonPlatform(store)) {
-      event.addData({
-        amazon_user_id: userId,
-      });
-    }
-
-    event
-      .addData({
+    logger.debug({
+      message: `InPlayer validate external payment >> succeed: true`,
+      data: {
+        receipt,
+        item_id,
+        access_fee_id,
+        amazon_user_id,
         response: response,
-      })
-      .setMessage(`InPlayer validate external payment >> succeed: true`)
-      .send();
+      },
+    });
 
     return response;
   } catch (error) {
-    event
-      .setMessage(`InPlayer validate external payment >> succeed: false`)
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer validate external payment >> succeed: false`,
+      data: {
+        receipt,
+        item_id,
+        access_fee_id,
+        amazon_user_id,
         error,
         response: error?.response,
-      })
-      .send();
+      },
+    });
     throw error;
   }
 }
