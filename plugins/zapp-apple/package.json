@@ -9,9 +9,6 @@
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks.git"
   },
-  "dependencies": {
-    "@applicaster/quick-brick-native-apple": "5.0.0"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
