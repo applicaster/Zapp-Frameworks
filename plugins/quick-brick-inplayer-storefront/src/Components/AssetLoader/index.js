@@ -2,7 +2,7 @@ import { createLogger, Subsystems } from "../../Services/LoggerService";
 import {
   checkAccessForAsset,
   getAccessFees,
-} from "../../Services/InPlayerService";
+} from "../../Services/inPlayerService";
 import { isWebBasedPlatform } from "../../Utils/Platform";
 
 import {

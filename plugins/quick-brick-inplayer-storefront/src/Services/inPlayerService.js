@@ -21,7 +21,7 @@ import {
   BaseSubsystem,
   BaseCategories,
   XRayLogLevel,
-} from "../Services/LoggerServices";
+} from "../Services/LoggerService";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.INPLAYER_SERVICE}`,

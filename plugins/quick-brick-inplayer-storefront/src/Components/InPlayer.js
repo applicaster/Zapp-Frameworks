@@ -18,7 +18,7 @@ import {
 } from "../Utils/PayloadUtils";
 import InPlayerSDK from "@inplayer-org/inplayer.js";
 import LoadingScreen from "./LoadingScreen";
-import { showAlert } from "../Utils/Account";
+import { showAlert } from "../Utils/Helper";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
 import { getStyles, getMessageOrDefault } from "../Utils/Customization";
 import {
@@ -49,14 +49,8 @@ const userAccountStorageTokenKey = "idToken";
 const InPlayer = (props) => {
   const { store } = useSelector(R.prop("appData"));
 
-  const HookTypeData = {
-    UNDEFINED: "Undefined",
-    PLAYER_HOOK: "PlayerHook",
-  };
-
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
-  const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
 
   const { callback, payload, rivers } = props;

@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, Dimensions } from "react-native";
 import PropTypes from "prop-types";
-import PaymentOptionView from "../../../UIComponents/PaymentOptionView";
+import PaymentOptionView from "../../UIComponents/PaymentOptionView";
 import { container } from "../../Styles";
 import { mapKeyToStyle, withEndSpace } from "../../Utils/Customization";
 

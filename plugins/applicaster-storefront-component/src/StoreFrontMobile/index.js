@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { SafeAreaView, StyleSheet, Dimensions } from "react-native";
 import StoreFrontContainer from "./StoreFrontContainer";
-import NavbarComponent from "../../UIComponents/NavbarComponent";
+import NavbarComponent from "../UIComponents/NavbarComponent";
 
-import Footer from "../../UIComponents/Footer";
+import Footer from "../UIComponents/Footer";
 
 const { height, width } = Dimensions.get("window");
 

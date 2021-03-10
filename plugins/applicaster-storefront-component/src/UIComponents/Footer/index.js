@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
-import { mapKeyToStyle, withEndSpace } from "../../../Utils/Customization";
+import { mapKeyToStyle, withEndSpace } from "../../Utils/Customization";
 import OpenURLButton from "../Buttons/OpenUrlButton";
 import React from "react";
 

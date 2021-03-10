@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { identity } from "ramda";
 import { Focusable } from "@applicaster/zapp-react-native-ui-components/Components/Focusable";
 
-import colors from "../../../colors";
+import colors from "../../colors";
 
 const localStyles = StyleSheet.create({
   button: {

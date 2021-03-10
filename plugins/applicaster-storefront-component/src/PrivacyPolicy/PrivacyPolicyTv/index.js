@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 import PrivacyTitle from "./PrivacyTitle";
 import PrivacyDescription from "./PrivacyDescription";
-import { useBackHandler, useDirectionalHandler } from "../../../../Utils/Hooks";
+import { useBackHandler, useDirectionalHandler } from "../../Utils/Hooks";
 import { TVEventHandlerComponent } from "@applicaster/zapp-react-native-tvos-ui-components/Components/TVEventHandlerComponent";
 import { Focusable } from "@applicaster/zapp-react-native-ui-components/Components/Focusable";
 

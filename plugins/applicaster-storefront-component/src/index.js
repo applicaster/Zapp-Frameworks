@@ -3,7 +3,7 @@ import StoreFrontMobile from "./StoreFrontMobile";
 import StoreFrontTv from "./StoreFrontTv";
 import React, { useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
-import LoadingScreen from "../LoadingScreen";
+import LoadingScreen from "./LoadingScreen";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
@@ -16,7 +16,7 @@ import {
   restore,
   initialize,
 } from "./Services/iAPService";
-import { createLogger } from "../../Services/LoggerService";
+import { createLogger } from "./Services/LoggerService";
 import * as R from "ramda";
 export const logger = createLogger({
   subsystem: "Storefront",

@@ -1,4 +1,4 @@
-import { validateExternalPayment } from "../../Services/InPlayerService";
+import { validateExternalPayment } from "../../Services/inPlayerService";
 import * as R from "ramda";
 
 export async function validatePayment(props) {
