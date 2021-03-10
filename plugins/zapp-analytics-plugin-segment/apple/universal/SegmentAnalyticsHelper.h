@@ -45,7 +45,7 @@ static NSString * _Nonnull const kPlayingItemExtensions = @"extensions";
 - (void)prepareEventPlayerResumePlayback:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion;
 - (void)prepareEventPlayerPausePlayback:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion;
 - (void)prepareEventPlayerPlaybackProgress:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion;
-
+- (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification * _Nonnull)notification completion:(void (^ __nullable)( NSDictionary * _Nullable parameters))completion;
 @end
 
 

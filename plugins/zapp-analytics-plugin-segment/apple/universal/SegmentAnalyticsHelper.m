@@ -301,9 +301,6 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
     //change event name if needed
     NSString *eventName = @"Video Paused";
-    if ([self.providerProperties[kVideoStartEventKey] isNotEmptyOrWhiteSpaces]) {
-        eventName = self.providerProperties[kVideoStartEventKey];
-    }
 
     //add more analytic params
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
@@ -318,9 +315,6 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
     //change event name if needed
     NSString *eventName = @"Video Playback Resume";
-    if ([self.providerProperties[kVideoStartEventKey] isNotEmptyOrWhiteSpaces]) {
-        eventName = self.providerProperties[kVideoStartEventKey];
-    }
 
     //add more analytic params
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
@@ -335,9 +329,6 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
     //change event name if needed
     NSString *eventName = @"Video Heartbeat";
-    if ([self.providerProperties[kVideoStartEventKey] isNotEmptyOrWhiteSpaces]) {
-        eventName = self.providerProperties[kVideoStartEventKey];
-    }
 
     //add more analytic params
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
@@ -349,6 +340,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 - (void)prepareEventPlayerDidFinishPlayItem:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
+    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
 
     long itemDuration = [self currentPlayedItemDuration];
     BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
@@ -362,21 +354,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
                 eventName = self.providerProperties[kVideoReachEventKey];
             }
 
-            NSString *videoName = STRING_OR_NA([entry objectForKey:@"title"]);
-            NSString *externalID = STRING_OR_NA([entry objectForKey:@"id"]);
-            NSString *page_url = STRING_OR_NA([entry objectForKey:@"kAPPlayerControlsPlayingItemPublicPage"]);
-            NSString *seasonName = STRING_OR_NA([entry objectForKey:@"kAPPlayerControllerPlayingItemSeasonName"]);
-            NSString *sourceFileName = [self sourceFileName:[self currentPlayedItemUrl:entry]];
-
-            NSDictionary *params = @{ @"Video Name": videoName,
-                                      @"External Vod ID": externalID,
-                                      @"Full Video Time": @(itemDuration),
-                                      @"Season Name": seasonName,
-                                      @"Source File Name": sourceFileName,
-                                      @"Page Url": page_url };
-
             //Add more analytic params
-            params = [self addExtraAnalyticsParamsForDictionary:params withModel:entry];
+            NSDictionary *params = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
 
             if (videoPercentage >= 99) {
                 [self videoCompleted:params completion:completion];
@@ -386,6 +365,31 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
             }
         }
     }
+}
+
+- (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification * _Nonnull)notification completion:(void (^ __nullable)( NSDictionary * _Nullable parameters))completion {
+    [self updatePlayedItemCurrentPosition];
+    NSDictionary *entry = [self currentPlayedItemEntry];
+    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
+    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
+    
+    AVPlayerItem *playerItem = (AVPlayerItem *)notification.object;
+    if([playerItem.asset isKindOfClass:[AVURLAsset class]]){
+        AVURLAsset *asset = (AVURLAsset *)playerItem.asset;
+        AVMediaSelectionGroup *audio = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicAudible];
+        AVMediaSelectionGroup *subtitles = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+        AVMediaSelectionOption *selectedAudio = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:audio];
+        AVMediaSelectionOption *selectedSubtitles = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:subtitles];
+        
+        NSDictionary *dict = @{@"selected_audio": selectedAudio.displayName,
+                               @"selected_subtitle": selectedSubtitles.displayName};
+        
+        NSMutableDictionary *updatedAnalyticsParams = [NSMutableDictionary dictionaryWithDictionary:analyticsParams];
+        [updatedAnalyticsParams addEntriesFromDictionary:dict];
+        analyticsParams = updatedAnalyticsParams;
+    }
+
+    completion(analyticsParams);
 }
 
 #pragma mark - AdobeAnalyticsDelegate
@@ -423,9 +427,20 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 }
 
 - (NSDictionary *)currentPlayedItemAnalyticsParams:(NSDictionary *)entry {
-    NSMutableDictionary *params = [NSMutableDictionary new];
+    long itemDuration = [self currentPlayedItemDuration];
 
-    return params;
+    NSString *videoName = STRING_OR_NA([entry objectForKey:@"title"]);
+    NSString *externalID = STRING_OR_NA([entry objectForKey:@"id"]);
+    NSString *page_url = STRING_OR_NA([entry objectForKey:@"kAPPlayerControlsPlayingItemPublicPage"]);
+    NSString *seasonName = STRING_OR_NA([entry objectForKey:@"kAPPlayerControllerPlayingItemSeasonName"]);
+    NSString *sourceFileName = [self sourceFileName:[self currentPlayedItemUrl:entry]];
+
+    return @{ @"Video Name": videoName,
+                              @"External Vod ID": externalID,
+                              @"Full Video Time": @(itemDuration),
+                              @"Season Name": seasonName,
+                              @"Source File Name": sourceFileName,
+                              @"Page Url": page_url };
 }
 
 @end

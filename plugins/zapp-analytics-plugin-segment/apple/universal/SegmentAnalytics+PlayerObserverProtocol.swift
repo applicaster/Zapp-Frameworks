@@ -26,6 +26,13 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
                                                selector: #selector(handleAccessLogEntry(notification:)),
                                                name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
                                                object: nil)
+        
+        if #available(tvOS 13.0, *) {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(handleMediaSelectionChange(notification:)),
+                                                   name: AVPlayerItem.mediaSelectionDidChangeNotification,
+                                                   object: nil)
+        }
     }
 
     public func playerDidDismiss(player: PlayerProtocol) {
@@ -63,6 +70,20 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
             let trackParameters = parameters as? [String: NSObject] ?? [:]
             self.trackEvent(eventName, parameters: trackParameters)
         }
+    }
+    
+    @objc func handleMediaSelectionChange(notification: NSNotification) {
+        objcHelper?.prepareEventPlayerMediaSelectionChange(with: notification as Notification,
+                                                           completion: { (parameters) in
+                                                            //post subtitles change
+                                                            var eventName = "Subtitle Language Changed"
+                                                            let trackParameters = parameters as? [String: NSObject] ?? [:]
+                                                            self.trackEvent(eventName, parameters: trackParameters)
+                                                            
+                                                            //post audio change
+                                                            eventName = "Audio Language Selected"
+                                                            self.trackEvent(eventName, parameters: trackParameters)
+                                                           })
     }
 
     override public func observeValue(forKeyPath keyPath: String?,
