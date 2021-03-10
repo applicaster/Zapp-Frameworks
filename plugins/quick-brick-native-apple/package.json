@@ -1,7 +1,7 @@
 {
-  "name": "@applicaster/zapp-apple",
-  "version": "1.6.6",
-  "description": "ZappApple",
+  "name": "@applicaster/quick-brick-native-apple",
+  "version": "5.0.0",
+  "description": "iOS and tvOS native code for QuickBrick applications. This package is used to provide native logic for QuickBrick",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks.git"
   },
+  "files": [
+    "apple"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
