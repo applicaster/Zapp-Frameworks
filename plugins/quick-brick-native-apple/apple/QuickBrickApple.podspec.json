@@ -1,6 +1,6 @@
 {
   "name": "QuickBrickApple",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0"
@@ -16,7 +16,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-native-apple/5.0.0"
+    "tag": "@@applicaster/quick-brick-native-apple/5.1.0"
   },
   "requires_arc": true,
   "source_files": "universal/**/*.{m,swift}",
@@ -32,18 +32,10 @@
     "OTHER_CFLAGS": "-fembed-bitcode"
   },
   "dependencies": {
-    "ZappCore": [
-
-    ],
-    "React": [
-
-    ],
-    "React-RCTLinking": [
-
-    ],
-    "XrayLogger": [
-
-    ]
+    "ZappCore": [],
+    "React": [],
+    "React-RCTLinking": [],
+    "XrayLogger": []
   },
   "swift_version": "5.1"
 }
