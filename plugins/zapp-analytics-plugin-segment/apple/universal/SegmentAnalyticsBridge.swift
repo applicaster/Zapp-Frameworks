@@ -12,15 +12,15 @@ import ZappCore
 class SegmentAnalyticsBridge: NSObject, RCTBridgeModule {
     fileprivate let pluginIdentifier = "segment_analytics"
     var bridge: RCTBridge!
-    
+
     static func moduleName() -> String! {
         return "SegmentAPI"
     }
-    
+
     public class func requiresMainQueueSetup() -> Bool {
         return true
     }
-    
+
     /// prefered thread on which to run this native module
     @objc public var methodQueue: DispatchQueue {
         return DispatchQueue.main
@@ -34,7 +34,7 @@ class SegmentAnalyticsBridge: NSObject, RCTBridgeModule {
               let options = options as? [String: Any] else {
             return
         }
-        
+
         provider.login(with: userID,
                        traits: traits,
                        options: options)

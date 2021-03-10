@@ -6,9 +6,9 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
+import AVFoundation
 import Foundation
 import ZappCore
-import AVFoundation
 
 extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol {
     var avPlayer: AVPlayer? {
@@ -26,7 +26,7 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
                                                selector: #selector(handleAccessLogEntry(notification:)),
                                                name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
                                                object: nil)
-        
+
         if #available(tvOS 13.0, *) {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(handleMediaSelectionChange(notification:)),
@@ -71,18 +71,18 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
             self.trackEvent(eventName, parameters: trackParameters)
         }
     }
-    
+
     @objc func handleMediaSelectionChange(notification: NSNotification) {
         objcHelper?.prepareEventPlayerMediaSelectionChange(with: notification as Notification,
-                                                           completion: { (parameters) in
-                                                            //post subtitles change
-                                                            var eventName = "Subtitle Language Changed"
-                                                            let trackParameters = parameters as? [String: NSObject] ?? [:]
-                                                            self.trackEvent(eventName, parameters: trackParameters)
-                                                            
-                                                            //post audio change
-                                                            eventName = "Audio Language Selected"
-                                                            self.trackEvent(eventName, parameters: trackParameters)
+                                                           completion: { parameters in
+                                                               // post subtitles change
+                                                               var eventName = "Subtitle Language Changed"
+                                                               let trackParameters = parameters as? [String: NSObject] ?? [:]
+                                                               self.trackEvent(eventName, parameters: trackParameters)
+
+                                                               // post audio change
+                                                               eventName = "Audio Language Selected"
+                                                               self.trackEvent(eventName, parameters: trackParameters)
                                                            })
     }
 

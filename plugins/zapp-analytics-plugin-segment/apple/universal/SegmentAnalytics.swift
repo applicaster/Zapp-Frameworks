@@ -100,8 +100,8 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
 
 extension SegmentAnalytics {
     @objc public func login(with identity: String,
-                      traits: [String : Any]?,
-                      options: [String : Any]?) {
+                            traits: [String: Any]?,
+                            options: [String: Any]?) {
         SEGAnalytics.shared()?.identify(identity,
                                         traits: traits,
                                         options: options)

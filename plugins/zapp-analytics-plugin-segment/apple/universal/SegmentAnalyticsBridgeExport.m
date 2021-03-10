@@ -8,12 +8,10 @@
 
 @import React;
 
-@interface RCT_EXTERN_MODULE(SegmentAPI, NSObject)
+@interface RCT_EXTERN_MODULE (SegmentAPI, NSObject)
 
 RCT_EXTERN_METHOD(identifyUser:(NSString *)identify
-                  traits:(NSDictionary *)traits
-                  options: (NSDictionary *)options)
+                      traits:(NSDictionary *)traits
+                          options:(NSDictionary *)options)
 
 @end
-
-

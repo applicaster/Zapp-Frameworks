@@ -22,7 +22,6 @@ NSString *const kMidrollopportunityEventKey = @"midroll_opportunity_event_name";
 NSString *const kVideoReachEventKey = @"video_reach_event_name";
 NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
-
 @interface SegmentAnalyticsHelper ()
 
 @property (nonatomic, weak) id<SegmentAnalyticsDelegate> delegate;
@@ -42,11 +41,10 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     return self;
 }
 
-
 #pragma mark - Track Events
 
 /* Remember that you can setup a event whitelist via CMS */
-- (void)prepareTrackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters completion:(void (^ __nullable)(NSDictionary *parameters))completion {
+- (void)prepareTrackEvent:(NSString *)eventName parameters:(NSDictionary *)parameters completion:(void (^__nullable)(NSDictionary *parameters))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         //The first if is been used for react native events
         NSDictionary *parametersWithDeviceID;
@@ -64,7 +62,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     });
 }
 
-- (void)prepareTrackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters completion:(void (^ __nullable)(NSDictionary *parameters))completion {
+- (void)prepareTrackScreenView:(NSString *)screenName parameters:(NSDictionary *)parameters completion:(void (^__nullable)(NSDictionary *parameters))completion {
     NSDictionary *parametersWithDeviceID;
 
     if ([[parameters objectForKey:@"properties"] isKindOfClass:[NSDictionary class]]) {
@@ -81,10 +79,10 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
 #pragma mark - Analytics events notifications
 
-- (void)prepareVideoAdvertisementsOpportunity:(NSNotification *)notification completion:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareVideoAdvertisementsOpportunity:(NSNotification *)notification completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     id model = notification.object;
     NSDictionary *extraParameters = notification.userInfo;
-    
+
     NSString *videoAdEventName;
     if ([extraParameters[@"Video Ad Type"] isEqualToString:@"Preroll"]) {
         videoAdEventName = @"Preroll Op";
@@ -99,22 +97,21 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     }
 
     if (videoAdEventName) {
-        NSDictionary *analyticsParams = [self notificationAnalyticsParams: model];
+        NSDictionary *analyticsParams = [self notificationAnalyticsParams:model];
 
         //add more analytic params
         analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:model];
 
         completion(videoAdEventName, analyticsParams);
-    }
-    else {
+    } else {
         completion(@"", nil);
     }
 }
 
-- (void)prepareWatchVideoAdvertisement:(NSNotification *)notification completion:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareWatchVideoAdvertisement:(NSNotification *)notification completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     id model = notification.object;
     NSDictionary *extraParameters = notification.userInfo;
-    
+
     NSString *videoAdEventName;
     if ([extraParameters[@"Video Ad Type"] isEqualToString:@"Preroll"]) {
         videoAdEventName = @"Prerole1_ok";
@@ -129,17 +126,16 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     }
 
     if (videoAdEventName) {
-        NSDictionary *analyticsParams = [self notificationAnalyticsParams: model];
+        NSDictionary *analyticsParams = [self notificationAnalyticsParams:model];
         analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:model];
 
         completion(videoAdEventName, analyticsParams);
-    }
-    else {
+    } else {
         completion(@"", nil);
     }
 }
 
-- (void)videoCompleted:(NSDictionary *)analyticsParams completion:(void (^ __nullable)( NSString * eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)videoCompleted:(NSDictionary *)analyticsParams completion:(void (^__nullable)(NSString *eventName,  NSDictionary *_Nullable parameters))completion {
     NSString *eventName = @"Video Completed";
 
     if ([self.providerProperties[kVideoCompleteEventKey] isNotEmptyOrWhiteSpaces]) {
@@ -199,18 +195,18 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     return modelAfterReplacing;
 }
 
-- (NSDictionary *)notificationAnalyticsParams:(NSDictionary *)modelParams{
+- (NSDictionary *)notificationAnalyticsParams:(NSDictionary *)modelParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:modelParams];
-    
+
     NSString *sourceFileName = [params objectForKey:@"Source File"];
     sourceFileName = [self sourceFileName:sourceFileName];
-    
+
     //Changed "Source File" key name to "Source_File_Name".
-    if ([[params allKeys] containsObject:@"Source File"]){
+    if ([[params allKeys] containsObject:@"Source File"]) {
         [params removeObjectForKey:@"Source File"];
     }
     [params setObject:sourceFileName forKey:@"Source_File_Name"];
-    
+
     return params;
 }
 
@@ -277,7 +273,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     self.maxPosition = @"0";
 }
 
-- (void)prepareEventPlayerDidStartPlayItem:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareEventPlayerDidStartPlayItem:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -294,8 +290,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     completion(eventName, analyticsParams);
 }
 
-- (void)prepareEventPlayerPausePlayback:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
-    
+- (void)prepareEventPlayerPausePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -309,7 +304,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     completion(eventName, analyticsParams);
 }
 
-- (void)prepareEventPlayerResumePlayback:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareEventPlayerResumePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -323,7 +318,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     completion(eventName, analyticsParams);
 }
 
-- (void)prepareEventPlayerPlaybackProgress:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareEventPlayerPlaybackProgress:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
 
@@ -337,7 +332,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     completion(eventName, analyticsParams);
 }
 
-- (void)prepareEventPlayerDidFinishPlayItem:(void (^ __nullable)( NSString * _Nonnull eventName,  NSDictionary * _Nullable parameters))completion {
+- (void)prepareEventPlayerDidFinishPlayItem:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
@@ -359,31 +354,30 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
             if (videoPercentage >= 99) {
                 [self videoCompleted:params completion:completion];
-            }
-            else {
+            } else {
                 completion(eventName, params);
             }
         }
     }
 }
 
-- (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification * _Nonnull)notification completion:(void (^ __nullable)( NSDictionary * _Nullable parameters))completion {
+- (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification *_Nonnull)notification completion:(void (^__nullable)(NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
     NSDictionary *entry = [self currentPlayedItemEntry];
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
     analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-    
+
     AVPlayerItem *playerItem = (AVPlayerItem *)notification.object;
-    if([playerItem.asset isKindOfClass:[AVURLAsset class]]){
+    if ([playerItem.asset isKindOfClass:[AVURLAsset class]]) {
         AVURLAsset *asset = (AVURLAsset *)playerItem.asset;
         AVMediaSelectionGroup *audio = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicAudible];
         AVMediaSelectionGroup *subtitles = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
         AVMediaSelectionOption *selectedAudio = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:audio];
         AVMediaSelectionOption *selectedSubtitles = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:subtitles];
-        
-        NSDictionary *dict = @{@"selected_audio": selectedAudio.displayName,
-                               @"selected_subtitle": selectedSubtitles.displayName};
-        
+
+        NSDictionary *dict = @{ @"selected_audio": selectedAudio.displayName,
+                                @"selected_subtitle": selectedSubtitles.displayName };
+
         NSMutableDictionary *updatedAnalyticsParams = [NSMutableDictionary dictionaryWithDictionary:analyticsParams];
         [updatedAnalyticsParams addEntriesFromDictionary:dict];
         analyticsParams = updatedAnalyticsParams;
@@ -436,19 +430,18 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     NSString *sourceFileName = [self sourceFileName:[self currentPlayedItemUrl:entry]];
 
     return @{ @"Video Name": videoName,
-                              @"External Vod ID": externalID,
-                              @"Full Video Time": @(itemDuration),
-                              @"Season Name": seasonName,
-                              @"Source File Name": sourceFileName,
-                              @"Page Url": page_url };
+              @"External Vod ID": externalID,
+              @"Full Video Time": @(itemDuration),
+              @"Season Name": seasonName,
+              @"Source File Name": sourceFileName,
+              @"Page Url": page_url };
 }
 
 @end
 
-
 @implementation NSString (HelperMethods)
 
-#define IS_NOT_NULL(val) (val && ((NSNull*)val != [NSNull null]))
+#define IS_NOT_NULL(val) (val && ((NSNull *)val != [NSNull null]))
 
 - (BOOL)isNotEmptyOrWhiteSpaces
 {
