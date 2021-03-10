@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-apple",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "description": "ZappApple",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
