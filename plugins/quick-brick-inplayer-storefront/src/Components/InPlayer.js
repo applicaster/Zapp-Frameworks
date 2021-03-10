@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 
 import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
-import Storefront from "./StoreFront";
+import Storefront from "../../../applicaster-storefront-component/src";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import {
@@ -20,18 +20,11 @@ import InPlayerSDK from "@inplayer-org/inplayer.js";
 import LoadingScreen from "./LoadingScreen";
 import { showAlert } from "../Utils/Account";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
-import {
-  getStyles,
-  isHomeScreen,
-  getMessageOrDefault,
-} from "../Utils/Customization";
-import { isHook } from "../Utils/UserAccount";
+import { getStyles, getMessageOrDefault } from "../Utils/Customization";
 import {
   createLogger,
   BaseSubsystem,
   BaseCategories,
-  XRayLogLevel,
-  addContext,
 } from "../Services/LoggerService";
 import { useSelector } from "react-redux";
 import { validatePayment } from "./StoreFrontValidation";
@@ -104,10 +97,22 @@ const InPlayer = (props) => {
     setupEnvironment();
   }, []);
 
+  async function onRestoreCompleted() {
+    //TODO: Add restore
+    if (payloadWithPurchaseData) {
+    }
+  }
+
   async function completeStorefrontFlow({ success, error, payload }) {
     try {
       console.log({ validatePayment });
-      const newPayload = await validatePayment({ ...props, payload, store });
+      await validatePayment({ ...props, payload, store });
+      const newPayload = await assetLoader({
+        props,
+        assetId,
+        store,
+        retryInCaseFail: true,
+      });
       logger.debug({
         message: "Validation payment completed",
         data: {
@@ -218,7 +223,8 @@ const InPlayer = (props) => {
   return payloadWithPurchaseData ? (
     <Storefront
       {...props}
-      completeStorefrontFlow={completeStorefrontFlow}
+      onStorefrontFinished={completeStorefrontFlow}
+      onRestoreCompleted={onRestoreCompleted}
       screenLocalizations={screenLocalizations}
       screenStyles={screenStyles}
       payload={payloadWithPurchaseData}

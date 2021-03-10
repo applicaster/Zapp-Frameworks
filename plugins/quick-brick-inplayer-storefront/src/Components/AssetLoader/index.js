@@ -1,5 +1,8 @@
 import { createLogger, Subsystems } from "../../Services/LoggerService";
-import { checkAccessForAsset, getAccessFees } from "./Services/InPlayerService";
+import {
+  checkAccessForAsset,
+  getAccessFees,
+} from "../../Services/InPlayerService";
 import { isWebBasedPlatform } from "../../Utils/Platform";
 
 import {
@@ -12,7 +15,12 @@ export const logger = createLogger({
   subsystem: Subsystems.ASSET_LOADER,
 });
 
-export async function assetLoader({ props, assetId, store }) {
+export async function assetLoader({
+  props,
+  assetId,
+  store,
+  retryInCaseFail = false,
+}) {
   const payload = props?.payload;
   if (!assetId || !payload) {
     throw new Error(
@@ -24,7 +32,7 @@ export async function assetLoader({ props, assetId, store }) {
   try {
     const assetData = await checkAccessForAsset({
       assetId,
-      retryInCaseFail: false,
+      retryInCaseFail,
     });
     const src = assetData?.src;
     const cookies = assetData?.cookies;

@@ -1,4 +1,4 @@
-import { validateExternalPayment } from "./Services/InPlayerService";
+import { validateExternalPayment } from "../../Services/InPlayerService";
 import * as R from "ramda";
 
 export async function validatePayment(props) {
@@ -15,31 +15,10 @@ export async function validatePayment(props) {
   const feeData = feeDataForPurchase({ purchasedItem, inPlayerFeesData });
   const fee = feeData?.fee;
   console.log({ fee });
+  
   await validatePurchase({ purchasedItem, fee, store });
-  return await loadAsset(props)
 }
 
-async function loadAsset(props) {
-  const { screenLocalizations } = props;
-
-  try {
-    const assetData = await checkAccessForAsset({
-      assetId,
-      retryInCaseFail: true,
-    });
-    const src = assetData?.src;
-    const cookies = assetData?.cookies;
-
-    if (assetData && src) {
-      const newPayload = src && {
-        ...payload,
-        content: { src, cookies },
-      };
-      return newPayload;
-    } else {
-      throw Error(screenLocalizations.video_stream_exception_message);
-    }
-}
 async function validatePurchase({ purchasedItem, fee, store }) {
   // Currently only avail for amazon, rest platform currently does not support this key
   const amazon_user_id = purchasedItem?.userId;
@@ -71,6 +50,16 @@ async function validatePurchase({ purchasedItem, fee, store }) {
         item_id: itemId,
         access_fee_id: id,
         store,
+      });
+      logger.debug({
+        message: "validateExternalPayment: Success",
+        data: {
+          receipt,
+          amazon_user_id,
+          item_id: itemId,
+          access_fee_id: id,
+          store,
+        },
       });
       return result;
     }

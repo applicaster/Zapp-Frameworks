@@ -14,14 +14,14 @@ import {
   isAmazonPlatform,
   isApplePlatform,
   isAndroidPlatform,
-} from "./../Utils/Platform";
+} from "../Utils/Platform";
 import { getInPlayerContent } from "../Utils/InPlayerResponse";
 import {
   createLogger,
   BaseSubsystem,
   BaseCategories,
   XRayLogLevel,
-} from "../Services/LoggerService";
+} from "../Services/LoggerServices";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.INPLAYER_SERVICE}`,
@@ -255,52 +255,42 @@ export async function isAuthenticated(in_player_client_id) {
   try {
     // InPlayer.Account.isAuthenticated() returns true even if token expired
     // To handle this case InPlayer.Account.getAccount() was used
-    const getAccount = await InPlayer.Account.getAccountInfo();
-    console.log({ getAccount });
-    logger
-      .createEvent()
-      .setMessage(`InPlayer.Account.getAccount >> isAuthenticated: true`)
-      .setLevel(XRayLogLevel.debug)
-      .addData({
+    await InPlayer.Account.getAccountInfo();
+
+    logger.debug({
+      message: `InPlayer.Account.getAccount >> isAuthenticated: true`,
+      data: {
         in_player_client_id,
         is_authenticated: true,
-      })
-      .send();
+      },
+    });
     return true;
   } catch (error) {
-    console.log({ error });
-
     const res = await error.response;
     console.log({ res });
     if (res?.status === 403) {
       await InPlayer.Account.refreshToken(in_player_client_id);
-      logger
-        .createEvent()
-        .setMessage(
-          `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`
-        )
-        .setLevel(XRayLogLevel.error)
-        .addData({
+
+      logger.warning({
+        message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: true`,
+        data: {
           in_player_client_id,
           is_authenticated: true,
           error,
-        })
-        .send();
+        },
+      });
       return true;
     }
 
-    logger
-      .createEvent()
-      .setMessage(
-        `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`
-      )
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.warning({
+      message: `InPlayer.Account.getAccount >> status: ${res?.status}, is_authenticated: false`,
+      data: {
         in_player_client_id,
         is_authenticated: false,
         error,
-      })
-      .send();
+      },
+    });
+
     return false;
   }
 }
@@ -523,18 +513,19 @@ function platformName(store) {
   }
 }
 
-//TODO: This func not working with Web, implement proper way in future
 export async function validateExternalPayment({
   receipt,
-  userId,
+  amazon_user_id,
   item_id,
   access_fee_id,
   store,
 }) {
-  let event = logger.createEvent().setLevel(XRayLogLevel.debug).addData({
+  console.log("validateExternalPayment", {
     receipt,
+    amazon_user_id,
     item_id,
     access_fee_id,
+    store,
   });
 
   try {
@@ -547,38 +538,38 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
-    console.log({ platformName: platformName(store) });
     const response = await InPlayer.Payment.validateReceipt({
       platform: platformName(store),
       itemId: item_id,
       accessFeeId: access_fee_id,
       receipt: receipt,
-      amazonUserId: isAmazonPlatform(store) ? userId : null,
+      amazonUserId: isAmazonPlatform(store) ? amazon_user_id : null,
     });
 
-    if (isAmazonPlatform(store)) {
-      event.addData({
-        amazon_user_id: userId,
-      });
-    }
-
-    event
-      .addData({
+    logger.debug({
+      message: `InPlayer validate external payment >> succeed: true`,
+      data: {
+        receipt,
+        item_id,
+        access_fee_id,
+        amazon_user_id,
         response: response,
-      })
-      .setMessage(`InPlayer validate external payment >> succeed: true`)
-      .send();
+      },
+    });
 
     return response;
   } catch (error) {
-    event
-      .setMessage(`InPlayer validate external payment >> succeed: false`)
-      .setLevel(XRayLogLevel.error)
-      .addData({
+    logger.error({
+      message: `InPlayer validate external payment >> succeed: false`,
+      data: {
+        receipt,
+        item_id,
+        access_fee_id,
+        amazon_user_id,
         error,
         response: error?.response,
-      })
-      .send();
+      },
+    });
     throw error;
   }
 }
