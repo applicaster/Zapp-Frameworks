@@ -16,7 +16,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster-plugins/SegmentAnalytics-iOS",
-    "tag": "@@applicaster/zapp-analytics-plugin-segment/2.0.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-segment/2.1.0"
   },
   "frameworks": [
     "Foundation",
