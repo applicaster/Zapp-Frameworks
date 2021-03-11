@@ -82,6 +82,7 @@ const ui_frameworks_quickbrick = ["quickbrick"];
 
 const ui_frameworks = {
   ios_for_quickbrick: ui_frameworks_quickbrick,
+  android_for_quickbrick: ui_frameworks_quickbrick,
 };
 
 const min_zapp_sdk = {
