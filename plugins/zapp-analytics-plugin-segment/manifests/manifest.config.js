@@ -10,7 +10,7 @@ const baseManifest = {
     {
       section: "configuration",
       type: "text",
-      key: "write_key",
+      key: "segment_write_key",
       tooltip_text: "The key used for connecting with segment analytics",
       default: "",
     },
