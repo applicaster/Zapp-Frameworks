@@ -340,24 +340,15 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     long itemDuration = [self currentPlayedItemDuration];
     BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
 
+    //Add more analytic params
+    NSDictionary *params = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
+    NSMutableDictionary *updatedParams = [NSMutableDictionary dictionaryWithDictionary:params];
+
     if (itemDuration && itemIsLive == NO && itemDuration != 0) {
-        //calculate the percentage.
-        double videoPercentage = (self.maxPosition.doubleValue / itemDuration) * 100;
-        if (videoPercentage) {
-            NSString *eventName = [NSString stringWithFormat:@"Video Stopped at %.2f%%", videoPercentage];
-            if ([self.providerProperties[kVideoReachEventKey] isNotEmptyOrWhiteSpaces]) {
-                eventName = self.providerProperties[kVideoReachEventKey];
-            }
-
-            //Add more analytic params
-            NSDictionary *params = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
-            if (videoPercentage >= 99) {
-                [self videoCompleted:params completion:completion];
-            } else {
-                completion(eventName, params);
-            }
+        if (self.maxPosition.doubleValue > 0) {
+            [updatedParams setObject:[NSNumber numberWithDouble:self.maxPosition.doubleValue] forKey:@"Played Time"];
         }
+        [self videoCompleted:updatedParams completion:completion];
     }
 }
 
