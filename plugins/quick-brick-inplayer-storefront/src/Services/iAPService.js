@@ -3,7 +3,7 @@ import { ApplicasterIAPModule } from "@applicaster/applicaster-iap";
 import { validateExternalPayment } from "./inPlayerService";
 import { findAsync } from "./InPlayerUtils";
 import * as R from "ramda";
-import MESSAGES from "../Components/AssetFlow/Config";
+import MESSAGES from "../Components/Config";
 import {
   createLogger,
   BaseSubsystem,

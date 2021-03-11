@@ -33,7 +33,7 @@ import {
   isRequirePurchaseError,
   showAlert,
 } from "./Helper";
-import MESSAGES from "./Config";
+import MESSAGES from "../Config";
 import {
   createLogger,
   Subsystems,

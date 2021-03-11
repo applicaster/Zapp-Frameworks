@@ -27,7 +27,7 @@ import {
   BaseCategories,
 } from "../Services/LoggerService";
 import { useSelector } from "react-redux";
-import { validatePayment } from "./StoreFrontValidation";
+import { validatePayment, validateRestore } from "./StoreFrontValidation";
 export const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
@@ -36,7 +36,7 @@ export const logger = createLogger({
 const getRiversProp = (key, rivers = {}) => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("type", "quick-brick-inplayer-storefront")),
     R.values
   );
 
@@ -52,11 +52,13 @@ const InPlayer = (props) => {
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [itemAssetId, setItemAssetId] = useState(null);
 
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
   const styles = getRiversProp("styles", rivers);
-
+  console.log({ styles, props });
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
 
@@ -91,29 +93,55 @@ const InPlayer = (props) => {
     setupEnvironment();
   }, []);
 
-  async function onRestoreCompleted() {
-    //TODO: Add restore
-    if (payloadWithPurchaseData) {
-    }
-  }
-
-  async function completeStorefrontFlow({ success, error, payload }) {
+  async function onRestoreCompleted(restoreData) {
     try {
-      console.log({ validatePayment });
-      await validatePayment({ ...props, payload, store });
-      const newPayload = await assetLoader({
-        props,
-        assetId,
-        store,
-        retryInCaseFail: true,
-      });
+      setIsLoading(true);
+      await validateRestore({ ...props, restoreData, store });
       logger.debug({
         message: "Validation payment completed",
         data: {
           payload,
         },
       });
-      callback && callback({ success, error, payload: newPayload });
+      const newPayload = await assetLoader({
+        props,
+        assetId: itemAssetId,
+        store,
+        retryInCaseFail: true,
+      });
+      if (newPayload) {
+        callback && callback({ success, error, payload: newPayload });
+      } else {
+        setIsLoading(false);
+      }
+
+      console.log("Susseed!", { result });
+    } catch (error) {
+      setIsLoading(false);
+    }
+  }
+
+  async function completeStorefrontFlow({ success, error, payload }) {
+    try {
+      if (success && !error) {
+        console.log({ validatePayment });
+        await validatePayment({ ...props, payload, store });
+        const newPayload = await assetLoader({
+          props,
+          assetId: itemAssetId,
+          store,
+          retryInCaseFail: true,
+        });
+        logger.debug({
+          message: "Validation payment completed",
+          data: {
+            payload,
+          },
+        });
+        callback && callback({ success, error, payload: newPayload });
+      } else {
+        callback && callback({ success, error, payload });
+      }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
 
@@ -181,6 +209,7 @@ const InPlayer = (props) => {
                 payload: payloadWithAsset,
               });
           } else {
+            setItemAssetId(assetId);
             setPayloadWithPurchaseData(payloadWithAsset);
           }
         } else {
@@ -213,16 +242,19 @@ const InPlayer = (props) => {
       callback && callback({ success: false, error, payload });
     }
   };
-  console.log({ payloadWithPurchaseData });
+  console.log({ payloadWithPurchaseData, isLoading });
   return payloadWithPurchaseData ? (
-    <Storefront
-      {...props}
-      onStorefrontFinished={completeStorefrontFlow}
-      onRestoreCompleted={onRestoreCompleted}
-      screenLocalizations={screenLocalizations}
-      screenStyles={screenStyles}
-      payload={payloadWithPurchaseData}
-    />
+    <>
+      {isLoading && <LoadingScreen />}
+      <Storefront
+        {...props}
+        onStorefrontFinished={completeStorefrontFlow}
+        onRestoreCompleted={onRestoreCompleted}
+        screenLocalizations={screenLocalizations}
+        screenStyles={screenStyles}
+        payload={payloadWithPurchaseData}
+      />
+    </>
   ) : (
     <LoadingScreen />
   );

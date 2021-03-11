@@ -157,7 +157,6 @@ export default function Storefront(props) {
   };
 
   const onRestoreSuccess = () => {
-    setDataSource(null);
     setLoading(false);
   };
 
@@ -165,21 +164,25 @@ export default function Storefront(props) {
     setScreen(ScreensData.PRIVACY_POLICY);
   };
 
-  const onPressRestore = () => {
+  async function onPressRestore() {
     setLoading(true);
 
     restore()
-      .then(() => {
-        props?.onRestoreCompleted();
+      .then(async (data) => {
         const alertTitle = MESSAGES.restore.success;
         const alertMessage = MESSAGES.restore.successInfo;
-        showAlert(alertTitle, alertMessage, onRestoreSuccess);
+        const onRestoreCompleted = props?.onRestoreCompleted;
+
+        await onRestoreCompleted(data);
+        onRestoreSuccess();
+
+        showAlert(alertTitle, alertMessage, hideLoader);
       })
       .catch((err) => {
         const alertTitle = MESSAGES.restore.fail;
         showAlert(alertTitle, err.message, hideLoader);
       });
-  };
+  }
 
   const onHandleBack = () => {
     if (screen === ScreensData.PRIVACY_POLICY) {
@@ -226,6 +229,12 @@ export default function Storefront(props) {
   }
 
   const render = () => {
+    console.log({
+      dataSource,
+      loading,
+      iapInitialized,
+      showdata: !dataSource || loading || !iapInitialized,
+    });
     if (!dataSource || loading || !iapInitialized) {
       return <LoadingScreen />;
     }

@@ -4,6 +4,8 @@ import { externalIdForPlatform } from "../../../Services/InPlayerServiceHelper";
 export function prepareInAppPurchaseData(inPlayerFeesData) {
   const result = R.map((item) => {
     const { externalFeeId, productType, title, productIdentifier } = item;
+    item.storePurchaseID = externalFeeId || productIdentifier;
+
     if (externalFeeId) {
       return {
         productType,

@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { Alert } from "react-native";
-import MESSAGES from "../Config";
+import MESSAGES from "../../Config";
 
 export function invokeCallBack(
   props,

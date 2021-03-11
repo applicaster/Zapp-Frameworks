@@ -150,9 +150,10 @@ export async function restore() {
     });
 
     const restoreResultFromStore = await ApplicasterIAPModule.restore();
-
+    console.log({ restoreResultFromStore });
     logger.debug({
       message: `ApplicasterIAPModule.restore >> Restore complete`,
+      data: { restored_data: restoreResultFromStore },
     });
     return restoreResultFromStore;
   } catch (error) {
