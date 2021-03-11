@@ -35,11 +35,11 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
     var objcHelper: SegmentAnalyticsHelper?
 
     lazy var ignoredEvents: [String] = {
-        ["Screen viewed: undefined",
-         "Tap Menu Item",
-         "Tap Cell",
-         "QuickBrickApple screen",
-         "IMANativeUI screen"]
+        guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
+              eventsListString.isEmpty == false else {
+            return []
+        }
+        return eventsListString.components(separatedBy: ",")
     }()
 
     /*
