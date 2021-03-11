@@ -14,6 +14,14 @@ const baseManifest = {
       tooltip_text: "The key used for connecting with segment analytics",
       default: "",
     },
+    {
+      section: "configuration",
+      type: "text_area",
+      key: "blacklisted_events_list",
+      initial_value: "",
+      label: "Blacklisted Events",
+      tooltip_text: "The key used to specify the blacklisted events",
+    }
   ],
   whitelisted_account_ids: [],
   ui_builder_support: false,
