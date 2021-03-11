@@ -366,8 +366,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
         AVMediaSelectionOption *selectedAudio = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:audio];
         AVMediaSelectionOption *selectedSubtitles = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:subtitles];
 
-        NSDictionary *dict = @{ @"selected_audio": selectedAudio.displayName,
-                                @"selected_subtitle": selectedSubtitles.displayName };
+        NSDictionary *dict = @{ @"Current Audio": selectedAudio.displayName,
+                                @"Current Subtitle": selectedSubtitles.displayName };
 
         NSMutableDictionary *updatedAnalyticsParams = [NSMutableDictionary dictionaryWithDictionary:analyticsParams];
         [updatedAnalyticsParams addEntriesFromDictionary:dict];
