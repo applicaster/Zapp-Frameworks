@@ -20,7 +20,7 @@ const baseManifest = {
       key: "blacklisted_events_list",
       initial_value: "",
       label: "Blacklisted Events",
-      tooltip_text: "The key used to specify the blacklisted events",
+      tooltip_text: "The key used to specify the blacklisted events, separated by comma",
     }
   ],
   whitelisted_account_ids: [],
