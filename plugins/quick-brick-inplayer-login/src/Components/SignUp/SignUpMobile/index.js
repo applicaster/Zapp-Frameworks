@@ -15,10 +15,10 @@ import TitleLabel from "../../UIComponents/TitleLabel";
 import BackButton from "../../UIComponents/Buttons/BackButton";
 
 const SignUpMobile = (props) => {
-  const [fullName, setFullName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [passwordConfirmation, setPasswordConfirmation] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [fullName, setFullName] = useState("Anton");
+  const [email, setEmail] = useState("a2003@a.com");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("Z1x2c3!@#");
+  const [password, setPassword] = useState("Z1x2c3!@#");
   const { width: screenWidth } = useDimensions("window");
 
   const { screenStyles, screenLocalizations } = props;
