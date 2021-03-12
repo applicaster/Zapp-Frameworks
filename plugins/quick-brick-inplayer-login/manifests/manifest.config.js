@@ -1302,4 +1302,5 @@ function createManifest({ version, platform }) {
     targets: isTV ? ["tv"] : ["mobile"],
   };
 }
+
 module.exports = createManifest;
