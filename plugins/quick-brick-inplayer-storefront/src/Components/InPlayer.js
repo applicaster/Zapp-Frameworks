@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 
 import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
-import Storefront from "../../../applicaster-storefront-component/src";
+import Storefront from "@applicaster/applicaster-storefront-component";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import {
