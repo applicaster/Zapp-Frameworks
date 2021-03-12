@@ -111,8 +111,8 @@
     "quickbrick"
   ],
   "platform": "lg_tv",
-  "dependency_version": "0.0.4",
-  "manifest_version": "0.0.4",
+  "dependency_version": "0.0.5",
+  "manifest_version": "0.0.5",
   "api": {
     "excludedNodeModules": [
       "@applicaster/applicaster-iap",
