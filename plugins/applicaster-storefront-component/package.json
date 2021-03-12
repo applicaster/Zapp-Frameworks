@@ -20,7 +20,7 @@
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
   "dependencies": {
-    "@applicaster/applicaster-iap": "0.3.3",
+    "@applicaster/applicaster-iap": "1.1.1",
     "axios": "^0.19.1",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
