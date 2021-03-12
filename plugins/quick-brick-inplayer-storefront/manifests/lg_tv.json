@@ -110,24 +110,20 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "lg_tv",
   "dependency_version": "0.0.2",
   "manifest_version": "0.0.2",
-  "api": {},
+  "api": {
+    "excludedNodeModules": [
+      "@applicaster/applicaster-iap",
+      "react-native-dropdownalert",
+      "react-native-keyboard-aware-scroll-view"
+    ]
+  },
   "project_dependencies": [],
-  "extra_dependencies": [
-    {
-      "ApplicasterIAP": ":path => 'node_modules/@applicaster/applicaster-iap/apple/ApplicasterIAP.podspec'"
-    },
-    {
-      "react-native-blur": ":path => 'node_modules/@react-native-community/blur/react-native-blur.podspec'"
-    }
-  ],
-  "min_zapp_sdk": "4.1.0-Dev",
-  "npm_dependencies": [
-    "@applicaster/applicaster-iap@0.3.3",
-    "@react-native-community/blur@3.4.1"
-  ],
+  "extra_dependencies": [],
+  "min_zapp_sdk": "1.0.0",
+  "npm_dependencies": [],
   "styles": {
     "fields": [
       {
