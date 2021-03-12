@@ -23,7 +23,7 @@ describe("event", () => {
     expect(event).toMatchInlineSnapshot(`
       Event {
         "data": Object {},
-        "error": null,
+        "exception": null,
         "level": 0,
         "logger": Logger {
           "addContext": [Function],
@@ -84,8 +84,8 @@ describe("event", () => {
     const error = new Error("this is an error object");
     const result = event.attachError(error);
     expect(result instanceof Event).toBe(true);
-    expect(event).toHaveProperty("error", error);
-    expect(result).toHaveProperty("error", error);
+    expect(event).toHaveProperty("exception", error);
+    expect(result).toHaveProperty("exception", error);
   });
 
   it("allows to set the jsOnly flag", () => {
@@ -116,7 +116,6 @@ describe("event", () => {
             "data": Object {
               "foo": "bar",
             },
-            "error": null,
             "message": "this is a message",
           },
         ],

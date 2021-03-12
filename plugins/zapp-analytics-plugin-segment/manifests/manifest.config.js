@@ -10,10 +10,18 @@ const baseManifest = {
     {
       section: "configuration",
       type: "text",
-      key: "write_key",
+      key: "segment_write_key",
       tooltip_text: "The key used for connecting with segment analytics",
       default: "",
     },
+    {
+      section: "configuration",
+      type: "text_area",
+      key: "blacklisted_events_list",
+      initial_value: "",
+      label: "Blacklisted Events",
+      tooltip_text: "The key used to specify the blacklisted events, separated by comma",
+    }
   ],
   whitelisted_account_ids: [],
   ui_builder_support: false,
@@ -41,8 +49,8 @@ const min_zapp_sdk = {
   amazon_fire_tv_for_quickbrick: "2.0.0",
   android_tv_for_quickbrick: "2.0.0",
   android_for_quickbrick: "2.0.0",
-  ios_for_quickbrick: "2.0.2-Dev",
-  tvos_for_quickbrick: "2.0.2-Dev"
+  ios_for_quickbrick: "1.0.0-Dev",
+  tvos_for_quickbrick: "1.0.0-Dev"
 };
 
 const extra_dependencies_apple = [

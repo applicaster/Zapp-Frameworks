@@ -41,9 +41,10 @@ public class LoadingState {
     /// Defines state loading status
     private(set) var loadingState: LoadingStateTypes = .initial {
         didSet {
-            logger?.debugLog(template: LoadingStateLogs.loadingStateDidSet,
+            logger?.debugLog(message: "\(LoadingStateLogs.loadingStateDidSet.message) \(readableName ?? ""): \(loadingState.toString())",
                              data: ["name": name,
-                                    "loadingState": loadingState.toString()])
+                                    "readable_name": readableName ?? "",
+                                    "loading_state": loadingState.toString()])
         }
     }
 

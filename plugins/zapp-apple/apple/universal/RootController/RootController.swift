@@ -54,9 +54,11 @@ public class RootController: NSObject {
         }
         self.userInterfaceLayer = userInterfaceLayer
         splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
+        NetworkRequestsManager.startListening()
         pluginsManager.crashlogs.prepareManager { [weak self] success in
             guard let self = self else { return }
             if success {
+
                 self.loadingStateMachine = LoadingStateMachine(dataSource: self,
                                                                withStates: self.prepareLoadingStates())
                 self.loadingStateMachine.startStatesInvocation()

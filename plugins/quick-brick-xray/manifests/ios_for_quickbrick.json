@@ -19,7 +19,7 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "2.0.2-dev",
+  "min_zapp_sdk": "4.1.0-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -61,7 +61,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "1.5.0",
+  "manifest_version": "1.6.2",
   "extra_dependencies": [
     {
       "QuickBrickXray": ":path => './node_modules/@applicaster/quick-brick-xray/apple/QuickBrickXray.podspec'"
@@ -77,6 +77,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@1.5.0"
+    "@applicaster/quick-brick-xray@1.6.2"
   ]
 }

@@ -18,7 +18,7 @@
   "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "4.0.0-Dev",
+  "min_zapp_sdk": "4.1.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -41,13 +41,13 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "1.2.0",
+  "manifest_version": "1.2.2",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-adobe@1.2.0"
+    "@applicaster/zapp-analytics-plugin-adobe@1.2.2"
   ]
 }

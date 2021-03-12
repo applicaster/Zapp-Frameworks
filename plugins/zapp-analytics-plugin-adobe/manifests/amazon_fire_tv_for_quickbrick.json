@@ -37,9 +37,9 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "manifest_version": "1.2.0",
+  "manifest_version": "1.2.2",
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-adobe@1.2.0"
+    "@applicaster/zapp-analytics-plugin-adobe@1.2.2"
   ],
   "project_dependencies": [
     {

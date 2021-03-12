@@ -127,6 +127,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
     override fun onProductDataResponse(response: ProductDataResponse?) {
         if (null == response) {
+            APLogger.error(TAG, "onProductDataResponse returned null ProductDataResponse")
             return
         }
 
@@ -134,14 +135,26 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         if (ProductDataResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
             APLogger.error(TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
             skuRequests[response.requestId]?.onSkuDetailsLoadingFailed(
-                IBillingAPI.IAPResult.generalError,
-                response.requestStatus.toString()
+                    IBillingAPI.IAPResult.generalError,
+                    response.requestStatus.toString()
             )
             return
         }
-        val skus =
-            response.productData.values.map { Sku(it.sku, it.price, it.title, it.description) }
-        request?.onSkuDetailsLoaded(skus)
+        val stringBuilder = StringBuilder()
+        response.productData.entries.forEach {
+            stringBuilder.append("Sku: ").append(it.key).append(": ")
+            stringBuilder.append("sku: ").append(it.value.sku).append(", ")
+            stringBuilder.append("price: ").append(it.value.price).append(", ")
+            stringBuilder.append("title: ").append(it.value.title).append(", ")
+            stringBuilder.append("description: ").append(it.value.description).append("\n")
+        }
+        APLogger.debug(TAG, "onProductDataResponse: ${response.productData.size} items:\n $stringBuilder")
+        if (null == request) {
+            APLogger.error(TAG, "onProductDataResponse: request ${response.requestId} not found in pending")
+        } else {
+            val skus = response.productData.values.map { Sku(it.sku, it.price ?: "", it.title, it.description) }
+            request.onSkuDetailsLoaded(skus)
+        }
     }
 
     override fun onPurchaseResponse(response: PurchaseResponse?) {
@@ -217,6 +230,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             initializationListener?.onAnyError(IBillingAPI.IAPResult.generalError, "Failed to load user data")
             return
         }
+        APLogger.info(TAG, "User data loaded: ${userDataResponse.userData.userId}  ${userDataResponse.userData.marketplace}")
         userData = userDataResponse.userData
         initializationListener?.onUserDataLoaded()
         // nothing yet

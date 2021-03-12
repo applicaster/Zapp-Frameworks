@@ -1,9 +1,10 @@
 //
-//  SegmentAnalyticsPlugin.swift
-//  SegmentAnalyticsPlugin
+//  SegmentAnalytics.swift
+//  SegmentAnalytics
 //
 //  Created by Roman Karpievich on 7/1/20.
-//  Copyright © 2020 Applicaster Ltd. All rights reserved.
+//  Updated by Alex Zchut on 10/03/2021.
+//  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
 import Analytics
@@ -11,19 +12,35 @@ import AVFoundation
 import Foundation
 import ZappCore
 
-import ZappAnalyticsPluginsSDK
-import ZappCore
-import ZappPlugins
 /*
  For more infomration check the Segment API docs:
  https://segment.com/docs/connections/sources/catalog/libraries/mobile/ios/
  */
-class SegmentAnalyticsPlugin: ZPAnalyticsProvider {
-    override public func getKey() -> String {
-        return "SegmentAnalyticsPlugin"
+class SegmentAnalytics: NSObject, PluginAdapterProtocol {
+    open var providerProperties: [String: NSObject] = [:]
+    open var configurationJSON: NSDictionary?
+
+    public var model: ZPPluginModel?
+    public var providerName: String {
+        return getKey()
     }
 
-    private var isDisabled = false
+    public func getKey() -> String {
+        return "SegmentAnalytics"
+    }
+
+    var isDisabled = false
+    var playbackStalled: Bool = false
+    public var playerPlugin: PlayerProtocol?
+    var objcHelper: SegmentAnalyticsHelper?
+
+    lazy var ignoredEvents: [String] = {
+        guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
+              eventsListString.isEmpty == false else {
+            return []
+        }
+        return eventsListString.components(separatedBy: ",")
+    }()
 
     /*
          track lets you record the actions your users perform.
@@ -37,22 +54,13 @@ class SegmentAnalyticsPlugin: ZPAnalyticsProvider {
          We recommend tracking just a few important events. You can always add more later!
      */
 
-    override func trackEvent(_ eventName: String, parameters: [String: NSObject]) {
-        // Check for a valid segment key
-        guard isDisabled == false else {
-            return
-        }
-
-        // Add extra params to align with the Android plugin code
-        var newParameters = parameters
-        newParameters["name"] = eventName as NSObject
-        newParameters["timestamp"] = getTimestamp() as NSObject
-
-        // Pass the event to Segement server
-        SEGAnalytics.shared()?.track(eventName, properties: newParameters)
+    public required init(pluginModel: ZPPluginModel) {
+        model = pluginModel
+        configurationJSON = model?.configurationJSON
+        providerProperties = model?.configurationJSON as? [String: NSObject] ?? [:]
     }
 
-    override func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
+    public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
         if let segmentKey = model?.configurationValue(for: "segment_write_key") as? String,
            segmentKey.isEmpty == false {
             let configuration = SEGAnalyticsConfiguration(writeKey: segmentKey)
@@ -60,13 +68,15 @@ class SegmentAnalyticsPlugin: ZPAnalyticsProvider {
             configuration.recordScreenViews = true
 
             SEGAnalytics.setup(with: configuration)
+            objcHelper = SegmentAnalyticsHelper(providerProperties: providerProperties,
+                                                delegate: self)
             completion?(true)
         } else {
             disable(completion: completion)
         }
     }
 
-    override func disable(completion: ((Bool) -> Void)?) {
+    public func disable(completion: ((Bool) -> Void)?) {
         disable()
         completion?(true)
     }
@@ -75,11 +85,25 @@ class SegmentAnalyticsPlugin: ZPAnalyticsProvider {
         isDisabled = true
     }
 
-    fileprivate func getTimestamp() -> String {
+    func getTimestamp() -> String {
         // UTC: '2019-03-29T14:50:23.971Z’
         let dateFormatter = ISO8601DateFormatter()
         let dateString = dateFormatter.string(from: Date())
 
         return "\(dateString)"
+    }
+
+    func shoudIgnoreEvent(_ eventName: String) -> Bool {
+        return ignoredEvents.contains(eventName)
+    }
+}
+
+extension SegmentAnalytics {
+    @objc public func login(with identity: String,
+                            traits: [String: Any]?,
+                            options: [String: Any]?) {
+        SEGAnalytics.shared()?.identify(identity,
+                                        traits: traits,
+                                        options: options)
     }
 }

@@ -10,6 +10,8 @@ import Foundation
 
 let switchCellIndentifier = "SwitchCellIdentifier"
 let logLevelCellIndentifier = "LogLevelCellIdentifier"
+let networkRequestsIgnoreExtensionsCellIdentifier = "NetworkRequestsIgnoreExtensionsCellIdentifier"
+let networkRequestsIgnoreDomainsCellIdentifier = "NetworkRequestsIgnoreDomainsCellIdentifier"
 
 struct SettingsIndexesHelper {
     static func isCustomSettingsEnabled(in indexPath: IndexPath) -> Bool {
@@ -45,7 +47,8 @@ class SettingsHelper {
             customSettingsData(),
             shortcutAccess(),
             fileLogLevel(),
-            showXrayFloatingButton()
+            showXrayFloatingButton(),
+            networkRequests()
         ]
         return sections
     }
@@ -110,5 +113,17 @@ class SettingsHelper {
                         cellIdentifier: switchCellIndentifier)
         xRayFloatingButton.cells.append(cell)
         return xRayFloatingButton
+    }
+    
+    static func networkRequests() -> Section {
+        var fileLogLevel = Section(footterText: "Defines Parameters for Network Requests")
+        let extensionsCell = Cell(title: "Ignored Extensions",
+                        cellIdentifier: networkRequestsIgnoreExtensionsCellIdentifier)
+        fileLogLevel.cells.append(extensionsCell)
+        
+        let domainsCell = Cell(title: "Ignored Domains",
+                        cellIdentifier: networkRequestsIgnoreDomainsCellIdentifier)
+        fileLogLevel.cells.append(domainsCell)
+        return fileLogLevel
     }
 }
