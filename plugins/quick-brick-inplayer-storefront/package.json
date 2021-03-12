@@ -1,0 +1,47 @@
+{
+  "name": "@applicaster/quick-brick-inplayer-storefront",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@applicaster/quick-brick-parent-lock": "*",
+    "@inplayer-org/inplayer.js": "3.9.0",
+    "@react-native-community/blur": "3.4.1",
+    "axios": "^0.19.1",
+    "moment": "^2.24.0",
+    "prop-types": "^15.7.2",
+    "ramda": "^0.26.1",
+    "react-native-actionsheet": "^2.4.0",
+    "react-native-dropdownalert": "^4.2.1",
+    "react-native-keyboard-aware-scroll-view": "0.9.1",
+    "react-redux": "^7.2.1"
+  },
+  "peerDependencies": {
+    "@applicaster/applicaster-iap": "*",
+    "@applicaster/quick-brick-xray": "*",
+    "@applicaster/zapp-react-native-bridge": "*",
+    "@applicaster/zapp-react-native-redux": "*",
+    "@applicaster/zapp-react-native-tvos-ui-components": "*",
+    "@applicaster/zapp-react-native-utils": "*",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick",
+      "tvos_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "amazon_fire_tv_for_quickbrick",
+      "samsung_tv",
+      "lg_tv"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
+}
