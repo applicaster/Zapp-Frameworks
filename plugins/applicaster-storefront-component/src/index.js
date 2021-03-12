@@ -9,6 +9,7 @@ import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
 import { useToggleNavBar } from "./Utils/Hooks";
 import { isApplePlatform } from "./Utils/Platform";
+import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
 
 import {
   purchaseAnItem,
@@ -24,12 +25,18 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
+  // const showParentLock = props?.screenStyles?.import_parent_lock;
+  const showParentLock =
+    props?.configuration?.import_parent_lock === "1" ? true : false;
+
+  console.log({ props, screenStyles: props?.screenStyles });
   useToggleNavBar();
 
   const ScreensData = {
     EMPTY: "Empty",
     STOREFRONT: "Storefront",
     PRIVACY_POLICY: "PrivacyPolicy",
+    PARENT_LOCK: "ParentLock",
   };
 
   const [screen, setScreen] = useState(ScreensData.EMPTY);
@@ -61,6 +68,18 @@ export default function Storefront(props) {
       onStorefrontCompleted({ success: false });
     }
   }
+
+  const presentParentLock = () => {
+    setScreen(ScreensData.PARENT_LOCK);
+  };
+
+  const parentLockCallback = (result) => {
+    if (result.success) {
+      setScreen(ScreensData.STOREFRONT);
+    } else {
+      onStorefrontCompleted({ success: false });
+    }
+  };
 
   async function prepareStoreFront() {
     await initializeIap();
@@ -103,7 +122,11 @@ export default function Storefront(props) {
         productsToPurchase,
       });
       console.log({ storeFeesData, productsToPurchase });
-      setScreen(ScreensData.STOREFRONT);
+      if (showParentLock) {
+        presentParentLock();
+      } else {
+        setScreen(ScreensData.STOREFRONT);
+      }
       setLoading(false);
       setDataSource(mappedFeeData);
     } catch (error) {
@@ -239,6 +262,8 @@ export default function Storefront(props) {
       return <LoadingScreen />;
     }
     switch (screen) {
+      case ScreensData.PARENT_LOCK:
+        return <ParentLockPlugin.Component callback={parentLockCallback} />;
       case ScreensData.STOREFRONT:
         return renderStoreFront();
       case ScreensData.PRIVACY_POLICY:

@@ -67,7 +67,9 @@ const InPlayer = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
 
-  const { import_parent_lock: showParentLock } = screenStyles;
+  // let { import_parent_lock: showParentLock } = screenStyles;
+  const showParentLock =
+    props?.configuration?.import_parent_lock === "1" ? true : false;
 
   let stillMounted = true;
 

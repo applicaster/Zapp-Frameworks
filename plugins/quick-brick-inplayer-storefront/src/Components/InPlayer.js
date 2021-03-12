@@ -50,7 +50,6 @@ const InPlayer = (props) => {
   const { store } = useSelector(R.prop("appData"));
 
   const navigator = useNavigation();
-  const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [itemAssetId, setItemAssetId] = useState(null);
@@ -61,8 +60,6 @@ const InPlayer = (props) => {
   console.log({ styles, props });
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-
-  const { import_parent_lock: showParentLock } = screenStyles;
 
   console.log({ screenStyles });
   useLayoutEffect(() => {

@@ -80,6 +80,12 @@ const AccountFlow = (props) => {
             eventMessage = `${eventMessage} access granted, flow completed`;
             accountFlowCallback({ success: true });
           } else {
+            console.log({
+              shouldShowParentLock,
+              should1ShowParentLock: shouldShowParentLock(
+                props.parentLockWasPresented
+              ),
+            });
             if (
               shouldShowParentLock &&
               shouldShowParentLock(props.parentLockWasPresented)
@@ -428,6 +434,7 @@ const AccountFlow = (props) => {
   };
 
   if (screen === ScreensData.PARENT_LOCK) {
+    console.log("Parent lock!", ParentLockPlugin);
     return <ParentLockPlugin.Component callback={parentLockCallback} />;
   }
 
