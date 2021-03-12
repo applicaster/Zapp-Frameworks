@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@applicaster/applicaster-iap": "0.3.3",
     "@applicaster/quick-brick-parent-lock": "*",
     "@inplayer-org/inplayer.js": "3.9.0",
     "@react-native-community/blur": "3.4.1",
@@ -39,7 +38,8 @@
       "tvos_for_quickbrick",
       "android_tv_for_quickbrick",
       "amazon_fire_tv_for_quickbrick",
-      "samsung_tv"
+      "samsung_tv",
+      "lg_tv"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   }

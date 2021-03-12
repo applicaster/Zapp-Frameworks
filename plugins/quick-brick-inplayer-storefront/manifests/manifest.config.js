@@ -1977,14 +1977,13 @@ const npm_dependencies = {
 };
 
 const min_zapp_sdk = {
-  ios: "20.2.0-Dev",
-  android: "20.0.0",
-  ios_for_quickbrick: "0.1.0-alpha1",
+  ios_for_quickbrick: "4.1.0-Dev",
   android_for_quickbrick: "0.1.0-alpha1",
-  tvos_for_quickbrick: "0.1.0-alpha1",
+  tvos_for_quickbrick: "4.1.0-Dev",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
   samsung_tv: "1.2.2",
+  lg_tv: "1.0.0", 
 };
 
 const isApple = R.includes(R.__, applePlatforms);
