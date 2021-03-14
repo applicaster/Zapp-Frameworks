@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import ZappApple
 import ZappCore
 
 class EventsBusTests: XCTestCase {
@@ -18,12 +19,12 @@ class EventsBusTests: XCTestCase {
         static let customEventSource = "\(kNativeSubsystemPath)/CustomTypeTestEvent"
         static let customEventSubject = "CustomType event subject"
     }
-    
+
     var receivedEventData: [AnyHashable: Any] = [:]
     var receivedEventSource: String = ""
     var receivedEventSubject: String = ""
 
-    func testPostingPredefinedEvent() {
+    func testPredefinedEvent() {
         clearParams()
         EventsBus.subscribe(self,
                             type: EventsBusType(.testEvent),
@@ -34,24 +35,24 @@ class EventsBusTests: XCTestCase {
                                     self.receivedEventSubject = eventDetails.subject ?? ""
                                 }
                             })
-        
+
         let event = EventsBus.Event(type: EventsBusType(.testEvent),
                                     source: Constants.predefinedEventSource,
                                     subject: Constants.predefinedEventSubject,
                                     data: [
                                         "name": "test",
-                                        "parameters": [:]
+                                        "parameters": [:],
                                     ])
         EventsBus.post(event)
-        
+
         XCTAssertNotNil(receivedEventData, "[PredefinedEvent] - Received Event `data` is nil")
         XCTAssertNotNil(receivedEventSource, "[PredefinedEvent] - Received Event `source` is nil")
         XCTAssertEqual(receivedEventSource, Constants.predefinedEventSource, "[PredefinedEvent] - Received Event source is not equal to `\(Constants.predefinedEventSource)`")
         XCTAssertNotNil(receivedEventSubject, "[PredefinedEvent] - Received Event `subject` is nil")
         XCTAssertEqual(receivedEventSubject, Constants.predefinedEventSubject, "[PredefinedEvent] - Received Event subject is not equal to `\(Constants.predefinedEventSubject)`")
     }
-    
-    func testPostingCustomEvent() {
+
+    func testCustomEvent() {
         clearParams()
         EventsBus.subscribe(self,
                             type: Constants.customEventType,
@@ -62,16 +63,16 @@ class EventsBusTests: XCTestCase {
                                     self.receivedEventSubject = eventDetails.subject ?? ""
                                 }
                             })
-        
+
         let event = EventsBus.Event(type: Constants.customEventType,
                                     source: Constants.customEventSource,
                                     subject: Constants.customEventSubject,
                                     data: [
                                         "name": "test",
-                                        "parameters": [:]
+                                        "parameters": [:],
                                     ])
         EventsBus.post(event)
-        
+
         XCTAssertNotNil(receivedEventData, "[CustomEvent] - Received Event `data` is nil")
         XCTAssertNotNil(receivedEventSource, "[CustomEvent] - Received Event `source` is nil")
         XCTAssertEqual(receivedEventSource, Constants.customEventSource, "[CustomEvent] - Received Event source is not equal to `\(Constants.customEventSource)`")
@@ -82,11 +83,10 @@ class EventsBusTests: XCTestCase {
     func fetchEventDetails(from content: Notification?) -> EventsBus.Event? {
         return content?.userInfo?[Constants.eventObject] as? EventsBus.Event
     }
-    
+
     func clearParams() {
         receivedEventData = [:]
         receivedEventSource = ""
         receivedEventSubject = ""
-        
     }
 }
