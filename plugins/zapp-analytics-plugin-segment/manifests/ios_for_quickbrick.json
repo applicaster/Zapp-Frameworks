@@ -30,7 +30,7 @@
   ],
   "platform": "ios_for_quickbrick",
   "min_zapp_sdk": "1.0.0-Dev",
-  "manifest_version": "2.1.2",
+  "manifest_version": "2.1.3",
   "extra_dependencies": [
     {
       "SegmentAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-segment/apple/SegmentAnalytics.podspec'"
@@ -47,6 +47,6 @@
     "mobile"
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-segment@2.1.2"
+    "@applicaster/zapp-analytics-plugin-segment@2.1.3"
   ]
 }
