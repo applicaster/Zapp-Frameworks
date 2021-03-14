@@ -23,6 +23,11 @@ class SessionStorageTests: XCTestCase {
         case unableToRemoveValueForKey
     }
 
+    struct ErrorMessages {
+        static let getValueNotMatch = "[SessionStorage - Get] - Value is not equal to `\(Constants.value)`"
+        static let removeValuePersist = "[SessionStorage - remove] - Value exists after removal"
+    }
+
     override func setUpWithError() throws {
         guard SessionStorage.sharedInstance.set(key: Constants.key,
                                                 value: Constants.value,
@@ -37,7 +42,7 @@ class SessionStorageTests: XCTestCase {
             throw SessionStorageError.unableToGetValueForKey
         }
 
-        XCTAssertEqual(value, Constants.value, "[SessionStorage - Get] - Value is not equal to `\(Constants.value)`")
+        XCTAssertEqual(value, Constants.value, ErrorMessages.getValueNotMatch)
     }
 
     func testRemoveValue() throws {
@@ -48,7 +53,7 @@ class SessionStorageTests: XCTestCase {
 
         let value = getValue(for: Constants.key, namespace: Constants.namespace)
 
-        XCTAssertNil(value, "[SessionStorage - remove] - Value exists after removal")
+        XCTAssertNil(value, ErrorMessages.removeValuePersist)
     }
 
     func getValue(for key: String, namespace: String?) -> String? {

@@ -9,7 +9,7 @@
 import Foundation
 
 extension PluginsManager: LoadingStateMachineDataSource {
-    func preapareLoadingPluginStates() -> [LoadingState] {
+    func prepareLoadingPluginStates() -> [LoadingState] {
         let loadPlugins = LoadingState()
         loadPlugins.stateHandler = loadPluginsGroup
         loadPlugins.readableName = "<plugins-state-machine> Load General Plugins JSON"

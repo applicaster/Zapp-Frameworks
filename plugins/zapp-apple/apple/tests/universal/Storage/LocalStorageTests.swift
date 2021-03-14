@@ -23,6 +23,11 @@ class LocalStorageTests: XCTestCase {
         case unableToRemoveValueForKey
     }
 
+    struct ErrorMessages {
+        static let getValueNotMatch = "[LocalStorage - Get] - Value is not equal to `\(Constants.value)`"
+        static let removeValuePersist = "[LocalStorage - Remove] - Value exists after removal"
+    }
+
     override func setUpWithError() throws {
         guard LocalStorage.sharedInstance.set(key: Constants.key,
                                               value: Constants.value,
@@ -37,7 +42,7 @@ class LocalStorageTests: XCTestCase {
             throw LocalStorageError.unableToGetValueForKey
         }
 
-        XCTAssertEqual(value, Constants.value, "[LocalStorage - Get] - Value is not equal to `\(Constants.value)`")
+        XCTAssertEqual(value, Constants.value, ErrorMessages.getValueNotMatch)
     }
 
     func testRemoveValue() throws {
@@ -48,7 +53,7 @@ class LocalStorageTests: XCTestCase {
 
         let value = getValue(for: Constants.key, namespace: Constants.namespace)
 
-        XCTAssertNil(value, "[LocalStorage - remove] - Value exists after removal")
+        XCTAssertNil(value, ErrorMessages.removeValuePersist)
     }
 
     func getValue(for key: String, namespace: String?) -> String? {

@@ -20,6 +20,20 @@ class EventsBusTests: XCTestCase {
         static let customEventSubject = "CustomType event subject"
     }
 
+    struct ErrorMessages {
+        static let predefinedEventReceivedDataNil = "[PredefinedEvent] - Received Event `data` is nil"
+        static let predefinedEventReceivedSourceNil = "[PredefinedEvent] - Received Event `source` is nil"
+        static let predefinedEventReceivedSourceNotMatch = "[PredefinedEvent] - Received Event source is not equal to `\(Constants.predefinedEventSource)`"
+        static let predefinedEventReceivedSubjectNil = "[PredefinedEvent] - Received Event `subject` is nil"
+        static let predefinedEventReceivedSubjectNotMatch = "[PredefinedEvent] - Received Event subject is not equal to `\(Constants.predefinedEventSubject)`"
+
+        static let customEventReceivedDataNil = "[CustomEvent] - Received Event `data` is nil"
+        static let customEventReceivedSourceNil = "[CustomEvent] - Received Event `source` is nil"
+        static let customEventReceivedSourceNotMatch = "[CustomEvent] - Received Event source is not equal to `\(Constants.customEventSource)`"
+        static let customEventReceivedSubjectNil = "[CustomEvent] - Received Event `subject` is nil"
+        static let customEventReceivedSubjectNotMatch = "[CustomEvent] - Received Event subject is not equal to `\(Constants.customEventSubject)`"
+    }
+
     var receivedEventData: [AnyHashable: Any] = [:]
     var receivedEventSource: String = ""
     var receivedEventSubject: String = ""
@@ -45,11 +59,11 @@ class EventsBusTests: XCTestCase {
                                     ])
         EventsBus.post(event)
 
-        XCTAssertNotNil(receivedEventData, "[PredefinedEvent] - Received Event `data` is nil")
-        XCTAssertNotNil(receivedEventSource, "[PredefinedEvent] - Received Event `source` is nil")
-        XCTAssertEqual(receivedEventSource, Constants.predefinedEventSource, "[PredefinedEvent] - Received Event source is not equal to `\(Constants.predefinedEventSource)`")
-        XCTAssertNotNil(receivedEventSubject, "[PredefinedEvent] - Received Event `subject` is nil")
-        XCTAssertEqual(receivedEventSubject, Constants.predefinedEventSubject, "[PredefinedEvent] - Received Event subject is not equal to `\(Constants.predefinedEventSubject)`")
+        XCTAssertNotNil(receivedEventData, ErrorMessages.predefinedEventReceivedDataNil)
+        XCTAssertNotNil(receivedEventSource, ErrorMessages.predefinedEventReceivedSourceNil)
+        XCTAssertEqual(receivedEventSource, Constants.predefinedEventSource, ErrorMessages.predefinedEventReceivedSourceNotMatch)
+        XCTAssertNotNil(receivedEventSubject, ErrorMessages.predefinedEventReceivedSubjectNil)
+        XCTAssertEqual(receivedEventSubject, Constants.predefinedEventSubject, ErrorMessages.predefinedEventReceivedSubjectNotMatch)
     }
 
     func testCustomEvent() {
@@ -73,11 +87,11 @@ class EventsBusTests: XCTestCase {
                                     ])
         EventsBus.post(event)
 
-        XCTAssertNotNil(receivedEventData, "[CustomEvent] - Received Event `data` is nil")
-        XCTAssertNotNil(receivedEventSource, "[CustomEvent] - Received Event `source` is nil")
-        XCTAssertEqual(receivedEventSource, Constants.customEventSource, "[CustomEvent] - Received Event source is not equal to `\(Constants.customEventSource)`")
-        XCTAssertNotNil(receivedEventSubject, "[CustomEvent] - Received Event `subject` is nil")
-        XCTAssertEqual(receivedEventSubject, Constants.customEventSubject, "[CustomEvent] - Received Event subject is not equal to `\(Constants.customEventSubject)`")
+        XCTAssertNotNil(receivedEventData, ErrorMessages.customEventReceivedDataNil)
+        XCTAssertNotNil(receivedEventSource, ErrorMessages.customEventReceivedSourceNil)
+        XCTAssertEqual(receivedEventSource, Constants.customEventSource, ErrorMessages.customEventReceivedSourceNotMatch)
+        XCTAssertNotNil(receivedEventSubject, ErrorMessages.customEventReceivedSubjectNil)
+        XCTAssertEqual(receivedEventSubject, Constants.customEventSubject, ErrorMessages.customEventReceivedSubjectNotMatch)
     }
 
     func fetchEventDetails(from content: Notification?) -> EventsBus.Event? {

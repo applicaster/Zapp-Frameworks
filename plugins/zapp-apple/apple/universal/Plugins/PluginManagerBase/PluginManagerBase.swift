@@ -24,6 +24,13 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
 
     open var providers: [String: pluginTypeProtocol] = [:]
 
+    public lazy var pluginModels: [ZPPluginModel]? = {
+        guard let models = PluginsManager.pluginModels()?.filter({ $0.pluginType == pluginType }) else {
+            return nil
+        }
+        return models
+    }()
+
     public func prepareManager(completion: PluginManagerCompletion) {
         createProviders(completion: completion)
     }
@@ -38,30 +45,27 @@ public class PluginManagerBase: PluginManagerProtocol, PluginManagerControlFlowP
 
     public func createProviders(forceEnable: Bool = false,
                                 completion: PluginManagerCompletion) {
-        let pluginModels = PluginsManager.pluginModels()?.filter {
-            $0.pluginType == pluginType
+        guard let pluginModels = pluginModels else {
+            completion?(false)
+            return
         }
 
-        if let pluginModels = pluginModels {
-            var counter = pluginModels.count
+        var counter = pluginModels.count
 
-            guard counter > 0 else {
-                completion?(true)
-                return
-            }
+        guard counter > 0 else {
+            completion?(true)
+            return
+        }
 
-            for pluginModel in pluginModels {
-                createProvider(pluginModel: pluginModel,
-                               forceEnable: forceEnable) { _ in
-                    counter -= 1
+        for pluginModel in pluginModels {
+            createProvider(pluginModel: pluginModel,
+                           forceEnable: forceEnable) { _ in
+                counter -= 1
 
-                    if counter == 0 {
-                        completion?(true)
-                    }
+                if counter == 0 {
+                    completion?(true)
                 }
             }
-        } else {
-            completion?(false)
         }
     }
 
