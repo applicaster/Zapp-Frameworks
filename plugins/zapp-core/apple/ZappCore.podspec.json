@@ -32,7 +32,7 @@
       "name": "UnitTests",
       "test_type": "unit",
       "ios": {
-        "source_files": "tests/iOS/**/*.{swift}"
+        "source_files": "tests/ios/**/*.{swift}"
       },
       "tvos": {
         "source_files": "tests/Dummy.swift"
