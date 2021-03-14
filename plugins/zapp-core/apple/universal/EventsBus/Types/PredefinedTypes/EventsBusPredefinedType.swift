@@ -9,6 +9,7 @@ import Foundation
 
 public enum EventsBusPredefinedType {
     case undefined
+    case testEvent
     case reachabilityChanged
     case analytics(_ subtype: EventsBusTypeAnalyticsSubtype)
     case msAppCenterCheckUpdates
