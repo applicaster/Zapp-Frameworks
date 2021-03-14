@@ -3,6 +3,7 @@
 //  SegmentAnalytics
 //
 //  Created by Alex Zchut on 10/03/2021.
+//  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
 import React
