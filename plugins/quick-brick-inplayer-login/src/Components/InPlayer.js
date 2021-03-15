@@ -1,5 +1,4 @@
 import React, { useState, useLayoutEffect } from "react";
-
 import AccountFlow from "./AccountFlow";
 import LogoutFlow from "./LogoutFlow";
 import * as R from "ramda";
@@ -184,21 +183,25 @@ const InPlayer = (props) => {
       event.addData({ token });
     }
 
-    if (
-      (hookType === HookTypeData.SCREEN_HOOK ||
-        hookType === HookTypeData.PLAYER_HOOK) &&
-      success
-    ) {
-      const { callback } = props;
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-      callback && callback({ success, error: null, payload: payload });
-    } else if (hookType === HookTypeData.USER_ACCOUNT) {
+    if (hookType === HookTypeData.USER_ACCOUNT) {
       event.setMessage(`${eventMessage}, plugin finished task: go back`).send();
       navigator.goBack();
     } else {
+      const { callback } = props;
       event.setMessage(`${eventMessage}, plugin finished task`).send();
+      let newPayload = payload;
+      if (newPayload.extensions) {
+        newPayload.extensions = {
+          ...payload.extensions,
+          parentLockWasPresented,
+        };
+      } else {
+        newPayload.extensions = {
+          parentLockWasPresented,
+        };
+      }
 
-      callback && callback({ success: success, error: null, payload: payload });
+      callback && callback({ success, error: null, payload: payload });
     }
   };
 

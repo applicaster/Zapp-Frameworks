@@ -123,7 +123,7 @@ const AccountFlow = (props) => {
     let eventMessage = "Parent lock finished";
 
     if (success) {
-      eventMessage = `${eventMessage}, no access presenting login screen`;
+      eventMessage = `${eventMessage}, presenting login screen`;
       await authenticateUser();
     } else {
       accountFlowCallback({ success: false });
@@ -155,8 +155,9 @@ const AccountFlow = (props) => {
   const maybeShowAlertToUser = (title) => async (error) => {
     const { response } = error;
     if (response && response.status >= 400 && response.status < 500) {
-      const json = await error.response.json();
-      showAlertToUser({ title, message: json.message });
+      const message = response.data.message;
+
+      showAlertToUser({ title, message: message });
       stillMounted && setLoading(false);
     } else {
       logger.log({

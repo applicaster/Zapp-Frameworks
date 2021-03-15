@@ -121,8 +121,14 @@ export default function Storefront(props) {
         storeFeesData,
         productsToPurchase,
       });
-      console.log({ storeFeesData, productsToPurchase });
-      if (showParentLock) {
+      const parentLockWasPresented =
+        props?.payload.extensions?.parentLockWasPresented;
+      console.log({
+        storeFeesData,
+        productsToPurchase,
+        parentLockWasPresented,
+      });
+      if (showParentLock && !parentLockWasPresented) {
         presentParentLock();
       } else {
         setScreen(ScreensData.STOREFRONT);
