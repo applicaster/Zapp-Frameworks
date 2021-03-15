@@ -33,7 +33,8 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
     var playbackStalled: Bool = false
     public var playerPlugin: PlayerProtocol?
     var objcHelper: SegmentAnalyticsHelper?
-
+    var playerRateObserverPointerString: UInt?
+    
     lazy var ignoredEvents: [String] = {
         guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
               eventsListString.isEmpty == false else {

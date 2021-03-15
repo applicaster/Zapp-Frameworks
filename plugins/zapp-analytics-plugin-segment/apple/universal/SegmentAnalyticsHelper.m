@@ -357,7 +357,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     NSDictionary *entry = [self currentPlayedItemEntry];
     NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
     analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
+    
+    BOOL selectionMade = NO;
     AVPlayerItem *playerItem = (AVPlayerItem *)notification.object;
     if ([playerItem.asset isKindOfClass:[AVURLAsset class]]) {
         AVURLAsset *asset = (AVURLAsset *)playerItem.asset;
@@ -373,10 +374,11 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
             NSMutableDictionary *updatedAnalyticsParams = [NSMutableDictionary dictionaryWithDictionary:analyticsParams];
             [updatedAnalyticsParams addEntriesFromDictionary:dict];
             analyticsParams = updatedAnalyticsParams;
+            selectionMade = YES;
         }
     }
 
-    completion(analyticsParams);
+    completion(selectionMade ? analyticsParams : nil);
 }
 
 #pragma mark - AdobeAnalyticsDelegate
