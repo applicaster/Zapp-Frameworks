@@ -51,7 +51,7 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
     }
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
-        let heartbeatDelay = 20.0
+        let heartbeatDelay = 15.0
         if let doubleValue = Double(objcHelper?.maxPosition ?? "0"),
            doubleValue + heartbeatDelay < currentTime {
             objcHelper?.prepareEventPlayerPlaybackProgress { eventName, parameters in
