@@ -40,7 +40,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
               eventsListString.isEmpty == false else {
             return []
         }
-        return eventsListString.components(separatedBy: ",")
+        return eventsListString.components(separatedBy: ",").map { $0.lowercased() }
     }()
 
     /*
@@ -95,7 +95,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
     }
 
     func shoudIgnoreEvent(_ eventName: String) -> Bool {
-        return ignoredEvents.contains(eventName)
+        return ignoredEvents.contains(eventName.lowercased())
     }
 }
 
