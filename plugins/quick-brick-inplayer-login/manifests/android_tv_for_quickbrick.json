@@ -111,8 +111,8 @@
     "quickbrick"
   ],
   "platform": "android_tv_for_quickbrick",
-  "dependency_version": "4.0.2",
-  "manifest_version": "4.0.2",
+  "dependency_version": "4.0.3",
+  "manifest_version": "4.0.3",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
