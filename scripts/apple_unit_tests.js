@@ -3,10 +3,10 @@
 /* eslint-disable no-console */
 const {
   iosBuildUnitTests,
-} = require("@applicaster/zapplicaster-cli/src/commands/publishPlugin/iOSTasks");
+} = require("./test_tasks");
 const {
   getIosModuleName,
-} = require("@applicaster/zapplicaster-cli/src/commands/publishPlugin/iOSTasks/helper");
+} = require("./test_tasks/helper");
 const { existsSync } = require("fs");
 
 const { resolve } = require("path");

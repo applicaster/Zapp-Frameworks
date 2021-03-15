@@ -116,7 +116,7 @@ extension PluginsManager {
     /// Note: Idea that this url will be used to retrieve configuration json only from plugins that was added in prebuild
     /// - Returns: Array of Data
     fileprivate class func latestJSONPluginData() -> NSArray? {
-        guard let localURLPath = FacadeConnector.connector?.applicationData?.pluginsURLPath(),
+        guard let localURLPath = LoadingManager().file(type: .plugins)?.localURLPath(),
               let pluginsData = pluginsData(from: localURLPath) else {
             return nil
         }

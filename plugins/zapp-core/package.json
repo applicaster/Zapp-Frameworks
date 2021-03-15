@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/applicaster/AppleApplicasterFrameworks"
   },
+  "dependencies": {
+    "@applicaster/x-ray": "0.2.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -56,7 +56,13 @@
     {
       "name": "UnitTests",
       "test_type": "unit",
-      "source_files": "Tests/**"
+      "ios": {
+        "source_files": "tests/ios/**/*.{swift}"
+      },
+      "tvos": {
+        "source_files": "tests/tvos/**/*.{swift}"
+      },
+      "source_files": "tests/universal/**/*.{swift}"
     }
   ],
   "swift_version": "5.1"
