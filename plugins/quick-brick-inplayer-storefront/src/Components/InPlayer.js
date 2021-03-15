@@ -198,7 +198,7 @@ const InPlayer = (props) => {
               payloadWithAsset,
             },
           });
-          if (R.isNil(payloadWithAsset?.extensions?.in_app_purchase_data)) {
+          if (!R.isNil(payloadWithAsset?.content?.src)) {
             callback &&
               callback({
                 success: true,
