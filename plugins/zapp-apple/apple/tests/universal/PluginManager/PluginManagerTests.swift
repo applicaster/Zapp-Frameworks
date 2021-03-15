@@ -72,7 +72,7 @@ extension PluginManagerTests {
 
         pluginManager.loadPluginsGroup {
             self.pluginModels = PluginsManager.parseLatestPluginsJson()
-            XCTAssertNotEqual(self.pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
+            XCTAssertEqual(self.pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
             expectation.fulfill()
         } _: {
             XCTAssert(true, ErrorMessages.pluginsListUnableToLoad)
