@@ -66,7 +66,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
            segmentKey.isEmpty == false {
             let configuration = SEGAnalyticsConfiguration(writeKey: segmentKey)
             configuration.trackApplicationLifecycleEvents = true
-            configuration.recordScreenViews = true
+            configuration.recordScreenViews = false
 
             SEGAnalytics.setup(with: configuration)
             objcHelper = SegmentAnalyticsHelper(providerProperties: providerProperties,

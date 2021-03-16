@@ -19,6 +19,10 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
         return getCurrentPlayerInstance()?.currentItem?.currentTime().seconds ?? 0.00
     }
     
+    var lastSavedPlayerPosition: Double {
+        return Double(objcHelper?.maxPosition ?? "0") ?? 0.00
+    }
+    
     public func playerDidFinishPlayItem(player: PlayerProtocol, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
@@ -56,7 +60,7 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
         let heartbeatDelay = 15.0
-        if currentPlayerPosition + heartbeatDelay < currentTime {
+        if lastSavedPlayerPosition + heartbeatDelay < currentTime {
             objcHelper?.prepareEventPlayerPlaybackProgress { eventName, parameters in
                 let trackParameters = parameters as? [String: NSObject] ?? [:]
                 self.trackEvent(eventName, parameters: trackParameters)
