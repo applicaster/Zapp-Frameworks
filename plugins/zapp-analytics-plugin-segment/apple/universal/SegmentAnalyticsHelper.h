@@ -28,8 +28,8 @@ static NSString *_Nonnull const kPlayingItemExtensions = @"extensions";
 
 @interface SegmentAnalyticsHelper : NSObject
 
-@property (nonatomic, strong) NSString *_Nullable maxPosition;
-@property (nonatomic, strong) NSString *_Nullable adPosition;
+@property (nonatomic, readwrite) NSTimeInterval playerPlayedTime;
+@property (nonatomic, readwrite) NSTimeInterval adPlayedTime;
 
 - (instancetype _Nonnull)initWithProviderProperties:(NSDictionary *_Nullable)providerProperties
                                            delegate:(id<SegmentAnalyticsDelegate> _Nullable)delegate;

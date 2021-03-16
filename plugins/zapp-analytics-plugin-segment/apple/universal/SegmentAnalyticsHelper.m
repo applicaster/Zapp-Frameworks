@@ -27,6 +27,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 @property (nonatomic, weak) id<SegmentAnalyticsDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *providerProperties;
 
+@property (nonatomic, readwrite) NSTimeInterval lastLanguageSelectionTime;
+
 @end
 
 @implementation SegmentAnalyticsHelper
@@ -37,6 +39,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     if (self) {
         self.providerProperties = providerProperties;
         self.delegate = delegate;
+        self.lastLanguageSelectionTime = [NSDate date].timeIntervalSince1970;
     }
     return self;
 }
@@ -262,27 +265,27 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 #pragma mark - video_reach event helper
 
 - (void)updatePlayedAdCurrentPosition:(NSTimeInterval)currentPosition {
-    if (self.adPosition.doubleValue < currentPosition) {
-        self.adPosition = [NSString stringWithFormat:@"%f", currentPosition];
+    if (self.adPlayedTime < currentPosition) {
+        self.adPlayedTime = currentPosition;
     }
 }
 
 - (void)updatePlayedItemCurrentPosition:(NSTimeInterval)currentPosition {
-    if (self.maxPosition.doubleValue < currentPosition) {
-        self.maxPosition = [NSString stringWithFormat:@"%f", currentPosition];
+    if (self.playerPlayedTime < currentPosition) {
+        self.playerPlayedTime = currentPosition;
     }
 }
 
 - (void)updatePlayedItemCurrentPosition {
     long currentPosition = [self currentPlayedItemPosition];
-    if (self.maxPosition.doubleValue < currentPosition) {
-        self.maxPosition = [NSString stringWithFormat:@"%ld", currentPosition];
+    if (self.playerPlayedTime < currentPosition) {
+        self.playerPlayedTime = currentPosition;
     }
 }
 
 #pragma mark - player states
 - (void)playerDidCreate {
-    self.maxPosition = @"0";
+    self.playerPlayedTime = 0.00;
 }
 
 - (NSDictionary *)analyticsParamsForEntry {
@@ -342,8 +345,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     NSMutableDictionary *updatedParams = [NSMutableDictionary dictionaryWithDictionary:params];
 
     if (itemDuration && itemIsLive == NO && itemDuration != 0) {
-        if (self.maxPosition.doubleValue > 0) {
-            [updatedParams setObject:[NSNumber numberWithDouble:self.maxPosition.doubleValue] forKey:@"Played Time"];
+        if (self.playerPlayedTime > 0) {
+            [updatedParams setObject:[NSNumber numberWithDouble:self.playerPlayedTime] forKey:@"Played Time"];
         }
         [self videoCompleted:updatedParams completion:completion];
     }
@@ -353,16 +356,21 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     [self updatePlayedItemCurrentPosition];
     NSDictionary *analyticsParams = [self analyticsParamsForEntry];
 
+    NSTimeInterval delayedEventTime = 5.0;
+    NSTimeInterval timeNow = [NSDate date].timeIntervalSince1970;
+    
     BOOL selectionMade = NO;
     AVPlayerItem *playerItem = (AVPlayerItem *)notification.object;
-    if ([playerItem.asset isKindOfClass:[AVURLAsset class]]) {
+    if ([playerItem.asset isKindOfClass:[AVURLAsset class]] &&
+        self.lastLanguageSelectionTime + delayedEventTime < timeNow ) {
+        self.lastLanguageSelectionTime = timeNow;
         AVURLAsset *asset = (AVURLAsset *)playerItem.asset;
         AVMediaSelectionGroup *audio = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicAudible];
         AVMediaSelectionGroup *subtitles = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
         AVMediaSelectionOption *selectedAudio = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:audio];
         AVMediaSelectionOption *selectedSubtitles = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:subtitles];
 
-        if (selectedAudio && selectedSubtitles && self.maxPosition.doubleValue > 5) {
+        if (selectedAudio && selectedSubtitles && self.playerPlayedTime > delayedEventTime) {
             NSDictionary *dict = @{ @"Current Audio": selectedAudio.displayName,
                                     @"Current Subtitle": selectedSubtitles.displayName };
 
@@ -378,7 +386,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
 #pragma mark - Ads
 - (void)prepareEventPlayerDidStartPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
-    self.adPosition = @"0";
+    self.adPlayedTime = 0.00;
     
     //change event name if needed
     NSString *eventName = @"Video Ad Play";
@@ -387,7 +395,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 }
 
 - (void)prepareEventPlayerDidFinishPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
-    self.adPosition = @"0";
+    self.adPlayedTime = 0.00;
 
     //change event name if needed
     NSString *eventName = @"Video Ad Completed";

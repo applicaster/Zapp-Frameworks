@@ -20,11 +20,11 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
     }
     
     var lastSavedPlayerPosition: Double {
-        return Double(objcHelper?.maxPosition ?? "0") ?? 0.00
+        return objcHelper?.playerPlayedTime ?? 0.0
     }
     
     var lastSavedAdPosition: Double {
-        return Double(objcHelper?.adPosition ?? "0") ?? 0.00
+        return objcHelper?.adPlayedTime ?? 0.00
     }
     
     public func playerDidFinishPlayItem(player: PlayerProtocol, completion: @escaping (Bool) -> Void) {
@@ -32,7 +32,7 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        objcHelper?.maxPosition = "0"
+        objcHelper?.playerPlayedTime = 0.00
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleAccessLogEntry(notification:)),
