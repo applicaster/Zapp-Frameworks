@@ -15,6 +15,10 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
         return playerPlugin?.playerObject as? AVPlayer
     }
 
+    var currentPlayerPosition: Double {
+        return getCurrentPlayerInstance()?.currentItem?.currentTime().seconds ?? 0.00
+    }
+    
     public func playerDidFinishPlayItem(player: PlayerProtocol, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
@@ -52,8 +56,7 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
         let heartbeatDelay = 15.0
-        if let doubleValue = Double(objcHelper?.maxPosition ?? "0"),
-           doubleValue + heartbeatDelay < currentTime {
+        if currentPlayerPosition + heartbeatDelay < currentTime {
             objcHelper?.prepareEventPlayerPlaybackProgress { eventName, parameters in
                 let trackParameters = parameters as? [String: NSObject] ?? [:]
                 self.trackEvent(eventName, parameters: trackParameters)
@@ -106,20 +109,22 @@ extension SegmentAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtoco
            object == player {
             // if playing
 
-            if playbackStalled, player.rate > 0 {
-                objcHelper?.prepareEventPlayerResumePlayback { eventName, parameters in
-                    let trackParameters = parameters as? [String: NSObject] ?? [:]
-                    self.trackEvent(eventName, parameters: trackParameters)
+            if currentPlayerPosition > 5 {
+                if playbackStalled, player.rate > 0 {
+                    objcHelper?.prepareEventPlayerResumePlayback { eventName, parameters in
+                        let trackParameters = parameters as? [String: NSObject] ?? [:]
+                        self.trackEvent(eventName, parameters: trackParameters)
+                    }
+                    playbackStalled = false
                 }
-                playbackStalled = false
-            }
-            // if paused
-            else if !playbackStalled, player.rate == 0 {
-                objcHelper?.prepareEventPlayerPausePlayback { eventName, parameters in
-                    let trackParameters = parameters as? [String: NSObject] ?? [:]
-                    self.trackEvent(eventName, parameters: trackParameters)
+                // if paused
+                else if !playbackStalled, player.rate == 0 {
+                    objcHelper?.prepareEventPlayerPausePlayback { eventName, parameters in
+                        let trackParameters = parameters as? [String: NSObject] ?? [:]
+                        self.trackEvent(eventName, parameters: trackParameters)
+                    }
+                    playbackStalled = true
                 }
-                playbackStalled = true
             }
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
