@@ -29,6 +29,7 @@ static NSString *_Nonnull const kPlayingItemExtensions = @"extensions";
 @interface SegmentAnalyticsHelper : NSObject
 
 @property (nonatomic, strong) NSString *_Nullable maxPosition;
+@property (nonatomic, strong) NSString *_Nullable adPosition;
 
 - (instancetype _Nonnull)initWithProviderProperties:(NSDictionary *_Nullable)providerProperties
                                            delegate:(id<SegmentAnalyticsDelegate> _Nullable)delegate;
@@ -44,8 +45,13 @@ static NSString *_Nonnull const kPlayingItemExtensions = @"extensions";
 - (void)prepareWatchVideoAdvertisement:(NSNotification *_Nullable)notification completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
 - (void)prepareEventPlayerResumePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
 - (void)prepareEventPlayerPausePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
-- (void)prepareEventPlayerPlaybackProgress:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
+- (void)prepareEventPlayerPlaybackProgress:(double)progress completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
 - (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification *_Nonnull)notification completion:(void (^__nullable)(NSDictionary *_Nullable parameters))completion;
+- (void)prepareEventPlayerDidSkippedPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
+- (void)prepareEventPlayerDidStartPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
+- (void)prepareEventPlayerDidFinishPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
+- (void)prepareEventPlayerAdPlaybackProgress:(double)progress completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion;
+
 @end
 
 @interface NSString (HelperMethods)
