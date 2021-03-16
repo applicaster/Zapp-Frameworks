@@ -70,6 +70,7 @@ const OAuth = (props) => {
     logout_text,
     login_text,
     title_text,
+    subtitle_text,
     back_button_text,
   } = screenLocalizations;
 
@@ -262,12 +263,12 @@ const OAuth = (props) => {
           <View style={containerStyle}>
             <BackButton
               title={back_button_text}
-              disabled={hookType !== HookTypeData.PLAYER_HOOK}
+              disabled={!(hookType === HookTypeData.PLAYER_HOOK || screenStyles?.back_button_force_display)}
               screenStyles={screenStyles}
               onPress={onBackButton}
             />
-            <TitleLabel screenStyles={screenStyles} title={title_text} />
-            <View style={clientLogoView}>
+            <TitleLabel screenStyles={screenStyles} title={title_text} subtitle={subtitle_text} />
+            <View style={[clientLogoView.default, clientLogoView[screenStyles?.client_logo_position]]}>
               <ClientLogo imageSrc={screenStyles.client_logo} />
             </View>
             <ActionButton

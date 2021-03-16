@@ -25,9 +25,17 @@ export function backgroundImageStyle(screenStyles, hookType, width, height) {
 }
 
 export const clientLogoView = {
-  height: 100,
-  width: 350,
-  position: "absolute",
-  alignSelf: "center",
-  top: 200,
+  default: {
+    height: 100,
+    width: 350,
+    position: "absolute",
+    alignSelf: "center",
+    top: 200,
+  },
+  top: {
+    top: 70,
+  },
+  middle: {
+    rop: 230,
+  }
 };
