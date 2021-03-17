@@ -3,15 +3,18 @@ import { Text, View, ActivityIndicator } from "react-native";
 
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
-import { signOut } from "../../Services/inPlayerService";
 import PropTypes from "prop-types";
 
-const LogoutFlow = ({ configuration, screenStyles, screenLocalizations }) => {
+const LogoutFlow = ({
+  configuration,
+  screenStyles,
+  screenLocalizations,
+  onLogout,
+}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const navigator = useNavigation();
 
-  const { logout_completion_action = "go_back" } = configuration;
   const {
     logout_title_succeed_text,
     logout_title_fail_text,
@@ -20,36 +23,15 @@ const LogoutFlow = ({ configuration, screenStyles, screenLocalizations }) => {
   useEffect(() => {
     console.log("Perform Signout");
     navigator.hideNavBar();
-    performSignOut();
     return () => {
       navigator.showNavBar();
     };
   }, []);
 
-  const invokeCompleteAction = () => {
-    if (logout_completion_action === "go_home") {
-      navigator.goHome();
-    } else {
-      navigator.goBack();
-    }
-  };
-
-  const performSignOut = () => {
-    signOut()
-      .then(async (didLogout) => {
-        if (didLogout) {
-        } else {
-          navigator.goBack();
-        }
-      })
-      .catch(setError)
-      .finally(() => {
-        setLoading(false);
-        setTimeout(() => {
-          invokeCompleteAction();
-        }, 1000);
-      });
-  };
+  async function performSignOut() {
+    await onLogout({ setError });
+    setLoading(false);
+  }
 
   const textStyle = {
     fontFamily: platformSelect({

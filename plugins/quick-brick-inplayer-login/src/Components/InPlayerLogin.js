@@ -79,6 +79,7 @@ function InPlayerLogin(props) {
       in_player_referrer: referrer,
       in_player_branding_id,
       in_player_environment,
+      logout_completion_action = "go_back",
     },
   } = props;
   const brandingId = React.useMemo(() => {
@@ -483,6 +484,32 @@ function InPlayerLogin(props) {
     }
   };
 
+  const invokeLogoutCompleteAction = () => {
+    if (logout_completion_action === "go_home") {
+      navigator.goHome();
+    } else {
+      navigator.goBack();
+    }
+  };
+
+  async function onLogout({ setError }) {
+    const timeout = 1000;
+    try {
+      const didLogout = await InPlayerService.signOut;
+      if (!didLogout) {
+        navigator.goBack();
+      }
+      setTimeout(() => {
+        invokeLogoutCompleteAction();
+      }, timeout);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => {
+        invokeCompleteAction();
+      }, timeout);
+    }
+  }
+
   function onAccountError({ title, message, type = "warn" }) {
     showAlertToUser({ title, message, type });
   }
@@ -522,6 +549,7 @@ function InPlayerLogin(props) {
       <LogoutFlow
         screenStyles={screenStyles}
         screenLocalizations={screenLocalizations}
+        onLogout={onLogout}
         {...props}
       />
     );
