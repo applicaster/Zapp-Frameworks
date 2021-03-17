@@ -7,6 +7,11 @@ const common = [
     initial_value: "My Company",
   },
   {
+    key: "subtitle_text",
+    label: "Subtitle label text",
+    initial_value: "Subtitle",
+  },
+  {
     key: "login_text",
     label: "Login button text",
     initial_value: "Login",
