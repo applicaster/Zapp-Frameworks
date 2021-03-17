@@ -1,9 +1,9 @@
-import AccountFlow from "./AccountFlow";
-import ForgotPassword from "./ForgotPassword";
-import Login from "./Login";
-import LogoutFlow from "./LogoutFlow";
-import SetNewPassword from "./SetNewPassword";
-import SignUp from "./SignUp";
+import AccountFlow from "./Component/AccountFlow";
+import ForgotPassword from "./Component/ForgotPassword";
+import Login from "./Component/Login";
+import LogoutFlow from "./Component/LogoutFlow";
+import SetNewPassword from "./Component/SetNewPassword";
+import SignUp from "./Component/SignUp";
 export {
   AccountFlow,
   ForgotPassword,
