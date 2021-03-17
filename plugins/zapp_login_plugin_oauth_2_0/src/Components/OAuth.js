@@ -241,7 +241,11 @@ const OAuth = (props) => {
   }, [isUserAuthenticated, hookType]);
 
   const onBackButton = () => {
-    callback && callback({ success: false, error: null, payload });
+    if (callback) {
+      callback({ success: false, error: null, payload });
+    } else {
+      navigator.goBack();
+    }
   };
 
   const SafeArea = Platform.isTV ? View : SafeAreaView;
