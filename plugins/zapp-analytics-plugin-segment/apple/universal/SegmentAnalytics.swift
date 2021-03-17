@@ -33,13 +33,14 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
     var playbackStalled: Bool = false
     public var playerPlugin: PlayerProtocol?
     var objcHelper: SegmentAnalyticsHelper?
-
+    var playerRateObserverPointerString: UInt?
+    
     lazy var ignoredEvents: [String] = {
         guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
               eventsListString.isEmpty == false else {
             return []
         }
-        return eventsListString.components(separatedBy: ",")
+        return eventsListString.components(separatedBy: ",").map { $0.lowercased() }
     }()
 
     /*
@@ -65,7 +66,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
            segmentKey.isEmpty == false {
             let configuration = SEGAnalyticsConfiguration(writeKey: segmentKey)
             configuration.trackApplicationLifecycleEvents = true
-            configuration.recordScreenViews = true
+            configuration.recordScreenViews = false
 
             SEGAnalytics.setup(with: configuration)
             objcHelper = SegmentAnalyticsHelper(providerProperties: providerProperties,
@@ -94,7 +95,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
     }
 
     func shoudIgnoreEvent(_ eventName: String) -> Bool {
-        return ignoredEvents.contains(eventName)
+        return ignoredEvents.contains(eventName.lowercased())
     }
 }
 

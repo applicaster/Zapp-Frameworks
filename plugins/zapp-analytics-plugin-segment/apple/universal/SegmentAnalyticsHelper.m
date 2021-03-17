@@ -27,6 +27,8 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 @property (nonatomic, weak) id<SegmentAnalyticsDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *providerProperties;
 
+@property (nonatomic, readwrite) NSTimeInterval lastLanguageSelectionTime;
+
 @end
 
 @implementation SegmentAnalyticsHelper
@@ -37,6 +39,7 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
     if (self) {
         self.providerProperties = providerProperties;
         self.delegate = delegate;
+        self.lastLanguageSelectionTime = [NSDate date].timeIntervalSince1970;
     }
     return self;
 }
@@ -261,21 +264,39 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
 #pragma mark - video_reach event helper
 
+- (void)updatePlayedAdCurrentPosition:(NSTimeInterval)currentPosition {
+    if (self.adPlayedTime < currentPosition) {
+        self.adPlayedTime = currentPosition;
+    }
+}
+
+- (void)updatePlayedItemCurrentPosition:(NSTimeInterval)currentPosition {
+    if (self.playerPlayedTime < currentPosition) {
+        self.playerPlayedTime = currentPosition;
+    }
+}
+
 - (void)updatePlayedItemCurrentPosition {
     long currentPosition = [self currentPlayedItemPosition];
-    if (self.maxPosition.doubleValue < currentPosition) {
-        self.maxPosition = [NSString stringWithFormat:@"%ld", currentPosition];
+    if (self.playerPlayedTime < currentPosition) {
+        self.playerPlayedTime = currentPosition;
     }
 }
 
 #pragma mark - player states
 - (void)playerDidCreate {
-    self.maxPosition = @"0";
+    self.playerPlayedTime = 0.00;
+}
+
+- (NSDictionary *)analyticsParamsForEntry {
+    NSDictionary *entry = [self currentPlayedItemEntry];
+    //add more analytic params
+    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
+    return [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
 }
 
 - (void)prepareEventPlayerDidStartPlayItem:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
 
     //change event name if needed
     NSString *eventName = @"Video Content Started";
@@ -283,70 +304,49 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
         eventName = self.providerProperties[kVideoStartEventKey];
     }
 
-    //add more analytic params
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
-    completion(eventName, analyticsParams);
+    completion(eventName, [self analyticsParamsForEntry]);
 }
 
 - (void)prepareEventPlayerPausePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
 
     //change event name if needed
     NSString *eventName = @"Video Paused";
 
-    //add more analytic params
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
-    completion(eventName, analyticsParams);
+    completion(eventName, [self analyticsParamsForEntry]);
 }
 
 - (void)prepareEventPlayerResumePlayback:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
 
     //change event name if needed
     NSString *eventName = @"Video Playback Resume";
 
-    //add more analytic params
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
-    completion(eventName, analyticsParams);
+    completion(eventName, [self analyticsParamsForEntry]);
 }
 
-- (void)prepareEventPlayerPlaybackProgress:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
-    [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
+- (void)prepareEventPlayerPlaybackProgress:(double)progress completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
+    [self updatePlayedItemCurrentPosition: progress];
 
     //change event name if needed
     NSString *eventName = @"Video Heartbeat";
 
-    //add more analytic params
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
-
-    completion(eventName, analyticsParams);
+    completion(eventName, [self analyticsParamsForEntry]);
 }
 
 - (void)prepareEventPlayerDidFinishPlayItem:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
 
     long itemDuration = [self currentPlayedItemDuration];
     BOOL itemIsLive = [self currentPlayedItemIsLiveStream];
 
     //Add more analytic params
-    NSDictionary *params = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
+    NSDictionary *params = [self analyticsParamsForEntry];
     NSMutableDictionary *updatedParams = [NSMutableDictionary dictionaryWithDictionary:params];
 
     if (itemDuration && itemIsLive == NO && itemDuration != 0) {
-        if (self.maxPosition.doubleValue > 0) {
-            [updatedParams setObject:[NSNumber numberWithDouble:self.maxPosition.doubleValue] forKey:@"Played Time"];
+        if (self.playerPlayedTime > 0) {
+            [updatedParams setObject:[NSNumber numberWithDouble:self.playerPlayedTime] forKey:@"Played Time"];
         }
         [self videoCompleted:updatedParams completion:completion];
     }
@@ -354,29 +354,69 @@ NSString *const kVideoCompleteEventKey = @"video_complete_event_name";
 
 - (void)prepareEventPlayerMediaSelectionChangeWithNotification:(NSNotification *_Nonnull)notification completion:(void (^__nullable)(NSDictionary *_Nullable parameters))completion {
     [self updatePlayedItemCurrentPosition];
-    NSDictionary *entry = [self currentPlayedItemEntry];
-    NSDictionary *analyticsParams = [self currentPlayedItemAnalyticsParams:entry];
-    analyticsParams = [self addExtraAnalyticsParamsForDictionary:analyticsParams withModel:entry];
+    NSDictionary *analyticsParams = [self analyticsParamsForEntry];
 
+    NSTimeInterval delayedEventTime = 5.0;
+    NSTimeInterval timeNow = [NSDate date].timeIntervalSince1970;
+    
+    BOOL selectionMade = NO;
     AVPlayerItem *playerItem = (AVPlayerItem *)notification.object;
-    if ([playerItem.asset isKindOfClass:[AVURLAsset class]]) {
+    if ([playerItem.asset isKindOfClass:[AVURLAsset class]] &&
+        self.lastLanguageSelectionTime + delayedEventTime < timeNow ) {
+        self.lastLanguageSelectionTime = timeNow;
         AVURLAsset *asset = (AVURLAsset *)playerItem.asset;
         AVMediaSelectionGroup *audio = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicAudible];
         AVMediaSelectionGroup *subtitles = [asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
         AVMediaSelectionOption *selectedAudio = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:audio];
         AVMediaSelectionOption *selectedSubtitles = [playerItem.currentMediaSelection selectedMediaOptionInMediaSelectionGroup:subtitles];
 
-        if (selectedAudio && selectedSubtitles) {
+        if (selectedAudio && selectedSubtitles && self.playerPlayedTime > delayedEventTime) {
             NSDictionary *dict = @{ @"Current Audio": selectedAudio.displayName,
                                     @"Current Subtitle": selectedSubtitles.displayName };
 
             NSMutableDictionary *updatedAnalyticsParams = [NSMutableDictionary dictionaryWithDictionary:analyticsParams];
             [updatedAnalyticsParams addEntriesFromDictionary:dict];
             analyticsParams = updatedAnalyticsParams;
+            selectionMade = YES;
         }
     }
 
-    completion(analyticsParams);
+    completion(selectionMade ? analyticsParams : nil);
+}
+
+#pragma mark - Ads
+- (void)prepareEventPlayerDidStartPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
+    self.adPlayedTime = 0.00;
+    
+    //change event name if needed
+    NSString *eventName = @"Video Ad Play";
+
+    completion(eventName, [self analyticsParamsForEntry]);
+}
+
+- (void)prepareEventPlayerDidFinishPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
+    self.adPlayedTime = 0.00;
+
+    //change event name if needed
+    NSString *eventName = @"Video Ad Completed";
+
+    completion(eventName, [self analyticsParamsForEntry]);
+}
+
+- (void)prepareEventPlayerDidSkippedPlayAd:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
+    //change event name if needed
+    NSString *eventName = @"Video Ad Skipped";
+
+    completion(eventName, [self analyticsParamsForEntry]);
+}
+
+- (void)prepareEventPlayerAdPlaybackProgress:(double)progress completion:(void (^__nullable)(NSString *_Nonnull eventName,  NSDictionary *_Nullable parameters))completion {
+    [self updatePlayedAdCurrentPosition:progress];
+    
+    //change event name if needed
+    NSString *eventName = @"Video Ad Playing (Heartbeat)";
+    
+    completion(eventName, [self analyticsParamsForEntry]);
 }
 
 #pragma mark - AdobeAnalyticsDelegate
