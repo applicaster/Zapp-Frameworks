@@ -3,8 +3,10 @@ import React, { useState, useLayoutEffect } from "react";
 import DropdownAlert from "react-native-dropdownalert";
 import { isWebBasedPlatform } from "../Utils/Platform";
 import { showAlert } from "../Utils/Account";
-import AccountFlow from "./AccountFlow";
-import LogoutFlow from "./LogoutFlow";
+import {
+  AccountFlow,
+  LogoutFlow,
+} from "@applicaster/applicaster-account-components";
 import * as R from "ramda";
 import * as InPlayerService from "../Services/inPlayerService";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
