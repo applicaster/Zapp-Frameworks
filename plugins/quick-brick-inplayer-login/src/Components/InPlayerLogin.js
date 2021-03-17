@@ -1,12 +1,10 @@
 import React, { useState, useLayoutEffect } from "react";
+import { Platform } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
 import { isWebBasedPlatform } from "../Utils/Platform";
 import { showAlert } from "../Utils/Account";
-import {
-  AccountFlow,
-  LogoutFlow,
-} from "@applicaster/applicaster-account-components";
+import AccountComponents from "@applicaster/applicaster-account-components";
 import * as R from "ramda";
 import * as InPlayerService from "../Services/inPlayerService";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -34,7 +32,7 @@ import {
   XRayLogLevel,
 } from "../Services/LoggerService";
 
-export const logger = createLogger({
+const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
 });
@@ -51,14 +49,14 @@ const getRiversProp = (key, rivers = {}) => {
 
 const localStorageTokenKey = "in_player_token";
 const userAccountStorageTokenKey = "idToken";
-const HookTypeData = {
-  UNDEFINED: "Undefined",
-  PLAYER_HOOK: "PlayerHook",
-  SCREEN_HOOK: "ScreenHook",
-  USER_ACCOUNT: "UserAccount",
-};
 
-function InPlayerLogin(props) {
+const InPlayerLogin = (props) => {
+  const HookTypeData = {
+    UNDEFINED: "Undefined",
+    PLAYER_HOOK: "PlayerHook",
+    SCREEN_HOOK: "ScreenHook",
+    USER_ACCOUNT: "UserAccount",
+  };
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [idToken, setIdtoken] = useState(null);
@@ -98,7 +96,6 @@ function InPlayerLogin(props) {
         defaultTokenKey, // 'inplayer_token'
         tokenValue
       ) {
-        console.log("NewTOKEN", { tokenValue });
         await localStorageSet(localStorageTokenKey, tokenValue);
         await localStorageSetUserAccount(
           userAccountStorageTokenKey,
@@ -107,11 +104,9 @@ function InPlayerLogin(props) {
       },
       getItem: async function () {
         const token = await localStorageGet(localStorageTokenKey);
-        console.log("GetTOKEN", { token });
         return token;
       },
       removeItem: async function () {
-        console.log("RemoveTOKEN");
         await localStorageRemove(localStorageTokenKey);
         await localStorageRemoveUserAccount(userAccountStorageTokenKey);
       },
@@ -134,9 +129,6 @@ function InPlayerLogin(props) {
             eventMessage = `${eventMessage} access granted, flow completed`;
             accountFlowCallback({ success: true });
           } else {
-            console.log({
-              showParentLock,
-            });
             if (showParentLock) {
               eventMessage = `${eventMessage} not granted, present parent lock`;
             } else {
@@ -191,8 +183,6 @@ function InPlayerLogin(props) {
         callback && callback({ success: true, error: null, payload });
       }
     } else {
-      console.log({ isHook: !isHook(navigator), stillMounted });
-
       if (!isHook(navigator)) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
@@ -204,7 +194,6 @@ function InPlayerLogin(props) {
 
         stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
       } else {
-        console.log("Here!2");
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
           data: {
@@ -374,7 +363,7 @@ function InPlayerLogin(props) {
             type: "success",
           });
           stillMounted && setLoading(false);
-          stillMounted && setScreen(ScreensData.LOGIN);
+          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
         })
         .catch((error) => {
           logger.error({
@@ -394,7 +383,7 @@ function InPlayerLogin(props) {
           });
         });
     } else {
-      stillMounted && setScreen(ScreensData.FORGOT_PASSWORD);
+      stillMounted && setScreen(AccountComponents.ScreensData.FORGOT_PASSWORD);
     }
   }
 
@@ -429,7 +418,8 @@ function InPlayerLogin(props) {
             type: "success",
           });
           stillMounted && setLoading(false);
-          stillMounted && setScreen(ScreensData.SET_NEW_PASSWORD);
+          stillMounted &&
+            setScreen(AccountComponents.ScreensData.SET_NEW_PASSWORD);
         })
         .catch((error) => {
           logger.error({
@@ -444,10 +434,10 @@ function InPlayerLogin(props) {
             title: screenLocalizations.request_password_error_title,
             message: screenLocalizations.request_password_error_text,
           });
-          stillMounted && setScreen(ScreensData.LOGIN);
+          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
         });
     } else {
-      stillMounted && setScreen(ScreensData.LOGIN);
+      stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
     }
   }
 
@@ -514,11 +504,14 @@ function InPlayerLogin(props) {
     showAlertToUser({ title, message, type });
   }
 
+  function onAccountHandleBackButton() {
+    accountFlowCallback({ success: false });
+  }
+
   function renderAccount() {
-    console.log("renderAccount");
     return (
       <>
-        <AccountFlow
+        <AccountComponents.AccountFlow
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
           backButton={!isHomeScreen(navigator)}
@@ -529,6 +522,7 @@ function InPlayerLogin(props) {
           onNewPasswordChange={onNewPasswordChange}
           onForgotPassword={onForgotPassword}
           onError={onAccountError}
+          onHandleBackButton={onAccountHandleBackButton}
           loading={loading}
           lastEmailUsed={lastEmailUsed}
           {...props}
@@ -546,7 +540,7 @@ function InPlayerLogin(props) {
 
   const renderLogoutScreen = () => {
     return (
-      <LogoutFlow
+      <AccountComponents.LogoutFlow
         screenStyles={screenStyles}
         screenLocalizations={screenLocalizations}
         onLogout={onLogout}
@@ -565,7 +559,7 @@ function InPlayerLogin(props) {
         return null;
     }
   }
-  console.log({ hookType });
 
   return renderFlow();
-}
+};
+export default InPlayerLogin;

@@ -21,7 +21,6 @@ export function addInPlayerProductId({ storeFeesData, inPlayerFeesData }) {
     const inPlayerFee = inPlayerFeesData[i];
 
     const storeFee = findStoreFee(inPlayerFee, storeFeesData);
-    console.log({ inPlayerFee, storeFee });
     if (storeFee) {
       storeFee.productType = inPlayerFee?.productType || "";
       storeFee.inPlayerProductId = inPlayerFee.productIdentifier;

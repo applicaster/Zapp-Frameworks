@@ -24,7 +24,6 @@ const StoreFrontMobile = (props) => {
     client_logo: logoUrl = "",
     close_button: buttonUrl = "",
   } = screenStyles;
-  console.log({ logoUrl, buttonUrl, screenStyles });
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: screenBackground }]}

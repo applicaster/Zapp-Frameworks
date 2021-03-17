@@ -11,8 +11,6 @@ export async function localStorageRemove(key) {
 }
 
 export async function localStorageGet(key) {
-  console.log({ localStorageGet, key });
-
   return await localStorage.getItem(key, localStorageNamespace);
 }
 

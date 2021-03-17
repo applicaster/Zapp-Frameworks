@@ -120,7 +120,6 @@ export async function isAuthenticated(in_player_client_id) {
     return true;
   } catch (error) {
     const res = await error.response;
-    console.log({ res });
     if (res?.status === 403) {
       await InPlayer.Account.refreshToken(in_player_client_id);
 
@@ -374,7 +373,6 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
-    console.log({ platformName: platformName(store) });
     const response = await InPlayer.Payment.validateReceipt({
       platform: platformName(store),
       itemId: item_id,

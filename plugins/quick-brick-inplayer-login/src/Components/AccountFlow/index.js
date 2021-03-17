@@ -8,7 +8,7 @@ import ForgotPassword from "../ForgotPassword";
 import SetNewPassword from "../SetNewPassword";
 import LoadingScreen from "../LoadingScreen";
 import SignUp from "../SignUp";
-import { container } from "../../Styles";
+import { container } from "../Styles";
 import { createLogger, Subsystems } from "../../Services/LoggerService";
 
 export const logger = createLogger({
@@ -23,7 +23,7 @@ const containerStyle = (screenStyles) => {
   };
 };
 
-export const ScreensData = {
+const ScreensData = {
   EMPTY: "Empty",
   LOGIN: "Login",
   SIGN_UP: "SignUp",
@@ -39,6 +39,7 @@ const AccountFlow = (props) => {
 
   const {
     shouldShowParentLock,
+    accountFlowCallback,
     screenStyles,
     setParentLockWasPresented,
     loading,
@@ -48,7 +49,6 @@ const AccountFlow = (props) => {
     onNewPasswordChange,
     onForgotPassword,
     onError,
-    onHandleBackButton,
   } = props;
 
   useLayoutEffect(() => {
@@ -80,13 +80,13 @@ const AccountFlow = (props) => {
       eventMessage = `${eventMessage}, presenting login screen`;
       await authenticateUser();
     } else {
-      onHandleBackButton && onHandleBackButton();
+      accountFlowCallback({ success: false });
     }
 
     logger.debug({
       message: eventMessage,
       data: {
-        success,
+        succeed,
       },
     });
   };
@@ -131,7 +131,6 @@ const AccountFlow = (props) => {
             signUp={() => {
               stillMounted && setScreen(ScreensData.SIGN_UP);
             }}
-            onBackButton={onHandleBackButton}
             onPresentForgotPasswordScreen={onPresentForgotPasswordScreen}
             onLoginError={onError}
             {...props}
@@ -194,7 +193,9 @@ const AccountFlow = (props) => {
 AccountFlow.propTypes = {
   configuration: PropTypes.object,
   setParentLockWasPresented: PropTypes.func,
-  shouldShowParentLock: PropTypes.bool,
+  parentLockWasPresented: PropTypes.bool,
+  shouldShowParentLock: PropTypes.func,
+  accountFlowCallback: PropTypes.func,
   screenStyles: PropTypes.object,
   screenLocalizations: PropTypes.shape({
     login_title_error_text: PropTypes.string,

@@ -1,14 +1,15 @@
-import AccountFlow from "./Component/AccountFlow";
-import ForgotPassword from "./Component/ForgotPassword";
-import Login from "./Component/Login";
-import LogoutFlow from "./Component/LogoutFlow";
-import SetNewPassword from "./Component/SetNewPassword";
-import SignUp from "./Component/SignUp";
-export {
+import AccountFlow, { ScreensData } from "./Components/AccountFlow";
+import ForgotPassword from "./Components/ForgotPassword";
+import Login from "./Components/Login";
+import LogoutFlow from "./Components/LogoutFlow";
+import SetNewPassword from "./Components/SetNewPassword";
+import SignUp from "./Components/SignUp";
+export default AccountComponent = {
   AccountFlow,
   ForgotPassword,
   Login,
   LogoutFlow,
   SetNewPassword,
   SignUp,
+  ScreensData,
 };

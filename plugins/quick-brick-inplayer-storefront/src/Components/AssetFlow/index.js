@@ -195,10 +195,7 @@ const AssetFlow = (props) => {
         .addData({ in_player_fees_data: inPlayerFeesData })
         .send();
 
-      console.log({ inPlayerFeesData });
       const storeFeesData = await retrieveProducts(inPlayerFeesData);
-
-      console.log({ storeFeesData });
 
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);

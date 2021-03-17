@@ -21,7 +21,7 @@ const LogoutFlow = ({
   } = screenLocalizations;
 
   useEffect(() => {
-    console.log("Perform Signout");
+    performSignOut();
     navigator.hideNavBar();
     return () => {
       navigator.showNavBar();

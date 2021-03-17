@@ -57,18 +57,15 @@ const InPlayer = (props) => {
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
   const styles = getRiversProp("styles", rivers);
-  console.log({ styles, props });
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
 
-  console.log({ screenStyles });
   useLayoutEffect(() => {
     InPlayerSDK.tokenStorage.overrides = {
       setItem: async function (
         defaultTokenKey, // 'inplayer_token'
         tokenValue
       ) {
-        console.log("NewTOKEN", { tokenValue });
         await localStorageSet(localStorageTokenKey, tokenValue);
         await localStorageSetUserAccount(
           userAccountStorageTokenKey,
@@ -77,11 +74,9 @@ const InPlayer = (props) => {
       },
       getItem: async function () {
         const token = await localStorageGet(localStorageTokenKey);
-        console.log("GetTOKEN", { token });
         return token;
       },
       removeItem: async function () {
-        console.log("RemoveTOKEN");
         await localStorageRemove(localStorageTokenKey);
         await localStorageRemoveUserAccount(userAccountStorageTokenKey);
       },
@@ -111,8 +106,6 @@ const InPlayer = (props) => {
       } else {
         setIsLoading(false);
       }
-
-      console.log("Susseed!", { result });
     } catch (error) {
       setIsLoading(false);
     }
@@ -121,7 +114,6 @@ const InPlayer = (props) => {
   async function completeStorefrontFlow({ success, error, payload }) {
     try {
       if (success && !error) {
-        console.log({ validatePayment });
         await validatePayment({ ...props, payload, store });
         const newPayload = await assetLoader({
           props,
@@ -180,13 +172,6 @@ const InPlayer = (props) => {
 
         const authenticationRequired = isAuthenticationRequired({ payload });
 
-        console.log({
-          isUserAuthenticated,
-          assetId,
-          payload,
-          props,
-          configuration: props.configuration,
-        });
         if (authenticationRequired && isUserAuthenticated && assetId) {
           const payloadWithAsset = await assetLoader({ props, assetId, store });
           logger.debug({
@@ -239,7 +224,6 @@ const InPlayer = (props) => {
       callback && callback({ success: false, error, payload });
     }
   };
-  console.log({ payloadWithPurchaseData, isLoading });
   return payloadWithPurchaseData ? (
     <>
       {isLoading && <LoadingScreen />}

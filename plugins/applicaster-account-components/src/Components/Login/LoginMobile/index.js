@@ -96,8 +96,8 @@ const LoginMobile = (props) => {
   };
 
   const onBackButton = () => {
-    const { accountFlowCallback } = props;
-    accountFlowCallback && accountFlowCallback(false);
+    const { onBackButton } = props;
+    onBackButton && onBackButton();
   };
 
   const forgotPasswordButton = () => {
