@@ -47,7 +47,13 @@ const custom_configuration_fields_apple = [
   {
     type: "text",
     key: "apple_app_id"
-  }
+  },
+  {
+    type: "text",
+    key: "plist.SKAdNetworkItems",
+    initial_value: "",
+    tooltip_text: "List of supported SKAdNetworks separated by comma"
+  },
 ];
 
 const custom_configuration_fields_android = [

@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginAppsFlyer",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "summary": "ZappAnalyticsPluginAppsFlyer",
   "description": "ZappAnalyticsPluginAppsFlyer container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -25,7 +25,7 @@
   "dependencies": {
     "ZappAnalyticsPluginsSDK": [],
     "AppsFlyerFramework": [
-      "~> 6.0.2"
+      "~> 6.2.4"
     ]
   }
 }
