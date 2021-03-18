@@ -85,8 +85,7 @@ const InPlayerLogin = (props) => {
     return isNaN(parsedValue) ? null : parsedValue;
   }, []);
 
-  const showParentLock =
-    props?.configuration?.import_parent_lock === "1" ? true : false;
+  const showParentLock = props?.configuration?.import_parent_lock;
 
   let stillMounted = true;
 

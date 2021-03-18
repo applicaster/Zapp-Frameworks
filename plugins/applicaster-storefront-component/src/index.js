@@ -25,9 +25,7 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
-  // const showParentLock = props?.screenStyles?.import_parent_lock;
-  const showParentLock =
-    props?.configuration?.import_parent_lock === "1" ? true : false;
+  const showParentLock = props?.screenStyles?.import_parent_lock;
 
   useToggleNavBar();
 
