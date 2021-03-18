@@ -1,60 +1,6 @@
 import * as R from "ramda";
 
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
-
-const manifestJson = () => {
-  try {
-    return platformSelect({
-      ios: require("../../../manifests/ios_for_quickbrick.json"),
-      tvos: require("../../../manifests/tvos_for_quickbrick.json"),
-      android: require("../../../manifests/android.json"),
-      android_tv: require("../../../manifests/android_tv_for_quickbrick.json"),
-      web: require("../../../manifests/samsung_tv.json"),
-      samsung_tv: require("../../../manifests/samsung_tv.json"),
-      lg_tv: require("../../../manifests/lg_tv.json"),
-      default: require("../../../manifests/android.json"),
-    });
-  } catch (error) {
-    throw new Error("Could not load manifest at inplayer login plugin.", error);
-  }
-};
-
-export function pluginIdentifier() {
-  return manifestJson().identifier;
-}
-
-export let styles = null;
-export function getStyles(screenStyles) {
-  return styles ? styles : prepareStyles(screenStyles);
-}
-
-export function prepareStyles(screenStyles) {
-  styles = populateConfigurationValues(manifestJson().styles.fields)(
-    screenStyles
-  );
-  styles.import_parent_lock = screenStyles.import_parent_lock
-    ? screenStyles.import_parent_lock
-    : false;
-
-  return styles;
-}
-
-export const isHomeScreen = (navigator) => {
-  return R.pathOr(false, ["payload", "home"], navigator.screenData);
-};
-
-const mapInputKeyToStyle = (key, obj) => {
-  return {
-    backgroundColor: obj?.[`${key}_background`],
-    backgroundColor_filled: obj?.[`${key}_background_filled`],
-    backgroundColor_focused: obj?.[`${key}_background_focused`],
-    borderColor: obj?.[`${key}_border_color`],
-    borderColor_filled: obj?.[`${key}_border_color_filled`],
-    borderColor_focused: obj?.[`${key}_border_color_focused`],
-    placeholderTextColor: obj?.[`${key}_placeholder_color`],
-  };
-};
 
 export const mapKeyToStyle = R.curry((key, obj) => {
   const isInputKey = key.includes("input");
