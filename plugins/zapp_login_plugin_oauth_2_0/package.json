@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp_login_plugin_oauth_2_0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {

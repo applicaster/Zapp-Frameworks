@@ -14,6 +14,17 @@
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
+  "general": {
+    "fields": [
+      {
+        "type": "switch",
+        "label": "Show full screen",
+        "tooltip": "Enabling this setting will hide both the nav bar and the menu on the screen",
+        "key": "allow_screen_plugin_presentation",
+        "initial_value": true
+      }
+    ]
+  },
   "hooks": {
     "fields": [
       {
@@ -34,8 +45,8 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.1.0",
-  "manifest_version": "0.1.0",
+  "dependency_version": "0.1.1",
+  "manifest_version": "0.1.1",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -53,7 +64,7 @@
   "npm_dependencies": [
     "@react-native-community/blur@3.4.1",
     "react-native-app-auth@6.0.1",
-    "@applicaster/zapp_login_plugin_oauth_2_0@0.1.0"
+    "@applicaster/zapp_login_plugin_oauth_2_0@0.1.1"
   ],
   "custom_configuration_fields": [
     {
