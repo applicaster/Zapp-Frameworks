@@ -1,7 +1,7 @@
 {
-  "name": "@applicaster/zapp-analytics-plugin-appsflyer",
+  "name": "@applicaster/zapp-analytics-plugin-appsflyer-strict",
   "version": "10.1.1",
-  "description": "AppsFlyer Analytics provider",
+  "description": "AppsFlyer Analytics provider with strict mode SDK to completely remove IDFA collection functionality and AdSupport framework dependencies",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/Zapp-Frameworks"
@@ -21,14 +21,9 @@
   "peerDependencies": {},
   "applicaster": {
     "supportedPlatforms": [
-      "android_for_quickbrick",
       "ios_for_quickbrick",
       "ios"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
-  },
-  "files": [
-    "apple",
-    "android"
-  ]
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginAppsFlyer",
-  "version": "10.1.1",
+  "version": "10.1.2",
   "summary": "ZappAnalyticsPluginAppsFlyer",
   "description": "ZappAnalyticsPluginAppsFlyer container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -12,17 +12,7 @@
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
     "tag": "@@applicaster/zapp-analytics-plugin-appsflyer/10.1.1"
   },
-  "platforms": {
-    "ios": "12.0"
-  },
   "requires_arc": true,
-  "source_files": "ios/**/*.{swift}",
-  "xcconfig": {
-    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
-    "ENABLE_BITCODE": "YES",
-    "SWIFT_VERSION": "5.1"
-  },
-  
   "default_subspecs": "Base",
   "subspecs": [
     {
@@ -32,6 +22,33 @@
         "AppsFlyerFramework": [
           "~> 6.2.4"
         ]
+      },
+      "source_files": "ios/**/*.{swift}",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "ENABLE_BITCODE": "YES",
+        "SWIFT_VERSION": "5.1"
+      },
+      "platforms": {
+        "ios": "12.0"
+      }
+    },
+    {
+      "name": "Legacy",
+      "dependencies": {
+        "ZappAnalyticsPluginsSDK": [],
+        "AppsFlyerFramework/Strict": [
+          "~> 6.2.4"
+        ]
+      },
+      "source_files": "ios/**/*.{swift}",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "ENABLE_BITCODE": "YES",
+        "SWIFT_VERSION": "5.1"
+      },
+      "platforms": {
+        "ios": "10.0"
       }
     },
     {
@@ -41,6 +58,33 @@
         "AppsFlyerFramework/Strict": [
           "~> 6.2.4"
         ]
+      },
+      "source_files": "ios/**/*.{swift}",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "ENABLE_BITCODE": "YES",
+        "SWIFT_VERSION": "5.1"
+      },
+      "platforms": {
+        "ios": "12.0"
+      }
+    },
+    {
+      "name": "LegacyStrict",
+      "dependencies": {
+        "ZappAnalyticsPluginsSDK": [],
+        "AppsFlyerFramework/Strict": [
+          "~> 6.2.4"
+        ]
+      },
+      "source_files": "ios/**/*.{swift}",
+      "xcconfig": {
+        "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+        "ENABLE_BITCODE": "YES",
+        "SWIFT_VERSION": "5.1"
+      },
+      "platforms": {
+        "ios": "10.0"
       }
     }
   ]
