@@ -51,6 +51,7 @@ const custom_configuration_fields_apple = [
   {
     type: "text",
     key: "plist.SKAdNetworkItems",
+    label: "SKAdNetworks",
     initial_value: "",
     tooltip_text: "List of supported SKAdNetworks separated by comma"
   },
