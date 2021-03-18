@@ -90,6 +90,42 @@ const InPlayerLogin = (props) => {
   let stillMounted = true;
 
   useLayoutEffect(() => {
+    setupEnvironment();
+  }, []);
+
+  function checkIfUserAuthenteficated() {
+    return InPlayerService.isAuthenticated(clientId)
+      .then(async (isAuthenticated) => {
+        let eventMessage = "Account Flow:";
+        const event = logger
+          .createEvent()
+          .setLevel(XRayLogLevel.debug)
+          .addData({ is_authenticated: isAuthenticated });
+
+        if (stillMounted) {
+          if (isAuthenticated) {
+            eventMessage = `${eventMessage} access granted, flow completed`;
+            accountFlowCallback({ success: true });
+            return true;
+          } else {
+            if (showParentLock) {
+              eventMessage = `${eventMessage} not granted, present parent lock`;
+            } else {
+              eventMessage = `${eventMessage} not granted, present login screen`;
+            }
+          }
+        }
+        event.setMessage(eventMessage).send();
+        return false;
+      })
+      .finally(() => {
+        stillMounted && setLoading(false);
+      });
+  }
+
+  async function setupEnvironment() {
+    await setConfig(in_player_environment);
+
     InPlayerSDK.tokenStorage.overrides = {
       setItem: async function (
         defaultTokenKey, // 'inplayer_token'
@@ -111,50 +147,15 @@ const InPlayerLogin = (props) => {
       },
     };
 
-    setupEnvironment();
-  }, []);
-
-  function checkIfUserAuthenteficated() {
-    InPlayerService.isAuthenticated(clientId)
-      .then(async (isAuthenticated) => {
-        let eventMessage = "Account Flow:";
-        const event = logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .addData({ is_authenticated: isAuthenticated });
-
-        if (stillMounted) {
-          if (isAuthenticated) {
-            eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
-          } else {
-            if (showParentLock) {
-              eventMessage = `${eventMessage} not granted, present parent lock`;
-            } else {
-              eventMessage = `${eventMessage} not granted, present login screen`;
-            }
-          }
-        }
-        event.setMessage(eventMessage).send();
-      })
-      .finally(() => {
-        stillMounted && setLoading(false);
-      });
-  }
-
-  async function setupEnvironment() {
-    await checkIfUserAuthenteficated();
     setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
 
-    const token = await localStorageGet(localStorageTokenKey);
+    const { token } = await InPlayerSDK.Account.getToken();
     setIdtoken(token);
 
     logger.debug({
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
-
-    setConfig(in_player_environment);
 
     if (payload) {
       const authenticationRequired = isAuthenticationRequired({ payload });
@@ -167,7 +168,8 @@ const InPlayerLogin = (props) => {
         inplayer_asset_id: assetId,
         configuration: props?.configuration,
       };
-      if (authenticationRequired || assetId) {
+      const isAuthenticated = await checkIfUserAuthenteficated();
+      if (!isAuthenticated && (authenticationRequired || assetId)) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
           data: { ...logData, hook_type: HookTypeData.PLAYER_HOOK },
@@ -182,6 +184,7 @@ const InPlayerLogin = (props) => {
         callback && callback({ success: true, error: null, payload });
       }
     } else {
+      setLoading(false);
       if (!isHook(navigator)) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
