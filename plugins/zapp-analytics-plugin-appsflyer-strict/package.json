@@ -16,7 +16,9 @@
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
-  "dependencies": {},
+  "dependencies": {
+    "@applicaster/zapp-analytics-plugin-appsflyer": "10.2.0-alpha.3"
+  },
   "devDependencies": {},
   "peerDependencies": {},
   "applicaster": {

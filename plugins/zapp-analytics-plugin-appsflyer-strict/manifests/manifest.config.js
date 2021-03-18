@@ -29,7 +29,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: [`@applicaster/zapp-analytics-plugin-appsflyer@${version}`],
+    npm_dependencies: [`@applicaster/zapp-analytics-plugin-appsflyer-strict@${version}`],
     targets: targets[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
     ui_frameworks: ui_frameworks[platform],
