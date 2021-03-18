@@ -47,7 +47,14 @@ const custom_configuration_fields_apple = [
   {
     type: "text",
     key: "apple_app_id"
-  }
+  },
+  {
+    type: "text",
+    key: "plist.SKAdNetworkItems",
+    label: "SKAdNetworks",
+    initial_value: "",
+    tooltip_text: "List of supported SKAdNetworks separated by comma"
+  },
 ];
 
 const custom_configuration_fields_android = [
@@ -82,7 +89,7 @@ const ui_frameworks = {
 };
 
 const min_zapp_sdk = {
-  ios_for_quickbrick: "2.0.2-Dev",
+  ios_for_quickbrick: "4.1.0-Dev",
   android_for_quickbrick: "1.0.0",
   android_tv_for_quickbrick: "1.0.0",
 };
