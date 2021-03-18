@@ -17,7 +17,17 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-
+  general: {
+    fields: [
+      {
+        type: "switch",
+        label: "Show full screen",
+        tooltip: "Enabling this setting will hide both the nav bar and the menu on the screen",
+        key: "allow_screen_plugin_presentation",
+        initial_value: true,
+      }
+    ]
+  },
   hooks: {
     fields: [
       {
