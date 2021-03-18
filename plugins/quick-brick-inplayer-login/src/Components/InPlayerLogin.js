@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useCallback } from "react";
 import { Platform } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
@@ -209,40 +209,45 @@ const InPlayerLogin = (props) => {
     };
   }
 
-  async function accountFlowCallback({ success }) {
-    let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
+  const accountFlowCallback = useCallback(
+    async ({ success }) => {
+      let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
-    const event = logger
-      .createEvent()
-      .setLevel(XRayLogLevel.debug)
-      .addData({ success, payload, hook_type: hookType });
+      const event = logger
+        .createEvent()
+        .setLevel(XRayLogLevel.debug)
+        .addData({ success, payload, hook_type: hookType });
 
-    if (success) {
-      const token = await localStorageGet(localStorageTokenKey);
-      event.addData({ token });
-    }
-
-    if (hookType === HookTypeData.USER_ACCOUNT) {
-      event.setMessage(`${eventMessage}, plugin finished task: go back`).send();
-      navigator.goBack();
-    } else {
-      const { callback } = props;
-      event.setMessage(`${eventMessage}, plugin finished task`).send();
-      let newPayload = payload;
-      if (newPayload.extensions) {
-        newPayload.extensions = {
-          ...payload.extensions,
-          parentLockWasPresented,
-        };
-      } else {
-        newPayload.extensions = {
-          parentLockWasPresented,
-        };
+      if (success) {
+        const token = await localStorageGet(localStorageTokenKey);
+        event.addData({ token });
       }
-
-      callback && callback({ success, error: null, payload: payload });
-    }
-  }
+      if (hookType === HookTypeData.USER_ACCOUNT) {
+        event
+          .setMessage(`${eventMessage}, plugin finished task: go back`)
+          .send();
+        navigator.goBack();
+      } else {
+        const { callback } = props;
+        event.setMessage(`${eventMessage}, plugin finished task`).send();
+        if (payload) {
+          let newPayload = payload;
+          if (newPayload.extensions) {
+            newPayload.extensions = {
+              ...payload.extensions,
+              parentLockWasPresented,
+            };
+          } else {
+            newPayload.extensions = {
+              parentLockWasPresented,
+            };
+          }
+        }
+        callback && callback({ success, error: null, payload: payload });
+      }
+    },
+    [hookType]
+  );
 
   const onLogin = ({ email, password }) => {
     stillMounted && setLoading(true);
@@ -484,7 +489,7 @@ const InPlayerLogin = (props) => {
   async function onLogout({ setError }) {
     const timeout = 1000;
     try {
-      const didLogout = await InPlayerService.signOut;
+      const didLogout = await InPlayerService.signOut();
       if (!didLogout) {
         navigator.goBack();
       }
