@@ -25,11 +25,8 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
-  // const showParentLock = props?.screenStyles?.import_parent_lock;
-  const showParentLock =
-    props?.configuration?.import_parent_lock === "1" ? true : false;
+  const showParentLock = props?.screenStyles?.import_parent_lock;
 
-  console.log({ props, screenStyles: props?.screenStyles });
   useToggleNavBar();
 
   const ScreensData = {
@@ -109,10 +106,8 @@ export default function Storefront(props) {
     try {
       const productsToPurchase =
         props?.payload?.extensions?.in_app_purchase_data?.productsToPurchase;
-      console.log({ productsToPurchase, props });
 
       const storeFeesData = await retrieveProducts(productsToPurchase);
-      console.log({ storeFeesData, productsToPurchase });
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);
       }
@@ -123,11 +118,7 @@ export default function Storefront(props) {
       });
       const parentLockWasPresented =
         props?.payload.extensions?.parentLockWasPresented;
-      console.log({
-        storeFeesData,
-        productsToPurchase,
-        parentLockWasPresented,
-      });
+
       if (showParentLock && !parentLockWasPresented) {
         presentParentLock();
       } else {
@@ -141,21 +132,16 @@ export default function Storefront(props) {
     }
   }
 
-  console.log("Storefront", { props });
-
   const buyItem = async ({ productIdentifier, productType }) => {
-    console.log({ productIdentifier, productType });
     if (!productIdentifier || !productType) {
       const error = new Error(MESSAGES.validation.productId);
       onStorefrontCompleted({ success: false, error });
     }
-    console.log({ productIdentifier, productType });
     try {
       const result = await purchaseAnItem({
         productIdentifier,
         productType,
       });
-      console.log({ result });
       setDataSource(null);
       setLoading(false);
       let newPayload = props?.payload;
@@ -181,7 +167,6 @@ export default function Storefront(props) {
     isApplePlatform && setLoading(true);
 
     const itemToPurchase = dataSource[index];
-    console.log({ itemToPurchase });
     return buyItem(itemToPurchase);
   };
 
@@ -222,7 +207,6 @@ export default function Storefront(props) {
   };
 
   function onStorefrontCompleted({ success, error, payload }) {
-    console.log("onStorefrontCompleted", { success, error, payload });
     props?.onStorefrontFinished?.({ success, error, payload });
   }
   const mobile = (
@@ -258,12 +242,6 @@ export default function Storefront(props) {
   }
 
   const render = () => {
-    console.log({
-      dataSource,
-      loading,
-      iapInitialized,
-      showdata: !dataSource || loading || !iapInitialized,
-    });
     if (!dataSource || loading || !iapInitialized) {
       return <LoadingScreen />;
     }

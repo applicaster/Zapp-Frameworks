@@ -157,7 +157,6 @@ export async function checkAccessForAsset({
 
     return { asset, src, cookies };
   } catch (error) {
-    console.log({ error });
     const event = logger.createEvent().addData({
       response: error?.response,
       is_purchase_required: false,
@@ -228,7 +227,6 @@ export async function getAccessFees(assetId) {
 
     const retVal = await InPlayer.Asset.getAssetAccessFees(assetId);
     const data = retVal?.data;
-    console.log({ acessFeesResult: data });
     const descriptions = R.map(R.prop("description"))(data);
     logger.debug({
       message: `InPlayer.Asset.getAssetAccessFees Completed >> inplayer_asset_id: ${assetId} >> fees_count: ${data.length}, fee_descriptions: ${descriptions}`,
@@ -267,7 +265,6 @@ export async function isAuthenticated(in_player_client_id) {
     return true;
   } catch (error) {
     const res = await error.response;
-    console.log({ res });
     if (res?.status === 403) {
       await InPlayer.Account.refreshToken(in_player_client_id);
 
@@ -376,7 +373,6 @@ export async function signUp(params) {
       .send();
     return retVal;
   } catch (error) {
-    console.log({ error });
     logger
       .createEvent()
       .setMessage(
@@ -455,7 +451,6 @@ export async function setNewPassword({ password, token, brandingId }) {
       .addData({ password, password_confirmation: password, succeed: true })
       .send();
   } catch (error) {
-    console.log({ error });
     logger
       .createEvent()
       .setMessage(
@@ -520,14 +515,6 @@ export async function validateExternalPayment({
   access_fee_id,
   store,
 }) {
-  console.log("validateExternalPayment", {
-    receipt,
-    amazon_user_id,
-    item_id,
-    access_fee_id,
-    store,
-  });
-
   try {
     if (!receipt) {
       throw new Error("Payment receipt is a required parameter!");

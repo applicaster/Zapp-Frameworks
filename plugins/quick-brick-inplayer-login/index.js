@@ -1,4 +1,4 @@
-import Component from "./src/Components/InPlayer";
+import Component from "./src/Components/InPlayerLogin";
 import * as R from "ramda";
 
 import { connectToStore } from "@applicaster/zapp-react-native-redux";

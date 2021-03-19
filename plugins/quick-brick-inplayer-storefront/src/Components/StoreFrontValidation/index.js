@@ -9,15 +9,12 @@ export const logger = createLogger({
 import MESSAGES from "../Config";
 
 export async function validatePayment(props) {
-  console.log("validatePayment", { props });
-
   const payload = props?.payload;
   const store = props?.store;
   const purchasedItem =
     payload?.extensions?.in_app_purchase_data?.purchasedProduct;
   const inPlayerData = payload?.extensions?.in_player_data;
   const inPlayerFeesData = inPlayerData?.inPlayerFeesData;
-  console.log({ inPlayerData, inPlayerFeesData });
   const purchasedProductIdentifier = purchasedItem?.productIdentifier;
 
   const feeData = feeDataForPurchase({
@@ -25,7 +22,6 @@ export async function validatePayment(props) {
     inPlayerFeesData,
   });
   const fee = feeData?.fee;
-  console.log({ fee });
 
   await validatePurchase({ purchasedItem, fee, store });
 }
@@ -33,28 +29,12 @@ export async function validatePayment(props) {
 async function validatePurchase({ purchasedItem, fee, store }) {
   // Currently only avail for amazon, rest platform currently does not support this key
   const amazon_user_id = purchasedItem?.userId;
-  console.log({ purchasedItem, fee, store });
   if (fee && purchasedItem) {
     const id = fee?.id;
     const itemId = fee?.item_id;
     const receipt = purchasedItem?.receipt;
-    console.log({
-      purchasedItem,
-      fee,
-      store,
-      validateExternalPayment,
-      id,
-      itemId,
-    });
 
     if (id && itemId && receipt && store) {
-      console.log({
-        receipt,
-        amazon_user_id,
-        itemId,
-        id,
-        store,
-      });
       const result = await validateExternalPayment({
         receipt,
         amazon_user_id,
@@ -81,8 +61,6 @@ async function validatePurchase({ purchasedItem, fee, store }) {
 }
 
 function feeDataForPurchase({ purchasedProductIdentifier, inPlayerFeesData }) {
-  console.log({ purchasedProductIdentifier, inPlayerFeesData });
-
   return R.find(R.propEq("storePurchaseID", purchasedProductIdentifier))(
     inPlayerFeesData
   );
@@ -97,7 +75,6 @@ export async function validateRestore(props) {
 
       const inPlayerData = payload?.extensions?.in_player_data;
       const inPlayerFeesData = inPlayerData?.inPlayerFeesData;
-      console.log({ props, restoreData, inPlayerFeesData });
 
       if (isAndroidPlatform) {
         restoreData = R.uniqWith(R.eqProps, restoreData);
@@ -107,7 +84,6 @@ export async function validateRestore(props) {
           restoreData.restoredProducts
         );
       }
-      console.log({ restoreData });
       const promises = inPlayerFeesData.map(async (feeData) => {
         return await restoreAnItem({ feeData, restoreData, store });
       });
@@ -117,11 +93,9 @@ export async function validateRestore(props) {
       const restoreProcessedArr = restoreCompletionsArr.filter(Boolean);
 
       const isRestoreFailed = R.isEmpty(restoreProcessedArr);
-      console.log({ isRestoreFailed });
       const isErrorOnAllRestores = restoreProcessedArr.every(
         ({ success }) => success === false
       );
-      console.log({ isErrorOnAllRestores, restoreProcessedArr });
 
       if (isRestoreFailed) throw new Error(MESSAGES.restore.empty);
 
@@ -137,7 +111,6 @@ async function restoreAnItem({ feeData, restoreData, store }) {
   const purchaseID = feeData?.storePurchaseID;
   const id = fee?.id.toString();
   const itemId = fee?.item_id.toString();
-  console.log({ fee, purchaseID, id, itemId });
   const itemFromStoreResult = isAndroidPlatform
     ? await findItemInRestoreAndroid(purchaseID, restoreData)
     : await findItemInRestoreIos(purchaseID, restoreData);
@@ -159,15 +132,7 @@ async function restoreAnItem({ feeData, restoreData, store }) {
       store,
     },
   });
-  console.log({
-    purchase_id: purchaseID,
-    restore_data: restoreData,
-    receipt: itemFromStoreResult?.receipt,
-    amazon_user_id,
-    item_id: itemId,
-    access_fee_id: id,
-    store,
-  });
+
   try {
     const result = await validateExternalPayment({
       receipt: itemFromStoreResult?.receipt,

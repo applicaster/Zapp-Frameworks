@@ -14,14 +14,10 @@ export const getCookiesFromAsset = (inPlayerItemAccess) => {
 };
 
 export const getSrcFromAsset = (inPlayerItemAccess) => {
-  console.log("getSrcFromAsset");
-
   const inPlayerContent =
     inPlayerItemAccess && getInPlayerContent(inPlayerItemAccess);
-  console.log({ inPlayerContent });
   if (inPlayerContent) {
     const src = retrieveSrcFromDefault({ inPlayerContent });
-    console.log({ src });
 
     if (src) {
       return src;

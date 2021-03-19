@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     height: 44,
   },
 });
-console.log({ styles });
 export default function NavbarComponent({ buttonUrl, logoUrl, buttonAction }) {
   return (
     <View style={styles.navbar}>

@@ -73,8 +73,6 @@ export async function inPlayerAssetId({ payload, configuration }) {
     configuration,
   });
 
-  console.log({ assetIdFromCustomKey, payload, configuration });
-
   if (assetIdFromCustomKey) {
     event
       .addData({ inplayer_asset_id: assetIdFromCustomKey })
@@ -86,7 +84,6 @@ export async function inPlayerAssetId({ payload, configuration }) {
   }
 
   const assetId = R.path(["extensions", "inplayer_asset_id"])(payload);
-  console.log({ assetId });
 
   if (assetId) {
     event
@@ -113,11 +110,9 @@ export async function inPlayerAssetId({ payload, configuration }) {
     .setMessage(eventMessage)
     .send();
   if (assetIdFallback) {
-    console.log({ assetIdFallback });
     return;
   }
   const assetIdFromExternalID = await getAssetByExternalId(payload);
-  console.log({ assetIdFromExternalID, getAssetByExternalId });
   return assetIdFromExternalID;
 }
 

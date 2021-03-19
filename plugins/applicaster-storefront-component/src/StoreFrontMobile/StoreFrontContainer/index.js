@@ -30,7 +30,6 @@ export default function StoreFrontContainer(props) {
     restoreTextStyle,
     restoreLinkStyle,
   ] = storefrontStyleKeys.map((key) => mapKeyToStyle(key, screenStyles));
-  console.log("Storefront", { props });
   return (
     <View
       style={[

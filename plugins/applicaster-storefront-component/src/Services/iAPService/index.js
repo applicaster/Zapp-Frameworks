@@ -50,7 +50,6 @@ export async function initialize(store) {
 }
 
 export async function purchaseAnItem({ productIdentifier, productType }) {
-  console.log({ productIdentifier, productType });
   if (!productIdentifier) throw new Error(MESSAGES.validation.productId);
   try {
     logger.debug({
@@ -80,15 +79,7 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
       ...purchaseCompletion,
       productType,
     });
-    console.log({ result, purchaseCompletion });
-    logger.debug({
-      message: `purchaseAnItem: ApplicasterIAPModule.finishPurchasedTransaction >> Finilizing transaction completed product_identifier:${productIdentifier}`,
-      data: {
-        productIdentifier,
-        productType,
-        purchase_completion: purchaseCompletion,
-      },
-    });
+
     return purchaseCompletion;
   } catch (error) {
     logger.error({
@@ -104,7 +95,6 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
 }
 
 export async function retrieveProducts(purchasableItems) {
-  console.log({ purchasableItems });
   if (purchasableItems) {
     try {
       logger.debug({
@@ -115,7 +105,6 @@ export async function retrieveProducts(purchasableItems) {
       });
 
       let result = await ApplicasterIAPModule.products(purchasableItems);
-      console.log({ result });
       result = R.prop("products")(result);
 
       logger.debug({
@@ -150,7 +139,6 @@ export async function restore() {
     });
 
     const restoreResultFromStore = await ApplicasterIAPModule.restore();
-    console.log({ restoreResultFromStore });
     logger.debug({
       message: `ApplicasterIAPModule.restore >> Restore complete`,
       data: { restored_data: restoreResultFromStore },
