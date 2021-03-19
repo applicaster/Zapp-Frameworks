@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
@@ -89,7 +89,7 @@ const InPlayerLogin = (props) => {
 
   let stillMounted = true;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setupEnvironment();
   }, []);
 
@@ -172,16 +172,19 @@ const InPlayerLogin = (props) => {
       if (!isAuthenticated && (authenticationRequired || assetId)) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
-          data: { ...logData, hook_type: HookTypeData.PLAYER_HOOK },
+          data: {
+            ...logData,
+            hook_type: HookTypeData.PLAYER_HOOK,
+            isAuthenticated,
+          },
         });
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
         logger.debug({
-          message:
-            "Data source not support InPlayer plugin invocation, finishing hook with: success",
-          data: { ...logData },
+          message: "InPlayer plugin invocation, finishing hook with: success",
+          data: { ...logData, isAuthenticated },
         });
-        callback && callback({ success: true, error: null, payload });
+        // callback && callback({ success: true, error: null, payload });
       }
     } else {
       setLoading(false);
@@ -515,6 +518,7 @@ const InPlayerLogin = (props) => {
     accountFlowCallback({ success: false });
   }
 
+  console.log(loading, AccountComponents);
   function renderAccount() {
     return (
       <>
@@ -530,13 +534,13 @@ const InPlayerLogin = (props) => {
           onForgotPassword={onForgotPassword}
           onError={onAccountError}
           onHandleBackButton={onAccountHandleBackButton}
-          loading={loading}
           lastEmailUsed={lastEmailUsed}
           {...props}
         />
         {!Platform.isTV && !isWebBasedPlatform && (
           <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
         )}
+        {loading && <AccountComponents.LoadingScreen />}
       </>
     );
   }

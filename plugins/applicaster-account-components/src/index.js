@@ -4,6 +4,7 @@ import Login from "./Components/Login";
 import LogoutFlow from "./Components/LogoutFlow";
 import SetNewPassword from "./Components/SetNewPassword";
 import SignUp from "./Components/SignUp";
+import LoadingScreen from "./Components/LoadingScreen";
 export default AccountComponent = {
   AccountFlow,
   ForgotPassword,
@@ -12,4 +13,5 @@ export default AccountComponent = {
   SetNewPassword,
   SignUp,
   ScreensData,
+  LoadingScreen,
 };

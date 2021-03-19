@@ -6,7 +6,6 @@ import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
 import Login from "../Login";
 import ForgotPassword from "../ForgotPassword";
 import SetNewPassword from "../SetNewPassword";
-import LoadingScreen from "../LoadingScreen";
 import SignUp from "../SignUp";
 import { container } from "../../Styles";
 import { createLogger, Subsystems } from "../../Services/LoggerService";
@@ -41,7 +40,6 @@ const AccountFlow = (props) => {
     shouldShowParentLock,
     screenStyles,
     setParentLockWasPresented,
-    loading,
     lastEmailUsed,
     onLogin,
     onCreateAccount,
@@ -183,10 +181,7 @@ const AccountFlow = (props) => {
 
   return (
     <View style={containerStyle(screenStyles)}>
-      <SafeArea style={container}>
-        {renderAuthenticationScreen()}
-        {loading && <LoadingScreen />}
-      </SafeArea>
+      <SafeArea style={container}>{renderAuthenticationScreen()}</SafeArea>
     </View>
   );
 };

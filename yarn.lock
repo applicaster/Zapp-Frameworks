@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@applicaster/applicaster-account-components@0.0.2-alpha.0":
-  version "0.0.2-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.2-alpha.0.tgz#9dddb551ff449305f02e19f53da55869b63d5ddc"
-  integrity sha512-cD/ksl4nD5gihxizPh2cZ6qL3yb8MKDEIMX7u9qSm39u15B1dNtKcx0P408CMYH7haMGTrDJpCQQmZkYgUO5qw==
+"@applicaster/applicaster-account-components@0.0.2-alpha.5":
+  version "0.0.2-alpha.5"
+  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.2-alpha.5.tgz#3a6554010122d0049dfd7a40a05c4e07ef318a71"
+  integrity sha512-70YqKlLPJDawAfb3ojSDhVG+KBu043T8/P0S4VWuLliYbVSm7ShOMNg/WrfUi1caP1D2hhNuZBrfTuTq/QyR5w==
   dependencies:
+    "@applicaster/quick-brick-parent-lock" "*"
     axios "^0.19.1"
     moment "^2.24.0"
     prop-types "^15.7.2"
@@ -14,12 +15,26 @@
     react-native-keyboard-aware-scroll-view "0.9.1"
     react-redux "^7.2.1"
 
-"@applicaster/applicaster-storefront-component@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-storefront-component/-/applicaster-storefront-component-0.0.2.tgz#bf9cb1c92a671aa0ea2fdcb6f92d1056180a0fa7"
-  integrity sha512-NfHoBqxxOG6+QQ9RdDld5nplBLAiSgkEbtghC9UHycNonxZBA9YT8Te+XzCYPqEIuncruo2NZ+9brp5P7WWQAQ==
+"@applicaster/applicaster-account-components@0.0.2-alpha.7":
+  version "0.0.2-alpha.7"
+  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.2-alpha.7.tgz#d0afffc9b3478bfa87d0e17ab1b90b57939a901b"
+  integrity sha512-MvDtDu7K5ZFoydIjKgG8mOhA0k213VKEqcRFhXvnecndFOLeE/gHwz74Ev00Q5A+BNbkUXajnTn9/UW9RtrTQQ==
+  dependencies:
+    "@applicaster/quick-brick-parent-lock" "*"
+    axios "^0.19.1"
+    moment "^2.24.0"
+    prop-types "^15.7.2"
+    ramda "^0.26.1"
+    react-native-keyboard-aware-scroll-view "0.9.1"
+    react-redux "^7.2.1"
+
+"@applicaster/applicaster-storefront-component@0.0.5-alpha.3":
+  version "0.0.5-alpha.3"
+  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-storefront-component/-/applicaster-storefront-component-0.0.5-alpha.3.tgz#6bfe45620808ba6ba3f6d3f9c3c9b797e8802dfa"
+  integrity sha512-FzjZa+BfvvMKIUtGRBGdEAFp7MDA8/o24mhDO5F21tcCXq9SsA4RgFZJvNoZuR2NZjkbVcfqcSS3bEOF1Z6KQA==
   dependencies:
     "@applicaster/applicaster-iap" "1.1.1"
+    "@applicaster/quick-brick-parent-lock" "*"
     axios "^0.19.1"
     moment "^2.24.0"
     prop-types "^15.7.2"
@@ -243,12 +258,12 @@
     axios "^0.21.1"
     ramda "^0.26.1"
 
-"@applicaster/quick-brick-inplayer-storefront@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-inplayer-storefront/-/quick-brick-inplayer-storefront-0.0.3.tgz#7b2d88dc69ccf6ab2f0162b4d9c49946a8c27600"
-  integrity sha512-w0B4cHp0AqZpbZ30vVklW+6xkZtCAO5EJz0t+dExDh1csLsWjvQhge7ETcej/PF/YOxWRUKOpWxI7m+efZUMGw==
+"@applicaster/quick-brick-inplayer-storefront@0.0.8-alpha.2":
+  version "0.0.8-alpha.2"
+  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-inplayer-storefront/-/quick-brick-inplayer-storefront-0.0.8-alpha.2.tgz#11f0bc74d762189b1ee9b53b75b9c6490cdafd2e"
+  integrity sha512-5Y/sSsqroWWCVpb+YsrW9hx5/Xmy0u74O99wmPmBOGq08dkIym5ICF4PBvhIaY2UpyOE1Yz4vGfypf7b+RDftg==
   dependencies:
-    "@applicaster/applicaster-storefront-component" "0.0.2"
+    "@applicaster/applicaster-storefront-component" "0.0.5-alpha.3"
     "@applicaster/quick-brick-parent-lock" "*"
     "@inplayer-org/inplayer.js" "3.9.0"
     "@react-native-community/blur" "3.4.1"
@@ -261,11 +276,12 @@
     react-native-keyboard-aware-scroll-view "0.9.1"
     react-redux "^7.2.1"
 
-"@applicaster/quick-brick-inplayer@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-inplayer/-/quick-brick-inplayer-4.0.0.tgz#2f66b4b25fe52d289c76d977ef177aa8f9e9c4ab"
-  integrity sha512-fAIT5x3doOG5iaNI6XAQb8OxNUvHLFtxae6lSR2ryAnnIAMVyfZf0ZlTAWTlELi+4OgIFCyS5uq5Hgo9lpa3xQ==
+"@applicaster/quick-brick-inplayer@4.0.4-alpha.6":
+  version "4.0.4-alpha.6"
+  resolved "https://registry.yarnpkg.com/@applicaster/quick-brick-inplayer/-/quick-brick-inplayer-4.0.4-alpha.6.tgz#590ddeb337e35a8201e8db6dbf74b1b6f61094db"
+  integrity sha512-W9mQaUewBwf18oMgENlD9o4vlGaBCF8lFj/9o4gEGqP7Vf6+cNze5CCur4F55PoPxuHvUw6zTqYIEsY7FAyj2w==
   dependencies:
+    "@applicaster/applicaster-account-components" "0.0.2-alpha.5"
     "@applicaster/quick-brick-parent-lock" "*"
     "@inplayer-org/inplayer.js" "3.9.0"
     "@react-native-community/blur" "3.4.1"
