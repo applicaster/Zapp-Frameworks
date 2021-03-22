@@ -19,25 +19,25 @@ class TokenStorage implements TokenStorageType {
 
   overrides: LocalStorageMethods = {
     setItem: (key: string, value: string) => {
-      if (localStorage?.setItem) {
-        localStorage.setItem(key, value);
-      } else {
-        this.storage[key] = value;
-      }
+      // if (localStorage?.setItem) {
+      //   localStorage.setItem(key, value);
+      // } else {
+      this.storage[key] = value;
+      // }
     },
     getItem: (key: string) => {
-      if (localStorage?.getItem) {
-        return localStorage.getItem(key);
-      }
+      // if (localStorage?.getItem) {
+      //   return localStorage.getItem(key);
+      // }
 
       return this.storage[key] || null;
     },
     removeItem: (key: string) => {
-      if (localStorage?.removeItem) {
-        localStorage.removeItem(key);
-      } else {
-        delete this.storage[key];
-      }
+      // if (localStorage?.removeItem) {
+      //   localStorage.removeItem(key);
+      // } else {
+      delete this.storage[key];
+      // }
     },
   };
 }
