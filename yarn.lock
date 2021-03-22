@@ -292,6 +292,11 @@
   resolved "https://registry.yarnpkg.com/@applicaster/x-ray/-/x-ray-0.2.0.tgz#d11a0d8ab8a6ab69e288548ed1a6cf37bdbb7a4a"
   integrity sha512-g4RkMEtxiuPyV6pbJ/pxEfdcTXCWmra8BcIa7vo5rWgzGak8y5d7uL2ipdiokarU+KKOUB+yQU1ZiFdDrPijDg==
 
+"@applicaster/zapp-analytics-plugin-appsflyer@next":
+  version "10.2.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
+  integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
+
 "@applicaster/zapp-pipes-dev-kit@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-pipes-dev-kit/-/zapp-pipes-dev-kit-1.4.1.tgz#92f16648d5484d442b89795f6bbaf88c632b3bcb"
