@@ -46,13 +46,13 @@
   ],
   "identifier": "AppsFlyer-iOS",
   "platform": "ios_for_quickbrick",
-  "manifest_version": "10.1.1",
+  "manifest_version": "10.2.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginAppsFlyer": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-appsflyer@10.1.1"
+    "@applicaster/zapp-analytics-plugin-appsflyer@10.2.0"
   ]
 }
