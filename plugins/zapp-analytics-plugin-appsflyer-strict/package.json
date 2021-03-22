@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-appsflyer-strict",
-  "version": "10.1.1",
+  "version": "10.2.0",
   "description": "AppsFlyer Analytics provider with strict mode SDK to completely remove IDFA collection functionality and AdSupport framework dependencies",
   "repository": {
     "type": "git",
