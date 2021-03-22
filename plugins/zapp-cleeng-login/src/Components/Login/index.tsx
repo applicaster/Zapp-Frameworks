@@ -2,13 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
-import { isWebBasedPlatform } from "../Utils/Platform";
-import { showAlert } from "../Utils/Account";
+import { isWebBasedPlatform } from "../../Utils/Platform";
+import { showAlert } from "../../Utils/Account";
 import AccountComponents from "@applicaster/applicaster-account-components";
 import * as R from "ramda";
-import * as InPlayerService from "../Services/inPlayerService";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
-import { getLocalizations } from "../Utils/Localizations";
+import { getLocalizations } from "../../Utils/Localizations";
 import {
   localStorageGet,
   localStorageSet,
@@ -19,12 +18,11 @@ import {
 import {
   inPlayerAssetId,
   isAuthenticationRequired,
-} from "../Utils/PayloadUtils";
-import InPlayerSDK from "@inplayer-org/inplayer.js";
+} from "../../Utils/PayloadUtils";
 
 import { setConfig } from "../Services/inPlayerService";
-import { getStyles, isHomeScreen } from "../Utils/Customization";
-import { isHook } from "../Utils/UserAccount";
+import { getStyles, isHomeScreen } from "../../Utils/Customization";
+import { isHook } from "../../Utils/UserAccount";
 import {
   createLogger,
   BaseSubsystem,
@@ -50,13 +48,14 @@ const getRiversProp = (key, rivers = {}) => {
 const localStorageTokenKey = "in_player_token";
 const userAccountStorageTokenKey = "idToken";
 
-const InPlayerLogin = (props) => {
+const Login = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
     PLAYER_HOOK: "PlayerHook",
     SCREEN_HOOK: "ScreenHook",
     USER_ACCOUNT: "UserAccount",
   };
+
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [idToken, setIdtoken] = useState(null);
@@ -573,4 +572,4 @@ const InPlayerLogin = (props) => {
 
   return renderFlow();
 };
-export default InPlayerLogin;
+export default Login;

@@ -28,12 +28,5 @@
     "apple",
     "android",
     "src"
-  ],
-  "applicaster": {
-    "supportedPlatforms": [
-      "ios_for_quickbrick",
-      "android_for_quickbrick"
-    ],
-    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
-  }
+  ]
 }
