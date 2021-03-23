@@ -14,13 +14,13 @@ import {
   localStorageRemove,
   localStorageSetUserAccount,
   localStorageRemoveUserAccount,
-} from "../Services/LocalStorageService";
+} from "../../Services/LocalStorageService";
+import { getLastEmailUsed } from "../../Services/CleengMiddlewateService";
 import {
   inPlayerAssetId,
   isAuthenticationRequired,
 } from "../../Utils/PayloadUtils";
 
-import { setConfig } from "../Services/inPlayerService";
 import { getStyles, isHomeScreen } from "../../Utils/Customization";
 import { isHook } from "../../Utils/UserAccount";
 import {
@@ -28,7 +28,7 @@ import {
   BaseSubsystem,
   BaseCategories,
   XRayLogLevel,
-} from "../Services/LoggerService";
+} from "../../Services/LoggerService";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -62,7 +62,7 @@ const Login = (props) => {
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [loading, setLoading] = useState(true);
   const [lastEmailUsed, setLastEmailUsed] = useState(null);
-
+  const [dropDownAlertRef, setDropDownAlertRef] = useState(null);
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
   const styles = getRiversProp("styles", rivers);
@@ -72,17 +72,10 @@ const Login = (props) => {
 
   const {
     configuration: {
-      in_player_client_id: clientId,
-      in_player_referrer: referrer,
-      in_player_branding_id,
-      in_player_environment,
+      publisher_id: publisherId,
       logout_completion_action = "go_back",
     },
   } = props;
-  const brandingId = React.useMemo(() => {
-    const parsedValue = parseInt(in_player_branding_id);
-    return isNaN(parsedValue) ? null : parsedValue;
-  }, []);
 
   const showParentLock = props?.configuration?.import_parent_lock;
 
@@ -93,122 +86,123 @@ const Login = (props) => {
   }, []);
 
   function checkIfUserAuthenteficated() {
-    return InPlayerService.isAuthenticated(clientId)
-      .then(async (isAuthenticated) => {
-        let eventMessage = "Account Flow:";
-        const event = logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .addData({ is_authenticated: isAuthenticated });
+    stillMounted && setLoading(false);
 
-        if (stillMounted) {
-          if (isAuthenticated) {
-            eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
-            return true;
-          } else {
-            if (showParentLock) {
-              eventMessage = `${eventMessage} not granted, present parent lock`;
-            } else {
-              eventMessage = `${eventMessage} not granted, present login screen`;
-            }
-          }
-        }
-        event.setMessage(eventMessage).send();
-        return false;
-      })
-      .finally(() => {
-        stillMounted && setLoading(false);
-      });
+    return false;
+    // return InPlayerService.isAuthenticated(clientId)
+    //   .then(async (isAuthenticated) => {
+    //     let eventMessage = "Account Flow:";
+    //     const event = logger
+    //       .createEvent()
+    //       .setLevel(XRayLogLevel.debug)
+    //       .addData({ is_authenticated: isAuthenticated });
+
+    //     if (stillMounted) {
+    //       if (isAuthenticated) {
+    //         eventMessage = `${eventMessage} access granted, flow completed`;
+    //         accountFlowCallback({ success: true });
+    //         return true;
+    //       } else {
+    //         if (showParentLock) {
+    //           eventMessage = `${eventMessage} not granted, present parent lock`;
+    //         } else {
+    //           eventMessage = `${eventMessage} not granted, present login screen`;
+    //         }
+    //       }
+    //     }
+    //     event.setMessage(eventMessage).send();
+    //     return false;
+    //   })
+    //   .finally(() => {
+    //     stillMounted && setLoading(false);
+    //   });
   }
 
   async function setupEnvironment() {
-    await setConfig(in_player_environment);
+    // CleengMiddleware.tokenStorage.overrides = {
+    //   setItem: async function (
+    //     defaultTokenKey, // 'inplayer_token'
+    //     tokenValue
+    //   ) {
+    //     await localStorageSet(localStorageTokenKey, tokenValue);
+    //     await localStorageSetUserAccount(
+    //       userAccountStorageTokenKey,
+    //       tokenValue
+    //     );
+    //   },
+    //   getItem: async function () {
+    //     const token = await localStorageGet(localStorageTokenKey);
+    //     return token;
+    //   },
+    //   removeItem: async function () {
+    //     await localStorageRemove(localStorageTokenKey);
+    //     await localStorageRemoveUserAccount(userAccountStorageTokenKey);
+    //   },
+    // };
 
-    InPlayerSDK.tokenStorage.overrides = {
-      setItem: async function (
-        defaultTokenKey, // 'inplayer_token'
-        tokenValue
-      ) {
-        await localStorageSet(localStorageTokenKey, tokenValue);
-        await localStorageSetUserAccount(
-          userAccountStorageTokenKey,
-          tokenValue
-        );
-      },
-      getItem: async function () {
-        const token = await localStorageGet(localStorageTokenKey);
-        return token;
-      },
-      removeItem: async function () {
-        await localStorageRemove(localStorageTokenKey);
-        await localStorageRemoveUserAccount(userAccountStorageTokenKey);
-      },
-    };
+    setLastEmailUsed((await getLastEmailUsed()) || null);
 
-    setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
-
-    const { token } = await InPlayerSDK.Account.getToken();
-    setIdtoken(token);
+    // const { token } = await CleengMiddleware.Account.getToken();
+    // setIdtoken(token);
 
     logger.debug({
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
 
-    if (payload) {
-      const authenticationRequired = isAuthenticationRequired({ payload });
-      const assetId = inPlayerAssetId({
-        payload,
-        configuration: props.configuration,
-      });
-      const logData = {
-        authentication_required: authenticationRequired,
-        inplayer_asset_id: assetId,
-        configuration: props?.configuration,
-      };
-      const isAuthenticated = await checkIfUserAuthenteficated();
-      if (!isAuthenticated && (authenticationRequired || assetId)) {
-        logger.debug({
-          message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
-          data: {
-            ...logData,
-            hook_type: HookTypeData.PLAYER_HOOK,
-            isAuthenticated,
-          },
-        });
-        stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
-      } else {
-        logger.debug({
-          message: "InPlayer plugin invocation, finishing hook with: success",
-          data: { ...logData, isAuthenticated },
-        });
-        // callback && callback({ success: true, error: null, payload });
-      }
-    } else {
-      setLoading(false);
-      if (!isHook(navigator)) {
-        logger.debug({
-          message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
-          data: {
-            configuration: props?.configuration,
-            hook_type: HookTypeData.USER_ACCOUNT,
-          },
-        });
+    // if (payload) {
+    //   const authenticationRequired = isAuthenticationRequired({ payload });
+    //   const assetId = inPlayerAssetId({
+    //     payload,
+    //     configuration: props.configuration,
+    //   });
+    //   const logData = {
+    //     authentication_required: authenticationRequired,
+    //     inplayer_asset_id: assetId,
+    //     configuration: props?.configuration,
+    //   };
+    //   const isAuthenticated = await checkIfUserAuthenteficated();
+    //   if (!isAuthenticated && (authenticationRequired || assetId)) {
+    //     logger.debug({
+    //       message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
+    //       data: {
+    //         ...logData,
+    //         hook_type: HookTypeData.PLAYER_HOOK,
+    //         isAuthenticated,
+    //       },
+    //     });
+    //     stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
+    //   } else {
+    //     logger.debug({
+    //       message: "InPlayer plugin invocation, finishing hook with: success",
+    //       data: { ...logData, isAuthenticated },
+    //     });
+    //     // callback && callback({ success: true, error: null, payload });
+    //   }
+    // } else {
+    //   setLoading(false);
+    //   if (!isHook(navigator)) {
+    //     logger.debug({
+    //       message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
+    //       data: {
+    //         configuration: props?.configuration,
+    //         hook_type: HookTypeData.USER_ACCOUNT,
+    //       },
+    //     });
 
-        stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
-      } else {
-        logger.debug({
-          message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
-          data: {
-            configuration: props?.configuration,
-            hook_type: HookTypeData.SCREEN_HOOK,
-          },
-        });
+    //     stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
+    //   } else {
+    //     logger.debug({
+    //       message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
+    //       data: {
+    //         configuration: props?.configuration,
+    //         hook_type: HookTypeData.SCREEN_HOOK,
+    //       },
+    //     });
 
-        stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
-      }
-    }
+    //     stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
+    //   }
+    // }
     return () => {
       stillMounted = false;
     };
@@ -265,34 +259,34 @@ const Login = (props) => {
       },
     });
 
-    InPlayerService.login({
-      email: email,
-      password,
-      clientId,
-      referrer,
-    })
-      .then(() => {
-        logger.debug({
-          message: `Login succeed, email: ${email}, password: ${password}`,
-          data: {
-            email,
-            password,
-          },
-        });
-        accountFlowCallback({ success: true });
-      })
-      .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
-      .catch((error) => {
-        logger.error({
-          message: `Login failed, email: ${email}, password: ${password}`,
-          data: {
-            email,
-            password,
-            error,
-          },
-        });
-        stillMounted && setLoading(false);
-      });
+    // InPlayerService.login({
+    //   email: email,
+    //   password,
+    //   clientId,
+    //   referrer,
+    // })
+    //   .then(() => {
+    //     logger.debug({
+    //       message: `Login succeed, email: ${email}, password: ${password}`,
+    //       data: {
+    //         email,
+    //         password,
+    //       },
+    //     });
+    //     accountFlowCallback({ success: true });
+    //   })
+    //   .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
+    //   .catch((error) => {
+    //     logger.error({
+    //       message: `Login failed, email: ${email}, password: ${password}`,
+    //       data: {
+    //         email,
+    //         password,
+    //         error,
+    //       },
+    //     });
+    //     stillMounted && setLoading(false);
+    //   });
   };
 
   function onCreateAccount({ fullName, email, password, setScreen }) {
@@ -306,39 +300,39 @@ const Login = (props) => {
       },
     });
 
-    InPlayerService.signUp({
-      fullName,
-      email,
-      password,
-      clientId,
-      referrer,
-      brandingId,
-      setScreen,
-    })
-      .then(() => {
-        logger.debug({
-          message: `Account Creation succeed, fullName: ${fullName}, email: ${email}, password: ${password}`,
-          data: {
-            email,
-            password,
-            fullName,
-          },
-        });
-        accountFlowCallback({ success: true });
-      })
-      .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
-      .catch((error) => {
-        logger.error({
-          message: `Account Creation failed, fullName: ${fullName}, email: ${email}, password: ${password}`,
-          data: {
-            email,
-            password,
-            fullName,
-            error,
-          },
-        });
-        stillMounted && setLoading(false);
-      });
+    // InPlayerService.signUp({
+    //   fullName,
+    //   email,
+    //   password,
+    //   clientId,
+    //   referrer,
+    //   brandingId,
+    //   setScreen,
+    // })
+    //   .then(() => {
+    //     logger.debug({
+    //       message: `Account Creation succeed, fullName: ${fullName}, email: ${email}, password: ${password}`,
+    //       data: {
+    //         email,
+    //         password,
+    //         fullName,
+    //       },
+    //     });
+    //     accountFlowCallback({ success: true });
+    //   })
+    //   .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
+    //   .catch((error) => {
+    //     logger.error({
+    //       message: `Account Creation failed, fullName: ${fullName}, email: ${email}, password: ${password}`,
+    //       data: {
+    //         email,
+    //         password,
+    //         fullName,
+    //         error,
+    //       },
+    //     });
+    //     stillMounted && setLoading(false);
+    //   });
   }
 
   function onNewPasswordChange({ password, token }) {
@@ -350,50 +344,50 @@ const Login = (props) => {
       },
     });
 
-    if (token && password) {
-      stillMounted && setLoading(true);
-      InPlayerService.setNewPassword({
-        password,
-        token,
-        brandingId,
-      })
-        .then(() => {
-          logger.debug({
-            message: `Set new password task succeed, password: ${password}, token: ${token}`,
-            data: {
-              password,
-              token,
-            },
-          });
+    // if (token && password) {
+    //   stillMounted && setLoading(true);
+    //   InPlayerService.setNewPassword({
+    //     password,
+    //     token,
+    //     brandingId,
+    //   })
+    //     .then(() => {
+    //       logger.debug({
+    //         message: `Set new password task succeed, password: ${password}, token: ${token}`,
+    //         data: {
+    //           password,
+    //           token,
+    //         },
+    //       });
 
-          showAlertToUser({
-            title: screenLocalizations.reset_password_success_title,
-            message: screenLocalizations.reset_password_success_text,
-            type: "success",
-          });
-          stillMounted && setLoading(false);
-          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-        })
-        .catch((error) => {
-          logger.error({
-            message: `Set new password task failed, password: ${password}, token: ${token}`,
-            data: {
-              password,
-              token,
-              error,
-            },
-          });
+    //       showAlertToUser({
+    //         title: screenLocalizations.reset_password_success_title,
+    //         message: screenLocalizations.reset_password_success_text,
+    //         type: "success",
+    //       });
+    //       stillMounted && setLoading(false);
+    //       stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
+    //     })
+    //     .catch((error) => {
+    //       logger.error({
+    //         message: `Set new password task failed, password: ${password}, token: ${token}`,
+    //         data: {
+    //           password,
+    //           token,
+    //           error,
+    //         },
+    //       });
 
-          stillMounted && setLoading(false);
+    //       stillMounted && setLoading(false);
 
-          showAlertToUser({
-            title: screenLocalizations.reset_password_error_title,
-            message: screenLocalizations.reset_password_error_text,
-          });
-        });
-    } else {
-      stillMounted && setScreen(AccountComponents.ScreensData.FORGOT_PASSWORD);
-    }
+    //       showAlertToUser({
+    //         title: screenLocalizations.reset_password_error_title,
+    //         message: screenLocalizations.reset_password_error_text,
+    //       });
+    //     });
+    // } else {
+    //   stillMounted && setScreen(AccountComponents.ScreensData.FORGOT_PASSWORD);
+    // }
   }
 
   function onForgotPassword({ email, setScreen }) {
@@ -404,50 +398,50 @@ const Login = (props) => {
       },
     });
 
-    if (email) {
-      stillMounted && setLoading(true);
-      InPlayerService.requestPassword({
-        email,
-        clientId,
-        brandingId,
-      })
-        .then((result) => {
-          const { message } = result;
+    // if (email) {
+    //   stillMounted && setLoading(true);
+    //   InPlayerService.requestPassword({
+    //     email,
+    //     clientId,
+    //     brandingId,
+    //   })
+    //     .then((result) => {
+    //       const { message } = result;
 
-          logger.debug({
-            message: `Request password change task, email: ${email}`,
-            data: {
-              email,
-            },
-          });
+    //       logger.debug({
+    //         message: `Request password change task, email: ${email}`,
+    //         data: {
+    //           email,
+    //         },
+    //       });
 
-          showAlertToUser({
-            title: screenLocalizations.request_password_success_title,
-            message,
-            type: "success",
-          });
-          stillMounted && setLoading(false);
-          stillMounted &&
-            setScreen(AccountComponents.ScreensData.SET_NEW_PASSWORD);
-        })
-        .catch((error) => {
-          logger.error({
-            message: `Request password change task failed, email: ${email}`,
-            data: {
-              email,
-              error,
-            },
-          });
-          stillMounted && setLoading(false);
-          showAlertToUser({
-            title: screenLocalizations.request_password_error_title,
-            message: screenLocalizations.request_password_error_text,
-          });
-          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-        });
-    } else {
-      stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-    }
+    //       showAlertToUser({
+    //         title: screenLocalizations.request_password_success_title,
+    //         message,
+    //         type: "success",
+    //       });
+    //       stillMounted && setLoading(false);
+    //       stillMounted &&
+    //         setScreen(AccountComponents.ScreensData.SET_NEW_PASSWORD);
+    //     })
+    //     .catch((error) => {
+    //       logger.error({
+    //         message: `Request password change task failed, email: ${email}`,
+    //         data: {
+    //           email,
+    //           error,
+    //         },
+    //       });
+    //       stillMounted && setLoading(false);
+    //       showAlertToUser({
+    //         title: screenLocalizations.request_password_error_title,
+    //         message: screenLocalizations.request_password_error_text,
+    //       });
+    //       stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
+    //     });
+    // } else {
+    //   stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
+    // }
   }
 
   const showAlertToUser = ({ title, message, type = "warn" }) => {
@@ -460,9 +454,11 @@ const Login = (props) => {
       },
     });
 
-    Platform.isTV || isWebBasedPlatform
-      ? showAlert(title, message)
-      : this.dropDownAlertRef.alertWithType(type, title, message);
+    if (Platform.isTV || isWebBasedPlatform) {
+      showAlert(title, message);
+    } else if (typeof this === "function") {
+      dropDownAlertRef.alertWithType(type, title, message);
+    }
   };
 
   const maybeShowAlertToUser = (title) => async (error) => {
@@ -493,20 +489,20 @@ const Login = (props) => {
 
   async function onLogout({ setError }) {
     const timeout = 1000;
-    try {
-      const didLogout = await InPlayerService.signOut();
-      if (!didLogout) {
-        navigator.goBack();
-      }
-      setTimeout(() => {
-        invokeLogoutCompleteAction();
-      }, timeout);
-    } catch (error) {
-      setError(error);
-      setTimeout(() => {
-        invokeCompleteAction();
-      }, timeout);
-    }
+    // try {
+    //   const didLogout = await InPlayerService.signOut();
+    //   if (!didLogout) {
+    //     navigator.goBack();
+    //   }
+    //   setTimeout(() => {
+    //     invokeLogoutCompleteAction();
+    //   }, timeout);
+    // } catch (error) {
+    //   setError(error);
+    //   setTimeout(() => {
+    //     invokeLogoutCompleteAction();
+    //   }, timeout);
+    // }
   }
 
   function onAccountError({ title, message, type = "warn" }) {
@@ -537,7 +533,7 @@ const Login = (props) => {
           {...props}
         />
         {!Platform.isTV && !isWebBasedPlatform && (
-          <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
+          <DropdownAlert ref={(ref) => setDropDownAlertRef(ref)} />
         )}
         {loading && <AccountComponents.LoadingScreen />}
       </>

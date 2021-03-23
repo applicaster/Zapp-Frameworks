@@ -14,7 +14,7 @@ import tokenStorage, { TokenStorageType } from "./factories/tokenStorage";
  *
  * @class Cleeng
  */
-class Cleeng {
+class CleengMiddleware {
   config: ApiConfig;
   Account: AccountType;
   request: RequestType;
@@ -51,4 +51,4 @@ class Cleeng {
   }
 }
 
-export default new Cleeng();
+export default new CleengMiddleware();
