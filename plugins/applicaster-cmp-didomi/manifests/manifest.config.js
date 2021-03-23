@@ -11,7 +11,6 @@ const baseManifest = {
   ui_builder_support: true,
   whitelisted_account_ids: [],
   ui_frameworks: ["quickbrick"],
-  core_plugin: true,
   min_zapp_sdk: "1.0.0",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
