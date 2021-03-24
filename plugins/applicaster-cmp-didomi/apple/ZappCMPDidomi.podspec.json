@@ -25,14 +25,5 @@
     "XrayLogger": [],
     "Didomi-XCFramework": [ "1.46.0" ]
   },
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "ios": {
-        "source_files": "tests/**/*.{swift}"
-      }
-    }
-  ],
   "swift_version": "5.1"
 }
