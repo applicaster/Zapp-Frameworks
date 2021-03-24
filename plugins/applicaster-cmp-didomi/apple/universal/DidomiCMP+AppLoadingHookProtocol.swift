@@ -1,5 +1,5 @@
 //
-//  DidomiCM+AppLoadingHookProtocol.swift
+//  DidomiCMP+AppLoadingHookProtocol.swift
 //  ConsentManagementDidomi
 //
 //  Created by Alex Zchut on 24/03/2021.
@@ -10,7 +10,7 @@ import Didomi
 import Foundation
 import ZappCore
 
-extension DidomiCM: AppLoadingHookProtocol {
+extension DidomiCMP: AppLoadingHookProtocol {
     public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
         guard let displayViewController = displayViewController else {
             completion?()

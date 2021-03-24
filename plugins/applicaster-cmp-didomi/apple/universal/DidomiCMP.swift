@@ -1,5 +1,5 @@
 //
-//  DidomiCM.swift
+//  DidomiCMP.swift
 //  ConsentManagementDidomi
 //
 //  Created by Alex Zchut on 24/03/2021.
@@ -10,7 +10,7 @@ import Didomi
 import XrayLogger
 import ZappCore
 
-public class DidomiCM: NSObject, GeneralProviderProtocol {
+public class DidomiCMP: NSObject, GeneralProviderProtocol {
     public var model: ZPPluginModel?
     public var configurationJSON: NSDictionary?
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/DidomiConsentManagement")
