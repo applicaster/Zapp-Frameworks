@@ -21,3 +21,7 @@ export async function localStorageSetUserAccount(key, value) {
 export async function localStorageRemoveUserAccount(key) {
   return await localStorage.removeItem(key);
 }
+
+export async function localStorageApplicasterGet(key) {
+  return await localStorage.getItem(key);
+}

@@ -1,12 +1,12 @@
 export const API = {
-  signIn: "./login",
+  signIn: "/login",
   signOut: "",
   signUp: "/register",
   passwordReset: "/passwordReset",
   extendToken: "/extendToken",
   subscriptions: "/subscriptions",
   purchaseItem: "/subscription",
-  restore: "./restore",
+  restore: "/restore",
 };
 
 // register,

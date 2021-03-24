@@ -3,18 +3,18 @@ import { AxiosResponse } from "axios";
 export interface CreateAccountData {
   email: string;
   password: string;
-  country: string;
-  locale: string;
-  currency: string;
+  publisherId: string;
 }
 
 export interface SignInData {
   email: string;
   password: string;
+  publisherId: string;
 }
 
 export interface ResetPasswordData {
   email: string;
+  publisherId: string;
 }
 
 export interface ExtendTokenData {

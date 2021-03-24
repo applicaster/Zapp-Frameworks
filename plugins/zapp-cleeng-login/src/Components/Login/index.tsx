@@ -9,17 +9,14 @@ import * as R from "ramda";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../../Utils/Localizations";
 import {
-  localStorageGet,
-  localStorageSet,
-  localStorageRemove,
-  localStorageSetUserAccount,
-  localStorageRemoveUserAccount,
-} from "../../Services/LocalStorageService";
-import { getLastEmailUsed } from "../../Services/CleengMiddlewateService";
-import {
-  inPlayerAssetId,
-  isAuthenticationRequired,
-} from "../../Utils/PayloadUtils";
+  getLastEmailUsed,
+  signIn,
+  signUp,
+  getToken,
+  signOut,
+  requestPassword,
+} from "../../Services/CleengMiddlewateService";
+import { isAuthenticationRequired } from "../../Utils/PayloadUtils";
 
 import { getStyles, isHomeScreen } from "../../Utils/Customization";
 import { isHook } from "../../Utils/UserAccount";
@@ -38,7 +35,7 @@ const logger = createLogger({
 const getRiversProp = (key, rivers = {}) => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("type", "zapp-cleeng-login")),
     R.values
   );
 
@@ -71,10 +68,7 @@ const Login = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const {
-    configuration: {
-      publisher_id: publisherId,
-      logout_completion_action = "go_back",
-    },
+    configuration: { publisherId, logout_completion_action = "go_back" },
   } = props;
 
   const showParentLock = props?.configuration?.import_parent_lock;
@@ -82,127 +76,77 @@ const Login = (props) => {
   let stillMounted = true;
 
   useEffect(() => {
+    navigator.hideNavBar();
+
     setupEnvironment();
+    return () => {
+      navigator.showNavBar();
+    };
   }, []);
 
-  function checkIfUserAuthenteficated() {
-    stillMounted && setLoading(false);
-
-    return false;
-    // return InPlayerService.isAuthenticated(clientId)
-    //   .then(async (isAuthenticated) => {
-    //     let eventMessage = "Account Flow:";
-    //     const event = logger
-    //       .createEvent()
-    //       .setLevel(XRayLogLevel.debug)
-    //       .addData({ is_authenticated: isAuthenticated });
-
-    //     if (stillMounted) {
-    //       if (isAuthenticated) {
-    //         eventMessage = `${eventMessage} access granted, flow completed`;
-    //         accountFlowCallback({ success: true });
-    //         return true;
-    //       } else {
-    //         if (showParentLock) {
-    //           eventMessage = `${eventMessage} not granted, present parent lock`;
-    //         } else {
-    //           eventMessage = `${eventMessage} not granted, present login screen`;
-    //         }
-    //       }
-    //     }
-    //     event.setMessage(eventMessage).send();
-    //     return false;
-    //   })
-    //   .finally(() => {
-    //     stillMounted && setLoading(false);
-    //   });
-  }
-
   async function setupEnvironment() {
-    // CleengMiddleware.tokenStorage.overrides = {
-    //   setItem: async function (
-    //     defaultTokenKey, // 'inplayer_token'
-    //     tokenValue
-    //   ) {
-    //     await localStorageSet(localStorageTokenKey, tokenValue);
-    //     await localStorageSetUserAccount(
-    //       userAccountStorageTokenKey,
-    //       tokenValue
-    //     );
-    //   },
-    //   getItem: async function () {
-    //     const token = await localStorageGet(localStorageTokenKey);
-    //     return token;
-    //   },
-    //   removeItem: async function () {
-    //     await localStorageRemove(localStorageTokenKey);
-    //     await localStorageRemoveUserAccount(userAccountStorageTokenKey);
-    //   },
-    // };
-
+    const token = await getToken();
+    console.log({ token });
     setLastEmailUsed((await getLastEmailUsed()) || null);
-
-    // const { token } = await CleengMiddleware.Account.getToken();
-    // setIdtoken(token);
+    setIdtoken(token);
 
     logger.debug({
-      message: "Starting InPlayer Plugin",
+      message: "Starting Cleeng Login Plugin",
       data: { configuration: props?.configuration },
     });
 
-    // if (payload) {
-    //   const authenticationRequired = isAuthenticationRequired({ payload });
-    //   const assetId = inPlayerAssetId({
-    //     payload,
-    //     configuration: props.configuration,
-    //   });
-    //   const logData = {
-    //     authentication_required: authenticationRequired,
-    //     inplayer_asset_id: assetId,
-    //     configuration: props?.configuration,
-    //   };
-    //   const isAuthenticated = await checkIfUserAuthenteficated();
-    //   if (!isAuthenticated && (authenticationRequired || assetId)) {
-    //     logger.debug({
-    //       message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
-    //       data: {
-    //         ...logData,
-    //         hook_type: HookTypeData.PLAYER_HOOK,
-    //         isAuthenticated,
-    //       },
-    //     });
-    //     stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
-    //   } else {
-    //     logger.debug({
-    //       message: "InPlayer plugin invocation, finishing hook with: success",
-    //       data: { ...logData, isAuthenticated },
-    //     });
-    //     // callback && callback({ success: true, error: null, payload });
-    //   }
-    // } else {
-    //   setLoading(false);
-    //   if (!isHook(navigator)) {
-    //     logger.debug({
-    //       message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
-    //       data: {
-    //         configuration: props?.configuration,
-    //         hook_type: HookTypeData.USER_ACCOUNT,
-    //       },
-    //     });
+    if (payload) {
+      const authenticationRequired = true;
+      // isAuthenticationRequired({ payload });
 
-    //     stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
-    //   } else {
-    //     logger.debug({
-    //       message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
-    //       data: {
-    //         configuration: props?.configuration,
-    //         hook_type: HookTypeData.SCREEN_HOOK,
-    //       },
-    //     });
+      const logData = {
+        authentication_required: authenticationRequired,
+        configuration: props?.configuration,
+      };
 
-    //     stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
-    //   }
-    // }
+      if (!token && authenticationRequired) {
+        setLoading(false);
+
+        logger.debug({
+          message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
+          data: {
+            ...logData,
+            hook_type: HookTypeData.PLAYER_HOOK,
+            is_authenticated: !!token,
+          },
+        });
+        stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
+      } else {
+        logger.debug({
+          message: "InPlayer plugin invocation, finishing hook with: success",
+          data: { ...logData, is_authenticated: !!token },
+        });
+        callback && callback({ success: true, error: null, payload });
+      }
+    } else {
+      setLoading(false);
+      if (!isHook(navigator)) {
+        logger.debug({
+          message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
+          data: {
+            configuration: props?.configuration,
+            hook_type: HookTypeData.USER_ACCOUNT,
+          },
+        });
+
+        stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
+      } else {
+        logger.debug({
+          message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
+          data: {
+            configuration: props?.configuration,
+            hook_type: HookTypeData.SCREEN_HOOK,
+          },
+        });
+
+        stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
+      }
+    }
     return () => {
       stillMounted = false;
     };
@@ -218,8 +162,8 @@ const Login = (props) => {
         .addData({ success, payload, hook_type: hookType });
 
       if (success) {
-        const token = await localStorageGet(localStorageTokenKey);
-        event.addData({ token });
+        const token = await getToken();
+        event.addData({ is_authenticated: !!token });
       }
       if (hookType === HookTypeData.USER_ACCOUNT) {
         event
@@ -248,7 +192,7 @@ const Login = (props) => {
     [hookType]
   );
 
-  const onLogin = ({ email, password }) => {
+  const onLogin = async ({ email, password }) => {
     stillMounted && setLoading(true);
 
     logger.debug({
@@ -259,34 +203,34 @@ const Login = (props) => {
       },
     });
 
-    // InPlayerService.login({
-    //   email: email,
-    //   password,
-    //   clientId,
-    //   referrer,
-    // })
-    //   .then(() => {
-    //     logger.debug({
-    //       message: `Login succeed, email: ${email}, password: ${password}`,
-    //       data: {
-    //         email,
-    //         password,
-    //       },
-    //     });
-    //     accountFlowCallback({ success: true });
-    //   })
-    //   .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
-    //   .catch((error) => {
-    //     logger.error({
-    //       message: `Login failed, email: ${email}, password: ${password}`,
-    //       data: {
-    //         email,
-    //         password,
-    //         error,
-    //       },
-    //     });
-    //     stillMounted && setLoading(false);
-    //   });
+    signIn({
+      email,
+      password,
+      publisherId,
+    })
+      .then((data) => {
+        console.log({ data });
+        logger.debug({
+          message: `Login succeed, email: ${email}, password: ${password}`,
+          data: {
+            email,
+            password,
+          },
+        });
+        accountFlowCallback({ success: true });
+      })
+      .catch(maybeShowAlertToUser(screenLocalizations.login_title_error_text))
+      .catch((error) => {
+        logger.error({
+          message: `Login failed, email: ${email}, password: ${password}`,
+          data: {
+            email,
+            password,
+            error,
+          },
+        });
+        stillMounted && setLoading(false);
+      });
   };
 
   function onCreateAccount({ fullName, email, password, setScreen }) {
@@ -300,94 +244,34 @@ const Login = (props) => {
       },
     });
 
-    // InPlayerService.signUp({
-    //   fullName,
-    //   email,
-    //   password,
-    //   clientId,
-    //   referrer,
-    //   brandingId,
-    //   setScreen,
-    // })
-    //   .then(() => {
-    //     logger.debug({
-    //       message: `Account Creation succeed, fullName: ${fullName}, email: ${email}, password: ${password}`,
-    //       data: {
-    //         email,
-    //         password,
-    //         fullName,
-    //       },
-    //     });
-    //     accountFlowCallback({ success: true });
-    //   })
-    //   .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
-    //   .catch((error) => {
-    //     logger.error({
-    //       message: `Account Creation failed, fullName: ${fullName}, email: ${email}, password: ${password}`,
-    //       data: {
-    //         email,
-    //         password,
-    //         fullName,
-    //         error,
-    //       },
-    //     });
-    //     stillMounted && setLoading(false);
-    //   });
-  }
-
-  function onNewPasswordChange({ password, token }) {
-    logger.debug({
-      message: `Set new password task, password: ${password}, token: ${token}`,
-      data: {
-        token,
-        password,
-      },
-    });
-
-    // if (token && password) {
-    //   stillMounted && setLoading(true);
-    //   InPlayerService.setNewPassword({
-    //     password,
-    //     token,
-    //     brandingId,
-    //   })
-    //     .then(() => {
-    //       logger.debug({
-    //         message: `Set new password task succeed, password: ${password}, token: ${token}`,
-    //         data: {
-    //           password,
-    //           token,
-    //         },
-    //       });
-
-    //       showAlertToUser({
-    //         title: screenLocalizations.reset_password_success_title,
-    //         message: screenLocalizations.reset_password_success_text,
-    //         type: "success",
-    //       });
-    //       stillMounted && setLoading(false);
-    //       stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-    //     })
-    //     .catch((error) => {
-    //       logger.error({
-    //         message: `Set new password task failed, password: ${password}, token: ${token}`,
-    //         data: {
-    //           password,
-    //           token,
-    //           error,
-    //         },
-    //       });
-
-    //       stillMounted && setLoading(false);
-
-    //       showAlertToUser({
-    //         title: screenLocalizations.reset_password_error_title,
-    //         message: screenLocalizations.reset_password_error_text,
-    //       });
-    //     });
-    // } else {
-    //   stillMounted && setScreen(AccountComponents.ScreensData.FORGOT_PASSWORD);
-    // }
+    signUp({
+      email,
+      password,
+      publisherId,
+    })
+      .then(() => {
+        logger.debug({
+          message: `Account Creation succeed, email: ${email}, password: ${password}`,
+          data: {
+            email,
+            password,
+          },
+        });
+        accountFlowCallback({ success: true });
+      })
+      .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
+      .catch((error) => {
+        logger.error({
+          message: `Account Creation failed, email: ${email}, password: ${password}`,
+          data: {
+            email,
+            password,
+            fullName,
+            error,
+          },
+        });
+        stillMounted && setLoading(false);
+      });
   }
 
   function onForgotPassword({ email, setScreen }) {
@@ -398,68 +282,63 @@ const Login = (props) => {
       },
     });
 
-    // if (email) {
-    //   stillMounted && setLoading(true);
-    //   InPlayerService.requestPassword({
-    //     email,
-    //     clientId,
-    //     brandingId,
-    //   })
-    //     .then((result) => {
-    //       const { message } = result;
+    if (email) {
+      stillMounted && setLoading(true);
+      requestPassword({
+        email,
+        publisherId,
+      })
+        .then((result) => {
+          logger.debug({
+            message: `Password request complete, email: ${email}`,
+            data: {
+              email,
+            },
+          });
 
-    //       logger.debug({
-    //         message: `Request password change task, email: ${email}`,
-    //         data: {
-    //           email,
-    //         },
-    //       });
-
-    //       showAlertToUser({
-    //         title: screenLocalizations.request_password_success_title,
-    //         message,
-    //         type: "success",
-    //       });
-    //       stillMounted && setLoading(false);
-    //       stillMounted &&
-    //         setScreen(AccountComponents.ScreensData.SET_NEW_PASSWORD);
-    //     })
-    //     .catch((error) => {
-    //       logger.error({
-    //         message: `Request password change task failed, email: ${email}`,
-    //         data: {
-    //           email,
-    //           error,
-    //         },
-    //       });
-    //       stillMounted && setLoading(false);
-    //       showAlertToUser({
-    //         title: screenLocalizations.request_password_error_title,
-    //         message: screenLocalizations.request_password_error_text,
-    //       });
-    //       stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-    //     });
-    // } else {
-    //   stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-    // }
-  }
-
-  const showAlertToUser = ({ title, message, type = "warn" }) => {
-    logger.log({
-      message: `Aller will be presented for user title: ${title}, message: ${message}, type: ${type}`,
-      data: {
-        title,
-        message,
-        type,
-      },
-    });
-
-    if (Platform.isTV || isWebBasedPlatform) {
-      showAlert(title, message);
-    } else if (typeof this === "function") {
-      dropDownAlertRef.alertWithType(type, title, message);
+          showAlertToUser({
+            title: screenLocalizations.request_password_success_title,
+            message: screenLocalizations.request_password_success_message, //TODO:Add localization
+            type: "success",
+          });
+          stillMounted && setLoading(false);
+          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
+        })
+        .catch((error) => {
+          logger.error({
+            message: `Request password change task failed, email: ${email}`,
+            data: {
+              email,
+              error,
+            },
+          });
+          stillMounted && setLoading(false);
+          showAlertToUser({
+            title: screenLocalizations.request_password_error_title,
+            message: screenLocalizations.request_password_error_text,
+          });
+        });
     }
-  };
+  }
+  const showAlertToUser = useCallback(
+    ({ title, message, type = "warn" }) => {
+      logger.log({
+        message: `Aller will be presented for user title: ${title}, message: ${message}, type: ${type}`,
+        data: {
+          title,
+          message,
+          type,
+        },
+      });
+
+      if (Platform.isTV || isWebBasedPlatform) {
+        showAlert(title, message);
+      } else {
+        dropDownAlertRef.alertWithType(type, title, message);
+      }
+    },
+    [dropDownAlertRef]
+  );
 
   const maybeShowAlertToUser = (title) => async (error) => {
     const { response } = error;
@@ -489,20 +368,20 @@ const Login = (props) => {
 
   async function onLogout({ setError }) {
     const timeout = 1000;
-    // try {
-    //   const didLogout = await InPlayerService.signOut();
-    //   if (!didLogout) {
-    //     navigator.goBack();
-    //   }
-    //   setTimeout(() => {
-    //     invokeLogoutCompleteAction();
-    //   }, timeout);
-    // } catch (error) {
-    //   setError(error);
-    //   setTimeout(() => {
-    //     invokeLogoutCompleteAction();
-    //   }, timeout);
-    // }
+    try {
+      const didLogout = await signOut();
+      if (!didLogout) {
+        navigator.goBack();
+      }
+      setTimeout(() => {
+        invokeLogoutCompleteAction();
+      }, timeout);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => {
+        invokeLogoutCompleteAction();
+      }, timeout);
+    }
   }
 
   function onAccountError({ title, message, type = "warn" }) {
@@ -513,11 +392,18 @@ const Login = (props) => {
     accountFlowCallback({ success: false });
   }
 
-  console.log(loading, AccountComponents);
+  console.log({
+    loading,
+    AccountComponents,
+    showBack: !isHomeScreen(navigator),
+  });
   function renderAccount() {
     return (
       <>
         <AccountComponents.AccountFlow
+          signUpScreen={{
+            nameLabelDisabled: true,
+          }}
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
           backButton={!isHomeScreen(navigator)}
@@ -525,7 +411,6 @@ const Login = (props) => {
           screenLocalizations={screenLocalizations}
           onLogin={onLogin}
           onCreateAccount={onCreateAccount}
-          onNewPasswordChange={onNewPasswordChange}
           onForgotPassword={onForgotPassword}
           onError={onAccountError}
           onHandleBackButton={onAccountHandleBackButton}

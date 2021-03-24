@@ -30,6 +30,7 @@ export function getStyles(screenStyles) {
 }
 
 export function prepareStyles(screenStyles) {
+  return {};
   styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );
