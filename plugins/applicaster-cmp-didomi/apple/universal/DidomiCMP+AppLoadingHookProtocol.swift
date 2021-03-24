@@ -11,14 +11,16 @@ import Foundation
 import ZappCore
 
 extension DidomiCMP: AppLoadingHookProtocol {
-    public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        guard let displayViewController = displayViewController, 
-            shouldPresentOnStartup == true else {
+    public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
+        DispatchQueue.main.async {
+            guard let displayViewController = UIApplication.shared.delegate?.window??.rootViewController,
+                  self.shouldPresentOnStartup == true else {
+                completion?()
+                return
+            }
+
+            Didomi.shared.setupUI(containerController: displayViewController)
             completion?()
-            return
         }
-        
-        Didomi.shared.setupUI(containerController: displayViewController)
-        completion?()
     }
 }

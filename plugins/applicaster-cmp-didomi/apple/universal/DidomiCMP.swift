@@ -32,7 +32,6 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
         configurationJSON?["api_key"] as? String
     }()
 
-    
     lazy var shouldPresentOnStartup: Bool = {
         var retValue: Bool = true
 
@@ -68,6 +67,15 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
             providerId: nil,
             disableDidomiRemoteConfig: false
         )
+
+        Didomi.shared.onError(callback: { event in
+            self.logger?.errorLog(message: "Intialization failed",
+                                  data: ["error": event.descriptionText])
+        })
+
+        Didomi.shared.onReady {
+            self.logger?.verboseLog(message: "Intialization completed successfully")
+        }
 
         completion?(true)
     }
