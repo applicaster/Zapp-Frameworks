@@ -29,10 +29,11 @@ class PluginManagerTests: XCTestCase {
         SessionStorage.sharedInstance.set(key: ZappStorageKeys.pluginConfigurationUrl,
                                           value: Constants.pluginConfigurationJson,
                                           namespace: nil)
+
+        pluginInitialization()
     }
 
     func testAnalyticsPlugins() {
-        pluginsInitialization()
         let pluginsManager = AnalyticsManager()
         guard let models = plugins(for: pluginsManager.pluginType) else {
             XCTAssert(false, ErrorMessages.analyticsPluginsListEmpty)
@@ -43,7 +44,6 @@ class PluginManagerTests: XCTestCase {
     }
 
     func testGeneralPlugins() {
-        pluginsInitialization()
         let pluginsManager = GeneralPluginsManager()
         guard let models = plugins(for: pluginsManager.pluginType) else {
             XCTAssert(false, ErrorMessages.generalPluginsListEmpty)
@@ -54,7 +54,6 @@ class PluginManagerTests: XCTestCase {
     }
 
     func testPlayerPlugins() {
-        pluginsInitialization()
         let pluginsManager = PlayerPluginsManager()
         guard let models = plugins(for: pluginsManager.pluginType) else {
             XCTAssert(false, ErrorMessages.playerPluginsListEmpty)
@@ -66,14 +65,11 @@ class PluginManagerTests: XCTestCase {
 }
 
 extension PluginManagerTests {
-    func pluginsInitialization() {
-        guard pluginModels == nil || pluginModels?.count == 0 else {
-            return
-        }
+    func pluginInitialization() {
+        let pluginManager = PluginsManager()
 
         let expectation = XCTestExpectation(description: "Download plugins configuration")
 
-        let pluginManager = PluginsManager()
         pluginManager.loadPluginsGroup {
             self.pluginModels = PluginsManager.parseLatestPluginsJson()
             XCTAssertNotEqual(self.pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
