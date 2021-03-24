@@ -11,7 +11,7 @@ end
 
 target 'FrameworksApp' do
   use_frameworks!
-  pod 'ZappCMPDidomi', :path => './ZappCMPDidomi.podspec', :testspecs => ['UnitTests']
+  pod 'ZappCMPDidomi', :path => './ZappCMPDidomi.podspec'
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
   pod 'XrayLogger', :path => '../node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'
 
