@@ -17,6 +17,9 @@
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {
+    "@applicaster/x-ray": "0.2.0"
+  },
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",
