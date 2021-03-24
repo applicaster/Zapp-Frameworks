@@ -12,7 +12,8 @@ import ZappCore
 
 extension DidomiCMP: AppLoadingHookProtocol {
     public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        guard let displayViewController = displayViewController else {
+        guard let displayViewController = displayViewController, 
+            shouldPresentOnStartup == true else {
             completion?()
             return
         }

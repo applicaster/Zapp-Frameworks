@@ -32,6 +32,27 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
         configurationJSON?["api_key"] as? String
     }()
 
+    
+    lazy var shouldPresentOnStartup: Bool = {
+        var retValue: Bool = true
+
+        guard let value = configurationJSON?["present_on_startup"] else {
+            return retValue
+        }
+
+        // Check if value bool or string
+        if let stringValue = value as? String {
+            if let boolValue = Bool(stringValue) {
+                retValue = boolValue
+            } else if let intValue = Int(stringValue) {
+                retValue = Bool(truncating: intValue as NSNumber)
+            }
+        } else if let boolValue = value as? Bool {
+            retValue = boolValue
+        }
+        return retValue
+    }()
+
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
         guard let apiKey = apiKey else {
