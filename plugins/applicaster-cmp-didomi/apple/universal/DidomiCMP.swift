@@ -77,10 +77,58 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
             self.logger?.verboseLog(message: "Intialization completed successfully")
         }
 
+        requestTrackingAuthorizationWhenApplicable()
+
         completion?(true)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
     }
+
+    func requestTrackingAuthorizationWhenApplicable() {
+        let didomiEventListener = EventListener()
+        Didomi.shared.addEventListener(listener: didomiEventListener)
+
+        didomiEventListener.onNoticeClickAgree = { _ in
+            // Click on Agree in the notice
+            // Request tracking permission from the user
+            self.requestTrackingAuthorization { status in
+                switch status {
+                case .authorized:
+                    Didomi.shared.setUserAgreeToAll()
+                case .denied:
+                    Didomi.shared.setUserDisagreeToAll()
+                case .restricted:
+                    Didomi.shared.setUserDisagreeToAll()
+                case .notDetermined:
+                    break
+                }
+            }
+        }
+
+        didomiEventListener.onPreferencesClickAgreeToAll = { _ in
+            // Click on Agree to all in the Preferences popup
+            // Request tracking permission from the user
+            self.requestTrackingAuthorization { status in
+                switch status {
+                case .authorized:
+                    Didomi.shared.setUserAgreeToAll()
+                case .denied:
+                    Didomi.shared.setUserDisagreeToAll()
+                case .restricted:
+                    Didomi.shared.setUserDisagreeToAll()
+                case .notDetermined:
+                    break
+                }
+            }
+        }
+    }
+}
+
+public enum AuthorizationStatus: UInt {
+    case notDetermined = 0
+    case restricted = 1
+    case denied = 2
+    case authorized = 3
 }

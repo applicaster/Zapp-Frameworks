@@ -104,6 +104,9 @@ const api_apple = {
   require_startup_execution: true,
   class_name: "DidomiCMP",
   modules: ["ZappCMPDidomi"],
+  plist: {
+    NSUserTrackingUsageDescription: "This identifier will be used to deliver personalized ads to you.",
+  },
 };
 
 const api_android = {
