@@ -10,12 +10,15 @@ import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.util.APLogger
 import com.google.gson.JsonElement
 import io.didomi.sdk.Didomi
+import io.didomi.sdk.events.EventListener
+import io.didomi.sdk.events.HideNoticeEvent
 
 
 // todo: RN bridge
-// todo: callbacks? At least for logging
 
-class DidomiPlugin : GenericPluginI, ApplicationLoaderHookUpI {
+class DidomiPlugin : GenericPluginI
+        , ApplicationLoaderHookUpI
+        , EventListener() {
 
     private var apiToken: String? = null
     private var presentOnStartup = true
@@ -47,7 +50,8 @@ class DidomiPlugin : GenericPluginI, ApplicationLoaderHookUpI {
         }
     }
 
-    override fun executeOnApplicationReady(context: Context, listener: HookListener) {
+    override fun executeOnApplicationReady(context: Context,
+                                           listener: HookListener) {
         if (apiToken.isNullOrBlank()) {
             listener.onHookFinished()
             return
@@ -69,6 +73,7 @@ class DidomiPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                         null,
                         false
                 )
+                addEventListener(this@DidomiPlugin)
                 onReady {
                     APLogger.info(TAG, "Didomi initialized")
                     if (hasAnyStatus() || !presentOnStartup) {
@@ -76,6 +81,13 @@ class DidomiPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                         listener.onHookFinished()
                     } else {
                         APLogger.info(TAG, "User consent requested")
+                        addEventListener(object : EventListener() {
+                            override fun hideNotice(event: HideNoticeEvent?) {
+                                super.hideNotice(event)
+                                removeEventListener(this)
+                                listener.onHookFinished()
+                            }
+                        })
                         this.showNotice(context as AppCompatActivity)
                     }
                 }
@@ -90,15 +102,45 @@ class DidomiPlugin : GenericPluginI, ApplicationLoaderHookUpI {
         }
     }
 
-    override fun executeOnStartup(context: Context, listener: HookListener) {
-        listener.onHookFinished()
-    }
+    override fun executeOnStartup(context: Context,
+                                  listener: HookListener) = listener.onHookFinished()
 
     override fun setPluginConfigurationParams(params: Map<*, *>?) {
         // handled in setPluginModel
     }
 
+    fun isReady() = Didomi.getInstance().isReady
+
+    fun showPreferences(eventListener: () -> Unit,
+                        activity: AppCompatActivity) {
+        Didomi.getInstance().apply {
+            addEventListener(object : EventListener() {
+                override fun hideNotice(event: HideNoticeEvent?) {
+                    super.hideNotice(event)
+                    removeEventListener(this)
+                    eventListener()
+                }
+            })
+            showPreferences(activity)
+        }
+    }
+
+    fun showNotice(eventListener: () -> Unit,
+                   activity: AppCompatActivity) {
+        Didomi.getInstance().apply {
+            addEventListener(object : EventListener() {
+                override fun hideNotice(event: HideNoticeEvent?) {
+                    super.hideNotice(event)
+                    removeEventListener(this)
+                    eventListener()
+                }
+            })
+            forceShowNotice(activity)
+        }
+    }
+
     companion object {
         private const val TAG = "Didomi"
+        const val PluginId = "applicaster-cmp-didomi"
     }
 }
