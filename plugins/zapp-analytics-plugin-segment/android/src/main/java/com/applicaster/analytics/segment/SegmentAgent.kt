@@ -14,18 +14,26 @@ class SegmentAgent : BaseAnalyticsAgent() {
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
-        if (analytics != null) return
-        analytics = Analytics.Builder(
-                context,
-                writeKey).trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
-                         .recordScreenViews() // Enable this to record screen views automatically!
-                         .build()
+        if (analytics != null) {
+            return
+        }
+        if (writeKey.isEmpty()) {
+            APLogger.error(TAG, "segment_write_key is empty. Analytics agent won't be activated")
+            return
+        }
+        analytics = Analytics.Builder(context, writeKey)
+                .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
+                .recordScreenViews() // Enable this to record screen views automatically!
+                .build()
         Analytics.setSingletonInstance(analytics)
     }
 
     override fun setParams(params: MutableMap<Any?, Any?>) {
         super.setParams(params)
-        writeKey = params.getOrElse("write_key", {""}).toString()
+        writeKey = params["segment_write_key"]?.toString() ?: ""
+        if(writeKey.isEmpty()) {
+            APLogger.error(TAG, "segment_write_key is empty. Analytics agent won't be activated")
+        }
     }
 
     override fun logEvent(eventName: String?) {
