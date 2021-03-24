@@ -33,13 +33,11 @@ public class NetworkRequestsManager {
             case .response:
                 guard url.absoluteString.isEmpty == false,
                       instance.pendingRequests.keys.contains(url.absoluteString),
+                      let request = instance.pendingRequests.removeValue(forKey: url.absoluteString),
                       let response = content[Params.response] as? [String: Any],
                       let statusCode = response[Params.statusCode] as? String else {
                     return
                 }
-                
-                let request = instance.pendingRequests[url.absoluteString] ?? [:]
-                instance.pendingRequests[url.absoluteString] = nil
 
                 instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message): \(url.host ?? "")",
                                             category: NetworkRequestsManagerLogs.request.category,
