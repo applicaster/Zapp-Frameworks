@@ -11,7 +11,7 @@ end
 
 target 'FrameworksApp' do
   use_frameworks!
-  pod 'ConsentManagementDidomi', :path => './ConsentManagementDidomi.podspec', :testspecs => ['UnitTests']
+  pod 'ZappCMPDidomi', :path => './ZappCMPDidomi.podspec', :testspecs => ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
 
   target 'FrameworksAppTests' do
