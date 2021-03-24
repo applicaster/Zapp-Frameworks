@@ -23,12 +23,6 @@ class PluginManagerTests: XCTestCase {
         static let playerPluginsListEmpty = "[PluginManager] - Player plugins not exists"
     }
 
-    override func setUpWithError() throws {
-        SessionStorage.sharedInstance.set(key: ZappStorageKeys.pluginConfigurationUrl,
-                                          value: Constants.pluginConfigurationJson,
-                                          namespace: nil)
-    }
-
     func testAnalyticsPlugins() {
         pluginsInitialization { (pluginModels) in
             let pluginsManager = AnalyticsManager()
@@ -69,6 +63,10 @@ class PluginManagerTests: XCTestCase {
 
 extension PluginManagerTests {
     func pluginsInitialization(_ completion: (([ZPPluginModel]?) -> Void)?) {
+        SessionStorage.sharedInstance.set(key: ZappStorageKeys.pluginConfigurationUrl,
+                                          value: Constants.pluginConfigurationJson,
+                                          namespace: nil)
+        
         let expectation = XCTestExpectation(description: "Download plugins configuration")
 
         let pluginManager = PluginsManager()
