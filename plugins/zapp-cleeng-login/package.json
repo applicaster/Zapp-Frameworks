@@ -9,6 +9,7 @@
   "dependencies": {
     "@applicaster/applicaster-account-components": "0.0.3-alpha.0",
     "@applicaster/quick-brick-parent-lock": "*",
+    "react-native-dropdownalert": "^4.2.1",
     "axios": "^0.19.1",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
