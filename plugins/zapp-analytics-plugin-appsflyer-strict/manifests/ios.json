@@ -9,15 +9,15 @@
   "dependency_repository_url": [],
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "AppsFlyer",
-  "description": "AppsFlyer Analytics provider",
+  "name": "AppsFlyer Strict Mode",
+  "description": "AppsFlyer Analytics provider with strict mode SDK to completely remove IDFA collection functionality and AdSupport framework dependencies",
   "cover_image": "",
   "type": "analytics",
   "screen": false,
   "react_native": false,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "4.1.0-Dev",
+  "min_zapp_sdk": "16.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -42,17 +42,17 @@
     "mobile"
   ],
   "ui_frameworks": [
-    "quickbrick"
+    "native"
   ],
-  "identifier": "AppsFlyer-iOS",
-  "platform": "ios_for_quickbrick",
+  "identifier": "AppsFlyer-Strict",
+  "platform": "ios",
   "manifest_version": "10.2.0",
   "extra_dependencies": [
     {
-      "ZappAnalyticsPluginAppsFlyer": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
+      "ZappAnalyticsPluginAppsFlyer/LegacyStrict": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-appsflyer@10.2.0"
+    "@applicaster/zapp-analytics-plugin-appsflyer-strict@10.2.0"
   ]
 }

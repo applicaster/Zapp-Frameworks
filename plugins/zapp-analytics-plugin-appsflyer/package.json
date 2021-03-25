@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-appsflyer",
-  "version": "10.1.1",
+  "version": "10.2.0",
   "description": "AppsFlyer Analytics provider",
   "repository": {
     "type": "git",
@@ -22,7 +22,8 @@
   "applicaster": {
     "supportedPlatforms": [
       "android_for_quickbrick",
-      "ios_for_quickbrick"
+      "ios_for_quickbrick",
+      "ios"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   },

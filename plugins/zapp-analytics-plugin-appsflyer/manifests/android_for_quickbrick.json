@@ -31,13 +31,13 @@
   ],
   "identifier": "AppsFlyer",
   "platform": "android_for_quickbrick",
-  "manifest_version": "10.1.1",
+  "manifest_version": "10.2.0",
   "project_dependencies": [
     {
       "zapp-analytics-plugin-appsflyer": "node_modules/@applicaster/zapp-analytics-plugin-appsflyer/android"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-appsflyer@10.1.1"
+    "@applicaster/zapp-analytics-plugin-appsflyer@10.2.0"
   ]
 }

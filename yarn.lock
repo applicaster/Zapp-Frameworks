@@ -51,13 +51,6 @@
     metro-react-native-babel-preset "^0.59.0"
     react-hot-loader "^4.12.5"
 
-"@applicaster/horizontal-list-qb@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/horizontal-list-qb/-/horizontal-list-qb-2.0.0.tgz#0d4b05f754852abe87526236ec03fe1e0537b834"
-  integrity sha512-Ye1nRWYHVf8HHggH7OLF7gHXxeKRku+H33TVX4gZVVsvLU8iwOuyn29g3EA8595BiivH3jTlIy4DAe8xlbj9KQ==
-  dependencies:
-    ramda "^0.26.1"
-
 "@applicaster/horizontal-list-qb@2.0.3-beta.1":
   version "2.0.3-beta.1"
   resolved "https://registry.yarnpkg.com/@applicaster/horizontal-list-qb/-/horizontal-list-qb-2.0.3-beta.1.tgz#77ba0ccb688acc29994054c5680ec9dc0e3e9e96"
@@ -397,17 +390,10 @@
   resolved "https://registry.yarnpkg.com/@applicaster/x-ray/-/x-ray-0.2.0.tgz#d11a0d8ab8a6ab69e288548ed1a6cf37bdbb7a4a"
   integrity sha512-g4RkMEtxiuPyV6pbJ/pxEfdcTXCWmra8BcIa7vo5rWgzGak8y5d7uL2ipdiokarU+KKOUB+yQU1ZiFdDrPijDg==
 
-"@applicaster/zapp-cleeng-login@0.0.2-alpha.0":
-  version "0.0.2-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.0.tgz#7c1ca3a2b0e7cc6710f074f3ca5fb8a5b9cfead2"
-  integrity sha512-CkQsNkIps//9bvGwxnrC5ers1je9Fz7aw82QEy962RBtkwWHxxbmDbiksp+OzKTzzBXZeMcrlfenu4Bvy4H8CQ==
-  dependencies:
-    "@applicaster/applicaster-account-components" "0.0.2-alpha.11"
-    "@applicaster/quick-brick-parent-lock" "*"
-    axios "^0.19.1"
-    moment "^2.24.0"
-    ramda "^0.26.1"
-    react-redux "^7.2.1"
+"@applicaster/zapp-analytics-plugin-appsflyer@next":
+  version "10.2.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
+  integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
 
 "@applicaster/zapp-pipes-dev-kit@^1.4.1":
   version "1.4.1"
