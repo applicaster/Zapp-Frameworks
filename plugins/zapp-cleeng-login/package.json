@@ -25,6 +25,7 @@
     "prepack": "npm run build"
   },
   "files": [
+    "lib",
     "manifests/**/*",
     "apple",
     "android",
