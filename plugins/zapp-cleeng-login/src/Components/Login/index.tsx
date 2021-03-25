@@ -24,7 +24,6 @@ import {
   createLogger,
   BaseSubsystem,
   BaseCategories,
-  XRayLogLevel,
 } from "../../Services/LoggerService";
 
 const logger = createLogger({
@@ -97,7 +96,7 @@ const Login = (props) => {
 
     if (payload) {
       const authenticationRequired = true;
-      // isAuthenticationRequired({ payload });
+      // isAuthenticationRequired(payload);
 
       const logData = {
         authentication_required: authenticationRequired,
@@ -156,23 +155,25 @@ const Login = (props) => {
     async ({ success }) => {
       let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
-      const event = logger
-        .createEvent()
-        .setLevel(XRayLogLevel.debug)
-        .addData({ success, payload, hook_type: hookType });
+      let data = { success, payload, hook_type: hookType };
 
       if (success) {
         const token = await getToken();
-        event.addData({ is_authenticated: !!token });
+        data["is_authenticated"] = !!token;
       }
       if (hookType === HookTypeData.USER_ACCOUNT) {
-        event
-          .setMessage(`${eventMessage}, plugin finished task: go back`)
-          .send();
+        logger.debug({
+          message: `${eventMessage}, plugin finished task: go back`,
+          data: data,
+        });
+
         navigator.goBack();
       } else {
         const { callback } = props;
-        event.setMessage(`${eventMessage}, plugin finished task`).send();
+        logger.debug({
+          message: `${eventMessage}, plugin finished task`,
+          data: data,
+        });
         if (payload) {
           let newPayload = payload;
           if (newPayload.extensions) {

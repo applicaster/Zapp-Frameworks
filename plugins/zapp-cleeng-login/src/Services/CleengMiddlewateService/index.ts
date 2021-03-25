@@ -25,12 +25,11 @@ import {
   createLogger,
   BaseSubsystem,
   BaseCategories,
-  XRayLogLevel,
 } from "../../Services/LoggerService";
 
 export const logger = createLogger({
-  subsystem: `${BaseSubsystem}/${BaseCategories.INPLAYER_SERVICE}`,
-  category: BaseCategories.INPLAYER_SERVICE,
+  subsystem: `${BaseSubsystem}/${BaseCategories.CLEENG_MIDDLEWARE_SERVICE}`,
+  category: BaseCategories.CLEENG_MIDDLEWARE_SERVICE,
 });
 
 const IN_PLAYER_LAST_EMAIL_USED_KEY = "com.cleengMiddleware.lastEmailUsed";
