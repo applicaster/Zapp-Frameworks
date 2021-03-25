@@ -95,6 +95,11 @@ const common = [
     initial_value: "Request Password Success",
   },
   {
+    key: "request_password_success_message",
+    label: "Successful password request message",
+    initial_value: "Please check your email to change password",
+  },
+  {
     key: "request_password_error_title",
     label: "Password request error title",
     initial_value: "Request Password Fail",

@@ -127,7 +127,7 @@ export async function signUp(data: CreateAccountData) {
   }
 }
 
-export async function signOut() {
+export async function signOut(): Promise<boolean> {
   try {
     const result = await removeToken();
     logger.debug({
@@ -190,7 +190,7 @@ export async function getToken() {
   return localStorageGet(LOCAL_STORAGE_TOKEN_KEY);
 }
 
-export async function removeToken() {
-  await localStorageRemove(LOCAL_STORAGE_TOKEN_KEY);
+export async function removeToken(): Promise<boolean> {
   await localStorageRemoveUserAccount(USER_ACCOUNT_STORAGE_TOKEN_KEY);
+  return await localStorageRemove(LOCAL_STORAGE_TOKEN_KEY);
 }

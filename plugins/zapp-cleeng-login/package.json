@@ -1,17 +1,17 @@
 {
   "name": "@applicaster/zapp-cleeng-login",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha.0",
   "author": "Zapp Team",
   "license": "ISC",
   "description": "Cleeng login",
   "main": "lib/index.js",
   "types": "index.d.ts",
   "dependencies": {
-    "ramda": "^0.26.1",
-    "@applicaster/applicaster-account-components": "0.0.2-alpha.11",
+    "@applicaster/applicaster-account-components": "0.0.2",
     "@applicaster/quick-brick-parent-lock": "*",
     "axios": "^0.19.1",
     "moment": "^2.24.0",
+    "ramda": "^0.26.1",
     "react-redux": "^7.2.1"
   },
   "peerDependencies": {
@@ -25,7 +25,7 @@
     "prepack": "npm run build"
   },
   "files": [
-    "manifests/**/*.json",
+    "manifests/**/*",
     "apple",
     "android",
     "src"

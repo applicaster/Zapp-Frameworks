@@ -4,7 +4,7 @@ const Request = {
   post: async (
     path: string,
     data: any,
-    baseURL: string = "https://applicaster-cleeng-sso.herokuapp.com"
+    baseURL: string = "https://applicaster-cleeng-sso.herokuapp.com/"
   ) => {
     const request: AxiosRequestConfig = {
       url: path,

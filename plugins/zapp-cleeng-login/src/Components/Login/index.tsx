@@ -298,7 +298,7 @@ const Login = (props) => {
 
           showAlertToUser({
             title: screenLocalizations.request_password_success_title,
-            message: screenLocalizations.request_password_success_message, //TODO:Add localization
+            message: screenLocalizations.request_password_success_message,
             type: "success",
           });
           stillMounted && setLoading(false);
