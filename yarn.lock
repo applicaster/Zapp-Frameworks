@@ -15,6 +15,19 @@
     react-native-keyboard-aware-scroll-view "0.9.1"
     react-redux "^7.2.1"
 
+"@applicaster/applicaster-account-components@0.0.3-alpha.0":
+  version "0.0.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.3-alpha.0.tgz#db621e11efd2acd2037f9ec14a25275df9f74b86"
+  integrity sha512-hpdJLjRyLZWRw+HbydLZR+iinX4PjYqEo0cAZpfMl+9n471Poj7uEZU9h+Zo8cIy+Z5wE3XdYsMtDkOwn2nJtQ==
+  dependencies:
+    "@applicaster/quick-brick-parent-lock" "*"
+    axios "^0.19.1"
+    moment "^2.24.0"
+    prop-types "^15.7.2"
+    ramda "^0.26.1"
+    react-native-keyboard-aware-scroll-view "0.9.1"
+    react-redux "^7.2.1"
+
 "@applicaster/applicaster-storefront-component@0.0.5-alpha.3":
   version "0.0.5-alpha.3"
   resolved "https://registry.yarnpkg.com/@applicaster/applicaster-storefront-component/-/applicaster-storefront-component-0.0.5-alpha.3.tgz#6bfe45620808ba6ba3f6d3f9c3c9b797e8802dfa"
@@ -50,6 +63,13 @@
     babel-plugin-transform-inline-environment-variables "^0.4.3"
     metro-react-native-babel-preset "^0.59.0"
     react-hot-loader "^4.12.5"
+
+"@applicaster/horizontal-list-qb@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@applicaster/horizontal-list-qb/-/horizontal-list-qb-2.0.0.tgz#0d4b05f754852abe87526236ec03fe1e0537b834"
+  integrity sha512-Ye1nRWYHVf8HHggH7OLF7gHXxeKRku+H33TVX4gZVVsvLU8iwOuyn29g3EA8595BiivH3jTlIy4DAe8xlbj9KQ==
+  dependencies:
+    ramda "^0.26.1"
 
 "@applicaster/horizontal-list-qb@2.0.3-beta.1":
   version "2.0.3-beta.1"
@@ -394,6 +414,18 @@
   version "10.2.0-alpha.3"
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
   integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
+
+"@applicaster/zapp-cleeng-login@0.0.2-alpha.2":
+  version "0.0.2-alpha.2"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.2.tgz#b6633b3c6abbcd749dfb30200633dfb461faba9a"
+  integrity sha512-R5Sk7sOZK+gW834vNPtZl+T5Vw3laFyaw5MkD1OAhwVwjUEmx0U5EXX+g7DnGq53eDx6/w1eyXdzKaWxomkw+g==
+  dependencies:
+    "@applicaster/applicaster-account-components" "0.0.3-alpha.0"
+    "@applicaster/quick-brick-parent-lock" "*"
+    axios "^0.19.1"
+    moment "^2.24.0"
+    ramda "^0.26.1"
+    react-redux "^7.2.1"
 
 "@applicaster/zapp-pipes-dev-kit@^1.4.1":
   version "1.4.1"

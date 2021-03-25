@@ -34,9 +34,7 @@ const manifestJson = () => {
       android,
     });
   } catch (error) {
-    throw new Error(
-      `Could not load manifest at inplayer login plugin: ${error}`
-    );
+    throw new Error(`Could not load manifest at cleeng login plugin: ${error}`);
   }
 };
 

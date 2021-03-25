@@ -41,9 +41,6 @@ const getRiversProp = (key, rivers = {}) => {
   return getPropByKey(rivers);
 };
 
-const localStorageTokenKey = "in_player_token";
-const userAccountStorageTokenKey = "idToken";
-
 const Login = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
@@ -70,8 +67,8 @@ const Login = (props) => {
     configuration: { publisherId, logout_completion_action = "go_back" },
   } = props;
 
-  const showParentLock = props?.configuration?.import_parent_lock;
-
+  const showParentLock =
+    screenStyles?.import_parent_lock === "1" ? true : false;
   let stillMounted = true;
 
   useEffect(() => {
@@ -117,7 +114,7 @@ const Login = (props) => {
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
         logger.debug({
-          message: "InPlayer plugin invocation, finishing hook with: success",
+          message: "Cleeng plugin invocation, finishing hook with: success",
           data: { ...logData, is_authenticated: !!token },
         });
         callback && callback({ success: true, error: null, payload });

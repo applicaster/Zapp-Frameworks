@@ -161,7 +161,7 @@ const mobile = [
   {
     key: "title_font_text",
     label: "Text title",
-    initial_value: "InPlayer",
+    initial_value: "Cleeng",
   },
   {
     key: "back_button_text",
@@ -203,11 +203,6 @@ const mobile = [
     key: "action_button_forgot_password_text",
     label: "Request password button title",
     initial_value: "REQUEST PASSWORD",
-  },
-  {
-    key: "action_button_set_new_password_text",
-    label: "Set new password button title",
-    initial_value: "SET NEW PASSWORD",
   },
 ];
 
