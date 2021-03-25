@@ -3,18 +3,20 @@ package com.applicaster.plugin.didomi
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.google.gson.JsonElement
 import io.didomi.sdk.Didomi
+import io.didomi.sdk.events.ConsentChangedEvent
 import io.didomi.sdk.events.EventListener
 import io.didomi.sdk.events.HideNoticeEvent
 
-
-// todo: RN bridge
 
 class DidomiPlugin : GenericPluginI
         , ApplicationLoaderHookUpI
@@ -30,7 +32,7 @@ class DidomiPlugin : GenericPluginI
         }
         presentOnStartup = asBool(configuration["present_on_startup"])
         apiToken = configuration["api_key"]?.asString
-        if (apiToken.isNullOrBlank()) {
+        if (!isAPITokenValid()) {
             APLogger.error(TAG, "Didomi plugin api_key is not configured")
         }
     }
@@ -52,16 +54,10 @@ class DidomiPlugin : GenericPluginI
 
     override fun executeOnApplicationReady(context: Context,
                                            listener: HookListener) {
-        if (apiToken.isNullOrBlank()) {
-            listener.onHookFinished()
+        if (!isAPITokenValid()) {
+            listener.onHookFinished() // we've already complained
             return
         }
-
-//        if(!OSUtil.hasNetworkConnection(AppContext.get())) {
-//            APLogger.error(TAG, "No internet connection, Didomi plugin will skip waiting")
-//            listener.onHookFinished()
-//            return
-//        }
 
         try {
             Didomi.getInstance().apply {
@@ -76,8 +72,11 @@ class DidomiPlugin : GenericPluginI
                 addEventListener(this@DidomiPlugin)
                 onReady {
                     APLogger.info(TAG, "Didomi initialized")
-                    if (hasAnyStatus() || !presentOnStartup) {
-                        APLogger.info(TAG, "User consent was already requested or presentOnStartup is disabled")
+                    if (hasAnyStatus()) {
+                        APLogger.info(TAG, "User consent was already requested")
+                        listener.onHookFinished()
+                    } else if (!presentOnStartup) {
+                        APLogger.info(TAG, "User consent presentOnStartup is disabled")
                         listener.onHookFinished()
                     } else {
                         APLogger.info(TAG, "User consent requested")
@@ -88,7 +87,8 @@ class DidomiPlugin : GenericPluginI
                                 listener.onHookFinished()
                             }
                         })
-                        this.showNotice(context as AppCompatActivity)
+                        // force show since otherwise we don't know if it was actually shown (in an easy way), and can't unsubscribe
+                        forceShowNotice(context as AppCompatActivity)
                     }
                 }
                 onError {
@@ -109,19 +109,26 @@ class DidomiPlugin : GenericPluginI
         // handled in setPluginModel
     }
 
+    private fun isAPITokenValid() = !apiToken.isNullOrBlank()
+
     fun isReady() = Didomi.getInstance().isReady
 
     fun showPreferences(eventListener: () -> Unit,
                         activity: AppCompatActivity) {
-        Didomi.getInstance().apply {
-            addEventListener(object : EventListener() {
-                override fun hideNotice(event: HideNoticeEvent?) {
-                    super.hideNotice(event)
-                    removeEventListener(this)
-                    eventListener()
-                }
-            })
-            showPreferences(activity)
+        Didomi.getInstance().showPreferences(activity).let {
+            // hack since there is no event coming from Didomi when user presses back without doing anything
+            activity.supportFragmentManager.apply {
+                registerFragmentLifecycleCallbacks(
+                        object : FragmentManager.FragmentLifecycleCallbacks() {
+                            override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
+                                super.onFragmentDetached(fm, f)
+                                if (f != it)
+                                    return
+                                unregisterFragmentLifecycleCallbacks(this)
+                                eventListener()
+                            }
+                        }, false)
+            }
         }
     }
 
@@ -139,8 +146,15 @@ class DidomiPlugin : GenericPluginI
         }
     }
 
+    override fun consentChanged(event: ConsentChangedEvent?) {
+        super.consentChanged(event)
+        LocalStorage.set(JSPreferencesKey, Didomi.getInstance().javaScriptForWebView, PluginId)
+        // todo: store enabled/disabled vendors/purposes
+    }
+
     companion object {
         private const val TAG = "Didomi"
         const val PluginId = "applicaster-cmp-didomi"
+        const val JSPreferencesKey = "javaScriptForWebView"
     }
 }
