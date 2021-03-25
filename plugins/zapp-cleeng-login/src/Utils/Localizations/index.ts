@@ -10,7 +10,6 @@ const getConfig = () =>
   });
 
 const getDefaultLocalizations = () => {
-  console.log({ Localizations });
   return getConfig().reduce((acc, { key, initial_value }) => {
     acc[key] = initial_value;
     return acc;

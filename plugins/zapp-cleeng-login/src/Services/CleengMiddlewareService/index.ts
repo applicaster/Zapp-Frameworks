@@ -4,6 +4,7 @@ import {
   SignInData,
   CreateAccountData,
   ResetPasswordData,
+  RequestCustomData,
 } from "../../models/Request";
 import Request from "../../factories/requests";
 import { API } from "../../constants";
@@ -14,18 +15,9 @@ import {
   localStorageRemoveUserAccount,
   localStorageRemove,
   localStorageApplicasterGet,
-} from "../../Services/LocalStorageService";
+} from "../LocalStorageService";
 
-import {
-  isAmazonPlatform,
-  isApplePlatform,
-  isAndroidPlatform,
-} from "../../Utils/Platform";
-import {
-  createLogger,
-  BaseSubsystem,
-  BaseCategories,
-} from "../../Services/LoggerService";
+import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.CLEENG_MIDDLEWARE_SERVICE}`,
@@ -36,19 +28,11 @@ const IN_PLAYER_LAST_EMAIL_USED_KEY = "com.cleengMiddleware.lastEmailUsed";
 const LOCAL_STORAGE_TOKEN_KEY = "in_player_token";
 const USER_ACCOUNT_STORAGE_TOKEN_KEY = "idToken";
 
-export async function setConfig({
-  BASE_URL = "https://applicaster-cleeng-sso.herokuapp.com",
-}) {
-  axios.defaults.baseURL = BASE_URL;
-
-  axios.defaults.headers.post["Content-Type"] =
-    "application/x-www-form-urlencoded";
+export async function prepareMiddleware(data: RequestCustomData) {
+  Request.prepare(data);
 }
 
 export async function signIn(data: SignInData) {
-  data.publisherId = "5d2f171181efe700153dd07c";
-
-  console.log({ data });
   data.email && setLastEmailUsed(data?.email);
 
   try {
@@ -88,16 +72,13 @@ export async function signUp(data: CreateAccountData) {
   const locale = await localStorageApplicasterGet("languageCode");
   const country = "US";
 
-  data.publisherId = "5d2f171181efe700153dd07c";
   data.email && setLastEmailUsed(data?.email);
 
   const create_account_data = { ...data, currency, locale, country };
-  console.log({ create_account_data });
 
   try {
     const response = await Request.post(API.signUp, create_account_data);
     const token = response?.data?.[0]?.token;
-    console.log({ response, token });
     if (token) {
       await setToken(token);
     }
@@ -144,10 +125,6 @@ export async function signOut(): Promise<boolean> {
 }
 
 export async function requestPassword(data: ResetPasswordData) {
-  data.publisherId = "5d2f171181efe700153dd07c";
-
-  console.log({ data });
-
   try {
     const response = await Request.post(API.passwordReset, data);
 

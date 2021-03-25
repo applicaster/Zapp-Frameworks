@@ -17,6 +17,13 @@ export interface ResetPasswordData {
   publisherId: string;
 }
 
+export interface RequestCustomData {
+  base_URL_api: string;
+  login_api_endpoint: string;
+  signin_api_endpoint: string;
+  password_reset_api_endpoint: string;
+}
+
 export interface ExtendTokenData {
   token: string;
 }

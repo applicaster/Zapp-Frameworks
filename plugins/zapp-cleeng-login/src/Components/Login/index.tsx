@@ -15,7 +15,8 @@ import {
   getToken,
   signOut,
   requestPassword,
-} from "../../Services/CleengMiddlewateService";
+  prepareMiddleware,
+} from "../../Services/CleengMiddlewareService";
 import { isAuthenticationRequired } from "../../Utils/PayloadUtils";
 
 import { getStyles, isHomeScreen } from "../../Utils/Customization";
@@ -66,7 +67,6 @@ const Login = (props) => {
   const {
     configuration: { publisherId, logout_completion_action = "go_back" },
   } = props;
-
   const showParentLock =
     screenStyles?.import_parent_lock === "1" ? true : false;
   let stillMounted = true;
@@ -82,7 +82,6 @@ const Login = (props) => {
 
   async function setupEnvironment() {
     const token = await getToken();
-    console.log({ token });
     setLastEmailUsed((await getLastEmailUsed()) || null);
     setIdtoken(token);
 
@@ -90,6 +89,8 @@ const Login = (props) => {
       message: "Starting Cleeng Login Plugin",
       data: { configuration: props?.configuration },
     });
+
+    prepareMiddleware(props?.configuration);
 
     if (payload) {
       const authenticationRequired = true;
@@ -207,7 +208,6 @@ const Login = (props) => {
       publisherId,
     })
       .then((data) => {
-        console.log({ data });
         logger.debug({
           message: `Login succeed, email: ${email}, password: ${password}`,
           data: {
@@ -390,11 +390,7 @@ const Login = (props) => {
     accountFlowCallback({ success: false });
   }
 
-  console.log({
-    loading,
-    AccountComponents,
-    showBack: !isHomeScreen(navigator),
-  });
+
   function renderAccount() {
     return (
       <>

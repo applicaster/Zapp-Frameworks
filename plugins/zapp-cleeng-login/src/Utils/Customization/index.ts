@@ -48,7 +48,6 @@ export function getStyles(screenStyles) {
 }
 
 export function prepareStyles(screenStyles) {
-  console.log({ manifestJson: manifestJson() });
   styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );
