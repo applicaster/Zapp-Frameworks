@@ -26,36 +26,28 @@ const baseManifest = {
       default: "",
     },
     {
-      group: true,
-      label: "Cleeng API",
-      tooltip: "Change this values only if you need custom end points.",
-      folded: true,
-      fields: [
-        {
-          type: "text",
-          key: "base_URL_api",
-          label: "Base URL",
-          default: "https://applicaster-cleeng-sso.herokuapp.com/",
-        },
-        {
-          type: "text",
-          key: "login_api_endpoint",
-          label: "Login End Point",
-          default: "login",
-        },
-        {
-          type: "text",
-          key: "signin_api_endpoint",
-          label: "Create Account End Point",
-          default: "register",
-        },
-        {
-          type: "text",
-          key: "password_reset_api_endpoint",
-          label: "Password Reset End Point",
-          default: "passwordReset",
-        },
-      ],
+      type: "text",
+      key: "base_URL_api",
+      label: "Base URL",
+      default: "https://applicaster-cleeng-sso.herokuapp.com/",
+    },
+    {
+      type: "text",
+      key: "login_api_endpoint",
+      label: "Login End Point",
+      default: "login",
+    },
+    {
+      type: "text",
+      key: "signin_api_endpoint",
+      label: "Create Account End Point",
+      default: "register",
+    },
+    {
+      type: "text",
+      key: "password_reset_api_endpoint",
+      label: "Password Reset End Point",
+      default: "passwordReset",
     },
   ],
   hooks: {
