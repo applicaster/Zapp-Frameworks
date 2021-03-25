@@ -2,7 +2,7 @@ import axios from "axios";
 import { RequestCustomData } from "../models/Request";
 import { API } from "../constants";
 
-const Request = (function (data) {
+const Request = (function () {
   var customData: RequestCustomData;
 
   return {
