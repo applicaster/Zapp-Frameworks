@@ -37,7 +37,7 @@ import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
-import com.theoplayer.android.internal.activity.CurrentActivityHelper;
+//import com.theoplayer.android.internal.activity.CurrentActivityHelper;
 import com.theoplayerreactnative.events.EventRouter;
 import com.theoplayerreactnative.events.EventsBinder;
 import com.theoplayerreactnative.utility.JSON2RN;
@@ -156,10 +156,12 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     }
 
     private void hackChromecast(Activity currentActivity) {
-        CurrentActivityHelper instance = CurrentActivityHelper.getInstance();
         try{
+            // CurrentActivityHelper
+            com.theoplayer.android.internal.i.a instance = com.theoplayer.android.internal.i.a.a();
             if(null != instance) {
-                if(null != instance.getLastResumedActivity()) {
+                // call getLastResumedActivity
+                if(null != instance.b()) {
                     return;
                 }
                 Field f = instance.getClass().getDeclaredField("lastResumedActivityHolder");
@@ -256,7 +258,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
     @Override
     public void onHostDestroy() {
-        stopCast();
         playerView.onDestroy();
     }
 
@@ -281,7 +282,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-                stopCast();
+                playerView.onDestroy();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     currentActivity
                             .getWindow()
@@ -290,16 +291,6 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 }
             }
         });
-    }
-
-    private void stopCast() {
-        // for now we stop the cast and playback when user leaves the screen,
-        // or player will resume playback when user will stop casting from notification bar
-        Cast cast = playerView.getCast();
-        if(null != cast && cast.isCasting()) {
-            cast.getChromecast().stop();
-        }
-        playerView.getPlayer().stop();
     }
 
     private WritableNativeMap repackEvent(String eventJSON) {
