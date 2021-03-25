@@ -72,8 +72,8 @@ class DidomiPlugin : GenericPluginI
                 addEventListener(this@DidomiPlugin)
                 onReady {
                     APLogger.info(TAG, "Didomi initialized")
-                    if (hasAnyStatus()) {
-                        APLogger.info(TAG, "User consent was already requested")
+                    if (!shouldConsentBeCollected()) {
+                        APLogger.info(TAG, "User consent was already requested or not needed")
                         listener.onHookFinished()
                     } else if (!presentOnStartup) {
                         APLogger.info(TAG, "User consent presentOnStartup is disabled")
