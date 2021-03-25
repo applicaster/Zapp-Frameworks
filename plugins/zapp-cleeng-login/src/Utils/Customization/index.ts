@@ -3,21 +3,39 @@ import * as R from "ramda";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { populateConfigurationValues } from "@applicaster/zapp-react-native-utils/stylesUtils";
 
+const MESSAGES = {
+  restore: {
+    success: "Restore success",
+    fail: "Restore failed",
+    failInfo: "Error occurred while restoring purchases.",
+    successInfo: "Purchase was successfully restored!",
+    empty: "No items to restore.",
+  },
+  purchase: {
+    fail: "Purchase failed",
+    required: "This item requires purchase.",
+  },
+  validation: {
+    productId: "Product identifier does not exist.",
+    noFees: "No fees available for current asset.",
+    emptyStore: "No items available in store.",
+  },
+  asset: {
+    fail: "Cannot load asset info.",
+  },
+};
+const ios = require("../../../manifests/ios_for_quickbrick.json");
+const android = require("../../../manifests/android_for_quickbrick.json");
+
 const manifestJson = () => {
   try {
     return platformSelect({
-      ios: require("manifests/ios_for_quickbrick.json"),
-      tvos: require("manifests/tvos_for_quickbrick.json"),
-      android: require("manifests/android.json"),
-      android_tv: require("manifests/android_tv_for_quickbrick.json"),
-      web: require("manifests/samsung_tv.json"),
-      samsung_tv: require("manifests/samsung_tv.json"),
-      lg_tv: require("manifests/lg_tv.json"),
-      default: require("manifests/android.json"),
+      ios,
+      android,
     });
   } catch (error) {
     throw new Error(
-      `Could not load manifest at inplayer login plugin: ${error?.message}`
+      `Could not load manifest at inplayer login plugin: ${error}`
     );
   }
 };
@@ -32,6 +50,7 @@ export function getStyles(screenStyles) {
 }
 
 export function prepareStyles(screenStyles) {
+  console.log({ manifestJson: manifestJson() });
   styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );

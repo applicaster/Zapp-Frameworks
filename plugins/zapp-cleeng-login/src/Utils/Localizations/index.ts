@@ -1,6 +1,6 @@
 import { getLocalizations as getCurrentLocalizations } from "@applicaster/zapp-react-native-utils/appUtils/localizationsHelper";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-import Localizations from "../../manifests/localizations.config";
+const Localizations = require("../../../manifests/localizations.config");
 
 const getConfig = () =>
   platformSelect({
@@ -10,6 +10,7 @@ const getConfig = () =>
   });
 
 const getDefaultLocalizations = () => {
+  console.log({ Localizations });
   return getConfig().reduce((acc, { key, initial_value }) => {
     acc[key] = initial_value;
     return acc;

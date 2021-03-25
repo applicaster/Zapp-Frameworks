@@ -23,5 +23,4 @@ export function createLogger({ category = "", subsystem }) {
 
   loggers[subsystem] = logger;
   return logger;
-
-
+}
