@@ -31,8 +31,19 @@ class SegmentAgent : BaseAnalyticsAgent() {
     override fun setParams(params: MutableMap<Any?, Any?>) {
         super.setParams(params)
         writeKey = params["segment_write_key"]?.toString() ?: ""
-        if(writeKey.isEmpty()) {
+        if (writeKey.isEmpty()) {
             APLogger.error(TAG, "segment_write_key is empty. Analytics agent won't be activated")
+        }
+        params[BLACKLISTED_EVENTS_LIST_KEY]?.let {
+            val list = it as? String
+            if (!list.isNullOrEmpty()) {
+                val events = list
+                        .split(BLACKLISTED_EVENTS_LIST_DELIMITER)
+                        .map { it.trim().toLowerCase(Locale.ENGLISH) }
+                if (events.isNotEmpty()) {
+                    blackListEvents.addAll(events)
+                }
+            }
         }
     }
 
@@ -70,5 +81,9 @@ class SegmentAgent : BaseAnalyticsAgent() {
     companion object {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.UK)
         private const val TAG = "SegmentAgent"
+
+        // plugin uses different key and separator from the base class
+        private const val BLACKLISTED_EVENTS_LIST_KEY = "blacklisted_events_list"
+        private const val BLACKLISTED_EVENTS_LIST_DELIMITER = ","
     }
 }
