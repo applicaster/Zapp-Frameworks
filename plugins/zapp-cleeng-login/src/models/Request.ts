@@ -26,6 +26,7 @@ export interface RequestCustomData {
 
 export interface ExtendTokenData {
   token: string;
+  publisherId: string;
 }
 
 export interface SubscriptionsData {

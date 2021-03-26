@@ -83,7 +83,7 @@ const Login = (props) => {
 
   async function setupEnvironment() {
     const oldToken = await getToken();
-    const newToken = await extendToken(oldToken);
+    const newToken = await extendToken({ token: oldToken, publisherId });
     setLastEmailUsed((await getLastEmailUsed()) || null);
     setIdtoken(newToken);
 

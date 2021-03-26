@@ -1,10 +1,9 @@
-import axios from "axios";
-import * as R from "ramda";
 import {
   SignInData,
   CreateAccountData,
   ResetPasswordData,
   RequestCustomData,
+  ExtendTokenData,
 } from "../../models/Request";
 import Request from "../../factories/requests";
 import { API } from "../../constants";
@@ -59,8 +58,10 @@ export async function signIn(data: SignInData) {
 export async function signUp(data: CreateAccountData) {
   const currency = "USD";
   const locale = await localStorageApplicasterGet("languageCode");
-  const country = await localStorageApplicasterGet("countryCode");
-
+  let country = await localStorageApplicasterGet("countryCode");
+  if (!country) {
+    country = "US";
+  }
   data.email && setLastEmailUsed(data?.email);
 
   const create_account_data = { ...data, currency, locale, country };
@@ -85,9 +86,9 @@ export async function signUp(data: CreateAccountData) {
   }
 }
 
-export async function extendToken(oldToken: string) {
+export async function extendToken(data: ExtendTokenData) {
   try {
-    const response = await Request.post(API.extendToken, { oldToken });
+    const response = await Request.post(API.extendToken, data);
     const token = response?.data?.[0]?.token;
     if (token) {
       await setToken(token);
@@ -95,15 +96,15 @@ export async function extendToken(oldToken: string) {
     logger.debug({
       message: `extendToken >> succeed: true`,
       data: {
-        old_token: oldToken,
+        ...data,
         response,
       },
     });
 
     return token;
   } catch (error) {
-    handleError(error, { old_token: oldToken }, "extendToken", false);
-    return false;
+    handleError(error, data, "extendToken", false);
+    return null;
   }
 }
 
