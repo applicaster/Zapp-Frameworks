@@ -1,6 +1,5 @@
 export const API = {
   signIn: "login",
-  signOut: "",
   signUp: "register",
   passwordReset: "passwordReset",
   extendToken: "extendToken",

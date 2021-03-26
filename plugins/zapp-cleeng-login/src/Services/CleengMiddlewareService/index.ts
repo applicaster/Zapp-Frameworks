@@ -52,25 +52,14 @@ export async function signIn(data: SignInData) {
 
     return response;
   } catch (error) {
-    const responseData = error?.response?.data;
-    const response_url = error?.response?.request?.responseURL;
-    logger.warning({
-      message: `signIn >> succeed: false, status: ${responseData?.code}, message: ${responseData?.message}, url: ${response_url}`,
-      data: {
-        ...data,
-        response_url,
-        error,
-      },
-    });
-
-    throw error;
+    handleError(error, data, "signIn");
   }
 }
 
 export async function signUp(data: CreateAccountData) {
   const currency = "USD";
   const locale = await localStorageApplicasterGet("languageCode");
-  const country = "US";
+  const country = await localStorageApplicasterGet("countryCode");
 
   data.email && setLastEmailUsed(data?.email);
 
@@ -92,17 +81,49 @@ export async function signUp(data: CreateAccountData) {
 
     return response;
   } catch (error) {
-    const responseData = error?.response?.data;
-    const response_url = error?.response?.request?.responseURL;
-    logger.warning({
-      message: `signUp >> succeed: false, status: ${responseData?.code}, message: ${responseData?.message}, url: ${response_url}`,
+    handleError(error, data, "signUp");
+  }
+}
+
+export async function extendToken(oldToken: string) {
+  try {
+    const response = await Request.post(API.extendToken, { oldToken });
+    const token = response?.data?.[0]?.token;
+    if (token) {
+      await setToken(token);
+    }
+    logger.debug({
+      message: `extendToken >> succeed: true`,
       data: {
-        ...data,
-        response_url,
-        error,
+        old_token: oldToken,
+        response,
       },
     });
 
+    return token;
+  } catch (error) {
+    handleError(error, { old_token: oldToken }, "extendToken", false);
+    return false;
+  }
+}
+
+function handleError(
+  error,
+  data,
+  funcName: string,
+  throwError: boolean = true
+) {
+  const responseData = error?.response?.data;
+  const response_url = error?.response?.request?.responseURL;
+  logger.warning({
+    message: `${funcName} >> succeed: false, status: ${responseData?.code}, message: ${responseData?.message}, url: ${response_url}`,
+    data: {
+      ...data,
+      response_url,
+      error,
+    },
+  });
+  if (throwError) {
     throw error;
   }
 }
@@ -170,3 +191,4 @@ export async function removeToken(): Promise<boolean> {
   await localStorageRemoveUserAccount(USER_ACCOUNT_STORAGE_TOKEN_KEY);
   return await localStorageRemove(LOCAL_STORAGE_TOKEN_KEY);
 }
+extendToken;

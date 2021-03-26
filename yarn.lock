@@ -415,16 +415,17 @@
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
   integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
 
-"@applicaster/zapp-cleeng-login@0.0.2-alpha.2":
-  version "0.0.2-alpha.2"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.2.tgz#b6633b3c6abbcd749dfb30200633dfb461faba9a"
-  integrity sha512-R5Sk7sOZK+gW834vNPtZl+T5Vw3laFyaw5MkD1OAhwVwjUEmx0U5EXX+g7DnGq53eDx6/w1eyXdzKaWxomkw+g==
+"@applicaster/zapp-cleeng-login@0.0.2-alpha.5":
+  version "0.0.2-alpha.5"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.5.tgz#4f6c42cb01168fec607273159a137123551fa721"
+  integrity sha512-KT5Z/eRATBgJVKHlc0H0NNnx5TM5vI9Ma4MZAAiuzCjB5L8A1VCPz7tQ6ND+R3YlmXAaRpnmQKQIhV0vKGjPSQ==
   dependencies:
     "@applicaster/applicaster-account-components" "0.0.3-alpha.0"
     "@applicaster/quick-brick-parent-lock" "*"
     axios "^0.19.1"
     moment "^2.24.0"
     ramda "^0.26.1"
+    react-native-dropdownalert "^4.2.1"
     react-redux "^7.2.1"
 
 "@applicaster/zapp-pipes-dev-kit@^1.4.1":

@@ -49,6 +49,31 @@ const baseManifest = {
       label: "Password Reset End Point",
       default: "passwordReset",
     },
+    {
+      group: true,
+      label: "Debug",
+      tooltip: "For development purposes",
+      folded: true,
+      fields: [
+        {
+          type: "tag_select",
+          key: "force_authentication_on_all",
+          tooltip_text:
+            "If On, all video entries will be marked as required login",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          initial_value: "off",
+        },
+      ],
+    },
   ],
   hooks: {
     fields: [

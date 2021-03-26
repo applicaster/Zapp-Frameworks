@@ -16,6 +16,7 @@ import {
   signOut,
   requestPassword,
   prepareMiddleware,
+  extendToken,
 } from "../../Services/CleengMiddlewareService";
 import { isAuthenticationRequired } from "../../Utils/PayloadUtils";
 
@@ -81,9 +82,10 @@ const Login = (props) => {
   }, []);
 
   async function setupEnvironment() {
-    const token = await getToken();
+    const oldToken = await getToken();
+    const newToken = await extendToken(oldToken);
     setLastEmailUsed((await getLastEmailUsed()) || null);
-    setIdtoken(token);
+    setIdtoken(newToken);
 
     logger.debug({
       message: "Starting Cleeng Login Plugin",
@@ -93,15 +95,17 @@ const Login = (props) => {
     prepareMiddleware(props?.configuration);
 
     if (payload) {
-      const authenticationRequired = true;
-      // isAuthenticationRequired(payload);
+      const testEnvironmentEnabled =
+        props?.configuration?.force_authentication_on_all || "off";
+      const authenticationRequired =
+        testEnvironmentEnabled === "on" || isAuthenticationRequired(payload);
 
       const logData = {
         authentication_required: authenticationRequired,
         configuration: props?.configuration,
       };
 
-      if (!token && authenticationRequired) {
+      if (!newToken && authenticationRequired) {
         setLoading(false);
 
         logger.debug({
@@ -109,14 +113,14 @@ const Login = (props) => {
           data: {
             ...logData,
             hook_type: HookTypeData.PLAYER_HOOK,
-            is_authenticated: !!token,
+            is_authenticated: !!newToken,
           },
         });
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
         logger.debug({
           message: "Cleeng plugin invocation, finishing hook with: success",
-          data: { ...logData, is_authenticated: !!token },
+          data: { ...logData, is_authenticated: !!newToken },
         });
         callback && callback({ success: true, error: null, payload });
       }
@@ -389,7 +393,6 @@ const Login = (props) => {
   function onAccountHandleBackButton() {
     accountFlowCallback({ success: false });
   }
-
 
   function renderAccount() {
     return (
