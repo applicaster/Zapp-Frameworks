@@ -265,12 +265,6 @@ const stylesMobile = {
       initial_value: "#a9a9a9ff",
     },
     {
-      key: "logout_background_color",
-      type: "color_picker",
-      label: "Logout background font color",
-      initial_value: "#161b29ff",
-    },
-    {
       key: "logout_title_font_ios",
       type: "ios_font_selector",
       label: "Logout iOS title font",

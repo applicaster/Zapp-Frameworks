@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
 import { isWebBasedPlatform } from "../../Utils/Platform";
@@ -81,6 +81,11 @@ const Login = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (hookType === HookTypeData.USER_ACCOUNT && idToken) {
+      onLogout();
+    }
+  }, [hookType, idToken]);
   async function setupEnvironment() {
     const oldToken = await getToken();
     const newToken = await extendToken({ token: oldToken, publisherId });
@@ -106,8 +111,6 @@ const Login = (props) => {
       };
 
       if (!newToken && authenticationRequired) {
-        setLoading(false);
-
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
           data: {
@@ -117,6 +120,7 @@ const Login = (props) => {
           },
         });
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
+        setLoading(false);
       } else {
         logger.debug({
           message: "Cleeng plugin invocation, finishing hook with: success",
@@ -125,8 +129,9 @@ const Login = (props) => {
         callback && callback({ success: true, error: null, payload });
       }
     } else {
-      setLoading(false);
       if (!isHook(navigator)) {
+        setLoading(false);
+
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
           data: {
@@ -137,6 +142,8 @@ const Login = (props) => {
 
         stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
       } else {
+        setLoading(false);
+
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
           data: {
@@ -211,7 +218,7 @@ const Login = (props) => {
       password,
       publisherId,
     })
-      .then((data) => {
+      .then(() => {
         logger.debug({
           message: `Login succeed, email: ${email}, password: ${password}`,
           data: {
@@ -290,7 +297,7 @@ const Login = (props) => {
         email,
         publisherId,
       })
-        .then((result) => {
+        .then(() => {
           logger.debug({
             message: `Password request complete, email: ${email}`,
             data: {
@@ -368,10 +375,17 @@ const Login = (props) => {
     }
   };
 
-  async function onLogout({ setError }) {
-    const timeout = 1000;
+  const onLogout = useCallback(async () => {
+    setLoading(true);
+    const timeout = 400;
     try {
       const didLogout = await signOut();
+
+      dropDownAlertRef.alertWithType(
+        "success",
+        "",
+        screenLocalizations?.logout_title_succeed_text
+      );
       if (!didLogout) {
         navigator.goBack();
       }
@@ -379,12 +393,17 @@ const Login = (props) => {
         invokeLogoutCompleteAction();
       }, timeout);
     } catch (error) {
-      setError(error);
+      dropDownAlertRef.alertWithType(
+        "error",
+        screenStyles?.logout_title_fail_text,
+        ""
+      );
+
       setTimeout(() => {
         invokeLogoutCompleteAction();
       }, timeout);
     }
-  }
+  }, [dropDownAlertRef]);
 
   function onAccountError({ title, message, type = "warn" }) {
     showAlertToUser({ title, message, type });
@@ -396,7 +415,9 @@ const Login = (props) => {
 
   function renderAccount() {
     return (
-      <>
+      <View
+        style={{ flex: 1, backgroundColor: screenStyles?.background_color }}
+      >
         <AccountComponents.AccountFlow
           signUpScreen={{
             nameLabelDisabled: true,
@@ -414,30 +435,15 @@ const Login = (props) => {
           lastEmailUsed={lastEmailUsed}
           {...props}
         />
-        {!Platform.isTV && !isWebBasedPlatform && (
-          <DropdownAlert ref={(ref) => setDropDownAlertRef(ref)} />
-        )}
-        {loading && <AccountComponents.LoadingScreen />}
-      </>
+      </View>
     );
   }
 
   const renderUACFlow = () => {
-    return idToken ? renderLogoutScreen() : renderAccount();
+    return idToken ? null : renderAccount();
   };
 
-  const renderLogoutScreen = () => {
-    return (
-      <AccountComponents.LogoutFlow
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        onLogout={onLogout}
-        {...props}
-      />
-    );
-  };
-
-  function renderFlow() {
+  function renderScreen() {
     switch (hookType) {
       case HookTypeData.PLAYER_HOOK || HookTypeData.SCREEN_HOOK:
         return renderAccount();
@@ -446,6 +452,24 @@ const Login = (props) => {
       case HookTypeData.UNDEFINED:
         return null;
     }
+  }
+
+  function renderFlow() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: screenStyles?.background_color,
+        }}
+      >
+        {renderScreen()}
+        {loading && <AccountComponents.LoadingScreen />}
+
+        {!Platform.isTV && !isWebBasedPlatform && (
+          <DropdownAlert ref={(ref) => setDropDownAlertRef(ref)} />
+        )}
+      </View>
+    );
   }
 
   return renderFlow();
