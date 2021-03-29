@@ -1,0 +1,44 @@
+{
+  "name": "GemiusAnalytics",
+  "version": "0.1.0",
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "swift_versions": [
+    "5.0",
+    "5.1",
+    "5.2"
+  ],
+  "summary": "GemiusAnalytics",
+  "description": "Support Gemius analytics",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "license": "Apache 2.0",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks",
+    "tag": "@@applicaster/zapp-analytics-plugin-gemius/0.1.0"
+  },
+  "frameworks": [
+    "Foundation",
+    "UIKit"
+  ],
+  "public_header_files": "universal/**/*.h",
+  "source_files": "universal/**/*.{h,m,swift}",
+  "dependencies": {
+    "ZappCore": [],
+    "Gemius": [
+      "~> 1.9.4"
+    ]
+  },
+  "xcconfig": {
+    "ENABLE_BITCODE": "YES",
+    "OTHER_LDFLAGS": "$(inherited)",
+    "FRAMEWORK_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Gemius/**",
+    "LIBRARY_SEARCH_PATHS": "$(inherited) \"${PODS_ROOT}\"/Gemius/**",
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_TESTABILITY": "YES",
+    "OTHER_CFLAGS": "-fembed-bitcode"
+  },
+  "swift_version": "5.1"
+}
