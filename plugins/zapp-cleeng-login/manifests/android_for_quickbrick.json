@@ -29,34 +29,50 @@
       "default": ""
     },
     {
+      "type": "text",
+      "key": "base_URL_api",
+      "label": "Base URL",
+      "default": "https://applicaster-cleeng-sso.herokuapp.com/"
+    },
+    {
+      "type": "text",
+      "key": "login_api_endpoint",
+      "label": "Login End Point",
+      "default": "login"
+    },
+    {
+      "type": "text",
+      "key": "signin_api_endpoint",
+      "label": "Create Account End Point",
+      "default": "register"
+    },
+    {
+      "type": "text",
+      "key": "password_reset_api_endpoint",
+      "label": "Password Reset End Point",
+      "default": "passwordReset"
+    },
+    {
       "group": true,
-      "label": "Cleeng API",
-      "tooltip": "Change this values only if you need custom end points.",
+      "label": "Debug",
+      "tooltip": "For development purposes",
       "folded": true,
       "fields": [
         {
-          "type": "text",
-          "key": "base_URL_api",
-          "label": "Base URL",
-          "default": "https://applicaster-cleeng-sso.herokuapp.com/"
-        },
-        {
-          "type": "text",
-          "key": "login_api_endpoint",
-          "label": "Login End Point",
-          "default": "login"
-        },
-        {
-          "type": "text",
-          "key": "signin_api_endpoint",
-          "label": "Create Account End Point",
-          "default": "register"
-        },
-        {
-          "type": "text",
-          "key": "password_reset_api_endpoint",
-          "label": "Password Reset End Point",
-          "default": "passwordReset"
+          "type": "tag_select",
+          "key": "force_authentication_on_all",
+          "tooltip_text": "If On, all video entries will be marked as required login",
+          "options": [
+            {
+              "text": "On",
+              "value": "on"
+            },
+            {
+              "text": "Off",
+              "value": "off"
+            }
+          ],
+          "initial_value": "off"
         }
       ]
     }
@@ -78,8 +94,8 @@
     ]
   },
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.0.2-alpha.0",
-  "manifest_version": "0.0.2-alpha.0",
+  "dependency_version": "0.0.2",
+  "manifest_version": "0.0.2",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -266,12 +282,6 @@
         "type": "color_picker",
         "label": "Create account link font color",
         "initial_value": "#a9a9a9ff"
-      },
-      {
-        "key": "logout_background_color",
-        "type": "color_picker",
-        "label": "Logout background font color",
-        "initial_value": "#161b29ff"
       },
       {
         "key": "logout_title_font_ios",
@@ -475,11 +485,6 @@
         "key": "action_button_forgot_password_text",
         "label": "Request password button title",
         "initial_value": "REQUEST PASSWORD"
-      },
-      {
-        "key": "action_button_set_new_password_text",
-        "label": "Set new password button title",
-        "initial_value": "SET NEW PASSWORD"
       }
     ]
   }
