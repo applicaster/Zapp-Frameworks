@@ -58,7 +58,7 @@ export async function signIn(data: SignInData) {
 export async function signUp(data: CreateAccountData) {
   const currency = "USD";
   const locale = await sessionStorageApplicasterGet("languageCode");
-  let country = await sessionStorageApplicasterGet("signedDeviceInfoToken");
+  let country = await sessionStorageApplicasterGet("country_code");
   if (!country) {
     country = "US";
   }
