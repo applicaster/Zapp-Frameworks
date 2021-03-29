@@ -87,6 +87,7 @@ const Login = (props) => {
     }
   }, [hookType, idToken]);
   async function setupEnvironment() {
+    prepareMiddleware(props?.configuration);
     const oldToken = await getToken();
     const newToken = await extendToken({ token: oldToken, publisherId });
     setLastEmailUsed((await getLastEmailUsed()) || null);
@@ -97,14 +98,11 @@ const Login = (props) => {
       data: { configuration: props?.configuration },
     });
 
-    prepareMiddleware(props?.configuration);
-
     if (payload) {
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
       const authenticationRequired =
         testEnvironmentEnabled === "on" || isAuthenticationRequired(payload);
-
       const logData = {
         authentication_required: authenticationRequired,
         configuration: props?.configuration,

@@ -15,7 +15,7 @@ import {
   localStorageRemove,
   sessionStorageApplicasterGet,
 } from "../LocalStorageService";
-
+import jwt_decode from "jwt-decode";
 import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
 
 export const logger = createLogger({
@@ -58,7 +58,10 @@ export async function signIn(data: SignInData) {
 export async function signUp(data: CreateAccountData) {
   const currency = "USD";
   const locale = await sessionStorageApplicasterGet("languageCode");
-  let country = await sessionStorageApplicasterGet("country_code");
+  const token = await sessionStorageApplicasterGet("signedDeviceInfoToken");
+  const decodedToken = jwt_decode(token);
+  let country = decodedToken["country"];
+
   if (!country) {
     country = "US";
   }
@@ -92,6 +95,7 @@ export async function extendToken(data: ExtendTokenData) {
       return null;
     }
     const response = await Request.post(API.extendToken, data);
+
     const token = response?.data?.[0]?.token;
     if (token) {
       await setToken(token);
@@ -195,4 +199,3 @@ export async function removeToken(): Promise<boolean> {
   await localStorageRemoveUserAccount(USER_ACCOUNT_STORAGE_TOKEN_KEY);
   return await localStorageRemove(LOCAL_STORAGE_TOKEN_KEY);
 }
-extendToken;
