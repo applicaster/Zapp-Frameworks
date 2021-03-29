@@ -1,4 +1,5 @@
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
+import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 
 const localStorageNamespace = "zapp-cleeng-login";
 
@@ -22,6 +23,6 @@ export async function localStorageRemoveUserAccount(key: string) {
   return await localStorage.removeItem(key);
 }
 
-export async function localStorageApplicasterGet(key: string) {
-  return await localStorage.getItem(key);
+export async function sessionStorageApplicasterGet(key: string) {
+  return await sessionStorage.getItem(key);
 }

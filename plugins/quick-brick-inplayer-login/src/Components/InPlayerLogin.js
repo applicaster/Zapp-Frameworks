@@ -268,7 +268,7 @@ const InPlayerLogin = (props) => {
     });
 
     InPlayerService.login({
-      email: email,
+      email,
       password,
       clientId,
       referrer,

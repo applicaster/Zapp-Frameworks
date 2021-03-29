@@ -13,7 +13,7 @@ import {
   localStorageSetUserAccount,
   localStorageRemoveUserAccount,
   localStorageRemove,
-  localStorageApplicasterGet,
+  sessionStorageApplicasterGet,
 } from "../LocalStorageService";
 
 import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
@@ -57,8 +57,8 @@ export async function signIn(data: SignInData) {
 
 export async function signUp(data: CreateAccountData) {
   const currency = "USD";
-  const locale = await localStorageApplicasterGet("languageCode");
-  let country = await localStorageApplicasterGet("countryCode");
+  const locale = await sessionStorageApplicasterGet("languageCode");
+  let country = await sessionStorageApplicasterGet("signedDeviceInfoToken");
   if (!country) {
     country = "US";
   }
@@ -88,6 +88,9 @@ export async function signUp(data: CreateAccountData) {
 
 export async function extendToken(data: ExtendTokenData) {
   try {
+    if (!data.token) {
+      return null;
+    }
     const response = await Request.post(API.extendToken, data);
     const token = response?.data?.[0]?.token;
     if (token) {

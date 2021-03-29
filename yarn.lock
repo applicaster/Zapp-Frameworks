@@ -415,10 +415,10 @@
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
   integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
 
-"@applicaster/zapp-cleeng-login@0.0.2-alpha.6":
-  version "0.0.2-alpha.6"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.6.tgz#a7f966b931729e1b483d34a2e92a9b6fa9d0230d"
-  integrity sha512-BdPEOPbkntIpCqBTZ01AKPpL8xfqfFKL9exKLKVjAMzXrY2NBMY5ndTe2m3egoL9dcNkl21T6hdpzkq3E2RG5w==
+"@applicaster/zapp-cleeng-login@0.0.2-alpha.8":
+  version "0.0.2-alpha.8"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-login/-/zapp-cleeng-login-0.0.2-alpha.8.tgz#387d901acc499cea278c57ffbb5dfe1835589116"
+  integrity sha512-eLVl2oz7n5jjdWQ5eoXqI7hqNJAmZ7ZKFM+xNHAiSToZyKskrZO4LhqHT9frwZmT9WxBBnxhCtu6mmSJpaFKyg==
   dependencies:
     "@applicaster/applicaster-account-components" "0.0.3-alpha.0"
     "@applicaster/quick-brick-parent-lock" "*"
@@ -7897,7 +7897,7 @@ punycode@2.x.x, punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-qs@^6.10.1, qs@^6.9.3:
+qs@^6.9.3:
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
   integrity sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==
