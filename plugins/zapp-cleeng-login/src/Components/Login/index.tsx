@@ -1,36 +1,32 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
-import { isWebBasedPlatform } from "../Utils/Platform";
-import { showAlert } from "../Utils/Account";
+import { isWebBasedPlatform } from "../../Utils/Platform";
+import { showAlert } from "../../Utils/Account";
 import AccountComponents from "@applicaster/applicaster-account-components";
 import * as R from "ramda";
-import * as InPlayerService from "../Services/inPlayerService";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
-import { getLocalizations } from "../Utils/Localizations";
+import { getLocalizations } from "../../Utils/Localizations";
 import {
-  localStorageGet,
-  localStorageSet,
-  localStorageRemove,
-  localStorageSetUserAccount,
-  localStorageRemoveUserAccount,
-} from "../Services/LocalStorageService";
-import {
-  inPlayerAssetId,
-  isAuthenticationRequired,
-} from "../Utils/PayloadUtils";
-import InPlayerSDK from "@inplayer-org/inplayer.js";
+  getLastEmailUsed,
+  signIn,
+  signUp,
+  getToken,
+  signOut,
+  requestPassword,
+  prepareMiddleware,
+  extendToken,
+} from "../../Services/CleengMiddlewareService";
+import { isAuthenticationRequired } from "../../Utils/PayloadUtils";
 
-import { setConfig } from "../Services/inPlayerService";
-import { getStyles, isHomeScreen } from "../Utils/Customization";
-import { isHook } from "../Utils/UserAccount";
+import { getStyles, isHomeScreen } from "../../Utils/Customization";
+import { isHook } from "../../Utils/UserAccount";
 import {
   createLogger,
   BaseSubsystem,
   BaseCategories,
-  XRayLogLevel,
-} from "../Services/LoggerService";
+} from "../../Services/LoggerService";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -40,30 +36,28 @@ const logger = createLogger({
 const getRiversProp = (key, rivers = {}) => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("type", "zapp-cleeng-login")),
     R.values
   );
 
   return getPropByKey(rivers);
 };
 
-const localStorageTokenKey = "in_player_token";
-const userAccountStorageTokenKey = "idToken";
-
-const InPlayerLogin = (props) => {
+const Login = (props) => {
   const HookTypeData = {
     UNDEFINED: "Undefined",
     PLAYER_HOOK: "PlayerHook",
     SCREEN_HOOK: "ScreenHook",
     USER_ACCOUNT: "UserAccount",
   };
+
   const navigator = useNavigation();
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [loading, setLoading] = useState(true);
   const [lastEmailUsed, setLastEmailUsed] = useState(null);
-
+  const [dropDownAlertRef, setDropDownAlertRef] = useState(null);
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
   const styles = getRiversProp("styles", rivers);
@@ -72,124 +66,70 @@ const InPlayerLogin = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const {
-    configuration: {
-      in_player_client_id: clientId,
-      in_player_referrer: referrer,
-      in_player_branding_id,
-      in_player_environment,
-      logout_completion_action = "go_back",
-    },
+    configuration: { publisherId, logout_completion_action = "go_back" },
   } = props;
-  const brandingId = React.useMemo(() => {
-    const parsedValue = parseInt(in_player_branding_id);
-    return isNaN(parsedValue) ? null : parsedValue;
-  }, []);
-
   const showParentLock =
     screenStyles?.import_parent_lock === "1" ? true : false;
-
   let stillMounted = true;
 
   useEffect(() => {
+    navigator.hideNavBar();
+
     setupEnvironment();
+    return () => {
+      navigator.showNavBar();
+    };
   }, []);
 
-  function checkIfUserAuthenteficated() {
-    return InPlayerService.isAuthenticated(clientId)
-      .then(async (isAuthenticated) => {
-        let eventMessage = "Account Flow:";
-        const event = logger
-          .createEvent()
-          .setLevel(XRayLogLevel.debug)
-          .addData({ is_authenticated: isAuthenticated });
-
-        if (stillMounted) {
-          if (isAuthenticated) {
-            eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
-            return true;
-          } else {
-            if (showParentLock) {
-              eventMessage = `${eventMessage} not granted, present parent lock`;
-            } else {
-              eventMessage = `${eventMessage} not granted, present login screen`;
-            }
-          }
-        }
-        event.setMessage(eventMessage).send();
-        return false;
-      })
-      .finally(() => {
-        stillMounted && setLoading(false);
-      });
-  }
-
+  useEffect(() => {
+    if (hookType === HookTypeData.USER_ACCOUNT && idToken) {
+      onLogout();
+    }
+  }, [hookType, idToken]);
   async function setupEnvironment() {
-    await setConfig(in_player_environment);
-
-    InPlayerSDK.tokenStorage.overrides = {
-      setItem: async function (
-        defaultTokenKey, // 'inplayer_token'
-        tokenValue
-      ) {
-        await localStorageSet(localStorageTokenKey, tokenValue);
-        await localStorageSetUserAccount(
-          userAccountStorageTokenKey,
-          tokenValue
-        );
-      },
-      getItem: async function () {
-        const token = await localStorageGet(localStorageTokenKey);
-        return token;
-      },
-      removeItem: async function () {
-        await localStorageRemove(localStorageTokenKey);
-        await localStorageRemoveUserAccount(userAccountStorageTokenKey);
-      },
-    };
-
-    setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
-
-    const { token } = await InPlayerSDK.Account.getToken();
-    setIdtoken(token);
+    prepareMiddleware(props?.configuration);
+    const oldToken = await getToken();
+    const newToken = await extendToken({ token: oldToken, publisherId });
+    setLastEmailUsed((await getLastEmailUsed()) || null);
+    setIdtoken(newToken);
 
     logger.debug({
-      message: "Starting InPlayer Plugin",
+      message: "Starting Cleeng Login Plugin",
       data: { configuration: props?.configuration },
     });
 
     if (payload) {
-      const authenticationRequired = isAuthenticationRequired({ payload });
-      const assetId = inPlayerAssetId({
-        payload,
-        configuration: props.configuration,
-      });
+      const testEnvironmentEnabled =
+        props?.configuration?.force_authentication_on_all || "off";
+      const authenticationRequired =
+        testEnvironmentEnabled === "on" || isAuthenticationRequired(payload);
       const logData = {
         authentication_required: authenticationRequired,
-        inplayer_asset_id: assetId,
         configuration: props?.configuration,
       };
-      const isAuthenticated = await checkIfUserAuthenteficated();
-      if (!isAuthenticated && (authenticationRequired || assetId)) {
+
+      if (!newToken && authenticationRequired) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
           data: {
             ...logData,
             hook_type: HookTypeData.PLAYER_HOOK,
-            isAuthenticated,
+            is_authenticated: !!newToken,
           },
         });
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
+        setLoading(false);
       } else {
         logger.debug({
-          message: "InPlayer plugin invocation, finishing hook with: success",
-          data: { ...logData, isAuthenticated },
+          message: "Cleeng plugin invocation, finishing hook with: success",
+          data: { ...logData, is_authenticated: !!newToken },
         });
-        // callback && callback({ success: true, error: null, payload });
+        callback && callback({ success: true, error: null, payload });
       }
     } else {
-      setLoading(false);
       if (!isHook(navigator)) {
+        setLoading(false);
+
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.USER_ACCOUNT}`,
           data: {
@@ -200,6 +140,8 @@ const InPlayerLogin = (props) => {
 
         stillMounted && setHookType(HookTypeData.USER_ACCOUNT);
       } else {
+        setLoading(false);
+
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.SCREEN_HOOK}`,
           data: {
@@ -220,23 +162,25 @@ const InPlayerLogin = (props) => {
     async ({ success }) => {
       let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
-      const event = logger
-        .createEvent()
-        .setLevel(XRayLogLevel.debug)
-        .addData({ success, payload, hook_type: hookType });
+      let data = { success, payload, hook_type: hookType };
 
       if (success) {
-        const token = await localStorageGet(localStorageTokenKey);
-        event.addData({ token });
+        const token = await getToken();
+        data["is_authenticated"] = !!token;
       }
       if (hookType === HookTypeData.USER_ACCOUNT) {
-        event
-          .setMessage(`${eventMessage}, plugin finished task: go back`)
-          .send();
+        logger.debug({
+          message: `${eventMessage}, plugin finished task: go back`,
+          data: data,
+        });
+
         navigator.goBack();
       } else {
         const { callback } = props;
-        event.setMessage(`${eventMessage}, plugin finished task`).send();
+        logger.debug({
+          message: `${eventMessage}, plugin finished task`,
+          data: data,
+        });
         if (payload) {
           let newPayload = payload;
           if (newPayload.extensions) {
@@ -256,7 +200,7 @@ const InPlayerLogin = (props) => {
     [hookType]
   );
 
-  const onLogin = ({ email, password }) => {
+  const onLogin = async ({ email, password }) => {
     stillMounted && setLoading(true);
 
     logger.debug({
@@ -267,11 +211,10 @@ const InPlayerLogin = (props) => {
       },
     });
 
-    InPlayerService.login({
+    signIn({
       email,
       password,
-      clientId,
-      referrer,
+      publisherId,
     })
       .then(() => {
         logger.debug({
@@ -308,22 +251,17 @@ const InPlayerLogin = (props) => {
       },
     });
 
-    InPlayerService.signUp({
-      fullName,
+    signUp({
       email,
       password,
-      clientId,
-      referrer,
-      brandingId,
-      setScreen,
+      publisherId,
     })
       .then(() => {
         logger.debug({
-          message: `Account Creation succeed, fullName: ${fullName}, email: ${email}, password: ${password}`,
+          message: `Account Creation succeed, email: ${email}, password: ${password}`,
           data: {
             email,
             password,
-            fullName,
           },
         });
         accountFlowCallback({ success: true });
@@ -331,7 +269,7 @@ const InPlayerLogin = (props) => {
       .catch(maybeShowAlertToUser(screenLocalizations.signup_title_error_text))
       .catch((error) => {
         logger.error({
-          message: `Account Creation failed, fullName: ${fullName}, email: ${email}, password: ${password}`,
+          message: `Account Creation failed, email: ${email}, password: ${password}`,
           data: {
             email,
             password,
@@ -341,61 +279,6 @@ const InPlayerLogin = (props) => {
         });
         stillMounted && setLoading(false);
       });
-  }
-
-  function onNewPasswordChange({ password, token }) {
-    logger.debug({
-      message: `Set new password task, password: ${password}, token: ${token}`,
-      data: {
-        token,
-        password,
-      },
-    });
-
-    if (token && password) {
-      stillMounted && setLoading(true);
-      InPlayerService.setNewPassword({
-        password,
-        token,
-        brandingId,
-      })
-        .then(() => {
-          logger.debug({
-            message: `Set new password task succeed, password: ${password}, token: ${token}`,
-            data: {
-              password,
-              token,
-            },
-          });
-
-          showAlertToUser({
-            title: screenLocalizations.reset_password_success_title,
-            message: screenLocalizations.reset_password_success_text,
-            type: "success",
-          });
-          stillMounted && setLoading(false);
-          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
-        })
-        .catch((error) => {
-          logger.error({
-            message: `Set new password task failed, password: ${password}, token: ${token}`,
-            data: {
-              password,
-              token,
-              error,
-            },
-          });
-
-          stillMounted && setLoading(false);
-
-          showAlertToUser({
-            title: screenLocalizations.reset_password_error_title,
-            message: screenLocalizations.reset_password_error_text,
-          });
-        });
-    } else {
-      stillMounted && setScreen(AccountComponents.ScreensData.FORGOT_PASSWORD);
-    }
   }
 
   function onForgotPassword({ email, setScreen }) {
@@ -408,16 +291,13 @@ const InPlayerLogin = (props) => {
 
     if (email) {
       stillMounted && setLoading(true);
-      InPlayerService.requestPassword({
+      requestPassword({
         email,
-        clientId,
-        brandingId,
+        publisherId,
       })
-        .then((result) => {
-          const { message } = result;
-
+        .then(() => {
           logger.debug({
-            message: `Request password change task, email: ${email}`,
+            message: `Password request complete, email: ${email}`,
             data: {
               email,
             },
@@ -425,12 +305,11 @@ const InPlayerLogin = (props) => {
 
           showAlertToUser({
             title: screenLocalizations.request_password_success_title,
-            message,
+            message: screenLocalizations.request_password_success_message,
             type: "success",
           });
           stillMounted && setLoading(false);
-          stillMounted &&
-            setScreen(AccountComponents.ScreensData.SET_NEW_PASSWORD);
+          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
         })
         .catch((error) => {
           logger.error({
@@ -445,31 +324,33 @@ const InPlayerLogin = (props) => {
             title: screenLocalizations.request_password_error_title,
             message: screenLocalizations.request_password_error_text,
           });
-          stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
         });
-    } else {
-      stillMounted && setScreen(AccountComponents.ScreensData.LOGIN);
     }
   }
+  const showAlertToUser = useCallback(
+    ({ title, message, type = "warn" }) => {
+      logger.log({
+        message: `Aller will be presented for user title: ${title}, message: ${message}, type: ${type}`,
+        data: {
+          title,
+          message,
+          type,
+        },
+      });
 
-  const showAlertToUser = ({ title, message, type = "warn" }) => {
-    logger.log({
-      message: `Aller will be presented for user title: ${title}, message: ${message}, type: ${type}`,
-      data: {
-        title,
-        message,
-        type,
-      },
-    });
-
-    Platform.isTV || isWebBasedPlatform
-      ? showAlert(title, message)
-      : this.dropDownAlertRef.alertWithType(type, title, message);
-  };
+      if (Platform.isTV || isWebBasedPlatform) {
+        showAlert(title, message);
+      } else {
+        dropDownAlertRef.alertWithType(type, title, message);
+      }
+    },
+    [dropDownAlertRef]
+  );
 
   const maybeShowAlertToUser = (title) => async (error) => {
     const { response } = error;
-    if (response && response.status >= 400 && response.status < 500) {
+
+    if (response && response.status >= 400 && response.status <= 500) {
       const message = response.data.message;
 
       showAlertToUser({ title, message: message });
@@ -493,10 +374,17 @@ const InPlayerLogin = (props) => {
     }
   };
 
-  async function onLogout({ setError }) {
-    const timeout = 1000;
+  const onLogout = useCallback(async () => {
+    setLoading(true);
+    const timeout = 400;
     try {
-      const didLogout = await InPlayerService.signOut();
+      const didLogout = await signOut();
+
+      dropDownAlertRef.alertWithType(
+        "success",
+        "",
+        screenLocalizations?.logout_title_succeed_text
+      );
       if (!didLogout) {
         navigator.goBack();
       }
@@ -504,12 +392,17 @@ const InPlayerLogin = (props) => {
         invokeLogoutCompleteAction();
       }, timeout);
     } catch (error) {
-      setError(error);
+      dropDownAlertRef.alertWithType(
+        "error",
+        screenStyles?.logout_title_fail_text,
+        ""
+      );
+
       setTimeout(() => {
-        invokeCompleteAction();
+        invokeLogoutCompleteAction();
       }, timeout);
     }
-  }
+  }, [dropDownAlertRef]);
 
   function onAccountError({ title, message, type = "warn" }) {
     showAlertToUser({ title, message, type });
@@ -519,11 +412,15 @@ const InPlayerLogin = (props) => {
     accountFlowCallback({ success: false });
   }
 
-  console.log(loading, AccountComponents);
   function renderAccount() {
     return (
-      <>
+      <View
+        style={{ flex: 1, backgroundColor: screenStyles?.background_color }}
+      >
         <AccountComponents.AccountFlow
+          signUpScreen={{
+            nameLabelDisabled: true,
+          }}
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
           backButton={!isHomeScreen(navigator)}
@@ -531,37 +428,21 @@ const InPlayerLogin = (props) => {
           screenLocalizations={screenLocalizations}
           onLogin={onLogin}
           onCreateAccount={onCreateAccount}
-          onNewPasswordChange={onNewPasswordChange}
           onForgotPassword={onForgotPassword}
           onError={onAccountError}
           onHandleBackButton={onAccountHandleBackButton}
           lastEmailUsed={lastEmailUsed}
           {...props}
         />
-        {!Platform.isTV && !isWebBasedPlatform && (
-          <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
-        )}
-        {loading && <AccountComponents.LoadingScreen />}
-      </>
+      </View>
     );
   }
 
   const renderUACFlow = () => {
-    return idToken ? renderLogoutScreen() : renderAccount();
+    return idToken ? null : renderAccount();
   };
 
-  const renderLogoutScreen = () => {
-    return (
-      <AccountComponents.LogoutFlow
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        onLogout={onLogout}
-        {...props}
-      />
-    );
-  };
-
-  function renderFlow() {
+  function renderScreen() {
     switch (hookType) {
       case HookTypeData.PLAYER_HOOK || HookTypeData.SCREEN_HOOK:
         return renderAccount();
@@ -572,6 +453,24 @@ const InPlayerLogin = (props) => {
     }
   }
 
+  function renderFlow() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: screenStyles?.background_color,
+        }}
+      >
+        {renderScreen()}
+        {loading && <AccountComponents.LoadingScreen />}
+
+        {!Platform.isTV && !isWebBasedPlatform && (
+          <DropdownAlert ref={(ref) => setDropDownAlertRef(ref)} />
+        )}
+      </View>
+    );
+  }
+
   return renderFlow();
 };
-export default InPlayerLogin;
+export default Login;
