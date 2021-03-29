@@ -1,6 +1,7 @@
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
+  "dependency_name": "@applicaster/applicaster-cmp-didomi",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Applicaster Didomi",
@@ -25,6 +26,7 @@ function createManifest({ version, platform }) {
     ...baseManifest,
     platform,
     manifest_version: version,
+    dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     project_dependencies: project_dependencies[platform],
