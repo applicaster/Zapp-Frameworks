@@ -17,9 +17,7 @@ function isValidUserName(name) {
 }
 
 function isValidConfirmationPassword(password, passwordConfirmation) {
-  return (
-    !!password && !!passwordConfirmation && password === passwordConfirmation
-  );
+  return !!password && !!passwordConfirmation && (password === passwordConfirmation);
 }
 
 function isValidPasswordLength(password) {
@@ -32,41 +30,31 @@ function isValidPasswordCharacters(password) {
 }
 
 function isValidPassword(password) {
-  return isValidPasswordLength(password) && isValidPasswordCharacters(password);
+  return isValidPasswordLength(password) && isValidPasswordCharacters(password)
 }
 
 function isValidToken(token) {
-  return !!token && token.length > 0;
+  return !!token && token.length > 0
 }
 
-export function validateSignUpData(
-  { fullName = null, email, password, passwordConfirmation },
-  screenLocalizations
-) {
-  if (fullName !== null && !isValidUserName(fullName)) {
+export function validateSignUpData({ fullName, email, password, passwordConfirmation }, screenLocalizations) {
+  if (!isValidUserName(fullName)) {
     return new Error(screenLocalizations.signup_name_validation_error);
   } else if (!isValidEmail(email)) {
     return new Error(screenLocalizations.login_email_validation_error);
   } else if (!isValidPassword(password)) {
     return new Error(screenLocalizations.signup_password_validation_error);
   } else if (!isValidConfirmationPassword(password, passwordConfirmation)) {
-    return new Error(
-      screenLocalizations.signup_password_confirmation_validation_error
-    );
+    return new Error(screenLocalizations.signup_password_confirmation_validation_error);
   }
 }
 
-export function validateNewPassword(
-  { token, password, passwordConfirmation },
-  screenLocalizations
-) {
+export function validateNewPassword({ token, password, passwordConfirmation }, screenLocalizations) {
   if (!isValidToken(token)) {
     return new Error(screenLocalizations.new_password_token_validation_error);
   } else if (!isValidPassword(password)) {
     return new Error(screenLocalizations.signup_password_validation_error);
   } else if (!isValidConfirmationPassword(password, passwordConfirmation)) {
-    return new Error(
-      screenLocalizations.signup_password_confirmation_validation_error
-    );
+    return new Error(screenLocalizations.signup_password_confirmation_validation_error);
   }
 }

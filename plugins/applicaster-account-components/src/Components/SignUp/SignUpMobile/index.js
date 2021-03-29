@@ -25,10 +25,8 @@ const SignUpMobile = (props) => {
 
   const signUp = () => {
     const { createAccount, onSignUpError } = props;
-    const validate = validateSignUpData(
-      { fullName, email, password, passwordConfirmation },
-      screenLocalizations
-    );
+    let itemToValidate = { fullName, email, password, passwordConfirmation };
+    const validate = validateSignUpData(itemToValidate, screenLocalizations);
 
     Keyboard.dismiss();
 
@@ -56,7 +54,7 @@ const SignUpMobile = (props) => {
   const scrollToInput = (reactNode) => {
     this.scroll.props.scrollToFocusedInput(reactNode, 150, 0);
   };
-
+  const nameLabelDisabled = props?.signUpScreen?.nameLabelDisabled;
   return (
     <View style={{ ...container, width: screenWidth }}>
       <BackButton
@@ -78,24 +76,26 @@ const SignUpMobile = (props) => {
           screenStyles={screenStyles}
           title={screenLocalizations.title_font_text}
         />
-        <TextInput
-          onSubmitEditing={() => {
-            this.emailTextInput.focus();
-            scrollToInput(findNodeHandle(this.emailTextInput));
-          }}
-          onFocus={(event) => {
-            scrollToInput(findNodeHandle(event.target));
-          }}
-          blurOnSubmit={false}
-          autoCapitalize="words"
-          placeholder={screenLocalizations.fields_name_text}
-          placeholderTextColor={
-            screenStyles?.fields_placeholder_font_color || "white"
-          }
-          style={textInputStyle}
-          value={fullName}
-          onChangeText={setFullName}
-        />
+        {!nameLabelDisabled && (
+          <TextInput
+            onSubmitEditing={() => {
+              this.emailTextInput.focus();
+              scrollToInput(findNodeHandle(this.emailTextInput));
+            }}
+            onFocus={(event) => {
+              scrollToInput(findNodeHandle(event.target));
+            }}
+            blurOnSubmit={false}
+            autoCapitalize="words"
+            placeholder={screenLocalizations.fields_name_text}
+            placeholderTextColor={
+              screenStyles?.fields_placeholder_font_color || "white"
+            }
+            style={textInputStyle}
+            value={fullName}
+            onChangeText={setFullName}
+          />
+        )}
         <TextInput
           ref={(input) => {
             this.emailTextInput = input;
