@@ -349,7 +349,8 @@ const Login = (props) => {
 
   const maybeShowAlertToUser = (title) => async (error) => {
     const { response } = error;
-    if (response && response.status >= 400 && response.status < 500) {
+
+    if (response && response.status >= 400 && response.status <= 500) {
       const message = response.data.message;
 
       showAlertToUser({ title, message: message });
