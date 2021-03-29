@@ -23,4 +23,8 @@ const NativeScreen = () => {
   );
 };
 
-export default NativeScreen;
+export default {
+  isFlowBlocker: () => true,
+  presentFullScreen: true,
+  Component: NativeScreen,
+};
