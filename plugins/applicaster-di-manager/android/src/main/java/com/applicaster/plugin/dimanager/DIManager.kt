@@ -75,6 +75,12 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
                 } else {
                     LocalStorage.set(jwtStorageKey, token)
                 }
+                val countryCode = json.optString(countryCodeJsonKey)
+                if (countryCode.isNullOrBlank()) {
+                    APLogger.error(TAG, "DIManager plugin received empty country")
+                } else {
+                    LocalStorage.set(countryCodeStorageKey, countryCode)
+                }
             } catch (e: Exception) {
                 APLogger.error(TAG, "DIManager plugin failed to fetch $serverUrl", e)
             } finally {
@@ -93,7 +99,9 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
 
     companion object {
         private const val jwtJsonKey = "jwt"
+        private const val countryCodeJsonKey = "country-code"
         private const val jwtStorageKey = "signedDeviceInfoToken"
+        private const val countryCodeStorageKey = "country_code"
         private const val TAG = "DIManager"
     }
 
