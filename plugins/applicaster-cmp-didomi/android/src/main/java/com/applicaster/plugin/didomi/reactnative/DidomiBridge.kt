@@ -26,9 +26,11 @@ class DidomiBridge(reactContext: ReactApplicationContext)
     fun showPreferences(result: Promise) {
         getPlugin().apply {
             when {
-                isReady() -> showPreferences(
-                        { result.resolve(true) },
-                        currentActivity as AppCompatActivity)
+                isReady() -> getReactApplicationContext().runOnUiQueueThread {
+                    showPreferences(
+                            { result.resolve(true) },
+                            currentActivity as AppCompatActivity)
+                }
                 else -> result.reject("NotReady", "Didomi is not ready")
             }
         }
@@ -38,12 +40,15 @@ class DidomiBridge(reactContext: ReactApplicationContext)
     fun showNotice(result: Promise) {
         getPlugin().apply {
             when {
-                isReady() -> showNotice(
-                        { result.resolve(true) },
-                        currentActivity as AppCompatActivity)
+                isReady() -> getReactApplicationContext().runOnUiQueueThread {
+                    showNotice(
+                            { result.resolve(true) },
+                            currentActivity as AppCompatActivity)
+                }
                 else -> result.reject("NotReady", "Didomi is not ready")
             }
         }
     }
+}
 
 }

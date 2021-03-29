@@ -1,10 +1,8 @@
 import React from "react";
-import {
-  StyleSheet,
-  Dimensions,
-  View,
-} from "react-native";
-
+import { StyleSheet, Dimensions, View } from "react-native";
+import { NativeModules } from "react-native";
+const Didomi = NativeModules?.DidomiBridge;
+const showPreferences = Didomi?.showPreferences;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,19 +10,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,255,0,0.5)",
   },
 });
-
-const NativeScreen = () => {
-  return (
-    <View style={styles.container}>
-    </View>
-  );
-};
-
-export default {
-  isFlowBlocker: () => true,
-  presentFullScreen: true,
-  Component: NativeScreen,
+React.useEffect(() => {
+  (async () => {
+    console.log("didomi", { Didomi, showPreferences });
+    const res = await showPreferences();
+    console.log("didomi res", { res });
+  })();
+}, []);
+export default NativeScreen = () => {
+  return <View style={styles.container}></View>;
 };
