@@ -13,13 +13,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,255,0,0.5)",
   },
 });
-React.useEffect(() => {
-  (async () => {
-    console.log("didomi", { Didomi, showPreferences });
-    const res = await showPreferences();
-    console.log("didomi res", { res });
-  })();
-}, []);
+
 export default NativeScreen = () => {
+  React.useEffect(() => {
+    (async () => {
+      console.log("didomi", { Didomi, showPreferences });
+      const res = await showPreferences();
+      console.log("didomi res", { res });
+    })();
+  }, []);
   return <View style={styles.container}></View>;
 };
