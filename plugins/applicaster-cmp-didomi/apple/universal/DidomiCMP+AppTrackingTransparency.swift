@@ -20,10 +20,11 @@ extension DidomiCMP {
                     completion(AuthorizationStatus(rawValue: status.rawValue) ?? .notDetermined)
                 })
             #else
-            completion(.notDetermined)
+                completion(.notDetermined)
             #endif
         } else {
-            completion(.notDetermined)
+            // prior to iOS 14, tracking identifier can be fetched without request
+            completion(.authorized)
         }
     }
 }

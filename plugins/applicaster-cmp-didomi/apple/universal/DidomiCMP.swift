@@ -17,6 +17,8 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
 
     struct Params {
         static let apiKey = "api_key"
+        static let jsPreferencesKey = "javaScriptForWebView"
+        static let pluginIdentifier = "applicaster-cmp-didomi"
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -77,7 +79,8 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
             self.logger?.verboseLog(message: "Intialization completed successfully")
         }
 
-        requestTrackingAuthorizationWhenApplicable()
+        subscribeToEventListeners()
+        
 
         completion?(true)
     }
@@ -85,46 +88,9 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
     }
-
-    func requestTrackingAuthorizationWhenApplicable() {
-        let didomiEventListener = EventListener()
-        Didomi.shared.addEventListener(listener: didomiEventListener)
-
-        didomiEventListener.onNoticeClickAgree = { _ in
-            // Click on Agree in the notice
-            // Request tracking permission from the user
-            self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
-            }
-        }
-
-        didomiEventListener.onPreferencesClickAgreeToAll = { _ in
-            // Click on Agree to all in the Preferences popup
-            // Request tracking permission from the user
-            self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
-            }
-        }
-    }
 }
+
+
 
 public enum AuthorizationStatus: UInt {
     case notDetermined = 0
