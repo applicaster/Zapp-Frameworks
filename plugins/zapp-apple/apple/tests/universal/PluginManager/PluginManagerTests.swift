@@ -23,65 +23,67 @@ class PluginManagerTests: XCTestCase {
         static let playerPluginsListEmpty = "[PluginManager] - Player plugins not exists"
     }
 
-    var pluginModels: [ZPPluginModel]?
-
-    override func setUpWithError() throws {
-        SessionStorage.sharedInstance.set(key: ZappStorageKeys.pluginConfigurationUrl,
-                                          value: Constants.pluginConfigurationJson,
-                                          namespace: nil)
-
-        pluginInitialization()
-    }
-
     func testAnalyticsPlugins() {
-        let pluginsManager = AnalyticsManager()
-        guard let models = plugins(for: pluginsManager.pluginType) else {
-            XCTAssert(false, ErrorMessages.analyticsPluginsListEmpty)
-            return
-        }
+        pluginsInitialization { (pluginModels) in
+            let pluginsManager = AnalyticsManager()
+            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+                XCTAssert(false, ErrorMessages.analyticsPluginsListEmpty)
+                return
+            }
 
-        XCTAssertTrue(models.count > 0, ErrorMessages.analyticsPluginsListEmpty)
+            XCTAssertTrue(models.count > 0, ErrorMessages.analyticsPluginsListEmpty)
+        }
     }
 
     func testGeneralPlugins() {
-        let pluginsManager = GeneralPluginsManager()
-        guard let models = plugins(for: pluginsManager.pluginType) else {
-            XCTAssert(false, ErrorMessages.generalPluginsListEmpty)
-            return
-        }
+        pluginsInitialization { (pluginModels) in
+            let pluginsManager = GeneralPluginsManager()
+            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+                XCTAssert(false, ErrorMessages.generalPluginsListEmpty)
+                return
+            }
 
-        XCTAssertTrue(models.count > 0, ErrorMessages.generalPluginsListEmpty)
+            XCTAssertTrue(models.count > 0, ErrorMessages.generalPluginsListEmpty)
+        }
+        
     }
 
     func testPlayerPlugins() {
-        let pluginsManager = PlayerPluginsManager()
-        guard let models = plugins(for: pluginsManager.pluginType) else {
-            XCTAssert(false, ErrorMessages.playerPluginsListEmpty)
-            return
-        }
+        pluginsInitialization { (pluginModels) in
+            let pluginsManager = PlayerPluginsManager()
+            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+                XCTAssert(false, ErrorMessages.playerPluginsListEmpty)
+                return
+            }
 
-        XCTAssertTrue(models.count > 0, ErrorMessages.playerPluginsListEmpty)
+            XCTAssertTrue(models.count > 0, ErrorMessages.playerPluginsListEmpty)
+        }
     }
 }
 
 extension PluginManagerTests {
-    func pluginInitialization() {
-        let pluginManager = PluginsManager()
-
+    func pluginsInitialization(_ completion: (([ZPPluginModel]?) -> Void)?) {
+        SessionStorage.sharedInstance.set(key: ZappStorageKeys.pluginConfigurationUrl,
+                                          value: Constants.pluginConfigurationJson,
+                                          namespace: nil)
+        
         let expectation = XCTestExpectation(description: "Download plugins configuration")
 
+        let pluginManager = PluginsManager()
         pluginManager.loadPluginsGroup {
-            self.pluginModels = PluginsManager.parseLatestPluginsJson()
-            XCTAssertNotEqual(self.pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
+            let pluginModels = PluginsManager.parseLatestPluginsJson()
+            XCTAssertNotEqual(pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
+            completion?(pluginModels)
             expectation.fulfill()
         } _: {
             XCTAssert(true, ErrorMessages.pluginsListUnableToLoad)
+            completion?(nil)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: Constants.timeout)
     }
 
-    func plugins(for pluginType: ZPPluginType) -> [ZPPluginModel]? {
+    func plugins(for pluginType: ZPPluginType, in pluginModels: [ZPPluginModel]?) -> [ZPPluginModel]? {
         return pluginModels?.filter({ $0.pluginType == pluginType })
     }
 }

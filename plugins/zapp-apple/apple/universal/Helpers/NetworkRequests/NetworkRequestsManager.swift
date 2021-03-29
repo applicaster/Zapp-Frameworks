@@ -31,20 +31,23 @@ public class NetworkRequestsManager {
             case .request:
                 instance.pendingRequests[url.absoluteString] = content
             case .response:
-                guard url.absoluteString.isEmpty == false,
-                      instance.pendingRequests.keys.contains(url.absoluteString),
-                      let request = instance.pendingRequests.removeValue(forKey: url.absoluteString),
+                let urlString = url.absoluteString
+                guard urlString.isEmpty == false,
+                      instance.pendingRequests.keys.contains(urlString),
                       let response = content[Params.response] as? [String: Any],
                       let statusCode = response[Params.statusCode] as? String else {
                     return
                 }
+
+                let request = instance.pendingRequests[urlString] ?? [:]
+                instance.pendingRequests[urlString] = nil
 
                 instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message): \(url.host ?? "")",
                                             category: NetworkRequestsManagerLogs.request.category,
                                             data: [Params.request: request,
                                                    Params.response: response,
                                                    Params.statusCode: statusCode,
-                                                   Params.url: url.absoluteString])
+                                                   Params.url: urlString])
             }
         }
         Sniffer.start()
