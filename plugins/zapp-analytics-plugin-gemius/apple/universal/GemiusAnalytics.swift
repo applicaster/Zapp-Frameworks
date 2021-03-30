@@ -17,7 +17,7 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
 
     struct Params {
         static let apiKey = "gemius_identifier"
-        static let jsPreferencesKey = "javaScriptForWebView"
+        static let gemiusHitcollectorHost = "https://pro.hit.gemius.pl"
         static let pluginIdentifier = "applicaster-cmp-didomi"
     }
     
@@ -66,11 +66,10 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
         if let gemiusKey = model?.configurationValue(for: Params.apiKey) as? String,
            gemiusKey.isEmpty == false {
-            let configuration = SEGAnalyticsConfiguration(writeKey: gemiusKey)
-            configuration.trackApplicationLifecycleEvents = true
-            configuration.recordScreenViews = false
-
-            SEGAnalytics.setup(with: configuration)
+           
+            GEMAudienceConfig.sharedInstance()?.hitcollectorHost = Params.gemiusHitcollectorHost
+            GEMAudienceConfig.sharedInstance()?.scriptIdentifier = gemiusKey
+            
             objcHelper = GemiusAnalyticsHelper(providerProperties: providerProperties,
                                                 delegate: self)
             completion?(true)

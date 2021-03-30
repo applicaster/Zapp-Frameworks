@@ -61,6 +61,7 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         newParameters["name"] = eventName as NSObject
         newParameters["timestamp"] = getTimestamp() as NSObject
 
+        
         // Pass the event to Segement server
 //        SEGAnalytics.shared()?.track(eventName, properties: newParameters)
     }
