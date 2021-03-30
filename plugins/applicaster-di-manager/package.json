@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/applicaster/Zapp-Frameworks"
   },
+  "dependencies": {
+    "@applicaster/x-ray": "0.2.0"
+  },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "applicaster": {
     "supportedPlatforms": [
