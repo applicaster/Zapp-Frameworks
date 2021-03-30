@@ -114,6 +114,7 @@ const api_apple = {
 const api_android = {
     require_startup_execution: true,
     class_name: "com.applicaster.plugin.didomi.DidomiPlugin",
+    react_packages: ["com.applicaster.plugin.didomi.reactnative.DidomiBridge"],
 }
 
 const api = {
