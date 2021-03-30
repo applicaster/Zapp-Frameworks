@@ -16,7 +16,6 @@ import {
   inPlayerAssetId,
   isAuthenticationRequired,
 } from "../Utils/PayloadUtils";
-import InPlayerSDK from "@inplayer-org/inplayer.js";
 import LoadingScreen from "./LoadingScreen";
 import { showAlert } from "../Utils/Helper";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
@@ -46,7 +45,7 @@ const getRiversProp = (key, rivers = {}) => {
 const localStorageTokenKey = "in_player_token";
 const userAccountStorageTokenKey = "idToken";
 
-const InPlayer = (props) => {
+const CleengStoreFront = (props) => {
   const { store } = useSelector(R.prop("appData"));
 
   const navigator = useNavigation();
@@ -61,51 +60,30 @@ const InPlayer = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   useLayoutEffect(() => {
-    // InPlayerSDK.tokenStorage.overrides = {
-    //   setItem: async function (
-    //     defaultTokenKey, // 'inplayer_token'
-    //     tokenValue
-    //   ) {
-    //     await localStorageSet(localStorageTokenKey, tokenValue);
-    //     await localStorageSetUserAccount(
-    //       userAccountStorageTokenKey,
-    //       tokenValue
-    //     );
-    //   },
-    //   getItem: async function () {
-    //     const token = await localStorageGet(localStorageTokenKey);
-    //     return token;
-    //   },
-    //   removeItem: async function () {
-    //     await localStorageRemove(localStorageTokenKey);
-    //     await localStorageRemoveUserAccount(userAccountStorageTokenKey);
-    //   },
-    // };
-
     setupEnvironment();
   }, []);
 
   async function onRestoreCompleted(restoreData) {
     try {
       setIsLoading(true);
-      await validateRestore({ ...props, restoreData, store });
-      logger.debug({
-        message: "Validation payment completed",
-        data: {
-          payload,
-        },
-      });
-      const newPayload = await assetLoader({
-        props,
-        assetId: itemAssetId,
-        store,
-        retryInCaseFail: true,
-      });
-      if (newPayload) {
-        callback && callback({ success, error, payload: newPayload });
-      } else {
-        setIsLoading(false);
-      }
+      // await validateRestore({ ...props, restoreData, store });
+      // logger.debug({
+      //   message: "Validation payment completed",
+      //   data: {
+      //     payload,
+      //   },
+      // });
+      // const newPayload = await assetLoader({
+      //   props,
+      //   assetId: itemAssetId,
+      //   store,
+      //   retryInCaseFail: true,
+      // });
+      // if (newPayload) {
+      //   callback && callback({ success, error, payload: newPayload });
+      // } else {
+      //   setIsLoading(false);
+      // }
     } catch (error) {
       setIsLoading(false);
     }
@@ -113,24 +91,24 @@ const InPlayer = (props) => {
 
   async function completeStorefrontFlow({ success, error, payload }) {
     try {
-      if (success && !error) {
-        await validatePayment({ ...props, payload, store });
-        const newPayload = await assetLoader({
-          props,
-          assetId: itemAssetId,
-          store,
-          retryInCaseFail: true,
-        });
-        logger.debug({
-          message: "Validation payment completed",
-          data: {
-            payload,
-          },
-        });
-        callback && callback({ success, error, payload: newPayload });
-      } else {
-        callback && callback({ success, error, payload });
-      }
+      // if (success && !error) {
+      //   await validatePayment({ ...props, payload, store });
+      //   const newPayload = await assetLoader({
+      //     props,
+      //     assetId: itemAssetId,
+      //     store,
+      //     retryInCaseFail: true,
+      //   });
+      //   logger.debug({
+      //     message: "Validation payment completed",
+      //     data: {
+      //       payload,
+      //     },
+      //   });
+      //   callback && callback({ success, error, payload: newPayload });
+      // } else {
+      //   callback && callback({ success, error, payload });
+      // }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
 
@@ -146,6 +124,7 @@ const InPlayer = (props) => {
       callback && callback({ success: false, error, payload });
     }
   }
+  
   const setupEnvironment = async () => {
     const {
       configuration: { in_player_environment, in_player_client_id },
@@ -239,4 +218,4 @@ const InPlayer = (props) => {
   );
 };
 
-export default InPlayer;
+export default CleengStoreFront;

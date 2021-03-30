@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "@applicaster/applicaster-storefront-component": "0.0.5",
-    "@inplayer-org/inplayer.js": "3.9.0",
     "@react-native-community/blur": "3.4.1",
     "axios": "^0.19.1",
     "moment": "^2.24.0",
