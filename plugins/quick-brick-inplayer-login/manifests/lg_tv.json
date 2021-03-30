@@ -111,8 +111,8 @@
     "quickbrick"
   ],
   "platform": "lg_tv",
-  "dependency_version": "4.0.4",
-  "manifest_version": "4.0.4",
+  "dependency_version": "5.0.0",
+  "manifest_version": "5.0.0",
   "api": {
     "excludedNodeModules": [
       "react-native-dropdownalert",
