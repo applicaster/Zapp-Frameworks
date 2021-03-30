@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-cleeng-storefront",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "types": "index.d.ts",

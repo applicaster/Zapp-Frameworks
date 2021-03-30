@@ -38,7 +38,7 @@ const getRiversProp = (key, rivers = {}) => {
 };
 
 const CleengStoreFront = (props) => {
-  const { store } = useSelector(R.prop("appData"));
+  // const { store } = useSelector(R.prop("appData"));
   const navigator = useNavigation();
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

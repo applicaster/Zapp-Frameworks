@@ -33,6 +33,13 @@ export interface RestoreData {
   receiptData: RecieptInfo;
 }
 
+export interface RequestCustomData {
+  base_URL_api: string;
+  login_api_endpoint: string;
+  signin_api_endpoint: string;
+  password_reset_api_endpoint: string;
+}
+
 export interface Account {
   getAllSubscriptions(data: SubscriptionsData): Promise<AxiosResponse>;
   purchaseItem(data: PurchaseItemData): Promise<AxiosResponse>;
