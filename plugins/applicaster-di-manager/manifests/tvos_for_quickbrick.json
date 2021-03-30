@@ -48,13 +48,13 @@
   ],
   "identifier": "di_manager_call",
   "npm_dependencies": [
-    "@applicaster/applicaster-di-manager@0.3.2"
+    "@applicaster/applicaster-di-manager@0.3.3"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.3.2",
+  "manifest_version": "0.3.3",
   "extra_dependencies": [
     {
       "ZappDiManager": ":path => './node_modules/@applicaster/applicaster-di-manager/apple/ZappDiManager.podspec'"
