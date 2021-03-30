@@ -19,28 +19,63 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NativeScreen = () => {
+const stylesError = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
+    color: "white",
+    backgroundColor: "rgba(255,0 ,0,0.5)",
+  },
+});
+
+type Props = {
+  screenData: {
+    general: any,
+  },
+};
+
+function renderError(message: string) {
+    // warn used that he did somethign wrong
+    console.error("NativeScreen", message);
+    // todo: in release builds, do not show the error component, just perform the return action
+    // and maybe show some generic non-scare message
+    return <Text style={stylesError.container}>Can not open native screen: {message}</Text>;
+}
+
+export default NativeScreen = (props: Props) => {
+
+  console.log("NativeScreen", "props", props);
 
   // these should come from the screen properties
-  const packageName = "DidomiBridge";
-  const methodName = "showPreferences";
+  const packageName = props?.screenData?.general?.reactPackageName;
+
+  if(!packageName) {
+    // warn used that he did somethign wrong
+    return renderError(`React package name is not set`);
+  }
+
+  const methodName = props?.screenData?.general?.reactMethodName;
+
+  if(!methodName) {
+    // warn used that he did somethign wrong
+    return renderError(`React method name is not set`);
+  }
 
   // todo: handle errors and fire exit action right away after showing some error message for the user
 
   const screenPackage = NativeModules[packageName];
   if(!screenPackage) {
-    // todo: make it red
     // warn used that he did somethign wrong
-    console.error("NativeScreen", `Package ${packageName} is not found`);
-    return <Text style={styles.container}>`Package ${packageName} is not found`</Text>;
+    return renderError(`Package ${packageName} is not found`);
   }
 
   const method = screenPackage[methodName];
   if(!method) {
-    // todo: make it red
     // warn used that he did somethign wrong
-    console.error("NativeScreen", `Method ${methodName} is not found in the package ${packageName}`);
-    return <Text style={styles.container}>`Method ${methodName} is not found in the package ${packageName}`</Text>;
+    return renderError(`Method ${methodName} is not found in the package ${packageName}`);
   }
 
   var navigator = useNavigation();

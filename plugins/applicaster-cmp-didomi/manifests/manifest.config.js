@@ -21,6 +21,23 @@ const baseManifest = {
   targets: ["mobile"],
 };
 
+const general = {
+  fields: [
+    {
+      type: "text_input",
+      key: "reactPackageName",
+      tooltip_text: "React Package Name",
+      default: "",
+    },
+    {
+      type: "text_input",
+      key: "reactMethodName",
+      tooltip_text: "React Method",
+      default: "showScreen",
+    },
+  ]
+}
+
 function createManifest({ version, platform }) {
   const manifest = {
     ...baseManifest,
@@ -35,6 +52,7 @@ function createManifest({ version, platform }) {
     targets: targets[platform],
     ui_frameworks: ui_frameworks[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
+    general
   };
   return manifest;
 }
