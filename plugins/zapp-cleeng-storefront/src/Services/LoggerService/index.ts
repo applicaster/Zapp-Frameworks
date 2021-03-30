@@ -1,6 +1,6 @@
 import XRayLogger from "@applicaster/quick-brick-xray";
 
-export const BaseSubsystem = "plugins/quick-brick-inplayer-storefront";
+export const BaseSubsystem = "plugins/zapp-cleeng-storefront";
 export const BaseCategories = {
   GENERAL: "general",
   LOCAL_STORAGE: "local_storage_wrapper",
@@ -17,18 +17,6 @@ export const Subsystems = {
   STOREFRONT_VALIDATION: `${BaseSubsystem}/storefront_validation`,
 };
 
-export const AccountSubsystems = {
-  SIGN_UP: `${Subsystems.ACCOUNT}/signUp`,
-  FORGOT_PASSWORD: `${Subsystems.ACCOUNT}/forgot_password`,
-  SET_NEW_PASSWORD: `${Subsystems.ACCOUNT}/set_new_password`,
-  PARENT_LOCK: `${Subsystems.ACCOUNT}/parent_lock`,
-};
-
-export const AssetSubsystems = {
-  STOREFRONT: `${Subsystems.ASSET}/storefront`,
-  POLICY: `${Subsystems.ASSET}/licence_policy`,
-};
-
 export function createLogger({ category = "", subsystem }) {
   if (!subsystem) {
     return null;
@@ -38,11 +26,3 @@ export function createLogger({ category = "", subsystem }) {
   loggers[subsystem] = logger;
   return logger;
 }
-
-export function addContext(context) {
-  for (const logger of Object.values(loggers)) {
-    logger.addContext(context);
-  }
-}
-
-export const XRayLogLevel = XRayLogger.logLevels;
