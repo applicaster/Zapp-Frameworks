@@ -10,8 +10,15 @@ const baseManifest = {
     {
       section: "configuration",
       type: "text",
-      key: "gemius_identifier",
-      tooltip_text: "Gemius Identifier",
+      key: "script_identifier",
+      tooltip_text: "Script Identifier",
+      default: "",
+    },
+    {
+      section: "configuration",
+      type: "text",
+      key: "hit_collector_host",
+      tooltip_text: "Collector Host",
       default: "",
     },
     {

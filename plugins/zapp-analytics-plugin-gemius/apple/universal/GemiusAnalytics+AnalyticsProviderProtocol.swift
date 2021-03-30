@@ -6,8 +6,8 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import GemiusSDK
 import Foundation
+import GemiusSDK
 import ZappCore
 
 extension GemiusAnalytics: AnalyticsProviderProtocol {
@@ -61,9 +61,13 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         newParameters["name"] = eventName as NSObject
         newParameters["timestamp"] = getTimestamp() as NSObject
 
-        
-        // Pass the event to Segement server
-//        SEGAnalytics.shared()?.track(eventName, properties: newParameters)
+        // Send evendt
+        let event = GEMAudienceEvent()
+        event.eventType = .EVENT_FULL_PAGEVIEW
+        for (key, value) in newParameters {
+            event.addExtraParameter(key, value: "\(value)")
+        }
+        event.send()
     }
 
     func trackEvent(_ eventName: String, timed: Bool) {

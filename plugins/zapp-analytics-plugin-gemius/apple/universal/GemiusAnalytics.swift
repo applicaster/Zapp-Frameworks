@@ -6,9 +6,9 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import GemiusSDK
 import AVFoundation
 import Foundation
+import GemiusSDK
 import ZappCore
 
 class GemiusAnalytics: NSObject, PluginAdapterProtocol {
@@ -16,11 +16,11 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     open var configurationJSON: NSDictionary?
 
     struct Params {
-        static let apiKey = "gemius_identifier"
-        static let gemiusHitcollectorHost = "https://pro.hit.gemius.pl"
-        static let pluginIdentifier = "applicaster-cmp-didomi"
+        static let scriptIdentifier = "script_identifier"
+        static let hitCollectorHost = "hit_collector_host"
+        static let pluginIdentifier = "applicaster-cmp-gemius"
     }
-    
+
     public var model: ZPPluginModel?
     public var providerName: String {
         return getKey()
@@ -33,10 +33,8 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     var isDisabled = false
     var playbackStalled: Bool = false
     public var playerPlugin: PlayerProtocol?
-    var objcHelper: GemiusAnalyticsHelper?
     var playerRateObserverPointerString: UInt?
-    
-    
+
     lazy var ignoredEvents: [String] = {
         guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
               eventsListString.isEmpty == false else {
@@ -45,17 +43,21 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
         return eventsListString.components(separatedBy: ",").map { $0.lowercased() }
     }()
 
-    /*
-         track lets you record the actions your users perform.
-         Every action triggers what we call an “event”, which can also have associated properties.
-
-         To get started, our SDK can automatically track a few key common events with our Native Mobile Spec,
-         such as the Application Installed, Application Updated and Application Opened. Simply enable this option during initialization.
-
-         You’ll also want to track events that are indicators of success for your mobile app,
-         like Signed Up, Item Purchased or Article Bookmarked.
-         We recommend tracking just a few important events. You can always add more later!
-     */
+    lazy var scriptIdentifier: String = {
+        guard let scriptIdentifier = model?.configurationValue(for: Params.scriptIdentifier) as? String else {
+            return ""
+        }
+        return scriptIdentifier
+    }()
+    
+    lazy var hitCollectorHost: String = {
+        guard let hitCollectorHost = model?.configurationValue(for: Params.hitCollectorHost) as? String else {
+            return ""
+        }
+        return hitCollectorHost
+    }()
+    
+    var gemiusPlayerObject: GSMPlayer?
 
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
@@ -64,14 +66,19 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     }
 
     public func prepareProvider(_ defaultParams: [String: Any], completion: ((Bool) -> Void)?) {
-        if let gemiusKey = model?.configurationValue(for: Params.apiKey) as? String,
-           gemiusKey.isEmpty == false {
-           
-            GEMAudienceConfig.sharedInstance()?.hitcollectorHost = Params.gemiusHitcollectorHost
-            GEMAudienceConfig.sharedInstance()?.scriptIdentifier = gemiusKey
+        if scriptIdentifier.isEmpty == false,
+           hitCollectorHost.isEmpty == false {
+            GEMAudienceConfig.sharedInstance()?.hitcollectorHost = hitCollectorHost
+            GEMAudienceConfig.sharedInstance()?.scriptIdentifier = scriptIdentifier
+            GEMConfig.sharedInstance()?.loggingEnabled = isDebug()
+
+            if let appName = FacadeConnector.connector?.applicationData?.bundleName(),
+               appName.isEmpty == false,
+               let appVersion = FacadeConnector.connector?.storage?.sessionStorageValue(for: "version_name", namespace: nil),
+               appVersion.isEmpty == false {
+                GEMConfig.sharedInstance()?.setAppInfo(appName, version: appVersion)
+            }
             
-            objcHelper = GemiusAnalyticsHelper(providerProperties: providerProperties,
-                                                delegate: self)
             completion?(true)
         } else {
             disable(completion: completion)
@@ -98,14 +105,12 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     func shoudIgnoreEvent(_ eventName: String) -> Bool {
         return ignoredEvents.contains(eventName.lowercased())
     }
-}
+    
+    func isDebug() -> Bool {
+        guard let value = FacadeConnector.connector?.applicationData?.isDebugEnvironment() else {
+            return false
+        }
 
-extension GemiusAnalytics {
-    @objc public func login(with identity: String,
-                            traits: [String: Any]?,
-                            options: [String: Any]?) {
-        SEGAnalytics.shared()?.identify(identity,
-                                        traits: traits,
-                                        options: options)
+        return Bool(value)
     }
 }

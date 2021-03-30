@@ -8,6 +8,7 @@
 
 import AVFoundation
 import Foundation
+import GemiusSDK
 import ZappCore
 
 extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol {
@@ -16,35 +17,44 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
     }
 
     var currentPlayerPosition: Double {
-        return getCurrentPlayerInstance()?.currentItem?.currentTime().seconds ?? 0.00
+        return avPlayer?.currentItem?.currentTime().seconds ?? 0.00
     }
-    
-    var lastSavedPlayerPosition: Double {
-        return objcHelper?.playerPlayedTime ?? 0.0
+
+    var entryId: String {
+        return playerPlugin?.entry?["id"] as? String ?? ""
     }
-    
-    var lastSavedAdPosition: Double {
-        return objcHelper?.adPlayedTime ?? 0.00
+
+    var entryTitle: String {
+        return playerPlugin?.entry?["title"] as? String ?? ""
     }
-    
+
     public func playerDidFinishPlayItem(player: PlayerProtocol, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        objcHelper?.playerPlayedTime = 0.00
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleAccessLogEntry(notification:)),
                                                name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
                                                object: nil)
 
-        if #available(tvOS 13.0, *) {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(handleMediaSelectionChange(notification:)),
-                                                   name: AVPlayerItem.mediaSelectionDidChangeNotification,
-                                                   object: nil)
+        gemiusPlayerObject = GSMPlayer(id: getKey(),
+                                       withHost: hitCollectorHost,
+                                       withGemiusID: scriptIdentifier,
+                                       with: nil)
+
+        let data = GSMProgramData()
+
+        // set item title
+        data.name = entryTitle
+
+        // set item duration
+        if let duration = avPlayer?.currentItem?.duration.seconds {
+            data.duration = NSNumber(value: Int(duration))
         }
+
+        // set program data
+        gemiusPlayerObject?.newProgram(entryId, with: data)
     }
 
     public func playerDidDismiss(player: PlayerProtocol) {
@@ -55,21 +65,16 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
                                         context: nil)
             playerRateObserverPointerString = nil
         }
+
+        gemiusPlayerObject?.program(.COMPLETE,
+                                    forProgram: entryId,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
         
-        objcHelper?.prepareEventPlayerDidFinishPlayItem { eventName, parameters in
-            let trackParameters = parameters as? [String: NSObject] ?? [:]
-            self.trackEvent(eventName, parameters: trackParameters)
-        }
     }
 
     public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
-        let heartbeatDelay = 15.0
-        if lastSavedPlayerPosition + heartbeatDelay < currentTime {
-            objcHelper?.prepareEventPlayerPlaybackProgress(currentTime) { eventName, parameters in
-                let trackParameters = parameters as? [String: NSObject] ?? [:]
-                self.trackEvent(eventName, parameters: trackParameters)
-            }
-        }
+
     }
 
     @objc func handleAccessLogEntry(notification: NSNotification) {
@@ -86,26 +91,11 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
         if let avPlayer = avPlayer {
             playerRateObserverPointerString = UInt(bitPattern: ObjectIdentifier(avPlayer))
         }
-        
-        objcHelper?.prepareEventPlayerDidStartPlayItem { eventName, parameters in
-            let trackParameters = parameters as? [String: NSObject] ?? [:]
-            self.trackEvent(eventName, parameters: trackParameters)
-        }
-    }
 
-    @objc func handleMediaSelectionChange(notification: NSNotification) {
-        objcHelper?.prepareEventPlayerMediaSelectionChange(with: notification as Notification,
-                                                           completion: { parameters in
-                                                               if let parameters = parameters as? [String: NSObject] {
-                                                                   // post subtitles change
-                                                                   var eventName = "Subtitle Language Changed"
-                                                                   self.trackEvent(eventName, parameters: parameters)
-
-                                                                   // post audio change
-                                                                   eventName = "Audio Language Selected"
-                                                                   self.trackEvent(eventName, parameters: parameters)
-                                                               }
-                                                           })
+        gemiusPlayerObject?.program(.PLAY,
+                                    forProgram: entryId,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
     }
 
     override public func observeValue(forKeyPath keyPath: String?,
@@ -119,18 +109,19 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
 
             if currentPlayerPosition > 5 {
                 if playbackStalled, player.rate > 0 {
-                    objcHelper?.prepareEventPlayerResumePlayback { eventName, parameters in
-                        let trackParameters = parameters as? [String: NSObject] ?? [:]
-                        self.trackEvent(eventName, parameters: trackParameters)
-                    }
+                    gemiusPlayerObject?.program(.PLAY,
+                                                forProgram: entryId,
+                                                atOffset: NSNumber(value: currentPlayerPosition),
+                                                with: nil)
                     playbackStalled = false
                 }
                 // if paused
                 else if !playbackStalled, player.rate == 0 {
-                    objcHelper?.prepareEventPlayerPausePlayback { eventName, parameters in
-                        let trackParameters = parameters as? [String: NSObject] ?? [:]
-                        self.trackEvent(eventName, parameters: trackParameters)
-                    }
+                    gemiusPlayerObject?.program(.PAUSE,
+                                                forProgram: entryId,
+                                                atOffset: NSNumber(value: currentPlayerPosition),
+                                                with: nil)
+                    
                     playbackStalled = true
                 }
             }
