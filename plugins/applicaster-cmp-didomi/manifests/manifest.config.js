@@ -24,13 +24,13 @@ const baseManifest = {
 const general = {
   fields: [
     {
-      type: "text_input",
+      type: "hidden",
       key: "reactPackageName",
       tooltip_text: "React Package Name",
       default: "",
     },
     {
-      type: "text_input",
+      type: "hidden",
       key: "reactMethodName",
       tooltip_text: "React Method",
       default: "showScreen",
