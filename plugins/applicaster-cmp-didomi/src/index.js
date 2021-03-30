@@ -37,11 +37,12 @@ type Props = {
   },
 };
 
-function renderError(message: string) {
-    // warn used that he did somethign wrong
+function renderError(message: string, onDismiss: () => void) {
     console.error("NativeScreen", message);
-    // todo: in release builds, do not show the error component, just perform the return action
-    // and maybe show some generic non-scare message
+    // todo: in release builds, do not show the error component, just perform the onDismiss action and show some generic not scaring message.
+
+    // warn zapp user that he did somethign wrong
+    // todo: add a button with onDismiss callback
     return <Text style={stylesError.container}>Can not open native screen: {message}</Text>;
 }
 
@@ -49,19 +50,30 @@ export default NativeScreen = (props: Props) => {
 
   console.log("NativeScreen", "props", props);
 
+  const onDismiss = () => {
+    // todo: this exit action should be customizible: go back or go home/other screen
+    if(navigator.canGoBack()) {
+      navigator.goBack();
+    } else {
+      // else log a warning, since it gives bad UX
+      console.warn("Can't bo back")
+      navigator.goHome();
+    }
+  };
+
   // these should come from the screen properties
   const packageName = props?.screenData?.general?.reactPackageName;
 
   if(!packageName) {
     // warn used that he did somethign wrong
-    return renderError(`React package name is not set`);
+    return renderError(`React package name is not set`, onDismiss);
   }
 
   const methodName = props?.screenData?.general?.reactMethodName;
 
   if(!methodName) {
     // warn used that he did somethign wrong
-    return renderError(`React method name is not set`);
+    return renderError(`React method name is not set`, onDismiss);
   }
 
   // todo: handle errors and fire exit action right away after showing some error message for the user
@@ -69,13 +81,13 @@ export default NativeScreen = (props: Props) => {
   const screenPackage = NativeModules[packageName];
   if(!screenPackage) {
     // warn used that he did somethign wrong
-    return renderError(`Package ${packageName} is not found`);
+    return renderError(`Package ${packageName} is not found`, onDismiss);
   }
 
   const method = screenPackage[methodName];
   if(!method) {
     // warn used that he did somethign wrong
-    return renderError(`Method ${methodName} is not found in the package ${packageName}`);
+    return renderError(`Method ${methodName} is not found in the package ${packageName}`, onDismiss);
   }
 
   var navigator = useNavigation();
@@ -86,14 +98,7 @@ export default NativeScreen = (props: Props) => {
       const res = await method();
       // todo: obtain result as optional object
       // todo: handle errors and fire exit action right away after showing some error message for the user
-      // todo: this exit action should be customizible: go back or go home/other screen
-      if(navigator.canGoBack()) {
-        navigator.goBack();
-      } else {
-        // else log a warning, since it gives bad UX
-        console.warn("Can't bo back")
-        navigator.goHome();
-      }
+      onDismiss();
     })();
   }, []);
   return <View style={styles.container}></View>;
