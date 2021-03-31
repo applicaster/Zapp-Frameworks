@@ -24,7 +24,8 @@
     "apple",
     "android",
     "src",
-    "lib"
+    "lib",
+    "ui_customization"
   ],
   "applicaster": {
     "supportedPlatforms": [

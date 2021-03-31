@@ -71,7 +71,7 @@ const api_apple = {
 const api_android = {
   class_name: "com.applicaster.reactnative.plugins.APReactNativeAdapter",
   react_packages: [
-    "com.applicaster.localnotifications.reactnative.LocalNotificationPackage",
+    "com.theoplayerreactnative.TheoPlayerPackage",
   ],
 };
 const api = {
