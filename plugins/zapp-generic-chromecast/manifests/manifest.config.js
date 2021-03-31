@@ -72,8 +72,8 @@ function createManifest({ version, platform }) {
 }
 const min_zapp_sdk = {
   android: "20.0.0",
-  tvos_for_quickbrick: "4.0.0-Dev",
-  ios_for_quickbrick: "4.0.0-Dev",
+  tvos_for_quickbrick: "4.1.0-Dev",
+  ios_for_quickbrick: "4.1.0-Dev",
   android_for_quickbrick: "1.0.0-Dev",
 };
 
@@ -91,7 +91,6 @@ const api_android = {
   roguard_rules: "-keep public class com.reactnative.googlecast.** {*;}",
 };
 const api = {
-  ios: api_apple,
   ios_for_quickbrick: api_apple,
   android: api_android,
   android_for_quickbrick: api_android,

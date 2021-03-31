@@ -63,13 +63,6 @@ public class LoggerAssistanceManager {
         logger?.debugLog(template: LoggerAssistanceManagerLogs.remoteLoggingPresentAuthentication)
     }
 
-    public func showXrayButtonOnScreen(with params: [String: Any],
-                                       on rootController: RootController?) {
-        guard let rootController = rootController else {
-            return
-        }
-    }
-
     fileprivate func resetToDefaultRemoteLoggingState() {
         SettingsBundleHelper.setSettingsBundleBoolValue(forKey: .loggerAssistanceRemoteEventsLogging,
                                                         value: false)

@@ -1,6 +1,6 @@
 {
   "name": "ZappApple",
-  "version": "1.4.2",
+  "version": "1.7.3",
   "summary": "Framework that has general logic of the Zapp Apple application",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/AppleApplicasterFrameworks.git",
-    "tag": "@@applicaster/zapp-apple/1.4.2"
+    "tag": "@@applicaster/zapp-apple/1.7.3"
   },
   "static_framework": true,
   "ios": {
@@ -47,7 +47,7 @@
       "= 5.0.0"
     ],
     "DeviceKit": [
-      "= 4.2.1"
+      "= 4.3.0"
     ],
     "XrayLogger": []
   },
@@ -56,7 +56,13 @@
     {
       "name": "UnitTests",
       "test_type": "unit",
-      "source_files": "Tests/**"
+      "ios": {
+        "source_files": "tests/ios/**/*.{swift}"
+      },
+      "tvos": {
+        "source_files": "tests/tvos/**/*.{swift}"
+      },
+      "source_files": "tests/universal/**/*.{swift}"
     }
   ],
   "swift_version": "5.1"

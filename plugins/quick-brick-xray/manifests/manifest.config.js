@@ -17,7 +17,7 @@ const baseManifest = {
   min_zapp_sdk: "0.0.1",
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
-  preload: true,
+  preload: false,
   custom_configuration_fields: [],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
@@ -157,8 +157,8 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  tvos_for_quickbrick: "2.0.2-dev",
-  ios_for_quickbrick: "2.0.2-dev",
+  tvos_for_quickbrick: "4.1.0-dev",
+  ios_for_quickbrick: "4.1.0-dev",
   android_for_quickbrick: "0.1.0-alpha1",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
@@ -201,7 +201,7 @@ function extra_npm_dependencies(platform) {
     platform === "android_tv_for_quickbrick" ||
     platform === "amazon_fire_tv_for_quickbrick"
   ) {
-    return ["@applicaster/x-ray@0.1.3"];
+    return ["@applicaster/x-ray@0.1.7"];
   }
   return [];
 }

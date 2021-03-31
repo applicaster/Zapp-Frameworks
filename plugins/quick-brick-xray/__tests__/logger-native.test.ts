@@ -69,6 +69,7 @@ describe("when XRay Native Module exists", () => {
         SayMyName,
         ClassSayMyName,
       ],
+      exception: new Error("foo"),
     };
 
     logger.log(invalidEvent);
@@ -88,6 +89,7 @@ describe("when XRay Native Module exists", () => {
                 "function ClassSayMyName",
               ],
             },
+            "exception": "foo",
             "level": 0,
             "message": "event with invalid data and context types",
             "subsystem": "SUBSYSTEM",
@@ -115,7 +117,7 @@ describe("when XRay Native Module exists", () => {
             "category": "CATEGORY",
             "context": Object {},
             "data": Object {},
-            "error": [Error: this is an error],
+            "exception": "this is an error",
             "level": 4,
             "message": "this is an error",
             "subsystem": "SUBSYSTEM",

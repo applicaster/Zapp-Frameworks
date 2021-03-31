@@ -1,0 +1,53 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderAdobe",
+    "modules": [
+      "ZappAnalyticsPluginAdobe"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Adobe Analytics",
+  "description": "Adobe Analytics provider",
+  "cover_image": "",
+  "type": "analytics",
+  "identifier": "AdobeAnalyticsAgent",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "4.1.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": false,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "label": "account id debug",
+      "key": "mobile_app_account_id"
+    },
+    {
+      "type": "text",
+      "label": "account id production",
+      "key": "mobile_app_account_id_production"
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "tvos_for_quickbrick",
+  "manifest_version": "1.2.2",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginAdobe": ":path => './node_modules/@applicaster/zapp-analytics-plugin-adobe/apple/ZappAnalyticsPluginAdobe.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-adobe@1.2.2"
+  ]
+}

@@ -21,7 +21,7 @@
   "min_zapp_sdk": "20.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [],
   "targets": [
     "mobile"
@@ -30,9 +30,9 @@
     "quickbrick"
   ],
   "platform": "android",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.1.0",
   "npm_dependencies": [
-    "@applicaster/zapp_local_notifications@1.0.0"
+    "@applicaster/zapp_local_notifications@1.1.0"
   ],
   "project_dependencies": [
     {

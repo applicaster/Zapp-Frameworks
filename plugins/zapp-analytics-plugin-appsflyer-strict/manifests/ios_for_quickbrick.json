@@ -1,0 +1,58 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "APAnalyticsProviderAppsFlyer",
+    "modules": [
+      "ZappAnalyticsPluginAppsFlyer"
+    ]
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "AppsFlyer Strict Mode",
+  "description": "AppsFlyer Analytics provider with strict mode SDK to completely remove IDFA collection functionality and AdSupport framework dependencies",
+  "cover_image": "",
+  "type": "analytics",
+  "screen": false,
+  "react_native": false,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "4.1.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": false,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "appsflyer_key"
+    },
+    {
+      "type": "text",
+      "key": "apple_app_id"
+    },
+    {
+      "type": "text",
+      "key": "plist.SKAdNetworkItems",
+      "label": "SKAdNetworks",
+      "initial_value": "",
+      "tooltip_text": "List of supported SKAdNetworks separated by comma"
+    }
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "identifier": "AppsFlyer-Strict",
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "10.2.0",
+  "extra_dependencies": [
+    {
+      "ZappAnalyticsPluginAppsFlyer/Strict": ":path => './node_modules/@applicaster/zapp-analytics-plugin-appsflyer/apple/ZappAnalyticsPluginAppsFlyer.podspec'"
+    }
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-appsflyer-strict@10.2.0"
+  ]
+}

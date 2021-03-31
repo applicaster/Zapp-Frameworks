@@ -1,12 +1,12 @@
 package com.applicaster.iap.reactnative.utils
 
 
-import android.util.Log
 import com.applicaster.iap.reactnative.IAPBridge
 import com.applicaster.iap.uni.api.IAPListener
 import com.applicaster.iap.uni.api.IBillingAPI
 import com.applicaster.iap.uni.api.Purchase
 import com.applicaster.iap.uni.api.Sku
+import com.applicaster.util.APLogger
 import com.facebook.react.bridge.Promise
 
 abstract class PromiseListener(protected val promise: Promise) : IAPListener {
@@ -40,7 +40,7 @@ abstract class PromiseListener(protected val promise: Promise) : IAPListener {
             reportError("PurchaseAcknowledge", result, description)
 
     private fun reportError(operation: String, result: IBillingAPI.IAPResult, description: String) {
-        Log.e(IAPBridge.TAG, "$operation failed with result $result: $description")
+        APLogger.error(IAPBridge.TAG, "$operation failed with result $result: $description")
         promise.reject(result.toString(), description)
     }
 }

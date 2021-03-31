@@ -9,14 +9,10 @@ import com.facebook.react.uimanager.ViewManager
 import java.util.*
 
 class CustomSegmentAPIPackage : ReactPackage {
-    override fun createNativeModules(reactContext: ReactApplicationContext): MutableList<NativeModule> {
-        val modules: MutableList<NativeModule> = ArrayList()
-        modules.add(SegmentAPI(reactContext))
 
-        return modules
-    }
+    override fun createNativeModules(reactContext: ReactApplicationContext): MutableList<NativeModule> =
+            mutableListOf(SegmentAPI(reactContext))
 
-    override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<View, ReactShadowNode<*>>> {
-        return Collections.emptyList()
-    }
+    override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<View, ReactShadowNode<*>>> =
+            Collections.emptyList()
 }

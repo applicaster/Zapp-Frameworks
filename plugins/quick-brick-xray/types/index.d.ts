@@ -1,4 +1,13 @@
-type AnyDictionary = { [K in string]: any };
+type AnyDictionary = { [key: string]: any };
+
+type SafeNativeType =
+  | string
+  | number
+  | boolean
+  | SafeNativeType[]
+  | { [key: string]: SafeNativeType };
+
+type SafeNativeDictionary = { [key: string]: SafeNativeType };
 
 declare module "@applicaster/quick-brick-xray";
 
@@ -11,15 +20,18 @@ declare enum XRayLogLevel {
   error = 4,
 }
 
-declare type XRayEvent = {
-  category: string;
-  subsystem: string;
+declare type XRayEventData = {
   message: string;
   data?: AnyDictionary;
   context?: AnyDictionary;
   exception?: Error;
   jsOnly?: boolean;
 };
+
+declare type XRayEvent = {
+  category: string;
+  subsystem: string;
+} & XRayEventData;
 
 declare type XRayLogEvent<XRayLogLevel> = XRayEvent & {
   level: XRayLogLevel;
@@ -39,18 +51,18 @@ declare type XRayNativeEvent =
   | XRayErrorEvent;
 
 declare interface XRayLoggerNativeBridgeI {
-  logEvent: any;
+  logEvent(XRayNativeEvent): void;
 }
 
 declare interface XRayEventI {
   logger: XRayLoggerI;
   level: XRayLogLevel;
   message: string;
-  data: AnyDictionary;
+  data: SafeNativeDictionary;
   error?: Error;
   setLevel(level: XRayLogLevel): this;
   setMessage(message: string): this;
-  addData(data: AnyDictionary): this;
+  addData(data: SafeNativeDictionary): this;
   attachError(error: Error): this;
   send(): void;
 }
@@ -58,8 +70,8 @@ declare interface XRayEventI {
 declare interface XRayLoggerI {
   category: string;
   subsystem: string;
-  context: AnyDictionary;
-  getContext(): AnyDictionary;
+  context: SafeNativeDictionary;
+  getContext(): SafeNativeDictionary;
   log(event: XRayEvent): void;
   debug(event: XRayEvent): void;
   info(event: XRayEvent): void;

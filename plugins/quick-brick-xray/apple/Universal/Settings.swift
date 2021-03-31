@@ -28,6 +28,8 @@ struct Settings {
     var showXrayFloatingButtonEnabled: Bool = false
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
+    var networkRequestsIgnoredExtensions: [String] = []
+    var networkRequestsIgnoredDomains:[String] = []
 
     var isCustomSettingsExpired: Bool {
         guard let customSettingsOffsetToDisable = customSettingsOffsetToDisable else {

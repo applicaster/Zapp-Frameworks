@@ -21,7 +21,7 @@
   "min_zapp_sdk": "2.0.2-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -61,13 +61,13 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "8.0.0",
+  "manifest_version": "8.1.0",
   "extra_dependencies": [
     {
       "ZappAnalyticsPluginComScore": ":path => './node_modules/@applicaster/zapp-analytics-plugin-comscore/apple/ZappAnalyticsPluginComScore.podspec'"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-comscore@8.0.0"
+    "@applicaster/zapp-analytics-plugin-comscore@8.1.0"
   ]
 }

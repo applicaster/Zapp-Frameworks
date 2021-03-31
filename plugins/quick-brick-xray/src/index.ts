@@ -5,12 +5,6 @@ import { Event } from "./Event";
 import { XRayLogLevel as LogLevel } from "./logLevels";
 import { applyConditions, wrapInObject } from "./utils";
 
-type XRayEventData = {
-  message: string;
-  data?: AnyDictionary;
-  error?: Error;
-};
-
 export const XRayLogLevel = LogLevel;
 
 export default class Logger implements XRayLoggerI {
@@ -92,9 +86,9 @@ export default class Logger implements XRayLoggerI {
   }
 
   error(event: Error | XRayEventData) {
-    const logEvent = R.is(Error, event)
-      ? { error: event, message: event.message }
-      : event;
+    const logEvent: XRayEventData = R.is(Error, event)
+      ? { exception: event as Error, message: event.message }
+      : (event as XRayEventData);
 
     logger.error({
       category: this.category,
@@ -104,7 +98,7 @@ export default class Logger implements XRayLoggerI {
     });
   }
 
-  getContext(): AnyDictionary {
+  getContext(): SafeNativeDictionary {
     return Object.assign({}, this.parent?.getContext() || {}, this.context);
   }
 
@@ -114,7 +108,7 @@ export default class Logger implements XRayLoggerI {
         {},
         this.getContext(),
         applyConditions(wrapInObject(context, "context"))
-      );
+      ) as SafeNativeDictionary;
 
       this.context = newContext;
     } catch (e) {

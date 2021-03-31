@@ -14,7 +14,7 @@
     "5ae06cef8fba0f00084bd3c6",
     "572a0a65373163000b000000"
   ],
-  "min_zapp_sdk": "4.0.0-Dev",
+  "min_zapp_sdk": "4.1.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": false,
@@ -36,8 +36,8 @@
   "identifier": "chromecast_qb",
   "platform": "ios_for_quickbrick",
   "dependency_name": "@applicaster/zapp-generic-chromecast",
-  "dependency_version": "1.0.2",
-  "manifest_version": "1.0.2",
+  "dependency_version": "1.1.4",
+  "manifest_version": "1.1.4",
   "api": {
     "class_name": "ChromecastAdapter",
     "modules": [
@@ -48,7 +48,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-generic-chromecast@1.0.2"
+    "@applicaster/zapp-generic-chromecast@1.1.4"
   ],
   "targets": [
     "mobile"

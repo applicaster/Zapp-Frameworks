@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginChartbeat",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "platforms": {
     "ios": "12.0"
   },
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-chartbeat/9.0.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-chartbeat/9.1.0"
   },
   "requires_arc": true,
   "public_header_files": "ios/**/*.h",

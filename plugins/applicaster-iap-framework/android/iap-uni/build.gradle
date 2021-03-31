@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+import org.gradle.util.VersionNumber
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -29,7 +31,25 @@ android {
     }
 }
 
+def safeExtGet(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
+}
+
 dependencies {
+
+    // Applicaster SDK
+    if (!findProject(':applicaster-android-sdk') || project.hasProperty('forceClosedDependencies')) {
+        def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '6.3.0')
+        api ("com.applicaster:applicaster-android-sdk-core:${sdkVersion}")
+    }
+    else {
+        api project(':applicaster-android-sdk')
+    }
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'

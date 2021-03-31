@@ -16,7 +16,7 @@
   "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "type": "text",
@@ -31,13 +31,13 @@
   ],
   "identifier": "AppsFlyer",
   "platform": "android_for_quickbrick",
-  "manifest_version": "10.0.0",
+  "manifest_version": "10.2.0",
   "project_dependencies": [
     {
       "zapp-analytics-plugin-appsflyer": "node_modules/@applicaster/zapp-analytics-plugin-appsflyer/android"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-appsflyer@10.0.0"
+    "@applicaster/zapp-analytics-plugin-appsflyer@10.2.0"
   ]
 }

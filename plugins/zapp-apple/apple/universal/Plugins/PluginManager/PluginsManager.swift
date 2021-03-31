@@ -35,7 +35,7 @@ public class PluginsManager: NSObject {
 
         pluginLoaderCompletion = completion
         pluginsStateMachine = LoadingStateMachine(dataSource: self,
-                                                  withStates: preapareLoadingPluginStates())
+                                                  withStates: prepareLoadingPluginStates())
         pluginsStateMachine.startStatesInvocation()
     }
 

@@ -11,7 +11,7 @@ const actionButtonContainerStyle = (screenStyles, customStyle) => {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: screenStyles?.action_button_background_color || "#F1AD12",
-    borderRadius: 10,
+    borderRadius: screenStyles?.action_button_border_radius,
     alignSelf: "center",
   };
 

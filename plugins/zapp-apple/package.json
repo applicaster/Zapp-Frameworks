@@ -1,20 +1,23 @@
 {
   "name": "@applicaster/zapp-apple",
-  "version": "1.4.2",
+  "version": "1.7.3",
   "description": "ZappApple",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/applicaster/AppleApplicasterFrameworks"
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks.git"
+  },
+  "dependencies": {
+    "@applicaster/x-ray": "0.2.0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/applicaster/AppleApplicasterFrameworks"
+    "url": "https://github.com/applicaster/Zapp-Frameworks.git"
   },
-  "homepage": "https://github.com/applicaster/AppleApplicasterFrameworks",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
   "applicaster": {}
 }

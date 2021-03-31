@@ -41,7 +41,6 @@ extension ChromecastAdapter {
             name: NSNotification.Name.gckuiCastDialogWillShow,
             object: nil
         )
-        addConnectivityListener()
     }
 
     func removeObservers() {
@@ -57,7 +56,8 @@ extension ChromecastAdapter {
         NotificationCenter.default.removeObserver(self,
                                                   name: NSNotification.Name.gckuiCastDialogWillShow,
                                                   object: nil)
-        removeConnectivityListener()
+        
+        EventsBus.unsubscribe(self)
     }
 
     // MARK: - Notifications

@@ -19,7 +19,7 @@
   "min_zapp_sdk": "1.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "type": "checkbox",
@@ -42,9 +42,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "9.0.0",
+  "manifest_version": "9.1.0",
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-firebase@9.0.0"
+    "@applicaster/zapp-analytics-plugin-firebase@9.1.0"
   ],
   "project_dependencies": [
     {

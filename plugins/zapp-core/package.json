@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-core",
-  "version": "1.2.0",
+  "version": "1.4.6",
   "description": "Native iOS low level framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -8,6 +8,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/applicaster/AppleApplicasterFrameworks"
+  },
+  "dependencies": {
+    "@applicaster/x-ray": "0.2.0"
   },
   "keywords": [],
   "author": "",

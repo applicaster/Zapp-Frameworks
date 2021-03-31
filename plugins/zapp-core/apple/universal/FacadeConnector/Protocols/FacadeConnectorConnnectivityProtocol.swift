@@ -34,10 +34,12 @@ import Foundation
     /**
      Add listener to get calls for connectivity state changes
      */
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
     @objc func addConnectivityListener(_ listener: ConnectivityListener)
     
     /**
      Remove listener to get calls for connectivity state changes
      */
+    @available(*, deprecated, message: "Deprecated from QB SDK 4.1.0, use EventsBus instead")
     @objc func removeConnectivityListener(_ listener: ConnectivityListener)
 }

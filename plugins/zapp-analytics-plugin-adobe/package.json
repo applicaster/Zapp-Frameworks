@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-adobe",
-  "version": "1.0.0",
+  "version": "1.2.2",
   "description": "Adobe Analytics provider",
   "repository": {
     "type": "git",
@@ -21,11 +21,16 @@
   "peerDependencies": {},
   "applicaster": {
     "supportedPlatforms": [
-      "ios_for_quickbrick"
+      "ios_for_quickbrick",
+      "tvos_for_quickbrick",
+      "android_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "amazon_fire_tv_for_quickbrick"
     ],
     "zappOwnerAccountId": "5e4d3752157a050008e973fc"
   },
   "files": [
-    "apple"
+    "apple",
+    "android"
   ]
 }

@@ -16,7 +16,7 @@
   "min_zapp_sdk": "2.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "preload": true,
+  "preload": false,
   "custom_configuration_fields": [
     {
       "key": "mobile_app_account_id",
@@ -47,13 +47,13 @@
   ],
   "identifier": "google_analytics_android",
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "4.1.0",
+  "manifest_version": "4.2.0",
   "project_dependencies": [
     {
       "zapp-analytics-plugin-google": "node_modules/@applicaster/zapp-analytics-plugin-google/android"
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-google@4.1.0"
+    "@applicaster/zapp-analytics-plugin-google@4.2.0"
   ]
 }

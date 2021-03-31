@@ -7,6 +7,7 @@ import com.amazon.device.iap.PurchasingListener
 import com.amazon.device.iap.PurchasingService
 import com.amazon.device.iap.model.*
 import com.applicaster.iap.uni.api.*
+import com.applicaster.util.APLogger
 
 class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
@@ -43,6 +44,7 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         }
 
         fun onUserDataLoaded() {
+            APLogger.debug(TAG, "User data received")
             restoreObserver = initializationListener
             PurchasingService.getPurchaseUpdates(receipts.hasPurchases())
         }
@@ -125,21 +127,34 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
 
     override fun onProductDataResponse(response: ProductDataResponse?) {
         if (null == response) {
+            APLogger.error(TAG, "onProductDataResponse returned null ProductDataResponse")
             return
         }
 
         val request = skuRequests.remove(response.requestId)
         if (ProductDataResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
-            Log.e(TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
+            APLogger.error(TAG, "onSkuDetailsLoadingFailed: ${response.requestStatus}")
             skuRequests[response.requestId]?.onSkuDetailsLoadingFailed(
-                IBillingAPI.IAPResult.generalError,
-                response.requestStatus.toString()
+                    IBillingAPI.IAPResult.generalError,
+                    response.requestStatus.toString()
             )
             return
         }
-        val skus =
-            response.productData.values.map { Sku(it.sku, it.price, it.title, it.description) }
-        request?.onSkuDetailsLoaded(skus)
+        val stringBuilder = StringBuilder()
+        response.productData.entries.forEach {
+            stringBuilder.append("Sku: ").append(it.key).append(": ")
+            stringBuilder.append("sku: ").append(it.value.sku).append(", ")
+            stringBuilder.append("price: ").append(it.value.price).append(", ")
+            stringBuilder.append("title: ").append(it.value.title).append(", ")
+            stringBuilder.append("description: ").append(it.value.description).append("\n")
+        }
+        APLogger.debug(TAG, "onProductDataResponse: ${response.productData.size} items:\n $stringBuilder")
+        if (null == request) {
+            APLogger.error(TAG, "onProductDataResponse: request ${response.requestId} not found in pending")
+        } else {
+            val skus = response.productData.values.map { Sku(it.sku, it.price ?: "", it.title, it.description) }
+            request.onSkuDetailsLoaded(skus)
+        }
     }
 
     override fun onPurchaseResponse(response: PurchaseResponse?) {
@@ -148,14 +163,14 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
         }
         val request = purchaseRequests.remove(response.requestId)
         if (PurchaseResponse.RequestStatus.SUCCESSFUL != response.requestStatus) {
-            Log.e(TAG, "onPurchaseFailed: ${response.requestStatus}")
+            APLogger.error(TAG, "onPurchaseFailed: ${response.requestStatus}")
             if(null != request) {
                 // for items that ara not fulfilled we do not get alreadyOwned, but just error
                 // try to handle it
                 if (PurchaseResponse.RequestStatus.FAILED == response.requestStatus) {
                     val ownedPurchase = receipts.getPurchase(request.sku)
                     if (null != ownedPurchase) {
-                        Log.i(TAG, "Already owned purchase found in storage: ${request.sku}")
+                        APLogger.info(TAG, "Already owned purchase found in storage: ${request.sku}")
                         request.listener.onPurchased(ownedPurchase)
                         return
                     }
@@ -186,19 +201,21 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
     override fun onPurchaseUpdatesResponse(response: PurchaseUpdatesResponse?) {
         if (null != response) {
             if (response.requestStatus != PurchaseUpdatesResponse.RequestStatus.SUCCESSFUL) {
-                Log.e(TAG, "onPurchaseUpdatesResponse: ${response.requestStatus}")
+                APLogger.error(TAG, "onPurchaseUpdatesResponse: ${response.requestStatus}")
                 restoreObserver?.onPurchaseRestoreFailed(
                     IBillingAPI.IAPResult.generalError,
                     response.requestStatus.toString()
                 )
                 return
             }
+            APLogger.debug(TAG, "Got PurchaseUpdatesResponse")
             receipts.update(response.receipts, response.userData?.userId)
             if (response.hasMore()) {
                 PurchasingService.getPurchaseUpdates(false)
                 return
             }
         }
+        APLogger.debug(TAG, "PurchaseUpdatesResponse completed")
         restoreObserver?.onPurchasesRestored(receipts.getPurchases())
         restoreObserver = null
     }
@@ -209,10 +226,11 @@ class AmazonBillingImpl : IBillingAPI, PurchasingListener {
             return
         }
         if (userDataResponse.requestStatus != UserDataResponse.RequestStatus.SUCCESSFUL) {
-            Log.e(TAG, "onPurchaseUpdatesResponse: ${userDataResponse.requestStatus}")
+            APLogger.error(TAG, "onPurchaseUpdatesResponse: ${userDataResponse.requestStatus}")
             initializationListener?.onAnyError(IBillingAPI.IAPResult.generalError, "Failed to load user data")
             return
         }
+        APLogger.info(TAG, "User data loaded: ${userDataResponse.userData.userId}  ${userDataResponse.userData.marketplace}")
         userData = userDataResponse.userData
         initializationListener?.onUserDataLoaded()
         // nothing yet
