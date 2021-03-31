@@ -19,11 +19,164 @@
   "ui_frameworks": [
     "quickbrick"
   ],
+  "screen": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text_input",
+      "key": "theoplayer_license_key",
+      "tooltip_text": "Theoplayer licence key",
+      "default": ""
+    },
+    {
+      "group": true,
+      "label": "Google IMA",
+      "tooltip": "Google IMA Settings",
+      "folded": true,
+      "fields": [
+        {
+          "type": "select",
+          "key": "advertisment_type",
+          "tooltip_text": "Ads type",
+          "options": [
+            {
+              "text": "VMAP",
+              "value": "VMAP"
+            },
+            {
+              "text": "VAST",
+              "value": "VAST"
+            },
+            {
+              "text": "OFF",
+              "value": "OFF"
+            }
+          ],
+          "initial_value": "VMAP"
+        },
+        {
+          "type": "text_input",
+          "key": "tag_vmap_url",
+          "tooltip_text": "VMAP URL",
+          "default": "",
+          "conditional_fields": [
+            {
+              "condition_value": [
+                "VMAP"
+              ],
+              "key": "custom_configuration_fields/advertisment_type"
+            }
+          ]
+        },
+        {
+          "type": "text_input",
+          "key": "tag_preroll_url",
+          "tooltip_text": "Preroll URL",
+          "default": "",
+          "conditional_fields": [
+            {
+              "condition_value": [
+                "VAST"
+              ],
+              "key": "custom_configuration_fields/advertisment_type"
+            }
+          ]
+        },
+        {
+          "type": "text_input",
+          "key": "tag_postroll_url",
+          "tooltip_text": "Postroll URL",
+          "default": "",
+          "conditional_fields": [
+            {
+              "condition_value": [
+                "VAST"
+              ],
+              "key": "custom_configuration_fields/advertisment_type"
+            }
+          ]
+        },
+        {
+          "type": "text_input",
+          "key": "tag_midroll_url",
+          "tooltip_text": "Midroll URL",
+          "default": "",
+          "conditional_fields": [
+            {
+              "condition_value": [
+                "VAST"
+              ],
+              "key": "custom_configuration_fields/advertisment_type"
+            }
+          ]
+        },
+        {
+          "type": "text_input",
+          "key": "midroll_offset",
+          "tooltip_text": "Midroll offset in percentage",
+          "default": "",
+          "conditional_fields": [
+            {
+              "condition_value": [
+                "VAST"
+              ],
+              "key": "custom_configuration_fields/advertisment_type"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": true,
+      "label": "Chromecast",
+      "tooltip": "Chromecast Settings",
+      "folded": true,
+      "fields": [
+        {
+          "type": "text_input",
+          "key": "chromecast_app_id",
+          "tooltip_text": "Chromecast application ID",
+          "default": ""
+        },
+        {
+          "type": "hidden",
+          "key": "plist.array.NSBonjourServices",
+          "initial_value": "_[chromecast_app_id]._googlecast._tcp, _googlecast._tcp"
+        }
+      ]
+    },
+    {
+      "group": true,
+      "label": "Moat Analytics",
+      "tooltip": "Moat Analytics",
+      "folded": true,
+      "fields": [
+        {
+          "type": "text_input",
+          "key": "moat_partner_code",
+          "tooltip_text": "Moad partner code",
+          "default": ""
+        }
+      ]
+    }
+  ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.0.2",
-  "manifest_version": "0.0.2",
-  "api": {},
-  "npm_dependencies": {},
+  "dependency_version": "0.0.3",
+  "manifest_version": "0.0.3",
+  "api": {
+    "class_name": "THEOplayerAdapter",
+    "modules": [
+      "ZappTHEOplayer"
+    ],
+    "plist": {
+      "NSLocalNetworkUsageDescription": "App uses the local network to discover Cast-enabled devices on your WiFi network."
+    },
+    "entitlements": {
+      "com.apple.developer.networking.wifi-info": true
+    }
+  },
+  "npm_dependencies": [
+    "@applicaster/zapp-react-native-theo-player@0.0.3"
+  ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
   "extra_dependencies": [
@@ -31,6 +184,5 @@
       "ZappTHEOplayer": ":path => './node_modules/@applicaster/zapp-react-native-theo-player/apple/ZappTHEOplayer.podspec'"
     }
   ],
-  "project_dependencies": {},
-  "custom_configuration_fields": []
+  "project_dependencies": {}
 }
