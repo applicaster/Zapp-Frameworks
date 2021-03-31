@@ -2,7 +2,7 @@
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
-      "com.applicaster.localnotifications.reactnative.LocalNotificationPackage"
+      "com.theoplayerreactnative.TheoPlayerPackage"
     ]
   },
   "dependency_repository_url": [],
@@ -30,9 +30,9 @@
     "quickbrick"
   ],
   "platform": "android",
-  "manifest_version": "1.1.0",
+  "manifest_version": "1.1.1",
   "npm_dependencies": [
-    "@applicaster/zapp_local_notifications@1.1.0"
+    "@applicaster/zapp_local_notifications@1.1.1"
   ],
   "project_dependencies": [
     {
