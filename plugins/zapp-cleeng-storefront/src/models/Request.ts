@@ -2,8 +2,7 @@ import { AxiosResponse } from "axios";
 
 export interface SubscriptionsData {
   token: string;
-  byAuthId: string;
-  offers: string;
+  publisherId: string;
 }
 
 export interface RecieptInfo {
@@ -38,13 +37,4 @@ export interface RequestCustomData {
   login_api_endpoint: string;
   signin_api_endpoint: string;
   password_reset_api_endpoint: string;
-}
-
-export interface Account {
-  getAllSubscriptions(data: SubscriptionsData): Promise<AxiosResponse>;
-  purchaseItem(data: PurchaseItemData): Promise<AxiosResponse>;
-  purchaseItemWithCoupon(
-    data: PurchaseItemWithCouponData
-  ): Promise<AxiosResponse>;
-  restore(data: RestoreData): Promise<AxiosResponse>;
 }

@@ -14,7 +14,7 @@ const Request = (function () {
         throw Error("No custom data provided to requests");
       }
       let newPath = path;
-
+      console.log({ newPath, data, customData });
       // switch (newPath) {
       //   case API.signIn:
       //     newPath = customData.signin_api_endpoint;
@@ -36,6 +36,7 @@ const Request = (function () {
         method: "POST",
         data,
       };
+      console.log({ request });
 
       return await axios(request);
     },

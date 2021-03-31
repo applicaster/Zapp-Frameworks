@@ -8,6 +8,7 @@ import { getLocalizations } from "../Utils/Localizations";
 import {
   getToken,
   prepareMiddleware,
+  getSubscriptionsData
 } from "../Services/CleengMiddlewareService";
 import {
   inPlayerAssetId,
@@ -67,14 +68,15 @@ const CleengStoreFront = (props) => {
     } = props;
 
     try {
-      const isUserAuthenticated = await getToken();
+      const token = await getToken();
 
       logger.debug({
         message: "Starting Cleeng Storefront Plugin",
         data: {},
       });
-      console.log({ isUserAuthenticated });
+      console.log({ token });
 
+      const subscriptionsData = await getSubscriptionsData({token, publisherId:"5d2f171181efe700153dd07c"})
       // if (payload) {
       //   const assetId = await inPlayerAssetId({
       //     payload,
