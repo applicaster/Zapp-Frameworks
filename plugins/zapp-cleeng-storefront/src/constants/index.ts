@@ -2,6 +2,7 @@ export const API = {
   subscriptions: "subscriptions",
   purchaseItem: "subscription",
   restore: "restore",
+  extendToken: "extendToken",
 };
 
 // register,

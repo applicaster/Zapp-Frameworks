@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 export interface SubscriptionsData {
   token: string;
   publisherId: string;
+  offers: Array<string>;
 }
 
 export interface RecieptInfo {
@@ -11,11 +12,11 @@ export interface RecieptInfo {
 }
 
 export interface PurchaseItemData {
-  appType: string; //ios/android
   receiptData: RecieptInfo;
   offerId: string;
   token: string;
-  isRestored: string;
+  isRestored: boolean;
+  publisherId: string;
 }
 
 export interface PurchaseItemWithCouponData {
@@ -34,7 +35,12 @@ export interface RestoreData {
 
 export interface RequestCustomData {
   base_URL_api: string;
-  login_api_endpoint: string;
-  signin_api_endpoint: string;
-  password_reset_api_endpoint: string;
+  get_items_to_purchase_api_endpoint: string;
+  purchase_an_item: string;
+  restore_api_endpoint: string;
+}
+
+export interface ExtendTokenData {
+  token: string;
+  publisherId: string;
 }
