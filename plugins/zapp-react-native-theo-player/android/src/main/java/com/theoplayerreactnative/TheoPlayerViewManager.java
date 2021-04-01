@@ -27,8 +27,8 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
-import com.theoplayer.android.api.cast.Cast;
 import com.theoplayer.android.api.cast.CastStrategy;
+import com.theoplayer.android.api.event.ads.AdsEventTypes;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
@@ -38,8 +38,11 @@ import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
 //import com.theoplayer.android.internal.activity.CurrentActivityHelper;
-import com.theoplayerreactnative.events.EventRouter;
-import com.theoplayerreactnative.events.EventsBinder;
+import com.theoplayerreactnative.events.AdEventRouter;
+import com.theoplayerreactnative.events.AdEventsBinder;
+import com.theoplayerreactnative.events.PlayerEventRouter;
+import com.theoplayerreactnative.events.PlayerEventsBinder;
+import com.theoplayerreactnative.events.IEvenRouter;
 import com.theoplayerreactnative.utility.JSON2RN;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,28 +65,37 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     public static final String TAG = RCT_MODULE_NAME;
 
     private enum InternalAndGlobalEventPair {
-        onPlayerPlay(new EventRouter<>(PlayerEventTypes.PLAY, EventsBinder::toRN)),
-        onPlayerPlaying(new EventRouter<>(PlayerEventTypes.PLAYING, EventsBinder::toRN)),
-        onPlayerPause(new EventRouter<>(PlayerEventTypes.PAUSE, EventsBinder::toRN)),
-        onPlayerProgress(new EventRouter<>(PlayerEventTypes.PROGRESS, EventsBinder::toRN)),
-        onPlayerSeeking(new EventRouter<>(PlayerEventTypes.SEEKING, EventsBinder::toRN)),
-        onPlayerSeeked(new EventRouter<>(PlayerEventTypes.SEEKED, EventsBinder::toRN)),
-        onPlayerWaiting(new EventRouter<>(PlayerEventTypes.WAITING, EventsBinder::toRN)),
-        onPlayerTimeUpdate(new EventRouter<>(PlayerEventTypes.TIMEUPDATE, EventsBinder::toRN)),
-        onPlayerRateChange(new EventRouter<>(PlayerEventTypes.RATECHANGE, EventsBinder::toRN)),
-        onPlayerReadyStateChange(new EventRouter<>(PlayerEventTypes.READYSTATECHANGE, EventsBinder::toRN)),
-        onPlayerLoadedMetaData(new EventRouter<>(PlayerEventTypes.LOADEDMETADATA, EventsBinder::toRN)),
-        onPlayerLoadedData(new EventRouter<>(PlayerEventTypes.LOADEDDATA, EventsBinder::toRN)),
-        onPlayerLoadStart(new EventRouter<>(PlayerEventTypes.LOADSTART, EventsBinder::toRN)),
-        onPlayerCanPlay(new EventRouter<>(PlayerEventTypes.CANPLAY, EventsBinder::toRN)),
-        onPlayerCanPlayThrough(new EventRouter<>(PlayerEventTypes.CANPLAYTHROUGH, EventsBinder::toRN)),
-        onPlayerDurationChange(new EventRouter<>(PlayerEventTypes.DURATIONCHANGE, EventsBinder::toRN)),
-        onPlayerSourceChange(new EventRouter<>(PlayerEventTypes.SOURCECHANGE, EventsBinder::toRN)),
-        onPlayerPresentationModeChange(new EventRouter<>(PlayerEventTypes.PRESENTATIONMODECHANGE, EventsBinder::toRN)),
-        onPlayerVolumeChange(new EventRouter<>(PlayerEventTypes.VOLUMECHANGE, EventsBinder::toRN)),
-        onPlayerDestroy(new EventRouter<>(PlayerEventTypes.DESTROY, EventsBinder::toRN)),
-        onPlayerEnded(new EventRouter<>(PlayerEventTypes.ENDED, EventsBinder::toRN)),
-        onPlayerError(new EventRouter<>(PlayerEventTypes.ERROR, EventsBinder::toRN)),
+
+        // Player events
+        onPlayerPlay(new PlayerEventRouter<>(PlayerEventTypes.PLAY, PlayerEventsBinder::toRN)),
+        onPlayerPlaying(new PlayerEventRouter<>(PlayerEventTypes.PLAYING, PlayerEventsBinder::toRN)),
+        onPlayerPause(new PlayerEventRouter<>(PlayerEventTypes.PAUSE, PlayerEventsBinder::toRN)),
+        onPlayerProgress(new PlayerEventRouter<>(PlayerEventTypes.PROGRESS, PlayerEventsBinder::toRN)),
+        onPlayerSeeking(new PlayerEventRouter<>(PlayerEventTypes.SEEKING, PlayerEventsBinder::toRN)),
+        onPlayerSeeked(new PlayerEventRouter<>(PlayerEventTypes.SEEKED, PlayerEventsBinder::toRN)),
+        onPlayerWaiting(new PlayerEventRouter<>(PlayerEventTypes.WAITING, PlayerEventsBinder::toRN)),
+        onPlayerTimeUpdate(new PlayerEventRouter<>(PlayerEventTypes.TIMEUPDATE, PlayerEventsBinder::toRN)),
+        onPlayerRateChange(new PlayerEventRouter<>(PlayerEventTypes.RATECHANGE, PlayerEventsBinder::toRN)),
+        onPlayerReadyStateChange(new PlayerEventRouter<>(PlayerEventTypes.READYSTATECHANGE, PlayerEventsBinder::toRN)),
+        onPlayerLoadedMetaData(new PlayerEventRouter<>(PlayerEventTypes.LOADEDMETADATA, PlayerEventsBinder::toRN)),
+        onPlayerLoadedData(new PlayerEventRouter<>(PlayerEventTypes.LOADEDDATA, PlayerEventsBinder::toRN)),
+        onPlayerLoadStart(new PlayerEventRouter<>(PlayerEventTypes.LOADSTART, PlayerEventsBinder::toRN)),
+        onPlayerCanPlay(new PlayerEventRouter<>(PlayerEventTypes.CANPLAY, PlayerEventsBinder::toRN)),
+        onPlayerCanPlayThrough(new PlayerEventRouter<>(PlayerEventTypes.CANPLAYTHROUGH, PlayerEventsBinder::toRN)),
+        onPlayerDurationChange(new PlayerEventRouter<>(PlayerEventTypes.DURATIONCHANGE, PlayerEventsBinder::toRN)),
+        onPlayerSourceChange(new PlayerEventRouter<>(PlayerEventTypes.SOURCECHANGE, PlayerEventsBinder::toRN)),
+        onPlayerPresentationModeChange(new PlayerEventRouter<>(PlayerEventTypes.PRESENTATIONMODECHANGE, PlayerEventsBinder::toRN)),
+        onPlayerVolumeChange(new PlayerEventRouter<>(PlayerEventTypes.VOLUMECHANGE, PlayerEventsBinder::toRN)),
+        onPlayerDestroy(new PlayerEventRouter<>(PlayerEventTypes.DESTROY, PlayerEventsBinder::toRN)),
+        onPlayerEnded(new PlayerEventRouter<>(PlayerEventTypes.ENDED, PlayerEventsBinder::toRN)),
+        onPlayerError(new PlayerEventRouter<>(PlayerEventTypes.ERROR, PlayerEventsBinder::toRN)),
+
+        // Ads events
+        onAdBreakBegin(new AdEventRouter<>(AdsEventTypes.AD_BREAK_BEGIN, AdEventsBinder::toRN)),
+        onAdBreakEnd(new AdEventRouter<>(AdsEventTypes.AD_BREAK_END, AdEventsBinder::toRN)),
+        onAdError(new AdEventRouter<>(AdsEventTypes.AD_ERROR, AdEventsBinder::toRN)),
+        onAdBegin(new AdEventRouter<>(AdsEventTypes.AD_BEGIN, AdEventsBinder::toRN)),
+        onAdEnd(new AdEventRouter<>(AdsEventTypes.AD_END, AdEventsBinder::toRN)),
 
         // non-player events
         onPlayerResize( null),
@@ -94,9 +106,9 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         @NonNull
         String globalEvent;
         @Nullable
-        EventRouter<?> router;
+        IEvenRouter<?> router;
 
-        InternalAndGlobalEventPair(@Nullable EventRouter<?> router) {
+        InternalAndGlobalEventPair(@Nullable IEvenRouter<?> router) {
             this.globalEvent = name();
             this.internalEvent = name() + "Internal";
             this.router = router;
