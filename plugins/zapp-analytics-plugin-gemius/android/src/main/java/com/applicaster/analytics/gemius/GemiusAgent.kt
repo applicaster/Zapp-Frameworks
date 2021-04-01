@@ -11,20 +11,20 @@ import java.util.*
 
 class GemiusAgent : BaseAnalyticsAgent() {
 
-    private var testIdentifier: String = ""
+    private var scriptIdentifier: String = ""
+    private var serverHost = "https://main.hit.gemius.pl"
 
     inner class PlayerAdapter : AnalyticsPlayerAdapter() {
 
-        private val player: Player = Player(playerID, serverHost, testIdentifier, PlayerData())
+        private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
 
         override fun onStart(data: Map<String, Any>?) {
             super.onStart(data)
             // todo: copy all required fields
-            val pdata = ProgramData().apply {
-                name = this@PlayerAdapter.getName()
-                duration = duration?.toInt()
-                data?.forEach { addCustomParameter(it.key, it.value.toString()) }
-            }
+            val pdata = ProgramData()
+            pdata.name = getName()
+            pdata.duration = duration?.toInt()
+            data?.forEach { pdata.addCustomParameter(it.key, it.value.toString()) }
             player.newProgram(getId(), pdata)
         }
 
@@ -93,8 +93,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
 
-        if (testIdentifier.isEmpty()) {
-            APLogger.error(TAG, "testIdentifier is empty. Analytics agent won't be activated")
+        if (scriptIdentifier.isEmpty()) {
+            APLogger.error(TAG, "scriptIdentifier is empty. Analytics agent won't be activated")
             return
         }
 
@@ -103,14 +103,21 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         //global config for Audience/Prism hits
         AudienceConfig.getSingleton().hitCollectorHost = serverHost
-        AudienceConfig.getSingleton().scriptIdentifier = testIdentifier
+        AudienceConfig.getSingleton().scriptIdentifier = scriptIdentifier
     }
 
     override fun setParams(params: MutableMap<Any?, Any?>) {
         super.setParams(params)
-        testIdentifier = params["testIdentifier"]?.toString() ?: ""
-        if (testIdentifier.isEmpty()) {
-            APLogger.error(TAG, "testIdentifier is empty. Analytics agent won't be activated")
+        scriptIdentifier = params["script_identifier"]?.toString() ?: ""
+        if (scriptIdentifier.isEmpty()) {
+            APLogger.error(TAG, "script_identifier is empty. Analytics agent won't be activated")
+        }
+
+        params["hit_collector_host"]?.toString().let {
+            when {
+                !it.isNullOrEmpty() -> serverHost = it
+                else -> APLogger.info(TAG, "hit_collector_host is empty, default host will $serverHost be used")
+            }
         }
     }
 
@@ -159,7 +166,6 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
     companion object {
         private const val TAG = "GemiusAgent"
-        private const val serverHost = "https://main.hit.gemius.pl"
         private const val playerID = "DefaultPlayer" // todo: maybe check for, say, inline player, theo?
     }
 }
