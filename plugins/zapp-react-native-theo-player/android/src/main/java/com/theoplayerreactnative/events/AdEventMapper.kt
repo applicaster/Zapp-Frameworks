@@ -4,7 +4,7 @@ import com.facebook.react.bridge.Arguments.createMap
 import com.facebook.react.bridge.WritableMap
 import com.theoplayer.android.api.event.ads.*
 
-object AdEventsBinder {
+object AdEventMapper {
 
     @JvmStatic
     fun toRN(event: AdBreakBeginEvent): WritableMap = createMap().apply {

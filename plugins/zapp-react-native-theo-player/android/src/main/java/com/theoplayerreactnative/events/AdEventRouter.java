@@ -15,7 +15,7 @@ import com.theoplayerreactnative.TheoPlayerViewManager;
 
 import org.jetbrains.annotations.NotNull;
 
-public class AdEventRouter<T extends AdEvent<T>> implements IEvenRouter<T> {
+public class AdEventRouter<T extends AdEvent<T>> implements IEventRouter {
 
     private static final String TAG = TheoPlayerViewManager.TAG;
 

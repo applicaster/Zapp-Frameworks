@@ -14,7 +14,7 @@ import com.theoplayerreactnative.TheoPlayerViewManager;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerEventRouter<T extends PlayerEvent<T>> implements IEvenRouter<T> {
+public class PlayerEventRouter<T extends PlayerEvent<T>> implements IEventRouter {
 
     private static final String TAG = TheoPlayerViewManager.TAG;
 
