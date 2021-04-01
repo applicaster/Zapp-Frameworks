@@ -5,11 +5,7 @@ import com.applicaster.util.APLogger
 import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
 import com.gemius.sdk.audience.AudienceConfig
-import com.gemius.sdk.audience.AudienceEvent
-import com.gemius.sdk.stream.EventProgramData
-import com.gemius.sdk.stream.Player
-import com.gemius.sdk.stream.PlayerData
-import com.gemius.sdk.stream.ProgramData
+import com.gemius.sdk.stream.*
 import java.util.*
 
 
@@ -23,27 +19,72 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         override fun onStart(data: Map<String, Any>?) {
             super.onStart(data)
-            val pdata = ProgramData()
-            pdata.name = getName()
-            pdata.duration = duration?.toInt()
-            data?.forEach { pdata.addCustomParameter(it.key, it.value.toString()) }
             // todo: copy all required fields
+            val pdata = ProgramData().apply {
+                name = this@PlayerAdapter.getName()
+                duration = duration?.toInt()
+                data?.forEach { addCustomParameter(it.key, it.value.toString()) }
+            }
             player.newProgram(getId(), pdata)
         }
 
         override fun onPlay(data: Map<String, Any>?) {
             super.onPlay(data)
-            player.programEvent(getId(), position?.toInt() ?: 0, Player.EventType.PLAY, EventProgramData())
+            player.programEvent(
+                    getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.PLAY,
+                    EventProgramData())
         }
 
         override fun onStop(data: Map<String, Any>?) {
             super.onStop(data)
-            player.programEvent(getId(), position?.toInt() ?: 0, Player.EventType.CLOSE, EventProgramData())
+            player.programEvent(getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.CLOSE,
+                    EventProgramData())
         }
 
         override fun onPause(data: Map<String, Any>?) {
             super.onPause(data)
-            player.programEvent(getId(), position?.toInt() ?: 0, Player.EventType.PAUSE, EventProgramData())
+            player.programEvent(getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.PAUSE,
+                    EventProgramData())
+        }
+
+        override fun onAdBreakStart(data: Map<String, Any>?) {
+            super.onAdBreakStart(data)
+            // not reported
+        }
+
+        override fun onAdBreakEnd(data: Map<String, Any>?) {
+            super.onAdBreakEnd(data)
+            // not reported
+        }
+
+        override fun onAdStart(data: Map<String, Any>?) {
+            super.onAdStart(data)
+            // todo: id, other data
+            val adata = AdData().apply {
+                //duration = 15
+                adType = AdData.AdType.BREAK
+            }
+            player.newAd("a1", adata)
+        }
+
+        override fun onAdEnd(data: Map<String, Any>?) {
+            super.onAdEnd(data)
+            // not reported
+        }
+
+        override fun onSeek(data: Map<String, Any>?) {
+            super.onSeek(data)
+            player.programEvent(
+                    getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.SEEK,
+                    EventProgramData())
         }
     }
 

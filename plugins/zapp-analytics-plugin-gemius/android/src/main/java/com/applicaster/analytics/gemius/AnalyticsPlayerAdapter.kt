@@ -39,6 +39,14 @@ open class AnalyticsPlayerAdapter {
 
     }
 
+    open fun onAdStart(data: Map<String, Any>?) {
+
+    }
+
+    open fun onAdEnd(data: Map<String, Any>?) {
+
+    }
+
     open fun onSeek(data: Map<String, Any>?) {
 
     }
