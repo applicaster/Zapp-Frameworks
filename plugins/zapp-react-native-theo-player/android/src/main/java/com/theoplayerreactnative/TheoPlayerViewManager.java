@@ -27,6 +27,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
+import com.theoplayer.android.api.ads.GoogleImaConfiguration;
 import com.theoplayer.android.api.cast.CastStrategy;
 import com.theoplayer.android.api.event.ads.AdsEventTypes;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
@@ -140,7 +141,11 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
           You can declare in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
         */
         THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
-                .ads(new AdsConfiguration.Builder().build())
+                .ads(new AdsConfiguration.Builder()
+                        .googleImaConfiguration(new GoogleImaConfiguration.Builder()
+                                .useNativeIma(true)
+                                .build())
+                        .build())
                 .license(license)
                 .castStrategy(CastStrategy.AUTO)
                 .analytics(analytics.toArray(new AnalyticsDescription[0]))
