@@ -10,6 +10,8 @@ import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 
+import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
+
 console.disableYellowBox = true;
 type PluginConfiguration = {
   theoplayer_license_key: string;
@@ -106,14 +108,18 @@ export default class THEOPlayer extends Component<Props, State> {
 
   componentDidMount() {}
 
-  onPlayerPlay = ({ nativeEvent }) => {};
+  onPlayerPlay = ({ nativeEvent }) => {
+  };
 
-  onPlayerPlaying = ({ nativeEvent }) => {};
+  onPlayerPlaying = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Playing", nativeEvent);
+  };
 
   onPlayerPause = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const duration = this.state?.duration;
     // this.props?.onPause({ currentTime, duration });
+    postAnalyticEvent("Player Pause", nativeEvent);
   };
 
   onPlayerProgress = ({ nativeEvent }) => {
@@ -124,9 +130,13 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  onPlayerSeeking = ({ nativeEvent }) => {};
+  onPlayerSeeking = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Seeking", nativeEvent);
+  };
 
-  onPlayerSeeked = ({ nativeEvent }) => {};
+  onPlayerSeeked = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Seeked", nativeEvent);
+  };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
@@ -194,18 +204,23 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
+    postAnalyticEvent("Ad Break Begin", nativeEvent);
   };
   onAdBreakEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
+    postAnalyticEvent("Ad Break End", nativeEvent);
   };
   onAdError = ({ nativeEvent }) => {
     console.log(nativeEvent)
+    postAnalyticEvent("Ad Error", nativeEvent);
   };
   onAdBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
+    postAnalyticEvent("Ad Begin", nativeEvent);
   };
   onAdEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
+    postAnalyticEvent("Ad End", nativeEvent);
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
