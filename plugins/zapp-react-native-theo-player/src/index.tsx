@@ -192,6 +192,22 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
+  onAdBreakBegin = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+  };
+  onAdBreakEnd = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+  };
+  onAdError = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+  };
+  onAdBegin = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+  };
+  onAdEnd = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+  };
+
   onJSWindowEvent = ({ nativeEvent }) => {
     const type = nativeEvent?.type;
 
@@ -255,6 +271,11 @@ export default class THEOPlayer extends Component<Props, State> {
           onPlayerDestroy={this.onPlayerDestroy}
           onPlayerEnded={this.onPlayerEnded}
           onPlayerError={this.onPlayerError}
+          onAdBreakBegin={this.onAdBreakBegin}
+          onAdBreakEnd={this.onAdBreakEnd}
+          onAdError={this.onAdError}
+          onAdBegin={this.onAdBegin}
+          onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
           licenceData={{ theoplayer_license_key, moat_partner_code }}
           source={{
