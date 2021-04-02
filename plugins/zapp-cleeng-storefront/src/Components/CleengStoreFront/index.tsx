@@ -154,13 +154,6 @@ const CleengStoreFront = (props) => {
       if (success && !error) {
         const token = await getToken();
         console.log({ success, error, payload });
-        // const result = validatePurchasedItem({
-        //   token,
-        //   publisherId,
-        //   isRestored: false,
-        //   offerId: "",
-        //   receiptData: { transactionId: "", receiptData: "" },
-        // });
 
         // await validatePayment({ ...props, payload, store });
         // const newPayload = await assetLoader({

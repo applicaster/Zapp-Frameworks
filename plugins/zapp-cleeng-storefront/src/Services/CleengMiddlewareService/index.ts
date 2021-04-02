@@ -84,9 +84,92 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
   }
 }
 
-async function verifyPurchase({ payload }) {
-  const purchasedItem =
+function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
+  const result = a1.filter(function (n) {
+    return a2.indexOf(n) !== -1;
+  });
+  return result.length > 0 ? true : false;
+}
+
+export async function isItemsPurchased(
+  offers: Array<string>,
+  token: string,
+  publisherId: string
+) {
+  const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
+    token,
+    publisherId,
+  });
+  return getArraysIntersection(offers, purchasedAuthIds);
+}
+
+export async function verifyPurchase(
+  payload: ZappEntry,
+  token: string,
+  publisherId: string,
+  isRestored: boolean
+) {
+  const productToPurchase =
+    payload?.extensions?.in_app_purchase_data?.productToPurchase;
+
+  const purchasedProduct =
     payload?.extensions?.in_app_purchase_data?.purchasedProduct;
+  const productIdentifier = purchasedProduct?.productIdentifier;
+  const receiptData = purchasedProduct?.reciept;
+  const transactionId = purchasedProduct?.transactionIdentifier;
+  const offerId = R.find(R.propEq("productIdentifier", productIdentifier))(
+    productToPurchase
+  )?.id;
+
+  if (offerId && productIdentifier && receiptData && transactionId) {
+    const result = await validatePurchasedItem({
+      token,
+      publisherId,
+      isRestored,
+      offerId,
+      receiptData: { transactionId, receiptData },
+    });
+    console.log("validatePurchasedItem", { result });
+    return await checkValidatedItem({
+      token,
+      publisherId,
+      authId: result?.authId,
+    });
+  }
+  return false;
+}
+
+export async function checkValidatedItem({
+  authId,
+  token,
+  publisherId,
+  tries = 5,
+  interval = 1000,
+}): Promise<boolean> {
+  try {
+    const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
+      token,
+      publisherId,
+    });
+    if (R.contains(authId, purchasedAuthIds)) {
+      return true;
+    } else if (tries > 0) {
+      await new Promise((r) => setTimeout(r, interval));
+      const newInterval = interval * 2;
+      const newTries = tries - 1;
+      checkValidatedItem({
+        authId,
+        token,
+        publisherId,
+        tries: newTries,
+        interval: newInterval,
+      });
+    } else {
+      return false;
+    }
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getPurchasedAuthIdsAndExtendToken(
@@ -130,6 +213,8 @@ export async function getPurchasedAuthIdsAndExtendToken(
     return null;
   }
 }
+
+
 
 function handleError(
   error,

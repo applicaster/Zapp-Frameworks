@@ -57,6 +57,22 @@ const baseManifest = {
       fields: [
         {
           type: "tag_select",
+          key: "debug_mode",
+          tooltip_text: "Enables debug mode",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          initial_value: "off",
+        },
+        {
+          type: "tag_select",
           key: "force_authentication_on_all",
           tooltip_text:
             "If On, all video entries will be marked as required login",
@@ -68,6 +84,56 @@ const baseManifest = {
             {
               text: "Off",
               value: "off",
+            },
+          ],
+          conditional_fields: [
+            {
+              condition_value: ["on"],
+              key: "custom_configuration_fields/debug_mode",
+            },
+          ],
+          initial_value: "off",
+        },
+        {
+          type: "tag_select",
+          key: "stub_purchase_flow_complete",
+          tooltip_text: "Stubbing all flow to purchase success",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          conditional_fields: [
+            {
+              condition_value: ["on"],
+              key: "custom_configuration_fields/debug_mode",
+            },
+          ],
+          initial_value: "off",
+        },
+        {
+          type: "tag_select",
+          key: "stub_purchase_flow_complete",
+          tooltip_text: "Stubbing all flow to purchase failed",
+          options: [
+            {
+              text: "On",
+              value: "on",
+            },
+            {
+              text: "Off",
+              value: "off",
+            },
+          ],
+          conditional_fields: [
+            {
+              condition_value: ["on"],
+              key: "custom_configuration_fields/debug_mode",
             },
           ],
           initial_value: "off",
