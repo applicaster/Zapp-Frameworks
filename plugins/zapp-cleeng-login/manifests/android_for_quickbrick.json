@@ -1,0 +1,491 @@
+{
+  "dependency_name": "@applicaster/zapp-cleeng-login",
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Quick Brick Cleeng login",
+  "description": "Quick Brick Cleeng login",
+  "type": "login",
+  "react_native": true,
+  "screen": true,
+  "identifier": "zapp-cleeng-login",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    ""
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "publisherId",
+      "label": "Cleeng Publisher ID",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "base_URL_api",
+      "label": "Base URL",
+      "default": "https://applicaster-cleeng-sso.herokuapp.com/"
+    },
+    {
+      "type": "text",
+      "key": "login_api_endpoint",
+      "label": "Login End Point",
+      "default": "login"
+    },
+    {
+      "type": "text",
+      "key": "signin_api_endpoint",
+      "label": "Create Account End Point",
+      "default": "register"
+    },
+    {
+      "type": "text",
+      "key": "password_reset_api_endpoint",
+      "label": "Password Reset End Point",
+      "default": "passwordReset"
+    },
+    {
+      "group": true,
+      "label": "Debug",
+      "tooltip": "For development purposes",
+      "folded": true,
+      "fields": [
+        {
+          "type": "tag_select",
+          "key": "force_authentication_on_all",
+          "tooltip_text": "If On, all video entries will be marked as required login",
+          "options": [
+            {
+              "text": "On",
+              "value": "on"
+            },
+            {
+              "text": "Off",
+              "value": "off"
+            }
+          ],
+          "initial_value": "off"
+        }
+      ]
+    }
+  ],
+  "hooks": {
+    "fields": [
+      {
+        "group": true,
+        "label": "Before Load",
+        "folded": true,
+        "fields": [
+          {
+            "key": "preload_plugins",
+            "type": "preload_plugins_selector",
+            "label": "Select Plugins"
+          }
+        ]
+      }
+    ]
+  },
+  "platform": "android_for_quickbrick",
+  "dependency_version": "0.0.2",
+  "manifest_version": "0.0.2",
+  "api": {
+    "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
+    "react_packages": [
+      "com.cmcewen.blurview.BlurViewPackage"
+    ],
+    "proguard_rules": "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }"
+  },
+  "project_dependencies": [
+    {
+      "react-native-community_blur": "node_modules/@react-native-community/blur/android"
+    }
+  ],
+  "extra_dependencies": [],
+  "min_zapp_sdk": "0.1.0-alpha1",
+  "npm_dependencies": [
+    "@react-native-community/blur@3.4.1"
+  ],
+  "styles": {
+    "fields": [
+      {
+        "key": "background_color",
+        "type": "color_picker",
+        "label": "Background font color",
+        "initial_value": "#161b29ff"
+      },
+      {
+        "key": "title_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS title font",
+        "initial_value": "Helvetica-Bold"
+      },
+      {
+        "key": "title_font_android",
+        "type": "android_font_selector",
+        "label": "Android title font",
+        "initial_value": "Roboto-Bold"
+      },
+      {
+        "key": "title_font_size",
+        "type": "number_input",
+        "label": "Title font size",
+        "initial_value": 15
+      },
+      {
+        "key": "title_font_color",
+        "type": "color_picker",
+        "label": "Title font color",
+        "initial_value": "#ffffffff"
+      },
+      {
+        "key": "back_button_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS back button font",
+        "initial_value": "Helvetica-Bold"
+      },
+      {
+        "key": "back_button_font_android",
+        "type": "android_font_selector",
+        "label": "Android back button font",
+        "initial_value": "Roboto-Bold"
+      },
+      {
+        "key": "back_button_font_size",
+        "type": "number_input",
+        "label": "Back button font size",
+        "initial_value": 15
+      },
+      {
+        "key": "back_button_font_color",
+        "type": "color_picker",
+        "label": "Back button font color",
+        "initial_value": "#ffffffff"
+      },
+      {
+        "key": "fields_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS input fields title font",
+        "initial_value": "Helvetica-Bold"
+      },
+      {
+        "key": "fields_font_android",
+        "type": "android_font_selector",
+        "label": "Android input fields title font",
+        "initial_value": "Roboto-Bold"
+      },
+      {
+        "key": "fields_font_size",
+        "type": "number_input",
+        "label": "Input fields title font size",
+        "initial_value": 13
+      },
+      {
+        "key": "fields_font_color",
+        "type": "color_picker",
+        "label": "Input fields font color",
+        "initial_value": "#ffffffff"
+      },
+      {
+        "key": "fields_placeholder_font_color",
+        "type": "color_picker",
+        "label": "Input fields placeholder font color",
+        "initial_value": "#ffffffff"
+      },
+      {
+        "key": "fields_separator_color",
+        "type": "color_picker",
+        "label": "Input fields separator color",
+        "initial_value": "#a9a9a9ff"
+      },
+      {
+        "key": "forgot_password_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS forgot password font",
+        "initial_value": "Helvetica"
+      },
+      {
+        "key": "forgot_password_font_android",
+        "type": "android_font_selector",
+        "label": "Android forgot password font",
+        "initial_value": "Roboto-Regular"
+      },
+      {
+        "key": "forgot_password_font_size",
+        "type": "number_input",
+        "label": "Forgot password font size",
+        "initial_value": 11
+      },
+      {
+        "key": "forgot_password_font_color",
+        "type": "color_picker",
+        "label": "Forgot password font color",
+        "initial_value": "#a9a9a9ff"
+      },
+      {
+        "key": "action_button_background_color",
+        "type": "color_picker",
+        "label": "iOS action button background color",
+        "initial_value": "#f1af13ff"
+      },
+      {
+        "key": "action_button_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS action button font",
+        "initial_value": "Helvetica-Bold"
+      },
+      {
+        "key": "action_button_font_android",
+        "type": "android_font_selector",
+        "label": "Android action button font",
+        "initial_value": "Roboto-Bold"
+      },
+      {
+        "key": "action_button_font_size",
+        "type": "number_input",
+        "label": "Action button font size",
+        "initial_value": 15
+      },
+      {
+        "key": "action_button_font_color",
+        "type": "color_picker",
+        "label": "Action button font Color",
+        "initial_value": "#ffffffff"
+      },
+      {
+        "key": "create_account_link_font_ios",
+        "type": "ios_font_selector",
+        "label": "iOS Create account link font",
+        "initial_value": "Helvetica"
+      },
+      {
+        "key": "create_account_link_font_android",
+        "type": "android_font_selector",
+        "label": "Android Create account link font",
+        "initial_value": "Roboto-Regular"
+      },
+      {
+        "key": "create_account_link_font_size",
+        "type": "number_input",
+        "label": "Create account link font size",
+        "initial_value": 11
+      },
+      {
+        "key": "create_account_link_font_color",
+        "type": "color_picker",
+        "label": "Create account link font color",
+        "initial_value": "#a9a9a9ff"
+      },
+      {
+        "key": "logout_title_font_ios",
+        "type": "ios_font_selector",
+        "label": "Logout iOS title font",
+        "initial_value": "Helvetica-Bold"
+      },
+      {
+        "key": "logout_title_font_android",
+        "type": "android_font_selector",
+        "label": "Logout Android title font",
+        "initial_value": "Roboto-Bold"
+      },
+      {
+        "key": "logout_title_font_size",
+        "type": "number_input",
+        "label": "Logout title font size",
+        "initial_value": 15
+      },
+      {
+        "key": "logout_title_font_color",
+        "type": "color_picker",
+        "label": "Logout title font color",
+        "initial_value": "#ffffffff"
+      }
+    ]
+  },
+  "localizations": {
+    "fields": [
+      {
+        "key": "fields_email_text",
+        "label": "Email field placeholder",
+        "initial_value": "E-mail"
+      },
+      {
+        "key": "fields_password_text",
+        "label": "Password field placeholder",
+        "initial_value": "Password"
+      },
+      {
+        "key": "fields_name_text",
+        "label": "Name field placeholder",
+        "initial_value": "Enter your name"
+      },
+      {
+        "key": "action_button_login_text",
+        "label": "Login button title",
+        "initial_value": "LOG IN"
+      },
+      {
+        "key": "action_button_signup_text",
+        "label": "Signup button title",
+        "initial_value": "SIGN UP"
+      },
+      {
+        "key": "video_stream_exception_message",
+        "label": "Message in case video url is empty",
+        "initial_value": "Video stream in not available. Please try again later"
+      },
+      {
+        "key": "general_error_message",
+        "label": "General error message",
+        "initial_value": "Something went wrong. Please try again later"
+      },
+      {
+        "key": "signup_title_error_text",
+        "label": "Error signup title",
+        "initial_value": "Sign-up failed"
+      },
+      {
+        "key": "login_title_error_text",
+        "label": "Error login title",
+        "initial_value": "Login failed"
+      },
+      {
+        "key": "logout_title_succeed_text",
+        "label": "Successful logout title",
+        "initial_value": "Successfully Logged Out"
+      },
+      {
+        "key": "logout_title_fail_text",
+        "label": "Error logout title",
+        "initial_value": "Logout Failed"
+      },
+      {
+        "key": "reset_password_success_title",
+        "label": "Successful password reset title",
+        "initial_value": "Set New Password Success"
+      },
+      {
+        "key": "reset_password_success_text",
+        "label": "Successful password reset message",
+        "initial_value": "Your password was successfully updated"
+      },
+      {
+        "key": "reset_password_error_title",
+        "label": "Password reset error title",
+        "initial_value": "Set New Password"
+      },
+      {
+        "key": "reset_password_error_text",
+        "label": "Password reset error message",
+        "initial_value": "New password could not be set. Please try again."
+      },
+      {
+        "key": "request_password_success_title",
+        "label": "Successful password request title",
+        "initial_value": "Request Password Success"
+      },
+      {
+        "key": "request_password_success_message",
+        "label": "Successful password request message",
+        "initial_value": "Please check your email to change password"
+      },
+      {
+        "key": "request_password_error_title",
+        "label": "Password request error title",
+        "initial_value": "Request Password Fail"
+      },
+      {
+        "key": "request_password_error_text",
+        "label": "Password request error message",
+        "initial_value": "Can not request password"
+      },
+      {
+        "key": "login_title_validation_error",
+        "label": "Login validation error title",
+        "initial_value": "Login form issue"
+      },
+      {
+        "key": "signup_title_validation_error",
+        "label": "Signup validation error title",
+        "initial_value": "Sign Up form issue"
+      },
+      {
+        "key": "new_password_title_validation_error",
+        "label": "New password validation error title",
+        "initial_value": "Set New Password form issue"
+      },
+      {
+        "key": "login_email_validation_error",
+        "label": "Error message for not valid EMAIL",
+        "initial_value": "Email is not valid"
+      },
+      {
+        "key": "signup_name_validation_error",
+        "label": "Error message for not valid NAME",
+        "initial_value": "Name can not be empty"
+      },
+      {
+        "key": "signup_password_validation_error",
+        "label": "Error message for not valid PASSWORD",
+        "initial_value": "Password must be at least 8 characters and contain one lower case, one upper case, one special character and one number"
+      },
+      {
+        "key": "signup_password_confirmation_validation_error",
+        "label": "Error message for not valid PASSWORD CONFIRMATION",
+        "initial_value": "Password not equal confirmation password"
+      },
+      {
+        "key": "new_password_token_validation_error",
+        "label": "Error message for not valid TOKEN",
+        "initial_value": "Token should not be empty"
+      },
+      {
+        "key": "title_font_text",
+        "label": "Text title",
+        "initial_value": "Cleeng"
+      },
+      {
+        "key": "back_button_text",
+        "label": "Back button title",
+        "initial_value": "Back"
+      },
+      {
+        "key": "fields_set_new_password_text",
+        "label": "New password field placeholder",
+        "initial_value": "New password"
+      },
+      {
+        "key": "fields_password_confirmation_text",
+        "label": "Password confirmation field placeholder",
+        "initial_value": "Password Confirmation"
+      },
+      {
+        "key": "fields_token_text",
+        "label": "Token field placeholder",
+        "initial_value": "Token"
+      },
+      {
+        "key": "forgot_password_text",
+        "label": "Forgot password text",
+        "initial_value": "Forgotten your Username or Password?"
+      },
+      {
+        "key": "create_account_link_text",
+        "label": "Create account text",
+        "initial_value": "No user? Sign Up!"
+      },
+      {
+        "key": "action_button_forgot_password_text",
+        "label": "Request password button title",
+        "initial_value": "REQUEST PASSWORD"
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+.vjs-icon-close {
+    font-family: THEOplayer;
+    font-weight: normal;
+    font-style: normal;
+    order: -101
+
+}
+
+.vjs-icon-close:before {
+  content: "\f125";
+  font-size: 3em;
+  order: -101; /* to the left of the play/pause-button */
+}
+
+.theoplayer-skin .theo-player-wrapper .vjs-control-bar.theo-top-controlbar {
+  top: 0;
+  height: 4em;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  flex-direction: row-reverse;
+  margin: 0.75em;
+  padding: 0;
+  width: auto;
+  visibility: visible;
+  color: white;
+}
+
+.vjs-fullscreen-control {
+    display: none !important;
+}
+
+.vjs-icon-picture-in-picture-enter {
+    display: none !important;
+
+}
+
+.theoplayer-skin .vjs-big-play-button {
+    display: none !important;
+}
+
+.theoplayer-skin video {
+  /* object-fit: contain;*/ /* default */
+  object-fit: cover; /* content outside of the container, hence some content might be missing from the container */
+  /* object-fit: fill; // all content inside of the container, but the content might be deformed to be fitted inside of it */
+}

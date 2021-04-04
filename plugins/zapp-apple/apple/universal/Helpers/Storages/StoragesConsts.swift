@@ -28,6 +28,8 @@ public struct ZappStorageKeys {
     public static let platform = "platform"
     public static let store = "store"
     public static let regionCode = "regionCode"
+    public static let countryCode = "countryCode"
+    public static let currencySymbol = "currencySymbol"
     public static let uuid = "uuid"
     public static let tvOS = "tvOS"
     public static let iOS = "iOS"

@@ -11,17 +11,13 @@ import javax.annotation.Nullable
 
 class SegmentAPI(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-    val TAG = "SegmentAPI"
-
-    override fun getName(): String {
-        return TAG
-    }
+    override fun getName(): String = TAG
 
     // Make sure to not call this method before the application initialization
     @ReactMethod
     fun identifyUser(userId: String,
-                 traits: ReadableMap,
-                 options: ReadableMap) {
+                     traits: ReadableMap,
+                     options: ReadableMap) {
 
         val analytics = Analytics.with(reactApplicationContext)
         val newTraits = Traits()
@@ -41,5 +37,9 @@ class SegmentAPI(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         newOptions?.context()?.putAll(options.toHashMap())
 
         analytics.identify(userId, newTraits, newOptions)
+    }
+
+    companion object {
+        private const val TAG = "SegmentAPI"
     }
 }
