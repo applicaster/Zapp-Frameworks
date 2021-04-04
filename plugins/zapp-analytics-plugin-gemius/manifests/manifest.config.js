@@ -41,6 +41,7 @@ function createManifest({ version, platform }) {
     platform,
     min_zapp_sdk: min_zapp_sdk[platform],
     manifest_version: version,
+    project_dependencies: project_dependencies[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
     targets: targets[platform],
@@ -52,6 +53,9 @@ function createManifest({ version, platform }) {
 }
 
 const min_zapp_sdk = {
+  amazon_fire_tv_for_quickbrick: "4.0.0",
+  android_tv_for_quickbrick: "4.0.0",
+  android_for_quickbrick: "4.0.0",
   ios_for_quickbrick: "4.1.0-Dev",
   tvos_for_quickbrick: "4.1.0-Dev"
 };
@@ -68,6 +72,23 @@ const extra_dependencies = {
   ios_for_quickbrick: extra_dependencies_apple,
 };
 
+const android_project_dependencies = [
+  {
+    "zapp-analytics-plugin-gemius":
+      "node_modules/@applicaster/zapp-analytics-plugin-gemius/android",
+  },
+]
+
+const project_dependencies = {
+  android_for_quickbrick: android_project_dependencies,
+  android_tv_for_quickbrick: android_project_dependencies,
+  amazon_fire_tv_for_quickbrick: android_project_dependencies
+};
+
+const api_android = {
+  "class_name": "com.applicaster.analytics.gemius.GemiusAgent",
+}
+
 const api_apple = {
   require_startup_execution: false,
   class_name: "GemiusAnalytics",
@@ -75,6 +96,9 @@ const api_apple = {
 };
 
 const api = {
+  amazon_fire_tv_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  android_for_quickbrick: api_android,
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple
 };
@@ -83,6 +107,9 @@ const mobileTarget = ["mobile"];
 const tvTarget = ["tv"];
 
 const targets = {
+  amazon_fire_tv_for_quickbrick: tvTarget,
+  android_tv_for_quickbrick: tvTarget,
+  android_for_quickbrick: mobileTarget,
   ios_for_quickbrick: mobileTarget,
   tvos_for_quickbrick: tvTarget
 };
