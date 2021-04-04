@@ -6,7 +6,7 @@ import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.delayedplugin.DelayedPlugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
-import com.applicaster.storage.LocalStorage
+import com.applicaster.session.SessionStorage
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
 import com.applicaster.util.OSUtil
@@ -73,7 +73,7 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
                 if (token.isNullOrBlank()) {
                     APLogger.error(TAG, "DIManager plugin received empty token")
                 } else {
-                    LocalStorage.set(jwtStorageKey, token)
+                    SessionStorage.set(jwtStorageKey, token)
                 }
             } catch (e: Exception) {
                 APLogger.error(TAG, "DIManager plugin failed to fetch $serverUrl", e)
@@ -98,7 +98,7 @@ class DIManager : GenericPluginI, ApplicationLoaderHookUpI, DelayedPlugin {
     }
 
     override fun disable(): Boolean {
-        LocalStorage.remove(jwtStorageKey)
+        SessionStorage.remove(jwtStorageKey)
         return true
     }
 }
