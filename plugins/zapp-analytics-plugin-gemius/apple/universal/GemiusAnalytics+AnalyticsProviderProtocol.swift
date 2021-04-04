@@ -56,6 +56,11 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         guard shoudIgnoreEvent(eventName) == false else {
             return
         }
+        
+        guard shouldHandlePlayerEvents(for: eventName, parameters: parameters) == false else {
+            return
+        }
+        
         // Add extra params to align with the Android plugin code
         var newParameters = parameters
         newParameters["name"] = eventName as NSObject
