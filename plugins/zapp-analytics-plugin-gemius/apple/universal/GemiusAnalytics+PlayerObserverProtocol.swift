@@ -33,11 +33,6 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
     }
 
     public func playerDidCreate(player: PlayerProtocol) {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleAccessLogEntry(notification:)),
-                                               name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
-                                               object: nil)
-
         gemiusPlayerObject = GSMPlayer(id: getKey(),
                                        withHost: hitCollectorHost,
                                        withGemiusID: scriptIdentifier,
@@ -49,9 +44,9 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
         data.addCustomParameter("Video UUID", value: entryId)
         // set item title
         data.addCustomParameter("Title", value: entryTitle)
-        //set program type
+        // set program type
         data.programType = .VIDEO
-        
+
         // set item duration
         if let duration = avPlayer?.currentItem?.duration.seconds {
             data.duration = NSNumber(value: duration)
@@ -59,6 +54,11 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
 
         // set program data
         gemiusPlayerObject?.newProgram(entryId, with: data)
+        
+        gemiusPlayerObject?.program(.BUFFER,
+                                    forProgram: entryId,
+                                    atOffset: 0,
+                                    with: nil)
     }
 
     public func playerDidDismiss(player: PlayerProtocol) {
@@ -74,73 +74,30 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
                                     forProgram: entryId,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
-        
     }
 
     public func playerProgressUpdate(player: PlayerProtocol,
                                      currentTime: TimeInterval,
                                      duration: TimeInterval) {
+    }
 
+    public func playerSeeked(player: PlayerProtocol,
+                             currentTime: TimeInterval,
+                             seekTime: TimeInterval) {
+        gemiusPlayerObject?.program(.SEEK, forProgram: entryId,
+                                    atOffset: NSNumber(value: currentTime),
+                                    with: nil)
     }
     
-    public func playerVideoSeek(player: PlayerProtocol,
-                                currentTime: TimeInterval,
-                                seekTime: TimeInterval) {
-        gemiusPlayerObject?.program(.SEEK, forProgram: entryId,
-                                    atOffset: NSNumber(value: currentPlayerPosition),
+    func playerPaused(player: PlayerProtocol, currentTime: TimeInterval) {
+        gemiusPlayerObject?.program(.PAUSE, forProgram: entryId,
+                                    atOffset: NSNumber(value: currentTime),
                                     with: nil)
     }
-
-    @objc func handleAccessLogEntry(notification: NSNotification) {
-        // Remove listening to the AccessLogs after first log received
-        NotificationCenter.default.removeObserver(self,
-                                                  name: NSNotification.Name.AVPlayerItemNewAccessLogEntry,
-                                                  object: nil)
-
-        // Register for observer for player
-        avPlayer?.addObserver(self,
-                              forKeyPath: "rate",
-                              options: [],
-                              context: nil)
-        if let avPlayer = avPlayer {
-            playerRateObserverPointerString = UInt(bitPattern: ObjectIdentifier(avPlayer))
-        }
-
-        gemiusPlayerObject?.program(.PLAY,
-                                    forProgram: entryId,
-                                    atOffset: NSNumber(value: currentPlayerPosition),
+    
+    func playerResumed(player: PlayerProtocol, currentTime: TimeInterval) {
+        gemiusPlayerObject?.program(.PLAY, forProgram: entryId,
+                                    atOffset: NSNumber(value: currentTime),
                                     with: nil)
-    }
-
-    override public func observeValue(forKeyPath keyPath: String?,
-                                      of object: Any?,
-                                      change: [NSKeyValueChangeKey: Any]?,
-                                      context: UnsafeMutableRawPointer?) {
-        if let object = object as? AVPlayer,
-           let player = avPlayer,
-           object == player {
-            // if playing
-
-            if currentPlayerPosition > 5 {
-                if playbackStalled, player.rate > 0 {
-                    gemiusPlayerObject?.program(.PLAY,
-                                                forProgram: entryId,
-                                                atOffset: NSNumber(value: currentPlayerPosition),
-                                                with: nil)
-                    playbackStalled = false
-                }
-                // if paused
-                else if !playbackStalled, player.rate == 0 {
-                    gemiusPlayerObject?.program(.PAUSE,
-                                                forProgram: entryId,
-                                                atOffset: NSNumber(value: currentPlayerPosition),
-                                                with: nil)
-                    
-                    playbackStalled = true
-                }
-            }
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
 }
