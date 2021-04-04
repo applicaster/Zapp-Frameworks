@@ -35,6 +35,12 @@ class THEOplayerView: UIView {
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
     @objc var onJSWindowEvent: RCTBubblingEventBlock?
+    @objc var onAdBreakBegin: RCTBubblingEventBlock?
+    @objc var onAdBreakEnd: RCTBubblingEventBlock?
+    @objc var onAdError: RCTBubblingEventBlock?
+    @objc var onAdBegin: RCTBubblingEventBlock?
+    @objc var onAdEnd: RCTBubblingEventBlock?
+
     @objc var licenceData: NSDictionary? {
         didSet {
             setupTheoPlayer()
@@ -124,6 +130,11 @@ class THEOplayerView: UIView {
         onPlayerDestroy = nil
         onPlayerEnded = nil
         onPlayerError = nil
+        onAdBreakBegin = nil
+        onAdBreakEnd = nil
+        onAdBegin = nil
+        onAdEnd = nil
+        onAdError = nil
         onJSWindowEvent = nil
         onPlayerPresentationModeChange = nil
         source = nil
