@@ -1,11 +1,10 @@
 package com.theoplayerreactnative.events
 
-import android.util.Log
 import com.facebook.react.bridge.Arguments.createMap
 import com.facebook.react.bridge.WritableMap
 import com.theoplayer.android.api.event.player.*
 
-object EventsBinder {
+object PlayerEventMapper {
 
     @JvmStatic
     fun toRN(event: PlayEvent): WritableMap = createMap().apply {

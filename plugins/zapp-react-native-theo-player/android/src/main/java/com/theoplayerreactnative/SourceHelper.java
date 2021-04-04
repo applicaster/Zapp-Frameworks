@@ -57,6 +57,11 @@ public class SourceHelper {
                     builder.type(SourceType.DASH);
                 } else if ("application/vnd.apple.mpegurl".equals(streamType)) {
                     builder.type(SourceType.HLS);
+                }  else if ("video/hls".equals(streamType)) {
+                    APLogger.warn(TAG,
+                            "Using non-ISO MIME type 'video/hls'. " +
+                                    "Should be either 'application/vnd.apple.mpegurl' or 'application/x-mpegurl'");
+                    builder.type(SourceType.HLS);
                 } else if ("video/mp4".equals(streamType)) {
                     builder.type(SourceType.MP4);
                 } else {
