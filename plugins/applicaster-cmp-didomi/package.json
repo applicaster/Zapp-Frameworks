@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/applicaster-cmp-didomi",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.11",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/applicaster/Zapp-Frameworks",
   "peerDependencies": {
-    "@applicaster/x-ray": "0.2.0",
+    "@applicaster/quick-brick-xray": "*",
     "react": "16.11.0",
     "react-native": "0.62.2"
   },

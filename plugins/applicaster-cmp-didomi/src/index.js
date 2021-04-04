@@ -1,35 +1,15 @@
-import React from "react";
-import { StyleSheet, Dimensions, Text, View } from "react-native";
+import * as React from "react";
+import { Text, View, TouchableOpacity } from "react-native";
 import { NativeModules } from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+import { createLogger, addContext } from "./logger";
+import { DEFAULT } from "./utils";
+import { styles, stylesError } from "./styles";
 
 /**
  * Class to present any native screens over QB application
  */
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width,
-    backgroundColor: "rgba(0,255,0,0.5)",
-  },
-});
-
-const stylesError = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width,
-    color: "white",
-    backgroundColor: "rgba(255,0 ,0,0.5)",
-  },
-});
 
 type Props = {
   screenData: {
@@ -37,69 +17,98 @@ type Props = {
   },
 };
 
-function renderError(message: string, onDismiss: () => void) {
-    console.error("NativeScreen", message);
-    // todo: in release builds, do not show the error component, just perform the onDismiss action and show some generic not scaring message.
+const logger = createLogger();
 
-    // warn zapp user that he did somethign wrong
-    // todo: add a button with onDismiss callback
-    return <Text style={stylesError.container}>Can not open native screen: {message}</Text>;
+function renderError(message: string, onDismiss: () => void) {
+  // todo: in release builds, do not show the error component, just perform the onDismiss action and show some generic not scaring message.
+  const releaseBuild = null;
+  logger.warn(message);
+
+  return !releaseBuild ? (
+    <View style={stylesError.container}>
+      <Text style={stylesError.alert}>⚠️</Text>
+      <Text style={stylesError.message}>Could not open native screen:</Text>
+      <Text style={stylesError.errorMessage}>{message}</Text>
+      <TouchableOpacity style={stylesError.button} onPress={onDismiss}>
+        <Text style={stylesError.buttonText}>Dismiss</Text>
+      </TouchableOpacity>
+    </View>
+  ) : (
+    <View style={stylesError.container} onLayout={onDismiss}>
+      <Text style={stylesError.message}>Could not open native screen</Text>
+    </View>
+  );
 }
 
-export default NativeScreen = (props: Props) => {
-
-  console.log("NativeScreen", "props", props);
+export default NativeScreen = ({ screenData }: Props) => {
+  const navigator = useNavigation();
+  const generalData = screenData?.general;
+  const packageName = generalData?.package_name || DEFAULT.packageName;
+  const methodName = generalData?.method_name || DEFAULT.methodName;
+  const screenPackage = NativeModules?.[packageName];
+  const method = screenPackage?.[methodName];
 
   const onDismiss = () => {
     // todo: this exit action should be customizible: go back or go home/other screen
-    if(navigator.canGoBack()) {
+    // manifest already has fields set up for this behavior
+    if (navigator.canGoBack()) {
+      logger.info("Dismissed native screen, going back");
       navigator.goBack();
     } else {
-      // else log a warning, since it gives bad UX
-      console.warn("Can't bo back")
+      logger.warn("Dismissed native screen, can't go back, trying to go home");
       navigator.goHome();
     }
   };
 
-  // these should come from the screen properties
-  const packageName = props?.screenData?.general?.reactPackageName;
-
-  if(!packageName) {
+  if (!packageName) {
     // warn used that he did somethign wrong
     return renderError(`React package name is not set`, onDismiss);
   }
 
-  const methodName = props?.screenData?.general?.reactMethodName;
-
-  if(!methodName) {
+  if (!methodName) {
     // warn used that he did somethign wrong
     return renderError(`React method name is not set`, onDismiss);
   }
 
   // todo: handle errors and fire exit action right away after showing some error message for the user
 
-  const screenPackage = NativeModules[packageName];
-  if(!screenPackage) {
+  if (!screenPackage) {
     // warn used that he did somethign wrong
     return renderError(`Package ${packageName} is not found`, onDismiss);
   }
 
-  const method = screenPackage[methodName];
-  if(!method) {
+  if (!method) {
     // warn used that he did somethign wrong
-    return renderError(`Method ${methodName} is not found in the package ${packageName}`, onDismiss);
+    return renderError(
+      `Method ${methodName} is not found in the package ${packageName}`,
+      onDismiss
+    );
   }
-
-  var navigator = useNavigation();
 
   React.useEffect(() => {
     (async () => {
+      addContext({
+        manifestData: DEFAULT,
+        screenId: screenData.id,
+        screenName: screenData.name,
+      });
       // todo: add params
-      const res = await method();
+
+      try {
+        const res = await method();
+        logger.info(`Received response from native method ${methodName}`, res);
+        onDismiss();
+      } catch (error) {
+        renderError(error);
+      }
       // todo: obtain result as optional object
       // todo: handle errors and fire exit action right away after showing some error message for the user
-      onDismiss();
     })();
+
+    return () => {
+      logger.info("Unmounted native screen");
+      onDismiss();
+    };
   }, []);
   return <View style={styles.container}></View>;
 };
