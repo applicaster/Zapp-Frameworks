@@ -82,14 +82,6 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
                                      duration: TimeInterval) {
 
     }
-    
-    public func playerVideoSeek(player: PlayerProtocol,
-                                currentTime: TimeInterval,
-                                seekTime: TimeInterval) {
-        gemiusPlayerObject?.program(.SEEK, forProgram: entryId,
-                                    atOffset: NSNumber(value: currentPlayerPosition),
-                                    with: nil)
-    }
 
     @objc func handleAccessLogEntry(notification: NSNotification) {
         // Remove listening to the AccessLogs after first log received

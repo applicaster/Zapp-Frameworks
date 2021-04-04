@@ -52,21 +52,6 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
         }
     }
 
-    public func playerVideoSeek(player: PlayerProtocol,
-                                currentTime: TimeInterval,
-                                seekTime: TimeInterval) {
-        if let providers = providers(playerPlugin: player) {
-            providers.forEach { providerDict in
-                let provider = providerDict.value
-                if let provider = provider as? PlayerObserverProtocol {
-                    provider.playerVideoSeek?(player: player,
-                                              currentTime: currentTime,
-                                              seekTime: seekTime)
-                }
-            }
-        }
-    }
-
     public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
         // provider can prevent from starting to play when player is ready to play
         // provider should call player.pluggablePlayerResume() when finished its operations
