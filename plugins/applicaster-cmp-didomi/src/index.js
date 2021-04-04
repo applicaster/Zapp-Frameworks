@@ -4,7 +4,7 @@ import { NativeModules } from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { createLogger, addContext } from "./logger";
-import { DEFAULT } from "./utils";
+import { DEFAULT, releaseBuild } from "./utils";
 import { styles, stylesError } from "./styles";
 
 /**
@@ -20,8 +20,6 @@ type Props = {
 const logger = createLogger();
 
 function renderError(message: string, onDismiss: () => void) {
-  // todo: in release builds, do not show the error component, just perform the onDismiss action and show some generic not scaring message.
-  const releaseBuild = null;
   logger.warn(message);
 
   return !releaseBuild ? (

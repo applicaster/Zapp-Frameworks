@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import createManifest from "../manifests/manifest.config";
 
 const PLATFORMS = ["android_for_quickbrick", "ios_for_quickbrick"];
+export const releaseBuild = process.env.with_release || null;
 
 /**
  * Generates a manifest using the current platform, and package version
