@@ -1,6 +1,6 @@
 {
   "name": "ZappTHEOplayer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
@@ -15,33 +15,46 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-react-native-theo-player/0.0.2"
+    "tag": "@@applicaster/zapp-react-native-theo-player/0.0.3"
   },
   "static_framework": true,
   "ios": {
     "xcconfig": {
-      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
       "ENABLE_BITCODE": "YES",
-      "OTHER_CFLAGS": "-fembed-bitcode",
-      "OTHER_LDFLAGS": "$(inherited)"
+      "OTHER_CFLAGS": "-fembed-bitcode"
     },
-    "dependencies": {},
+    "dependencies": {
+      "GoogleAds-IMA-iOS-SDK": [
+        "= 3.13.0"
+      ],
+      "React": [],
+      "ZappCore": [],
+      "google-cast-sdk": [
+        "= 4.3.0"
+      ]
+    },
     "source_files": "ios/**/*.{swift}"
   },
   "tvos": {
     "xcconfig": {
       "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
       "ENABLE_BITCODE": "YES",
-      "OTHER_CFLAGS": "-fembed-bitcode",
-      "OTHER_LDFLAGS": "$(inherited)"
+      "OTHER_CFLAGS": "-fembed-bitcode"
     },
     "source_files": "tvos/**/*.{swift}"
   },
-  "vendored_frameworks": "universal/THEOplayerSDK.framework",
+  "vendored_frameworks": [
+    "THEOplayerSDK.framework"
+  ],
   "dependencies": {
     "XrayLogger": []
   },
-  "source_files": "universal/**/*.{h,m,swift}",
+  "source_files": [
+    "universal/**/*.{h,m,swift}"
+  ],
+  "resources": [
+    "ui_customization/**/*"
+  ],
   "testspecs": [
     {
       "name": "UnitTests",

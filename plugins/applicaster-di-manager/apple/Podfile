@@ -1,6 +1,6 @@
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 install! 'cocoapods', :share_schemes_for_development_pods => true
 project '../../../localProject/apple/FrameworksApp.xcodeproj'
 
@@ -11,9 +11,12 @@ end
 
 target 'FrameworksApp' do
   use_frameworks!
-  pod 'ZappSessionStorageIdfa', :path => './ZappSessionStorageIdfa.podspec', :testspecs => ['UnitTests']
+  pod 'ZappDiManager', :path => './ZappDiManager.podspec', :testspecs => ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
-
+  pod 'QuickBrickXray', path: '../../quick-brick-xray/apple/QuickBrickXray.podspec'
+  pod 'XrayLogger', path: '../../../node_modules/@applicaster/x-ray/apple/Xraylogger.podspec'
+  pod 'Reporter', path: '../../../node_modules/@applicaster/x-ray/apple/Reporter.podspec'
+  pod 'LoggerInfo', path: '../../../node_modules/@applicaster/x-ray/apple/LoggerInfo.podspec'
   target 'FrameworksAppTests' do
     inherit! :search_paths
   end

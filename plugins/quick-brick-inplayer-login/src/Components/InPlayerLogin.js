@@ -85,7 +85,8 @@ const InPlayerLogin = (props) => {
     return isNaN(parsedValue) ? null : parsedValue;
   }, []);
 
-  const showParentLock = props?.configuration?.import_parent_lock;
+  const showParentLock =
+    screenStyles?.import_parent_lock === "1" ? true : false;
 
   let stillMounted = true;
 
@@ -267,7 +268,7 @@ const InPlayerLogin = (props) => {
     });
 
     InPlayerService.login({
-      email: email,
+      email,
       password,
       clientId,
       referrer,
@@ -332,7 +333,7 @@ const InPlayerLogin = (props) => {
         logger.error({
           message: `Account Creation failed, fullName: ${fullName}, email: ${email}, password: ${password}`,
           data: {
-            email: trimmedEmail,
+            email,
             password,
             fullName,
             error,
