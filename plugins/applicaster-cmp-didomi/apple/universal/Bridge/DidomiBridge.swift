@@ -34,7 +34,7 @@ class DidomiBridge: NSObject, RCTBridgeModule {
         return provider
     }
 
-    @objc public func getCastState(_ resolver: @escaping RCTPromiseResolveBlock,
+    @objc public func showPreferences(_ resolver: @escaping RCTPromiseResolveBlock,
                                    rejecter: @escaping RCTPromiseRejectBlock) {
         guard let pluginInstance = self.pluginInstance else {
             rejecter("failure", "plugin not available", nil)

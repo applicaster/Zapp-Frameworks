@@ -15,7 +15,7 @@
   },
   "requires_arc": true,
   "swift_versions": "5.1",
-  "source_files": "universal/**/*.{swift}",
+  "source_files": "universal/**/*.{swift,m}",
   "xcconfig": {
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES"
