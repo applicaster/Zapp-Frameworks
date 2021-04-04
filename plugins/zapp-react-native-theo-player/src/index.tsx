@@ -163,7 +163,6 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerLoadStart = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Created", nativeEvent);
   };
 
   onPlayerCanPlay = ({ nativeEvent }) => {};
