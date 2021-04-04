@@ -32,6 +32,14 @@ extension RootController: FacadeConnectorPlayerDependantProtocol {
                                                              duration: duration)
     }
 
+    public func playerVideoSeek(player: PlayerProtocol,
+                                currentTime: TimeInterval,
+                                seekTime: TimeInterval) {
+        pluginsManager.playerDependants.playerVideoSeek(player: player,
+                                                        currentTime: currentTime,
+                                                        seekTime: seekTime)
+    }
+
     public func playerReadyToPlay(player: PlayerProtocol) -> Bool {
         return pluginsManager.playerDependants.playerReadyToPlay(player: player)
     }

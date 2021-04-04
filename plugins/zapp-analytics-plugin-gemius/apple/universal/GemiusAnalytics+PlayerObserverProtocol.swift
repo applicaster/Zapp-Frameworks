@@ -16,7 +16,7 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
         return playerPlugin?.playerObject as? AVPlayer
     }
 
-    var currentPlayerPosition: Double {
+    var currentPlayerPosition: TimeInterval {
         return avPlayer?.currentItem?.currentTime().seconds ?? 0.00
     }
 
@@ -45,12 +45,16 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
 
         let data = GSMProgramData()
 
+        // set item id
+        data.addCustomParameter("Video UUID", value: entryId)
         // set item title
-        data.name = entryTitle
-
+        data.addCustomParameter("Title", value: entryTitle)
+        //set program type
+        data.programType = .VIDEO
+        
         // set item duration
         if let duration = avPlayer?.currentItem?.duration.seconds {
-            data.duration = NSNumber(value: Int(duration))
+            data.duration = NSNumber(value: duration)
         }
 
         // set program data
@@ -73,8 +77,18 @@ extension GemiusAnalytics: PlayerObserverProtocol, PlayerDependantPluginProtocol
         
     }
 
-    public func playerProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
+    public func playerProgressUpdate(player: PlayerProtocol,
+                                     currentTime: TimeInterval,
+                                     duration: TimeInterval) {
 
+    }
+    
+    public func playerVideoSeek(player: PlayerProtocol,
+                                currentTime: TimeInterval,
+                                seekTime: TimeInterval) {
+        gemiusPlayerObject?.program(.SEEK, forProgram: entryId,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
     }
 
     @objc func handleAccessLogEntry(notification: NSNotification) {

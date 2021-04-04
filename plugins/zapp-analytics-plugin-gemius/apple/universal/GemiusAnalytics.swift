@@ -58,7 +58,7 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     }()
     
     var gemiusPlayerObject: GSMPlayer?
-
+    
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
         configurationJSON = model?.configurationJSON

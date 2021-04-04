@@ -14,6 +14,11 @@ extension GemiusAnalytics: PlayerAdObserverProtocol {
     func playerAdStarted(player: PlayerProtocol) {
         let data = GSMAdData()
         gemiusPlayerObject?.newAd(UUID().uuidString, with: data)
+        
+        gemiusPlayerObject?.program(.BREAK,
+                                    forProgram: entryId,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
     }
     
     func playerAdCompleted(player: PlayerProtocol) {
@@ -24,7 +29,9 @@ extension GemiusAnalytics: PlayerAdObserverProtocol {
 
     }
     
-    func playerAdProgressUpdate(player: PlayerProtocol, currentTime: TimeInterval, duration: TimeInterval) {
+    func playerAdProgressUpdate(player: PlayerProtocol,
+                                currentTime: TimeInterval,
+                                duration: TimeInterval) {
 
     }
 }
