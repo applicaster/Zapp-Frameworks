@@ -8,7 +8,6 @@
 import Foundation
 import os.log
 import THEOplayerSDK
-import ZappCore
 
 struct RNTHEOplayerKeys {
     static let currentTime = "currentTime"
@@ -55,7 +54,7 @@ extension THEOplayerView {
 
     func attachEventListeners() {
         logger?.debugLog(message: "Player Add event listeners")
-
+        
         listeners[PlayerEventTypes.PLAY.name] = player.addEventListener(type: PlayerEventTypes.PLAY, listener: play)
         listeners[PlayerEventTypes.PLAYING.name] = player.addEventListener(type: PlayerEventTypes.PLAYING, listener: playing)
         listeners[PlayerEventTypes.PAUSE.name] = player.addEventListener(type: PlayerEventTypes.PAUSE, listener: pause)
@@ -82,8 +81,9 @@ extension THEOplayerView {
     }
 
     func removeEventListeners() {
+        
         logger?.debugLog(message: "Player Remove event listeners")
-
+        
         player.removeEventListener(type: PlayerEventTypes.PLAY, listener: listeners[PlayerEventTypes.PLAY.name]!)
         player.removeEventListener(type: PlayerEventTypes.PLAYING, listener: listeners[PlayerEventTypes.PLAYING.name]!)
         player.removeEventListener(type: PlayerEventTypes.PAUSE, listener: listeners[PlayerEventTypes.PAUSE.name]!)
@@ -115,7 +115,6 @@ extension THEOplayerView {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
-
         onPlayerPlay?([RNTHEOplayerKeys.type: event.type,
                        RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
@@ -124,10 +123,6 @@ extension THEOplayerView {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
-
-        // update player dependent plugins on resume/play
-        FacadeConnector.connector?.playerDependant?.playerResumed?(player: self,
-                                                                   currentTime: event.getPatchedCurrentTime)
         onPlayerPlaying?([RNTHEOplayerKeys.type: event.type,
                           RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
@@ -136,11 +131,6 @@ extension THEOplayerView {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
-
-        // update player dependent plugins on pause
-        FacadeConnector.connector?.playerDependant?.playerPaused?(player: self,
-                                                                  currentTime: event.getPatchedCurrentTime)
-
         onPlayerPause?([RNTHEOplayerKeys.type: event.type,
                         RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
@@ -159,11 +149,6 @@ extension THEOplayerView {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
-
-        // update player dependent plugins on seek
-        FacadeConnector.connector?.playerDependant?.playerSeeked?(player: self,
-                                                                  currentTime: event.getPatchedCurrentTime,
-                                                                  seekTime: 0)
         onPlayerSeeked?([RNTHEOplayerKeys.type: event.type,
                          RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
@@ -185,11 +170,6 @@ extension THEOplayerView {
         }
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: info)
-
-        // update player dependent plugins on progress update
-        FacadeConnector.connector?.playerDependant?.playerProgressUpdate(player: self,
-                                                                         currentTime: event.getPatchedCurrentTime,
-                                                                         duration: event.currentProgramDateTime?.timeIntervalSince1970 ?? 0)
         onPlayerTimeUpdate?(info)
     }
 
@@ -237,7 +217,6 @@ extension THEOplayerView {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
-
         onPlayerLoadStart?([RNTHEOplayerKeys.type: event.type,
                             RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime])
     }
@@ -317,14 +296,12 @@ extension THEOplayerView {
     private func destroy(event: DestroyEvent) {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type])
-
         onPlayerDestroy?([RNTHEOplayerKeys.type: event.type])
     }
 
     private func ended(event: EndedEvent) {
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
                          data: [RNTHEOplayerKeys.type: event.type])
-
         onPlayerEnded?([RNTHEOplayerKeys.type: event.type])
     }
 

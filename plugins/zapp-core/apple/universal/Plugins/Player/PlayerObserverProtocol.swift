@@ -43,22 +43,10 @@ import Foundation
     ///  - player: instance of the player that conform PlayerProtocol protocol
     @objc optional func playerReadyToPlay(player: PlayerProtocol) -> Bool
 
-    /// Player instance is paused
+    /// Player instance did seek
     ///
     ///  - player: instance of the player that conform PlayerProtocol protocol
-    @objc optional func playerPaused(player: PlayerProtocol,
-                                     currentTime: TimeInterval)
-    
-    /// Player instance is resumed
-    ///
-    ///  - player: instance of the player that conform PlayerProtocol protocol
-    @objc optional func playerResumed(player: PlayerProtocol,
-                                     currentTime: TimeInterval)
-    
-    /// Player instance is seeked
-    ///
-    ///  - player: instance of the player that conform PlayerProtocol protocol
-    @objc optional func playerSeeked(player: PlayerProtocol,
-                                     currentTime: TimeInterval,
-                                     seekTime: TimeInterval)
+    @objc optional func playerVideoSeek(player: PlayerProtocol,
+                                        currentTime: TimeInterval,
+                                        seekTime: TimeInterval)
 }

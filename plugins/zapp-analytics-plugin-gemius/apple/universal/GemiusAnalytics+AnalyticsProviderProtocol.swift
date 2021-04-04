@@ -65,11 +65,7 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         let event = GEMAudienceEvent()
         event.eventType = .EVENT_FULL_PAGEVIEW
         for (key, value) in newParameters {
-            var paramValue = value
-            if let value = value as? String, value.isEmpty {
-                paramValue = "N/A" as NSObject
-            }
-            event.addExtraParameter(key, value: "\(paramValue)")
+            event.addExtraParameter(key, value: "\(value)")
         }
         event.send()
     }

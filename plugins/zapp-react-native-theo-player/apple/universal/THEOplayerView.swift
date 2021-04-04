@@ -3,7 +3,6 @@ import React
 import THEOplayerSDK
 import UIKit
 import XrayLogger
-import ZappCore
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -128,9 +127,6 @@ class THEOplayerView: UIView {
         onJSWindowEvent = nil
         onPlayerPresentationModeChange = nil
         source = nil
-        
-        //update player dependent plugins on dismiss
-        FacadeConnector.connector?.playerDependant?.playerDidDismiss(player: self)
     }
 
     // MARK: - THEOplayer setup and unload
@@ -183,7 +179,5 @@ class THEOplayerView: UIView {
             player.play()
         }
 
-        //update player dependent plugins on creation
-        FacadeConnector.connector?.playerDependant?.playerDidCreate(player: self)
     }
 }

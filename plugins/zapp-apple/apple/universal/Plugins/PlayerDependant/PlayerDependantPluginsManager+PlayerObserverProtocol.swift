@@ -52,42 +52,16 @@ extension PlayerDependantPluginsManager: PlayerObserverProtocol {
         }
     }
 
-    public func playerResumed(player: PlayerProtocol,
-                              currentTime: TimeInterval) {
+    public func playerVideoSeek(player: PlayerProtocol,
+                                currentTime: TimeInterval,
+                                seekTime: TimeInterval) {
         if let providers = providers(playerPlugin: player) {
             providers.forEach { providerDict in
                 let provider = providerDict.value
                 if let provider = provider as? PlayerObserverProtocol {
-                    provider.playerResumed?(player: player,
-                                            currentTime: currentTime)
-                }
-            }
-        }
-    }
-
-    public func playerPaused(player: PlayerProtocol,
-                             currentTime: TimeInterval) {
-        if let providers = providers(playerPlugin: player) {
-            providers.forEach { providerDict in
-                let provider = providerDict.value
-                if let provider = provider as? PlayerObserverProtocol {
-                    provider.playerPaused?(player: player,
-                                           currentTime: currentTime)
-                }
-            }
-        }
-    }
-
-    public func playerSeeked(player: PlayerProtocol,
-                             currentTime: TimeInterval,
-                             seekTime: TimeInterval) {
-        if let providers = providers(playerPlugin: player) {
-            providers.forEach { providerDict in
-                let provider = providerDict.value
-                if let provider = provider as? PlayerObserverProtocol {
-                    provider.playerSeeked?(player: player,
-                                           currentTime: currentTime,
-                                           seekTime: seekTime)
+                    provider.playerVideoSeek?(player: player,
+                                              currentTime: currentTime,
+                                              seekTime: seekTime)
                 }
             }
         }
