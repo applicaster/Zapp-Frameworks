@@ -186,7 +186,6 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerResize = ({ nativeEvent }) => {};
 
   onPlayerDestroy = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Dismissed", nativeEvent);
   };
 
   onPlayerEnded = ({ nativeEvent }) => {
@@ -235,6 +234,7 @@ export default class THEOPlayer extends Component<Props, State> {
       } else if (this.props?.playerEvent) {
         this.props?.playerEvent("close");
       }
+      postAnalyticEvent("Player Closed", nativeEvent);
     }
   };
 

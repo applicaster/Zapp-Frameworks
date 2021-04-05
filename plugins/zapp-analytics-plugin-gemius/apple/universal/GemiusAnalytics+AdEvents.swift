@@ -27,12 +27,12 @@ extension GemiusAnalytics {
         
         switch eventName {
         case AdEvents.adBreakBegin:
-            retValue = true
+            retValue = proceedAdEvent(eventName)
             gemiusPlayerObject?.program(.BREAK, forProgram: entryId,
                                         atOffset: NSNumber(value: currentPlayerPosition),
                                         with: nil)
         case AdEvents.adBegin:
-            retValue = true
+            retValue = proceedAdEvent(eventName)
             let data = GSMAdData()
             gemiusPlayerObject?.newAd(UUID().uuidString, with: data)
         default:
@@ -40,5 +40,10 @@ extension GemiusAnalytics {
         }
 
         return retValue
+    }
+    
+    func proceedAdEvent(_ eventName: String) -> Bool {
+        lastProceededAdEvent = eventName
+        return true
     }
 }
