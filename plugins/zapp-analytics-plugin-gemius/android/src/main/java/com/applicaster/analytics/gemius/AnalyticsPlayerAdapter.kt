@@ -17,51 +17,51 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
-    open fun onStart(data: Map<String, Any>?) {
+    open fun onStart(params: Map<String, Any>?) {
         cleanData()
-        this.data = data
+        data = params
         duration = parseDuration()
         isStarted = true
     }
 
     @CallSuper
-    open fun onStop(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onStop(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onPlay(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onPlay(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onPause(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onPause(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onAdBreakStart(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onAdBreakStart(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onAdBreakEnd(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onAdBreakEnd(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onAdStart(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onAdStart(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onAdEnd(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onAdEnd(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     @CallSuper
-    open fun onSeek(data: Map<String, Any>?) {
-        updatePosition()
+    open fun onSeek(params: Map<String, Any>?) {
+        updatePosition(params)
     }
 
     fun routeTimedEventStart(eventName: String?, params: TreeMap<String, String>?) : Boolean {
@@ -85,7 +85,8 @@ open class AnalyticsPlayerAdapter {
     fun routeEvent(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
-            PLAY_EVENT -> onPlay(params)
+            PLAYER_PLAYING_EVENT -> onPlay(params)
+            PLAYER_PAUSE_EVENT -> onPause(params)
             AD_START_EVENT -> onAdStart(params)
             AD_END_EVENT -> onAdEnd(params)
             AD_BREAK_START_EVENT -> onAdBreakStart(params)
@@ -106,22 +107,26 @@ open class AnalyticsPlayerAdapter {
     private fun parseDuration() : Long? {
         return when(val length = data?.get(KEY_DURATION)){
             null -> null
-            is String -> length.toLong()
+            is String -> length.toDouble().toLong() // can contain .
             is Number -> length as Long
             else -> null
         }
     }
 
-    private fun updatePosition()  {
-        when(val length = data?.get(KEY_POSITION)){
-            is String -> position = length.toLong()
-            is Number -> position = length as Long
+    private fun updatePosition(params: Map<String, Any>?)  {
+        when(val pos = params?.get(KEY_POSITION)){
+            is String -> position = pos.toDouble().toLong() // can contain .
+            is Number -> position = pos as Long
             else -> {}
         }
     }
 
     companion object {
+        // not used, it comes with PLAY_TIMED_EVENT
         const val PLAY_EVENT = "VOD Item: Play Was Triggered"
+
+        const val PLAYER_PLAYING_EVENT = "Player Playing"
+        const val PLAYER_PAUSE_EVENT = "Player Pause"
 
         const val AD_BREAK_START_EVENT = "Ad Break Begin"
         const val AD_BREAK_END_EVENT = "Ad Break End"
@@ -135,8 +140,8 @@ open class AnalyticsPlayerAdapter {
         const val KEY_LINK = "Item Link"
         const val KEY_TYPE = "Item Type"
 
-        const val KEY_DURATION = "Custom Propertyduration" // must me Item Length
+        const val KEY_DURATION = "Custom Propertyduration" // must me 'Item Length'
         const val KEY_CUSTOM_PROPERTIES = "Custom PropertyanalyticsCustomProperties"
-        const val KEY_POSITION = "currentTime"
+        const val KEY_POSITION = "currentTime" // must be Position or something like that
     }
 }

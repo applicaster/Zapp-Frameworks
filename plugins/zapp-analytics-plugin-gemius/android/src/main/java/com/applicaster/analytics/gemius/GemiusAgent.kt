@@ -20,14 +20,14 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
 
-        override fun onStart(data: Map<String, Any>?) {
-            super.onStart(data)
+        override fun onStart(params: Map<String, Any>?) {
+            super.onStart(params)
             val pdata = ProgramData()
             pdata.name = getName()
             pdata.duration = duration?.toInt()
 
             // copy all custom fields
-            (data?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
+            (params?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
                 // Custom PropertyanalyticsCustomProperties -> {"_SC":"a721efad-b903-4bea-a86f-3877a0fbe423","_SCD":3146,"_SCT":"Vermist - S3 - Aflevering 21","_ST":"vid.tvi.ep.vod.free","channel":"Play5","ct":"ce/tv","se":"Vermist","tv":"10126594220817528","video_type":"long_form","video_subtype":"long","URL_alias":"/video/vermist/seizoen-3/vermist-s3-aflevering-21"}
                 try {
                     val jsonObject = JSONObject(it)
@@ -43,8 +43,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
             player.newProgram(getId(), pdata)
         }
 
-        override fun onPlay(data: Map<String, Any>?) {
-            super.onPlay(data)
+        override fun onPlay(params: Map<String, Any>?) {
+            super.onPlay(params)
             player.programEvent(
                     getId(),
                     position?.toInt() ?: 0,
@@ -52,44 +52,44 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     EventProgramData())
         }
 
-        override fun onStop(data: Map<String, Any>?) {
-            super.onStop(data)
+        override fun onStop(params: Map<String, Any>?) {
+            super.onStop(params)
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.CLOSE, // stop is close for us
                     EventProgramData())
         }
 
-        override fun onPause(data: Map<String, Any>?) {
-            super.onPause(data)
+        override fun onPause(params: Map<String, Any>?) {
+            super.onPause(params)
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.PAUSE,
                     EventProgramData())
         }
 
-        override fun onAdBreakStart(data: Map<String, Any>?) {
-            super.onAdBreakStart(data)
+        override fun onAdBreakStart(params: Map<String, Any>?) {
+            super.onAdBreakStart(params)
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.BREAK,
                     EventProgramData())
         }
 
-        override fun onAdBreakEnd(data: Map<String, Any>?) {
-            super.onAdBreakEnd(data)
+        override fun onAdBreakEnd(params: Map<String, Any>?) {
+            super.onAdBreakEnd(params)
             // not reported
         }
 
-        override fun onAdStart(data: Map<String, Any>?) {
-            super.onAdStart(data)
+        override fun onAdStart(params: Map<String, Any>?) {
+            super.onAdStart(params)
             // todo: other data if needed
-            val id = data?.get("id")?.toString() ?: ""
+            val id = params?.get("id")?.toString() ?: ""
             val adata = AdData().apply {
                 adType = AdData.AdType.BREAK
-                when (val d = data?.get("duration")) {
-                    is String -> duration = d.toInt()
-                    is Number -> duration = d as Int?
+                when (val d = params?.get("duration")) {
+                    is String -> duration = d.toFloat().toInt()
+                    is Number -> duration = d.toInt()
                     else -> APLogger.warn(TAG, "Duration is missing in the ad data")
                 }
             }
@@ -103,9 +103,9 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     })
         }
 
-        override fun onAdEnd(data: Map<String, Any>?) {
-            super.onAdEnd(data)
-            val id = data?.get("id")?.toString() ?: ""
+        override fun onAdEnd(params: Map<String, Any>?) {
+            super.onAdEnd(params)
+            val id = params?.get("id")?.toString() ?: ""
             player.adEvent(
                     getId(),
                     id,
@@ -114,8 +114,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     null)
         }
 
-        override fun onSeek(data: Map<String, Any>?) {
-            super.onSeek(data)
+        override fun onSeek(params: Map<String, Any>?) {
+            super.onSeek(params)
             player.programEvent(
                     getId(),
                     position?.toInt() ?: 0,
