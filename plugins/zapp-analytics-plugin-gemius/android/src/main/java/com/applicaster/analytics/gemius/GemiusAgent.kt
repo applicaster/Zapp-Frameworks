@@ -27,7 +27,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
             pdata.duration = duration?.toInt()
 
             // copy all custom fields
-            (data?.get("Custom PropertyanalyticsCustomProperties") as? String)?.let {
+            (data?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
                 // Custom PropertyanalyticsCustomProperties -> {"_SC":"a721efad-b903-4bea-a86f-3877a0fbe423","_SCD":3146,"_SCT":"Vermist - S3 - Aflevering 21","_ST":"vid.tvi.ep.vod.free","channel":"Play5","ct":"ce/tv","se":"Vermist","tv":"10126594220817528","video_type":"long_form","video_subtype":"long","URL_alias":"/video/vermist/seizoen-3/vermist-s3-aflevering-21"}
                 try {
                     val jsonObject = JSONObject(it)
@@ -56,7 +56,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
             super.onStop(data)
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
-                    Player.EventType.CLOSE,
+                    Player.EventType.CLOSE, // stop is close for us
                     EventProgramData())
         }
 
@@ -70,7 +70,10 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         override fun onAdBreakStart(data: Map<String, Any>?) {
             super.onAdBreakStart(data)
-            // not reported
+            player.programEvent(getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.BREAK,
+                    EventProgramData())
         }
 
         override fun onAdBreakEnd(data: Map<String, Any>?) {
@@ -80,17 +83,35 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         override fun onAdStart(data: Map<String, Any>?) {
             super.onAdStart(data)
-            // todo: id, other data
+            // todo: other data if needed
+            val id = data?.get("id")?.toString() ?: ""
             val adata = AdData().apply {
-                //duration = 15
                 adType = AdData.AdType.BREAK
+                when (val d = data?.get("duration")) {
+                    is String -> duration = d.toInt()
+                    is Number -> duration = d as Int?
+                    else -> APLogger.warn(TAG, "Duration is missing in the ad data")
+                }
             }
-            player.newAd("a1", adata)
+            player.newAd(id, adata)
+            player.adEvent(
+                    getId(),
+                    id, position?.toInt(),
+                    Player.EventType.PLAY,
+                    EventAdData().apply {
+                        autoPlay = true // all our ads are autoplay I assume
+                    })
         }
 
         override fun onAdEnd(data: Map<String, Any>?) {
             super.onAdEnd(data)
-            // not reported
+            val id = data?.get("id")?.toString() ?: ""
+            player.adEvent(
+                    getId(),
+                    id,
+                    position?.toInt(),
+                    Player.EventType.COMPLETE,
+                    null)
         }
 
         override fun onSeek(data: Map<String, Any>?) {
