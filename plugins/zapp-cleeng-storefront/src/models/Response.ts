@@ -1,6 +1,6 @@
 export interface OfferItem {
   accessGranted: boolean;
-  accessToTags: [string];
+  accessToTags: Array<string>;
   active: boolean;
   androidProductId: string;
   appleProductId: string;
@@ -15,7 +15,7 @@ export interface OfferItem {
   expiresAt?: number;
   freeDays: string;
   freePeriods: string;
-  geoRestrictionCountries: [string];
+  geoRestrictionCountries: Array<string>;
   geoRestrictionEnabled: boolean;
   geoRestrictionType?: string;
   id: string;

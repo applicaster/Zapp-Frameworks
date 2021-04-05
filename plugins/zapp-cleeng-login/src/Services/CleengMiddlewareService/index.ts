@@ -15,6 +15,7 @@ import {
   localStorageRemove,
   sessionStorageApplicasterGet,
 } from "../LocalStorageService";
+import * as R from "ramda";
 import jwt_decode from "jwt-decode";
 import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
 
@@ -36,7 +37,8 @@ export async function signIn(data: SignInData) {
 
   try {
     const response = await Request.post(API.signIn, data);
-    const token = response?.data?.[0]?.token;
+    const token =
+      response?.data && R.find(R.propEq("offerId", ""))(response?.data)?.token;
     if (token) {
       await setToken(token);
     }
@@ -71,7 +73,8 @@ export async function signUp(data: CreateAccountData) {
 
   try {
     const response = await Request.post(API.signUp, create_account_data);
-    const token = response?.data?.[0]?.token;
+    const token =
+      response?.data && R.find(R.propEq("offerId", ""))(response?.data)?.token;
     if (token) {
       await setToken(token);
     }
@@ -94,9 +97,12 @@ export async function extendToken(data: ExtendTokenData) {
     if (!data.token) {
       return null;
     }
+    console.log({ data });
     const response = await Request.post(API.extendToken, data);
+    console.log({ response });
 
-    const token = response?.data?.[0]?.token;
+    const token =
+      response?.data && R.find(R.propEq("offerId", ""))(response?.data)?.token;
     if (token) {
       await setToken(token);
     }

@@ -12,8 +12,9 @@ import {
   getToken,
   prepareMiddleware,
   getSubscriptionsData,
-  getPurchasedAuthIdsAndExtendToken,
-  validatePurchasedItem,
+  isItemsPurchased,
+  verifyPurchase,
+  restorePurchases,
 } from "../../Services/CleengMiddlewareService";
 
 import LoadingScreen from "../LoadingScreen";
@@ -55,7 +56,8 @@ const CleengStoreFront = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const publisherId = props?.configuration?.publisherId;
-
+  const enabledDebugModeForIap =
+    props?.configuration.iap_debug_mode_enabled === "on";
   useEffect(() => {
     navigator.hideNavBar();
 
@@ -92,8 +94,19 @@ const CleengStoreFront = (props) => {
       if (payload) {
         const authIDs = payload?.extensions?.ds_product_ids;
 
-        const authenticationRequired = true;
-        //  isAuthenticationRequired({ payload });
+        const itemsPurchased = await isItemsPurchased(
+          authIDs,
+          token,
+          publisherId
+        );
+        if (itemsPurchased === true) {
+          callback && callback({ success: true, error: null, payload });
+        }
+
+        const testEnvironmentEnabled =
+          props?.configuration?.force_authentication_on_all || "off";
+        const authenticationRequired =
+          testEnvironmentEnabled === "on" || isAuthenticationRequired(payload);
 
         if (authenticationRequired) {
           const subscriptionsData = await getSubscriptionsData({
@@ -155,25 +168,22 @@ const CleengStoreFront = (props) => {
         const token = await getToken();
         console.log({ success, error, payload });
 
-        // await validatePayment({ ...props, payload, store });
-        // const newPayload = await assetLoader({
-        //   props,
-        //   assetId: itemAssetId,
-        //   store,
-        //   retryInCaseFail: true,
-        // });
+        const result = await verifyPurchase(payload, token, publisherId, false);
+        console.log("completeStorefrontFlow!!!!! Success", result);
         logger.debug({
           message: "Validation payment completed",
           data: {
             payload,
           },
         });
-        // callback && callback({ success, error, payload });
+        callback && callback({ success: result, error, payload });
       } else {
         callback && callback({ success, error, payload });
       }
     } catch (error) {
+      console.log("completeStorefrontFlow!!!!! Failed", { error });
       const message = getMessageOrDefault(error, screenLocalizations);
+      console.log({ message });
 
       logger.error({
         message: `Validation payment failed, error:${message}`,
@@ -184,6 +194,7 @@ const CleengStoreFront = (props) => {
       });
 
       showAlert("General Error!", message);
+      console.log({ success, error, payload, callback });
       callback && callback({ success: false, error, payload });
     }
   }
@@ -191,24 +202,30 @@ const CleengStoreFront = (props) => {
   async function onRestoreCompleted(restoreData) {
     try {
       setIsLoading(true);
-      // await validateRestore({ ...props, restoreData, store });
-      // logger.debug({
-      //   message: "Validation payment completed",
-      //   data: {
-      //     payload,
-      //   },
-      // });
-      // const newPayload = await assetLoader({
-      //   props,
-      //   assetId: itemAssetId,
-      //   store,
-      //   retryInCaseFail: true,
-      // });
-      // if (newPayload) {
-      //   callback && callback({ success, error, payload: newPayload });
-      // } else {
-      //   setIsLoading(false);
-      // }
+      console.log({ restoreData });
+      const authIDs = payload?.extensions?.ds_product_ids;
+      const token = await getToken();
+
+      const result = await restorePurchases({
+        restoreData,
+        offers: authIDs || ["216", "217", "218", "219"],
+        token,
+        publisherId,
+      });
+      logger.debug({
+        message: "Validation payment completed",
+        data: {
+          payload,
+          result,
+        },
+      });
+
+      if (result === true) {
+        callback && callback({ success: true, error: null, payload });
+      } else {
+        //TODO: if can not find purchased item add relevant error
+        setIsLoading(false);
+      }
     } catch (error) {
       setIsLoading(false);
     }
@@ -223,6 +240,7 @@ const CleengStoreFront = (props) => {
         screenLocalizations={screenLocalizations}
         screenStyles={screenStyles}
         payload={payloadWithPurchaseData}
+        isDebugModeEnabled={enabledDebugModeForIap}
       />
     </>
   ) : (

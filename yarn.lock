@@ -417,10 +417,10 @@
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-analytics-plugin-appsflyer/-/zapp-analytics-plugin-appsflyer-10.2.0-alpha.3.tgz#ee0f3d94383663e59dbbe14f826cf2da4305e504"
   integrity sha512-heFl4Ys5xa/CceRteBUM8b55cwKjZ36dHrX4HXC/XrdNH5q1TP4FthoBwkahxtppTDqc9a7e1KAGEm5SYg7kGw==
 
-"@applicaster/zapp-cleeng-storefront@0.0.1-alpha.0":
-  version "0.0.1-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-storefront/-/zapp-cleeng-storefront-0.0.1-alpha.0.tgz#5511020d384cb31a7cab7a569112810cceddda92"
-  integrity sha512-FHetLb+ZERhYKj35+n7mmbem/nAyPdZXT5IvotNC5qu32Hw+pfa4qo4j0J/CA/48xh7sm9psfDREVgT6awXKYQ==
+"@applicaster/zapp-cleeng-storefront@0.0.2-alpha.1":
+  version "0.0.2-alpha.1"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-cleeng-storefront/-/zapp-cleeng-storefront-0.0.2-alpha.1.tgz#ba4ac11e56cd91640a56dcbd3995c8725d40f90e"
+  integrity sha512-SoQH/lgUv/SabFxOx+YT5N02rcBM4OncIpkes3zt9+Qm/VeKrdAgs+dqLlLZdQr+8C5mVeYDZ02wmNgjs9iXag==
   dependencies:
     "@applicaster/applicaster-storefront-component" "0.0.5"
     "@react-native-community/blur" "3.4.1"

@@ -96,30 +96,8 @@ const baseManifest = {
         },
         {
           type: "tag_select",
-          key: "stub_purchase_flow_complete",
-          tooltip_text: "Stubbing all flow to purchase success",
-          options: [
-            {
-              text: "On",
-              value: "on",
-            },
-            {
-              text: "Off",
-              value: "off",
-            },
-          ],
-          conditional_fields: [
-            {
-              condition_value: ["on"],
-              key: "custom_configuration_fields/debug_mode",
-            },
-          ],
-          initial_value: "off",
-        },
-        {
-          type: "tag_select",
-          key: "stub_purchase_flow_complete",
-          tooltip_text: "Stubbing all flow to purchase failed",
+          key: "iap_debug_mode_enabled",
+          tooltip_text: "Forcing to finish all purchases with stubs",
           options: [
             {
               text: "On",

@@ -12,7 +12,7 @@ export interface RecieptInfo {
 }
 
 export interface PurchaseItemData {
-  receiptData: RecieptInfo;
+  receipt: RecieptInfo;
   offerId: string;
   token: string;
   isRestored: boolean;
@@ -26,11 +26,15 @@ export interface PurchaseItemWithCouponData {
   couponCode: string;
 }
 
+export interface RestoreProduct {
+  productIdentifier: string;
+  transactionIdentifier: string;
+}
 export interface RestoreData {
-  appType: string;
-  receipts: { productId: string; transactionId: string }[];
+  restoreData: {receipt:string, products:Array<RestoreProduct>};
+  offers: Array<string>;
   token: string;
-  receiptData: RecieptInfo;
+  publisherId: string;
 }
 
 export interface RequestCustomData {

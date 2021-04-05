@@ -49,3 +49,10 @@ export const isAuthenticationRequired = ({ payload }) => {
   // });
   return requires_authentication;
 };
+
+export function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
+  const result = a1.filter(function (n) {
+    return a2.indexOf(n) !== -1;
+  });
+  return result.length > 0 ? true : false;
+}

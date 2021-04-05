@@ -40,6 +40,12 @@ const mobile = [
     label: "Payment terms of use text",
     initial_value: "terms of use.",
   },
+  {
+    key: "resotore_purchases_text",
+    label:
+      "Restore subscription message, if user has no access on current screen",
+    initial_value: "Unable to find valid subscription",
+  },
 ];
 
 const tv = [
