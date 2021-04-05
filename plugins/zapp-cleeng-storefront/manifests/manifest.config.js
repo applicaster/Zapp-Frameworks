@@ -116,6 +116,18 @@ const baseManifest = {
           ],
           initial_value: "off",
         },
+        {
+          type: "text",
+          key: "force_use_auth_ids",
+          label: "Force to use auth ids as screen data sourse",
+          default: "",
+          conditional_fields: [
+            {
+              condition_value: ["on"],
+              key: "custom_configuration_fields/debug_mode",
+            },
+          ],
+        },
       ],
     },
   ],

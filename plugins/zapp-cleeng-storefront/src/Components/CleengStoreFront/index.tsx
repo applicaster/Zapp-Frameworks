@@ -54,7 +54,7 @@ const CleengStoreFront = (props) => {
   const styles = getRiversProp("styles", rivers);
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-
+  console.log({ screenLocalizations });
   const publisherId = props?.configuration?.publisherId;
   const enabledDebugModeForIap =
     props?.configuration.iap_debug_mode_enabled === "on";
