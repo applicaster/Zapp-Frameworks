@@ -15,8 +15,9 @@ extension GemiusAnalytics {
         static let paused = "Player Pause"
         static let seeking = "Player Seeking"
         static let seeked = "Player Seeked"
-        static let dismissed = "Player Closed"
-        static let created = "VOD Item: Play Was Triggered"
+        static let dismissed = "Play VOD Item.end"
+        static let created = "Play VOD Item.start"
+        static let buffering = "Player Load Start"
     }
 
     func shouldHandlePlayerEvents(for eventName: String, parameters: [String: NSObject]) -> Bool {
@@ -41,6 +42,9 @@ extension GemiusAnalytics {
 
         case PlyerEvents.seeked:
             retValue = handleSeekEvent(eventName, parameters: parameters)
+
+        case PlyerEvents.buffering:
+            retValue = handleBufferEvent(eventName, parameters: parameters)
 
         default:
             break
@@ -70,19 +74,21 @@ extension GemiusAnalytics {
 
         // set item title
         if let title = parameters["Item Name"] as? String {
-            data.addCustomParameter("Title", value: title)
+            data.name = title
         }
 
         // set item duration
         if let duration = parameters["Custom Propertylength"] as? String {
-            data.addCustomParameter("Duration", value: duration)
+            data.duration = NSNumber(value: Int(duration) ?? 0)
         }
 
         if let jsonString = parameters["Custom PropertyanalyticsCustomProperties"] as? String,
            let jsonData = jsonString.data(using: String.Encoding.utf8),
            let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: AnyObject] {
-            if let cimTag = jsonDictionary["_ST"] as? String {
-                data.addCustomParameter("CIM tag", value: cimTag)
+            for (key, value) in jsonDictionary {
+                var updatedKey = key.lowercased()
+                updatedKey = updatedKey.first == "_" ? String(updatedKey.dropFirst()) : updatedKey
+                data.addCustomParameter(updatedKey, value: "\(value)")
             }
         }
 
@@ -92,18 +98,20 @@ extension GemiusAnalytics {
         // set program data
         gemiusPlayerObject?.newProgram(itemId, with: data)
 
-        // buffering
-        let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.BUFFER, forProgram: itemId,
-                                    atOffset: NSNumber(value: currentPlayerPosition),
-                                    with: nil)
-
         return proceedPlayerEvent(eventName)
     }
 
     func handleSeekEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.SEEK, forProgram: lastProgramID,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
+        return proceedPlayerEvent(eventName)
+    }
+
+    func handleBufferEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
+        gemiusPlayerObject?.program(.BUFFER, forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         return proceedPlayerEvent(eventName)

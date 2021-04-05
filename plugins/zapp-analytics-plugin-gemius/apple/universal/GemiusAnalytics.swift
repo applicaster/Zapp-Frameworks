@@ -35,14 +35,6 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     public var playerPlugin: PlayerProtocol?
     var playerRateObserverPointerString: UInt?
 
-    lazy var ignoredEvents: [String] = {
-        guard let eventsListString = model?.configurationValue(for: "blacklisted_events_list") as? String,
-              eventsListString.isEmpty == false else {
-            return []
-        }
-        return eventsListString.components(separatedBy: ",").map { $0.lowercased() }
-    }()
-
     lazy var scriptIdentifier: String = {
         guard let scriptIdentifier = model?.configurationValue(for: Params.scriptIdentifier) as? String else {
             return ""
@@ -103,10 +95,6 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
         let dateString = dateFormatter.string(from: Date())
 
         return "\(dateString)"
-    }
-
-    func shoudIgnoreEvent(_ eventName: String) -> Bool {
-        return ignoredEvents.contains(eventName.lowercased())
     }
     
     func isDebug() -> Bool {

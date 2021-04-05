@@ -33,17 +33,27 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
 
     @objc public func startObserveTimedEvent(_ eventName: String,
                                              parameters: [String: Any]?) {
-        trackEvent(eventName,
+        let updatedEventName = "\(eventName).start"
+        
+        var parametersToPass: [String: NSObject] = [:]
+        if let parameters = parameters as? [String: NSObject] {
+            parametersToPass = parameters
+        }
+        trackEvent(updatedEventName,
+                   parameters: parametersToPass,
                    timed: true)
     }
 
     @objc public func stopObserveTimedEvent(_ eventName: String,
                                             parameters: [String: Any]?) {
+        let updatedEventName = "\(eventName).end"
+
         var parametersToPass: [String: NSObject] = [:]
         if let parameters = parameters as? [String: NSObject] {
             parametersToPass = parameters
         }
-        endTimedEvent(eventName,
+        
+        endTimedEvent(updatedEventName,
                       parameters: parametersToPass)
     }
 
@@ -52,32 +62,13 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         guard isDisabled == false else {
             return
         }
-
-        guard shoudIgnoreEvent(eventName) == false else {
-            return
-        }
         
         guard !shouldHandlePlayerEvents(for: eventName, parameters: parameters),
               !shouldHandleAdEvents(for: eventName, parameters: parameters) else {
             return
         }
         
-        // Add extra params to align with the Android plugin code
-        var newParameters = parameters
-        newParameters["name"] = eventName as NSObject
-        newParameters["timestamp"] = getTimestamp() as NSObject
-
-        // Send evendt
-        let event = GEMAudienceEvent()
-        event.eventType = .EVENT_FULL_PAGEVIEW
-        for (key, value) in newParameters {
-            var paramValue = value
-            if let value = value as? String, value.isEmpty {
-                paramValue = "N/A" as NSObject
-            }
-            event.addExtraParameter(key, value: "\(paramValue)")
-        }
-        event.send()
+        //ignore other events
     }
 
     func trackEvent(_ eventName: String, timed: Bool) {

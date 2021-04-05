@@ -20,14 +20,6 @@ const baseManifest = {
       key: "hit_collector_host",
       tooltip_text: "Collector Host",
       default: "",
-    },
-    {
-      section: "configuration",
-      type: "text_area",
-      key: "blacklisted_events_list",
-      initial_value: "",
-      label: "Blacklisted Events",
-      tooltip_text: "The key used to specify the blacklisted events, separated by comma",
     }
   ],
   whitelisted_account_ids: [],

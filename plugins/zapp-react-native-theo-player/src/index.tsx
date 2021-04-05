@@ -163,6 +163,7 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerLoadStart = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Load Start", nativeEvent);
   };
 
   onPlayerCanPlay = ({ nativeEvent }) => {};
@@ -185,8 +186,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerResize = ({ nativeEvent }) => {};
 
-  onPlayerDestroy = ({ nativeEvent }) => {
-  };
+  onPlayerDestroy = ({ nativeEvent }) => {};
 
   onPlayerEnded = ({ nativeEvent }) => {
     if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
@@ -234,7 +234,6 @@ export default class THEOPlayer extends Component<Props, State> {
       } else if (this.props?.playerEvent) {
         this.props?.playerEvent("close");
       }
-      postAnalyticEvent("Player Closed", nativeEvent);
     }
   };
 
