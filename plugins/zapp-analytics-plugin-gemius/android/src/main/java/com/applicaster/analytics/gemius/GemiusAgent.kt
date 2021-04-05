@@ -6,6 +6,8 @@ import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
 import com.gemius.sdk.audience.AudienceConfig
 import com.gemius.sdk.stream.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 
@@ -20,11 +22,24 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         override fun onStart(data: Map<String, Any>?) {
             super.onStart(data)
-            // todo: copy all required fields
             val pdata = ProgramData()
             pdata.name = getName()
             pdata.duration = duration?.toInt()
-            data?.forEach { pdata.addCustomParameter(it.key, it.value.toString()) }
+
+            // copy all custom fields
+            (data?.get("Custom PropertyanalyticsCustomProperties") as? String)?.let {
+                // Custom PropertyanalyticsCustomProperties -> {"_SC":"a721efad-b903-4bea-a86f-3877a0fbe423","_SCD":3146,"_SCT":"Vermist - S3 - Aflevering 21","_ST":"vid.tvi.ep.vod.free","channel":"Play5","ct":"ce/tv","se":"Vermist","tv":"10126594220817528","video_type":"long_form","video_subtype":"long","URL_alias":"/video/vermist/seizoen-3/vermist-s3-aflevering-21"}
+                try {
+                    val jsonObject = JSONObject(it)
+                    for (k in jsonObject.keys()) {
+                        val key = k.removePrefix("_").toLowerCase(Locale.getDefault())
+                        val value = jsonObject.get(k).toString()
+                        pdata.addCustomParameter(key, value)
+                    }
+                } catch (e: JSONException) {
+                    APLogger.error(TAG, "Failed to deserialize custom properties block", e)
+                }
+            }
             player.newProgram(getId(), pdata)
         }
 
@@ -88,7 +103,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
     }
 
-    private val player: PlayerAdapter? = null
+    private val player: PlayerAdapter = PlayerAdapter()
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
@@ -141,7 +156,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeTimedEventStart(eventName, params))
+        if(player.routeTimedEventStart(eventName, params))
             return
     }
 
@@ -150,7 +165,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeTimedEventEnd(eventName, params))
+        if(player.routeTimedEventEnd(eventName, params))
             return
     }
 
@@ -159,7 +174,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeEvent(eventName, params))
+        if(player.routeEvent(eventName, params))
             return
         // todo: handle or forward any other event types if needed
     }
