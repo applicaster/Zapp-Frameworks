@@ -127,6 +127,9 @@ extension GemiusAnalytics {
 
     func handleDismissEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
+        gemiusPlayerObject?.program(.STOP, forProgram: lastProgramID,
+                                    atOffset: NSNumber(value: currentPlayerPosition),
+                                    with: nil)
         gemiusPlayerObject?.program(.CLOSE, forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)

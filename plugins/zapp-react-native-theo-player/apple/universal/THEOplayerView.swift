@@ -70,7 +70,7 @@ class THEOplayerView: UIView {
     }
 
     deinit {
-        onJSWindowEvent = nil
+
     }
 
     override init(frame: CGRect) {
@@ -105,9 +105,9 @@ class THEOplayerView: UIView {
     private func unloadTheoPlayer() {
         logger?.debugLog(message: "Unload player")
         removeJSEventListeners()
+        removeEventListeners()
         player.stop()
         player.destroy()
-        removeEventListeners()
         player = nil
         onPlayerPlay = nil
         onPlayerPlaying = nil
@@ -137,6 +137,7 @@ class THEOplayerView: UIView {
         onAdEnd = nil
         onAdError = nil
         onPlayerPresentationModeChange = nil
+        onJSWindowEvent = nil
         source = nil
     }
 
