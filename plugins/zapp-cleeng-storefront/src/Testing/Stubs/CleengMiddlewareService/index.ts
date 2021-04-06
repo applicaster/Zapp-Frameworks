@@ -109,7 +109,7 @@ export async function verifyPurchase(
       publisherId,
       isRestored,
       offerId,
-      receiptData: { transactionId, receiptData },
+      receipt: { transactionId, receiptData },
     });
     console.log("validatePurchasedItem", { result });
     return await checkValidatedItem({
