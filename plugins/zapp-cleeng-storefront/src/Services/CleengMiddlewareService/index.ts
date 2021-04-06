@@ -128,7 +128,13 @@ export async function isItemsPurchasedRecursive(
 
   if (result === false && tries > 0) {
     await new Promise((r) => setTimeout(r, interval));
-    tries = tries - 1;
+    const newTries = tries - 1;
+    return await isItemsPurchasedRecursive(
+      offers,
+      token,
+      publisherId,
+      newTries
+    );
   } else {
     return result;
   }
@@ -212,7 +218,7 @@ export async function checkValidatedItem({
     } else if (tries > 0) {
       await new Promise((r) => setTimeout(r, interval));
       const newTries = tries - 1;
-      await checkValidatedItem({
+      return await checkValidatedItem({
         authId,
         token,
         publisherId,

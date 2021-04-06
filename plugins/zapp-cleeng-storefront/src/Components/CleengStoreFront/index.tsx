@@ -92,13 +92,19 @@ const CleengStoreFront = (props) => {
       }
 
       if (payload) {
-        const authIDs = payload?.extensions?.ds_product_ids;
+        const authIDs = payload?.extensions?.ds_product_ids || [
+          "216",
+          "217",
+          "218",
+          "219",
+        ];
 
         const itemsPurchased = await isItemsPurchased(
           authIDs,
           token,
           publisherId
         );
+        console.log({ itemsPurchased });
         if (itemsPurchased === true) {
           callback && callback({ success: true, error: null, payload });
         }
@@ -112,7 +118,7 @@ const CleengStoreFront = (props) => {
           const subscriptionsData = await getSubscriptionsData({
             token,
             publisherId,
-            offers: authIDs || ["216", "217", "218", "219"],
+            offers: authIDs,
           });
 
           console.log({ subscriptionsData });
