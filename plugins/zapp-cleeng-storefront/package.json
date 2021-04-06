@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +33,11 @@
     "@applicaster/zapp-react-native-utils": "*",
     "react": "16.11.0",
     "react-native": "0.62.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.26",
+    "@types/react-native": "^0.63.1",
+    "typescript": "^3.9.7"
   },
   "files": [
     "lib",
