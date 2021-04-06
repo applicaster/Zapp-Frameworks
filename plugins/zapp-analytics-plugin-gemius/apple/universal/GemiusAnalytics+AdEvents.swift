@@ -19,30 +19,34 @@ extension GemiusAnalytics {
 
     func shouldHandleAdEvents(for eventName: String, parameters: [String: NSObject]) -> Bool {
         var retValue = false
-        let entryId = "11"
 
-        guard let currentPlayerPosition = parameters["currentTime"] as? Int else {
-            return retValue
-        }
-        
         switch eventName {
         case AdEvents.adBreakBegin:
-            retValue = proceedAdEvent(eventName)
-            gemiusPlayerObject?.program(.BREAK, forProgram: entryId,
+            let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
+            gemiusPlayerObject?.program(.BREAK,
+                                        forProgram: lastProgramID,
                                         atOffset: NSNumber(value: currentPlayerPosition),
                                         with: nil)
-        case AdEvents.adBegin:
             retValue = proceedAdEvent(eventName)
+            
+        case AdEvents.adBegin:
             let data = GSMAdData()
-            gemiusPlayerObject?.newAd(UUID().uuidString, with: data)
+            gemiusPlayerObject?.newAd(UUID().uuidString,
+                                      with: data)
+            retValue = proceedAdEvent(eventName)
+
         default:
             break
         }
 
         return retValue
     }
-    
-    func proceedAdEvent(_ eventName: String) -> Bool {
+
+    fileprivate func getCurrentPlayerPosition(from parameters: [String: NSObject]) -> Int {
+        return parameters["currentTime"] as? Int ?? 0
+    }
+
+    fileprivate func proceedAdEvent(_ eventName: String) -> Bool {
         lastProceededAdEvent = eventName
         return true
     }

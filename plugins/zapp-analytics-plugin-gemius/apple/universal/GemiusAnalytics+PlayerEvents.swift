@@ -34,6 +34,7 @@ extension GemiusAnalytics {
 
         case PlyerEvents.dismissed:
             retValue = handleDismissEvent(eventName, parameters: parameters)
+
         case PlyerEvents.play:
             retValue = handlePlayEvent(eventName, parameters: parameters)
 
@@ -103,7 +104,8 @@ extension GemiusAnalytics {
 
     func handleSeekEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.SEEK, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.SEEK,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         return proceedPlayerEvent(eventName)
@@ -111,7 +113,8 @@ extension GemiusAnalytics {
 
     func handleBufferEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.BUFFER, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.BUFFER,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         return proceedPlayerEvent(eventName)
@@ -119,7 +122,8 @@ extension GemiusAnalytics {
 
     func handlePauseEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.PAUSE, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.PAUSE,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         return proceedPlayerEvent(eventName)
@@ -127,7 +131,8 @@ extension GemiusAnalytics {
 
     func handlePlayEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.PLAY, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.PLAY,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         return proceedPlayerEvent(eventName)
@@ -135,10 +140,12 @@ extension GemiusAnalytics {
 
     func handleDismissEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-        gemiusPlayerObject?.program(.STOP, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.STOP,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
-        gemiusPlayerObject?.program(.CLOSE, forProgram: lastProgramID,
+        gemiusPlayerObject?.program(.CLOSE,
+                                    forProgram: lastProgramID,
                                     atOffset: NSNumber(value: currentPlayerPosition),
                                     with: nil)
         lastProgramID = nil
