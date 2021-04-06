@@ -32,6 +32,13 @@
     "react": "16.11.0",
     "react-native": "0.62.2"
   },
+  "files": [
+    "lib",
+    "manifests/**/*",
+    "apple",
+    "android",
+    "src"
+  ],
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",
