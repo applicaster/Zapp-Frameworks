@@ -1,7 +1,7 @@
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
-  "dependency_name": "@applicaster/applicaster-cmp-didomi",
+  dependency_name: "@applicaster/applicaster-cmp-didomi",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Applicaster Didomi",
@@ -23,20 +23,58 @@ const baseManifest = {
 
 const general = {
   fields: [
+    // Type text_input
     {
       type: "hidden",
-      key: "reactPackageName",
-      tooltip_text: "React Package Name",
-      default: "",
+      key: "package_name",
+      tooltip_text: "Didomi Package Name",
+      default: "DidomiBridge",
     },
+    // Type text_input
     {
       type: "hidden",
-      key: "reactMethodName",
-      tooltip_text: "React Method",
-      default: "showScreen",
+      key: "method_name",
+      tooltip_text: "Default Method to Retreive",
+      default: "showPreferences",
     },
-  ]
-}
+    // Type select
+    {
+      type: "hidden",
+      key: "on_dismiss",
+      label: "On Dismiss",
+      label_tooltip: "On dismiss of native screen do this",
+      rules: "conditional",
+      options: [
+        {
+          text: "Navigate to screen",
+          value: "screen",
+        },
+        {
+          text: "Navigate to Home",
+          value: "home",
+        },
+        {
+          text: "Navigate back",
+          value: "back",
+        },
+      ],
+      initial_value: "back",
+    },
+    // Type screen_selector
+    {
+      type: "hidden",
+      key: "to_screen",
+      label: "Dismiss to Screen",
+      tooltip_text: "Fallback or navigate to this screen after dismiss of native",
+      conditional_fields: [
+        {
+          key: "styles/title_text_data_key",
+          condition_value: "screen",
+        },
+      ],
+    },
+  ],
+};
 
 function createManifest({ version, platform }) {
   const manifest = {
@@ -52,7 +90,7 @@ function createManifest({ version, platform }) {
     targets: targets[platform],
     ui_frameworks: ui_frameworks[platform],
     custom_configuration_fields: custom_configuration_fields[platform],
-    general
+    general,
   };
   return manifest;
 }
@@ -71,11 +109,11 @@ const custom_configuration_fields_apple = [
     type: "text",
     label: "API key",
     default: "",
-    tooltip_text: "API key"
-  }
+    tooltip_text: "API key",
+  },
 ];
 
-const custom_configuration_fields_android = custom_configuration_fields_apple
+const custom_configuration_fields_android = custom_configuration_fields_apple;
 
 const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
@@ -110,7 +148,8 @@ const extra_dependencies = {
 
 const project_dependencies_android = [
   {
-    "applicaster-cmp-didomi": "node_modules/@applicaster/applicaster-cmp-didomi/android",
+    "applicaster-cmp-didomi":
+      "node_modules/@applicaster/applicaster-cmp-didomi/android",
   },
 ];
 
@@ -125,15 +164,16 @@ const api_apple = {
   class_name: "DidomiCMP",
   modules: ["ZappCMPDidomi"],
   plist: {
-    NSUserTrackingUsageDescription: "This identifier will be used to deliver personalized ads to you.",
+    NSUserTrackingUsageDescription:
+      "This identifier will be used to deliver personalized ads to you.",
   },
 };
 
 const api_android = {
-    require_startup_execution: true,
-    class_name: "com.applicaster.plugin.didomi.DidomiPlugin",
-    react_packages: ["com.applicaster.plugin.didomi.reactnative.DidomiPackage"],
-}
+  require_startup_execution: true,
+  class_name: "com.applicaster.plugin.didomi.DidomiPlugin",
+  react_packages: ["com.applicaster.plugin.didomi.reactnative.DidomiPackage"],
+};
 
 const api = {
   ios_for_quickbrick: api_apple,
