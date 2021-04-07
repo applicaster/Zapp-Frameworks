@@ -84,6 +84,7 @@ class DidomiPlugin : GenericPluginI
                             override fun hideNotice(event: HideNoticeEvent?) {
                                 super.hideNotice(event)
                                 removeEventListener(this)
+                                storeConsent()
                                 listener.onHookFinished()
                             }
                         })
@@ -125,6 +126,7 @@ class DidomiPlugin : GenericPluginI
                                 if (f != it)
                                     return
                                 unregisterFragmentLifecycleCallbacks(this)
+                                storeConsent()
                                 eventListener()
                             }
                         }, false)
@@ -139,6 +141,7 @@ class DidomiPlugin : GenericPluginI
                 override fun hideNotice(event: HideNoticeEvent?) {
                     super.hideNotice(event)
                     removeEventListener(this)
+                    storeConsent()
                     eventListener()
                 }
             })
@@ -146,15 +149,26 @@ class DidomiPlugin : GenericPluginI
         }
     }
 
+    // not been called for some reason
     override fun consentChanged(event: ConsentChangedEvent?) {
         super.consentChanged(event)
-        LocalStorage.set(JSPreferencesKey, Didomi.getInstance().javaScriptForWebView, PluginId)
-        // todo: store enabled/disabled vendors/purposes
+        storeConsent()
+    }
+
+    private fun storeConsent() {
+        Didomi.getInstance().apply{
+            val webViewString = javaScriptForWebView
+            val queryString = queryStringForWebView
+            LocalStorage.set(JSPreferencesKey, webViewString, PluginId)
+            LocalStorage.set(QueryPreferencesKey, queryString, PluginId)
+            APLogger.info(TAG, "queryString $queryString, webViewString $webViewString")
+        }
     }
 
     companion object {
         private const val TAG = "Didomi"
         const val PluginId = "applicaster-cmp-didomi"
         const val JSPreferencesKey = "javaScriptForWebView"
+        const val QueryPreferencesKey = "queryStringForWebView"
     }
 }
