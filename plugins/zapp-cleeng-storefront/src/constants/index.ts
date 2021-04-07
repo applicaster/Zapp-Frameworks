@@ -5,14 +5,3 @@ export const API = {
   extendToken: "extendToken",
 };
 
-// register,
-// subscriptions,
-// addSubscription,
-// restoreSubscriptions,
-// extendToken,
-// passwordReset,
-// submitConsent,
-// updateCustomerEmail,
-// getCustomer,
-// generateCustomerToken,
-// getFreeAccessToken

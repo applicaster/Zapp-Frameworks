@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { View } from "react-native";
+
 import { useSelector } from "react-redux";
 import * as R from "ramda";
 
@@ -240,21 +242,27 @@ const CleengStoreFront = (props) => {
       setIsLoading(false);
     }
   }
-  return payloadWithPurchaseData ? (
-    <>
+  console.log({ screenStyles });
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: screenStyles?.background_color,
+      }}
+    >
+      {payloadWithPurchaseData && (
+        <Storefront
+          {...props}
+          onStorefrontFinished={completeStorefrontFlow}
+          onRestoreCompleted={onRestoreCompleted}
+          screenLocalizations={screenLocalizations}
+          screenStyles={screenStyles}
+          payload={payloadWithPurchaseData}
+          isDebugModeEnabled={enabledDebugModeForIap}
+        />
+      )}
       {isLoading && <LoadingScreen />}
-      <Storefront
-        {...props}
-        onStorefrontFinished={completeStorefrontFlow}
-        onRestoreCompleted={onRestoreCompleted}
-        screenLocalizations={screenLocalizations}
-        screenStyles={screenStyles}
-        payload={payloadWithPurchaseData}
-        isDebugModeEnabled={enabledDebugModeForIap}
-      />
-    </>
-  ) : (
-    <LoadingScreen />
+    </View>
   );
 };
 
