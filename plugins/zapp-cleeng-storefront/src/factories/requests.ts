@@ -15,19 +15,19 @@ const Request = (function () {
       }
       let newPath = path;
       console.log({ newPath, data, customData });
-      switch (newPath) {
-        case API.subscriptions:
-          newPath = customData.get_items_to_purchase_api_endpoint;
-          break;
-        case API.purchaseItem:
-          newPath = customData.purchase_an_item;
-          break;
-        case API.restore:
-          newPath = customData.restore_api_endpoint;
-          break;
-        default:
-          break;
-      }
+      // switch (newPath) {
+      //   case API.subscriptions:
+      //     newPath = customData.get_items_to_purchase_api_endpoint;
+      //     break;
+      //   case API.purchaseItem:
+      //     newPath = customData.purchase_an_item;
+      //     break;
+      //   case API.restore:
+      //     newPath = customData.restore_api_endpoint;
+      //     break;
+      //   default:
+      //     break;
+      // }
 
       //TODO: Fix newPath bug on cleeng login
       const request: AxiosRequestConfig = {

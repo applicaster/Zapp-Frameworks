@@ -47,7 +47,7 @@ const baseManifest = {
       type: "text",
       key: "restore_api_endpoint",
       label: "Restore purchases End Point",
-      default: "restore",
+      default: "restoreSubscriptions",
     },
     {
       group: true,

@@ -114,7 +114,7 @@ export async function isItemsPurchasedRecursive(
   offers: Array<string>,
   token: string,
   publisherId: string,
-  tries = 5
+  tries = 3
 ): Promise<boolean> {
   const funcName = "isItemsPurchasedRecursive";
   try {
@@ -312,27 +312,29 @@ export async function restorePurchases(data: RestoreData) {
   const token = data?.token;
   const publisherId = data.publisherId;
   const offers = data.offers;
-
+  console.log({ token, offers });
   function iOSData() {
-    const reciept = data?.restoreData?.receipt;
-    const reciepts = R.map((item) => {
+    const receiptData = data?.restoreData?.receipt;
+    const products = data?.restoreData?.products;
+    console.log({ receiptData, products });
+    const receipts = R.map((item) => {
       return {
         transactionId: item.transactionIdentifier,
         productId: item.productIdentifier,
       };
-    })(data?.restoreData?.products);
+    })(products);
     return {
-      reciept,
-      reciepts,
+      receiptData,
+      receipts,
     };
   }
 
   function androidData() {
-    const recieptsData = data?.restoreData;
+    const receiptData = data?.restoreData;
     const reciepts = R.map((item) => {
       const parsedReciept = JSON.parse(item.reciept);
       return parsedReciept;
-    })(recieptsData);
+    })(receiptData);
     return { reciepts };
   }
 

@@ -41,4 +41,7 @@ struct ReacеNativePurchaseResponseKeys {
 struct ReacеNativeRestorePurchasesKeys {
     static let receipt = "receipt"
     static let restoreProductsIDs = "restoredProducts"
+    static let products = "products"
+    static let productIdentifier = "productIdentifier"
+    static let transactionIdentifier = "transactionIdentifier"
 }

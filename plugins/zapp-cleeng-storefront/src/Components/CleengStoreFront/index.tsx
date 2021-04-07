@@ -208,13 +208,13 @@ const CleengStoreFront = (props) => {
   async function onRestoreCompleted(restoreData) {
     try {
       setIsLoading(true);
-      console.log({ restoreData });
-      const authIDs = payload?.extensions?.ds_product_ids;
+      const authIDs = payload?.extensions?.ds_product_ids || testAuths;
       const token = await getToken();
+      console.log({ restoreData, authIDs, token, publisherId });
 
       const result = await restorePurchases({
         restoreData,
-        offers: authIDs || testAuths,
+        offers: authIDs,
         token,
         publisherId,
       });
@@ -236,6 +236,7 @@ const CleengStoreFront = (props) => {
         setIsLoading(false);
       }
     } catch (error) {
+      console.log({ error });
       setIsLoading(false);
     }
   }

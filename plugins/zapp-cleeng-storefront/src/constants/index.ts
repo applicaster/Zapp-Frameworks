@@ -1,7 +1,7 @@
 export const API = {
   subscriptions: "subscriptions",
   purchaseItem: "subscription",
-  restore: "restore",
+  restore: "restoreSubscriptions",
   extendToken: "extendToken",
 };
 
