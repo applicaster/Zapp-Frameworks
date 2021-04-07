@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-
+import { useSelector } from "react-redux";
 import * as R from "ramda";
+
 import Storefront from "@applicaster/applicaster-storefront-component";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../../Utils/Localizations";
 import {
   preparePayload,
   isAuthenticationRequired,
+  getRiversProp,
 } from "../../Utils/DataHelper";
+
 import {
   getToken,
   prepareMiddleware,
@@ -25,25 +28,15 @@ import {
   BaseSubsystem,
   BaseCategories,
 } from "../../Services/LoggerService";
-import { useSelector } from "react-redux";
+
 export const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
-  const getPropByKey = R.compose(
-    R.prop(key),
-    R.find(R.propEq("type", "zapp-cleeng-storefront")),
-    R.values
-  );
-
-  return getPropByKey(rivers);
-};
-
 const CleengStoreFront = (props) => {
-  const appData: any = useSelector(R.prop("appData"));
-  const store = appData?.store;
+  // const appData: any = useSelector(R.prop("appData"));
+  // const store = appData?.store;
 
   const navigator = useNavigation();
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
@@ -58,6 +51,7 @@ const CleengStoreFront = (props) => {
   const publisherId = props?.configuration?.publisherId;
   const enabledDebugModeForIap =
     props?.configuration.iap_debug_mode_enabled === "on";
+
   useEffect(() => {
     navigator.hideNavBar();
 
@@ -72,6 +66,7 @@ const CleengStoreFront = (props) => {
       message: "Starting Cleeng Storefront Plugin",
       data: {},
     });
+
     prepareMiddleware(props?.configuration);
 
     const {

@@ -60,3 +60,13 @@ export function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
   console.log({ result });
   return result.length > 0 ? true : false;
 }
+
+export const getRiversProp = (key, rivers = {}) => {
+  const getPropByKey = R.compose(
+    R.prop(key),
+    R.find(R.propEq("type", "zapp-cleeng-storefront")),
+    R.values
+  );
+
+  return getPropByKey(rivers);
+};

@@ -117,7 +117,7 @@ const baseManifest = {
           initial_value: "off",
         },
         {
-          type: "text",
+          type: "text_input",
           key: "force_use_auth_ids",
           label: "Force to use auth ids as screen data sourse",
           default: "",
