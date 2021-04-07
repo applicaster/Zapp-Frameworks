@@ -41,26 +41,23 @@ export async function getSubscriptionsData(
       ...data,
       byAuthId,
     };
-    console.log({ data });
     const response = await Request.post(API.subscriptions, newData);
     const responseData = response?.data;
     logger.debug({
       message: `${funcName} >> succeed: true`,
       data: {
-        ...data,
+        ...newData,
         response,
       },
     });
     return responseData;
   } catch (error) {
-    console.log({ error });
     handleError(error, data, funcName);
   }
 }
 
 export async function validatePurchasedItem(data: PurchaseItemData) {
   const funcName = "validatePurchasedItem";
-  console.log({ data, funcName });
   try {
     const appType = isApplePlatform ? "ios" : "android";
 
@@ -69,14 +66,12 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
       appType,
     };
 
-    console.log({ data });
     const response = await Request.post(API.purchaseItem, newData);
-    console.log({ response });
     const responseData = response?.data;
     logger.debug({
       message: `${funcName} >> succeed: true`,
       data: {
-        ...data,
+        ...newData,
         response,
       },
     });
@@ -92,12 +87,27 @@ export async function isItemsPurchased(
   token: string,
   publisherId: string
 ): Promise<boolean> {
-  const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
-    token,
-    publisherId,
-  });
-  console.log({ purchasedAuthIds, offers });
-  return getArraysIntersection(offers, purchasedAuthIds);
+  const funcName = "isItemsPurchased";
+
+  try {
+    const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
+      token,
+      publisherId,
+    });
+
+    const isPurchased = getArraysIntersection(offers, purchasedAuthIds);
+    logger.debug({
+      message: `${funcName} >> succeed: true`,
+      data: {
+        purchased_auth_ids: purchasedAuthIds,
+        is_purchased: isPurchased,
+      },
+    });
+
+    return isPurchased;
+  } catch (error) {
+    handleError(error, { offers, token, publisherId }, funcName, false);
+  }
 }
 
 export async function isItemsPurchasedRecursive(
@@ -106,26 +116,31 @@ export async function isItemsPurchasedRecursive(
   publisherId: string,
   tries = 5
 ): Promise<boolean> {
-  const interval = 5000;
+  const funcName = "isItemsPurchasedRecursive";
+  try {
+    const interval = 5000;
 
-  const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
-    token,
-    publisherId,
-  });
-  console.log({ purchasedAuthIds, offers });
-  const result = getArraysIntersection(offers, purchasedAuthIds);
-
-  if (result === false && tries > 0) {
-    await new Promise((r) => setTimeout(r, interval));
-    const newTries = tries - 1;
-    return await isItemsPurchasedRecursive(
-      offers,
+    const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
       token,
       publisherId,
-      newTries
-    );
-  } else {
-    return result;
+    });
+    console.log({ purchasedAuthIds, offers });
+    const result = getArraysIntersection(offers, purchasedAuthIds);
+
+    if (result === false && tries > 0) {
+      await new Promise((r) => setTimeout(r, interval));
+      const newTries = tries - 1;
+      return await isItemsPurchasedRecursive(
+        offers,
+        token,
+        publisherId,
+        newTries
+      );
+    } else {
+      return result;
+    }
+  } catch (error) {
+    handleError(error, { offers, token, publisherId, tries }, funcName, false);
   }
 }
 
@@ -136,57 +151,58 @@ export async function verifyPurchase(
   isRestored: boolean
 ) {
   const funcName = "verifyPurchase";
-  console.log({ payload });
-  const productToPurchase =
-    payload?.extensions?.in_app_purchase_data?.productsToPurchase;
-  console.log({ productToPurchase });
 
-  const purchasedProduct =
-    payload?.extensions?.in_app_purchase_data?.purchasedProduct;
-  console.log({ purchasedProduct });
+  try {
+    const productToPurchase =
+      payload?.extensions?.in_app_purchase_data?.productsToPurchase;
 
-  const productIdentifier = purchasedProduct?.productIdentifier;
+    const purchasedProduct =
+      payload?.extensions?.in_app_purchase_data?.purchasedProduct;
+    console.log({ purchasedProduct });
 
-  const receiptData = purchasedProduct?.receipt;
-  const transactionId = purchasedProduct?.transactionIdentifier;
+    const productIdentifier = purchasedProduct?.productIdentifier;
 
-  const offerId = R.find(R.propEq("productIdentifier", productIdentifier))(
-    productToPurchase
-  )?.id;
-  const authId = R.find(R.propEq("productIdentifier", productIdentifier))(
-    productToPurchase
-  )?.authId;
-  console.log({ offerId, productIdentifier, receiptData, transactionId });
-  if (offerId && productIdentifier && receiptData && transactionId) {
-    const data = isApplePlatform ? { receiptData } : JSON.parse(receiptData);
+    const receiptData = purchasedProduct?.receipt;
+    const transactionId = purchasedProduct?.transactionIdentifier;
 
-    const result = await validatePurchasedItem({
-      token,
-      offerId,
-      publisherId,
-      isRestored,
-      receipt: { transactionId, ...data },
-    });
-    console.log(" validatePurchasedItem", { result });
-    const validateResult = await checkValidatedItem({
-      token,
-      publisherId,
-      authId: authId,
-    });
-    console.log("validateResult", { validateResult });
-    logger.debug({
-      message: `${funcName} >> succeed: true`,
-      data: {
-        result,
+    const offerId = R.find(R.propEq("productIdentifier", productIdentifier))(
+      productToPurchase
+    )?.id;
+    const authId = R.find(R.propEq("productIdentifier", productIdentifier))(
+      productToPurchase
+    )?.authId;
+    console.log({ offerId, productIdentifier, receiptData, transactionId });
+    if (offerId && productIdentifier && receiptData && transactionId) {
+      const data = isApplePlatform ? { receiptData } : JSON.parse(receiptData);
+
+      const result = await validatePurchasedItem({
         token,
-        publisher_id: publisherId,
-        validate_result: validateResult,
-      },
-    });
-    return validateResult;
+        offerId,
+        publisherId,
+        isRestored,
+        receipt: { transactionId, ...data },
+      });
+      const validateResult = await checkValidatedItem({
+        token,
+        publisherId,
+        authId: authId,
+      });
+      logger.debug({
+        message: `${funcName} >> succeed: true`,
+        data: {
+          result,
+          token,
+          publisher_id: publisherId,
+          validate_result: validateResult,
+        },
+      });
+      return validateResult;
+    }
+    const error = new Error("Required paramenters not exist");
+    handleError(error, { payload, publisherId, isRestored }, funcName);
+  } catch (error) {
+    handleError(error, { payload, publisherId, isRestored }, funcName);
   }
-  const error = new Error("Required paramenters not exist");
-  handleError(error, { payload, publisherId, isRestored }, funcName);
 }
 
 export async function checkValidatedItem({
@@ -206,13 +222,20 @@ export async function checkValidatedItem({
     console.log({ purchasedAuthIds });
 
     if (R.contains(authId, purchasedAuthIds)) {
-      console.log("Finished!!!!!");
+      logger.debug({
+        message: `${funcName} >> succeed: true`,
+        data: {
+          authId,
+          token,
+          publisher_id: publisherId,
+        },
+      });
       return true;
     } else if (tries > 0) {
       await new Promise((r) => setTimeout(r, interval));
       const newTries = tries - 1;
       logger.debug({
-        message: `${funcName} >> succeed: true`,
+        message: `${funcName} >> can not find any items purchased items, trying check again`,
         data: {
           authId,
           token,
@@ -227,11 +250,19 @@ export async function checkValidatedItem({
         tries: newTries,
       });
     } else {
+      logger.debug({
+        message: `${funcName} >> can not find any items purchased items, checking stopped with error`,
+        data: {
+          authId,
+          token,
+          publisher_id: publisherId,
+        },
+      });
       const error = new Error("Can not validate purchased items");
       handleError(error, { authId, publisherId }, funcName);
     }
   } catch (error) {
-    throw error;
+    handleError(error, { authId, token, publisherId, tries }, funcName);
   }
 }
 
@@ -250,14 +281,12 @@ export async function getPurchasedAuthIdsAndExtendToken(
     let token: string;
     let purchasedAuthIds: Array<string> = [];
     for (const tokenData of responseData) {
-      console.log({ tokenData });
       if (tokenData.offerId === "") {
         token = tokenData.token;
       } else {
         purchasedAuthIds.push(tokenData.authId);
       }
     }
-    console.log({ token, purchasedAuthIds });
     if (token) {
       await setToken(token);
     }
@@ -267,6 +296,8 @@ export async function getPurchasedAuthIdsAndExtendToken(
       data: {
         ...data,
         response,
+        token,
+        purchased_auth_ids: purchasedAuthIds,
       },
     });
 
@@ -279,24 +310,42 @@ export async function getPurchasedAuthIdsAndExtendToken(
 export async function restorePurchases(data: RestoreData) {
   const funcName = "restorePurchases";
   const token = data?.token;
-  const reciept = data?.restoreData?.receipt;
   const publisherId = data.publisherId;
   const offers = data.offers;
-  const reciepts = R.map((item) => {
+
+  function iOSData() {
+    const reciept = data?.restoreData?.receipt;
+    const reciepts = R.map((item) => {
+      return {
+        transactionId: item.transactionIdentifier,
+        productId: item.productIdentifier,
+      };
+    })(data?.restoreData?.products);
     return {
-      transactionId: item.transactionIdentifier,
-      productId: item.productIdentifier,
+      reciept,
+      reciepts,
     };
-  })(data?.restoreData?.products);
-  console.log({ token, reciept, reciepts });
+  }
+
+  function androidData() {
+    const recieptsData = data?.restoreData;
+    const reciepts = R.map((item) => {
+      const parsedReciept = JSON.parse(item.reciept);
+      return parsedReciept;
+    })(recieptsData);
+    return { reciepts };
+  }
+
+  const customData = isApplePlatform ? iOSData() : androidData();
+  console.log({ token, customData });
   try {
     if (!data.token) {
       return null;
     }
     const response = await Request.post(API.restore, {
+      publisherId,
       token,
-      reciept,
-      reciepts,
+      ...customData,
     });
 
     const result = isItemsPurchasedRecursive(offers, token, publisherId);
@@ -304,6 +353,7 @@ export async function restorePurchases(data: RestoreData) {
       message: `${funcName} >> succeed: true`,
       data: {
         ...data,
+        ...customData,
         response,
         result,
       },
@@ -330,6 +380,7 @@ function handleError(
     data: {
       ...data,
       error,
+      throw_error: throwError,
     },
   });
   if (throwError) {
