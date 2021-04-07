@@ -51,7 +51,17 @@ const CleengStoreFront = (props) => {
   const publisherId = props?.configuration?.publisherId;
   const enabledDebugModeForIap =
     props?.configuration.iap_debug_mode_enabled === "on";
+  const force_use_auth_ids = props?.configuration?.force_use_auth_ids;
+  console.log({ force_use_auth_ids });
 
+  const testAuths =
+    (props?.configuration?.debug_mode === "on" &&
+      force_use_auth_ids &&
+      force_use_auth_ids.length > 0 &&
+      force_use_auth_ids.split(",")) ||
+    null;
+
+  console.log({ testAuths });
   useEffect(() => {
     navigator.hideNavBar();
 
@@ -87,12 +97,7 @@ const CleengStoreFront = (props) => {
       }
 
       if (payload) {
-        const authIDs = payload?.extensions?.ds_product_ids || [
-          "216",
-          "217",
-          "218",
-          "219",
-        ];
+        const authIDs = payload?.extensions?.ds_product_ids || testAuths;
 
         const itemsPurchased = await isItemsPurchased(
           authIDs,
@@ -209,7 +214,7 @@ const CleengStoreFront = (props) => {
 
       const result = await restorePurchases({
         restoreData,
-        offers: authIDs || ["216", "217", "218", "219"],
+        offers: authIDs || testAuths,
         token,
         publisherId,
       });
