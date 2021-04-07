@@ -331,11 +331,11 @@ export async function restorePurchases(data: RestoreData) {
 
   function androidData() {
     const receiptData = data?.restoreData;
-    const reciepts = R.map((item) => {
+    const receipts = R.map((item) => {
       const parsedReciept = JSON.parse(item.receipt);
       return parsedReciept;
     })(receiptData);
-    return { reciepts };
+    return { receipts };
   }
 
   const customData = isApplePlatform ? iOSData() : androidData();
