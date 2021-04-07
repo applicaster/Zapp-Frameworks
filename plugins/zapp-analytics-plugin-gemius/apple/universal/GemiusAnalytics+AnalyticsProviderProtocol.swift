@@ -34,7 +34,7 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
     @objc public func startObserveTimedEvent(_ eventName: String,
                                              parameters: [String: Any]?) {
         let updatedEventName = "\(eventName).start"
-        
+
         var parametersToPass: [String: NSObject] = [:]
         if let parameters = parameters as? [String: NSObject] {
             parametersToPass = parameters
@@ -52,7 +52,7 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         if let parameters = parameters as? [String: NSObject] {
             parametersToPass = parameters
         }
-        
+
         endTimedEvent(updatedEventName,
                       parameters: parametersToPass)
     }
@@ -62,13 +62,13 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         guard isDisabled == false else {
             return
         }
-        
+
         guard !shouldHandlePlayerEvents(for: eventName, parameters: parameters),
               !shouldHandleAdEvents(for: eventName, parameters: parameters) else {
             return
         }
-        
-        //ignore other events
+
+        // ignore other events
     }
 
     func trackEvent(_ eventName: String, timed: Bool) {
@@ -85,5 +85,11 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
 
     func endTimedEvent(_ eventName: String, parameters: [String: NSObject]) {
         trackEvent(eventName, parameters: parameters)
+    }
+}
+
+extension GemiusAnalytics {
+    func getCurrentPlayerPosition(from parameters: [String: NSObject]) -> Double {
+        return parameters["currentTime"] as? Double ?? 0.00
     }
 }

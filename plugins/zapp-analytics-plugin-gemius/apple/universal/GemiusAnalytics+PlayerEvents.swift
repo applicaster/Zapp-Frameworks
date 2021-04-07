@@ -153,10 +153,6 @@ extension GemiusAnalytics {
         return true
     }
 
-    fileprivate func getCurrentPlayerPosition(from parameters: [String: NSObject]) -> Int {
-        return parameters["currentTime"] as? Int ?? 0
-    }
-
     fileprivate func proceedPlayerEvent(_ eventName: String) -> Bool {
         lastProceededPlayerEvent = eventName
         return true

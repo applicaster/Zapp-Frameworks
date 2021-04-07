@@ -42,10 +42,6 @@ extension GemiusAnalytics {
         return retValue
     }
 
-    fileprivate func getCurrentPlayerPosition(from parameters: [String: NSObject]) -> Int {
-        return parameters["currentTime"] as? Int ?? 0
-    }
-
     fileprivate func proceedAdEvent(_ eventName: String) -> Bool {
         lastProceededAdEvent = eventName
         return true
