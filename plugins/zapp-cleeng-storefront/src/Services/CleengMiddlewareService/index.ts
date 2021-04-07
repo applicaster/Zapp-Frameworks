@@ -332,7 +332,7 @@ export async function restorePurchases(data: RestoreData) {
   function androidData() {
     const receiptData = data?.restoreData;
     const reciepts = R.map((item) => {
-      const parsedReciept = JSON.parse(item.reciept);
+      const parsedReciept = JSON.parse(item.receipt);
       return parsedReciept;
     })(receiptData);
     return { reciepts };

@@ -21,6 +21,7 @@ function PaymentOptionView({
   onPress,
   screenLocalizations,
 }) {
+  console.log({ screenLocalizations });
   const isLandscape = () => {
     const { width, height } = Dimensions.get("window");
     return width >= height;
