@@ -169,7 +169,6 @@ export async function getPurchasedAuthIdsAndExtendToken(
     let token: string;
     let purchasedAuthIds: Array<string> = [];
     for (const tokenData of responseData) {
-      console.log({ tokenData });
       if (tokenData.offerId === "") {
         token = tokenData.token;
       } else {

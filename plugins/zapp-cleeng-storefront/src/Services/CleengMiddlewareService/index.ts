@@ -157,8 +157,10 @@ export async function verifyPurchase(
   console.log({ purchasedProduct });
 
   const productIdentifier = purchasedProduct?.productIdentifier;
+
   const receiptData = purchasedProduct?.receipt;
   const transactionId = purchasedProduct?.transactionIdentifier;
+
   const offerId = R.find(R.propEq("productIdentifier", productIdentifier))(
     productToPurchase
   )?.id;
@@ -167,12 +169,14 @@ export async function verifyPurchase(
   )?.authId;
   console.log({ offerId, productIdentifier, receiptData, transactionId });
   if (offerId && productIdentifier && receiptData && transactionId) {
+    const data = isApplePlatform ? { receiptData } : JSON.parse(receiptData);
+
     const result = await validatePurchasedItem({
       token,
       offerId,
       publisherId,
       isRestored,
-      receipt: { transactionId, receiptData },
+      receipt: { transactionId, ...data },
     });
     console.log(" validatePurchasedItem", { result });
     const validateResult = await checkValidatedItem({
@@ -218,13 +222,6 @@ export async function checkValidatedItem({
     } else if (tries > 0) {
       await new Promise((r) => setTimeout(r, interval));
       const newTries = tries - 1;
-      return await checkValidatedItem({
-        authId,
-        token,
-        publisherId,
-        tries: newTries,
-        interval,
-      });
       logger.debug({
         message: `${funcName} >> succeed: true`,
         data: {
@@ -233,6 +230,13 @@ export async function checkValidatedItem({
           publisher_id: publisherId,
           new_tries: newTries,
         },
+      });
+      return await checkValidatedItem({
+        authId,
+        token,
+        publisherId,
+        tries: newTries,
+        interval,
       });
     } else {
       const error = new Error("Can not validate purchased items");
