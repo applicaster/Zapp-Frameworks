@@ -162,7 +162,7 @@ const CleengStoreFront = (props) => {
           },
         });
 
-        showAlert("General Error!", message);
+        showAlert(screenLocalizations?.general_error_title, message);
       }
       callback && callback({ success: false, error, payload });
     }
@@ -199,7 +199,7 @@ const CleengStoreFront = (props) => {
         },
       });
 
-      showAlert("General Error!", message);
+      showAlert(screenLocalizations?.general_error_title, message);
       console.log({ success, error, payload, callback });
       callback && callback({ success: false, error, payload });
     }
@@ -229,7 +229,10 @@ const CleengStoreFront = (props) => {
       if (result === true) {
         callback && callback({ success: true, error: null, payload });
       } else {
-        //TODO: if can not find purchased item add relevant error
+        showAlert(
+          screenLocalizations?.warning_title,
+          screenLocalizations?.restore_purchases_can_not_find_text
+        );
         setIsLoading(false);
       }
     } catch (error) {

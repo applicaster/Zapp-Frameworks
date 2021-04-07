@@ -51,8 +51,12 @@ export const isAuthenticationRequired = ({ payload }) => {
 };
 
 export function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
+  if (!a1 || !a2 || a1.length === 0 || a2.length === 0) {
+    return false;
+  }
   const result = a1.filter(function (n) {
     return a2.indexOf(n) !== -1;
   });
+  console.log({ result });
   return result.length > 0 ? true : false;
 }

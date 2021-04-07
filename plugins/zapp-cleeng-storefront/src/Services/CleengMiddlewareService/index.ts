@@ -17,7 +17,7 @@ import { isApplePlatform } from "../../Utils/Platform";
 import * as R from "ramda";
 
 import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
-import { ViewPagerAndroidComponent } from "react-native";
+import { getArraysIntersection } from "../../Utils/DataHelper";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.CLEENG_MIDDLEWARE_SERVICE}`,
@@ -85,17 +85,6 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
     console.log("validatePurchasedItem", { error });
     handleError(error, data, funcName);
   }
-}
-
-function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
-  if (!a1 || !a2 || a1.length === 0 || a2.length === 0) {
-    return false;
-  }
-  const result = a1.filter(function (n) {
-    return a2.indexOf(n) !== -1;
-  });
-  console.log({ result });
-  return result.length > 0 ? true : false;
 }
 
 export async function isItemsPurchased(
@@ -205,8 +194,8 @@ export async function checkValidatedItem({
   token,
   publisherId,
   tries = 5,
-  interval = 5000,
 }): Promise<boolean> {
+  const interval = 5000;
   console.log({ authId, token, publisherId });
   const funcName = "checkValidatedItem";
   try {
@@ -236,7 +225,6 @@ export async function checkValidatedItem({
         token,
         publisherId,
         tries: newTries,
-        interval,
       });
     } else {
       const error = new Error("Can not validate purchased items");

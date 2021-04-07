@@ -10,6 +10,22 @@ const common = [
     label: "General error message",
     initial_value: "Something went wrong. Please try again later",
   },
+  {
+    key: "warning_title",
+    label: "Warning!",
+    initial_value: "Unable to find valid subscription",
+  },
+  {
+    key: "general_error_title",
+    label: "General Error!",
+    initial_value: "Unable to find valid subscription",
+  },
+  {
+    key: "restore_purchases_can_not_find_text",
+    label:
+      "Restore subscription message, if user has no access on current screen",
+    initial_value: "Unable to find valid subscription",
+  },
 ];
 
 const mobile = [
@@ -39,12 +55,6 @@ const mobile = [
     key: "terms_of_use_link_text",
     label: "Payment terms of use text",
     initial_value: "terms of use.",
-  },
-  {
-    key: "resotore_purchases_text",
-    label:
-      "Restore subscription message, if user has no access on current screen",
-    initial_value: "Unable to find valid subscription",
   },
 ];
 

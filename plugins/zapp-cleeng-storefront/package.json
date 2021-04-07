@@ -39,13 +39,6 @@
     "@types/react-native": "^0.63.1",
     "typescript": "^3.9.7"
   },
-  "files": [
-    "lib",
-    "manifests/**/*",
-    "apple",
-    "android",
-    "src"
-  ],
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",
