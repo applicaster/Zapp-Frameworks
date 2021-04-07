@@ -56,6 +56,16 @@ const mobile = [
     label: "Payment terms of use text",
     initial_value: "terms of use.",
   },
+  {
+    key: "payment_option_action_text_type_subscribe",
+    label: "Buy button title, subscription",
+    initial_value: "Subscribe for:",
+  },
+  {
+    key: "payment_option_action_text_type_buy",
+    label: "Buy button title, purchase",
+    initial_value: "Buy for:",
+  },
 ];
 
 const tv = [

@@ -37,12 +37,9 @@ export const logger = createLogger({
 });
 
 const CleengStoreFront = (props) => {
-  // const appData: any = useSelector(R.prop("appData"));
-  // const store = appData?.store;
-
   const navigator = useNavigation();
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { callback, payload, rivers } = props;
   const localizations = getRiversProp("localizations", rivers);
@@ -140,6 +137,7 @@ const CleengStoreFront = (props) => {
             },
           });
 
+          setIsLoading(false);
           setPayloadWithPurchaseData(newPayload);
         } else {
           logger.debug({
@@ -151,7 +149,6 @@ const CleengStoreFront = (props) => {
           callback && callback({ success: true, error: null, payload });
         }
       }
-      //TODO: Maybe screen logic here without payload
     } catch (error) {
       if (error) {
         const message = getMessageOrDefault(error, screenLocalizations);
@@ -242,12 +239,12 @@ const CleengStoreFront = (props) => {
       setIsLoading(false);
     }
   }
-  console.log({ screenStyles });
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: screenStyles?.background_color,
+        backgroundColor: screenStyles?.payment_screen_background,
       }}
     >
       {payloadWithPurchaseData && (

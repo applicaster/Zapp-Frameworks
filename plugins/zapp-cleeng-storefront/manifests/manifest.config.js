@@ -159,12 +159,6 @@ const stylesMobile = {
       folded: true,
       fields: [
         {
-          key: "background_color",
-          type: "color_picker",
-          label: "Background font color",
-          initial_value: "#161b29ff",
-        },
-        {
           key: "payment_screen_background",
           type: "color_picker_rgba",
           label: "Payment Screen Background Color",
