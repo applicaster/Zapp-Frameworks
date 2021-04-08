@@ -25,6 +25,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
             val pdata = ProgramData()
             pdata.name = getName()
             pdata.duration = duration?.toInt()
+            // todo: need to determine type
+            pdata.programType = ProgramData.ProgramType.VIDEO
 
             // copy all custom fields
             (params?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
@@ -100,6 +102,11 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     Player.EventType.PLAY,
                     EventAdData().apply {
                         autoPlay = true // all our ads are autoplay I assume
+                        when (val d = params?.get("breakSize")) {
+                            is String -> breakSize = d.toFloat().toInt()
+                            is Number -> breakSize = d.toInt()
+                            else -> APLogger.warn(TAG, "breakSize is missing in the ad data")
+                        }
                     })
         }
 
