@@ -136,6 +136,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         List<AnalyticsDescription> analytics = getAnalytics();
 
         String cssFile = "file:///android_asset/" + PluginHelper.getScaleMode() + ".css";
+        String jsFile = "file:///android_asset/script.js";
 
         /*
           If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
@@ -151,7 +152,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .license(license)
                 .castStrategy(CastStrategy.AUTO)
                 .analytics(analytics.toArray(new AnalyticsDescription[0]))
-                .jsPaths("file:///android_asset/script.js")
+                .jsPaths(jsFile)
                 .cssPaths(cssFile)
                 .build();
 
