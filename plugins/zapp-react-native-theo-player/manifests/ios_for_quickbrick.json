@@ -33,11 +33,11 @@
       "tooltip_text": "Set player scale mode",
       "options": [
         {
-          "text": "contain",
+          "text": "scale to fit",
           "value": "style-fit"
         },
         {
-          "text": "cover",
+          "text": "scale to fill",
           "value": "style-fill"
         }
       ],
@@ -176,8 +176,8 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.2.0",
-  "manifest_version": "0.2.0",
+  "dependency_version": "0.2.1",
+  "manifest_version": "0.2.1",
   "api": {
     "class_name": "THEOplayerAdapter",
     "modules": [
@@ -191,7 +191,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-react-native-theo-player@0.2.0"
+    "@applicaster/zapp-react-native-theo-player@0.2.1"
   ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
