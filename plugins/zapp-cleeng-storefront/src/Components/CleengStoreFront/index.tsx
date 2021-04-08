@@ -64,7 +64,6 @@ const CleengStoreFront = (props) => {
   console.log({ testAuths });
   useEffect(() => {
     navigator.hideNavBar();
-
     setupEnvironment();
     return () => {
       navigator.showNavBar();
