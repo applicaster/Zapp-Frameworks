@@ -27,11 +27,11 @@ const baseManifest = {
       tooltip_text: "Set player scale mode",
       options: [
         {
-          text: "contain",
+          text: "scale to fit",
           value: "style-fit",
         },
         {
-          text: "cover",
+          text: "scale to fill",
           value: "style-fill",
         },
       ],
