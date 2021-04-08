@@ -44,7 +44,7 @@ const common = [
   {
     key: "restore_failed_message",
     label: "Restore subscription message, failed",
-    initial_value: "Restore failed",
+    initial_value: "Unable to finish restore purchase. Please try again later",
   },
   {
     key: "restore_failed_no_items_message",
@@ -80,6 +80,11 @@ const mobile = [
     key: "terms_of_use_link_text",
     label: "Payment terms of use text",
     initial_value: "terms of use.",
+  },
+  {
+    key: "terms_of_use_link",
+    label: "Payment terms of use link",
+    initial_value: "https://www.google.com",
   },
   {
     key: "payment_option_action_text_type_subscribe",
