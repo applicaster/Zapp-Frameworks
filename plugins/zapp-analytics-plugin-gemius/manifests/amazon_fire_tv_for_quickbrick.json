@@ -27,20 +27,16 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "tvos_for_quickbrick",
-  "min_zapp_sdk": "4.1.0-Dev",
+  "platform": "amazon_fire_tv_for_quickbrick",
+  "min_zapp_sdk": "4.0.0",
   "manifest_version": "0.1.0",
-  "extra_dependencies": [
+  "project_dependencies": [
     {
-      "GemiusAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-gemius/apple/GemiusAnalytics.podspec'"
+      "zapp-analytics-plugin-gemius": "node_modules/@applicaster/zapp-analytics-plugin-gemius/android"
     }
   ],
   "api": {
-    "require_startup_execution": false,
-    "class_name": "GemiusAnalytics",
-    "modules": [
-      "GemiusAnalytics"
-    ]
+    "class_name": "com.applicaster.analytics.gemius.GemiusAgent"
   },
   "targets": [
     "tv"

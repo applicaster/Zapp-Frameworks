@@ -1,26 +1,25 @@
 {
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "Segment Analytics",
-  "identifier": "segment_analytics",
-  "description": "Segment Analytics",
+  "name": "Gemius Analytics",
+  "identifier": "gemius_analytics",
+  "description": "Gemius Analytics",
   "type": "analytics",
   "react_native": true,
   "custom_configuration_fields": [
     {
       "section": "configuration",
       "type": "text",
-      "key": "segment_write_key",
-      "tooltip_text": "The key used for connecting with segment analytics",
+      "key": "script_identifier",
+      "tooltip_text": "Script Identifier",
       "default": ""
     },
     {
       "section": "configuration",
-      "type": "text_area",
-      "key": "blacklisted_events_list",
-      "initial_value": "",
-      "label": "Blacklisted Events",
-      "tooltip_text": "The key used to specify the blacklisted events, separated by comma"
+      "type": "text",
+      "key": "hit_collector_host",
+      "tooltip_text": "Collector Host",
+      "default": ""
     }
   ],
   "whitelisted_account_ids": [],
@@ -29,24 +28,24 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "min_zapp_sdk": "1.0.0-Dev",
-  "manifest_version": "2.1.6",
+  "min_zapp_sdk": "4.1.0-Dev",
+  "manifest_version": "0.1.0",
   "extra_dependencies": [
     {
-      "SegmentAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-segment/apple/SegmentAnalytics.podspec'"
+      "GemiusAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-gemius/apple/GemiusAnalytics.podspec'"
     }
   ],
   "api": {
     "require_startup_execution": false,
-    "class_name": "SegmentAnalytics",
+    "class_name": "GemiusAnalytics",
     "modules": [
-      "SegmentAnalytics"
+      "GemiusAnalytics"
     ]
   },
   "targets": [
     "mobile"
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-segment@2.1.6"
+    "@applicaster/zapp-analytics-plugin-gemius@0.1.0"
   ]
 }
