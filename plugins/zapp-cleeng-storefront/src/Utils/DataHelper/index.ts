@@ -3,13 +3,15 @@ import { OfferItem } from "../../models/Response";
 import { isAndroidPlatform, isApplePlatform } from "../Platform";
 export async function preparePayload({ payload, cleengResponse }) {
   let newPayload = payload;
-  //   newPayload.extensions.cleeng_data = cleengResponse;
-  if (!newPayload?.extensions) {
-    newPayload.extensions = {};
+  if (newPayload) {
+    if (R.isNil(newPayload?.extensions)) {
+      newPayload.extensions = {};
+    }
+
+    newPayload.extensions.in_app_purchase_data = {
+      productsToPurchase: prepareInAppPurchaseData(cleengResponse),
+    };
   }
-  newPayload.extensions.in_app_purchase_data = {
-    productsToPurchase: prepareInAppPurchaseData(cleengResponse),
-  };
 
   return newPayload;
 }
