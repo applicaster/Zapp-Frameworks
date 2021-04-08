@@ -1,0 +1,52 @@
+{
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Segment Analytics",
+  "identifier": "segment_analytics",
+  "description": "Segment Analytics",
+  "type": "analytics",
+  "react_native": true,
+  "custom_configuration_fields": [
+    {
+      "section": "configuration",
+      "type": "text",
+      "key": "segment_write_key",
+      "tooltip_text": "The key used for connecting with segment analytics",
+      "default": ""
+    },
+    {
+      "section": "configuration",
+      "type": "text_area",
+      "key": "blacklisted_events_list",
+      "initial_value": "",
+      "label": "Blacklisted Events",
+      "tooltip_text": "The key used to specify the blacklisted events, separated by comma"
+    }
+  ],
+  "whitelisted_account_ids": [],
+  "ui_builder_support": false,
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "min_zapp_sdk": "1.0.0-Dev",
+  "manifest_version": "2.1.6",
+  "extra_dependencies": [
+    {
+      "SegmentAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-segment/apple/SegmentAnalytics.podspec'"
+    }
+  ],
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "SegmentAnalytics",
+    "modules": [
+      "SegmentAnalytics"
+    ]
+  },
+  "targets": [
+    "mobile"
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-segment@2.1.6"
+  ]
+}

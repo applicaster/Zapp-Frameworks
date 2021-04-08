@@ -22,6 +22,22 @@ const baseManifest = {
       default: "",
     },
     {
+      type: "tag_select",
+      key: "theoplayer_scale_mode",
+      tooltip_text: "Set player scale mode",
+      options: [
+        {
+          text: "contain",
+          value: "style-fit",
+        },
+        {
+          text: "cover",
+          value: "style-fill",
+        },
+      ],
+      initial_value: "style-fit",
+    },
+    {
       group: true,
       label: "Google IMA",
       tooltip: "Google IMA Settings",

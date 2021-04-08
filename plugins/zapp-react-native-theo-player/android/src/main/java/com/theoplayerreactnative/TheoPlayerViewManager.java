@@ -27,8 +27,9 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
-import com.theoplayer.android.api.cast.Cast;
+import com.theoplayer.android.api.ads.GoogleImaConfiguration;
 import com.theoplayer.android.api.cast.CastStrategy;
+import com.theoplayer.android.api.event.ads.AdsEventTypes;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
@@ -38,8 +39,11 @@ import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
 //import com.theoplayer.android.internal.activity.CurrentActivityHelper;
-import com.theoplayerreactnative.events.EventRouter;
-import com.theoplayerreactnative.events.EventsBinder;
+import com.theoplayerreactnative.events.AdEventRouter;
+import com.theoplayerreactnative.events.AdEventMapper;
+import com.theoplayerreactnative.events.PlayerEventRouter;
+import com.theoplayerreactnative.events.PlayerEventMapper;
+import com.theoplayerreactnative.events.IEventRouter;
 import com.theoplayerreactnative.utility.JSON2RN;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,28 +66,37 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     public static final String TAG = RCT_MODULE_NAME;
 
     private enum InternalAndGlobalEventPair {
-        onPlayerPlay(new EventRouter<>(PlayerEventTypes.PLAY, EventsBinder::toRN)),
-        onPlayerPlaying(new EventRouter<>(PlayerEventTypes.PLAYING, EventsBinder::toRN)),
-        onPlayerPause(new EventRouter<>(PlayerEventTypes.PAUSE, EventsBinder::toRN)),
-        onPlayerProgress(new EventRouter<>(PlayerEventTypes.PROGRESS, EventsBinder::toRN)),
-        onPlayerSeeking(new EventRouter<>(PlayerEventTypes.SEEKING, EventsBinder::toRN)),
-        onPlayerSeeked(new EventRouter<>(PlayerEventTypes.SEEKED, EventsBinder::toRN)),
-        onPlayerWaiting(new EventRouter<>(PlayerEventTypes.WAITING, EventsBinder::toRN)),
-        onPlayerTimeUpdate(new EventRouter<>(PlayerEventTypes.TIMEUPDATE, EventsBinder::toRN)),
-        onPlayerRateChange(new EventRouter<>(PlayerEventTypes.RATECHANGE, EventsBinder::toRN)),
-        onPlayerReadyStateChange(new EventRouter<>(PlayerEventTypes.READYSTATECHANGE, EventsBinder::toRN)),
-        onPlayerLoadedMetaData(new EventRouter<>(PlayerEventTypes.LOADEDMETADATA, EventsBinder::toRN)),
-        onPlayerLoadedData(new EventRouter<>(PlayerEventTypes.LOADEDDATA, EventsBinder::toRN)),
-        onPlayerLoadStart(new EventRouter<>(PlayerEventTypes.LOADSTART, EventsBinder::toRN)),
-        onPlayerCanPlay(new EventRouter<>(PlayerEventTypes.CANPLAY, EventsBinder::toRN)),
-        onPlayerCanPlayThrough(new EventRouter<>(PlayerEventTypes.CANPLAYTHROUGH, EventsBinder::toRN)),
-        onPlayerDurationChange(new EventRouter<>(PlayerEventTypes.DURATIONCHANGE, EventsBinder::toRN)),
-        onPlayerSourceChange(new EventRouter<>(PlayerEventTypes.SOURCECHANGE, EventsBinder::toRN)),
-        onPlayerPresentationModeChange(new EventRouter<>(PlayerEventTypes.PRESENTATIONMODECHANGE, EventsBinder::toRN)),
-        onPlayerVolumeChange(new EventRouter<>(PlayerEventTypes.VOLUMECHANGE, EventsBinder::toRN)),
-        onPlayerDestroy(new EventRouter<>(PlayerEventTypes.DESTROY, EventsBinder::toRN)),
-        onPlayerEnded(new EventRouter<>(PlayerEventTypes.ENDED, EventsBinder::toRN)),
-        onPlayerError(new EventRouter<>(PlayerEventTypes.ERROR, EventsBinder::toRN)),
+
+        // Player events
+        onPlayerPlay(new PlayerEventRouter<>(PlayerEventTypes.PLAY, PlayerEventMapper::toRN)),
+        onPlayerPlaying(new PlayerEventRouter<>(PlayerEventTypes.PLAYING, PlayerEventMapper::toRN)),
+        onPlayerPause(new PlayerEventRouter<>(PlayerEventTypes.PAUSE, PlayerEventMapper::toRN)),
+        onPlayerProgress(new PlayerEventRouter<>(PlayerEventTypes.PROGRESS, PlayerEventMapper::toRN)),
+        onPlayerSeeking(new PlayerEventRouter<>(PlayerEventTypes.SEEKING, PlayerEventMapper::toRN)),
+        onPlayerSeeked(new PlayerEventRouter<>(PlayerEventTypes.SEEKED, PlayerEventMapper::toRN)),
+        onPlayerWaiting(new PlayerEventRouter<>(PlayerEventTypes.WAITING, PlayerEventMapper::toRN)),
+        onPlayerTimeUpdate(new PlayerEventRouter<>(PlayerEventTypes.TIMEUPDATE, PlayerEventMapper::toRN)),
+        onPlayerRateChange(new PlayerEventRouter<>(PlayerEventTypes.RATECHANGE, PlayerEventMapper::toRN)),
+        onPlayerReadyStateChange(new PlayerEventRouter<>(PlayerEventTypes.READYSTATECHANGE, PlayerEventMapper::toRN)),
+        onPlayerLoadedMetaData(new PlayerEventRouter<>(PlayerEventTypes.LOADEDMETADATA, PlayerEventMapper::toRN)),
+        onPlayerLoadedData(new PlayerEventRouter<>(PlayerEventTypes.LOADEDDATA, PlayerEventMapper::toRN)),
+        onPlayerLoadStart(new PlayerEventRouter<>(PlayerEventTypes.LOADSTART, PlayerEventMapper::toRN)),
+        onPlayerCanPlay(new PlayerEventRouter<>(PlayerEventTypes.CANPLAY, PlayerEventMapper::toRN)),
+        onPlayerCanPlayThrough(new PlayerEventRouter<>(PlayerEventTypes.CANPLAYTHROUGH, PlayerEventMapper::toRN)),
+        onPlayerDurationChange(new PlayerEventRouter<>(PlayerEventTypes.DURATIONCHANGE, PlayerEventMapper::toRN)),
+        onPlayerSourceChange(new PlayerEventRouter<>(PlayerEventTypes.SOURCECHANGE, PlayerEventMapper::toRN)),
+        onPlayerPresentationModeChange(new PlayerEventRouter<>(PlayerEventTypes.PRESENTATIONMODECHANGE, PlayerEventMapper::toRN)),
+        onPlayerVolumeChange(new PlayerEventRouter<>(PlayerEventTypes.VOLUMECHANGE, PlayerEventMapper::toRN)),
+        onPlayerDestroy(new PlayerEventRouter<>(PlayerEventTypes.DESTROY, PlayerEventMapper::toRN)),
+        onPlayerEnded(new PlayerEventRouter<>(PlayerEventTypes.ENDED, PlayerEventMapper::toRN)),
+        onPlayerError(new PlayerEventRouter<>(PlayerEventTypes.ERROR, PlayerEventMapper::toRN)),
+
+        // Ads events
+        onAdBreakBegin(new AdEventRouter<>(AdsEventTypes.AD_BREAK_BEGIN, AdEventMapper::toRN)),
+        onAdBreakEnd(new AdEventRouter<>(AdsEventTypes.AD_BREAK_END, AdEventMapper::toRN)),
+        onAdError(new AdEventRouter<>(AdsEventTypes.AD_ERROR, AdEventMapper::toRN)),
+        onAdBegin(new AdEventRouter<>(AdsEventTypes.AD_BEGIN, AdEventMapper::toRN)),
+        onAdEnd(new AdEventRouter<>(AdsEventTypes.AD_END, AdEventMapper::toRN)),
 
         // non-player events
         onPlayerResize( null),
@@ -94,9 +107,9 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         @NonNull
         String globalEvent;
         @Nullable
-        EventRouter<?> router;
+        IEventRouter router;
 
-        InternalAndGlobalEventPair(@Nullable EventRouter<?> router) {
+        InternalAndGlobalEventPair(@Nullable IEventRouter router) {
             this.globalEvent = name();
             this.internalEvent = name() + "Internal";
             this.router = router;
@@ -122,18 +135,25 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
 
         List<AnalyticsDescription> analytics = getAnalytics();
 
+        String cssFile = "file:///android_asset/" + PluginHelper.getScaleMode() + ".css";
+        String jsFile = "file:///android_asset/script.js";
+
         /*
           If you want to use Google Ima set googleIma in theoplayer config(uncomment line below) and add `integration: "google-ima"`
           in js ads source declaration.
           You can declare in THEOplayer configuration builder default js and css paths by using cssPaths() and jsPaths()
         */
         THEOplayerConfig playerConfig = new THEOplayerConfig.Builder()
-                .ads(new AdsConfiguration.Builder().build())
+                .ads(new AdsConfiguration.Builder()
+                        .googleImaConfiguration(new GoogleImaConfiguration.Builder()
+                                .useNativeIma(true)
+                                .build())
+                        .build())
                 .license(license)
                 .castStrategy(CastStrategy.AUTO)
                 .analytics(analytics.toArray(new AnalyticsDescription[0]))
-                .jsPaths("file:///android_asset/script.js")
-                .cssPaths("file:///android_asset/style.css")
+                .jsPaths(jsFile)
+                .cssPaths(cssFile)
                 .build();
 
         final Activity currentActivity = reactContext.getCurrentActivity();
