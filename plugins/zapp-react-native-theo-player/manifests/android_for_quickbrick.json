@@ -28,6 +28,22 @@
       "default": ""
     },
     {
+      "type": "tag_select",
+      "key": "theoplayer_scale_mode",
+      "tooltip_text": "Set player scale mode",
+      "options": [
+        {
+          "text": "contain",
+          "value": "style-fit"
+        },
+        {
+          "text": "cover",
+          "value": "style-fill"
+        }
+      ],
+      "initial_value": "style-fit"
+    },
+    {
       "group": true,
       "label": "Google IMA",
       "tooltip": "Google IMA Settings",
@@ -160,8 +176,8 @@
     }
   ],
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.0.3",
-  "manifest_version": "0.0.3",
+  "dependency_version": "0.2.0",
+  "manifest_version": "0.2.0",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
