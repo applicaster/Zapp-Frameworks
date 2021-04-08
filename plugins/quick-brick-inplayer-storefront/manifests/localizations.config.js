@@ -40,6 +40,11 @@ const mobile = [
     label: "Payment terms of use text",
     initial_value: "terms of use.",
   },
+  {
+    key: "terms_of_use_link",
+    label: "Payment terms of use link",
+    initial_value: "https://www.google.com",
+  },
 ];
 
 const tv = [
