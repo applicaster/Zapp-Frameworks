@@ -22,6 +22,7 @@ object AdEventMapper {
         map.putInt("maxDuration", adBreak.maxDuration)
         map.putDouble("maxRemainingDuration", adBreak.maxRemainingDuration)
         map.putString("integrationKind", adBreak.integration.type)
+        map.putInt("breakSize", adBreak.ads.size)
     }
 
     @JvmStatic
@@ -54,6 +55,10 @@ object AdEventMapper {
         }
         (ad as? NonLinearAd?)?.let {
             map.putString("resourceURI", it.resourceURI)
+        }
+        ad.adBreak?.let {
+            map.putInt("breakSize", it.ads.size)
+            map.putInt("adPosition", it.ads.indexOf(ad))
         }
     }
 
