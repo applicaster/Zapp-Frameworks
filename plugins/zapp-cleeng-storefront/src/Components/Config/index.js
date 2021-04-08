@@ -13,11 +13,11 @@ const MESSAGES = {
   validation: {
     productId: "Product identifier does not exist.",
     noFees: "No fees available for current asset.",
-    emptyStore: "No items available in store."
+    emptyStore: "No items available in store.",
   },
   asset: {
-    fail: "Cannot load asset info."
-  }
+    fail: "Cannot load asset info.",
+  },
 };
 
 export default MESSAGES;

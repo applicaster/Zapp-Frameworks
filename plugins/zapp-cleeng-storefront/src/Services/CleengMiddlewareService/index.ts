@@ -307,6 +307,24 @@ export async function getPurchasedAuthIdsAndExtendToken(
   }
 }
 
+export function isRestoreEmpty(data) {
+  if (isApplePlatform) {
+    const products = data?.products;
+    console.log({ products, data, length: products?.length });
+    if (products && products?.length > 0) {
+      console.log("FALSE");
+      return false;
+    }
+    console.log("TRUE");
+    return true;
+  } else {
+    if (data && data?.length > 0) {
+      return false;
+    }
+    return true;
+  }
+}
+
 export async function restorePurchases(data: RestoreData) {
   const funcName = "restorePurchases";
   const token = data?.token;
@@ -363,7 +381,7 @@ export async function restorePurchases(data: RestoreData) {
 
     return result;
   } catch (error) {
-    handleError(error, data, funcName);
+    handleError(error, data, funcName, true);
   }
 }
 

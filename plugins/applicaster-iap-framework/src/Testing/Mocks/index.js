@@ -54,7 +54,7 @@ export const purchaseMock = {
   transactionIdentifier: "123456789",
 };
 
-export const restoreProductsMock = {
+export const restoreProductsMockiOS = {
   receipt: "Base64Reciept",
   restoredProducts: [
     "com.babyfirst.discounted.1month.premium",
@@ -62,4 +62,41 @@ export const restoreProductsMock = {
     "com.babyfirst.discounted.1year.premium",
     "com.babyfirst.discounted.1year.standard",
   ],
+  products: [
+    {
+      productIdentifier: "com.babyfirst.discounted.1month.premium",
+      transactionIdentifier: "1",
+    },
+    {
+      productIdentifier: "com.babyfirst.discounted.1month.standard",
+      transactionIdentifier: "2",
+    },
+    {
+      productIdentifier: "com.babyfirst.discounted.1year.premium",
+      transactionIdentifier: "3",
+    },
+    {
+      productIdentifier: "com.babyfirst.discounted.1year.standard",
+      transactionIdentifier: "4",
+    },
+  ],
 };
+
+export const restoreProductsMockAndroid = [
+  {
+    receipt:
+      '{"orderId":"GPA.3316-2382-9492-23216","packageName":"com.applicaster.il.babyfirsttv","productId":"com.babyfirst.discounted.1month.premium","purchaseTime":1617832687002,"purchaseState":0,"purchaseToken":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","autoRenewing":true,"acknowledged":true,"transactionIdentifier":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","productIdentifier":"com.babyfirst.discounted.1month.standard"}',
+  },
+  {
+    receipt:
+      '{"orderId":"GPA.3316-2382-9492-23216","packageName":"com.applicaster.il.babyfirsttv","productId":"com.babyfirst.discounted.1month.standard","purchaseTime":1617832687002,"purchaseState":0,"purchaseToken":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","autoRenewing":true,"acknowledged":true,"transactionIdentifier":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","productIdentifier":"com.babyfirst.discounted.1month.standard"}',
+  },
+  {
+    receipt:
+      '{"orderId":"GPA.3316-2382-9492-23216","packageName":"com.applicaster.il.babyfirsttv","productId":"com.babyfirst.discounted.1year.premium","purchaseTime":1617832687002,"purchaseState":0,"purchaseToken":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","autoRenewing":true,"acknowledged":true,"transactionIdentifier":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","productIdentifier":"com.babyfirst.discounted.1month.standard"}',
+  },
+  {
+    receipt:
+      '{"orderId":"GPA.3316-2382-9492-23216","packageName":"com.applicaster.il.babyfirsttv","productId":"com.babyfirst.discounted.1year.standard","purchaseTime":1617832687002,"purchaseState":0,"purchaseToken":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","autoRenewing":true,"acknowledged":true,"transactionIdentifier":"jkalfijpbicpjmhnfnbnnhma.AO-J1OwgpDYl48ic8wdd3Ah1hnSJCcyGkHxqAPXPibP_jn6kQazMIYDSW1Ktx7ah6ONovm8TCKoWAkLz2L30-pfC2ZVP3OogMUkFbWqDrHtT57MfGjriuss","productIdentifier":"com.babyfirst.discounted.1month.standard"}',
+  },
+];

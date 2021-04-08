@@ -190,18 +190,13 @@ export default function Storefront(props) {
 
     restore()
       .then(async (data) => {
-        const alertTitle = MESSAGES.restore.success;
-        const alertMessage = MESSAGES.restore.successInfo;
         const onRestoreCompleted = props?.onRestoreCompleted;
 
         await onRestoreCompleted(data);
         onRestoreSuccess();
-
-        showAlert(alertTitle, alertMessage, hideLoader);
       })
       .catch((err) => {
-        const alertTitle = MESSAGES.restore.fail;
-        showAlert(alertTitle, err.message, hideLoader);
+        throw err;
       });
   }
 

@@ -12,19 +12,44 @@ const common = [
   },
   {
     key: "warning_title",
-    label: "Warning!",
-    initial_value: "Unable to find valid subscription",
+    label: "Warning title",
+    initial_value: "Warning!",
   },
   {
     key: "general_error_title",
-    label: "General Error!",
-    initial_value: "Unable to find valid subscription",
+    label: "General Error title",
+    initial_value: "General Error!",
   },
   {
     key: "restore_purchases_can_not_find_text",
     label:
       "Restore subscription message, if user has no access on current screen",
-    initial_value: "Unable to find valid subscription",
+    initial_value: "Unable to find valid subscription for current item",
+  },
+  {
+    key: "restore_success_title",
+    label: "Restore subscription title, success",
+    initial_value: "Restore success",
+  },
+  {
+    key: "restore_success_message",
+    label: "Restore subscription title, message",
+    initial_value: "Purchase was successfully restored!",
+  },
+  {
+    key: "restore_failed_title",
+    label: "Restore subscription title, failed",
+    initial_value: "Restore failed",
+  },
+  {
+    key: "restore_failed_message",
+    label: "Restore subscription message, failed",
+    initial_value: "Restore failed",
+  },
+  {
+    key: "restore_failed_no_items_message",
+    label: "Restore subscription title, no items",
+    initial_value: "No items to restore.",
   },
 ];
 

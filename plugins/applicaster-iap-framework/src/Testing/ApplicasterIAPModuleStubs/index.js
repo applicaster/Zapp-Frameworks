@@ -1,8 +1,12 @@
 import {
   productMockResponse,
   purchaseMock,
-  restoreProductsMock,
+  restoreProductsMockiOS,
+  restoreProductsMockAndroid,
 } from "../Mocks";
+import { Platform } from "react-native";
+export const isApplePlatform = Platform.OS === "ios";
+
 export const ApplicasterIAPModuleStubs = {
   async isInitialized() {
     return true;
@@ -25,7 +29,9 @@ export const ApplicasterIAPModuleStubs = {
   },
 
   async restore() {
-    return restoreProductsMock;
+    return isApplePlatform
+      ? restoreProductsMockiOS
+      : restoreProductsMockAndroid;
   },
 
   async finishPurchasedTransaction(payload) {

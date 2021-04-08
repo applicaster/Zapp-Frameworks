@@ -20,6 +20,7 @@ import {
   isItemsPurchased,
   verifyPurchase,
   restorePurchases,
+  isRestoreEmpty,
 } from "../../Services/CleengMiddlewareService";
 
 import LoadingScreen from "../LoadingScreen";
@@ -205,7 +206,24 @@ const CleengStoreFront = (props) => {
   }
 
   async function onRestoreCompleted(restoreData) {
+    function finishFlow() {
+      callback && callback({ success: true, error: null, payload });
+    }
+
     try {
+      if (isRestoreEmpty(restoreData)) {
+        console.log({ restoreData });
+        showAlert(
+          screenLocalizations?.warning_title,
+          screenLocalizations?.restore_failed_no_items_message
+        );
+        logger.debug({
+          message: `onRestoreCompleted -> No items to restore`,
+          data: { restoreData },
+        });
+        return;
+      }
+
       setIsLoading(true);
       const authIDs = payload?.extensions?.ds_product_ids || testAuths;
       const token = await getToken();
@@ -218,28 +236,43 @@ const CleengStoreFront = (props) => {
         publisherId,
       });
       logger.debug({
-        message: "Validation payment completed",
+        message: `Validation payment completed -> success, restored item in entry ${result}`,
         data: {
           payload,
-          result,
+          is_restored_item_in_entry: result,
         },
       });
 
       if (result === true) {
-        callback && callback({ success: true, error: null, payload });
+        showAlert(
+          screenLocalizations?.restore_success_title,
+          screenLocalizations?.restore_success_message,
+          finishFlow
+        );
       } else {
         showAlert(
-          screenLocalizations?.warning_title,
+          screenLocalizations?.restore_success_title,
           screenLocalizations?.restore_purchases_can_not_find_text
         );
         setIsLoading(false);
       }
     } catch (error) {
-      console.log({ error });
+      showAlert(
+        screenLocalizations?.restore_failed_title,
+        screenLocalizations?.restore_failed_message
+      );
+
+      logger.error({
+        message: `onRestoreCompleted -> error`,
+        data: {
+          error,
+          restoreData,
+        },
+      });
       setIsLoading(false);
     }
   }
-
+  console.log({ props });
   return (
     <View
       style={{
