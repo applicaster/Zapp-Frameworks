@@ -41,7 +41,7 @@ class THEOplayerView: UIView {
     @objc var onAdBegin: RCTBubblingEventBlock?
     @objc var onAdEnd: RCTBubblingEventBlock?
 
-    @objc var licenceData: NSDictionary? {
+    @objc var configurationData: NSDictionary? {
         didSet {
             setupTheoPlayer()
         }
@@ -146,17 +146,18 @@ class THEOplayerView: UIView {
     private func setupTheoPlayer() {
         logger?.debugLog(message: "Initialize player",
                          data: [:])
-        let theoplayerLicenseKey = licenceData?["theoplayer_license_key"] as? String
+        let theoplayerLicenseKey = configurationData?["theoplayer_license_key"] as? String
+        let playerScaleMode = configurationData?["theoplayer_scale_mode"] as? String
 
         var analytics = [AnalyticsDescription]()
-        if let moatPartnerCode = licenceData?["moat_partner_code"] as? String {
+        if let moatPartnerCode = configurationData?["moat_partner_code"] as? String {
             analytics.append(MoatOptions(partnerCode: moatPartnerCode,
                                          debugLoggingEnabled: true))
         }
 
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
-        let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
+        let stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
         let playerConfig = THEOplayerConfiguration(chromeless: false,
                                                    defaultCSS: true,
                                                    cssPaths: stylePaths,

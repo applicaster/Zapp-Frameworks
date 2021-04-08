@@ -14,6 +14,7 @@ import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analytic
 
 console.disableYellowBox = true;
 type PluginConfiguration = {
+  theoplayer_scale_mode: string;
   theoplayer_license_key: string;
   moat_partner_code: string;
 };
@@ -250,6 +251,7 @@ export default class THEOPlayer extends Component<Props, State> {
       pluginConfiguration,
     } = this.props;
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
+    const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
     return (
@@ -294,7 +296,7 @@ export default class THEOPlayer extends Component<Props, State> {
           onAdBegin={this.onAdBegin}
           onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          licenceData={{ theoplayer_license_key, moat_partner_code }}
+          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
           source={{
             sources: [
               {
