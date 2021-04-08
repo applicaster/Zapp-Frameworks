@@ -10,8 +10,11 @@ import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 
+import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
+
 console.disableYellowBox = true;
 type PluginConfiguration = {
+  theoplayer_scale_mode: string;
   theoplayer_license_key: string;
   moat_partner_code: string;
 };
@@ -106,14 +109,18 @@ export default class THEOPlayer extends Component<Props, State> {
 
   componentDidMount() {}
 
-  onPlayerPlay = ({ nativeEvent }) => {};
+  onPlayerPlay = ({ nativeEvent }) => {
+  };
 
-  onPlayerPlaying = ({ nativeEvent }) => {};
+  onPlayerPlaying = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Playing", nativeEvent);
+  };
 
   onPlayerPause = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const duration = this.state?.duration;
     // this.props?.onPause({ currentTime, duration });
+    postAnalyticEvent("Player Pause", nativeEvent);
   };
 
   onPlayerProgress = ({ nativeEvent }) => {
@@ -124,9 +131,13 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  onPlayerSeeking = ({ nativeEvent }) => {};
+  onPlayerSeeking = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Seeking", nativeEvent);
+  };
 
-  onPlayerSeeked = ({ nativeEvent }) => {};
+  onPlayerSeeked = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Seeked", nativeEvent);
+  };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
@@ -152,7 +163,9 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  onPlayerLoadStart = ({ nativeEvent }) => {};
+  onPlayerLoadStart = ({ nativeEvent }) => {
+    postAnalyticEvent("Player Load Start", nativeEvent);
+  };
 
   onPlayerCanPlay = ({ nativeEvent }) => {};
 
@@ -192,6 +205,27 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
+  onAdBreakBegin = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+    postAnalyticEvent("Ad Break Begin", nativeEvent);
+  };
+  onAdBreakEnd = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+    postAnalyticEvent("Ad Break End", nativeEvent);
+  };
+  onAdError = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+    postAnalyticEvent("Ad Error", nativeEvent);
+  };
+  onAdBegin = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+    postAnalyticEvent("Ad Begin", nativeEvent);
+  };
+  onAdEnd = ({ nativeEvent }) => {
+    console.log(nativeEvent)
+    postAnalyticEvent("Ad End", nativeEvent);
+  };
+
   onJSWindowEvent = ({ nativeEvent }) => {
     const type = nativeEvent?.type;
 
@@ -217,6 +251,7 @@ export default class THEOPlayer extends Component<Props, State> {
       pluginConfiguration,
     } = this.props;
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
+    const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
     return (
@@ -255,8 +290,13 @@ export default class THEOPlayer extends Component<Props, State> {
           onPlayerDestroy={this.onPlayerDestroy}
           onPlayerEnded={this.onPlayerEnded}
           onPlayerError={this.onPlayerError}
+          onAdBreakBegin={this.onAdBreakBegin}
+          onAdBreakEnd={this.onAdBreakEnd}
+          onAdError={this.onAdError}
+          onAdBegin={this.onAdBegin}
+          onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          licenceData={{ theoplayer_license_key, moat_partner_code }}
+          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
           source={{
             sources: [
               {

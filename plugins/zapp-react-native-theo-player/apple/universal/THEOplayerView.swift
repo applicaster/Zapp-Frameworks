@@ -35,7 +35,13 @@ class THEOplayerView: UIView {
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
     @objc var onJSWindowEvent: RCTBubblingEventBlock?
-    @objc var licenceData: NSDictionary? {
+    @objc var onAdBreakBegin: RCTBubblingEventBlock?
+    @objc var onAdBreakEnd: RCTBubblingEventBlock?
+    @objc var onAdError: RCTBubblingEventBlock?
+    @objc var onAdBegin: RCTBubblingEventBlock?
+    @objc var onAdEnd: RCTBubblingEventBlock?
+
+    @objc var configurationData: NSDictionary? {
         didSet {
             setupTheoPlayer()
         }
@@ -64,6 +70,7 @@ class THEOplayerView: UIView {
     }
 
     deinit {
+
     }
 
     override init(frame: CGRect) {
@@ -124,8 +131,13 @@ class THEOplayerView: UIView {
         onPlayerDestroy = nil
         onPlayerEnded = nil
         onPlayerError = nil
-        onJSWindowEvent = nil
+        onAdBreakBegin = nil
+        onAdBreakEnd = nil
+        onAdBegin = nil
+        onAdEnd = nil
+        onAdError = nil
         onPlayerPresentationModeChange = nil
+        onJSWindowEvent = nil
         source = nil
     }
 
@@ -134,17 +146,18 @@ class THEOplayerView: UIView {
     private func setupTheoPlayer() {
         logger?.debugLog(message: "Initialize player",
                          data: [:])
-        let theoplayerLicenseKey = licenceData?["theoplayer_license_key"] as? String
+        let theoplayerLicenseKey = configurationData?["theoplayer_license_key"] as? String
+        let playerScaleMode = configurationData?["theoplayer_scale_mode"] as? String
 
         var analytics = [AnalyticsDescription]()
-        if let moatPartnerCode = licenceData?["moat_partner_code"] as? String {
+        if let moatPartnerCode = configurationData?["moat_partner_code"] as? String {
             analytics.append(MoatOptions(partnerCode: moatPartnerCode,
                                          debugLoggingEnabled: true))
         }
 
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
-        let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
+        let stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
         let playerConfig = THEOplayerConfiguration(chromeless: false,
                                                    defaultCSS: true,
                                                    cssPaths: stylePaths,

@@ -78,6 +78,14 @@ extension THEOplayerView {
         listeners[PlayerEventTypes.DESTROY.name] = player.addEventListener(type: PlayerEventTypes.DESTROY, listener: destroy)
         listeners[PlayerEventTypes.ENDED.name] = player.addEventListener(type: PlayerEventTypes.ENDED, listener: ended)
         listeners[PlayerEventTypes.ERROR.name] = player.addEventListener(type: PlayerEventTypes.ERROR, listener: error)
+        
+        // Ads events
+        listeners[AdsEventTypes.AD_BREAK_BEGIN.name] = player.addEventListener(type: AdsEventTypes.AD_BREAK_BEGIN, listener: adBreakBegin)
+        listeners[AdsEventTypes.AD_BREAK_END.name] = player.addEventListener(type: AdsEventTypes.AD_BREAK_END, listener: adBreakEnd)
+        listeners[AdsEventTypes.AD_ERROR.name] = player.addEventListener(type: AdsEventTypes.AD_ERROR, listener: adError)
+        listeners[AdsEventTypes.AD_BEGIN.name] = player.addEventListener(type: AdsEventTypes.AD_BEGIN, listener: adBegin)
+        listeners[AdsEventTypes.AD_END.name] = player.addEventListener(type: AdsEventTypes.AD_END, listener: adEnd)
+
     }
 
     func removeEventListeners() {
@@ -312,6 +320,37 @@ extension THEOplayerView {
         onPlayerError?([RNTHEOplayerKeys.type: event.type,
                         RNTHEOplayerKeys.error: event.error,
             ])
+    }
+    
+    // MARK: - Ad Events
+    private func adBreakBegin(event: AdBreakBeginEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+        onAdBreakBegin?([RNTHEOplayerKeys.type: event.type])
+    }
+    
+    private func adBreakEnd(event: AdBreakEndEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+        onAdBreakEnd?([RNTHEOplayerKeys.type: event.type])
+    }
+    
+    private func adError(event: AdErrorEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+        onAdError?([RNTHEOplayerKeys.type: event.type])
+    }
+    
+    private func adBegin(event: AdBeginEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+        onAdBegin?([RNTHEOplayerKeys.type: event.type])
+    }
+    
+    private func adEnd(event: AdEndEvent) {
+        logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
+                         data: [RNTHEOplayerKeys.type: event.type])
+        onAdEnd?([RNTHEOplayerKeys.type: event.type])
     }
 
     // MARK: - THEOplayer JS listener sended from JS script

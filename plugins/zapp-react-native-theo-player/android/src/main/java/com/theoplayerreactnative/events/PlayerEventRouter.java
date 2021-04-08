@@ -12,7 +12,9 @@ import com.theoplayer.android.api.event.player.PlayerEvent;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayerreactnative.TheoPlayerViewManager;
 
-public class EventRouter<T extends PlayerEvent<T>> {
+import org.jetbrains.annotations.NotNull;
+
+public class PlayerEventRouter<T extends PlayerEvent<T>> implements IEventRouter {
 
     private static final String TAG = TheoPlayerViewManager.TAG;
 
@@ -20,15 +22,15 @@ public class EventRouter<T extends PlayerEvent<T>> {
         WritableMap toRN(E event);
     }
 
-    public EventRouter(EventType<T> type, EventCast<T> cast) {
+    public PlayerEventRouter(EventType<T> type, EventCast<T> cast) {
         this.cast = cast;
         this.type = type;
     }
 
-    public void subscribe(Player player,
-                          View playerView,
-                          ThemedReactContext reactContext,
-                          String internalEvent) {
+    public void subscribe(@NotNull Player player,
+                          @NotNull View playerView,
+                          @NotNull ThemedReactContext reactContext,
+                          @NotNull String internalEvent) {
 
         EventListener<T> eventListener = e -> {
             APLogger.verbose(TAG, "Received player event " + type.getName());
