@@ -24,7 +24,7 @@ export default function StoreFrontContainer(props) {
     screenStyles,
     screenLocalizations,
   } = props;
-  console.log({ dataSource, props });
+
   const [
     paymentTitleStyle,
     restoreTextStyle,

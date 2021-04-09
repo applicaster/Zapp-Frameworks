@@ -15,12 +15,9 @@ import {
 let isDebugEnabled = false;
 
 function iAPModule() {
-  console.log({
-    isDebugEnabled,
-    Debug: isDebugEnabled ? ApplicasterIAPModuleStubs : ApplicasterIAPModule,
-  });
   return isDebugEnabled ? ApplicasterIAPModuleStubs : ApplicasterIAPModule;
 }
+
 export function setDebugEnabled(enabled) {
   isDebugEnabled = enabled;
 }
@@ -122,7 +119,6 @@ export async function retrieveProducts(purchasableItems) {
       });
 
       let result = await iAPModule().products(purchasableItems);
-      console.log({ result });
       result = R.prop("products")(result);
 
       logger.debug({

@@ -112,9 +112,7 @@ export default function Storefront(props) {
     try {
       const productsToPurchase =
         props?.payload?.extensions?.in_app_purchase_data?.productsToPurchase;
-      console.log({ productsToPurchase });
       const storeFeesData = await retrieveProducts(productsToPurchase);
-      console.log({ storeFeesData });
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);
       }
@@ -134,7 +132,6 @@ export default function Storefront(props) {
       setLoading(false);
       setDataSource(mappedFeeData);
     } catch (error) {
-      console.log("preparePurchaseData!!!!!!", { error });
       setLoading(false);
       onStorefrontCompleted({ success: false, error });
     }
