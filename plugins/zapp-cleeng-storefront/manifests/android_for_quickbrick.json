@@ -24,6 +24,12 @@
       "default": ""
     },
     {
+      "type": "text_input",
+      "key": "standalone_screen_auth_ids",
+      "label": "Products ids for standalone screen",
+      "default": ""
+    },
+    {
       "type": "text",
       "key": "base_URL_api",
       "label": "Base URL",
@@ -154,8 +160,8 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.0.3",
-  "manifest_version": "0.0.3",
+  "dependency_version": "0.0.4",
+  "manifest_version": "0.0.4",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -386,6 +392,30 @@
             "initial_value": "rgba(255, 255, 255, 1)"
           },
           {
+            "key": "payment_option_purchased_label_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Purchased Label Text for ios.",
+            "initial_value": "HelveticaNeue-Bold"
+          },
+          {
+            "key": "payment_option_purchased_label_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Purchased Label Text for android.",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "payment_option_purchased_label_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Purchased Label Text.",
+            "initial_value": "12"
+          },
+          {
+            "key": "payment_option_purchased_label_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Purchased Label Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
             "key": "terms_of_use_instructions_font_ios",
             "type": "ios_font_selector",
             "label_tooltip": "Font for the Terms of Use Instructions Text for ios.",
@@ -495,6 +525,11 @@
         "key": "restore_failed_no_items_message",
         "label": "Restore subscription title, no items",
         "initial_value": "No items to restore."
+      },
+      {
+        "key": "purchased_message",
+        "label": "Message that shows item was purchased",
+        "initial_value": "Purchased"
       },
       {
         "key": "payment_screen_title_text",
