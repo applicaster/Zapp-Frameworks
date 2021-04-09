@@ -69,9 +69,11 @@ const CleengStoreFront = (props) => {
 
   useEffect(() => {
     navigator.hideNavBar();
+    navigator.hideBottomBar();
     setupEnvironment();
     return () => {
       navigator.showNavBar();
+      navigator.showBottomBar();
     };
   }, []);
 
@@ -95,8 +97,7 @@ const CleengStoreFront = (props) => {
           message: "Token not exist, invokation failed",
           data: {},
         });
-
-        callback && callback({ success: false, error: null, payload });
+        finishStorefront({ success: false, error: null, payload });
       }
 
       if (payload) {
@@ -108,7 +109,7 @@ const CleengStoreFront = (props) => {
           publisherId
         );
         if (itemsPurchased === true) {
-          callback && callback({ success: true, error: null, payload });
+          finishStorefront({ success: true, error: null, payload });
         }
 
         const testEnvironmentEnabled =
@@ -146,10 +147,9 @@ const CleengStoreFront = (props) => {
             data: {},
           });
 
-          callback && callback({ success: true, error: null, payload });
+          finishStorefront({ success: true, error: null, payload });
         }
       } else if (standaloneScreenAuthIds) {
-        //standaloneScreenAuthIds
         const subscriptionsData = await getSubscriptionsData({
           token,
           publisherId,
@@ -184,7 +184,7 @@ const CleengStoreFront = (props) => {
             publisherId,
           },
         });
-        callback && callback({ success: false, error: null, payload });
+        finishStorefront({ success: false, error: null, payload });
       }
     } catch (error) {
       if (error) {
@@ -200,7 +200,7 @@ const CleengStoreFront = (props) => {
 
         showAlert(screenLocalizations?.general_error_title, message);
       }
-      callback && callback({ success: false, error, payload });
+      finishStorefront({ success: false, error, payload });
     }
   };
 
@@ -216,15 +216,14 @@ const CleengStoreFront = (props) => {
             payload,
           },
         });
-        callback && callback({ success: result, error, payload });
+        finishStorefront({ success: result, error, payload });
       } else if (error) {
         const message = getMessageOrDefault(error, screenLocalizations);
 
         showAlert(screenLocalizations?.general_error_title, message);
-
-        callback && callback({ success, error, payload });
+        finishStorefront({ success, error, payload });
       } else {
-        callback && callback({ success, error, payload });
+        finishStorefront({ success, error, payload });
       }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
@@ -238,13 +237,21 @@ const CleengStoreFront = (props) => {
       });
 
       showAlert(screenLocalizations?.general_error_title, message);
-      callback && callback({ success: false, error, payload });
+      finishStorefront({ success: false, error, payload });
+    }
+  }
+
+  function finishStorefront({ success, error, payload }) {
+    if (callback) {
+      callback({ success, error, payload });
+    } else {
+      !callback && navigator.goBack();
     }
   }
 
   async function onRestoreCompleted(restoreData) {
     function finishFlow() {
-      callback && callback({ success: true, error: null, payload });
+      finishStorefront({ success: true, error: null, payload });
     }
 
     try {
