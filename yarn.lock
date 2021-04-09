@@ -28,42 +28,6 @@
     react-native-keyboard-aware-scroll-view "0.9.1"
     react-redux "^7.2.1"
 
-"@applicaster/applicaster-iap@1.1.2-alpha.0":
-  version "1.1.2-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-iap/-/applicaster-iap-1.1.2-alpha.0.tgz#f158d550eb4e4a1faef5b8c1e4057edbbed37de8"
-  integrity sha512-1YQPHDzhR+gZN789XW1xXEO+679aM1yY9MKL3+8FJb+ar0O2rYxa5h+0RxDkvD54wkLeGH4dHvD37l2gwuzrAQ==
-
-"@applicaster/applicaster-iap@1.1.2-alpha.21":
-  version "1.1.2-alpha.21"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-iap/-/applicaster-iap-1.1.2-alpha.21.tgz#68cc55099267a24ae423b31101aa90c1d4499da9"
-  integrity sha512-9NZ7BOc6z7AKuRbdYPz2WUV79nW+9iAP9SLpQlWeyfraso3EEdS7sj41Q2uS6T8HbTCAGVFRmdj+4mV66C9w0g==
-
-"@applicaster/applicaster-storefront-component@0.0.6-alpha.17":
-  version "0.0.6-alpha.17"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-storefront-component/-/applicaster-storefront-component-0.0.6-alpha.17.tgz#d038c8725332f1ce8ecf3e9f5713c8cc9b5e3c97"
-  integrity sha512-0kuGseCU+Sik2bWThol5OLjSGW+qyLa5jgRzLfW13bLBm0WpKH7lq7O0iCJox7Oj34wXrqBxgiwOKVGAux+zRA==
-  dependencies:
-    "@applicaster/applicaster-iap" "1.1.2-alpha.0"
-    "@applicaster/quick-brick-parent-lock" "*"
-    axios "^0.19.1"
-    moment "^2.24.0"
-    prop-types "^15.7.2"
-    ramda "^0.26.1"
-    react-redux "^7.2.1"
-
-"@applicaster/applicaster-storefront-component@0.0.6-alpha.22":
-  version "0.0.6-alpha.22"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-storefront-component/-/applicaster-storefront-component-0.0.6-alpha.22.tgz#2c99098c881f1998f7357f51b8c86066bbdf1321"
-  integrity sha512-bpfQxSFJzV2i2w9kg0JKzfo+/iaZ6tBY9l2s0ZEuVBIyHNbCwUShJTgLGYECfNKWh1E/Ungr4dwKhgJvO64wQA==
-  dependencies:
-    "@applicaster/applicaster-iap" "1.1.2-alpha.21"
-    "@applicaster/quick-brick-parent-lock" "*"
-    axios "^0.19.1"
-    moment "^2.24.0"
-    prop-types "^15.7.2"
-    ramda "^0.26.1"
-    react-redux "^7.2.1"
-
 "@applicaster/applicaster-types@*":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@applicaster/applicaster-types/-/applicaster-types-5.0.0.tgz#6243bb10d90ab4d672d0082fdd2b65130430cec8"
