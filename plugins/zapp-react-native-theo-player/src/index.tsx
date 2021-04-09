@@ -313,12 +313,12 @@ export default class THEOPlayer extends Component<Props, State> {
           onAdBegin={this.onAdBegin}
           onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          licenceData={{ theoplayer_license_key, moat_partner_code }}
+          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
           source={{
             sources: [
               {
-                type: entry ?.content ?.type,
-                src: entry ?.content ?.src,
+                type: entry?.content?.type,
+                src: entry?.content?.src,
               },
             ],
             ads: getIMAData({ entry, pluginConfiguration }),
