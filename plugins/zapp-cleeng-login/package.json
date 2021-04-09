@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "types": "index.d.ts",
   "dependencies": {
-    "@applicaster/applicaster-account-components": "0.0.3-alpha.0",
+    "@applicaster/applicaster-account-components": "0.1.1",
     "@applicaster/quick-brick-parent-lock": "*",
     "axios": "^0.19.1",
     "jwt-decode": "3.1.2",

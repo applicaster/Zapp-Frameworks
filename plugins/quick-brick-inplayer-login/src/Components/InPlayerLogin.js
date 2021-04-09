@@ -519,7 +519,6 @@ const InPlayerLogin = (props) => {
     accountFlowCallback({ success: false });
   }
 
-  console.log(loading, AccountComponents);
   function renderAccount() {
     return (
       <>

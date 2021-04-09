@@ -97,9 +97,7 @@ export async function extendToken(data: ExtendTokenData) {
     if (!data.token) {
       return null;
     }
-    console.log({ data });
     const response = await Request.post(API.extendToken, data);
-    console.log({ response });
 
     const token =
       response?.data && R.find(R.propEq("offerId", ""))(response?.data)?.token;

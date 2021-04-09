@@ -162,7 +162,6 @@ const Login = (props) => {
 
   const accountFlowCallback = useCallback(
     async ({ success }) => {
-      console.log({ parentLockWasPresented, hookType });
       let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
       let data = { success, payload, hook_type: hookType };
