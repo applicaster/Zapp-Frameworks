@@ -2,32 +2,6 @@
 # yarn lockfile v1
 
 
-"@applicaster/applicaster-account-components@0.0.2-alpha.11":
-  version "0.0.2-alpha.11"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.2-alpha.11.tgz#b15bf31248611f97cccc86eac429a19c56c23953"
-  integrity sha512-gBr3ZIyAFTOnC6J2xiMngVNw854uq3CvHUpBhSEQxA5ikWIpx7KqQkbijkVq4GnHQtdKXjizf56/5CG/LeN2nQ==
-  dependencies:
-    "@applicaster/quick-brick-parent-lock" "*"
-    axios "^0.19.1"
-    moment "^2.24.0"
-    prop-types "^15.7.2"
-    ramda "^0.26.1"
-    react-native-keyboard-aware-scroll-view "0.9.1"
-    react-redux "^7.2.1"
-
-"@applicaster/applicaster-account-components@0.0.3-alpha.0":
-  version "0.0.3-alpha.0"
-  resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.0.3-alpha.0.tgz#db621e11efd2acd2037f9ec14a25275df9f74b86"
-  integrity sha512-hpdJLjRyLZWRw+HbydLZR+iinX4PjYqEo0cAZpfMl+9n471Poj7uEZU9h+Zo8cIy+Z5wE3XdYsMtDkOwn2nJtQ==
-  dependencies:
-    "@applicaster/quick-brick-parent-lock" "*"
-    axios "^0.19.1"
-    moment "^2.24.0"
-    prop-types "^15.7.2"
-    ramda "^0.26.1"
-    react-native-keyboard-aware-scroll-view "0.9.1"
-    react-redux "^7.2.1"
-
 "@applicaster/applicaster-types@*":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@applicaster/applicaster-types/-/applicaster-types-5.0.0.tgz#6243bb10d90ab4d672d0082fdd2b65130430cec8"
