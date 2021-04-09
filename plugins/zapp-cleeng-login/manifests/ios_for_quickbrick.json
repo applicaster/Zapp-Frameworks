@@ -9,11 +9,17 @@
   "screen": true,
   "identifier": "zapp-cleeng-login",
   "ui_builder_support": true,
-  "whitelisted_account_ids": [""],
+  "whitelisted_account_ids": [
+    ""
+  ],
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
-  "targets": ["mobile"],
-  "ui_frameworks": ["quickbrick"],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
   "preload": true,
   "custom_configuration_fields": [
     {
@@ -88,8 +94,8 @@
     ]
   },
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.1.0",
-  "manifest_version": "0.1.0",
+  "dependency_version": "0.1.1",
+  "manifest_version": "0.1.1",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -98,7 +104,9 @@
     }
   ],
   "min_zapp_sdk": "4.1.0-Dev",
-  "npm_dependencies": ["@react-native-community/blur@3.4.1"],
+  "npm_dependencies": [
+    "@react-native-community/blur@3.4.1"
+  ],
   "styles": {
     "fields": [
       {
