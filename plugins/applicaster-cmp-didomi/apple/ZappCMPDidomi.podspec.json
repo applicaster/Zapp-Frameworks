@@ -1,6 +1,6 @@
 {
   "name": "ZappCMPDidomi",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "platforms": {
     "ios": "12.0"
   },
@@ -11,7 +11,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/consent-management-didomi/0.0.1"
+    "tag": "@@applicaster/applicaster-cmp-didomi/0.1.0"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
@@ -24,7 +24,9 @@
     "ZappCore": [],
     "XrayLogger": [],
     "React": [],
-    "Didomi-XCFramework": [ "1.46.0" ]
+    "Didomi-XCFramework": [
+      "1.46.0"
+    ]
   },
   "swift_version": "5.1"
 }
