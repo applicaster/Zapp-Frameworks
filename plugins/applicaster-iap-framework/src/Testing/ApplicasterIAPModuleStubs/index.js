@@ -16,7 +16,6 @@ export const ApplicasterIAPModuleStubs = {
     return true;
   },
   async products(payload) {
-    console.log("products", productMockResponse);
     return { ...productMockResponse, payload };
   },
 
