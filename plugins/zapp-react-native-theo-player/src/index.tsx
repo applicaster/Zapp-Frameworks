@@ -13,8 +13,8 @@ import { getDRMData } from "./Services/DRM";
 import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
 
 console.disableYellowBox = true;
+
 type PluginConfiguration = {
-  theoplayer_scale_mode: string;
   theoplayer_license_key: string;
   moat_partner_code: string;
 };
@@ -42,6 +42,7 @@ type Props = {
   onEnded: () => void;
   onPause: (arg: any) => void;
   onError: (arg: any) => void;
+  onPlay: (arg: any) => void;
   onPlaybackRateChange: (arg: any) => void;
   onAdChangedState: (arg: any) => void;
   onClose: () => void;
@@ -84,6 +85,7 @@ const manifestJson = platformSelect({
   ios: require("../manifests/ios_for_quickbrick.json"),
   android: require("../manifests/android_for_quickbrick.json"),
 });
+
 export default class THEOPlayer extends Component<Props, State> {
   _root: THEOplayerView;
 
@@ -105,29 +107,44 @@ export default class THEOPlayer extends Component<Props, State> {
       showNativeSubtitles: false,
       playbackRate: 0,
     };
+
+    this.getCurrentTime = this.getCurrentTime.bind(this);
+    this.getDuration = this.getDuration.bind(this);
   }
 
-  componentDidMount() {}
+  getCurrentTime() {
+    return this.state.currentTime;
+  }
+
+  getDuration() {
+    return this.state.duration;
+  }
 
   onPlayerPlay = ({ nativeEvent }) => {
+    const { currentTime } = nativeEvent;
+
+    if (currentTime > 0) {
+      this.props.onPlay(nativeEvent)
+    }
   };
 
   onPlayerPlaying = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Playing", nativeEvent);
+    this.props.onPlay(nativeEvent)
   };
 
   onPlayerPause = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const duration = this.state?.duration;
-    // this.props?.onPause({ currentTime, duration });
-    postAnalyticEvent("Player Pause", nativeEvent);
+    
+    this.props?.onPause({ currentTime, duration });
   };
 
   onPlayerProgress = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     const { duration } = this.state;
+
     if (!R.isNil(this.props?.onProgress)) {
-      this.props?.onProgress({ currentTime, duration });
+      this.props?.onProgress(null, { currentTime, duration });
     }
   };
 
@@ -141,11 +158,17 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
-  onPlayerTimeUpdate = ({ nativeEvent }) => {};
+  onPlayerTimeUpdate = ({ nativeEvent }) => {
+    const { currentTime } = nativeEvent;
+
+    this.setState({ currentTime });
+  };
 
   onPlayerRateChange = ({ nativeEvent }) => {
     const { playbackRate } = nativeEvent;
+
     this.setState({ playbackRate });
+
     if (!R.isNil(this.props?.onPlaybackRateChange)) {
       this.props?.onPlaybackRateChange({ playbackRate });
     }
@@ -155,28 +178,22 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerLoadedMetaData = ({ nativeEvent }) => {};
 
-  onPlayerLoadedData = ({ nativeEvent }) => {
-    const { duration } = this.state;
-    const { currentTime } = nativeEvent;
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration, currentTime });
-    }
-  };
+  onPlayerLoadedData = ({ nativeEvent }) => {};
 
   onPlayerLoadStart = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Load Start", nativeEvent);
+    this.props.onLoad(nativeEvent);
   };
 
-  onPlayerCanPlay = ({ nativeEvent }) => {};
+  onPlayerCanPlay = ({ nativeEvent }) => {
+    this.props.onCanPlay({ duration: this.state.duration, currentTime: this.state.currentTime });
+  };
 
   onPlayerCanPlayThrough = ({ nativeEvent }) => {};
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
+
     this.setState({ duration });
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration: duration, currentTime: -1 });
-    }
   };
 
   onPlayerSourceChange = ({ nativeEvent }) => {};
@@ -296,12 +313,12 @@ export default class THEOPlayer extends Component<Props, State> {
           onAdBegin={this.onAdBegin}
           onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
+          licenceData={{ theoplayer_license_key, moat_partner_code }}
           source={{
             sources: [
               {
-                type: entry?.content?.type,
-                src: entry?.content?.src,
+                type: entry ?.content ?.type,
+                src: entry ?.content ?.src,
               },
             ],
             ads: getIMAData({ entry, pluginConfiguration }),
