@@ -4,6 +4,7 @@ const paymentOptionStyleKeys = [
   "payment_option_title",
   "payment_option_description",
   "payment_option_button",
+  "payment_option_purchased_label",
 ];
 
 function getBoxStyles(screenStyles, isLandscape) {

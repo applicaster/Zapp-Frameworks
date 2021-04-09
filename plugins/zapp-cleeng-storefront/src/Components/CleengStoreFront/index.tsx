@@ -21,6 +21,7 @@ import {
   verifyPurchase,
   restorePurchases,
   isRestoreEmpty,
+  getPurchasedItems,
 } from "../../Services/CleengMiddlewareService";
 
 import LoadingScreen from "../LoadingScreen";
@@ -48,6 +49,13 @@ const CleengStoreFront = (props) => {
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
   const publisherId = props?.configuration?.publisherId;
+  const standalone_screen_auth_ids =
+    props?.configuration?.standalone_screen_auth_ids;
+  const standaloneScreenAuthIds =
+    (standalone_screen_auth_ids &&
+      standalone_screen_auth_ids.length > 0 &&
+      standalone_screen_auth_ids.split(",")) ||
+    null;
   const enabledDebugModeForIap =
     props?.configuration.iap_debug_mode_enabled === "on";
   const force_use_auth_ids = props?.configuration?.force_use_auth_ids;
@@ -118,6 +126,7 @@ const CleengStoreFront = (props) => {
           const newPayload = await preparePayload({
             payload,
             cleengResponse: subscriptionsData,
+            purchasedItems: [],
           });
 
           logger.debug({
@@ -139,6 +148,43 @@ const CleengStoreFront = (props) => {
 
           callback && callback({ success: true, error: null, payload });
         }
+      } else if (standaloneScreenAuthIds) {
+        //standaloneScreenAuthIds
+        const subscriptionsData = await getSubscriptionsData({
+          token,
+          publisherId,
+          offers: standaloneScreenAuthIds,
+        });
+        const purchasedItems = await getPurchasedItems(
+          standaloneScreenAuthIds,
+          token,
+          publisherId
+        );
+
+        const newPayload = await preparePayload({
+          payload: {},
+          cleengResponse: subscriptionsData,
+          purchasedItems,
+        });
+        logger.debug({
+          message: "Payload prepared",
+          data: {
+            auth_ids: standaloneScreenAuthIds,
+            subscriptionData: subscriptionsData,
+          },
+        });
+
+        setIsLoading(false);
+        setPayloadWithPurchaseData(newPayload);
+      } else {
+        logger.error({
+          message: "Plugin could not started, no data exist",
+          data: {
+            token,
+            publisherId,
+          },
+        });
+        callback && callback({ success: false, error: null, payload });
       }
     } catch (error) {
       if (error) {
@@ -171,11 +217,13 @@ const CleengStoreFront = (props) => {
           },
         });
         callback && callback({ success: result, error, payload });
-      } else {
+      } else if (error) {
         const message = getMessageOrDefault(error, screenLocalizations);
-    
+
         showAlert(screenLocalizations?.general_error_title, message);
 
+        callback && callback({ success, error, payload });
+      } else {
         callback && callback({ success, error, payload });
       }
     } catch (error) {

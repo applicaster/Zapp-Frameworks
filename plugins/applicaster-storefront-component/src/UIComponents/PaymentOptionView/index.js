@@ -21,7 +21,6 @@ function PaymentOptionView({
   onPress,
   screenLocalizations,
 }) {
-
   const isLandscape = () => {
     const { width, height } = Dimensions.get("window");
     return width >= height;
@@ -32,8 +31,13 @@ function PaymentOptionView({
     payment_option_button_background: backgroundColor = "",
   } = screenStyles;
 
-  const { title, description, price, productType } = paymentOptionItem;
-
+  const {
+    title,
+    description,
+    price,
+    productType,
+    purchased,
+  } = paymentOptionItem;
   const [
     titleStyle,
     descriptionStyle,
@@ -50,6 +54,20 @@ function PaymentOptionView({
   const buttonStyle = getButtonStyle(radius, backgroundColor);
 
   const label = `${actionForLabel} ${price}`.toUpperCase();
+  function renderPaymmentAction() {
+    return purchased ? (
+      <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
+        {screenLocalizations?.purchased_message}
+      </Text>
+    ) : (
+      <ActionButton
+        labelStyle={labelStyle}
+        buttonStyle={buttonStyle}
+        title={label}
+        onPress={onPress}
+      />
+    );
+  }
   return (
     <View style={getBoxStyles(screenStyles, isLandscape)}>
       <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
@@ -62,12 +80,7 @@ function PaymentOptionView({
       >
         {description}
       </Text>
-      <ActionButton
-        labelStyle={labelStyle}
-        buttonStyle={buttonStyle}
-        title={label}
-        onPress={onPress}
-      />
+      {renderPaymmentAction()}
     </View>
   );
 }

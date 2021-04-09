@@ -120,7 +120,6 @@ export async function retrieveProducts(purchasableItems) {
 
       let result = await iAPModule().products(purchasableItems);
       result = R.prop("products")(result);
-
       logger.debug({
         message: `retrieveProducts: ApplicasterIAPModule.products >> Availible products to purchase recieved`,
         data: {
