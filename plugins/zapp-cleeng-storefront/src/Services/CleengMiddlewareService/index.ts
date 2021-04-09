@@ -77,7 +77,6 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
     });
     return responseData;
   } catch (error) {
-    console.log("validatePurchasedItem", { error });
     handleError(error, data, funcName);
   }
 }
@@ -124,7 +123,6 @@ export async function isItemsPurchasedRecursive(
       token,
       publisherId,
     });
-    console.log({ purchasedAuthIds, offers });
     const result = getArraysIntersection(offers, purchasedAuthIds);
 
     if (result === false && tries > 0) {
@@ -158,7 +156,6 @@ export async function verifyPurchase(
 
     const purchasedProduct =
       payload?.extensions?.in_app_purchase_data?.purchasedProduct;
-    console.log({ purchasedProduct });
 
     const productIdentifier = purchasedProduct?.productIdentifier;
 
@@ -171,7 +168,6 @@ export async function verifyPurchase(
     const authId = R.find(R.propEq("productIdentifier", productIdentifier))(
       productToPurchase
     )?.authId;
-    console.log({ offerId, productIdentifier, receiptData, transactionId });
     if (offerId && productIdentifier && receiptData && transactionId) {
       const data = isApplePlatform ? { receiptData } : JSON.parse(receiptData);
 
@@ -212,14 +208,12 @@ export async function checkValidatedItem({
   tries = 5,
 }): Promise<boolean> {
   const interval = 5000;
-  console.log({ authId, token, publisherId });
   const funcName = "checkValidatedItem";
   try {
     const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
       token,
       publisherId,
     });
-    console.log({ purchasedAuthIds });
 
     if (R.contains(authId, purchasedAuthIds)) {
       logger.debug({
@@ -310,12 +304,9 @@ export async function getPurchasedAuthIdsAndExtendToken(
 export function isRestoreEmpty(data) {
   if (isApplePlatform) {
     const products = data?.products;
-    console.log({ products, data, length: products?.length });
     if (products && products?.length > 0) {
-      console.log("FALSE");
       return false;
     }
-    console.log("TRUE");
     return true;
   } else {
     if (data && data?.length > 0) {
@@ -330,11 +321,9 @@ export async function restorePurchases(data: RestoreData) {
   const token = data?.token;
   const publisherId = data.publisherId;
   const offers = data.offers;
-  console.log({ token, offers });
   function iOSData() {
     const receiptData = data?.restoreData?.receipt;
     const products = data?.restoreData?.products;
-    console.log({ receiptData, products });
     const receipts = R.map((item) => {
       return {
         transactionId: item.transactionIdentifier,
@@ -357,7 +346,6 @@ export async function restorePurchases(data: RestoreData) {
   }
 
   const customData = isApplePlatform ? iOSData() : androidData();
-  console.log({ token, customData });
   try {
     if (!data.token) {
       return null;
@@ -391,7 +379,6 @@ function handleError(
   funcName: string,
   throwError: boolean = true
 ) {
-  console.log({ error, data, funcName, throwError });
   const message = error?.response?.data?.message || "No Message";
   const response_url = error?.response?.request?.responseURL || "No URL";
 

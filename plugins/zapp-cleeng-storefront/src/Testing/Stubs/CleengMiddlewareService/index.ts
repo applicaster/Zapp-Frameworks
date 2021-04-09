@@ -40,7 +40,6 @@ export async function getSubscriptionsData(
   try {
     return getSubscriptionsResponse;
   } catch (error) {
-    console.log({ error });
     handleError(error, data, funcName);
   }
 }
@@ -56,7 +55,6 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
       appType,
     };
 
-    console.log({ data });
     const response = await Request.post(API.purchaseItem, newData);
     const responseData = response?.data;
     logger.debug({
@@ -68,7 +66,6 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
     });
     return responseData;
   } catch (error) {
-    console.log({ error });
     handleError(error, data, funcName);
   }
 }
@@ -111,7 +108,6 @@ export async function verifyPurchase(
       offerId,
       receipt: { transactionId, receiptData },
     });
-    console.log("validatePurchasedItem", { result });
     return await checkValidatedItem({
       token,
       publisherId,
@@ -175,7 +171,6 @@ export async function getPurchasedAuthIdsAndExtendToken(
         purchasedAuthIds.push(tokenData.authId);
       }
     }
-    console.log({ token, purchasedAuthIds });
     if (token) {
       await setToken(token);
     }

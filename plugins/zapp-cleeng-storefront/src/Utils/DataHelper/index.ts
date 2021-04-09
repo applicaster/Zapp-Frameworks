@@ -17,9 +17,7 @@ export async function preparePayload({ payload, cleengResponse }) {
 }
 
 export function prepareInAppPurchaseData(cleengResponse) {
-  console.log({ cleengResponse });
   const result = R.map((item) => {
-    console.log({ item });
     const productType = "subscription";
     if (isApplePlatform) {
       return {
@@ -34,10 +32,8 @@ export function prepareInAppPurchaseData(cleengResponse) {
         productIdentifier: item?.androidProductId,
       };
     }
-    console.log({ item });
     return item;
   })(cleengResponse);
-  console.log({ result });
   return result;
 }
 
@@ -47,12 +43,6 @@ export const isAuthenticationRequired = ({ payload }) => {
     "requires_authentication",
   ])(payload);
 
-  // logger.debug({
-  //   message: `Payload entry is requires_authentication: ${requires_authentication}`,
-  //   data: {
-  //     requires_authentication: requires_authentication,
-  //   },
-  // });
   return requires_authentication;
 };
 
@@ -63,7 +53,6 @@ export function getArraysIntersection(a1: Array<string>, a2: Array<string>) {
   const result = a1.filter(function (n) {
     return a2.indexOf(n) !== -1;
   });
-  console.log({ result });
   return result.length > 0 ? true : false;
 }
 

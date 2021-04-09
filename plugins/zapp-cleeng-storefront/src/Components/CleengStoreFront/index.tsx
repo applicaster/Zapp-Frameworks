@@ -47,12 +47,10 @@ const CleengStoreFront = (props) => {
   const styles = getRiversProp("styles", rivers);
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-  console.log({ screenLocalizations });
   const publisherId = props?.configuration?.publisherId;
   const enabledDebugModeForIap =
     props?.configuration.iap_debug_mode_enabled === "on";
   const force_use_auth_ids = props?.configuration?.force_use_auth_ids;
-  console.log({ force_use_auth_ids });
 
   const testAuths =
     (props?.configuration?.debug_mode === "on" &&
@@ -61,7 +59,6 @@ const CleengStoreFront = (props) => {
       force_use_auth_ids.split(",")) ||
     null;
 
-  console.log({ testAuths });
   useEffect(() => {
     navigator.hideNavBar();
     setupEnvironment();
@@ -84,7 +81,6 @@ const CleengStoreFront = (props) => {
 
     try {
       const token = await getToken();
-      console.log({ token, publisherId });
 
       if (!token) {
         logger.debug({
@@ -103,7 +99,6 @@ const CleengStoreFront = (props) => {
           token,
           publisherId
         );
-        console.log({ itemsPurchased });
         if (itemsPurchased === true) {
           callback && callback({ success: true, error: null, payload });
         }
@@ -120,14 +115,10 @@ const CleengStoreFront = (props) => {
             offers: authIDs,
           });
 
-          console.log({ subscriptionsData });
-
           const newPayload = await preparePayload({
             payload,
             cleengResponse: subscriptionsData,
           });
-
-          console.log({ newPayload });
 
           logger.debug({
             message: "Payload prepared",
@@ -171,10 +162,8 @@ const CleengStoreFront = (props) => {
     try {
       if (success && !error) {
         const token = await getToken();
-        console.log({ success, error, payload });
 
         const result = await verifyPurchase(payload, token, publisherId, false);
-        console.log("completeStorefrontFlow!!!!! Success", result);
         logger.debug({
           message: "Validation payment completed",
           data: {
@@ -184,18 +173,13 @@ const CleengStoreFront = (props) => {
         callback && callback({ success: result, error, payload });
       } else {
         const message = getMessageOrDefault(error, screenLocalizations);
-        console.log({
-          general_error_title: screenLocalizations?.general_error_title,
-          message,
-        });
+    
         showAlert(screenLocalizations?.general_error_title, message);
 
         callback && callback({ success, error, payload });
       }
     } catch (error) {
-      console.log("completeStorefrontFlow!!!!! Failed", { error });
       const message = getMessageOrDefault(error, screenLocalizations);
-      console.log({ message });
 
       logger.error({
         message: `Validation payment failed, error:${message}`,
@@ -206,7 +190,6 @@ const CleengStoreFront = (props) => {
       });
 
       showAlert(screenLocalizations?.general_error_title, message);
-      console.log({ success, error, payload, callback });
       callback && callback({ success: false, error, payload });
     }
   }
@@ -218,7 +201,6 @@ const CleengStoreFront = (props) => {
 
     try {
       if (isRestoreEmpty(restoreData)) {
-        console.log({ restoreData });
         showAlert(
           screenLocalizations?.warning_title,
           screenLocalizations?.restore_failed_no_items_message
@@ -233,7 +215,6 @@ const CleengStoreFront = (props) => {
       setIsLoading(true);
       const authIDs = payload?.extensions?.ds_product_ids || testAuths;
       const token = await getToken();
-      console.log({ restoreData, authIDs, token, publisherId });
 
       const result = await restorePurchases({
         restoreData,
@@ -278,7 +259,6 @@ const CleengStoreFront = (props) => {
       setIsLoading(false);
     }
   }
-  console.log({ props });
   return (
     <View
       style={{
