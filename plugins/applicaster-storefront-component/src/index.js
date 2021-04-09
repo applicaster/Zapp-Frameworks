@@ -134,6 +134,7 @@ export default function Storefront(props) {
       setLoading(false);
       setDataSource(mappedFeeData);
     } catch (error) {
+      console.log("preparePurchaseData!!!!!!", { error });
       setLoading(false);
       onStorefrontCompleted({ success: false, error });
     }

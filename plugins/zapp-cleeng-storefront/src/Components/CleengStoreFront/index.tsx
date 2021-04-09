@@ -183,6 +183,13 @@ const CleengStoreFront = (props) => {
         });
         callback && callback({ success: result, error, payload });
       } else {
+        const message = getMessageOrDefault(error, screenLocalizations);
+        console.log({
+          general_error_title: screenLocalizations?.general_error_title,
+          message,
+        });
+        showAlert(screenLocalizations?.general_error_title, message);
+
         callback && callback({ success, error, payload });
       }
     } catch (error) {
