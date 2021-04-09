@@ -25,6 +25,12 @@ const baseManifest = {
       default: "",
     },
     {
+      type: "text_input",
+      key: "standalone_screen_auth_ids",
+      label: "Products ids for standalone screen",
+      default: "",
+    },
+    {
       type: "text",
       key: "base_URL_api",
       label: "Base URL",
@@ -355,6 +361,32 @@ const stylesMobile = {
           label_tooltip: "Font Color for Payment Option Action Button Text.",
           initial_value: "rgba(255, 255, 255, 1)",
         },
+
+        {
+          key: "payment_option_purchased_label_font_ios",
+          type: "ios_font_selector",
+          label_tooltip: "Font for the Purchased Label Text for ios.",
+          initial_value: "HelveticaNeue-Bold",
+        },
+        {
+          key: "payment_option_purchased_label_font_android",
+          type: "android_font_selector",
+          label_tooltip: "Font for the Purchased Label Text for android.",
+          initial_value: "Roboto-Bold",
+        },
+        {
+          key: "payment_option_purchased_label_fontsize",
+          type: "number_input",
+          label_tooltip: "Font Size for Purchased Label Text.",
+          initial_value: "12",
+        },
+        {
+          key: "payment_option_purchased_label_fontcolor",
+          type: "color_picker_rgba",
+          label_tooltip: "Font Color for Purchased Label Text.",
+          initial_value: "rgba(255, 255, 255, 1)",
+        },
+
         {
           key: "terms_of_use_instructions_font_ios",
           type: "ios_font_selector",

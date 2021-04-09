@@ -51,6 +51,11 @@ const common = [
     label: "Restore subscription title, no items",
     initial_value: "No items to restore.",
   },
+  {
+    key: "purchased_message",
+    label: "Message that shows item was purchased",
+    initial_value: "Purchased",
+  },
 ];
 
 const mobile = [

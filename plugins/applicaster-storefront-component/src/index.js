@@ -98,6 +98,7 @@ export default function Storefront(props) {
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
           storeFee.productType = productToPurchase.productType;
+          storeFee.purchased = productToPurchase.purchased;
           if (!storeFee.title && productToPurchase.title) {
             storeFee.title = productToPurchase.title;
           }

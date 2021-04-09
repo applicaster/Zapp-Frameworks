@@ -17,7 +17,10 @@ import { isApplePlatform } from "../../Utils/Platform";
 import * as R from "ramda";
 
 import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
-import { getArraysIntersection } from "../../Utils/DataHelper";
+import {
+  getArraysIntersection,
+  isItemsIntersected,
+} from "../../Utils/DataHelper";
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.CLEENG_MIDDLEWARE_SERVICE}`,
@@ -81,6 +84,31 @@ export async function validatePurchasedItem(data: PurchaseItemData) {
   }
 }
 
+export async function getPurchasedItems(
+  offers: Array<string>,
+  token: string,
+  publisherId: string
+): Promise<Array<string>> {
+  const funcName = "getPurchasedItems";
+
+  try {
+    const purchasedAuthIds = await getPurchasedAuthIdsAndExtendToken({
+      token,
+      publisherId,
+    });
+    const result = getArraysIntersection(offers, purchasedAuthIds);
+    logger.debug({
+      message: `${funcName} >> succeed: true`,
+      data: {
+        purchased_auth_ids: purchasedAuthIds,
+        purchased_items: result,
+      },
+    });
+    return result;
+  } catch (error) {
+    handleError(error, { offers, token, publisherId }, funcName, false);
+  }
+}
 export async function isItemsPurchased(
   offers: Array<string>,
   token: string,
@@ -94,7 +122,7 @@ export async function isItemsPurchased(
       publisherId,
     });
 
-    const isPurchased = getArraysIntersection(offers, purchasedAuthIds);
+    const isPurchased = isItemsIntersected(offers, purchasedAuthIds);
     logger.debug({
       message: `${funcName} >> succeed: true`,
       data: {
@@ -123,7 +151,7 @@ export async function isItemsPurchasedRecursive(
       token,
       publisherId,
     });
-    const result = getArraysIntersection(offers, purchasedAuthIds);
+    const result = isItemsIntersected(offers, purchasedAuthIds);
 
     if (result === false && tries > 0) {
       await new Promise((r) => setTimeout(r, interval));
