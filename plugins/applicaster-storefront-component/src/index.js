@@ -16,7 +16,9 @@ import {
   retrieveProducts,
   restore,
   initialize,
+  setDebugEnabled,
 } from "./Services/iAPService";
+
 import { createLogger } from "./Services/LoggerService";
 import * as R from "ramda";
 export const logger = createLogger({
@@ -26,6 +28,7 @@ import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
   const showParentLock = props?.screenStyles?.import_parent_lock;
+  const isDebugModeEnabled = props?.isDebugModeEnabled === true;
 
   useToggleNavBar();
 
@@ -49,6 +52,9 @@ export default function Storefront(props) {
 
   async function initializeIap() {
     try {
+      // Enables stubs for iap
+      setDebugEnabled(isDebugModeEnabled);
+
       logger.debug({
         message: "initializeIap: Initializing IAP plugin`",
       });
@@ -106,8 +112,9 @@ export default function Storefront(props) {
     try {
       const productsToPurchase =
         props?.payload?.extensions?.in_app_purchase_data?.productsToPurchase;
-
+      console.log({ productsToPurchase });
       const storeFeesData = await retrieveProducts(productsToPurchase);
+      console.log({ storeFeesData });
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);
       }
@@ -127,6 +134,7 @@ export default function Storefront(props) {
       setLoading(false);
       setDataSource(mappedFeeData);
     } catch (error) {
+      console.log("preparePurchaseData!!!!!!", { error });
       setLoading(false);
       onStorefrontCompleted({ success: false, error });
     }
@@ -183,18 +191,13 @@ export default function Storefront(props) {
 
     restore()
       .then(async (data) => {
-        const alertTitle = MESSAGES.restore.success;
-        const alertMessage = MESSAGES.restore.successInfo;
         const onRestoreCompleted = props?.onRestoreCompleted;
 
         await onRestoreCompleted(data);
         onRestoreSuccess();
-
-        showAlert(alertTitle, alertMessage, hideLoader);
       })
       .catch((err) => {
-        const alertTitle = MESSAGES.restore.fail;
-        showAlert(alertTitle, err.message, hideLoader);
+        throw err;
       });
   }
 

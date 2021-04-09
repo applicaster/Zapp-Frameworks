@@ -15,22 +15,22 @@ const Request = (function () {
       }
       let newPath = path;
 
-      switch (newPath) {
-        case API.signIn:
-          newPath = customData.signin_api_endpoint;
-          break;
-        case API.signUp:
-          newPath = customData.login_api_endpoint;
-          break;
-        case API.passwordReset:
-          newPath = customData.password_reset_api_endpoint;
-          break;
-        default:
-          break;
-      }
+      // switch (newPath) {
+      //   case API.signIn:
+      //     newPath = customData.login_api_endpoint;
+      //     break;
+      //   case API.signUp:
+      //     newPath = customData.login_api_endpoint;
+      //     break;
+      //   case API.passwordReset:
+      //     newPath = customData.password_reset_api_endpoint;
+      //     break;
+      //   default:
+      //     break;
+      // }
 
       const request: AxiosRequestConfig = {
-        url: path,
+        url: newPath,
         baseURL: customData.base_URL_api,
         method: "POST",
         data,

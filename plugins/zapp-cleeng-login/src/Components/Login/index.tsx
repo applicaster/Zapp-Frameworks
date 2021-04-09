@@ -74,10 +74,12 @@ const Login = (props) => {
 
   useEffect(() => {
     navigator.hideNavBar();
+    navigator.hideBottomBar();
 
     setupEnvironment();
     return () => {
       navigator.showNavBar();
+      navigator.showBottomBar();
     };
   }, []);
 
@@ -160,6 +162,7 @@ const Login = (props) => {
 
   const accountFlowCallback = useCallback(
     async ({ success }) => {
+      console.log({ parentLockWasPresented, hookType });
       let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
       let data = { success, payload, hook_type: hookType };
@@ -194,10 +197,11 @@ const Login = (props) => {
             };
           }
         }
+
         callback && callback({ success, error: null, payload: payload });
       }
     },
-    [hookType]
+    [hookType, parentLockWasPresented]
   );
 
   const onLogin = async ({ email, password }) => {

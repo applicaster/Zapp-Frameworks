@@ -1,0 +1,433 @@
+{
+  "dependency_repository_url": [],
+  "dependency_name": "@applicaster/zapp-cleeng-storefront",
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Cleeng Storefront",
+  "description": "Cleeng Storefront",
+  "type": "payments",
+  "screen": true,
+  "react_native": true,
+  "identifier": "zapp-cleeng-storefront",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    ""
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "custom_configuration_fields": [
+    {
+      "type": "text",
+      "key": "in_player_client_id",
+      "tooltip_text": "In Player Client ID",
+      "default": ""
+    },
+    {
+      "type": "number_input",
+      "key": "in_player_branding_id",
+      "tooltip_text": "In Player Branding ID"
+    },
+    {
+      "type": "text",
+      "key": "in_player_referrer",
+      "tooltip_text": "In Player Referrer URL",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "key": "in_player_custom_asset_key",
+      "tooltip_text": "Custom asset key",
+      "default": "extensions.event_inplayer_id"
+    },
+    {
+      "type": "tag_select",
+      "key": "in_player_environment",
+      "tooltip_text": "InPlayer working environment",
+      "options": [
+        {
+          "text": "Development",
+          "value": "development"
+        },
+        {
+          "text": "Production",
+          "value": "production"
+        }
+      ],
+      "initial_value": "production"
+    },
+    {
+      "type": "tag_select",
+      "key": "logout_completion_action",
+      "tooltip_text": "Defines what action plugin should do after user log out. ",
+      "options": [
+        {
+          "text": "Go back to previous screen",
+          "value": "go_back"
+        },
+        {
+          "text": "Go back to home screen",
+          "value": "go_home"
+        }
+      ],
+      "initial_value": "go_back"
+    },
+    {
+      "type": "text",
+      "key": "consumable_type_mapper",
+      "tooltip_text": "Mapping key for consumable purchase",
+      "default": "consumable"
+    },
+    {
+      "type": "text",
+      "key": "non_consumable_type_mapper",
+      "tooltip_text": "Mapping key for non consumable purchase",
+      "default": "ppv"
+    },
+    {
+      "type": "text",
+      "key": "subscription_type_mapper",
+      "tooltip_text": "Mapping key for subscription purchase",
+      "default": "subscription"
+    }
+  ],
+  "hooks": {
+    "fields": [
+      {
+        "group": true,
+        "label": "Before Load",
+        "folded": true,
+        "fields": [
+          {
+            "key": "preload_plugins",
+            "type": "preload_plugins_selector",
+            "label": "Select Plugins"
+          }
+        ]
+      }
+    ]
+  },
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "ios_for_quickbrick",
+  "dependency_version": "0.0.1-alpha.0",
+  "manifest_version": "0.0.1-alpha.0",
+  "api": {},
+  "project_dependencies": [],
+  "extra_dependencies": [
+    {
+      "ApplicasterIAP": ":path => 'node_modules/@applicaster/applicaster-iap/apple/ApplicasterIAP.podspec'"
+    },
+    {
+      "react-native-blur": ":path => 'node_modules/@react-native-community/blur/react-native-blur.podspec'"
+    }
+  ],
+  "min_zapp_sdk": "4.1.0-Dev",
+  "npm_dependencies": [
+    "@applicaster/applicaster-iap@0.3.3",
+    "@react-native-community/blur@3.4.1"
+  ],
+  "styles": {
+    "fields": [
+      {
+        "group": true,
+        "label": "Storefront Screen Design and Text",
+        "tooltip": "These fields affect the design of the storefront screen.",
+        "folded": true,
+        "fields": [
+          {
+            "key": "payment_screen_background",
+            "type": "color_picker_rgba",
+            "label": "Payment Screen Background Color",
+            "label_tooltip": "Background Color for the payment screen.",
+            "initial_value": "rgba(66,74,87,1)"
+          },
+          {
+            "key": "close_button",
+            "type": "uploader",
+            "label": "Close Button",
+            "label_tooltip": "Icon for close button. Dimensions 45 x 45.",
+            "placeholder": "W 45px x H 45px"
+          },
+          {
+            "key": "client_logo",
+            "type": "uploader",
+            "label": "Client Logo",
+            "label_tooltip": "Client logo image. Dimension 200 x44.",
+            "placeholder": "W 200px x H 44px"
+          },
+          {
+            "key": "payment_screen_title_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for Main Title for ios.",
+            "initial_value": "HelveticaNeue-Bold"
+          },
+          {
+            "key": "payment_screen_title_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for Main Title for android.",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "payment_screen_title_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Main Title Text.",
+            "initial_value": "21"
+          },
+          {
+            "key": "payment_screen_title_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Main Title Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "restore_purchases_text_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for Restore Purchases Description Text for ios.",
+            "initial_value": "HelveticaNeue"
+          },
+          {
+            "key": "restore_purchases_text_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for Restore Purchases Description Text for android.",
+            "initial_value": "Roboto-Regular"
+          },
+          {
+            "key": "restore_purchases_text_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Restore Purchases Description Text.",
+            "initial_value": "12"
+          },
+          {
+            "key": "restore_purchases_text_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Restore Purchases Description Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "restore_purchases_link_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for Restore Purchases Link Text for ios.",
+            "initial_value": "HelveticaNeue-Bold"
+          },
+          {
+            "key": "restore_purchases_link_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for Restore Purchases Link Text for android.",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "restore_purchases_link_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Restore Purchases Link Text.",
+            "initial_value": "13"
+          },
+          {
+            "key": "restore_purchases_link_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Restore Purchases Link Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "payment_option_background",
+            "type": "color_picker_rgba",
+            "label": "Payment Option Background Color",
+            "label_tooltip": "Background Color for the Payment Option.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "payment_option_corner_radius",
+            "type": "number_input",
+            "label": "Payment Option Corner Radius",
+            "label_tooltip": "Corner Radius for the Payment Option.",
+            "initial_value": "6"
+          },
+          {
+            "key": "payment_option_title_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Payment Option Title for ios.",
+            "initial_value": "HelveticaNeue-Bold"
+          },
+          {
+            "key": "payment_option_title_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Payment Option Title for android.",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "payment_option_title_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Payment Option Title.",
+            "initial_value": "20"
+          },
+          {
+            "key": "payment_option_title_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Payment Option Title.",
+            "initial_value": "rgba(0,0,0,1)"
+          },
+          {
+            "key": "payment_option_description_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Payment Option Description for ios.",
+            "initial_value": "HelveticaNeue"
+          },
+          {
+            "key": "payment_option_description_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Payment Option Description for android.",
+            "initial_value": "Roboto-Regular"
+          },
+          {
+            "key": "payment_option_description_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Payment Option Description.",
+            "initial_value": "14"
+          },
+          {
+            "key": "payment_option_description_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Payment Option Description.",
+            "initial_value": "rgba(66,74,87,1)"
+          },
+          {
+            "key": "payment_option_button_background",
+            "type": "color_picker_rgba",
+            "label": "Payment Option Action Button Background Color",
+            "label_tooltip": "Background Color for the Payment Option Action Button.",
+            "initial_value": "rgba(39, 218, 134, 1)"
+          },
+          {
+            "key": "payment_option_button_corner_radius",
+            "type": "number_input",
+            "label": "Payment Option Action Button Corner Radius",
+            "label_tooltip": "Corner Radius for the Payment Option Action Button.",
+            "initial_value": "18"
+          },
+          {
+            "key": "payment_option_button_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Payment Option Action Button Text for ios.",
+            "initial_value": "HelveticaNeue-Bold"
+          },
+          {
+            "key": "payment_option_button_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Payment Option Action Button Text for android.",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "payment_option_button_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Payment Option Action Button Text.",
+            "initial_value": "12"
+          },
+          {
+            "key": "payment_option_button_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Payment Option Action Button Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "terms_of_use_instructions_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Terms of Use Instructions Text for ios.",
+            "initial_value": "HelveticaNeue"
+          },
+          {
+            "key": "terms_of_use_instructions_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Terms of Use Instructions Text for android.",
+            "initial_value": "Roboto-Regular"
+          },
+          {
+            "key": "terms_of_use_instructions_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for the Terms of Use Instructions Text.",
+            "initial_value": "10"
+          },
+          {
+            "key": "terms_of_use_instructions_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for the Terms of Use Instructions Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          },
+          {
+            "key": "terms_of_use_link",
+            "type": "text_input",
+            "label": "Payment Terms of use Link",
+            "label_tooltip": "Link for the Terms of Use.",
+            "initial_value": "http://google.com"
+          },
+          {
+            "key": "terms_of_use_link_font_ios",
+            "type": "ios_font_selector",
+            "label_tooltip": "Font for the Terms of Use Link Text for ios.",
+            "initial_value": "HelveticaNeue"
+          },
+          {
+            "key": "terms_of_use_link_font_android",
+            "type": "android_font_selector",
+            "label_tooltip": "Font for the Terms of Use Link Text for android.",
+            "initial_value": "Roboto-Regular"
+          },
+          {
+            "key": "terms_of_use_link_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for the Terms of Use Link Text.",
+            "initial_value": "10"
+          },
+          {
+            "key": "terms_of_use_link_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for the Terms of Use Link Text.",
+            "initial_value": "rgba(255, 255, 255, 1)"
+          }
+        ]
+      }
+    ]
+  },
+  "localizations": {
+    "fields": [
+      {
+        "key": "video_stream_exception_message",
+        "label": "Message in case video url is empty",
+        "initial_value": "Video stream in not available. Please try again later"
+      },
+      {
+        "key": "general_error_message",
+        "label": "General error message",
+        "initial_value": "Something went wrong. Please try again later"
+      },
+      {
+        "key": "payment_screen_title_text",
+        "label": "Payment screen title",
+        "initial_value": "Choose Your Subscription"
+      },
+      {
+        "key": "restore_purchases_text",
+        "label": "Restore purchases description",
+        "initial_value": "Purchased already a subscription?"
+      },
+      {
+        "key": "restore_purchases_link",
+        "label": "Restore purchases text",
+        "initial_value": "Restore"
+      },
+      {
+        "key": "terms_of_use_instructions_text",
+        "label": "Payment terms of use instruction",
+        "initial_value": "By making a selection and completing this transaction, you verify that you are at least 18 years old and agree to the"
+      },
+      {
+        "key": "terms_of_use_link_text",
+        "label": "Payment terms of use text",
+        "initial_value": "terms of use."
+      }
+    ]
+  },
+  "targets": [
+    "mobile"
+  ]
+}

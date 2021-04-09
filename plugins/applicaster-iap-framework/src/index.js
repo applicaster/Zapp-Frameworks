@@ -1,4 +1,5 @@
 import { NativeModules } from "react-native";
+export { ApplicasterIAPModuleStubs } from "./Testing/ApplicasterIAPModuleStubs";
 
 // eslint-disable-next-line prefer-promise-reject-errors
 const nullPromise = () => Promise.reject("ApplicasterIAP bridge is null");
@@ -9,7 +10,6 @@ const defaultIAP = {
 const { ApplicasterIAPBridge = defaultIAP } = NativeModules;
 
 export const ApplicasterIAPModule = {
-
   async isInitialized() {
     return ApplicasterIAPBridge?.isInitialized?.();
   },

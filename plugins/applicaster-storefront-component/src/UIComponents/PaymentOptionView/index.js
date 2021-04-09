@@ -11,11 +11,17 @@ import {
 import ActionButton from "../Buttons/ActionButton.js";
 
 const paymentActions = {
-  subscribe: "Subscribe",
-  buy: "Buy",
+  subscribe: "Subscribe for:",
+  buy: "Buy for:",
 };
 
-function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
+function PaymentOptionView({
+  screenStyles,
+  paymentOptionItem,
+  onPress,
+  screenLocalizations,
+}) {
+  console.log({ screenLocalizations });
   const isLandscape = () => {
     const { width, height } = Dimensions.get("window");
     return width >= height;
@@ -36,12 +42,14 @@ function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
 
   const actionForLabel =
     productType === "subscription"
-      ? paymentActions.subscribe
-      : paymentActions.buy;
+      ? screenLocalizations?.payment_option_action_text_type_subscribe ||
+        paymentActions.subscribe
+      : screenLocalizations?.payment_option_action_text_type_buy ||
+        paymentActions.buy;
 
   const buttonStyle = getButtonStyle(radius, backgroundColor);
 
-  const label = `${actionForLabel} for ${price}`.toUpperCase();
+  const label = `${actionForLabel} ${price}`.toUpperCase();
   return (
     <View style={getBoxStyles(screenStyles, isLandscape)}>
       <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
