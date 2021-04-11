@@ -1,7 +1,7 @@
 {
   "name": "CopaAmericaStats",
   "version": "0.0.1",
-  "swift_versions": "5.1",
+  "swift_versions": ["5.0", "5.1"],
   "summary": "CopaAmerica Stats",
   "description": "This plugin allow to fetch statistics for CopaAmerica",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",

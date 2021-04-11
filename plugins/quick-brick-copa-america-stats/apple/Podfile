@@ -1,6 +1,6 @@
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '10.0'
+platform :ios, '12.0'
 install! 'cocoapods', :share_schemes_for_development_pods => true
 project '../../../localProject/apple/FrameworksApp.xcodeproj'
 
@@ -10,10 +10,11 @@ pre_install do |installer|
 end
 
 target 'FrameworksApp' do
-  supports_swift_versions '5.1'
+  supports_swift_versions '>= 5.0'
   use_frameworks!
   pod 'CopaAmericaStats', :path => './CopaAmericaStats.podspec', :testspecs => ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
+  pod 'XrayLogger', :path => '../node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'
 
   target 'FrameworksAppTests' do
     inherit! :search_paths
