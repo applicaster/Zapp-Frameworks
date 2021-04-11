@@ -8,20 +8,21 @@ const baseManifest = {
   description:
     "This plugin allow to fetch statistics for CopaAmerica",
   type: "general",
-  screen: false,
+  screen: true,
   react_native: true,
   ui_builder_support: true,
+  ui_frameworks: ["quickbrick"],
+  min_zapp_sdk: "1.0.0",
+  deprecated_since_zapp_sdk: "",
+  unsupported_since_zapp_sdk: "",
+  custom_configuration_fields: [],
   whitelisted_account_ids: [
     "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6",
   ],
-  min_zapp_sdk: "4.1.0-Dev",
-  deprecated_since_zapp_sdk: "",
-  unsupported_since_zapp_sdk: "",
   npm_dependencies: [],
   identifier: "quick_brick_copa_america_stats",
   targets: ["mobile"],
-  ui_frameworks: ["native", "quickbrick"],
   custom_configuration_fields: [
     {
       key: "api_token",
