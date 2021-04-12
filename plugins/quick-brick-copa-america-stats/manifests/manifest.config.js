@@ -4,9 +4,9 @@ const baseManifest = {
   dependency_name: "@applicaster/quick-brick-copa-america-stats",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "CopaAmerica Stats plugin for QuickBrick",
+  name: "CopaAmerica Statistics",
   description:
-    "This plugin allow to fetch statistics for CopaAmerica",
+    "This plugin fetching statistics for CopaAmerica",
   type: "general",
   screen: true,
   react_native: true,
@@ -17,11 +17,10 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [],
   whitelisted_account_ids: [
-    "572a0a65373163000b000000",
     "5ae06cef8fba0f00084bd3c6",
   ],
   npm_dependencies: [],
-  identifier: "quick_brick_copa_america_stats",
+  identifier: "quick-brick-copa-america-stats",
   targets: ["mobile"],
   custom_configuration_fields: [
     {
