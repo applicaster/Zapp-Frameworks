@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+import org.gradle.util.VersionNumber
+
 android {
     packageBuildConfig = false
     compileSdkVersion 28
@@ -10,11 +12,6 @@ android {
         minSdkVersion 19
 
         consumerProguardFiles 'proguard-rules.pro'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
     }
 
     buildTypes {
@@ -37,10 +34,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
@@ -51,215 +44,31 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url 'https://jitpack.io' }
-    maven {
-        credentials {
-            username System.getenv("MAVEN_USERNAME")
-            password System.getenv("MAVEN_PASSWORD")
-        }
-        url 'https://dl.bintray.com/applicaster-ltd/maven'
+}
+
+def safeExtGet(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
     }
+    return ver
 }
 
 dependencies {
 
     // Applicaster SDK
-    def applicasterSDKPath = 'com.applicaster:applicaster-android-sdk:4.1.1'
+    def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '8.2.0')
+    def applicasterSDKPath = "com.applicaster:applicaster-android-sdk-core:$sdkVersion"
 
     // Check if an open SDK is defined - if not use the closed one.
     def devSDK = findProject(':applicaster-android-sdk')
-    if(devSDK != null){
+    if (devSDK != null) {
         implementation project(':applicaster-android-sdk')
-    }
-    else{
-       implementation (applicasterSDKPath)
+    } else {
+        api applicasterSDKPath
     }
 
-    def appCenterSdkVersion = '2.3.0'
+    def appCenterSdkVersion = '3.3.1'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
-
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.2.51"
-}
-
-buildscript {
-    ext.kotlin_version = '1.2.0'
-    ext.dokka_version = '0.9.17'
-    repositories {
-        jcenter()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
-    }
-}
-
-//---------------------------------- Bintray ----------------------------------//
-
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
-buildscript {
-
-    ext.kotlin_version = '1.2.0'
-
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
-    }
-}
-
-/*
- * Gets the version name from the latest Git tag
- */
-def getVersionName = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'describe', '--abbrev=0', '--tags'
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    }
-    catch (ignored) {
-        return null
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId GROUP
-
-            def versionFromTag = getVersionName()
-            if (versionFromTag != null) {
-                // There is a tag existing on the current commit - we can upload to Bintray
-                version versionFromTag
-
-                artifactId ARTIFACT_ID
-                artifact "build/outputs/aar/${project.getName()}-release.aar"
-                artifact androidJavadocsJar
-                artifact androidSourcesJar
-                pom.withXml {
-                    Node root = asNode()
-                    root.appendNode('name', ARTIFACT_ID)
-                    root.appendNode('description', POM_DESCRIPTION)
-                    root.appendNode('url', POM_URL)
-
-                    def issues = root.appendNode('issueManagement')
-                    issues.appendNode('system', 'github')
-                    issues.appendNode('url', ISSUE_URL)
-
-                    def scm = root.appendNode('scm')
-                    scm.appendNode('url', POM_SCM_URL)
-                    scm.appendNode('connection', POM_SCM_CONNECTION)
-                    scm.appendNode('developerConnection', POM_SCM_DEV_CONNECTION)
-
-                    def license = root.appendNode('licenses').appendNode('license')
-                    license.appendNode('name', POM_LICENCE_NAME)
-                    license.appendNode('url', POM_LICENCE_URL)
-                    license.appendNode('distribution', POM_LICENCE_DIST)
-
-                    def developer = root.appendNode('developers').appendNode('developer')
-                    developer.appendNode('id', POM_DEVELOPER_ID)
-                    developer.appendNode('name', POM_DEVELOPER_NAME)
-                    developer.appendNode('email', POM_DEVELOPER_EMAIL)
-
-                    def dependenciesNode = asNode().appendNode('dependencies')
-                    configurations.compile.allDependencies.each {
-                        if (!it.name.is('unspecified')) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
-                        }
-                    }
-                    configurations.implementation.allDependencies.each {
-                        if (!it.name.is('unspecified')) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
-                        }
-                    }
-                    configurations.api.allDependencies.each {
-                        if (!it.name.is('unspecified')) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-static def getBintrayUserProperty() {
-    return System.getenv("BINTRAY_USER")
-}
-
-static def getBintrayApiKeyProperty() {
-    return System.getenv("BINTRAY_API_KEY")
-}
-
-bintrayUpload {
-    dependsOn "publishMavenJavaPublicationToMavenLocal"
-}
-bintray {
-    user = bintrayUserProperty
-    key = bintrayApiKeyProperty
-    publications = ['mavenJava']
-
-    dryRun = false
-    publish = true
-    pkg {
-        repo = 'maven'
-        name = ARTIFACT_ID
-        userOrg = 'applicaster-ltd'
-        websiteUrl = POM_URL
-        issueTrackerUrl = ISSUE_URL
-        vcsUrl = POM_SCM_URL
-        licenses = ['Apache-2.0']
-        labels = ['aar', 'android']
-        version {
-            name = getVersionName()
-            vcsTag = 'v' + getVersionName()
-        }
-    }
-}
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    failOnError false
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-task androidJar(type: Jar) {
-    from 'build/intermediates/classes/release'
-}
-
-artifacts {
-    archives androidSourcesJar
-    archives androidJavadocsJar
-    archives androidJar
 }
