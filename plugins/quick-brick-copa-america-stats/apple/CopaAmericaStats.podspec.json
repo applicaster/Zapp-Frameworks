@@ -18,8 +18,10 @@
   "source_files": "universal/**/*.{h,m,swift}",
   "dependencies": {
     "ZappCore": [],
+    "XrayLogger": [],
     "Alamofire": ["5.4.1"],
-    "SwiftyJSON": ["5.0.1"]
+    "SwiftyJSON": ["5.0.1"],
+    "React": []
   },
   "xcconfig": {
     "ENABLE_BITCODE": "YES",

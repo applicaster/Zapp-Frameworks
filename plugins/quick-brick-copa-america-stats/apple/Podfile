@@ -15,7 +15,10 @@ target 'FrameworksApp' do
   pod 'CopaAmericaStats', :path => './CopaAmericaStats.podspec', :testspecs => ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
   pod 'XrayLogger', :path => '../node_modules/@applicaster/x-ray/apple/XrayLogger.podspec'
-
+  pod 'React', :path => '../node_modules/react-native', :subspecs => ['CxxBridge','DevSupport','RCTActionSheet','RCTNetwork','RCTWebSocket','RCTText','RCTImage','Core','RCTLinkingIOS','RCTAnimation']
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+	
   target 'FrameworksAppTests' do
     inherit! :search_paths
   end
