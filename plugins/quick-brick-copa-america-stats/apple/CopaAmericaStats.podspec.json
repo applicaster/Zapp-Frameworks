@@ -29,12 +29,5 @@
     "ENABLE_TESTABILITY": "YES",
     "OTHER_CFLAGS": "-fembed-bitcode"
   },
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "source_files": "Tests/**"
-    }
-  ],
   "swift_version": "5.1"
 }
