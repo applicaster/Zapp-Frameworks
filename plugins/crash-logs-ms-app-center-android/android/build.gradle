@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+import org.gradle.util.VersionNumber
+
+android {
+    packageBuildConfig = false
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+def safeExtGet(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
+}
+
+dependencies {
+
+    // Applicaster SDK
+    def sdkVersion = safeExtGet('applicaster_android_sdk_core_version', '8.2.0')
+    def applicasterSDKPath = "com.applicaster:applicaster-android-sdk-core:$sdkVersion"
+
+    // Check if an open SDK is defined - if not use the closed one.
+    def devSDK = findProject(':applicaster-android-sdk')
+    if (devSDK != null) {
+        implementation project(':applicaster-android-sdk')
+    } else {
+        api applicasterSDKPath
+    }
+
+    def appCenterSdkVersion = '3.3.1'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+}
