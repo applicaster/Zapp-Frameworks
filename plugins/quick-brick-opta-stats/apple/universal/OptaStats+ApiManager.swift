@@ -1,6 +1,6 @@
 //
-//  CopaAmericaApiManager.swift
-//  CopaAmericaStats
+//  OptaStats+ApiManager.swift
+//  OptaStats
 //
 //  Created by Alex Zchut on 11/04/2021.
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
@@ -10,11 +10,11 @@ import Alamofire
 import SwiftyJSON
 import UIKit
 
-typealias CopaAmericaApiCompletionHandler = (_ success: Bool, _ json: JSON?) -> Void
+typealias OptaApiCompletionHandler = (_ success: Bool, _ json: JSON?) -> Void
 
-extension CopaAmericaStats {
+extension OptaStats {
     func fetchMatchScreenDetails(fixtureId: String,
-                                 completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                 completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -30,7 +30,7 @@ extension CopaAmericaStats {
     }
 
     func fetchGroupCards(tournamentCalendar: String,
-                         completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                         completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -46,7 +46,7 @@ extension CopaAmericaStats {
 
     func fetchTeamScreenDetails(tournamentCalendar: String,
                                 contestantId: String,
-                                completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -63,7 +63,7 @@ extension CopaAmericaStats {
     }
 
     func fetchTournamentWinners(competitionId: String,
-                                completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -79,7 +79,7 @@ extension CopaAmericaStats {
 
     func fetchPlayerScreenFullSquad(tournamentCalendar: String,
                                     contestantId: String,
-                                    completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                    completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -96,7 +96,7 @@ extension CopaAmericaStats {
     }
 
     func fetchPlayerScreenCareer(personId: String,
-                                 completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                 completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -111,7 +111,7 @@ extension CopaAmericaStats {
     }
 
     func fetchAllMatches(tournamentCalendar: String,
-                         completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                         completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -130,7 +130,7 @@ extension CopaAmericaStats {
     }
 
     func fetchAllMatchesGrouped(tournamentCalendar: String,
-                                completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                                completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -145,7 +145,7 @@ extension CopaAmericaStats {
     }
 
     func fetchMatchDetails(matchId: String,
-                           completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                           completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",
@@ -160,7 +160,7 @@ extension CopaAmericaStats {
     }
 
     func fetchLineUp(contestantId: String,
-                     completion: @escaping (CopaAmericaApiCompletionHandler)) {
+                     completion: @escaping (OptaApiCompletionHandler)) {
         let params = [
             "_rt": "c",
             "_fmt": "json",

@@ -1,15 +1,15 @@
 {
-  "name": "CopaAmericaStats",
+  "name": "OptaStats",
   "version": "0.0.1",
   "swift_versions": ["5.0", "5.1"],
-  "summary": "CopaAmerica Stats",
-  "description": "This plugin allow to fetch statistics for CopaAmerica",
+  "summary": "Opta Stats",
+  "description": "This plugin allow to fetch statistics from Opta",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
   "license": "Appache 2.0",
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-copa-america-stats/0.0.1"
+    "tag": "@@applicaster/quick-brick-opta-stats/0.0.1"
   },
   "platforms": {
     "ios": "12.0",

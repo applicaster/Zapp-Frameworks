@@ -1,6 +1,6 @@
 //
-//  CopaAmericaStatsBridgeExport.m
-//  CopaAmericaStats
+//  OptaStatsBridgeExport.m
+//  OptaStats
 //
 //  Created by Alex Zchut on 11/04/2021.
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
@@ -8,7 +8,7 @@
 
 @import React;
 
-@interface RCT_EXTERN_MODULE (CopaAmericaStatsBridge, NSObject)
+@interface RCT_EXTERN_MODULE (OptaStatsBridge, NSObject)
 
 RCT_EXTERN_METHOD(fetchMatchScreenDetails:(NSString *)fixtureId resolver:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
 RCT_EXTERN_METHOD(fetchMatchDetails:(NSString *)matchId resolver:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);

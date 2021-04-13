@@ -1,6 +1,6 @@
 //
-//  CopaAmericaStatsBridge.swift
-//  CopaAmericaStats
+//  OptaStatsBridge.swift
+//  OptaStats
 //
 //  Created by Alex Zchut on 11/04/2021.
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
@@ -9,13 +9,13 @@
 import React
 import ZappCore
 
-@objc(CopaAmericaStatsBridge)
-class CopaAmericaStatsBridge: NSObject, RCTBridgeModule {
-    fileprivate let pluginIdentifier = "quick-brick-copa-america-stats"
+@objc(OptaStatsBridge)
+class OptaStatsBridge: NSObject, RCTBridgeModule {
+    fileprivate let pluginIdentifier = "quick-brick-opta-stats"
     var bridge: RCTBridge!
 
     static func moduleName() -> String! {
-        return "CopaAmericaStatsBridge"
+        return "OptaStatsBridge"
     }
 
     public class func requiresMainQueueSetup() -> Bool {
@@ -27,8 +27,8 @@ class CopaAmericaStatsBridge: NSObject, RCTBridgeModule {
         return DispatchQueue.main
     }
 
-    var pluginInstance: CopaAmericaStats? {
-        guard let provider = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? CopaAmericaStats else {
+    var pluginInstance: OptaStats? {
+        guard let provider = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? OptaStats else {
             return nil
         }
         return provider

@@ -1,12 +1,12 @@
 const baseManifest = {
   api: {},
   dependency_repository_url: [],
-  dependency_name: "@applicaster/quick-brick-copa-america-stats",
+  dependency_name: "@applicaster/quick-brick-opta-stats",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "CopaAmerica Statistics",
+  name: "Opta Statistics",
   description:
-    "This plugin fetching statistics for CopaAmerica",
+    "This plugin fetching statistics from Opta",
   type: "general",
   screen: true,
   react_native: true,
@@ -20,7 +20,7 @@ const baseManifest = {
     "5ae06cef8fba0f00084bd3c6",
   ],
   npm_dependencies: [],
-  identifier: "quick-brick-copa-america-stats",
+  identifier: "quick-brick-opta-stats",
   targets: ["mobile"],
   custom_configuration_fields: [
     {
@@ -50,27 +50,6 @@ const baseManifest = {
       placeholder: "Enter calendar id",
       tooltip_text: "Calendar id of the tournament",
       type: "text"
-    },
-    {
-      key: "image_base_url",
-      label: "Image Base URL",
-      placeholder: "Enter image base url",
-      tooltip_text: "URL where the plugin get the images",
-      type: "text"
-    },
-    {
-      key: "show_team",
-      label: "Show Team",
-      placeholder: "",
-      tooltip_text: "Show Players in Team screen",
-      type: "checkbox"
-    },
-    {
-      key: "number_of_matches",
-      label: "Number of matches",
-      placeholder: "",
-      tooltip_text: "Change how many matches we show in the carrousel",
-      type: "text"
     }
   ],
 };
@@ -84,7 +63,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
-    npm_dependencies: [`@applicaster/quick-brick-copa-america-stats@${version}`],
+    npm_dependencies: [`@applicaster/quick-brick-opta-stats@${version}`],
     targets: targets[platform],
   };
   return manifest;
@@ -95,8 +74,8 @@ const min_zapp_sdk = {
 };
 
 const extra_dependencies_apple = {
-  CopaAmericaStats:
-    ":path => './node_modules/@applicaster/quick-brick-copa-america-stats/apple/CopaAmericaStats.podspec'",
+  OptaStats:
+    ":path => './node_modules/@applicaster/quick-brick-opta-stats/apple/OptaStats.podspec'",
 };
 const extra_dependencies = {
   ios_for_quickbrick: [extra_dependencies_apple],
@@ -105,8 +84,8 @@ const extra_dependencies = {
 
 const api_apple = {
   require_startup_execution: false,
-  class_name: "CopaAmericaStats",
-  modules: ["CopaAmericaStats"],
+  class_name: "OptaStats",
+  modules: ["OptaStats"],
 };
 
 const api = {
