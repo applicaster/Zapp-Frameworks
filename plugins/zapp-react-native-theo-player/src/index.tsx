@@ -27,6 +27,11 @@ type Content = {
 type Entry = {
   content: Content;
   media_group: any;
+  id: string;
+  title: string;
+  extensions: {
+    analyticsCustomProperties: object
+  };
 };
 
 type Props = {
@@ -58,7 +63,10 @@ type VideoStyle = {
 };
 
 type State = {
+  loadedData: boolean;
+  loadedVideo: boolean;
   showControls: boolean;
+  canplay: boolean;
   showPoster: boolean;
   currentTime: number;
   duration: number;
@@ -71,6 +79,16 @@ type State = {
   audioTrackLanguage: string;
   showNativeSubtitles: boolean;
   playbackRate: number;
+  volume: number
+  muted: boolean;
+  advertismentPlaying: boolean;
+  autoplay: boolean;
+  fullscreen: boolean;
+  rate: number;
+  selectedAudioTracks: object;
+  selectedTextTracks: object;
+  textTracks: Array<object>;
+  error: boolean;
 };
 
 const videoStyles = ({ width, height }) => ({
@@ -93,9 +111,8 @@ export default class THEOPlayer extends Component<Props, State> {
       currentTime: 0,
       canplay: false,
       playing: false,
-      playerState: "loadstart",
       paused: false,
-      showControl: false,
+      showControls: false,
       showPoster: true,
       showNativeSubtitles: false,
       seek: {},
@@ -201,6 +218,8 @@ export default class THEOPlayer extends Component<Props, State> {
       })
     }
   };
+
+  onPlayerLoadStart = ({ nativeEvent }) => {};
 
   onPlayerCanPlay = ({ nativeEvent }) => {
     this.setState({ canplay: true })
