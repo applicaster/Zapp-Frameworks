@@ -117,14 +117,14 @@ export default class THEOPlayer extends Component<Props, State> {
     };
   }
 
-  analyticProperties = (nativeEvent) => {
+  analyticsProperties = (nativeEvent) => {
     const {
       id,
       title,
       extensions: {
         analyticsCustomProperties
       }
-    } = this.props.entry
+    } = this.props.entry;
 
     const {
       duration,
@@ -138,8 +138,8 @@ export default class THEOPlayer extends Component<Props, State> {
       currentTime,
       analyticsCustomProperties,
       ...nativeEvent
-    }
-  }
+    };
+  };
 
   onPlayerPlay = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
@@ -147,31 +147,31 @@ export default class THEOPlayer extends Component<Props, State> {
     this.setState({ currentTime });
 
     if (currentTime > 0) {
-      postAnalyticEvent("Player Resume", this.analyticProperties(nativeEvent));
+      postAnalyticEvent("Player Resume", this.analyticsProperties(nativeEvent));
     }
 
-    postAnalyticEvent("Player Play", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Play", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerPlaying = ({ nativeEvent }) => {
     this.setState({ playing: true });
-    postAnalyticEvent("Player Playing", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Playing", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerPause = ({ nativeEvent }) => {    
-    postAnalyticEvent("Player Pause", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Pause", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerProgress = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Progress", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Progress", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerSeeking = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeking", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Seeking", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerSeeked = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeked", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Seeked", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
@@ -197,7 +197,7 @@ export default class THEOPlayer extends Component<Props, State> {
     if (!loadedVideo) {
       this.setState({ loadedVideo: true, duration }, () => {
         this.props.onLoad({ duration, currentTime });
-        postAnalyticEvent("Player Loaded Data", this.analyticProperties(nativeEvent));
+        postAnalyticEvent("Player Loaded Data", this.analyticsProperties(nativeEvent));
       })
     }
   };
@@ -212,6 +212,7 @@ export default class THEOPlayer extends Component<Props, State> {
     const { duration } = nativeEvent;
 
     this.setState({ duration });
+    this.props.onLoad({ duration, currentTime: 0 });
   };
 
   onPlayerSourceChange = ({ nativeEvent }) => {};
@@ -237,7 +238,7 @@ export default class THEOPlayer extends Component<Props, State> {
       this.props?.onEnded();
     }
 
-    postAnalyticEvent("Player Ended", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Player Ended", this.analyticsProperties(nativeEvent));
   };
 
   onPlayerError = ({ nativeEvent }) => {
@@ -248,23 +249,23 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Break Begin", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Ad Break Begin", this.analyticsProperties(nativeEvent));
   };
   onAdBreakEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Break End", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Ad Break End", this.analyticsProperties(nativeEvent));
   };
   onAdError = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Error", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Ad Error", this.analyticsProperties(nativeEvent));
   };
   onAdBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Begin", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Ad Begin", this.analyticsProperties(nativeEvent));
   };
   onAdEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad End", this.analyticProperties(nativeEvent));
+    postAnalyticEvent("Ad End", this.analyticsProperties(nativeEvent));
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
