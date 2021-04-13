@@ -31,7 +31,7 @@ const baseManifest = {
       type: "text"
     },
     {
-      key: "referer",
+      key: "referer", 
       label: "Referer",
       placeholder: "Enter referer",
       tooltip_text: "Referer of the provider",
