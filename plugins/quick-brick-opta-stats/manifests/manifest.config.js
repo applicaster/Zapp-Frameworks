@@ -8,7 +8,7 @@ const baseManifest = {
   description:
     "This plugin fetching statistics from Opta",
   type: "general",
-  screen: true,
+  screen: false,
   react_native: true,
   ui_builder_support: true,
   ui_frameworks: ["quickbrick"],
