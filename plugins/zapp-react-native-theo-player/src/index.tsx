@@ -135,7 +135,7 @@ export default class THEOPlayer extends Component<Props, State> {
       id,
       title,
       duration,
-      currentTime,
+      offset: currentTime,
       analyticsCustomProperties,
       ...nativeEvent
     };
