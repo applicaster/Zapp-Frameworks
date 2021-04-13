@@ -2,7 +2,6 @@
   "name": "@applicaster/quick-brick-opta-stats",
   "version": "0.0.1",
   "description": "",
-  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,5 +28,9 @@
       "tvos_for_quickbrick"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
-  }
+  },
+  "files": [
+    "android",
+    "apple"
+  ]
 }
