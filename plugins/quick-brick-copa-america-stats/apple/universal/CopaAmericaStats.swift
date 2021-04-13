@@ -15,7 +15,6 @@ public class CopaAmericaStats: NSObject, GeneralProviderProtocol {
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
         configurationJSON = model?.configurationJSON
-
     }
 
     public var providerName: String {
@@ -36,22 +35,19 @@ public class CopaAmericaStats: NSObject, GeneralProviderProtocol {
         static let referer = "referer"
         static let competitionId = "competition_id"
         static let calendarId = "calendar_id"
-
     }
 
-    lazy var apiToken: String = {
-        configurationJSON?[Params.apiToken] as? String ?? ""
+    lazy var pluginParams: PluginParams = {
+        PluginParams(apiToken: configurationJSON?[Params.apiToken] as? String ?? "",
+                     referer: configurationJSON?[Params.referer] as? String ?? "",
+                     competitionId: configurationJSON?[Params.competitionId] as? String,
+                     calendarId: configurationJSON?[Params.calendarId] as? String)
     }()
-    
-    lazy var referer: String? = {
-        configurationJSON?[Params.referer] as? String
-    }()
-    
-    lazy var competitionId: String? = {
-        configurationJSON?[Params.competitionId] as? String
-    }()
-    
-    lazy var calendarId: String? = {
-        configurationJSON?[Params.calendarId] as? String
-    }()
+}
+
+struct PluginParams {
+    var apiToken: String
+    var referer: String
+    var competitionId: String?
+    var calendarId: String?
 }

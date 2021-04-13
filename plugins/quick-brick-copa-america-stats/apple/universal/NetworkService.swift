@@ -6,8 +6,8 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 import SwiftyJSON
 
 typealias networkServiceCompletionHandler = (_ success: Bool, _ json: JSON?) -> Void
@@ -15,43 +15,34 @@ typealias networkServiceCompletionHandler = (_ success: Bool, _ json: JSON?) -> 
 struct NetworkService {
     static func makeRequest(_ request: NetworkURLRequestConvertible, completion: @escaping (networkServiceCompletionHandler)) {
         var fullURL: URL?
-        
+
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         if let url = urls.last {
             fullURL = url.appendingPathComponent("\(request.cacheKey).json")
         }
-            
-        
+
         AF.request(request).responseJSON { response in
             if let json = response.value {
-                let jsonInfo = JSON(json)
-                
-                if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
-                    if let url = fullURL {
-                        do {
-                            try data.write(to: url, options: [.atomic])
-                        } catch {
-                            print("Could not save cached file")
-                        }
-                    }
-                }
-                
-                completion(true, jsonInfo)
+                saveToCache(url: fullURL, json: json)
+                completion(true, JSON(json))
+            } else if let url = fullURL,
+                      FileManager.default.fileExists(atPath: url.path),
+                      let cachedJSONData = try? Data(contentsOf: url),
+                      let cachedJSON = String(data: cachedJSONData, encoding: .utf8) {
+                completion(true, JSON(parseJSON: cachedJSON))
             } else {
-                if let url = fullURL {
-                    let fm = FileManager.default
-                
-                    if fm.fileExists(atPath: url.path) {
-                        if let cachedJSONData = try? Data(contentsOf: url), let cachedJSON = String(data: cachedJSONData, encoding: .utf8) {
-                            completion(true, JSON(parseJSON: cachedJSON))
-                        }
-                    } else {
-                        completion(false, nil)
-                    }
-                    
-                } else {
-                    completion(false, nil)
-                }
+                completion(false, nil)
+            }
+        }
+    }
+
+    static func saveToCache(url: URL?, json: Any) {
+        if let data = try? JSONSerialization.data(withJSONObject: json, options: []),
+           let url = url {
+            do {
+                try data.write(to: url, options: [.atomic])
+            } catch {
+                print("Could not save cached file")
             }
         }
     }

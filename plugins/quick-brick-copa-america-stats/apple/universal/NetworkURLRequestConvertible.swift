@@ -9,17 +9,21 @@
 import Foundation
 import Alamofire
 
+enum NetworkURLRequestError: Error {
+    case invalidBaseUrl
+}
+
 enum NetworkURLRequestConvertible: URLRequestConvertible {
-    case matchScreen(apiToken: String, parameters: [String: AnyObject])
-    case groupCards(apiToken: String, parameters: [String: AnyObject])
-    case teamScreen(apiToken: String, parameters: [String: AnyObject])
-    case playerScreenFullSquad(apiToken: String, parameters: [String: AnyObject])
-    case playerScreenCareer(apiToken: String, parameters: [String: AnyObject])
-    case allMatches(apiToken: String, parameters: [String: AnyObject])
-    case allMatchesList(apiToken: String, parameters: [String: AnyObject])
-    case matchDetail(apiToken: String, parameters: [String: AnyObject])
-    case lineUp(apiToken: String, parameters: [String: AnyObject])
-    case tournamentWinners(apiToken: String, parameters: [String: AnyObject])
+    case matchScreen(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case groupCards(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case teamScreen(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case playerScreenFullSquad(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case playerScreenCareer(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case allMatches(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case allMatchesList(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case matchDetail(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case lineUp(pluginParams: PluginParams, requestParams: [String: AnyObject])
+    case tournamentWinners(pluginParams: PluginParams, requestParams: [String: AnyObject])
     
     static let baseURL: String = "http://api.performfeeds.com/soccerdata"
     
@@ -32,26 +36,26 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
     
     var path: String {
         switch self {
-        case .matchScreen(let apiToken, _):
-            return "/matchstats/\(apiToken)"
-        case .groupCards(let apiToken, _):
-            return "/standings/\(apiToken)"
-        case .teamScreen(let apiToken, _):
-            return "/seasonstats/\(apiToken)"
-        case .playerScreenFullSquad(let apiToken, _):
-            return "/squads/\(apiToken)"
-        case .playerScreenCareer(let apiToken, _):
-            return "/playercareer/\(apiToken)"
-        case .allMatches(let apiToken, _):
-            return "/tournamentschedule/\(apiToken)"
-        case .allMatchesList(let apiToken, _):
-            return "/match/\(apiToken)"
-        case .matchDetail(let apiToken, _):
-            return "/match/\(apiToken)"
-        case .lineUp(let apiToken, _):
-            return "/squads/\(apiToken)"
-        case .tournamentWinners(let apiToken, _):
-            return "/trophies/\(apiToken)"
+        case .matchScreen(let pluginParams, _):
+            return "/matchstats/\(pluginParams.apiToken)"
+        case .groupCards(let pluginParams, _):
+            return "/standings/\(pluginParams.apiToken)"
+        case .teamScreen(let pluginParams, _):
+            return "/seasonstats/\(pluginParams.apiToken)"
+        case .playerScreenFullSquad(let pluginParams, _):
+            return "/squads/\(pluginParams.apiToken)"
+        case .playerScreenCareer(let pluginParams, _):
+            return "/playercareer/\(pluginParams.apiToken)"
+        case .allMatches(let pluginParams, _):
+            return "/tournamentschedule/\(pluginParams.apiToken)"
+        case .allMatchesList(let pluginParams, _):
+            return "/match/\(pluginParams.apiToken)"
+        case .matchDetail(let pluginParams, _):
+            return "/match/\(pluginParams.apiToken)"
+        case .lineUp(let pluginParams, _):
+            return "/squads/\(pluginParams.apiToken)"
+        case .tournamentWinners(let pluginParams, _):
+            return "/trophies/\(pluginParams.apiToken)"
         }
     }
     
@@ -81,37 +85,40 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
     }
     
     func asURLRequest() throws -> URLRequest {
-        let url: URL = URL(string: "\(NetworkURLRequestConvertible.baseURL)\(path)")!
+        guard let url: URL = URL(string: "\(NetworkURLRequestConvertible.baseURL)\(path)") else {
+            throw NetworkURLRequestError.invalidBaseUrl
+        }
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
         urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         
         //Set-up parameters
-        switch self {
-        case .matchScreen(_, let params),
-             .groupCards(_, let params),
-             .teamScreen(_, let params),
-             .playerScreenFullSquad(_, let params),
-             .playerScreenCareer(_, let params),
-             .allMatches(_, let params),
-             .allMatchesList(_, let params),
-             .matchDetail(_, let params),
-             .lineUp(_, let params),
-             .tournamentWinners(_, let params):
-            let encodedURLRequest = try Alamofire.URLEncoding.default.encode(urlRequest, with: params)
-            urlRequest = encodedURLRequest
-            break
-        }
+        let encodedURLRequest = try Alamofire.URLEncoding.default.encode(urlRequest, with: content.requestParams)
+        urlRequest = encodedURLRequest
         
         //Add necessary Header values
-        switch self {
-        default:
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            urlRequest.setValue("copaamerica.com", forHTTPHeaderField: "Referer")
-        }
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(content.pluginParams.referer, forHTTPHeaderField: "Referer")
         
         print("Making Request: \(urlRequest)")
         return urlRequest
+    }
+    
+    var content: (pluginParams: PluginParams, requestParams: [String: AnyObject]) {
+        switch self {
+        case .matchScreen(let pluginParams, let requestParams),
+             .groupCards(let pluginParams, let requestParams),
+             .teamScreen(let pluginParams, let requestParams),
+             .playerScreenFullSquad(let pluginParams, let requestParams),
+             .playerScreenCareer(let pluginParams, let requestParams),
+             .allMatches(let pluginParams, let requestParams),
+             .allMatchesList(let pluginParams, let requestParams),
+             .matchDetail(let pluginParams, let requestParams),
+             .lineUp(let pluginParams, let requestParams),
+             .tournamentWinners(let pluginParams, let requestParams):
+            return (pluginParams, requestParams)
+        }
     }
 }
