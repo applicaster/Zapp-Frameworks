@@ -3,9 +3,8 @@ import React, { Component } from "react";
 import { Platform } from "react-native";
 import * as R from "ramda";
 
-import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { fetchImageFromMetaByKey } from "./Utils";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
@@ -13,6 +12,7 @@ import { getDRMData } from "./Services/DRM";
 import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
 
 console.disableYellowBox = true;
+
 type PluginConfiguration = {
   theoplayer_scale_mode: string;
   theoplayer_license_key: string;
@@ -80,10 +80,6 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
-const manifestJson = platformSelect({
-  ios: require("../manifests/ios_for_quickbrick.json"),
-  android: require("../manifests/android_for_quickbrick.json"),
-});
 export default class THEOPlayer extends Component<Props, State> {
   _root: THEOplayerView;
 
@@ -91,99 +87,142 @@ export default class THEOPlayer extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showControls: false,
-      showPoster: true,
-      currentTime: 0,
+      loadedData: false,
+      loadedVideo: false,
       duration: 0,
-      paused: false,
+      currentTime: 0,
+      canplay: false,
       playing: false,
+      playerState: "loadstart",
+      paused: false,
+      showControl: false,
+      showPoster: true,
+      showNativeSubtitles: false,
       seek: {},
+      subtitlesLanguage: "Off",
       subtitles: [],
       audioTracks: [],
-      subtitlesLanguage: "Off",
       audioTrackLanguage: null,
-      showNativeSubtitles: false,
+      volume: 0,
+      muted: false,
       playbackRate: 0,
+      advertismentPlaying: false,
+      autoplay: true,
+      fullscreen: false,
+      rate: 0,
+      selectedAudioTracks: {},
+      selectedTextTracks: {},
+      textTracks: [{}],
+      error: null,
     };
   }
 
-  componentDidMount() {}
+  analyticProperties = (nativeEvent) => {
+    const {
+      id,
+      title,
+      extensions: {
+        analyticsCustomProperties
+      }
+    } = this.props.entry
+
+    const {
+      duration,
+      currentTime
+    } = this.state;
+
+    return {
+      id,
+      title,
+      duration,
+      currentTime,
+      analyticsCustomProperties,
+      ...nativeEvent
+    }
+  }
 
   onPlayerPlay = ({ nativeEvent }) => {
+    const { currentTime } = nativeEvent;
+    
+    this.setState({ currentTime });
+
+    if (currentTime > 0) {
+      postAnalyticEvent("Player Resume", this.analyticProperties(nativeEvent));
+    }
+
+    postAnalyticEvent("Player Play", this.analyticProperties(nativeEvent));
   };
 
   onPlayerPlaying = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Playing", nativeEvent);
+    this.setState({ playing: true });
+    postAnalyticEvent("Player Playing", this.analyticProperties(nativeEvent));
   };
 
-  onPlayerPause = ({ nativeEvent }) => {
-    const { currentTime } = nativeEvent;
-    const duration = this.state?.duration;
-    // this.props?.onPause({ currentTime, duration });
-    postAnalyticEvent("Player Pause", nativeEvent);
+  onPlayerPause = ({ nativeEvent }) => {    
+    postAnalyticEvent("Player Pause", this.analyticProperties(nativeEvent));
   };
 
   onPlayerProgress = ({ nativeEvent }) => {
-    const { currentTime } = nativeEvent;
-    const { duration } = this.state;
-    if (!R.isNil(this.props?.onProgress)) {
-      this.props?.onProgress({ currentTime, duration });
-    }
+    postAnalyticEvent("Player Progress", this.analyticProperties(nativeEvent));
   };
 
   onPlayerSeeking = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeking", nativeEvent);
+    postAnalyticEvent("Player Seeking", this.analyticProperties(nativeEvent));
   };
 
   onPlayerSeeked = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeked", nativeEvent);
+    postAnalyticEvent("Player Seeked", this.analyticProperties(nativeEvent));
   };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
-  onPlayerTimeUpdate = ({ nativeEvent }) => {};
+  onPlayerTimeUpdate = ({ nativeEvent }) => {
+    const { currentTime } = nativeEvent;
 
-  onPlayerRateChange = ({ nativeEvent }) => {
-    const { playbackRate } = nativeEvent;
-    this.setState({ playbackRate });
-    if (!R.isNil(this.props?.onPlaybackRateChange)) {
-      this.props?.onPlaybackRateChange({ playbackRate });
-    }
+    this.setState({ currentTime });
   };
+
+  onPlayerRateChange = ({ nativeEvent }) => {};
 
   onPlayerReadyStateChange = ({ nativeEvent }) => {};
 
-  onPlayerLoadedMetaData = ({ nativeEvent }) => {};
+  onPlayerLoadedMetaData = ({ nativeEvent }) => {
+    this.setState({ loadedData: true })
+  };
 
   onPlayerLoadedData = ({ nativeEvent }) => {
-    const { duration } = this.state;
+    const { duration, loadedVideo } = this.state;
     const { currentTime } = nativeEvent;
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration, currentTime });
+
+    if (!loadedVideo) {
+      this.setState({ loadedVideo: true, duration }, () => {
+        this.props.onLoad({ duration, currentTime });
+        postAnalyticEvent("Player Loaded Data", this.analyticProperties(nativeEvent));
+      })
     }
   };
 
-  onPlayerLoadStart = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Load Start", nativeEvent);
+  onPlayerCanPlay = ({ nativeEvent }) => {
+    this.setState({ canplay: true })
   };
-
-  onPlayerCanPlay = ({ nativeEvent }) => {};
 
   onPlayerCanPlayThrough = ({ nativeEvent }) => {};
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
+
     this.setState({ duration });
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration: duration, currentTime: -1 });
-    }
   };
 
   onPlayerSourceChange = ({ nativeEvent }) => {};
 
   onPlayerPresentationModeChange = ({ nativeEvent }) => {};
 
-  onPlayerVolumeChange = ({ nativeEvent }) => {};
+  onPlayerVolumeChange = ({ nativeEvent }) => {
+    const { volume } = nativeEvent;
+    
+    this.setState({ volume })
+  };
 
   onPlayerResize = ({ nativeEvent }) => {};
 
@@ -197,6 +236,8 @@ export default class THEOPlayer extends Component<Props, State> {
     if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
       this.props?.onEnded();
     }
+
+    postAnalyticEvent("Player Ended", this.analyticProperties(nativeEvent));
   };
 
   onPlayerError = ({ nativeEvent }) => {
@@ -207,23 +248,23 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Break Begin", nativeEvent);
+    postAnalyticEvent("Ad Break Begin", this.analyticProperties(nativeEvent));
   };
   onAdBreakEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Break End", nativeEvent);
+    postAnalyticEvent("Ad Break End", this.analyticProperties(nativeEvent));
   };
   onAdError = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Error", nativeEvent);
+    postAnalyticEvent("Ad Error", this.analyticProperties(nativeEvent));
   };
   onAdBegin = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad Begin", nativeEvent);
+    postAnalyticEvent("Ad Begin", this.analyticProperties(nativeEvent));
   };
   onAdEnd = ({ nativeEvent }) => {
     console.log(nativeEvent)
-    postAnalyticEvent("Ad End", nativeEvent);
+    postAnalyticEvent("Ad End", this.analyticProperties(nativeEvent));
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
@@ -250,10 +291,12 @@ export default class THEOPlayer extends Component<Props, State> {
       source,
       pluginConfiguration,
     } = this.props;
+
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
+
     return (
       <View
         style={
