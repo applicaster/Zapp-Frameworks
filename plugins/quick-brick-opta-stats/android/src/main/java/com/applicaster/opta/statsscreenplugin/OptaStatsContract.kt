@@ -17,7 +17,7 @@ import kotlin.collections.ArrayList
 class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
     companion object {
-        private val TAG: String = "COPAOptaStatsContract"
+        private const val TAG: String = "COPAOptaStatsContract"
     }
 
     private var configurationHandler: PluginConfigurationHandler = PluginConfigurationHandler()

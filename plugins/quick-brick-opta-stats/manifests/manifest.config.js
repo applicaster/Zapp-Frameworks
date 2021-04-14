@@ -62,6 +62,7 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
+    project_dependencies: project_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/quick-brick-opta-stats@${version}`],
     targets: targets[platform],
@@ -70,7 +71,8 @@ function createManifest({ version, platform }) {
 }
 const min_zapp_sdk = {
   tvos_for_quickbrick: "4.1.0-Dev",
-  ios_for_quickbrick: "4.1.0-Dev"
+  ios_for_quickbrick: "4.1.0-Dev",
+  android_for_quickbrick: "4.0.0"
 };
 
 const extra_dependencies_apple = {
@@ -82,15 +84,28 @@ const extra_dependencies = {
   tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
+const project_dependencies = {
+  android_for_quickbrick: [
+    {
+      "quick-brick-opta-stats": "./quick_brick/node_modules/@applicaster/quick-brick-opta-stats/android",
+    },
+  ],
+};
+
 const api_apple = {
   require_startup_execution: false,
   class_name: "OptaStats",
   modules: ["OptaStats"],
 };
 
+const api_android = {
+    class_name: "com.applicaster.opta.statsscreenplugin.OptaStatsContract"
+};
+
 const api = {
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
+  android_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
@@ -98,6 +113,7 @@ const tvTarget = ["tv"];
 const targets = {
   ios_for_quickbrick: mobileTarget,
   tvos_for_quickbrick: tvTarget,
+  android_for_quickbrick: mobileTarget,
 };
 
 module.exports = createManifest;
