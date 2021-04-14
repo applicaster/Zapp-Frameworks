@@ -141,7 +141,7 @@ export default class THEOPlayer extends Component<Props, State> {
     analyticsTracker.initialState(this.state, this.props.entry)
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     analyticsTracker.handleChange(this.state);
 
     if (this.state.playerClosed) {
@@ -152,9 +152,8 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerPlay = ({ nativeEvent }) => {};
 
   onPlayerPlaying = ({ nativeEvent }) => {
-    console.log("PLAYING EVENT")
     const { currentTime } = nativeEvent;
-    const { loadedVideo, seeking, paused } = this.state;
+    const { loadedVideo, seeking } = this.state;
 
     if (seeking) {
       this.setState({ seeking: false });
@@ -171,8 +170,6 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerPause = ({ nativeEvent }) => {
-    console.log("PAUSE EVENT")
-
     const {
       paused,
       readyState,
@@ -189,8 +186,6 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerProgress = ({ nativeEvent }) => {};
 
   onPlayerSeeking = ({ nativeEvent }) => {
-    console.log("SEEKING EVENT")
-
     if (this.state.loadedVideo) {
       this.setState({ seeking: true, seeked: false });
     }
@@ -214,13 +209,12 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerRateChange = ({ nativeEvent }) => {};
 
   onPlayerReadyStateChange = ({ nativeEvent }) => {
-    console.log("READY STATE CHANGE EVENT", nativeEvent);
     let buffering = false;
 
     const { readyState } = nativeEvent;
     const haveCurrentData = this.state.readyState === "HAVE_CURRENT_DATA";
     const enoughData = readyState === "HAVE_ENOUGH_DATA";
-    console.log(haveCurrentData, enoughData, "ESTAMOS LISTOS?")
+
     if (haveCurrentData && enoughData) {
       buffering = true;
     }
@@ -228,9 +222,7 @@ export default class THEOPlayer extends Component<Props, State> {
     this.setState({ readyState, buffering })
   };
 
-  onPlayerLoadedMetaData = ({ nativeEvent }) => {
-    console.log("METADATA EVENT", nativeEvent);
-  };
+  onPlayerLoadedMetaData = ({ nativeEvent }) => {};
 
   onPlayerLoadedData = ({ nativeEvent }) => {
     const { duration } = this.state;
@@ -245,15 +237,12 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerCanPlay = ({ nativeEvent }) => {
-    console.log("CAN PLAY EVENT", nativeEvent);
     this.setState({
       buffering: false
     })
   };
 
   onPlayerCanPlayThrough = ({ nativeEvent }) => {
-    console.log("CAN PLAY THROUGH", nativeEvent);
-
     this.setState({ 
       canplay: true, 
       playing: false, 
