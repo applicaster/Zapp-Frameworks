@@ -73,24 +73,6 @@ const baseManifest = {
       ],
       initial_value: "go_back",
     },
-    {
-      type: "text",
-      key: "consumable_type_mapper",
-      tooltip_text: "Mapping key for consumable purchase",
-      default: "consumable",
-    },
-    {
-      type: "text",
-      key: "non_consumable_type_mapper",
-      tooltip_text: "Mapping key for non consumable purchase",
-      default: "ppv",
-    },
-    {
-      type: "text",
-      key: "subscription_type_mapper",
-      tooltip_text: "Mapping key for subscription purchase",
-      default: "subscription",
-    },
   ],
   hooks: {
     fields: [
@@ -123,7 +105,7 @@ const stylesMobile = {
       key: "title_font_ios",
       type: "ios_font_selector",
       label: "iOS title font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "title_font_android",
@@ -147,7 +129,7 @@ const stylesMobile = {
       key: "back_button_font_ios",
       type: "ios_font_selector",
       label: "iOS back button font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "back_button_font_android",
@@ -171,7 +153,7 @@ const stylesMobile = {
       key: "fields_font_ios",
       type: "ios_font_selector",
       label: "iOS input fields title font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "fields_font_android",
@@ -207,7 +189,7 @@ const stylesMobile = {
       key: "forgot_password_font_ios",
       type: "ios_font_selector",
       label: "iOS forgot password font",
-      initial_value: "Roboto-Regular",
+      initial_value: "Helvetica",
     },
     {
       key: "forgot_password_font_android",
@@ -237,7 +219,7 @@ const stylesMobile = {
       key: "action_button_font_ios",
       type: "ios_font_selector",
       label: "iOS action button font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "action_button_font_android",
@@ -261,7 +243,7 @@ const stylesMobile = {
       key: "create_account_link_font_ios",
       type: "ios_font_selector",
       label: "iOS Create account link font",
-      initial_value: "Roboto-Regular",
+      initial_value: "Helvetica",
     },
     {
       key: "create_account_link_font_android",
@@ -291,7 +273,7 @@ const stylesMobile = {
       key: "logout_title_font_ios",
       type: "ios_font_selector",
       label: "Logout iOS title font",
-      initial_value: "Roboto-Bold",
+      initial_value: "Helvetica-Bold",
     },
     {
       key: "logout_title_font_android",
