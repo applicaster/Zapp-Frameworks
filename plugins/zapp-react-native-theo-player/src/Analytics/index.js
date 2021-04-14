@@ -132,7 +132,6 @@ export class AnalyticsTracker {
       } = analyticEvent;
 
       if (shouldReport() && validState(state)) {
-        console.log(`DISPATCHING ${eventName} !!!!!!!!!!!!!!!!!!!`)
         this.handleAnalyticEvent(eventName);
       }
     });
