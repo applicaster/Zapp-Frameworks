@@ -1,15 +1,13 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { Platform } from "react-native";
+import { View, Platform } from "react-native";
 import * as R from "ramda";
 
+import { AnalyticsTracker } from "./Analytics";
 import { fetchImageFromMetaByKey } from "./Utils";
-import { View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
-
-import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
 
 console.disableYellowBox = true;
 
@@ -63,32 +61,32 @@ type VideoStyle = {
 };
 
 type State = {
-  loadedData: boolean;
+  playerCreated: boolean;
+  loadStart: boolean;
   loadedVideo: boolean;
-  showControls: boolean;
+  readyState: string;
+  adBreakBegin: boolean;
+  adBreakEnd: boolean;
+  adBegin: boolean;
+  adEnd: boolean;
+  adError: boolean;
   canplay: boolean;
-  showPoster: boolean;
   currentTime: number;
   duration: number;
   paused: boolean;
   playing: boolean;
-  seek: object;
-  subtitles: [];
-  audioTracks: [];
-  subtitlesLanguage: string;
-  audioTrackLanguage: string;
-  showNativeSubtitles: boolean;
+  resume: boolean;
+  seeking: boolean;
+  seeked: boolean;
   playbackRate: number;
-  volume: number
+  volume: number;
   muted: boolean;
   advertismentPlaying: boolean;
   autoplay: boolean;
-  fullscreen: boolean;
   rate: number;
-  selectedAudioTracks: object;
-  selectedTextTracks: object;
-  textTracks: Array<object>;
   error: boolean;
+  playerEnded: boolean;
+  playerClosed: boolean;
 };
 
 const videoStyles = ({ width, height }) => ({
@@ -105,127 +103,122 @@ export default class THEOPlayer extends Component<Props, State> {
     super(props);
 
     this.state = {
-      loadedData: false,
+      playerCreated: false,
+      loadStart: false,
       loadedVideo: false,
+      readyState: "",
+      adBreakBegin: false,
+      adBreakEnd: false,
+      adBegin: false,
+      adEnd: false,
+      adError: false,
       duration: 0,
       currentTime: 0,
       canplay: false,
       playing: false,
+      resume: false,
       paused: false,
-      showControls: false,
-      showPoster: true,
-      showNativeSubtitles: false,
-      seek: {},
-      subtitlesLanguage: "Off",
-      subtitles: [],
-      audioTracks: [],
-      audioTrackLanguage: null,
+      seeking: false,
+      seeked: false,
       volume: 0,
       muted: false,
       playbackRate: 0,
       advertismentPlaying: false,
       autoplay: true,
-      fullscreen: false,
       rate: 0,
-      selectedAudioTracks: {},
-      selectedTextTracks: {},
-      textTracks: [{}],
       error: null,
+      playerEnded: false,
+      playerClosed: false
     };
+
+    this.analyticsTracker = new AnalyticsTracker(this.state, props.entry);
   }
 
-  analyticsProperties = (nativeEvent) => {
-    const {
-      id,
-      title,
-      extensions: {
-        analyticsCustomProperties
-      }
-    } = this.props.entry;
+  componentDidUpdate() {
+    this.analyticsTracker.handleChange(this.state);
 
-    const {
-      duration,
-      currentTime
-    } = this.state;
-
-    return {
-      id,
-      title,
-      duration,
-      offset: currentTime,
-      analyticsCustomProperties,
-      ...nativeEvent
-    };
-  };
-
-  onPlayerPlay = ({ nativeEvent }) => {
-    const { currentTime } = nativeEvent;
-    
-    this.setState({ currentTime });
-
-    if (currentTime > 0) {
-      postAnalyticEvent("Player Resume", this.analyticsProperties(nativeEvent));
+    if (this.state.playerClosed) {
+      this.handleEnded();
     }
+  }
 
-    postAnalyticEvent("Player Play", this.analyticsProperties(nativeEvent));
-  };
+  onPlayerPlay = ({ nativeEvent }) => {};
 
   onPlayerPlaying = ({ nativeEvent }) => {
-    this.setState({ playing: true });
-    postAnalyticEvent("Player Playing", this.analyticsProperties(nativeEvent));
+    const { currentTime } = nativeEvent;
+    const { loadedVideo, seeking } = this.state;
+
+    if (seeking) {
+      this.setState({ seeking: false });
+      return;
+    }
+
+    if (loadedVideo && currentTime < 1) {
+      this.setState({ playing: true, paused: false });
+    }
+
+    if (loadedVideo && currentTime > 1) {
+      this.setState({ resume: true, paused: false });
+    } 
   };
 
-  onPlayerPause = ({ nativeEvent }) => {    
-    postAnalyticEvent("Player Pause", this.analyticsProperties(nativeEvent));
+  onPlayerPause = ({ nativeEvent }) => {
+    const {
+      paused,
+      readyState,
+      loadedVideo
+    } = this.state;
+
+    const willSeek = readyState === "HAVE_METADATA";
+
+    if (loadedVideo && !willSeek && !paused) {
+      this.setState({ paused: true, playing: false, resume: false });
+    }
   };
 
-  onPlayerProgress = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Progress", this.analyticsProperties(nativeEvent));
-  };
+  onPlayerProgress = ({ nativeEvent }) => {};
 
   onPlayerSeeking = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeking", this.analyticsProperties(nativeEvent));
+    if (this.state.loadedVideo) {
+      this.setState({ seeking: true, seeked: false });
+    }
   };
 
-  onPlayerSeeked = ({ nativeEvent }) => {
-    postAnalyticEvent("Player Seeked", this.analyticsProperties(nativeEvent));
-  };
+  onPlayerSeeked = ({ nativeEvent }) => {};
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-
     this.setState({ currentTime });
   };
 
   onPlayerRateChange = ({ nativeEvent }) => {};
 
-  onPlayerReadyStateChange = ({ nativeEvent }) => {};
-
-  onPlayerLoadedMetaData = ({ nativeEvent }) => {
-    this.setState({ loadedData: true })
+  onPlayerReadyStateChange = ({ nativeEvent }) => {
+    const { readyState } = nativeEvent;
+    this.setState({ readyState })
   };
+
+  onPlayerLoadedMetaData = ({ nativeEvent }) => {};
 
   onPlayerLoadedData = ({ nativeEvent }) => {
-    const { duration, loadedVideo } = this.state;
+    const { duration } = this.state;
     const { currentTime } = nativeEvent;
 
-    if (!loadedVideo) {
-      this.setState({ loadedVideo: true, duration }, () => {
-        this.props.onLoad({ duration, currentTime });
-        postAnalyticEvent("Player Loaded Data", this.analyticsProperties(nativeEvent));
-      })
-    }
+    this.props.onLoad({ duration, currentTime });
+    this.setState({ loadedVideo: true });
   };
 
-  onPlayerLoadStart = ({ nativeEvent }) => {};
-
-  onPlayerCanPlay = ({ nativeEvent }) => {
-    this.setState({ canplay: true })
+  onPlayerLoadStart = ({ nativeEvent }) => {
+    this.setState({ loadStart: true });
   };
 
-  onPlayerCanPlayThrough = ({ nativeEvent }) => {};
+  onPlayerCanPlay = ({ nativeEvent }) => {};
+
+  onPlayerCanPlayThrough = ({ nativeEvent }) => {
+    this.setState({ canplay: true, playing: false, resume: false});
+  };
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
@@ -234,7 +227,9 @@ export default class THEOPlayer extends Component<Props, State> {
     this.props.onLoad({ duration, currentTime: 0 });
   };
 
-  onPlayerSourceChange = ({ nativeEvent }) => {};
+  onPlayerSourceChange = ({ nativeEvent }) => {
+    this.setState({ playerCreated: true });
+  };
 
   onPlayerPresentationModeChange = ({ nativeEvent }) => {};
 
@@ -249,15 +244,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerDestroy = ({ nativeEvent }) => {};
 
   onPlayerEnded = ({ nativeEvent }) => {
-    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
-      this.props?.onEnd();
-    }
-
-    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
-      this.props?.onEnded();
-    }
-
-    postAnalyticEvent("Player Ended", this.analyticsProperties(nativeEvent));
+    this.setState({ playerClosed: true });
   };
 
   onPlayerError = ({ nativeEvent }) => {
@@ -267,24 +254,23 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onAdBreakBegin = ({ nativeEvent }) => {
-    console.log(nativeEvent)
-    postAnalyticEvent("Ad Break Begin", this.analyticsProperties(nativeEvent));
+    this.setState({ adBreakBegin: true, adBreakEnd: false })
   };
+
   onAdBreakEnd = ({ nativeEvent }) => {
-    console.log(nativeEvent)
-    postAnalyticEvent("Ad Break End", this.analyticsProperties(nativeEvent));
+    this.setState({ adBreakEnd: true, adBreakBegin: false})
   };
+
   onAdError = ({ nativeEvent }) => {
-    console.log(nativeEvent)
-    postAnalyticEvent("Ad Error", this.analyticsProperties(nativeEvent));
+    this.setState({ adError: true });
   };
+
   onAdBegin = ({ nativeEvent }) => {
-    console.log(nativeEvent)
-    postAnalyticEvent("Ad Begin", this.analyticsProperties(nativeEvent));
+    this.setState({ adBegin: true, adEnd: false });
   };
+
   onAdEnd = ({ nativeEvent }) => {
-    console.log(nativeEvent)
-    postAnalyticEvent("Ad End", this.analyticsProperties(nativeEvent));
+    this.setState({ adEnd: true, adBegin: false });
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
@@ -302,6 +288,16 @@ export default class THEOPlayer extends Component<Props, State> {
   _assignRoot = (component: THEOplayerView) => {
     this._root = component;
   };
+
+  handleEnded() {
+    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
+      this.props?.onEnd();
+    }
+
+    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
+      this.props?.onEnded();
+    }
+  }
 
   render() {
     const {
