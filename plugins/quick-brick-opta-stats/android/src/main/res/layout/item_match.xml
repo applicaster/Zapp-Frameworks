@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.appcompat.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:applicaster="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_match"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/layout_background"
+    applicaster:cardCornerRadius="@dimen/card_corner_radius"
+    applicaster:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/layout_background"
+        android:minHeight="250dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/dotedline" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/Theme.Opta.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_phase"
+            style="@style/Theme.Opta.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            style="@style/Theme.Opta.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            app:layout_constraintStart_toEndOf="@+id/iv_location"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phase" />
+
+        <ImageView
+            android:id="@+id/iv_flag_1"
+            android:layout_width="60dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="140dp"
+            android:src="@drawable/unknow_flag"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_country_1"
+            style="@style/Theme.Opta.Country"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_flag_1" />
+
+        <TextView
+            android:id="@+id/tv_goals_1"
+            style="@style/Theme.Opta.Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="148dp"
+            android:text="-"
+            app:layout_constraintStart_toEndOf="@+id/iv_flag_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_flag_2"
+            android:layout_width="60dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="140dp"
+            android:src="@drawable/unknow_flag"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_goals_2"
+            style="@style/Theme.Opta.Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="148dp"
+            android:layout_marginEnd="32dp"
+            android:text="-"
+            app:layout_constraintEnd_toStartOf="@+id/iv_flag_2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_game_state"
+            style="@style/Theme.Opta.GameState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="140dp"
+            android:text="-"
+            app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+            app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pb_gam_state"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:progressDrawable="@drawable/progress_colors"
+            app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+            app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_game_state" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/Theme.Opta.Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="-"
+            app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+            app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+            app:layout_constraintTop_toBottomOf="@+id/pb_gam_state" />
+
+        <TextView
+            android:id="@+id/tv_country_2"
+            style="@style/Theme.Opta.Country"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_flag_2" />
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="19dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phase"
+            app:srcCompat="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/tv_penalties"
+            style="@style/Theme.Opta.BoldSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/handsome_gray"
+            android:padding="4dp"
+            android:text="@string/penalties"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/tv_penalties_away"
+            app:layout_constraintStart_toEndOf="@+id/tv_penalties_home"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+        <TextView
+            style="@style/Theme.Opta.Time"
+            android:id="@+id/tv_penalties_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="144dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:text="-"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+        <TextView
+            style="@style/Theme.Opta.Time"
+            android:id="@+id/tv_penalties_away"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="144dp"
+            android:layout_marginStart="8dp"
+            android:text="-"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_match_more_info" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</android.appcompat.widget.CardView>
+

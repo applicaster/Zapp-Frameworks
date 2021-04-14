@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:applicaster="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        applicaster:cardCornerRadius="@dimen/card_corner_radius"
+        applicaster:cardElevation="@dimen/card_elevation">
+
+        <androidx.constraintlayout.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    app:layout_constraintBottom_toTopOf="@+id/v_divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="-"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_phase"
+                    style="@style/Theme.Opta.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="-"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    app:layout_constraintStart_toEndOf="@+id/iv_location"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_phase" />
+
+                <ImageView
+                    android:id="@+id/iv_flag_1"
+                    android:layout_width="60dp"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="140dp"
+                    android:src="@drawable/unknow_flag"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_country_1"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAlignment="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_flag_1" />
+
+                <TextView
+                    android:id="@+id/tv_goals_1"
+                    style="@style/Theme.Opta.Score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="140dp"
+                    android:text="-"
+                    app:layout_constraintStart_toEndOf="@+id/iv_flag_1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_flag_2"
+                    android:layout_width="60dp"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/unknow_flag"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_goals_2"
+                    style="@style/Theme.Opta.Score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_flag_2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_game_state"
+                    style="@style/Theme.Opta.GameState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/pb_gam_state"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:progressDrawable="@drawable/progress_colors"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_game_state" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    style="@style/Theme.Opta.Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
+                    app:layout_constraintTop_toBottomOf="@+id/pb_gam_state" />
+
+                <TextView
+                    android:id="@+id/tv_country_2"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="18dp"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_flag_2" />
+
+                <ImageView
+                    android:id="@+id/iv_location"
+                    android:layout_width="19dp"
+                    android:layout_height="17dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_phase"
+                    app:srcCompat="@drawable/ic_location" />
+
+                <View
+                    android:id="@+id/v_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@color/gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_goals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/v_divider" />
+
+                <TextView
+                    android:id="@+id/tv_possession_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/possession"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_goals" />
+
+                <LinearLayout
+                    android:id="@+id/ll_possession_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:weightSum="12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_possession_title">
+
+                    <TextView
+                        android:id="@+id/tv_possession_home"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_possession_home"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors"
+                        android:rotation="180" />
+
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="2"
+                        android:padding="4dp"
+                        android:src="@drawable/football" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_possession_away"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors" />
+
+                    <TextView
+                        android:id="@+id/tv_possession_away"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_completed_passes_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/completed_passes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.500"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_possession_container" />
+
+                <LinearLayout
+                    android:id="@+id/ll_completed_passes_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:weightSum="12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_completed_passes_title">
+
+                    <TextView
+                        android:id="@+id/tv_completed_passes_home"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_completed_passes_home"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors"
+                        android:rotation="180" />
+
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="2"
+                        android:padding="4dp"
+                        android:src="@drawable/shoes" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_completed_passes_away"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors" />
+
+                    <TextView
+                        android:id="@+id/tv_completed_passes_away"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/v_divider_2"
+                    android:layout_width="2dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/handsome_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_completed_passes_container" />
+
+                <TextView
+                    android:id="@+id/tv_corner_title_away"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/corners"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_2"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_corner_away" />
+
+                <TextView
+                    android:id="@+id/tv_corner_value_away"
+                    style="@style/Theme.Opta.HighlightSmallTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_corner_title_away" />
+
+                <TextView
+                    android:id="@+id/tv_corner_value_home"
+                    style="@style/Theme.Opta.HighlightSmallTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_corner_title_home" />
+
+                <ImageView
+                    android:id="@+id/iv_corner_away"
+                    android:layout_width="53dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/corner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_2"
+                    app:layout_constraintTop_toTopOf="@+id/v_divider_2" />
+
+                <TextView
+                    android:id="@+id/tv_corner_title_home"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/corners"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_corner_home" />
+
+                <ImageView
+                    android:id="@+id/iv_corner_home"
+                    android:layout_width="53dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/corner"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/v_divider_2" />
+
+                <LinearLayout
+                    android:id="@+id/ll_shot_goal_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:weightSum="12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_shot_to_goal_title">
+
+                    <TextView
+                        android:id="@+id/tv_shot_to_goal_home"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_shot_to_goal_home"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors"
+                        android:rotation="180" />
+
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:src="@drawable/football" />
+
+                    <ProgressBar
+                        android:id="@+id/pb_shot_to_goal_away"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/pb_stat_size"
+                        android:layout_height="8dp"
+                        android:layout_weight="4"
+                        android:progressDrawable="@drawable/progress_colors" />
+
+                    <TextView
+                        android:id="@+id/tv_shot_to_goal_away"
+                        style="@style/Theme.Opta.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_shot_to_goal_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/shot_to_goal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/v_divider_2" />
+
+                <View
+                    android:id="@+id/v_divider_3"
+                    android:layout_width="2dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/handsome_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_shot_goal_container" />
+
+                <ImageView
+                    android:id="@+id/iv_fault_home"
+                    android:layout_width="53dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/fault"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/v_divider_3" />
+
+                <TextView
+                    android:id="@+id/tv_fault_title_home"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/faults"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_fault_home" />
+
+                <TextView
+                    android:id="@+id/tv_fault_value_home"
+                    style="@style/Theme.Opta.HighlightSmallTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_fault_title_home" />
+
+                <ImageView
+                    android:id="@+id/iv_fault_away"
+                    android:layout_width="53dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/fault"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_3"
+                    app:layout_constraintTop_toTopOf="@+id/v_divider_3" />
+
+                <TextView
+                    android:id="@+id/tv_fault_title_away"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/faults"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_3"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_fault_away" />
+
+                <TextView
+                    android:id="@+id/tv_fault_value_away"
+                    style="@style/Theme.Opta.HighlightSmallTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_fault_title_away" />
+
+                <LinearLayout
+                    android:id="@+id/ll_cards_home_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_fault_value_home"
+                    app:layout_constraintEnd_toStartOf="@+id/v_divider_3"
+                    app:layout_constraintHorizontal_bias="0.862"
+                    app:layout_constraintStart_toEndOf="@+id/iv_fault_home"
+                    app:layout_constraintTop_toTopOf="@+id/iv_fault_home">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="32dp"
+                            android:background="@color/yellow" />
+
+                        <TextView
+                            android:id="@+id/tv_home_yellow_cards_value"
+                            style="@style/Theme.Opta.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="-" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="32dp"
+                            android:background="@color/red" />
+
+                        <TextView
+                            android:id="@+id/tv_home_red_cards_value"
+                            style="@style/Theme.Opta.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="-" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_cards_away_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_fault_value_away"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_fault_away"
+                    app:layout_constraintHorizontal_bias="0.13"
+                    app:layout_constraintStart_toEndOf="@+id/v_divider_3"
+                    app:layout_constraintTop_toTopOf="@+id/iv_fault_away">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="32dp"
+                            android:background="@color/yellow" />
+
+                        <TextView
+                            android:id="@+id/tv_away_yellow_cards_value"
+                            style="@style/Theme.Opta.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="-" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="32dp"
+                            android:background="@color/red" />
+
+                        <TextView
+                            android:id="@+id/tv_away_red_cards_value"
+                            style="@style/Theme.Opta.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="-" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_formation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/v_divider_3">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/formation_map" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:id="@+id/rll_formation"
+                            android:layout_width="0dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv5"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lll_formation"
+                            android:layout_width="0dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/lv5"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/lv4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/lv3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/lv2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/lv1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_formation_home_title"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_initial_home_team_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_formation" />
+
+
+                <TextView
+                    android:id="@+id/tv_formation_away_title"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_initial_home_team_title"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_formation" />
+
+                <TextView
+                    android:id="@+id/tv_initial_home_team_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/initial_team"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_formation_home_title" />
+
+                <LinearLayout
+                    android:id="@+id/ll_teams_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_initial_home_team_title">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_home_team"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/handsome_gray" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_away_team"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_reserves_home_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/reserves"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_teams_container" />
+
+                <LinearLayout
+                    android:id="@+id/ll_reserve_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_reserves_home_title">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_reserves_home"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/handsome_gray" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_reserves_away"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_home_coach_title"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/coach"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_reserve_container" />
+
+                <TextView
+                    android:id="@+id/tv_home_coach_name"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:text="-"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_coach_title" />
+
+                <TextView
+                    android:id="@+id/tv_away_coach_name"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_coach_title" />
+
+                <ImageView
+                    android:id="@+id/iv_referee"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/whistle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_coach_name" />
+
+                <TextView
+                    android:id="@+id/tv_principal_referee_title"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/principal_referee"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_referee" />
+
+                <TextView
+                    android:id="@+id/tv_principal_referee_name"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_principal_referee_title" />
+
+                <TextView
+                    android:id="@+id/tv_principal_asistant_title"
+                    style="@style/Theme.Opta.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/principal_asistants"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_principal_referee_name" />
+
+                <TextView
+                    android:id="@+id/tv_principal_asistant_name_1"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="-"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_principal_asistant_title"
+                    app:layout_constraintHorizontal_bias="0.8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_principal_asistant_title" />
+
+                <TextView
+                    android:id="@+id/tv_principal_asistant_name_2"
+                    style="@style/Theme.Opta.Country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="-"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_principal_asistant_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_principal_asistant_title" />
+
+                <TextView
+                    android:id="@+id/tv_penalties"
+                    style="@style/Theme.Opta.BoldSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/handsome_gray"
+                    android:padding="4dp"
+                    android:text="@string/penalties"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+                <TextView
+                    android:id="@+id/tv_penalties_home"
+                    style="@style/Theme.Opta.Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="-"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_penalties"
+                    app:layout_constraintHorizontal_bias="0.822"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+                <TextView
+                    android:id="@+id/tv_penalties_away"
+                    style="@style/Theme.Opta.Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="-"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.225"
+                    app:layout_constraintStart_toEndOf="@+id/tv_penalties"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.NestedScrollView>
+    </androidx.appcompat.widget.CardView>
+</androidx.core.widget.NestedScrollView>
