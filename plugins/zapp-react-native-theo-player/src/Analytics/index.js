@@ -18,7 +18,8 @@ export class AnalyticsTracker {
       seeking: false,
       adError: false,
       playerEnded: false,
-      playerClosed: false
+      playerClosed: false,
+      playerBuffering: false
     };
 
     this.analyticsEvents = [
@@ -91,7 +92,12 @@ export class AnalyticsTracker {
         eventName: "Player Closed",
         validState: ({ playerClosed }) => this.handlePlayerClosed(playerClosed),
         shouldReport: () => !this.playerEvents.playerClosed
-      }
+      },
+      {
+        eventName: "Player Buffering",
+        validState: ({ buffering }) => this.handlePlayerCreated(buffering),
+        shouldReport: () => !this.playerEvents.playerBuffering
+      },
     ];
   }
 
@@ -285,5 +291,13 @@ export class AnalyticsTracker {
     }
 
     return playerClosed;
+  }
+
+  handlePlayerBuffering(playerBuffering) {
+    if (playerBuffering) {
+      this.playerEvents.playerBuffering = true;
+    }
+
+    return playerBuffering;
   }
 }
