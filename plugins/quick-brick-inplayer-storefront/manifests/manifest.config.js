@@ -25,6 +25,12 @@ const baseManifest = {
       default: "",
     },
     {
+      type: "text_input",
+      key: "standalone_screen_auth_ids",
+      label: "Products ids for standalone screen",
+      default: "",
+    },
+    {
       type: "number_input",
       key: "in_player_branding_id",
       tooltip_text: "In Player Branding ID",
