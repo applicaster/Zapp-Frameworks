@@ -96,6 +96,8 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
+const analyticsTracker = new AnalyticsTracker();
+
 export default class THEOPlayer extends Component<Props, State> {
   _root: THEOplayerView;
 
@@ -131,11 +133,14 @@ export default class THEOPlayer extends Component<Props, State> {
       playerClosed: false
     };
 
-    this.analyticsTracker = new AnalyticsTracker(this.state, props.entry);
+  }
+
+  componentDidMount() {
+    analyticsTracker.initialState(this.state, this.props.entry)
   }
 
   componentDidUpdate() {
-    this.analyticsTracker.handleChange(this.state);
+    analyticsTracker.handleChange(this.state);
 
     if (this.state.playerClosed) {
       this.handleEnded();
@@ -184,7 +189,13 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  onPlayerSeeked = ({ nativeEvent }) => {};
+  onPlayerSeeked = ({ nativeEvent }) => {
+    const { seeking, paused } = this.state;
+
+    if(paused && seeking) {
+      this.setState({ seeking: false })
+    }
+  };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 

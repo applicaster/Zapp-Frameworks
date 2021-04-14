@@ -95,6 +95,11 @@ export class AnalyticsTracker {
     ];
   }
 
+  initialState(state, entry) {
+    this.state = state,
+    this.entry = entry
+  }
+
   getAnalyticPayload(entry, state) {
     const {
       id,
@@ -127,6 +132,7 @@ export class AnalyticsTracker {
       } = analyticEvent;
 
       if (shouldReport() && validState(state)) {
+        console.log(`DISPATCHING ${eventName} !!!!!!!!!!!!!!!!!!!`)
         this.handleAnalyticEvent(eventName);
       }
     });
@@ -204,7 +210,7 @@ export class AnalyticsTracker {
 
     if (!adBreakBegin && resume) {
       this.playerEvents.resume = true;
-      this.playerEvents.pause = false;
+      this.playerEvents.paused = false;
     }
 
     return !adBreakBegin && resume;
