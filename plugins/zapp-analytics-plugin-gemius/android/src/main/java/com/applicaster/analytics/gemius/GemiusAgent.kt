@@ -70,6 +70,14 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     EventProgramData())
         }
 
+        override fun onBuffering(params: Map<String, String>?) {
+            super.onBuffering(params)
+            player.programEvent(getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.BUFFER,
+                    EventProgramData())
+        }
+
         override fun onAdBreakStart(params: Map<String, Any>?) {
             super.onAdBreakStart(params)
             player.programEvent(getId(),
@@ -127,6 +135,15 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.SEEK,
+                    EventProgramData())
+        }
+
+        override fun onComplete(params: Map<String, String>?) {
+            super.onComplete(params)
+            player.programEvent(
+                    getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.COMPLETE,
                     EventProgramData())
         }
     }
