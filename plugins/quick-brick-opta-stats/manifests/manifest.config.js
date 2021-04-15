@@ -76,7 +76,7 @@ const general = {
     {
       type: "hidden",
       key: "package_name",
-      tooltip_text: "Opta Package Name",
+      tooltip_text: "Opta Package Bridge Name",
       default: "OptaBridge",
     },
     // Type text_input
