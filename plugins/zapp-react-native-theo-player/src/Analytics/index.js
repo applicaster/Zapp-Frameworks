@@ -79,7 +79,7 @@ export class AnalyticsTracker {
         shouldReport: () => !this.playerEvents.paused
       },
       {
-        eventName: "Player Seek",
+        eventName: "Player Seeked",
         validState: (state) => this.handleSeek(state),
         shouldReport: () => !this.playerEvents.seeking
       },
