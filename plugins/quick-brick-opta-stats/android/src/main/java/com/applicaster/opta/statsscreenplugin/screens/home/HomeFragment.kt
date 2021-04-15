@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applicaster.opta.statsscreenplugin.R
 import com.applicaster.opta.statsscreenplugin.data.model.AllMatchesModel
@@ -34,7 +35,10 @@ class HomeFragment : HeartbeatFragment(), HomeView, MatchView, GroupAdapter.OnTe
         MatchAdapter.OnMatchClickListener {
 
     companion object {
-        private val TAG: String = "CopaHomeFragment"
+        @JvmStatic
+        fun newInstance(): Fragment = HomeFragment()
+
+        private const val TAG: String = "CopaHomeFragment"
     }
 
     // todo: this should be configurable

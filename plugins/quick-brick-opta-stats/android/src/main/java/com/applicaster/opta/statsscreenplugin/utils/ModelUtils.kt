@@ -148,10 +148,10 @@ class ModelUtils {
         }
 
         fun getLocalization(): String {
-            return when {
-                CustomApplication.getDefaultDeviceLocale().language == "en" -> "en-en"
-                CustomApplication.getDefaultDeviceLocale().language == "es" -> "es-es"
-                CustomApplication.getDefaultDeviceLocale().language == "pt" -> "pt-br"
+            return when (CustomApplication.getDefaultDeviceLocale().language) {
+                "en" -> "en-en"
+                "es" -> "es-es"
+                "pt" -> "pt-br"
                 // default language
                 else -> "en-en"
             }

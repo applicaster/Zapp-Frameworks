@@ -24,7 +24,7 @@ const baseManifest = {
   targets: ["mobile"],
   custom_configuration_fields: [
     {
-      key: "api_token",
+      key: "token",
       label: "API Token",
       placeholder: "Enter token",
       tooltip_text: "Token to access the information provided by Opta",

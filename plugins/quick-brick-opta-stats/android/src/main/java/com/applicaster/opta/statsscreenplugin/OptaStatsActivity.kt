@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.applicaster.opta.statsscreenplugin.plugin.PluginDataRepository
 import com.applicaster.opta.statsscreenplugin.screens.allmatches.AllMatchesFragment
 import com.applicaster.opta.statsscreenplugin.screens.career.PlayerCareerFragment
+import com.applicaster.opta.statsscreenplugin.screens.home.HomeFragment
 import com.applicaster.opta.statsscreenplugin.screens.matchdetails.MatchDetailsFragment
 import com.applicaster.opta.statsscreenplugin.screens.team.TeamFragment
 import com.applicaster.util.OSUtil
@@ -20,7 +21,7 @@ class OptaStatsActivity : AppCompatActivity() {
 
     companion object {
         enum class Screen {
-            ALL_MATCHES, MATCH_DETAILS, PLAYER_DETAILS, TEAM
+            ALL_MATCHES, MATCH_DETAILS, PLAYER_DETAILS, TEAM, HOME
         }
 
         const val SCREEN_EXTRA = "screen_extra"
@@ -50,6 +51,9 @@ class OptaStatsActivity : AppCompatActivity() {
                 Screen.TEAM -> {
                     intent.putExtra(TEAM_ID, data[TEAM_ID])
                     intent.putExtra(SCREEN_EXTRA, Screen.TEAM)
+                }
+                Screen.HOME -> {
+                    intent.putExtra(SCREEN_EXTRA, Screen.HOME)
                 }
             }
             return intent
@@ -95,6 +99,10 @@ class OptaStatsActivity : AppCompatActivity() {
                 Screen.TEAM -> {
                     addFragment(R.id.fragment_container, TeamFragment
                             .newInstance(intent.extras?.get(TEAM_ID).toString()), false)
+                }
+                Screen.HOME -> {
+                    addFragment(R.id.fragment_container,
+                            HomeFragment.newInstance(), true)
                 }
             }
         }
