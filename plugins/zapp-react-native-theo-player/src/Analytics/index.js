@@ -106,7 +106,7 @@ export class AnalyticsTracker {
     this.entry = entry
   }
 
-  getAnalyticPayload(entry, state) {
+  getAnalyticPayload(entry, state, event) {
     const {
       id,
       title,
@@ -114,18 +114,31 @@ export class AnalyticsTracker {
     } = entry;
 
     const {
-      duration,
       currentTime
     } = state;
 
     return {
       id,
       title,
-      duration,
+      duration: this.handleDuration(event, state, entry),
       offset: currentTime,
       extensions,
     };
   };
+
+  handleDuration(event, state, entry) {
+    const {
+      duration: nativeEventDuration
+    } = state;
+
+    const {
+      duration: entryDuration
+    } = entry.extensions;
+
+    const duration = nativeEventDuration || entryDuration;
+
+    return duration;
+  }
 
   handleChange(state) {
     this.state = state;
@@ -146,7 +159,7 @@ export class AnalyticsTracker {
   handleAnalyticEvent(event) {
     postAnalyticEvent(
       event,
-      this.getAnalyticPayload(this.entry, this.state)
+      this.getAnalyticPayload(this.entry, this.state, event)
     );
   };
 
