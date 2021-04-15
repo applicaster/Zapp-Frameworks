@@ -30,10 +30,5 @@
       "android_for_quickbrick"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
-  },
-  "files": [
-    "android",
-    "apple",
-    "src"
-  ]
+  }
 }
