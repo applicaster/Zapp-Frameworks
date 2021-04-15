@@ -5,14 +5,12 @@
   "author_email": "zapp@applicaster.com",
   "name": "inPlayer Storefront",
   "description": "inPlayer Storefront",
-  "type": "login",
+  "type": "payments",
   "screen": true,
   "react_native": true,
   "identifier": "quick-brick-inplayer-storefront",
   "ui_builder_support": true,
-  "whitelisted_account_ids": [
-    ""
-  ],
+  "whitelisted_account_ids": [""],
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -107,9 +105,7 @@
       }
     ]
   },
-  "ui_frameworks": [
-    "quickbrick"
-  ],
+  "ui_frameworks": ["quickbrick"],
   "platform": "ios_for_quickbrick",
   "dependency_version": "0.0.10",
   "manifest_version": "0.0.10",
@@ -427,7 +423,5 @@
       }
     ]
   },
-  "targets": [
-    "mobile"
-  ]
+  "targets": ["mobile"]
 }

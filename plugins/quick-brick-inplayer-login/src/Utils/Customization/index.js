@@ -33,9 +33,8 @@ export function prepareStyles(screenStyles) {
     screenStyles
   );
   console.log("PREPARE_STYLES", { screenStyles, styles });
-  styles.import_parent_lock = screenStyles.import_parent_lock
-    ? screenStyles.import_parent_lock
-    : false;
+  styles.import_parent_lock =
+    screenStyles?.import_parent_lock === "1" ? true : false;
 
   return styles;
 }

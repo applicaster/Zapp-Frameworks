@@ -26,8 +26,8 @@ const baseManifest = {
     },
     {
       type: "text_input",
-      key: "standalone_screen_auth_ids",
-      label: "Products ids for standalone screen",
+      key: "standalone_screen_inplayer_asset_id",
+      label: "Inplayer asset Id with with packages to purchase",
       default: "",
     },
     {
