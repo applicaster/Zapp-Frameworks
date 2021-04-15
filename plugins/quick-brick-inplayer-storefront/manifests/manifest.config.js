@@ -8,7 +8,7 @@ const baseManifest = {
   author_email: "zapp@applicaster.com",
   name: "inPlayer Storefront",
   description: "inPlayer Storefront",
-  type: "login",
+  type: "payments",
   screen: true,
   react_native: true,
   identifier: "quick-brick-inplayer-storefront",

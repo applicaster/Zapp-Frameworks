@@ -55,13 +55,14 @@ export async function assetLoader({
         assetId,
         store,
       });
-
+      console.log({ inPlayerFeesData });
       if (inPlayerFeesData) {
         const newPayload = payload;
         newPayload.extensions.in_player_data = { inPlayerFeesData, assetId };
         newPayload.extensions.in_app_purchase_data = {
           productsToPurchase: prepareInAppPurchaseData(inPlayerFeesData),
         };
+        console.log({ newPayload });
 
         return newPayload;
       }

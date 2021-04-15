@@ -24,15 +24,15 @@ export function pluginIdentifier() {
   return manifestJson().identifier;
 }
 
-export let styles = null;
 export function getStyles(screenStyles) {
-  return styles ? styles : prepareStyles(screenStyles);
+  return prepareStyles(screenStyles);
 }
 
 export function prepareStyles(screenStyles) {
-  styles = populateConfigurationValues(manifestJson().styles.fields)(
+  const styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );
+  console.log("PREPARE_STYLES", { screenStyles, styles });
   styles.import_parent_lock = screenStyles.import_parent_lock
     ? screenStyles.import_parent_lock
     : false;

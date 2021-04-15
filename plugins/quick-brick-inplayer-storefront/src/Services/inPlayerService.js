@@ -39,7 +39,7 @@ export async function setConfig(environment = "production") {
     })
     .setMessage(`Set InPlayer environment: ${environment}`)
     .send();
-  await InPlayer.setConfig("development"); //TODO: Remove hard coded value
+  await InPlayer.setConfig(environment);
 }
 
 export async function getAssetByExternalId(payload) {

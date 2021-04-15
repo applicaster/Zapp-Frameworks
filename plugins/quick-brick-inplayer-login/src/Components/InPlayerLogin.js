@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
@@ -37,10 +37,10 @@ const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
+const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("id", screenId)),
     R.values
   );
 
@@ -58,6 +58,7 @@ const InPlayerLogin = (props) => {
     USER_ACCOUNT: "UserAccount",
   };
   const navigator = useNavigation();
+  const screenId = navigator?.activeRiver?.id;
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
@@ -65,10 +66,11 @@ const InPlayerLogin = (props) => {
   const [lastEmailUsed, setLastEmailUsed] = useState(null);
 
   const { callback, payload, rivers } = props;
-  const localizations = getRiversProp("localizations", rivers);
-  const styles = getRiversProp("styles", rivers);
+  const localizations = getRiversProp("localizations", rivers, screenId);
+  const styles = getRiversProp("styles", rivers, screenId);
 
-  const screenStyles = getStyles(styles);
+  const screenStyles = useMemo(() => getStyles(styles), [styles]);
+
   const screenLocalizations = getLocalizations(localizations);
 
   const {
@@ -84,9 +86,9 @@ const InPlayerLogin = (props) => {
     const parsedValue = parseInt(in_player_branding_id);
     return isNaN(parsedValue) ? null : parsedValue;
   }, []);
-
   const showParentLock =
     screenStyles?.import_parent_lock === "1" ? true : false;
+  console.log({ screenStyles, showParentLock, screenId });
 
   let stillMounted = true;
 
@@ -157,7 +159,7 @@ const InPlayerLogin = (props) => {
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
-
+    console.log({ payload });
     if (payload) {
       const authenticationRequired = isAuthenticationRequired({ payload });
       const assetId = inPlayerAssetId({
@@ -170,6 +172,7 @@ const InPlayerLogin = (props) => {
         configuration: props?.configuration,
       };
       const isAuthenticated = await checkIfUserAuthenteficated();
+      console.log({ authenticationRequired, assetId });
       if (!isAuthenticated && (authenticationRequired || assetId)) {
         logger.debug({
           message: `Plugin hook_type: ${HookTypeData.PLAYER_HOOK}`,
@@ -185,7 +188,7 @@ const InPlayerLogin = (props) => {
           message: "InPlayer plugin invocation, finishing hook with: success",
           data: { ...logData, isAuthenticated },
         });
-        // callback && callback({ success: true, error: null, payload });
+        callback && callback({ success: true, error: null, payload });
       }
     } else {
       setLoading(false);
@@ -250,6 +253,7 @@ const InPlayerLogin = (props) => {
             };
           }
         }
+        console.log("Finish Login");
         callback && callback({ success, error: null, payload: payload });
       }
     },

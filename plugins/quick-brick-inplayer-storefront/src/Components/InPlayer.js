@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-
+import { View } from "react-native";
 import { assetLoader } from "./AssetLoader";
 import * as R from "ramda";
 import Storefront from "@applicaster/applicaster-storefront-component";
@@ -81,11 +81,12 @@ const InPlayer = (props) => {
         await localStorageRemoveUserAccount(userAccountStorageTokenKey);
       },
     };
-
     setupEnvironment();
   }, []);
 
   async function onRestoreCompleted(restoreData) {
+    console.log("CallBack 89");
+
     try {
       setIsLoading(true);
       await validateRestore({ ...props, restoreData, store });
@@ -112,6 +113,7 @@ const InPlayer = (props) => {
   }
 
   async function completeStorefrontFlow({ success, error, payload }) {
+    console.log("completeStorefrontFlow", { success, error, payload });
     try {
       if (success && !error) {
         await validatePayment({ ...props, payload, store });
@@ -162,7 +164,7 @@ const InPlayer = (props) => {
         },
       });
 
-      setConfig(in_player_environment);
+      await setConfig(in_player_environment);
 
       if (payload) {
         const assetId = await inPlayerAssetId({
@@ -184,6 +186,7 @@ const InPlayer = (props) => {
             },
           });
           if (!R.isNil(payloadWithAsset?.content?.src)) {
+            console.log("callback", { payloadWithAsset });
             callback &&
               callback({
                 success: true,
@@ -191,8 +194,9 @@ const InPlayer = (props) => {
                 payload: payloadWithAsset,
               });
           } else {
-            setItemAssetId(assetId);
-            setPayloadWithPurchaseData(payloadWithAsset);
+            console.log({ assetId, payloadWithAsset });
+            // setItemAssetId(assetId);
+            // setPayloadWithPurchaseData(payloadWithAsset);
           }
         } else {
           logger.debug({
@@ -203,7 +207,7 @@ const InPlayer = (props) => {
               in_player_client_id,
             },
           });
-
+          console.log("CallBack 209");
           callback && callback({ success: true, error: null, payload });
         }
       }
@@ -221,23 +225,32 @@ const InPlayer = (props) => {
 
         showAlert("General Error!", message);
       }
+      console.log("CallBack 227");
+
       callback && callback({ success: false, error, payload });
     }
   };
-  return payloadWithPurchaseData ? (
-    <>
+  console.log({ payloadWithPurchaseData });
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: screenStyles?.payment_screen_background,
+      }}
+    >
+      {payloadWithPurchaseData && (
+        <Storefront
+          {...props}
+          onStorefrontFinished={completeStorefrontFlow}
+          onRestoreCompleted={onRestoreCompleted}
+          screenLocalizations={screenLocalizations}
+          screenStyles={screenStyles}
+          payload={payloadWithPurchaseData}
+          isDebugModeEnabled={enabledDebugModeForIap}
+        />
+      )}
       {isLoading && <LoadingScreen />}
-      <Storefront
-        {...props}
-        onStorefrontFinished={completeStorefrontFlow}
-        onRestoreCompleted={onRestoreCompleted}
-        screenLocalizations={screenLocalizations}
-        screenStyles={screenStyles}
-        payload={payloadWithPurchaseData}
-      />
-    </>
-  ) : (
-    <LoadingScreen />
+    </View>
   );
 };
 

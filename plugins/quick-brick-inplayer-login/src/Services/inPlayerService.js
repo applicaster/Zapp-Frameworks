@@ -30,7 +30,7 @@ export async function setConfig(environment = "production") {
     message: `Set InPlayer environment: ${environment}`,
     data: { environment: environment },
   });
-  await InPlayer.setConfig("development");
+  await InPlayer.setConfig(environment);
 }
 
 export async function getAssetByExternalId(payload) {
@@ -190,7 +190,7 @@ export async function login({ email, password, clientId, referrer }) {
 
 export async function signUp(params) {
   const { fullName, email, password, clientId, referrer, brandingId } = params;
-
+  console.log({ fullName, email, password, clientId, referrer, brandingId });
   try {
     const retVal = await InPlayer.Account.signUp({
       fullName,
