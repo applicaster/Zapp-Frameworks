@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.CardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:applicaster="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_card"
@@ -84,5 +84,5 @@
             android:visibility="gone"
             applicaster:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
-</androidx.appcompat.widget.CardView>
+</androidx.cardview.widget.CardView>
 

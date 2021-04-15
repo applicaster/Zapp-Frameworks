@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
@@ -14,7 +14,7 @@
         applicaster:cardCornerRadius="@dimen/card_corner_radius"
         applicaster:cardElevation="@dimen/card_elevation">
 
-        <androidx.constraintlayout.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -1084,6 +1084,6 @@
                     app:layout_constraintStart_toEndOf="@+id/tv_penalties"
                     app:layout_constraintTop_toBottomOf="@+id/tv_time" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.NestedScrollView>
-    </androidx.appcompat.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
 </androidx.core.widget.NestedScrollView>
