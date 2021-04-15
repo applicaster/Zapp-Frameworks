@@ -8,7 +8,7 @@ const baseManifest = {
   description:
     "This plugin fetching statistics from Opta",
   type: "general",
-  screen: false,
+  screen: true,
   react_native: true,
   ui_builder_support: true,
   ui_frameworks: ["quickbrick"],
@@ -66,9 +66,65 @@ function createManifest({ version, platform }) {
     api: api[platform],
     npm_dependencies: [`@applicaster/quick-brick-opta-stats@${version}`],
     targets: targets[platform],
+    general,
   };
   return manifest;
 }
+const general = {
+  fields: [
+    // Type text_input
+    {
+      type: "hidden",
+      key: "package_name",
+      tooltip_text: "Opta Package Name",
+      default: "OptaPackage",
+    },
+    // Type text_input
+    {
+      type: "hidden",
+      key: "method_name",
+      tooltip_text: "Default Method to Retreive",
+      default: "showScreen",
+    },
+    // Type select
+    {
+      type: "hidden",
+      key: "on_dismiss",
+      label: "On Dismiss",
+      label_tooltip: "On dismiss of native screen do this",
+      rules: "conditional",
+      options: [
+        {
+          text: "Navigate to screen",
+          value: "screen",
+        },
+        {
+          text: "Navigate to Home",
+          value: "home",
+        },
+        {
+          text: "Navigate back",
+          value: "back",
+        },
+      ],
+      initial_value: "back",
+    },
+    // Type screen_selector
+    {
+      type: "hidden",
+      key: "to_screen",
+      label: "Dismiss to Screen",
+      tooltip_text: "Fallback or navigate to this screen after dismiss of native",
+      conditional_fields: [
+        {
+          key: "styles/title_text_data_key",
+          condition_value: "screen",
+        },
+      ],
+    },
+  ],
+};
+
 const min_zapp_sdk = {
   tvos_for_quickbrick: "4.1.0-Dev",
   ios_for_quickbrick: "4.1.0-Dev",
@@ -99,7 +155,8 @@ const api_apple = {
 };
 
 const api_android = {
-    class_name: "com.applicaster.opta.statsscreenplugin.OptaStatsContract"
+    class_name: "com.applicaster.opta.statsscreenplugin.OptaStatsContract",
+    react_packages: ["com.applicaster.opta.statsscreenplugin.reactnative.OptaPackage"],
 };
 
 const api = {

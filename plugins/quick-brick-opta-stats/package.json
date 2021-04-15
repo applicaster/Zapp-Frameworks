@@ -33,6 +33,7 @@
   },
   "files": [
     "android",
-    "apple"
+    "apple",
+    "src"
   ]
 }

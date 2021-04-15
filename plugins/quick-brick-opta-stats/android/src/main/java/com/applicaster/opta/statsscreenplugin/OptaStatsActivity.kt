@@ -108,7 +108,7 @@ class OptaStatsActivity : AppCompatActivity() {
         }
     }
 
-    fun addFragment(containerViewId: Int, fragment: Fragment, isFirstFragment: Boolean) {
+    private fun addFragment(containerViewId: Int, fragment: Fragment, isFirstFragment: Boolean) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(containerViewId, fragment)
