@@ -6,7 +6,6 @@ export function prepareInAppPurchaseData(
   accessForAsset = null
 ) {
   const asset = accessForAsset?.asset;
-  console.log({ accessForAsset });
   const result = R.map((item) => {
     const { externalFeeId, productType, title, productIdentifier } = item;
     item.storePurchaseID = externalFeeId || productIdentifier;
@@ -16,7 +15,7 @@ export function prepareInAppPurchaseData(
         productType,
         title,
         productIdentifier: externalFeeId,
-        purchased: asset?.expires_at ? true : false, // posibly check time
+        purchased: asset?.expires_at ? true : false,
         expiresAt: asset?.expires_at,
       };
     } else {
@@ -24,7 +23,7 @@ export function prepareInAppPurchaseData(
         productIdentifier,
         productType,
         title,
-        purchased: asset?.expires_at ? true : false, // posibly check time
+        purchased: asset?.expires_at ? true : false,
         expiresAt: asset?.expires_at,
       };
     }

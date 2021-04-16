@@ -101,6 +101,16 @@ const mobile = [
     label: "Message that shows item was purchased",
     initial_value: "Purchased",
   },
+  {
+    key: "subscription_expiration_date_message",
+    label: "Label that show expiration date",
+    initial_value: "Valid until:",
+  },
+  {
+    key: "subscription_expiration_data_date_format",
+    label: "Date format for expiration date param",
+    initial_value: "MMMM Do YYYY, h:mm a",
+  },
 ];
 
 const tv = [

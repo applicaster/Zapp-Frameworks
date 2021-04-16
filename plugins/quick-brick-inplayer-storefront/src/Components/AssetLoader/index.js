@@ -20,7 +20,6 @@ export async function assetLoaderStandaloneScreen({ props, assetId, store }) {
     const accessForAsset = await checkAccessForAsset({
       assetId,
     });
-    console.log({ accessForAsset });
     const newPayload = await preparePayloadWithPurchaseData({
       props,
       assetId,
@@ -45,7 +44,6 @@ export async function assetLoader({
   store,
   retryInCaseFail = false,
 }) {
-  console.log({ props, assetId, store });
   const payload = props?.payload;
   if (!assetId || !payload) {
     throw new Error(
@@ -59,7 +57,6 @@ export async function assetLoader({
       assetId,
       retryInCaseFail,
     });
-    console.log({ assetData });
     const src = assetData?.src;
     const cookies = assetData?.cookies;
 
@@ -83,7 +80,7 @@ export async function assetLoader({
   }
 }
 
-export async function preparePayloadWithPurchaseData({
+async function preparePayloadWithPurchaseData({
   props,
   assetId,
   store,
@@ -148,7 +145,6 @@ export async function preparePurchaseData({ props, assetId, store }) {
       in_player_environment,
       store,
     });
-    console.log({ inPlayerFeesData });
     logger.debug({
       message: "preparePurchaseData: Purchase fee data",
       data: {

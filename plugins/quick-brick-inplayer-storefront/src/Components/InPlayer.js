@@ -1,10 +1,6 @@
 import React, { useState, useLayoutEffect, useMemo } from "react";
 import { View } from "react-native";
-import {
-  assetLoader,
-  preparePayloadWithPurchaseData,
-  assetLoaderStandaloneScreen,
-} from "./AssetLoader";
+import { assetLoader, assetLoaderStandaloneScreen } from "./AssetLoader";
 import * as R from "ramda";
 import Storefront from "@applicaster/applicaster-storefront-component";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -114,24 +110,31 @@ const InPlayer = (props) => {
           payload,
         },
       });
-      const newPayload = await assetLoader({
-        props,
-        assetId: itemAssetId,
-        store,
-        retryInCaseFail: true,
-      });
-      if (newPayload) {
-        finishStorefront({ success, error, payload: newPayload });
-      } else {
+      if (isStanaloneScreen()) {
         setIsLoading(false);
+      } else {
+        const newPayload = await assetLoader({
+          props,
+          assetId: itemAssetId,
+          store,
+          retryInCaseFail: true,
+        });
+        if (newPayload) {
+          finishStorefront({ success, error, payload: newPayload });
+        } else {
+          setIsLoading(false);
+        }
       }
     } catch (error) {
       setIsLoading(false);
     }
   }
-  // if (standaloneScreenInplayerAssetId && !isHook(navigator)) {
+
+  function isStanaloneScreen() {
+    return (standaloneScreenInplayerAssetId && !isHook(navigator)) === true;
+  }
+
   async function completeStorefrontFlow({ success, error, payload }) {
-    console.log("completeStorefrontFlow", { success, error, payload });
     try {
       if (success && !error) {
         await validatePayment({ ...props, payload, store });
@@ -147,9 +150,10 @@ const InPlayer = (props) => {
             payload,
           },
         });
-        finishStorefront({ success, error, payload: newPayload });
+        !isStanaloneScreen() &&
+          finishStorefront({ success, error, payload: newPayload });
       } else {
-        finishStorefront({ success, error, payload });
+        !isStanaloneScreen() && finishStorefront({ success, error, payload });
       }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
@@ -237,7 +241,6 @@ const InPlayer = (props) => {
             assetId: assetId,
             store,
           });
-          console.log({ payloadWithAsset });
           logger.debug({
             message: "Asset loader finished task  ",
             data: {
@@ -246,21 +249,9 @@ const InPlayer = (props) => {
               payloadWithAsset,
             },
           });
-          console.log({ payloadWithAsset });
           setItemAssetId(assetId);
           setPayloadWithPurchaseData(payloadWithAsset);
           setIsLoading(false);
-          // if (!R.isNil(payloadWithAsset?.content?.src)) {
-          //   finishStorefront({
-          //     success: true,
-          //     error: null,
-          //     payload: payloadWithAsset,
-          //   });
-          // } else {
-          //   setItemAssetId(assetId);
-          //   setPayloadWithPurchaseData(payloadWithAsset);
-          //   setIsLoading(false);
-          // }
         } else {
           logger.debug({
             message:
@@ -304,7 +295,6 @@ const InPlayer = (props) => {
       !callback && navigator.goBack();
     }
   }
-
   return (
     <View
       style={{
