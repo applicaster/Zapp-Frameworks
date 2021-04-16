@@ -25,7 +25,7 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
-    open fun onLoaded(params: Map<String, String>?) {
+    open fun onLoaded(params: Map<String, Any>?) {
         updatePosition(params)
         duration = parseDuration()
     }
@@ -71,12 +71,17 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
-    open fun onBuffering(params: Map<String, String>?) {
+    open fun onSeekEnd(params: Map<String, Any>?) {
         updatePosition(params)
     }
 
     @CallSuper
-    open fun onComplete(params: Map<String, String>?) {
+    open fun onBuffering(params: Map<String, Any>?) {
+        updatePosition(params)
+    }
+
+    @CallSuper
+    open fun onComplete(params: Map<String, Any>?) {
         updatePosition(params)
     }
 
@@ -109,6 +114,7 @@ open class AnalyticsPlayerAdapter {
             PLAYER_PLAYING_EVENT -> onPlay(params)
             PLAYER_PAUSE_EVENT -> onPause(params)
             PLAYER_SEEK_EVENT -> onSeek(params)
+            PLAYER_SEEK_EVENT_END -> onSeekEnd(params)
             PLAYER_BUFFERING_EVENT -> onBuffering(params)
 
             PLAYER_COMPETE_EVENT -> onComplete(params)
@@ -174,8 +180,9 @@ open class AnalyticsPlayerAdapter {
         const val PLAYER_LOADED_EVENT = "Player Loaded Video"
 
         // Seek in progress, reported each time user moves the position,
-        // will be followed by the play event when seek has completed
         const val PLAYER_SEEK_EVENT = "Player Seek"
+        // Seek has competed and playback resumed
+        const val PLAYER_SEEK_EVENT_END = "Player Seek End"
 
         // Reached the end of the video
         const val PLAYER_COMPETE_EVENT = "Player Ended"
