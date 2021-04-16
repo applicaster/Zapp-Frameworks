@@ -525,6 +525,7 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
+
     const response = await InPlayer.Payment.validateReceipt({
       platform: platformName(store),
       itemId: item_id,

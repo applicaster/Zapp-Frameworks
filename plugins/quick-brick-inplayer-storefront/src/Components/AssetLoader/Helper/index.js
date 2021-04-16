@@ -1,7 +1,12 @@
 import * as R from "ramda";
 import { externalIdForPlatform } from "../../../Services/InPlayerServiceHelper";
 
-export function prepareInAppPurchaseData(inPlayerFeesData) {
+export function prepareInAppPurchaseData(
+  inPlayerFeesData,
+  accessForAsset = null
+) {
+  const asset = accessForAsset?.asset;
+  console.log({ accessForAsset });
   const result = R.map((item) => {
     const { externalFeeId, productType, title, productIdentifier } = item;
     item.storePurchaseID = externalFeeId || productIdentifier;
@@ -11,12 +16,16 @@ export function prepareInAppPurchaseData(inPlayerFeesData) {
         productType,
         title,
         productIdentifier: externalFeeId,
+        purchased: asset?.expires_at ? true : false, // posibly check time
+        expiresAt: asset?.expires_at,
       };
     } else {
       return {
         productIdentifier,
         productType,
         title,
+        purchased: asset?.expires_at ? true : false, // posibly check time
+        expiresAt: asset?.expires_at,
       };
     }
   })(inPlayerFeesData);

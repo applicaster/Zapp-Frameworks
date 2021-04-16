@@ -1,6 +1,10 @@
 import React, { useState, useLayoutEffect, useMemo } from "react";
 import { View } from "react-native";
-import { assetLoader } from "./AssetLoader";
+import {
+  assetLoader,
+  preparePayloadWithPurchaseData,
+  assetLoaderStandaloneScreen,
+} from "./AssetLoader";
 import * as R from "ramda";
 import Storefront from "@applicaster/applicaster-storefront-component";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -34,7 +38,6 @@ export const logger = createLogger({
 });
 
 const getRiversProp = (key, rivers = {}, screenId = "") => {
-  console.log({ rivers, screenId });
   const getPropByKey = R.compose(
     R.prop(key),
     R.find(R.propEq("id", screenId)),
@@ -62,15 +65,14 @@ const InPlayer = (props) => {
   const styles = getRiversProp("styles", rivers, screenId);
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
 
-  console.log({ screenStyles, styles });
   const screenLocalizations = getLocalizations(localizations);
-  const standalone_screen_auth_ids =
-    props?.configuration?.standalone_screen_auth_ids;
-  const standaloneScreenAuthIds =
-    (standalone_screen_auth_ids &&
-      standalone_screen_auth_ids.length > 0 &&
-      standalone_screen_auth_ids.split(",")) ||
-    null;
+  const standalone_screen_inplayer_asset_id =
+    props?.configuration?.standalone_screen_inplayer_asset_id;
+  const standaloneScreenInplayerAssetId =
+    standalone_screen_inplayer_asset_id &&
+    standalone_screen_inplayer_asset_id.length > 0
+      ? standalone_screen_inplayer_asset_id
+      : null;
   useLayoutEffect(() => {
     navigator.hideNavBar();
     navigator.hideBottomBar();
@@ -103,8 +105,6 @@ const InPlayer = (props) => {
   }, []);
 
   async function onRestoreCompleted(restoreData) {
-    console.log("CallBack 89");
-
     try {
       setIsLoading(true);
       await validateRestore({ ...props, restoreData, store });
@@ -129,7 +129,7 @@ const InPlayer = (props) => {
       setIsLoading(false);
     }
   }
-
+  // if (standaloneScreenInplayerAssetId && !isHook(navigator)) {
   async function completeStorefrontFlow({ success, error, payload }) {
     console.log("completeStorefrontFlow", { success, error, payload });
     try {
@@ -183,13 +183,6 @@ const InPlayer = (props) => {
       });
 
       await setConfig(in_player_environment);
-      console.log({
-        payload,
-        standaloneScreenAuthIds,
-        notHook: !isHook(navigator),
-        props,
-        screenStyles,
-      });
 
       if (payload) {
         const assetId = await inPlayerAssetId({
@@ -210,7 +203,6 @@ const InPlayer = (props) => {
             },
           });
           if (!R.isNil(payloadWithAsset?.content?.src)) {
-            console.log("callback", { payloadWithAsset });
             callback &&
               callback({
                 success: true,
@@ -218,7 +210,6 @@ const InPlayer = (props) => {
                 payload: payloadWithAsset,
               });
           } else {
-            console.log({ assetId, payloadWithAsset });
             setItemAssetId(assetId);
             setPayloadWithPurchaseData(payloadWithAsset);
             setIsLoading(false);
@@ -232,48 +223,44 @@ const InPlayer = (props) => {
               in_player_client_id,
             },
           });
-          console.log("CallBack 209");
           finishStorefront({ success: true, error: null, payload });
         }
-      } else if (standaloneScreenAuthIds && !isHook(navigator)) {
-        console.log({ standaloneScreenAuthIds });
+      } else if (standaloneScreenInplayerAssetId && !isHook(navigator)) {
         const mockPayload = {
-          id: standaloneScreenAuthIds,
-          extensions: {
-            inplayer_asset_type: "jw",
-            requires_authentication: true,
-          },
+          id: standaloneScreenInplayerAssetId,
+          extensions: {},
         };
-        const assetId = standaloneScreenAuthIds;
-        console.log({ assetId });
+        const assetId = standaloneScreenInplayerAssetId;
         if (isUserAuthenticated && assetId) {
-          const payloadWithAsset = await assetLoader({
+          const payloadWithAsset = await assetLoaderStandaloneScreen({
             props: { ...props, payload: mockPayload },
             assetId: assetId,
             store,
           });
+          console.log({ payloadWithAsset });
           logger.debug({
-            message: "Asset loader finished task",
+            message: "Asset loader finished task  ",
             data: {
               in_player_environment,
               in_player_client_id,
               payloadWithAsset,
             },
           });
-          if (!R.isNil(payloadWithAsset?.content?.src)) {
-            console.log("callback", { payloadWithAsset });
-            finishStorefront({
-              success: true,
-              error: null,
-              payload: payloadWithAsset,
-            });
-          } else {
-            console.log({ assetId, payloadWithAsset });
-            setItemAssetId(assetId);
-            console.log({ payloadWithAsset });
-            setPayloadWithPurchaseData(payloadWithAsset);
-            setIsLoading(false);
-          }
+          console.log({ payloadWithAsset });
+          setItemAssetId(assetId);
+          setPayloadWithPurchaseData(payloadWithAsset);
+          setIsLoading(false);
+          // if (!R.isNil(payloadWithAsset?.content?.src)) {
+          //   finishStorefront({
+          //     success: true,
+          //     error: null,
+          //     payload: payloadWithAsset,
+          //   });
+          // } else {
+          //   setItemAssetId(assetId);
+          //   setPayloadWithPurchaseData(payloadWithAsset);
+          //   setIsLoading(false);
+          // }
         } else {
           logger.debug({
             message:
@@ -283,16 +270,11 @@ const InPlayer = (props) => {
               in_player_client_id,
             },
           });
-          console.log("CallBack 209");
           finishStorefront({ success: true, error: null, payload });
         }
       } else {
         logger.error({
           message: "Plugin could not started, no data exist",
-          data: {
-            token,
-            publisherId,
-          },
         });
         finishStorefront({ success: false, error: null, payload });
       }
@@ -310,12 +292,10 @@ const InPlayer = (props) => {
 
         showAlert("General Error!", message);
       }
-      console.log("CallBack 227");
 
       finishStorefront({ success: false, error, payload });
     }
   };
-  console.log({ payloadWithPurchaseData });
 
   function finishStorefront({ success, error, payload }) {
     if (callback) {
