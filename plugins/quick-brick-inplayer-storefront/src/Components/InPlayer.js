@@ -69,6 +69,7 @@ const InPlayer = (props) => {
     standalone_screen_inplayer_asset_id.length > 0
       ? standalone_screen_inplayer_asset_id
       : null;
+
   useLayoutEffect(() => {
     navigator.hideNavBar();
     navigator.hideBottomBar();

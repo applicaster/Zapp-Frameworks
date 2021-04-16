@@ -32,7 +32,8 @@ export function prepareStyles(screenStyles) {
   const styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );
-
+  styles.import_parent_lock =
+    screenStyles?.import_parent_lock === "1" ? true : false;
   return styles;
 }
 

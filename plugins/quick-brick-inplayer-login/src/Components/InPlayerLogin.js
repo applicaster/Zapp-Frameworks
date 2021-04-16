@@ -94,7 +94,6 @@ const InPlayerLogin = (props) => {
       : false;
 
   let stillMounted = true;
-
   useEffect(() => {
     setupEnvironment();
     return () => {

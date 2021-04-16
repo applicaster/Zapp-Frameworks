@@ -34,6 +34,8 @@ export function prepareStyles(screenStyles) {
     screenStyles
   );
 
+  styles.import_parent_lock =
+    screenStyles?.import_parent_lock === "1" ? true : false;
   return styles;
 }
 
