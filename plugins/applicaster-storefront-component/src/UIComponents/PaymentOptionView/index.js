@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import PropTypes from "prop-types";
 import { mapKeyToStyle } from "../../Utils/Customization";
+import moment from "moment";
 import {
   paymentOptionStyleKeys,
   styles,
@@ -37,6 +38,7 @@ function PaymentOptionView({
     price,
     productType,
     purchased,
+    expiresAt,
   } = paymentOptionItem;
   const [
     titleStyle,
@@ -56,9 +58,22 @@ function PaymentOptionView({
   const label = `${actionForLabel} ${price}`.toUpperCase();
   function renderPaymmentAction() {
     return purchased ? (
-      <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
-        {screenLocalizations?.purchased_message}
-      </Text>
+      <>
+        <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
+          {screenLocalizations?.purchased_message}
+        </Text>
+        {expiresAt && (
+          <Text style={description} numberOfLines={1} ellipsizeMode="tail">
+            {`${
+              screenLocalizations?.subscription_expiration_date_message
+            } ${moment
+              .unix(expiresAt)
+              .format(
+                screenLocalizations?.subscription_expiration_data_date_format
+              )}`}
+          </Text>
+        )}
+      </>
     ) : (
       <ActionButton
         labelStyle={labelStyle}
