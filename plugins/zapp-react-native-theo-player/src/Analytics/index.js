@@ -124,7 +124,7 @@ export class AnalyticsTracker {
     } = state;
 
     return {
-      id,
+      id: this.handleId(event, state, entry),
       title,
       duration: this.handleDuration(event, state, entry),
       offset: currentTime,
@@ -162,6 +162,33 @@ export class AnalyticsTracker {
     }
 
     return duration;
+  }
+
+  handleId(event, state, entry) {
+    const {
+      adId,
+    } = state;
+
+    const {
+      id: entryId
+    } = entry;
+
+    const noIdEvents = [
+      "Ad Break Started", 
+      "Ad Break Ended"
+    ];
+
+    if (noIdEvents.includes(event)) {
+      return null;
+    }
+
+    const adEvents = {
+      "Ad Begin": adId,
+      "Ad End": adId,
+      "Ad Error": adId
+    }
+
+    return adEvents[event] || entryId;
   }
 
   handleChange(state) {
