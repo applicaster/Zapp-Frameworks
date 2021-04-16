@@ -73,6 +73,8 @@ type State = {
   canplay: boolean;
   currentTime: number;
   duration: number;
+  adBreakDuration: number;
+  adDuration: number;
   paused: boolean;
   playing: boolean;
   resume: boolean;
@@ -115,6 +117,8 @@ export default class THEOPlayer extends Component<Props, State> {
       adBegin: false,
       adEnd: false,
       adError: false,
+      adBreakDuration: 0,
+      adDuration: 0,
       duration: 0,
       currentTime: 0,
       canplay: false,
@@ -197,7 +201,6 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerSeeked = ({ nativeEvent }) => {
     const { seek } = this.state;
-
     if(seek) {
       this.setState({ seek: false, seekEnd: true });
     }
@@ -289,12 +292,12 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-    this.setState({ adBreakBegin: true, adBreakEnd: false, duration: maxDuration})
+    this.setState({ adBreakBegin: true, adBreakEnd: false, adBreakDuration: maxDuration})
   };
 
   onAdBreakEnd = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-    this.setState({ adBreakEnd: true, adBreakBegin: false, duration: maxDuration})
+    this.setState({ adBreakEnd: true, adBreakBegin: false, adBreakDuration: maxDuration})
   };
 
   onAdError = ({ nativeEvent }) => {
@@ -303,12 +306,12 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBegin = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
-    this.setState({ adBegin: true, adEnd: false, duration });
+    this.setState({ adBegin: true, adEnd: false, adDuration: duration });
   };
 
   onAdEnd = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
-    this.setState({ adEnd: true, adBegin: false, duration});
+    this.setState({ adEnd: true, adBegin: false, adDuration: duration });
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {

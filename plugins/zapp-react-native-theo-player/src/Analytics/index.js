@@ -133,7 +133,11 @@ export class AnalyticsTracker {
   };
 
   handleDuration(event, state, entry) {
+    let duration;
+
     const {
+      adBreakDuration,
+      adDuration,
       duration: nativeEventDuration
     } = state;
 
@@ -141,7 +145,21 @@ export class AnalyticsTracker {
       duration: entryDuration
     } = entry.extensions;
 
-    const duration = nativeEventDuration || entryDuration;
+    const adEvents = {
+      "Ad Break Started": adBreakDuration,
+      "Ad Break Ended": adBreakDuration,
+      "Ad Begin": adDuration,
+      "Ad End": adDuration,
+      "Ad Error": adDuration
+    }
+
+    if (adEvents[event]) {
+      duration = adEvents[event];
+    }
+
+    if (!adEvents[event]) {
+      duration = nativeEventDuration || entryDuration;
+    }
 
     return duration;
   }
