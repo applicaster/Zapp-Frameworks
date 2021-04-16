@@ -27,7 +27,12 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
-  const showParentLock = props?.screenStyles?.import_parent_lock;
+  let showParentLock =
+    (props?.screenStyles?.import_parent_lock === "1" ||
+      props?.screenStyles?.import_parent_lock === true) &&
+    props?.payload?.extensions?.skip_parent_lock !== true
+      ? true
+      : false;
   const isDebugModeEnabled = props?.isDebugModeEnabled === true;
 
   useToggleNavBar();
@@ -94,11 +99,14 @@ export default function Storefront(props) {
       const storeFee = storeFeesData[i];
       for (let i = 0; i < productsToPurchase.length; i++) {
         const productToPurchase = productsToPurchase[i];
+        console.log({ productToPurchase });
         if (
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
           storeFee.productType = productToPurchase.productType;
           storeFee.purchased = productToPurchase.purchased;
+          storeFee.expiresAt = productToPurchase.expiresAt;
+
           if (!storeFee.title && productToPurchase.title) {
             storeFee.title = productToPurchase.title;
           }
