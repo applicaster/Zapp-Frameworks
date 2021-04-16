@@ -76,6 +76,7 @@ type State = {
   adBreakDuration: number;
   adDuration: number;
   adId: string;
+  adData: object;
   paused: boolean;
   playing: boolean;
   resume: boolean;
@@ -123,6 +124,7 @@ export default class THEOPlayer extends Component<Props, State> {
       duration: 0,
       currentTime: 0,
       adId: "",
+      adData: {},
       canplay: false,
       playing: false,
       resume: false,
@@ -299,6 +301,7 @@ export default class THEOPlayer extends Component<Props, State> {
       adBreakBegin: true, 
       adBreakEnd: false, 
       adBreakDuration: maxDuration,
+      adData: nativeEvent
     })
   };
 
@@ -309,6 +312,7 @@ export default class THEOPlayer extends Component<Props, State> {
       adBreakEnd: true, 
       adBreakBegin: false, 
       adBreakDuration: maxDuration,
+      adData: nativeEvent
     })
   };
 
@@ -323,7 +327,8 @@ export default class THEOPlayer extends Component<Props, State> {
       adBegin: true, 
       adEnd: false, 
       adDuration: duration,
-      adId: id
+      adId: id,
+      adData: nativeEvent
     });
   };
 
@@ -333,7 +338,8 @@ export default class THEOPlayer extends Component<Props, State> {
       adEnd: true,
       adBegin: false,
       adDuration: duration,
-      adId: id
+      adId: id,
+      adData: nativeEvent
     });
   };
 

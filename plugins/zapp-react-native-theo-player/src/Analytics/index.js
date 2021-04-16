@@ -114,23 +114,43 @@ export class AnalyticsTracker {
 
   getAnalyticPayload(entry, state, event) {
     const {
-      id,
       title,
       extensions
     } = entry;
 
     const {
-      currentTime
+      currentTime,
     } = state;
 
-    return {
+    const payload = {
       id: this.handleId(event, state, entry),
       title,
       duration: this.handleDuration(event, state, entry),
       offset: currentTime,
       extensions,
     };
+    console.log(event, this.addNativeData(payload, event, state))
+    return this.addNativeData(payload, event, state);
   };
+
+  addNativeData(payload, event, state) {
+    const adEvents = [
+      "Ad Break Started",
+      "Ad Break Ended",
+      "Ad Begin",
+      "Ad End",
+      "Ad Error"
+    ]
+
+    if (adEvents.includes(event)) {
+      return {
+        ...payload,
+        adData: state.adData
+      }
+    }
+
+    return payload;
+  }
 
   handleDuration(event, state, entry) {
     let duration;
