@@ -115,8 +115,6 @@ export default class THEOPlayer extends Component<Props, State> {
       adBegin: false,
       adEnd: false,
       adError: false,
-      adBreakDuration: 0,
-      adDuration: 0,
       duration: 0,
       currentTime: 0,
       canplay: false,
