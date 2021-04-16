@@ -76,7 +76,7 @@ type State = {
   paused: boolean;
   playing: boolean;
   resume: boolean;
-  seekStart: boolean;
+  seek: boolean;
   seekEnd: boolean;
   playbackRate: number;
   volume: number;
@@ -123,7 +123,7 @@ export default class THEOPlayer extends Component<Props, State> {
       playing: false,
       resume: false,
       paused: false,
-      seekStart: false,
+      seek: false,
       seekEnd: false,
       volume: 0,
       muted: false,
@@ -146,8 +146,12 @@ export default class THEOPlayer extends Component<Props, State> {
   componentDidUpdate() {
     analyticsTracker.handleChange(this.state);
 
-    if (this.state.playerClosed) {
+    if (this.state.playerEnded) {
       this.handleEnded();
+    }
+
+    if (this.state.playerClosed) {
+      this.handleClosed();
     }
   }
 
@@ -155,10 +159,10 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerPlaying = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-    const { loadedVideo, seekStart } = this.state;
+    const { loadedVideo, seek } = this.state;
 
-    if (seekStart) {
-      this.setState({ seekStart: false });
+    if (seek) {
+      this.setState({ seek: false, seekEnd: true });
       return;
     }
 
@@ -189,15 +193,15 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerSeeking = ({ nativeEvent }) => {
     if (this.state.loadedVideo) {
-      this.setState({ seekStart: true, seekEnd: false });
+      this.setState({ seek: true, seekEnd: false });
     }
   };
 
   onPlayerSeeked = ({ nativeEvent }) => {
-    const { seekStart, paused } = this.state;
+    const { seek } = this.state;
 
-    if(paused && seekStart) {
-      this.setState({ seekStart: false })
+    if(seek) {
+      this.setState({ seek: false, seekEnd: true });
     }
   };
 
@@ -276,7 +280,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerDestroy = ({ nativeEvent }) => {};
 
   onPlayerEnded = ({ nativeEvent }) => {
-    this.setState({ playerClosed: true });
+    this.setState({ playerEnded: true });
   };
 
   onPlayerError = ({ nativeEvent }) => {
@@ -326,6 +330,10 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   handleEnded() {
+    this.setState({ playerClosed: true });
+  }
+
+  handleClosed() {
     if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
       this.props?.onEnd();
     }
