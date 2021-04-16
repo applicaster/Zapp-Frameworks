@@ -15,5 +15,5 @@
     <color name="title_highlight">#F2C700</color>
     <color name="yellow">#F2C700</color>
     <color name="handsome_gray">#e6e6e6</color>
-    <color name="bg_toolbar">@color/black</color>
+    <color name="bg_toolbar">#100A42</color>
 </resources>

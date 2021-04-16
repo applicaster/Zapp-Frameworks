@@ -69,11 +69,6 @@ class OptaStatsActivity : AppCompatActivity() {
         Picasso.get().load(PluginDataRepository.INSTANCE.getLogoUrl())
                 .into(iv_logo)
 
-        OSUtil.getColorResourceIdentifier("top_bar_background")
-                .let { if (it == 0) R.color.black else it }
-                .let { ContextCompat.getColor(applicationContext, it) }
-                .let { toolbar.setBackgroundColor(it) }
-
         iv_back.setOnClickListener {
             onBackPressed()
         }
