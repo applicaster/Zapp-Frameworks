@@ -119,7 +119,7 @@ export class AnalyticsTracker {
     } = entry;
 
     const {
-      currentTime,
+      currentTime
     } = state;
 
     const payload = {
@@ -129,7 +129,7 @@ export class AnalyticsTracker {
       offset: currentTime,
       extensions,
     };
-    console.log(event, this.addNativeData(payload, event, state))
+
     return this.addNativeData(payload, event, state);
   };
 
