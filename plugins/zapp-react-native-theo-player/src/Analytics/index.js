@@ -15,7 +15,8 @@ export class AnalyticsTracker {
       playing: false,
       resume: false,
       paused: false,
-      seeking: false,
+      seek: false,
+      seekEnd: false,
       adError: false,
       playerEnded: false,
       playerClosed: false,
@@ -79,9 +80,14 @@ export class AnalyticsTracker {
         shouldReport: () => !this.playerEvents.paused
       },
       {
-        eventName: "Player Seeked",
-        validState: (state) => this.handleSeek(state),
-        shouldReport: () => !this.playerEvents.seeking
+        eventName: "Player Seek",
+        validState: ({ seek }) => this.handleSeek(seek),
+        shouldReport: () => !this.playerEvents.seek
+      },
+      {
+        eventName: "Player Seek End",
+        validState: ({ seekEnd }) => this.handleSeekEnd(seekEnd),
+        shouldReport: () => !this.playerEvents.seekEnd
       },
       {
         eventName: "Player Ended",
@@ -103,7 +109,7 @@ export class AnalyticsTracker {
 
   initialState(state, entry) {
     this.state = state,
-    this.entry = entry
+      this.entry = entry
   }
 
   getAnalyticPayload(entry, state, event) {
@@ -244,24 +250,31 @@ export class AnalyticsTracker {
       this.playerEvents.paused = true;
       this.playerEvents.playing = false;
       this.playerEvents.resume = false;
-      this.playerEvents.seeking = false;
+      this.playerEvents.seek = false;
     }
 
     return !adBreakBegin && paused;
   }
 
-  handleSeek(state) {
-    const {
-      seeking,
-      playing,
-      resume
-    } = state;
-
-    if (!playing && resume && seeking) {
-      this.playerEvents.seeking = true;
+  handleSeek(seek) {
+    if (seek) {
+      this.playerEvents.seek = true;
+      this.playerEvents.seekEnd = false;
     }
 
-    return seeking;
+    return seek;
+  }
+
+  handleSeekEnd(seekEnd) {
+    if (seekEnd) {
+    }
+
+    if (seekEnd) {
+      this.playerEvents.seekEnd = true;
+      this.playerEvents.seek = false;
+    }
+
+    return seekEnd;
   }
 
   handleAdBegin(adBegin) {
