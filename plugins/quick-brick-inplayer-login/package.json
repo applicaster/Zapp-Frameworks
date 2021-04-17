@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@applicaster/applicaster-account-components": "0.1.1",
+    "@applicaster/applicaster-account-components": "0.1.2",
     "@applicaster/quick-brick-parent-lock": "*",
     "@inplayer-org/inplayer.js": "3.11.0",
     "@react-native-community/blur": "3.4.1",
