@@ -10,10 +10,10 @@ import Alamofire
 import Foundation
 import SwiftyJSON
 
-typealias networkServiceCompletionHandler = (_ success: Bool, _ json: JSON?) -> Void
+typealias NetworkServiceCompletionHandler = (_ success: Bool, _ json: JSON?) -> Void
 
 struct NetworkService {
-    static func makeRequest(_ request: NetworkURLRequestConvertible, completion: @escaping (networkServiceCompletionHandler)) {
+    static func makeRequest(_ request: NetworkURLRequestConvertible, completion: @escaping (NetworkServiceCompletionHandler)) {
         var fullURL: URL?
 
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -22,6 +22,12 @@ struct NetworkService {
         }
 
         AF.request(request).responseJSON { response in
+            guard let statusCode = response.response?.statusCode,
+                  (200 ... 299).contains(statusCode) else {
+                completion(false, nil)
+                return
+            }
+
             if let json = response.value {
                 saveToCache(url: fullURL, json: json)
                 completion(true, JSON(json))

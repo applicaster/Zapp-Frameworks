@@ -16,11 +16,17 @@
     "tvos": "12.0"
   },
   "source_files": "universal/**/*.{h,m,swift}",
+  "resources": "universal/**/*.{xib,storyboard}",
   "dependencies": {
     "ZappCore": [],
+    "ZappPlugins": [],
     "XrayLogger": [],
     "Alamofire": ["5.4.1"],
     "SwiftyJSON": ["5.0.1"],
+    "RxSwift": ["4.4.1"],
+    "RxCocoa": ["4.4.1"],
+    "SDWebImage": ["4.4.6"],
+    "MBProgressHUD": ["1.2.0"],
     "React": []
   },
   "xcconfig": {

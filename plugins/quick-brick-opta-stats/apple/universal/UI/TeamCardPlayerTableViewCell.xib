@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TeamCardPlayerTableViewCell" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Kv-Kg-e1C">
+                    <rect key="frame" x="0.0" y="5" width="375" height="60"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wFw-Gp-kFm">
+                            <rect key="frame" x="8" y="0.0" width="80" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="H5Y-Xe-hrV"/>
+                                <constraint firstAttribute="height" constant="60" id="vOu-Ys-JBL"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="60"/>
+                            <color key="textColor" red="0.7803921568627451" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="JC2-A4-3AM">
+                            <rect key="frame" x="96" y="10" width="206" height="40.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text=" " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IDx-j0-s6n">
+                                    <rect key="frame" x="0.0" y="0.0" width="4.5" height="24"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                    <color key="textColor" red="0.94901960784313721" green="0.7803921568627451" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REQ-Cw-8ws">
+                                    <rect key="frame" x="0.0" y="26" width="3.5" height="14.5"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.95294117647058818" green="0.95294117647058818" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstItem="JC2-A4-3AM" firstAttribute="top" relation="greaterThanOrEqual" secondItem="4Kv-Kg-e1C" secondAttribute="top" constant="8" id="4L0-ec-B6d"/>
+                        <constraint firstItem="JC2-A4-3AM" firstAttribute="leading" secondItem="wFw-Gp-kFm" secondAttribute="trailing" constant="8" id="O0F-5h-Ij4"/>
+                        <constraint firstItem="wFw-Gp-kFm" firstAttribute="centerY" secondItem="4Kv-Kg-e1C" secondAttribute="centerY" id="Rin-Zx-AJ4"/>
+                        <constraint firstItem="JC2-A4-3AM" firstAttribute="centerY" secondItem="4Kv-Kg-e1C" secondAttribute="centerY" id="bje-bR-i4Q"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="JC2-A4-3AM" secondAttribute="bottom" constant="8" id="ngm-fD-wzk"/>
+                        <constraint firstAttribute="height" constant="60" id="rUm-4O-WAg"/>
+                        <constraint firstItem="wFw-Gp-kFm" firstAttribute="leading" secondItem="4Kv-Kg-e1C" secondAttribute="leading" constant="8" id="vJf-BT-hxH"/>
+                    </constraints>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mDn-Pt-BCc">
+                    <rect key="frame" x="310" y="0.0" width="65" height="65"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="mDn-Pt-BCc" secondAttribute="height" multiplier="1:1" id="25c-yH-PxB"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="mDn-Pt-BCc" firstAttribute="bottom" secondItem="4Kv-Kg-e1C" secondAttribute="bottom" id="AEc-qf-qJy"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="4Kv-Kg-e1C" secondAttribute="bottom" constant="5" id="QoV-Uk-ajh"/>
+                <constraint firstItem="mDn-Pt-BCc" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b5j-TG-gvB"/>
+                <constraint firstItem="mDn-Pt-BCc" firstAttribute="leading" secondItem="JC2-A4-3AM" secondAttribute="trailing" constant="8" id="mLl-PA-VXo"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="4Kv-Kg-e1C" secondAttribute="trailing" id="scs-ZV-CeT"/>
+                <constraint firstAttribute="trailing" secondItem="mDn-Pt-BCc" secondAttribute="trailing" id="wYu-92-uEw"/>
+                <constraint firstItem="4Kv-Kg-e1C" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="ytb-94-JIs"/>
+                <constraint firstItem="4Kv-Kg-e1C" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="zsd-r8-6Tj"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="playerImageView" destination="mDn-Pt-BCc" id="gVQ-bb-kfP"/>
+                <outlet property="playerNameLabel" destination="IDx-j0-s6n" id="LWF-kB-qU8"/>
+                <outlet property="playerNumberLabel" destination="wFw-Gp-kFm" id="WTh-sS-cwh"/>
+                <outlet property="playerPositionLabel" destination="REQ-Cw-8ws" id="Jxr-Sq-dCj"/>
+            </connections>
+            <point key="canvasLocation" x="248.80000000000001" y="-97.151424287856074"/>
+        </view>
+    </objects>
+</document>
