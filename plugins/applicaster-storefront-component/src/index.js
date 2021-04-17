@@ -2,14 +2,13 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 import StoreFrontMobile from "./StoreFrontMobile";
 import StoreFrontTv from "./StoreFrontTv";
 import React, { useState, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
 import LoadingScreen from "./LoadingScreen";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
 import { useToggleNavBar } from "./Utils/Hooks";
 import { isApplePlatform } from "./Utils/Platform";
-import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
+import { usePickFromState } from "@applicaster/zapp-react-native-redux/hooks";
 
 import {
   purchaseAnItem,
@@ -27,6 +26,12 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
+  const { plugins } = usePickFromState(["plugins"]);
+  const parentLockPlugin = plugins.find(
+    (plugin) => plugin.identifier === "parent-lock-qb"
+  );
+  const ParentLockPlugin = parentLockPlugin?.module;
+
   let showParentLock =
     (props?.screenStyles?.import_parent_lock === "1" ||
       props?.screenStyles?.import_parent_lock === true) &&
