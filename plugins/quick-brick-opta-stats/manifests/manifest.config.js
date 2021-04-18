@@ -65,11 +65,23 @@ const baseManifest = {
       label_tooltip: "Please upload a zip file to provide the design assets for this plugin."
     },
     {
+      type: "tag_select",
       key: "show_team",
       label: "Show Team",
-      placeholder: "",
+      label: "",
       label_tooltip: "Show Players in Team screen",
-      type: "switch"
+      rules: "conditional",
+      options: [
+        {
+          "text": "Yes",
+          "value": "true"
+        },
+        {
+          "text": "No",
+          "value": "false"
+        }
+      ],
+      initial_value: "true"
     },
     {
       key: "number_of_matches",
