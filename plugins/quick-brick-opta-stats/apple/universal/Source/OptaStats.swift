@@ -69,7 +69,7 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
         
         let viewModel = GroupCardsViewModel()
         viewController.groupCardViewModel = viewModel
-        replaceViewController(with: viewController)
+        replaceViewController(with: viewController, on: nil)
     }
     
     func showScreen(with screenArguments: NSDictionary, completion: ((_ success: Bool) -> Void)?) {
@@ -83,7 +83,7 @@ enum StatsScreenTypes: String {
     case teamsScreen = "all_teams_screen"
     case teamScreen = "team_screen"
     case matchesScreen = "all_matches_screen"
-    case matchScreen = "match_details_screen"
+    case matchScreen = "match_details_screen"
     case playerScreen = "player_screen"
 }
 

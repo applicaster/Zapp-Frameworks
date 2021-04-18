@@ -50,6 +50,13 @@ const baseManifest = {
       placeholder: "Enter calendar id",
       tooltip_text: "Calendar id of the tournament",
       type: "text"
+    },
+    {
+      key: "image_base_url",
+      label: "Image Base Url",
+      placeholder: "Enter image base url",
+      tooltip_text: "URL where the plugin get the images",
+      type: "text"
     }
   ],
 };

@@ -39,15 +39,18 @@ public class NetworkRequestsManager {
                     return
                 }
 
-                let request = instance.pendingRequests[urlString] ?? [:]
-                instance.pendingRequests[urlString] = nil
+                do {
+                    let request = instance.pendingRequests[urlString] ?? [:]
+                    instance.pendingRequests[urlString] = nil
 
-                instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message): \(url.host ?? "")",
-                                            category: NetworkRequestsManagerLogs.request.category,
-                                            data: [Params.request: request,
-                                                   Params.response: response,
-                                                   Params.statusCode: statusCode,
-                                                   Params.url: urlString])
+                    instance.logger?.verboseLog(message: "\(NetworkRequestsManagerLogs.request.message): \(url.host ?? "")",
+                                                category: NetworkRequestsManagerLogs.request.category,
+                                                data: [Params.request: request,
+                                                       Params.response: response,
+                                                       Params.statusCode: statusCode,
+                                                       Params.url: urlString])
+                }
+                catch {}
             }
         }
         Sniffer.start()
