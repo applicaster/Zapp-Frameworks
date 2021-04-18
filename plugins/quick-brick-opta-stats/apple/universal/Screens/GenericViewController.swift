@@ -11,12 +11,12 @@ import UIKit
 class GenericViewController: ViewControllerBase {
     @IBOutlet var screenNameLabel: UILabel!
 
-    var screenName: String = ""
+    var screenType: StatsScreenTypes = .undefined
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        screenNameLabel.text = screenName
+        screenNameLabel.text = screenType.rawValue
     }
 
     /*

@@ -142,9 +142,9 @@ extension UIViewController {
         let nav = navigationController?.navigationBar
         nav?.barStyle = .default
         nav?.isTranslucent = false
-        nav?.barTintColor = UIColor(hex: "#003D17")
+        nav?.barTintColor = UIColor(hex: "#141054")
         nav?.tintColor = UIColor.white
-        nav?.backgroundColor = UIColor(hex: "#003D17")
+        nav?.backgroundColor = UIColor(hex: "#141054")
 
         var leftItem: UIBarButtonItem?
         var rightItems: [UIBarButtonItem]?
@@ -183,13 +183,13 @@ extension UIViewController {
     }
 
     func loadTournamentLogo() {
-        if let path = Bundle(for: classForCoder).path(forResource: "COPAAMERICA19-logo", ofType: "png") {
+        if let path = Bundle(for: classForCoder).path(forResource: "logo", ofType: "png") {
             let logo = UIImage(contentsOfFile: path)
-            let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 36))
-            logoImageView.contentMode = .scaleAspectFit
+            let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 128, height: 44))
+            logoImageView.contentMode = .scaleAspectFill
             logoImageView.image = logo
 
-            let logoView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 36))
+            let logoView = UIView(frame: logoImageView.bounds)
             logoView.addSubview(logoImageView)
             navigationItem.titleView = logoView
         }
@@ -198,39 +198,29 @@ extension UIViewController {
     // MARK: -
 
     func showMatchDetailScreenWithStat(matchStat: MatchStatsCard) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
-            vc.matchStat = matchStat
-            vc.isModalPresentation = true
-
-            let navController = NavigationController(rootViewController: vc)
-            present(navController, animated: true, completion: nil)
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
+            viewController.matchStat = matchStat
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 
     func showMatchDetailScreenWithID(matchID: String) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
-            vc.matchID = matchID
-            vc.isModalPresentation = true
-
-            let navController = NavigationController(rootViewController: vc)
-            present(navController, animated: true, completion: nil)
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
+            viewController.matchID = matchID
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 
     func showAllMatchesScreen() {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchesCardViewController.storyboardID) as? MatchesCardViewController {
-            viewController.isModalPresentation = true
-            let navController = NavigationController(rootViewController: viewController)
-            present(navController, animated: true, completion: nil)
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 
     func showTeamScreen(teamID: String) {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController {
             viewController.teamID = teamID
-            viewController.isModalPresentation = true
-            let navController = NavigationController(rootViewController: viewController)
-            present(navController, animated: true, completion: nil)
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 }
