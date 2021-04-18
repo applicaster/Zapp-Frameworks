@@ -185,7 +185,7 @@ extension UIViewController {
     func loadTournamentLogo() {
         if let path = Bundle(for: classForCoder).path(forResource: "logo", ofType: "png") {
             let logo = UIImage(contentsOfFile: path)
-            let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 128, height: 44))
+            let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 116.36, height: 40))
             logoImageView.contentMode = .scaleAspectFill
             logoImageView.image = logo
 

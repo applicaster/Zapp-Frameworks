@@ -132,7 +132,7 @@ public struct PluginParams {
         self.competitionId = competitionId
         self.calendarId = calendarId
         self.imageBaseUrl = imageBaseUrl
-        self.showTeam = Bool(showTeam) ?? false
+        self.showTeam = showTeam.boolValue()
         self.numberOfMatches = Int(numberOfMatches) ?? 3
     }
 }
