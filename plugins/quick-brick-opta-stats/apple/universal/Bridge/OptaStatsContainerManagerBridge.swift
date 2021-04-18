@@ -11,9 +11,10 @@ import React
 
 @objc(OptaStatsContainerManager)
 public class OptaStatsContainerManager: RCTViewManager {
+    static let optaStatsModuleName = "OptaStatsContainer"
 
     override public static func moduleName() -> String? {
-        return String(describing: Self.self)
+        return OptaStatsContainerManager.optaStatsModuleName
     }
     
     override public class func requiresMainQueueSetup() -> Bool {
