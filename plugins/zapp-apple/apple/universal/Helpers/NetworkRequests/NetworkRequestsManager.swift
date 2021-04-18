@@ -50,6 +50,7 @@ public class NetworkRequestsManager {
                                                        Params.statusCode: statusCode,
                                                        Params.url: urlString])
                 }
+                catch {}
             }
         }
         Sniffer.start()
