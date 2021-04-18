@@ -129,7 +129,7 @@ extension OptaStats {
     }
 
     fileprivate func presentController(viewController: UIViewController, on targetViewController: UIViewController?) {
-        var topmostViewController = targetViewController
+        var topmostViewController = targetViewController 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.50) {
             while topmostViewController?.presentedViewController != nil {
                 topmostViewController = topmostViewController?.presentedViewController

@@ -75,6 +75,14 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     }
     
     func showScreen(with screenArguments: NSDictionary, completion: ((_ success: Bool) -> Void)?) {
+        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: "GroupCardsViewController") as? GroupCardsViewController else {
+            return
+        }
+        
+        let viewModel = GroupCardsViewModel()
+        viewController.groupCardViewModel = viewModel
+        let targetViewController = UIApplication.shared.keyWindow?.rootViewController
+        replaceViewController(with: viewController, on: targetViewController, present: true)
         
         completion?(true)
     }

@@ -57,7 +57,13 @@ const baseManifest = {
       placeholder: "Enter image base url",
       tooltip_text: "URL where the plugin get the images",
       type: "text"
-    }
+    },
+    {
+      key: "ios_assets_bundle",
+      type: "uploader",
+      label: "iOS Design Assets",
+      label_tooltip: "Please upload a zip file to provide the design assets for this plugin."
+    },
   ],
 };
 
