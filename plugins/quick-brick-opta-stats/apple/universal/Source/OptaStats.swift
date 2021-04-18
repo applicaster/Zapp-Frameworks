@@ -44,6 +44,8 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
         static let competitionId = "competition_id"
         static let calendarId = "calendar_id"
         static let imageBaseUrl = "image_base_url"
+        static let showTeam = "show_team"
+        static let numberOfMatches = "number_of_matches"
     }
 
     lazy var pluginParams: PluginParams = {
@@ -51,7 +53,9 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
                      referer: configurationJSON?[Params.referer] as? String ?? "",
                      competitionId: configurationJSON?[Params.competitionId] as? String ?? "",
                      calendarId: configurationJSON?[Params.calendarId] as? String ?? "",
-                     imageBaseUrl: configurationJSON?[Params.imageBaseUrl] as? String ?? "")
+                     imageBaseUrl: configurationJSON?[Params.imageBaseUrl] as? String ?? "",
+                     showTeam: configurationJSON?[Params.showTeam] as? String ?? "false",
+                     numberOfMatches: configurationJSON?[Params.numberOfMatches] as? String ?? "3")
     }()
 
     public lazy var mainStoryboard: UIStoryboard = {
@@ -104,20 +108,31 @@ public struct PluginParams {
     var competitionId: String
     var calendarId: String
     var imageBaseUrl: String
-
+    var showTeam: Bool
+    var numberOfMatches: Int
     init() {
         token = ""
         referer = ""
         competitionId = ""
         calendarId = ""
         imageBaseUrl = ""
+        showTeam = false
+        numberOfMatches = 3
     }
 
-    init(token: String, referer: String, competitionId: String, calendarId: String, imageBaseUrl: String) {
+    init(token: String,
+         referer: String,
+         competitionId: String,
+         calendarId: String,
+         imageBaseUrl: String,
+         showTeam: String,
+         numberOfMatches: String) {
         self.token = token
         self.referer = referer
         self.competitionId = competitionId
         self.calendarId = calendarId
         self.imageBaseUrl = imageBaseUrl
+        self.showTeam = Bool(showTeam) ?? false
+        self.numberOfMatches = Int(numberOfMatches) ?? 3
     }
 }

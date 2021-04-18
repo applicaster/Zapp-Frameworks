@@ -10,8 +10,6 @@ import Foundation
 
 class Helpers {
     static var tournamentFinished: Bool = false
-    static var showTeam: Bool = false
-    static var forceNumberOfMatches = 3
 
     static var shortDateFormatter: DateFormatter = {
         let df = DateFormatter()

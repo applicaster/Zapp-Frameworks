@@ -320,7 +320,7 @@ extension TeamCardViewController: UITableViewDataSource {
         case TeamCardSection.players.rawValue:
             var count = 0
 
-            if Helpers.showTeam {
+            if OptaStats.pluginParams.showTeam {
                 if let list = squadCardViewModel.squadCard.value?.squad?.persons {
                     count = list.count
                 } else if let list = teamCardViewModel.teamCard.value?.players {

@@ -85,14 +85,14 @@ final class MatchesCardViewModel: ViewModel {
 
         for matchDate in matchDates {
             // we only retrieve UP to 3 matches per day
-            if matches.count == Helpers.forceNumberOfMatches { continue }
+            if matches.count == OptaStats.pluginParams.numberOfMatches { continue }
 
             let startOfToday = Calendar.current.startOfDay(for: Date())
 
             if let matchesToAdd = matchDate.matches {
                 for match in matchesToAdd {
                     // we only retrieve UP to 3 matches per day
-                    if matches.count == Helpers.forceNumberOfMatches { continue }
+                    if matches.count == OptaStats.pluginParams.numberOfMatches { continue }
 
                     if let currentMatchDate = match.date {
                         let startOfMatchDay = Calendar.current.startOfDay(for: currentMatchDate)

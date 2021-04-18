@@ -64,6 +64,20 @@ const baseManifest = {
       label: "iOS Design Assets",
       label_tooltip: "Please upload a zip file to provide the design assets for this plugin."
     },
+    {
+      key: "show_team",
+      label: "Show Team",
+      placeholder: "",
+      label_tooltip: "Show Players in Team screen",
+      type: "switch"
+    },
+    {
+      key: "number_of_matches",
+      label: "Number of matches",
+      placeholder: "",
+      label_tooltip: "Change how many matches we show in the carrousel",
+      type: "text_input"
+    }
   ],
 };
 
