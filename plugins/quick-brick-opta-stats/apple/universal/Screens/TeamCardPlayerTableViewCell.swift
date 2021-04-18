@@ -77,8 +77,8 @@ class TeamCardPlayerTableViewCell: UITableViewCell {
             playerPositionLabel.text = Localized.getLocalizedString(from: "ASSISTANT")
         }
 
-        let imageBaseURL = Helpers.imageBaseURL
-        playerImageView.sd_setImage(with: URL(string: "\(imageBaseURL)\(personId).png"), placeholderImage: UIImage(named: ""))
+        let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
+        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personId).png"), placeholderImage: UIImage(named: ""))
     }
 
     private func setPlayerInfo() {
@@ -96,8 +96,8 @@ class TeamCardPlayerTableViewCell: UITableViewCell {
             playerPositionLabel.text = Localized.getLocalizedString(from: playerPosition.capitalized).uppercased()
         }
 
-        let imageBaseURL = Helpers.imageBaseURL
-        playerImageView.sd_setImage(with: URL(string: "\(imageBaseURL)\(playerId).png"), placeholderImage: UIImage(named: ""))
+        let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
+        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(playerId).png"), placeholderImage: UIImage(named: ""))
     }
 
     fileprivate func findPlayerShirtNumber(player: SquadPerson) -> String? {

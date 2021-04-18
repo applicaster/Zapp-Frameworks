@@ -43,13 +43,15 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
         static let referer = "referer"
         static let competitionId = "competition_id"
         static let calendarId = "calendar_id"
+        static let imageBaseUrl = "image_base_url"
     }
 
     lazy var pluginParams: PluginParams = {
         PluginParams(token: configurationJSON?[Params.token] as? String ?? "",
                      referer: configurationJSON?[Params.referer] as? String ?? "",
                      competitionId: configurationJSON?[Params.competitionId] as? String ?? "",
-                     calendarId: configurationJSON?[Params.calendarId] as? String ?? "")
+                     calendarId: configurationJSON?[Params.calendarId] as? String ?? "",
+                     imageBaseUrl: configurationJSON?[Params.imageBaseUrl] as? String ?? "")
     }()
 
     public lazy var mainStoryboard: UIStoryboard = {
@@ -92,18 +94,21 @@ public struct PluginParams {
     var referer: String
     var competitionId: String
     var calendarId: String
+    var imageBaseUrl: String
 
     init() {
         token = ""
         referer = ""
         competitionId = ""
         calendarId = ""
+        imageBaseUrl = ""
     }
 
-    init(token: String, referer: String, competitionId: String, calendarId: String) {
+    init(token: String, referer: String, competitionId: String, calendarId: String, imageBaseUrl: String) {
         self.token = token
         self.referer = referer
         self.competitionId = competitionId
         self.calendarId = calendarId
+        self.imageBaseUrl = imageBaseUrl
     }
 }
