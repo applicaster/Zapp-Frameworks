@@ -78,7 +78,7 @@ class TeamCardPlayerTableViewCell: UITableViewCell {
         }
 
         let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
-        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personId).png"), placeholderImage: UIImage(named: ""))
+        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personId).png"), placeholderImage: nil)
     }
 
     private func setPlayerInfo() {
@@ -97,7 +97,7 @@ class TeamCardPlayerTableViewCell: UITableViewCell {
         }
 
         let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
-        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(playerId).png"), placeholderImage: UIImage(named: ""))
+        playerImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(playerId).png"), placeholderImage: nil)
     }
 
     fileprivate func findPlayerShirtNumber(player: SquadPerson) -> String? {

@@ -173,7 +173,7 @@ class PlayerDetailsViewController: ViewControllerBase {
         }
 
         let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
-        playerPhotoImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personID).png"), placeholderImage: UIImage(named: ""))
+        playerPhotoImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personID).png"), placeholderImage: nil)
 
         playerRealNameLabel.text = person?.matchName?.uppercased()
 

@@ -11,6 +11,7 @@ import Foundation
 class Localized: NSObject {
     static func getLocalizedLanguageCode() -> String {
         let deviceLocale = NSLocale.current.languageCode ?? "es"
+
         switch deviceLocale {
         case "en", "es", "pt":
             return deviceLocale

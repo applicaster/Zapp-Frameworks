@@ -24,6 +24,7 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
         var imageToLoad = "all-matches-es"
 
         let deviceLocale = NSLocale.current.languageCode
+
         switch deviceLocale {
         case "en":
             imageToLoad = "all-matches-en"
