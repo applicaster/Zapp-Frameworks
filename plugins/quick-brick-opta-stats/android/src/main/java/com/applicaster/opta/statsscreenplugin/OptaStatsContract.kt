@@ -9,6 +9,7 @@ import com.applicaster.opta.statsscreenplugin.screens.home.HomeFragment
 import com.applicaster.opta.statsscreenplugin.utils.Constants
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
+import com.applicaster.util.APLogger
 import com.google.gson.internal.LinkedTreeMap
 import java.io.Serializable
 import java.util.*
@@ -18,6 +19,17 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
     companion object {
         private const val TAG: String = "COPAOptaStatsContract"
+        private val REQUIRED_KEYS = arrayOf(
+                //Constants.PARAM_SHIELD_IMAGE_BASE_URL,
+                //Constants.PARAM_FLAG_IMAGE_BASE_URL,
+                //Constants.PARAM_PERSON_IMAGE_BASE_URL,
+                //Constants.PARAM_SHIRT_IMAGE_BASE_URL,
+                //Constants.PARAM_PARTIDOS_IMAGE_BASE_URL,
+                Constants.PARAM_TOKEN,
+                Constants.PARAM_COMPETITION_ID,
+                Constants.PARAM_CALENDAR_ID,
+                Constants.PARAM_REFERER,
+                Constants.PARAM_NUMBER_OF_MATCHES);
     }
 
     private var configurationHandler: PluginConfigurationHandler = PluginConfigurationHandler()
@@ -76,15 +88,23 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
     private fun setPluginConfiguration(params: Map<*, *>?): Boolean {
         // first check if any of the params are null
-        if (checkParamsAreSet(params))
+        if (!checkParamsAreSet(params))
             return false
 
         params?.let {
-            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString())
-            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString())
-            PluginDataRepository.INSTANCE.setPersonImageBaseUrl(params[Constants.PARAM_PERSON_IMAGE_BASE_URL].toString())
-            PluginDataRepository.INSTANCE.setShirtImageBaseUrl(params[Constants.PARAM_SHIRT_IMAGE_BASE_URL].toString())
-            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl(params[Constants.PARAM_PARTIDOS_IMAGE_BASE_URL].toString())
+            val baseUrl = params[Constants.PARAM_IMAGE_BASE_URL] as String
+            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setPersonImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setShirtImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl(baseUrl)
+
+//            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString())
+//            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString())
+//            PluginDataRepository.INSTANCE.setPersonImageBaseUrl(params[Constants.PARAM_PERSON_IMAGE_BASE_URL].toString())
+//            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl(params[Constants.PARAM_PARTIDOS_IMAGE_BASE_URL].toString())
+//            PluginDataRepository.INSTANCE.setShirtImageBaseUrl(params[Constants.PARAM_SHIRT_IMAGE_BASE_URL].toString())
+
             PluginDataRepository.INSTANCE.setToken(params[Constants.PARAM_TOKEN].toString())
             PluginDataRepository.INSTANCE.setCompetitionId(params[Constants.PARAM_COMPETITION_ID].toString())
             PluginDataRepository.INSTANCE.setCalendarId(params[Constants.PARAM_CALENDAR_ID].toString())
@@ -100,20 +120,15 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
     }
 
     private fun checkParamsAreSet(params: Map<*, *>?): Boolean {
-        params?.let {
-            return params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString().isEmpty() ||
-                    params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString().isEmpty() ||
-                    params[Constants.PARAM_PERSON_IMAGE_BASE_URL].toString().isEmpty() ||
-                    params[Constants.PARAM_SHIRT_IMAGE_BASE_URL].toString().isEmpty() ||
-                    params[Constants.PARAM_PARTIDOS_IMAGE_BASE_URL].toString().isEmpty() ||
-                    params[Constants.PARAM_TOKEN].toString().isEmpty() ||
-                    params[Constants.PARAM_COMPETITION_ID].toString().isEmpty() ||
-                    params[Constants.PARAM_CALENDAR_ID].toString().isEmpty() ||
-                    params[Constants.PARAM_REFERER].toString().isEmpty() ||
-                    params[Constants.PARAM_NUMBER_OF_MATCHES].toString().isEmpty()
+        if(null == params)
+            return false
+        REQUIRED_KEYS.forEach {
+            if((params[it] as? String).isNullOrEmpty()) {
+                APLogger.warn(TAG, "Parameter $it is missing in plugin configuration")
+                return false
+            }
         }
-
-        return false
+        return true
     }
 
     /*override*/ fun present(context: Context?, screenMap: HashMap<String, Any>?, dataSource: Serializable?, isActivity: Boolean) {

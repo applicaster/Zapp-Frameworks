@@ -144,7 +144,7 @@ class ModelUtils {
                 Shield -> PluginDataRepository.INSTANCE.getShieldImageBaseUrl()
                 Shirt -> PluginDataRepository.INSTANCE.getShirtImageBaseUrl()
                 Partidos -> PluginDataRepository.INSTANCE.getPartidosImageBaseUrl()
-            }.plus(id)
+            }.plus(id).plus(".png")
         }
 
         fun getLocalization(): String {
