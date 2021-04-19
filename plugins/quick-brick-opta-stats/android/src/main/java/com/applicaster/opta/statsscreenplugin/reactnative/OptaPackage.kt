@@ -11,5 +11,5 @@ class OptaPackage : ReactPackage {
             listOf<NativeModule>(OptaBridge(reactContext))
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> =
-            emptyList()
+            listOf(OptaStatsViewManager(reactContext))
 }
