@@ -26,6 +26,7 @@ import com.applicaster.opta.statsscreenplugin.screens.match.MatchView
 import com.applicaster.opta.statsscreenplugin.utils.Constants
 import com.applicaster.opta.statsscreenplugin.utils.ModelUtils
 import com.applicaster.opta.statsscreenplugin.utils.PluginUtils
+import com.applicaster.opta.statsscreenplugin.view.StickyRecyclerView
 import com.applicaster.util.APLogger
 
 class OptaStatsView(context: Context) : FrameLayout(context),
@@ -33,22 +34,27 @@ class OptaStatsView(context: Context) : FrameLayout(context),
         GroupAdapter.OnTeamFlagClickListener,
         MatchAdapter.OnMatchClickListener {
 
+    // instead of synthetics for now
+    private var pageIndicator: com.chahinem.pageindicator.PageIndicator
+    private var rv_group_cards: RecyclerView
+    private var rv_matches: StickyRecyclerView
+    private var pb_loading: View
+
     init {
         APLogger.info(TAG, "OptaStatsView created")
-        LayoutInflater.from(context).inflate(R.layout.fragment_home, this, true)
-    }
+        val view = LayoutInflater.from(context).inflate(R.layout.fragment_home, this, false)
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
+        pageIndicator = view.findViewById(R.id.pageIndicator)
+        rv_group_cards = view.findViewById(R.id.rv_group_cards)
+        rv_matches = view.findViewById(R.id.rv_matches)
+        pb_loading = view.findViewById(R.id.pb_loading)
+
+        view.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        addView(view)
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-
-        pageIndicator = findViewById(R.id.pageIndicator)
-        rv_group_cards = findViewById(R.id.rv_group_cards)
-        rv_matches = findViewById(R.id.rv_matches)
-        pb_loading = findViewById(R.id.pb_loading)
 
         homePresenter.getAllMatchesFromDate()
         homePresenter.getGroups()
@@ -59,12 +65,6 @@ class OptaStatsView(context: Context) : FrameLayout(context),
         homePresenter.onDestroy()
         matchPresenter.onDestroy()
     }
-
-    // instead of generics for now
-    private lateinit var pageIndicator: com.chahinem.pageindicator.PageIndicator
-    private lateinit var rv_group_cards: RecyclerView
-    private lateinit var rv_matches: RecyclerView
-    private lateinit var pb_loading: View
 
     // todo: this should be configurable
     lateinit var startDate: String

@@ -2,8 +2,8 @@ package com.applicaster.opta.statsscreenplugin.utils
 
 object Constants {
     // used in api that doesn't have data right now
-    val OLD_CALENDAR_ID = "c5pvkmdgtsvjy0qnfuv1u9h49"
-    val OLD_MATCH_ID = "8rusyp6d6l5i3puiwr0zmeu7e"
+    const val OLD_CALENDAR_ID = "c5pvkmdgtsvjy0qnfuv1u9h49"
+    const val OLD_MATCH_ID = "8rusyp6d6l5i3puiwr0zmeu7e"
 
     const val PARAM_SHIELD_IMAGE_BASE_URL = "shield_image_base_url"
     const val PARAM_FLAG_IMAGE_BASE_URL = "flag_image_base_url"
@@ -28,25 +28,25 @@ object Constants {
 
     // fallback assets
     const val DEFAULT_LOGO_URL =
-            "https://assets-secure.applicaster.com/zapp/assets/app_family/148/Logo%20nav%20bar%20_%20green%20BG%20colour.jpg"
+            "https://assets-secure.applicaster.com/zapp/assets/app_family/148/172523756576/header-logo-copa-america-2020.png"
     const val DEFAULT_BACK_BUTTON_URL =
             "https://assets-secure.applicaster.com/zapp/assets/app_family/148/navbar_back_btn.png"
 
     // player positions
-    val GOALKEEPER = "Goalkeeper"
-    val MIDFIELDER = "Midfielder"
-    val DEFENDER = "Defender"
-    val DEFENSIVE_MIDFIELDER = "Defensive Midfielder"
-    val ATTACKING_MIDFIELDER = "Attacking Midfielder"
-    val ATTACKER = "Attacker"
-    val SUBSTITUTE = "Substitute"
-    val STRIKER = "Striker"
-    val UNKNOWN = "Unknown"
+    const val GOALKEEPER = "Goalkeeper"
+    const val MIDFIELDER = "Midfielder"
+    const val DEFENDER = "Defender"
+    const val DEFENSIVE_MIDFIELDER = "Defensive Midfielder"
+    const val ATTACKING_MIDFIELDER = "Attacking Midfielder"
+    const val ATTACKER = "Attacker"
+    const val SUBSTITUTE = "Substitute"
+    const val STRIKER = "Striker"
+    const val UNKNOWN = "Unknown"
 
     // game states
-    val FIXTURE = "Fixture"
-    val PLAYING = "Playing"
-    val PLAYED = "Played"
+    const val FIXTURE = "Fixture"
+    const val PLAYING = "Playing"
+    const val PLAYED = "Played"
 
-    val UTC_DATE_FORMAT = "yyyy-MM-dd'Z'"
+    const val UTC_DATE_FORMAT = "yyyy-MM-dd'Z'"
 }
