@@ -391,8 +391,12 @@ extension THEOplayerView {
     }
     
     fileprivate func getAdParams(from event: AdEvent) -> [String: Any] {
+        let adPosition = event.ad?.adBreak?.ads.firstIndex(where: { (obj) -> Bool in
+            return obj.id == event.ad?.id
+        })
         return ["id": event.ad?.id ?? "",
                 "type": event.ad?.type ?? "",
+                "adPosition": adPosition ?? 0,
                 "skipOffset": event.ad?.skipOffset ?? 0,
                 "breakSize": event.ad?.adBreak?.ads.count ?? 0,
                 "timeOffset": event.ad?.adBreak?.timeOffset ?? 0,

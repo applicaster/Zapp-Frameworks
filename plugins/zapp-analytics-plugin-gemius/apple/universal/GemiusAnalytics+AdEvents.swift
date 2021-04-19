@@ -22,6 +22,7 @@ extension GemiusAnalytics {
         var timeOffset: Double = 0.0
         var maxDuration: Double = 0.0
         var maxRemainingDuration: Double = 0.0
+        var adPosition: Int = 0
         var id: String = ""
     }
 
@@ -47,7 +48,7 @@ extension GemiusAnalytics {
             let adEventParams = parseAdEventParams(from: parameters)
             let adEventData = GSMEventAdData()
             adEventData.autoPlay = true
-            adEventData.adPosition = NSNumber(value: adEventParams.timeOffset)
+            adEventData.adPosition = NSNumber(value: adEventParams.adPosition)
             adEventData.breakSize = NSNumber(value: adEventParams.breakSize)
 
             gemiusPlayerObject?.adEvent(.PLAY,
@@ -62,7 +63,7 @@ extension GemiusAnalytics {
             let adEventParams = parseAdEventParams(from: parameters)
             let adEventData = GSMEventAdData()
             adEventData.autoPlay = true
-            adEventData.adPosition = NSNumber(value: adEventParams.timeOffset)
+            adEventData.adPosition = NSNumber(value: adEventParams.adPosition)
             adEventData.breakSize = NSNumber(value: adEventParams.breakSize)
 
             gemiusPlayerObject?.adEvent(.COMPLETE,
@@ -89,6 +90,7 @@ extension GemiusAnalytics {
             return adParams
         }
 
+        adParams.adPosition = adData["adPosition"] as? Int ?? 0
         adParams.breakSize = adData["breakSize"] as? Int ?? 0
         adParams.maxDuration = adData["maxDuration"] as? Double ?? 0.0
         adParams.maxRemainingDuration = adData["maxRemainingDuration"] as? Double ?? 0.0
