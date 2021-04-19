@@ -7,6 +7,11 @@ import { createLogger, addContext } from "./logger";
 import { DEFAULT, releaseBuild } from "./utils";
 import { styles, stylesError } from "./styles";
 
+
+import {requireNativeComponent} from 'react-native';
+
+const OptaStatsContainerManager = requireNativeComponent('OptaStatsContainerManager');
+
 /**
  * Class to present any native screens over QB application
  */
@@ -46,7 +51,13 @@ export default NativeScreen = ({ screenData }: Props) => {
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
 
+  if(!screenData['url']) {
+    // show home screen (url is always null for now)
+    return <OptaStatsContainerManager style={styles.container}></OptaStatsContainerManager>
+  }
+
   const onDismiss = () => {
+    
     // todo: this exit action should be customizible: go back or go home/other screen
     // manifest already has fields set up for this behavior
     if (navigator.canGoBack()) {
