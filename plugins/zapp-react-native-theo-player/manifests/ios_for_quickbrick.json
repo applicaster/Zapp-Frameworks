@@ -19,6 +19,23 @@
   "ui_frameworks": [
     "quickbrick"
   ],
+  "hooks": {
+    "fields": [
+      {
+        "group": true,
+        "label": "Before Load",
+        "folded": true,
+        "fields": [
+          {
+            "key": "preload_plugins",
+            "type": "preload_plugins_selector",
+            "label": "Select Plugins",
+            "initial_value": []
+          }
+        ]
+      }
+    ]
+  },
   "screen": true,
   "custom_configuration_fields": [
     {
@@ -176,8 +193,8 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.2.2-alpha.3",
-  "manifest_version": "0.2.2-alpha.3",
+  "dependency_version": "0.3.0",
+  "manifest_version": "0.3.0",
   "api": {
     "class_name": "THEOplayerAdapter",
     "modules": [
@@ -191,7 +208,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-react-native-theo-player@0.2.2-alpha.3"
+    "@applicaster/zapp-react-native-theo-player@0.3.0"
   ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
