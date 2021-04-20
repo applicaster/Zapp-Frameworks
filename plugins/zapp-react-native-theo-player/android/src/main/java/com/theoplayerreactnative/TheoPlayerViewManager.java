@@ -1,12 +1,11 @@
 package com.theoplayerreactnative;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,25 +37,22 @@ import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
-//import com.theoplayer.android.internal.activity.CurrentActivityHelper;
-import com.theoplayerreactnative.events.AdEventRouter;
 import com.theoplayerreactnative.events.AdEventMapper;
-import com.theoplayerreactnative.events.PlayerEventRouter;
-import com.theoplayerreactnative.events.PlayerEventMapper;
+import com.theoplayerreactnative.events.AdEventRouter;
 import com.theoplayerreactnative.events.IEventRouter;
+import com.theoplayerreactnative.events.PlayerEventMapper;
+import com.theoplayerreactnative.events.PlayerEventRouter;
 import com.theoplayerreactnative.utility.JSON2RN;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> implements LifecycleEventListener {
 
@@ -157,8 +153,24 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .build();
 
         final Activity currentActivity = reactContext.getCurrentActivity();
-        playerView = new THEOplayerView(currentActivity, playerConfig);
-        playerView.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        playerView = new THEOplayerView(currentActivity, playerConfig){
+            public void requestLayout() {
+                super.requestLayout();
+                // This view relies on a measure + layout pass happening after it calls requestLayout().
+                // https://github.com/facebook/react-native/issues/4990#issuecomment-180415510
+                // https://stackoverflow.com/questions/39836356/react-native-resize-custom-ui-component
+                post(measureAndLayout);
+            }
+
+            private final Runnable measureAndLayout = () -> {
+                measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                        MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+                layout(getLeft(), getTop(), getRight(), getBottom());
+            };
+        };
+        playerView.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
         playerView.addJavaScriptMessageListener(JavaScriptMessageListener, event -> {
             APLogger.debug(TAG, "Received JS event " + event);
             reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
@@ -171,29 +183,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         reactContext.addLifecycleEventListener(this);
         goFullscreen(currentActivity);
 
-        hackChromecast(currentActivity);
         return playerView;
-    }
-
-    private void hackChromecast(Activity currentActivity) {
-        try{
-            // CurrentActivityHelper
-            com.theoplayer.android.internal.i.a instance = com.theoplayer.android.internal.i.a.a();
-            if(null != instance) {
-                // call getLastResumedActivity
-                if(null != instance.b()) {
-                    return;
-                }
-                Field f = instance.getClass().getDeclaredField("lastResumedActivityHolder");
-                f.setAccessible(true);
-                Application.ActivityLifecycleCallbacks handler = (Application.ActivityLifecycleCallbacks) f.get(instance);
-                if (handler != null) {
-                    handler.onActivityResumed(currentActivity);
-                }
-            }
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
     }
 
     @NotNull
@@ -282,16 +272,17 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     }
 
     private void goFullscreen(Activity currentActivity) {
-        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        playerView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     currentActivity
                             .getWindow()
