@@ -93,11 +93,11 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
         params?.let {
             val baseUrl = params[Constants.PARAM_IMAGE_BASE_URL] as String
-            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(baseUrl)
-            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setShieldImageBaseUrl("$baseUrl/shields/")
+            PluginDataRepository.INSTANCE.setFlagImageBaseUrl("$baseUrl/flags/")
             PluginDataRepository.INSTANCE.setPersonImageBaseUrl(baseUrl)
-            PluginDataRepository.INSTANCE.setShirtImageBaseUrl(baseUrl)
-            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl(baseUrl)
+            PluginDataRepository.INSTANCE.setShirtImageBaseUrl("$baseUrl/shirts/")
+            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl("$baseUrl/partidos/")
 
 //            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString())
 //            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString())
@@ -112,7 +112,9 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
             PluginDataRepository.INSTANCE.setNumberOfMatches(params[Constants.PARAM_NUMBER_OF_MATCHES].toString())
             PluginDataRepository.INSTANCE.setShowTeam(params[Constants.PARAM_SHOW_TEAM])
             PluginDataRepository.INSTANCE.setTeamsCount(params[Constants.PARAM_TEAMS_COUNT].toString().toIntOrNull())
-            PluginDataRepository.INSTANCE.enablePlayerScreen(params[Constants.PARAM_ENABLE_PLAYER_SCREEN].toString().toBoolean())
+
+            val playerScreen = params[Constants.PARAM_ENABLE_PLAYER_SCREEN] ?: "1"
+            PluginDataRepository.INSTANCE.enablePlayerScreen(playerScreen == "1" || playerScreen == true)
             return true
         }
 
