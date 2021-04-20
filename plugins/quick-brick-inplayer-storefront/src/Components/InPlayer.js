@@ -18,7 +18,7 @@ import {
 } from "../Utils/PayloadUtils";
 import InPlayerSDK from "@inplayer-org/inplayer.js";
 import LoadingScreen from "./LoadingScreen";
-import { showAlert, isHook } from "../Utils/Helper";
+import { showAlert, isHook, isRestoreEmpty } from "../Utils/Helper";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
 import { getStyles, getMessageOrDefault } from "../Utils/Customization";
 import {
@@ -102,6 +102,18 @@ const InPlayer = (props) => {
   }, []);
 
   async function onRestoreCompleted(restoreData) {
+    console.log({ restoreData });
+    if (isRestoreEmpty(restoreData)) {
+      showAlert(
+        screenLocalizations?.warning_title,
+        screenLocalizations?.restore_failed_no_items_message
+      );
+      logger.debug({
+        message: `onRestoreCompleted -> No items to restore`,
+        data: { restoreData },
+      });
+      return;
+    }
     try {
       setIsLoading(true);
       await validateRestore({ ...props, restoreData, store });
@@ -120,13 +132,32 @@ const InPlayer = (props) => {
           store,
           retryInCaseFail: true,
         });
+
         if (newPayload) {
-          finishStorefront({ success, error, payload: newPayload });
+          showAlert(
+            screenLocalizations?.restore_success_title,
+            screenLocalizations?.restore_success_message,
+            () => {
+              finishStorefront({
+                success: true,
+                error: null,
+                payload: newPayload,
+              });
+            }
+          );
         } else {
+          showAlert(
+            screenLocalizations?.restore_failed_title,
+            screenLocalizations?.restore_failed_message
+          );
           setIsLoading(false);
         }
       }
     } catch (error) {
+      showAlert(
+        screenLocalizations?.restore_failed_title,
+        screenLocalizations?.restore_failed_message
+      );
       setIsLoading(false);
     }
   }
@@ -136,6 +167,7 @@ const InPlayer = (props) => {
   }
 
   async function completeStorefrontFlow({ success, error, payload }) {
+    console.log({ success, error, payload });
     try {
       if (success && !error) {
         await validatePayment({ ...props, payload, store });
@@ -145,10 +177,11 @@ const InPlayer = (props) => {
           store,
           retryInCaseFail: true,
         });
+        console.log({ newPayload });
         logger.debug({
           message: "Validation payment completed",
           data: {
-            payload,
+            newPayload,
           },
         });
         !isStanaloneScreen() &&
@@ -157,6 +190,7 @@ const InPlayer = (props) => {
         !isStanaloneScreen() && finishStorefront({ success, error, payload });
       }
     } catch (error) {
+      console.log({ error });
       const message = getMessageOrDefault(error, screenLocalizations);
 
       logger.error({
@@ -167,7 +201,7 @@ const InPlayer = (props) => {
         },
       });
 
-      showAlert("General Error!", message);
+      showAlert(screenLocalizations?.general_error_title, message);
       finishStorefront({ success: false, error, payload });
     }
   }
@@ -282,7 +316,7 @@ const InPlayer = (props) => {
           },
         });
 
-        showAlert("General Error!", message);
+        showAlert(screenLocalizations?.general_error_title, message);
       }
 
       finishStorefront({ success: false, error, payload });

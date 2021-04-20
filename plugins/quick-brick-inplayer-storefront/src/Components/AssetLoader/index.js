@@ -59,7 +59,7 @@ export async function assetLoader({
     });
     const src = assetData?.src;
     const cookies = assetData?.cookies;
-
+    console.log({ assetData, src });
     if (assetData && src) {
       const newPayload = src && {
         ...payload,
@@ -72,7 +72,7 @@ export async function assetLoader({
   } catch (error) {
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
-    } else if (error?.requestedToPurchase) {
+    } else if (error?.requestedToPurchase && retryInCaseFail === false) {
       return await preparePayloadWithPurchaseData({ props, assetId, store });
     } else {
       handleError(error);

@@ -188,7 +188,7 @@ export async function checkAccessForAsset({
       });
     } else {
       const isPurchaseRequired = assetPaymentRequired(error);
-
+      console.log({ isPurchaseRequired });
       if (isPurchaseRequired) {
         logger.debug({
           message: `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`,
@@ -526,7 +526,7 @@ export async function validateExternalPayment({
       throw new Error("Payment access_fee_id is a required parameter!");
     }
 
-    const response = await InPlayer.Payment.validateReceipt({
+    const response = await InPlayer.Payment.applePayPayment({
       platform: platformName(store),
       itemId: item_id,
       accessFeeId: access_fee_id,
