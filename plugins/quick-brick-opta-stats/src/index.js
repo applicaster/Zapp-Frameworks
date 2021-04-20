@@ -10,7 +10,7 @@ import { styles, stylesError } from "./styles";
 
 import {requireNativeComponent} from 'react-native';
 
-const OptaStatsContainerManager = requireNativeComponent('OptaStatsContainerManager');
+const OptaStatsContainer = requireNativeComponent('OptaStatsContainer');
 
 /**
  * Class to present any native screens over QB application
@@ -53,7 +53,7 @@ export default NativeScreen = ({ screenData }: Props) => {
 
   if(!screenData['url']) {
     // show home screen (url is always null for now)
-    return <OptaStatsContainerManager style={styles.container}></OptaStatsContainerManager>
+    return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
   }
 
   const onDismiss = () => {
