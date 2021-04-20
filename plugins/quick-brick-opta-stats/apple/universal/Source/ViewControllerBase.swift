@@ -200,27 +200,36 @@ extension UIViewController {
     func showMatchDetailScreenWithStat(matchStat: MatchStatsCard) {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
             viewController.matchStat = matchStat
-            self.navigationController?.pushViewController(viewController, animated: true)
+            showViewController(viewController)
         }
     }
 
     func showMatchDetailScreenWithID(matchID: String) {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController {
             viewController.matchID = matchID
-            self.navigationController?.pushViewController(viewController, animated: true)
+            showViewController(viewController)
         }
     }
 
     func showAllMatchesScreen() {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: MatchesCardViewController.storyboardID) as? MatchesCardViewController {
-            self.navigationController?.pushViewController(viewController, animated: true)
+            showViewController(viewController)
         }
     }
 
     func showTeamScreen(teamID: String) {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController {
             viewController.teamID = teamID
+            showViewController(viewController)
+        }
+    }
+    
+    func showViewController(_ viewController: ViewControllerBase) {
+        if self.navigationController != nil {
             self.navigationController?.pushViewController(viewController, animated: true)
+        }
+        else {
+            OptaStats.presentViewControllerModally(viewController: viewController)
         }
     }
 }

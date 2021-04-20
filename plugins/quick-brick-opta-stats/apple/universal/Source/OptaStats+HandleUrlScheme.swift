@@ -116,13 +116,13 @@ extension OptaStats {
             presentVC.dismiss(animated: true, completion: nil)
         }
 
-        if present, let newViewController = newViewController {
-            let navController = NavigationController(rootViewController: newViewController)
-            navController.modalPresentationStyle = .fullScreen
-            navController.navigationBar.setBackgroundImage(targetViewController?.navigationController?.navigationBar.backgroundImage(for: .default), for: .default)
-            newViewController.isModalPresentation = true
-            presentController(viewController: navController, on: targetViewController)
-        } else if let newView = newViewController?.view {
+        guard let newViewController = newViewController else {
+            return
+        }
+        
+        if present {
+            OptaStats.presentViewControllerModally(viewController: newViewController, on: targetViewController)
+        } else if let newView = newViewController.view {
             newView.translatesAutoresizingMaskIntoConstraints = false
             targetView?.addSubview(newView)
             currentChildViewController = newViewController
@@ -131,7 +131,21 @@ extension OptaStats {
         }
     }
 
-    fileprivate func presentController(viewController: UIViewController, on targetViewController: UIViewController?) {
+    static func presentViewControllerModally(viewController: ViewControllerBase, on target: UIViewController? = nil) {
+        var targetViewController = target
+        if targetViewController == nil {
+            targetViewController = UIApplication.shared.keyWindow?.rootViewController
+        }
+        
+        let navigationController = NavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.setBackgroundImage(targetViewController?.navigationController?.navigationBar.backgroundImage(for: .default), for: .default)
+        viewController.isModalPresentation = true
+        
+        presentController(navigationController, on: targetViewController)
+    }
+    
+    static func presentController(_ viewController: UIViewController, on targetViewController: UIViewController?) {
         var topmostViewController = targetViewController 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.50) {
             while topmostViewController?.presentedViewController != nil {

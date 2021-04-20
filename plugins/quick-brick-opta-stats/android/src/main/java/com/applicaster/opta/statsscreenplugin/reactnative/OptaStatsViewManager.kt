@@ -12,6 +12,6 @@ class OptaStatsViewManager(context: ReactApplicationContext) : SimpleViewManager
             OptaStatsView(reactContext)
 
     companion object {
-        const val REACT_CLASS = "OptaStatsContainerManager"
+        const val REACT_CLASS = "OptaStatsContainer"
     }
 }
