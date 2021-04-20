@@ -25,6 +25,12 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
+    open fun onLoaded(params: Map<String, Any>?) {
+        updatePosition(params)
+        duration = parseDuration()
+    }
+
+    @CallSuper
     open fun onStop(params: Map<String, Any>?) {
         updatePosition(params)
     }
@@ -64,29 +70,55 @@ open class AnalyticsPlayerAdapter {
         updatePosition(params)
     }
 
+    @CallSuper
+    open fun onSeekEnd(params: Map<String, Any>?) {
+        updatePosition(params)
+    }
+
+    @CallSuper
+    open fun onBuffering(params: Map<String, Any>?) {
+        updatePosition(params)
+    }
+
+    @CallSuper
+    open fun onComplete(params: Map<String, Any>?) {
+        updatePosition(params)
+    }
+
     fun routeTimedEventStart(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
-            PLAY_TIMED_EVENT -> onStart(params)
+            // ...add events there and return true
             else -> return false
         }
-        return true;
+        return true
     }
 
     fun routeTimedEventEnd(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
-            PLAY_TIMED_EVENT -> onStop(params)
+            // ...add events there and return true
             else -> return false
         }
-        return true;
+        return true
     }
 
     fun routeEvent(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
+            PLAYER_CREATED_EVENT -> onStart(params)
+            PLAYER_CLOSED_EVENT -> onStop(params)
+
+            ENTRY_LOADED_EVENT -> onLoaded(params)
+
             PLAYER_PLAYING_EVENT -> onPlay(params)
             PLAYER_PAUSE_EVENT -> onPause(params)
+            PLAYER_SEEK_EVENT -> onSeek(params)
+            PLAYER_SEEK_EVENT_END -> onSeekEnd(params)
+            PLAYER_BUFFERING_EVENT -> onBuffering(params)
+
+            PLAYER_COMPETE_EVENT -> onComplete(params)
+
             AD_START_EVENT -> onAdStart(params)
             AD_END_EVENT -> onAdEnd(params)
             AD_BREAK_START_EVENT -> onAdBreakStart(params)
@@ -122,26 +154,51 @@ open class AnalyticsPlayerAdapter {
     }
 
     companion object {
-        // not used, it comes with PLAY_TIMED_EVENT
-        const val PLAY_EVENT = "VOD Item: Play Was Triggered"
 
+        // Player was created with some entry to play.
+        // We have to create new program here, even though we don't have some data like real duration.
+        const val PLAYER_CREATED_EVENT = "Player Created"
+
+        // Player closed (destroyed)
+        const val PLAYER_CLOSED_EVENT = "Player Closed"
+
+        // User initiated play action
         const val PLAYER_PLAYING_EVENT = "Player Playing"
+
+        // User initiated pause action
         const val PLAYER_PAUSE_EVENT = "Player Pause"
+
+        // Buffering caused by stream interruption (no data), not seek, ad, or start
+        const val PLAYER_BUFFERING_EVENT = "Player Buffering"
+
+        // Player has opened entry url (does not loads anything yet, we can go into preroll instead of main bideo after that)
+        const val ENTRY_LOADED_EVENT = "Media Entry Load"
+
+        // Main video loaded (after preroll, if any). Only here we have real duration.
+        // Not used right now due to bug in Gemius: we can't report ads if there is no Program
+        // despite what docs says (they say we can), therefore all programs will report wrong duration
+        const val PLAYER_LOADED_EVENT = "Player Loaded Video"
+
+        // Seek in progress, reported each time user moves the position,
+        const val PLAYER_SEEK_EVENT = "Player Seek"
+        // Seek has competed and playback resumed
+        const val PLAYER_SEEK_EVENT_END = "Player Seek End"
+
+        // Reached the end of the video
+        const val PLAYER_COMPETE_EVENT = "Player Ended"
 
         const val AD_BREAK_START_EVENT = "Ad Break Begin"
         const val AD_BREAK_END_EVENT = "Ad Break End"
         const val AD_START_EVENT = "Ad Begin"
         const val AD_END_EVENT = "Ad End"
 
-        const val PLAY_TIMED_EVENT = "Play VOD Item"
-
         const val KEY_ID = "Item ID"
         const val KEY_NAME = "Item Name"
         const val KEY_LINK = "Item Link"
         const val KEY_TYPE = "Item Type"
 
-        const val KEY_DURATION = "Custom Propertyduration" // must me 'Item Length'
+        const val KEY_DURATION = "duration" // must me 'Item Length'
+        const val KEY_POSITION = "offset" // must be Position or something like that
         const val KEY_CUSTOM_PROPERTIES = "Custom PropertyanalyticsCustomProperties"
-        const val KEY_POSITION = "currentTime" // must be Position or something like that
     }
 }

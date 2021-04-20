@@ -13,6 +13,23 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  hooks: {
+    fields: [
+      {
+        group: true,
+        label: "Before Load",
+        folded: true,
+        fields: [
+          {
+            key: "preload_plugins",
+            type: "preload_plugins_selector",
+            label: "Select Plugins",
+            initial_value: [],
+          },
+        ],
+      },
+    ],
+  },
   screen: true,
   custom_configuration_fields: [
     {
