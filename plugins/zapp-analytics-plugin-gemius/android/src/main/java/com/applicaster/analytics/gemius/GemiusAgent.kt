@@ -1,7 +1,9 @@
 package com.applicaster.analytics.gemius
 
 import com.applicaster.analytics.BaseAnalyticsAgent
+import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
 import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
 import com.gemius.sdk.audience.AudienceConfig
@@ -19,6 +21,10 @@ class GemiusAgent : BaseAnalyticsAgent() {
     inner class PlayerAdapter : AnalyticsPlayerAdapter() {
 
         private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
+
+        init{
+            player.setContext(AppContext.get())
+        }
 
         override fun onStart(params: Map<String, Any>?) {
             super.onStart(params)
@@ -158,7 +164,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
     }
 
-    private val player: PlayerAdapter = PlayerAdapter()
+    private var player: PlayerAdapter? = null
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
@@ -168,7 +174,9 @@ class GemiusAgent : BaseAnalyticsAgent() {
             return
         }
 
-        Config.setLoggingEnabled(true)
+        player = PlayerAdapter()
+
+        Config.setLoggingEnabled(APDebugUtil.getIsInDebugMode())
         Config.setAppInfo(OSUtil.getPackageName(), OSUtil.getZappAppVersion())
 
         //global config for Audience/Prism hits
@@ -211,7 +219,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeTimedEventStart(eventName, params))
+        if(true == player?.routeTimedEventStart(eventName, params))
             return
     }
 
@@ -220,7 +228,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeTimedEventEnd(eventName, params))
+        if(true == player?.routeTimedEventEnd(eventName, params))
             return
     }
 
@@ -229,7 +237,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeEvent(eventName, params))
+        if(true == player?.routeEvent(eventName, params))
             return
         // todo: handle or forward any other event types if needed
     }
