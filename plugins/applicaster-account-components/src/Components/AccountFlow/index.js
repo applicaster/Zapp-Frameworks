@@ -1,8 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import { View, SafeAreaView, Keyboard, Platform } from "react-native";
 import PropTypes from "prop-types";
-
-import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
+import { usePickFromState } from "@applicaster/zapp-react-native-redux/hooks";
 import Login from "../Login";
 import ForgotPassword from "../ForgotPassword";
 import SetNewPassword from "../SetNewPassword";
@@ -32,6 +31,13 @@ export const ScreensData = {
 };
 
 const AccountFlow = (props) => {
+  const { plugins } = usePickFromState(["plugins"]);
+  const parentLockPlugin = plugins.find(
+    (plugin) => plugin.identifier === "parent-lock-qb"
+  );
+  const ParentLockPlugin = parentLockPlugin?.module
+
+
   let stillMounted = true;
 
   const [screen, setScreen] = useState(ScreensData.EMPTY);

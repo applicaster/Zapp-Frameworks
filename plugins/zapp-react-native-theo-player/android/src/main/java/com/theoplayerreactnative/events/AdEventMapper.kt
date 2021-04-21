@@ -58,7 +58,7 @@ object AdEventMapper {
         }
         ad.adBreak?.let {
             map.putInt("breakSize", it.ads.size)
-            map.putInt("adPosition", it.ads.indexOf(ad))
+            map.putInt("adPosition", it.ads.indexOfFirst { it.id == ad.id })
         }
     }
 

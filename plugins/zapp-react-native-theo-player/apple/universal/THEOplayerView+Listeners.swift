@@ -80,11 +80,11 @@ extension THEOplayerView {
         listeners[PlayerEventTypes.ERROR.name] = player.addEventListener(type: PlayerEventTypes.ERROR, listener: error)
         
         // Ads events
-        listeners[AdsEventTypes.AD_BREAK_BEGIN.name] = player.addEventListener(type: AdsEventTypes.AD_BREAK_BEGIN, listener: adBreakBegin)
-        listeners[AdsEventTypes.AD_BREAK_END.name] = player.addEventListener(type: AdsEventTypes.AD_BREAK_END, listener: adBreakEnd)
-        listeners[AdsEventTypes.AD_ERROR.name] = player.addEventListener(type: AdsEventTypes.AD_ERROR, listener: adError)
-        listeners[AdsEventTypes.AD_BEGIN.name] = player.addEventListener(type: AdsEventTypes.AD_BEGIN, listener: adBegin)
-        listeners[AdsEventTypes.AD_END.name] = player.addEventListener(type: AdsEventTypes.AD_END, listener: adEnd)
+        listeners[AdsEventTypes.AD_BREAK_BEGIN.name] = player.ads.addEventListener(type: AdsEventTypes.AD_BREAK_BEGIN, listener: adBreakBegin)
+        listeners[AdsEventTypes.AD_BREAK_END.name] = player.ads.addEventListener(type: AdsEventTypes.AD_BREAK_END, listener: adBreakEnd)
+        listeners[AdsEventTypes.AD_ERROR.name] = player.ads.addEventListener(type: AdsEventTypes.AD_ERROR, listener: adError)
+        listeners[AdsEventTypes.AD_BEGIN.name] = player.ads.addEventListener(type: AdsEventTypes.AD_BEGIN, listener: adBegin)
+        listeners[AdsEventTypes.AD_END.name] = player.ads.addEventListener(type: AdsEventTypes.AD_END, listener: adEnd)
 
     }
 
@@ -116,6 +116,11 @@ extension THEOplayerView {
         player.removeEventListener(type: PlayerEventTypes.ENDED, listener: listeners[PlayerEventTypes.ENDED.name]!)
         player.removeEventListener(type: PlayerEventTypes.ERROR, listener: listeners[PlayerEventTypes.ERROR.name]!)
 
+        player.ads.removeEventListener(type: AdsEventTypes.AD_BREAK_BEGIN, listener: listeners[AdsEventTypes.AD_BREAK_BEGIN.name]!)
+        player.ads.removeEventListener(type: AdsEventTypes.AD_BREAK_END, listener: listeners[AdsEventTypes.AD_BREAK_END.name]!)
+        player.ads.removeEventListener(type: AdsEventTypes.AD_ERROR, listener: listeners[AdsEventTypes.AD_ERROR.name]!)
+        player.ads.removeEventListener(type: AdsEventTypes.AD_BEGIN, listener: listeners[AdsEventTypes.AD_BEGIN.name]!)
+        player.ads.removeEventListener(type: AdsEventTypes.AD_END, listener: listeners[AdsEventTypes.AD_END.name]!)
         listeners.removeAll()
     }
 
@@ -324,15 +329,19 @@ extension THEOplayerView {
     
     // MARK: - Ad Events
     private func adBreakBegin(event: AdBreakBeginEvent) {
+        let params = [RNTHEOplayerKeys.type: event.type]
+ 
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
-                         data: [RNTHEOplayerKeys.type: event.type])
-        onAdBreakBegin?([RNTHEOplayerKeys.type: event.type])
+                         data: params)
+        onAdBreakBegin?(params)
     }
     
     private func adBreakEnd(event: AdBreakEndEvent) {
+        let params = [RNTHEOplayerKeys.type: event.type]
+
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
-                         data: [RNTHEOplayerKeys.type: event.type])
-        onAdBreakEnd?([RNTHEOplayerKeys.type: event.type])
+                         data: params)
+        onAdBreakEnd?(params)
     }
     
     private func adError(event: AdErrorEvent) {
@@ -342,15 +351,24 @@ extension THEOplayerView {
     }
     
     private func adBegin(event: AdBeginEvent) {
+        var params:[String: Any] = [RNTHEOplayerKeys.type: event.type]
+        //append params
+        getAdParams(from: event).forEach { params[$0] = $1 }
+        
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
-                         data: [RNTHEOplayerKeys.type: event.type])
-        onAdBegin?([RNTHEOplayerKeys.type: event.type])
+                         data: params)
+        onAdBegin?(params)
     }
     
     private func adEnd(event: AdEndEvent) {
+        var params:[String: Any] = [RNTHEOplayerKeys.type: event.type]
+        //append params
+        getAdParams(from: event).forEach { params[$0] = $1 }
+        
         logger?.debugLog(message: "\(eventNamesKey) \(event.type)",
-                         data: [RNTHEOplayerKeys.type: event.type])
-        onAdEnd?([RNTHEOplayerKeys.type: event.type])
+                         data: params)
+        
+        onAdEnd?(params)
     }
 
     // MARK: - THEOplayer JS listener sended from JS script
@@ -370,6 +388,20 @@ extension THEOplayerView {
                          data: ["message": message])
 
         onJSWindowEvent?(message)
+    }
+    
+    fileprivate func getAdParams(from event: AdEvent) -> [String: Any] {
+        let adPosition = event.ad?.adBreak?.ads.firstIndex(where: { (obj) -> Bool in
+            return obj.id == event.ad?.id
+        })
+        return ["id": event.ad?.id ?? "",
+                "type": event.ad?.type ?? "",
+                "adPosition": adPosition ?? 0,
+                "skipOffset": event.ad?.skipOffset ?? 0,
+                "breakSize": event.ad?.adBreak?.ads.count ?? 0,
+                "timeOffset": event.ad?.adBreak?.timeOffset ?? 0,
+                "maxDuration": event.ad?.adBreak?.maxDuration ?? 0,
+                "maxRemainingDuration": event.ad?.adBreak?.maxRemainingDuration ?? 0]
     }
 }
 

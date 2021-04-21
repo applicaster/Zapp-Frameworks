@@ -2,14 +2,13 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 import StoreFrontMobile from "./StoreFrontMobile";
 import StoreFrontTv from "./StoreFrontTv";
 import React, { useState, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
 import LoadingScreen from "./LoadingScreen";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
 import { useToggleNavBar } from "./Utils/Hooks";
 import { isApplePlatform } from "./Utils/Platform";
-import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
+import { usePickFromState } from "@applicaster/zapp-react-native-redux/hooks";
 
 import {
   purchaseAnItem,
@@ -27,7 +26,18 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
-  const showParentLock = props?.screenStyles?.import_parent_lock;
+  const { plugins } = usePickFromState(["plugins"]);
+  const parentLockPlugin = plugins.find(
+    (plugin) => plugin.identifier === "parent-lock-qb"
+  );
+  const ParentLockPlugin = parentLockPlugin?.module;
+
+  let showParentLock =
+    (props?.screenStyles?.import_parent_lock === "1" ||
+      props?.screenStyles?.import_parent_lock === true) &&
+    props?.payload?.extensions?.skip_parent_lock !== true
+      ? true
+      : false;
   const isDebugModeEnabled = props?.isDebugModeEnabled === true;
 
   useToggleNavBar();
@@ -94,11 +104,14 @@ export default function Storefront(props) {
       const storeFee = storeFeesData[i];
       for (let i = 0; i < productsToPurchase.length; i++) {
         const productToPurchase = productsToPurchase[i];
+        console.log({ productToPurchase });
         if (
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
           storeFee.productType = productToPurchase.productType;
           storeFee.purchased = productToPurchase.purchased;
+          storeFee.expiresAt = productToPurchase.expiresAt;
+
           if (!storeFee.title && productToPurchase.title) {
             storeFee.title = productToPurchase.title;
           }

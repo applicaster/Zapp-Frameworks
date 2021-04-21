@@ -1,0 +1,36 @@
+{
+  "api": {
+    "class_name": "com.applicaster.crashlog.AppCenterCrashlog"
+  },
+  "dependency_repository_url": [],
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "App Center Crashlogs",
+  "description": "Zapp Crashlogs Plugin App Center",
+  "type": "error_monitoring",
+  "screen": false,
+  "react_native": true,
+  "identifier": "crashlogs_appcenter",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "min_zapp_sdk": "4.0.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [],
+  "npm_dependencies": [
+    "@applicaster/crash-logs-ms-app-center-android@0.2.0"
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_for_quickbrick",
+  "manifest_version": "0.2.0",
+  "project_dependencies": [
+    {
+      "crash-logs-ms-app-center-android": "node_modules/@applicaster/crash-logs-ms-app-center-android/android"
+    }
+  ]
+}
