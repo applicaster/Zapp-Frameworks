@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-react-native-theo-player",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Zapp Team",
   "license": "ISC",
   "description": "THEOplayer with React Native wrapper",
