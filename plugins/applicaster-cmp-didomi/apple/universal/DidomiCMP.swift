@@ -19,8 +19,8 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
         static let apiKey = "api_key"
         static let jsPreferencesKey = "javaScriptForWebView"
         static let pluginIdentifier = "applicaster-cmp-didomi"
-        static let didomiGDPRApplies = "didomiGDPRApplies"
-        static let didomiIABConsent = "didomiIABConsent"
+        static let didomiGDPRApplies = "IABTCF_gdprApplies"
+        static let didomiIABConsent = "IABTCF_TCString"
 
     }
 

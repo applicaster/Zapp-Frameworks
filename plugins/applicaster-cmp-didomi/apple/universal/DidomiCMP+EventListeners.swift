@@ -72,13 +72,13 @@ extension DidomiCMP {
     }
 
     func saveParamsToSessionStorageIfExists() {
-        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: "IABTCF_gdprApplies") {
+        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: Params.didomiGDPRApplies) {
             _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
                                                                            value: didomiGDPRApplies,
                                                                            namespace: Params.pluginIdentifier)
         }
 
-        if let didomiIABConsent = UserDefaults.standard.string(forKey: "IABTCF_TCString") {
+        if let didomiIABConsent = UserDefaults.standard.string(forKey: Params.didomiIABConsent) {
             _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiIABConsent,
                                                                            value: didomiIABConsent,
                                                                            namespace: Params.pluginIdentifier)
