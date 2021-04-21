@@ -1,5 +1,7 @@
 package com.applicaster.opta.statsscreenplugin.plugin
 
+import android.graphics.Color
+
 interface PluginRepository {
 
     fun getToken(): String
@@ -65,4 +67,8 @@ interface PluginRepository {
     fun enablePlayerScreen(enabled: Boolean)
 
     fun isPlayerScreenEnabled(): Boolean
+
+    fun setNavBarColor(colorHEX: Int)
+
+    fun getNavBarColor() : Int
 }

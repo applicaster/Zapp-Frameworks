@@ -1,6 +1,7 @@
 package com.applicaster.opta.statsscreenplugin
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.applicaster.opta.statsscreenplugin.plugin.PluginDataRepository
@@ -10,6 +11,7 @@ import com.applicaster.opta.statsscreenplugin.utils.Constants
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
 import com.google.gson.internal.LinkedTreeMap
 import java.io.Serializable
 import java.util.*
@@ -18,7 +20,7 @@ import kotlin.collections.ArrayList
 class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
     companion object {
-        private const val TAG: String = "COPAOptaStatsContract"
+        const val TAG: String = "COPAOptaStatsContract"
         private val REQUIRED_KEYS = arrayOf(
                 //Constants.PARAM_SHIELD_IMAGE_BASE_URL,
                 //Constants.PARAM_FLAG_IMAGE_BASE_URL,
@@ -112,6 +114,16 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
             PluginDataRepository.INSTANCE.setNumberOfMatches(params[Constants.PARAM_NUMBER_OF_MATCHES].toString())
             PluginDataRepository.INSTANCE.setShowTeam(params[Constants.PARAM_SHOW_TEAM])
             PluginDataRepository.INSTANCE.setTeamsCount(params[Constants.PARAM_TEAMS_COUNT].toString().toIntOrNull())
+
+            (params[Constants.PARAM_NAV_BAR_COLOR] as? String)?.let {
+                try {
+                    val color = Color.parseColor(it)
+                    PluginDataRepository.INSTANCE.setNavBarColor(color)
+                } catch (e: Exception){
+                    APLogger.error(TAG, "Failed to parse nav bar color $it", e)
+                    PluginDataRepository.INSTANCE.setNavBarColor(AppContext.get().resources.getColor(R.color.bg_toolbar))
+                }
+            }
 
             val playerScreen = params[Constants.PARAM_ENABLE_PLAYER_SCREEN] ?: "1"
             PluginDataRepository.INSTANCE.enablePlayerScreen(playerScreen == "1" || playerScreen == true)

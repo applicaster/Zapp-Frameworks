@@ -1,5 +1,6 @@
 package com.applicaster.opta.statsscreenplugin.plugin
 
+import com.applicaster.opta.statsscreenplugin.R
 import com.applicaster.opta.statsscreenplugin.utils.Constants.DEFAULT_BACK_BUTTON_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.DEFAULT_LOGO_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_APP_ID
@@ -9,6 +10,7 @@ import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_COMPETITION_
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_ENABLE_PLAYER_SCREEN
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_FLAG_IMAGE_BASE_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_LOGO_URL
+import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_NAV_BAR_COLOR
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_NUMBER_OF_MATCHES
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_PARTIDOS_IMAGE_BASE_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_PERSON_IMAGE_BASE_URL
@@ -18,6 +20,7 @@ import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_SHIRT_IMAGE_
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_SHOW_TEAM
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_TEAMS_COUNT
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_TOKEN
+import com.applicaster.util.AppContext
 import com.applicaster.util.PreferenceUtil
 
 enum class PluginDataRepository : PluginRepository {
@@ -155,5 +158,15 @@ enum class PluginDataRepository : PluginRepository {
 
     override fun isPlayerScreenEnabled(): Boolean {
         return PreferenceUtil.getInstance().getBooleanPref(PARAM_ENABLE_PLAYER_SCREEN, false)
+    }
+
+    override fun setNavBarColor(colorHEX: Int) {
+        PreferenceUtil.getInstance().setIntPref(PARAM_NAV_BAR_COLOR, colorHEX)
+    }
+
+    override fun getNavBarColor(): Int {
+        return PreferenceUtil.getInstance().getIntPref(
+                PARAM_NAV_BAR_COLOR,
+                AppContext.get().resources.getColor(R.color.bg_toolbar))
     }
 }
