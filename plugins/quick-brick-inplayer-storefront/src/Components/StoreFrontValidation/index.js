@@ -42,7 +42,6 @@ async function validatePurchase({ purchasedItem, fee, store }) {
         access_fee_id: id,
         store,
       });
-      console.log({ result });
       logger.debug({
         message: "validateExternalPayment: Success",
         data: {

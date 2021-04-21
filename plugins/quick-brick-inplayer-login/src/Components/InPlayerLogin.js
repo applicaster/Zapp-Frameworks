@@ -93,15 +93,19 @@ const InPlayerLogin = (props) => {
       ? true
       : false;
 
+  navigator.hideNavBar();
+  navigator.hideBottomBar();
   let stillMounted = true;
   useEffect(() => {
     setupEnvironment();
     return () => {
+      navigator.showNavBar();
+      navigator.showBottomBar();
       stillMounted = false;
     };
   }, []);
 
-  function checkIfUserAuthenteficated() {
+  async function checkIfUserAuthenteficated() {
     return InPlayerService.isAuthenticated(clientId).then(
       async (isAuthenticated) => {
         let eventMessage = "Account Flow:";
@@ -113,7 +117,6 @@ const InPlayerLogin = (props) => {
         if (stillMounted) {
           if (isAuthenticated) {
             eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
             return true;
           } else {
             if (showParentLock) {
@@ -191,7 +194,7 @@ const InPlayerLogin = (props) => {
           message: "InPlayer plugin invocation, finishing hook with: success",
           data: { ...logData, isAuthenticated },
         });
-        stillMounted && setLoading(false);
+        accountFlowCallback({ success: true });
       }
     } else {
       setLoading(false);
@@ -348,7 +351,7 @@ const InPlayerLogin = (props) => {
       });
   }
 
-  function onNewPasswordChange({ password, token }) {
+  function onNewPasswordChange({ password, token, setScreen }) {
     logger.debug({
       message: `Set new password task, password: ${password}, token: ${token}`,
       data: {

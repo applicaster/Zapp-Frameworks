@@ -59,7 +59,6 @@ export async function assetLoader({
     });
     const src = assetData?.src;
     const cookies = assetData?.cookies;
-    console.log({ assetData, src });
     if (assetData && src) {
       const newPayload = src && {
         ...payload,
@@ -70,7 +69,6 @@ export async function assetLoader({
       throw Error(screenLocalizations.video_stream_exception_message);
     }
   } catch (error) {
-    console.log("Asset Loader Failed", { error });
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
     } else if (error?.requestedToPurchase && retryInCaseFail === false) {

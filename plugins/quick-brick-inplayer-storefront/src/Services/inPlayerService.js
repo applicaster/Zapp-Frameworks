@@ -188,7 +188,6 @@ export async function checkAccessForAsset({
       });
     } else {
       const isPurchaseRequired = assetPaymentRequired(error);
-      console.log({ isPurchaseRequired });
       if (isPurchaseRequired) {
         logger.debug({
           message: `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`,
@@ -200,7 +199,6 @@ export async function checkAccessForAsset({
             error,
           },
         });
-        console.log({ error });
         throw { ...error, requestedToPurchase: isPurchaseRequired };
       }
       logger.error({

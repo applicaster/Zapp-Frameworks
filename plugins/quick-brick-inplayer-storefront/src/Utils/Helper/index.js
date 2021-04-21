@@ -14,7 +14,6 @@ export const isHook = (navigator) => {
 };
 
 export function isRestoreEmpty(data) {
-  console.log({isApplePlatform})
   if (isApplePlatform) {
     const products = data?.products;
     if (products && products?.length > 0) {

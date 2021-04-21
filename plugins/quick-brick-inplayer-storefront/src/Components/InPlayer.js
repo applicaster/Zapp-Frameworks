@@ -102,7 +102,6 @@ const InPlayer = (props) => {
   }, []);
 
   async function onRestoreCompleted(restoreData) {
-    console.log({ restoreData });
     if (isRestoreEmpty(restoreData)) {
       showAlert(
         screenLocalizations?.warning_title,
@@ -167,7 +166,6 @@ const InPlayer = (props) => {
   }
 
   async function completeStorefrontFlow({ success, error, payload }) {
-    console.log({ success, error, payload });
     try {
       if (success && !error) {
         await validatePayment({ ...props, payload, store });
@@ -177,7 +175,6 @@ const InPlayer = (props) => {
           store,
           retryInCaseFail: true,
         });
-        console.log({ newPayload });
         logger.debug({
           message: "Validation payment completed",
           data: {
@@ -190,7 +187,6 @@ const InPlayer = (props) => {
         !isStanaloneScreen() && finishStorefront({ success, error, payload });
       }
     } catch (error) {
-      console.log("Error payment", { error });
       const message = getMessageOrDefault(error, screenLocalizations);
 
       logger.error({
@@ -305,7 +301,6 @@ const InPlayer = (props) => {
         finishStorefront({ success: false, error: null, payload });
       }
     } catch (error) {
-      console.log({ error });
       if (error) {
         const message = getMessageOrDefault(error, screenLocalizations);
 
