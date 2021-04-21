@@ -190,7 +190,7 @@ const InPlayer = (props) => {
         !isStanaloneScreen() && finishStorefront({ success, error, payload });
       }
     } catch (error) {
-      console.log({ error });
+      console.log("Error payment", { error });
       const message = getMessageOrDefault(error, screenLocalizations);
 
       logger.error({
@@ -305,6 +305,7 @@ const InPlayer = (props) => {
         finishStorefront({ success: false, error: null, payload });
       }
     } catch (error) {
+      console.log({ error });
       if (error) {
         const message = getMessageOrDefault(error, screenLocalizations);
 

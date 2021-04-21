@@ -70,6 +70,7 @@ export async function assetLoader({
       throw Error(screenLocalizations.video_stream_exception_message);
     }
   } catch (error) {
+    console.log("Asset Loader Failed", { error });
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
     } else if (error?.requestedToPurchase && retryInCaseFail === false) {
@@ -116,7 +117,7 @@ function handleError(error) {
       ? MESSAGES.purchase.required
       : statusString;
     const errorWithMessage = { ...error, message };
-    throw Error(errorWithMessage);
+    throw errorWithMessage;
   } else {
     throw Error(MESSAGES.asset.fail);
   }
