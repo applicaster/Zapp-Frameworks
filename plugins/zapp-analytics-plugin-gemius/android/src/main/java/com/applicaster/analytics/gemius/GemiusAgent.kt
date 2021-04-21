@@ -3,6 +3,7 @@ package com.applicaster.analytics.gemius
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
 import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
 import com.gemius.sdk.audience.AudienceConfig
@@ -20,6 +21,10 @@ class GemiusAgent : BaseAnalyticsAgent() {
     inner class PlayerAdapter : AnalyticsPlayerAdapter() {
 
         private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
+
+        init{
+            player.setContext(AppContext.get())
+        }
 
         override fun onStart(params: Map<String, Any>?) {
             super.onStart(params)
