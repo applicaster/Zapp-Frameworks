@@ -1,6 +1,7 @@
 package com.applicaster.analytics.gemius
 
 import com.applicaster.analytics.BaseAnalyticsAgent
+import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
 import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
@@ -168,7 +169,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
             return
         }
 
-        Config.setLoggingEnabled(true)
+        Config.setLoggingEnabled(APDebugUtil.getIsInDebugMode())
         Config.setAppInfo(OSUtil.getPackageName(), OSUtil.getZappAppVersion())
 
         //global config for Audience/Prism hits
