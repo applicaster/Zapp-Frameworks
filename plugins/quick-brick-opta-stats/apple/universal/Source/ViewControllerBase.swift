@@ -142,9 +142,9 @@ extension UIViewController {
         let nav = navigationController?.navigationBar
         nav?.barStyle = .default
         nav?.isTranslucent = false
-        nav?.barTintColor = UIColor(hex: "#141054")
+        nav?.barTintColor = UIColor(argbHexString: OptaStats.pluginParams.navbarBgColor)
         nav?.tintColor = UIColor.white
-        nav?.backgroundColor = UIColor(hex: "#141054")
+        nav?.backgroundColor = UIColor(argbHexString: OptaStats.pluginParams.navbarBgColor)
 
         var leftItem: UIBarButtonItem?
         var rightItems: [UIBarButtonItem]?
@@ -183,11 +183,12 @@ extension UIViewController {
     }
 
     func loadTournamentLogo() {
-        if let path = Bundle(for: classForCoder).path(forResource: "logo", ofType: "png") {
-            let logo = UIImage(contentsOfFile: path)
+        let navbarLogoImageUrl = OptaStats.pluginParams.navbarLogoImageUrl
+
+        if !navbarLogoImageUrl.isEmpty {
             let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 116.36, height: 40))
             logoImageView.contentMode = .scaleAspectFill
-            logoImageView.image = logo
+            logoImageView.sd_setImage(with: URL(string: navbarLogoImageUrl), placeholderImage: nil)
 
             let logoView = UIView(frame: logoImageView.bounds)
             logoView.addSubview(logoImageView)
@@ -223,12 +224,11 @@ extension UIViewController {
             showViewController(viewController)
         }
     }
-    
+
     func showViewController(_ viewController: ViewControllerBase) {
-        if self.navigationController != nil {
-            self.navigationController?.pushViewController(viewController, animated: true)
-        }
-        else {
+        if navigationController != nil {
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
             OptaStats.presentViewControllerModally(viewController: viewController)
         }
     }

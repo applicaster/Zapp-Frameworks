@@ -20,7 +20,7 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
-        configurationJSON = model?.configurationJSON
+        configurationJSON = model?.object["configuration_json"] as? NSDictionary
     }
 
     public var providerName: String {
@@ -57,7 +57,9 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
                      calendarId: configurationJSON?[Params.calendarId] as? String ?? "",
                      imageBaseUrl: configurationJSON?[Params.imageBaseUrl] as? String ?? "",
                      showTeam: configurationJSON?[Params.showTeam] as? String ?? "false",
-                     numberOfMatches: configurationJSON?[Params.numberOfMatches] as? String ?? "3")
+                     numberOfMatches: configurationJSON?[Params.numberOfMatches] as? String ?? "3",
+                     navbarBgColor: configurationJSON?[Params.navbarBgColor] as? String ?? "",
+                     navbarLogoImageUrl: configurationJSON?[Params.navbarLogoImageUrl] as? String ?? "")
     }()
 
     public lazy var mainStoryboard: UIStoryboard = {
@@ -112,6 +114,9 @@ public struct PluginParams {
     var imageBaseUrl: String
     var showTeam: Bool
     var numberOfMatches: Int
+    var navbarBgColor: String
+    var navbarLogoImageUrl: String
+    
     init() {
         token = ""
         referer = ""
@@ -120,6 +125,8 @@ public struct PluginParams {
         imageBaseUrl = ""
         showTeam = false
         numberOfMatches = 3
+        navbarBgColor = ""
+        navbarLogoImageUrl = ""
     }
 
     init(token: String,
@@ -128,7 +135,9 @@ public struct PluginParams {
          calendarId: String,
          imageBaseUrl: String,
          showTeam: String,
-         numberOfMatches: String) {
+         numberOfMatches: String,
+         navbarBgColor: String,
+         navbarLogoImageUrl: String) {
         self.token = token
         self.referer = referer
         self.competitionId = competitionId
@@ -136,5 +145,7 @@ public struct PluginParams {
         self.imageBaseUrl = imageBaseUrl
         self.showTeam = showTeam.boolValue()
         self.numberOfMatches = Int(numberOfMatches) ?? 3
+        self.navbarBgColor = navbarBgColor
+        self.navbarLogoImageUrl = navbarLogoImageUrl
     }
 }
