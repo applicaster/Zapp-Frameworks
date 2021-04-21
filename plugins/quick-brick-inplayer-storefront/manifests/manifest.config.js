@@ -1059,7 +1059,7 @@ const extra_dependencies = {
 
 const npm_dependencies = {
   default: [
-    "@applicaster/applicaster-iap@0.3.3",
+    "@applicaster/applicaster-iap@1.1.3",
     "@react-native-community/blur@3.4.1",
   ],
   web: [],
