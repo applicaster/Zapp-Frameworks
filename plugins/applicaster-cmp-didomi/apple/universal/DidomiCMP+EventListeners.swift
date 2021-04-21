@@ -48,7 +48,6 @@ extension DidomiCMP {
                 case .notDetermined:
                     break
                 }
-                self.saveParamsToSessionStorage()
             }
         }
 
@@ -66,7 +65,6 @@ extension DidomiCMP {
                 case .notDetermined:
                     break
                 }
-                self.saveParamsToSessionStorage()
             }
         }
 
@@ -74,13 +72,13 @@ extension DidomiCMP {
     }
 
     func saveParamsToSessionStorage() {
-        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: "IABConsent_SubjectToGDPR") {
+        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: "IABTCF_gdprApplies") {
             _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
                                                                            value: didomiGDPRApplies,
                                                                            namespace: Params.pluginIdentifier)
         }
 
-        if let didomiIABConsent = UserDefaults.standard.string(forKey: "IABConsent_ConsentString") {
+        if let didomiIABConsent = UserDefaults.standard.string(forKey: "IABTCF_TCString") {
             _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiIABConsent,
                                                                            value: didomiIABConsent,
                                                                            namespace: Params.pluginIdentifier)
