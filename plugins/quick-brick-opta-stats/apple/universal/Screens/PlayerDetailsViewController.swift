@@ -159,18 +159,12 @@ class PlayerDetailsViewController: ViewControllerBase {
         playerTypeLabel.text = fallbackStringPlayerType
         // playerTypeLabel.text =  Localized.getLocalizedString(from: person?.type?.uppercased() ?? fallbackStringPlayerType) //person?.type?.uppercased() ?? fallbackStringPlayerType
         playerFlagImageView.image = nil
+        
+        let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamId).png"
+        playerFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-\(teamId)", ofType: "png") {
-            playerFlagImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            playerFlagImageView.image = nil
-        }
-
-        if let path = Bundle(for: classForCoder).path(forResource: "SHIELD-\(teamId)", ofType: "png") {
-            playerShieldImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            playerShieldImageView.image = nil
-        }
+        let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(teamId).png"
+        playerShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
 
         let imageBaseUrl = OptaStats.pluginParams.imageBaseUrl
         playerPhotoImageView.sd_setImage(with: URL(string: "\(imageBaseUrl)\(personID).png"), placeholderImage: nil)

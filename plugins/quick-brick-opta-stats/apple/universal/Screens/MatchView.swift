@@ -139,27 +139,21 @@ class MatchView: UIView {
         if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
             team1FlagImageView.image = UIImage(contentsOfFile: path)
             team2FlagImageView.image = UIImage(contentsOfFile: path)
+
         }
+
 
         if let contestants = matchStat?.matchInfo.contestants {
             for (index, contestant) in contestants.enumerated() {
-                var flagImage: UIImage?
-
-                if let path = Bundle(for: classForCoder).path(forResource: "flag-\(contestant.id ?? "")", ofType: "png") {
-                    flagImage = UIImage(contentsOfFile: path)
-                }
-
-                if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png"), flagImage == nil {
-                    flagImage = UIImage(contentsOfFile: path)
-                }
+                let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(contestant.id ?? "").png"
 
                 switch index {
                 case 0:
                     team1CountryLabel.text = contestant.code?.uppercased()
-                    team1FlagImageView.image = flagImage
+                    team1FlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
                 case 1:
                     team2CountryLabel.text = contestant.code?.uppercased()
-                    team2FlagImageView.image = flagImage
+                    team2FlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
                 default:
                     break
                 }

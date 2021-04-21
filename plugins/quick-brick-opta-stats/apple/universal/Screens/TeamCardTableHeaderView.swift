@@ -96,28 +96,20 @@ class TeamCardTableHeaderView: UIView {
         if let teamName = squad.contestantName {
             teamNameLabel.text = teamName
         }
+        
+        let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(squad.contestantId ?? "").png"
+        teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
+        teamFlagImageView.layer.cornerRadius = 4
+        teamFlagImageView.clipsToBounds = true
+        teamFlagImageView.layer.borderColor = UIColor.lightGray.cgColor
+        teamFlagImageView.layer.borderWidth = 0.25
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-\(squad.contestantId ?? "")", ofType: "png") {
-            teamFlagImageView.image = UIImage(contentsOfFile: path)
-            teamFlagImageView.layer.cornerRadius = 4
-            teamFlagImageView.clipsToBounds = true
-            teamFlagImageView.layer.borderColor = UIColor.lightGray.cgColor
-            teamFlagImageView.layer.borderWidth = 0.25
-        } else {
-            teamFlagImageView.image = nil
-        }
+        let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(squad.contestantId ?? "").png"
+        teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)
 
-        if let path = Bundle(for: classForCoder).path(forResource: "SHIRT-\(squad.contestantId ?? "")", ofType: "png") {
-            teamShirtImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            teamShirtImageView.image = nil
-        }
 
-        if let path = Bundle(for: classForCoder).path(forResource: "SHIELD-\(squad.contestantId ?? "")", ofType: "png") {
-            teamShieldImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            teamShieldImageView.image = nil
-        }
+        let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(squad.contestantId ?? "").png"
+        teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
 
         if let path = Bundle(for: classForCoder).path(forResource: "copa-icon", ofType: "png") {
             trophyImageView.image = UIImage(contentsOfFile: path)
@@ -140,23 +132,15 @@ class TeamCardTableHeaderView: UIView {
             teamNameLabel.text = teamName
         }
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-\(teamCard.contestantStat?.id ?? "")", ofType: "png") {
-            teamFlagImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            teamFlagImageView.image = nil
-        }
+        let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamCard.contestantStat?.id ?? "").png"
+        teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
 
-        if let path = Bundle(for: classForCoder).path(forResource: "SHIRT-\(teamCard.contestantStat?.id ?? "")", ofType: "png") {
-            teamShirtImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            teamShirtImageView.image = nil
-        }
 
-        if let path = Bundle(for: classForCoder).path(forResource: "SHIELD-\(teamCard.contestantStat?.id ?? "")", ofType: "png") {
-            teamShieldImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            teamShieldImageView.image = nil
-        }
+        let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(teamCard.contestantStat?.id ?? "").png"
+        teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)
+
+        let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(teamCard.contestantStat?.id ?? "").png"
+        teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
 
         if let path = Bundle(for: classForCoder).path(forResource: "copa-icon", ofType: "png") {
             trophyImageView.image = UIImage(contentsOfFile: path)

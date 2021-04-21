@@ -74,8 +74,6 @@ class MatchListingTableViewCell: UITableViewCell {
         }
         if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
             homeFlagImageView.image = UIImage(contentsOfFile: path)
-        }
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
             awayFlagImageView.image = UIImage(contentsOfFile: path)
         }
 
@@ -97,18 +95,17 @@ class MatchListingTableViewCell: UITableViewCell {
         homeNameLabel.text = "-"
 
         homeFlagImageView.image = nil
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            homeFlagImageView.image = UIImage(contentsOfFile: path)
-        }
         homeFlagImageView.isUserInteractionEnabled = false
 
         awayNameLabel.text = "-"
         awayFlagImageView.image = nil
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            awayFlagImageView.image = UIImage(contentsOfFile: path)
-        }
         awayFlagImageView.isUserInteractionEnabled = false
 
+        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
+            homeFlagImageView.image = UIImage(contentsOfFile: path)
+            awayFlagImageView.image = UIImage(contentsOfFile: path)
+        }
+        
         matchTimeLabel.text = "-"
 
         matchGroupLabel.text = "-"
@@ -118,19 +115,26 @@ class MatchListingTableViewCell: UITableViewCell {
             return
         }
 
+        var placeholderFlagImage: UIImage?
+        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
+            placeholderFlagImage = UIImage(contentsOfFile: path)
+        }
+        
         if let contestants = match.contestants {
             for (index, contestant) in contestants.enumerated() {
                 switch index {
                 case 0:
                     homeNameLabel.text = contestant.code?.uppercased()
 
-                    if let homeContestantId = contestant.id, let path = Bundle(for: classForCoder).path(forResource: "flag-\(homeContestantId)", ofType: "png") {
-                        homeFlagImageView.image = UIImage(contentsOfFile: path)
-                    } else if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-                        homeFlagImageView.image = UIImage(contentsOfFile: path)
+                    if let homeContestantId = contestant.id {
+                        let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(homeContestantId).png"
+                        homeFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
+                    } else if let placeholderFlagImage = placeholderFlagImage {
+                        awayFlagImageView.image = placeholderFlagImage
                     } else {
                         homeFlagImageView.image = nil
                     }
+                    
                     if let _ = didTapOnTeamFlag {
                         team1FlagImageRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOnTeam1FlagAction))
                         if let team1FlagImageRecognizer = team1FlagImageRecognizer {
@@ -141,10 +145,11 @@ class MatchListingTableViewCell: UITableViewCell {
                 case 1:
                     awayNameLabel.text = contestant.code?.uppercased()
 
-                    if let awayContestantId = contestant.id, let path = Bundle(for: classForCoder).path(forResource: "flag-\(awayContestantId)", ofType: "png") {
-                        awayFlagImageView.image = UIImage(contentsOfFile: path)
-                    } else if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-                        awayFlagImageView.image = UIImage(contentsOfFile: path)
+                    if let awayContestantId = contestant.id {
+                        let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(awayContestantId).png"
+                        awayFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
+                    } else if let placeholderFlagImage = placeholderFlagImage {
+                        awayFlagImageView.image = placeholderFlagImage
                     } else {
                         awayFlagImageView.image = nil
                     }
