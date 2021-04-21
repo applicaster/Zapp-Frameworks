@@ -138,13 +138,15 @@ class ModelUtils {
         }
 
         fun getImageUrl(type: UrlType, id: String): String {
-            return when (type) {
-                Flag -> PluginDataRepository.INSTANCE.getFlagImageBaseUrl()
-                Person -> PluginDataRepository.INSTANCE.getPersonImageBaseUrl()
-                Shield -> PluginDataRepository.INSTANCE.getShieldImageBaseUrl()
-                Shirt -> PluginDataRepository.INSTANCE.getShirtImageBaseUrl()
-                Partidos -> PluginDataRepository.INSTANCE.getPartidosImageBaseUrl()
-            }.plus(id).plus(".png")
+            PluginDataRepository.INSTANCE.apply {
+                return when (type) {
+                    Flag -> "${getFlagImageBaseUrl()}$id.png"
+                    Person -> "${getPersonImageBaseUrl()}$id.png"
+                    Shield -> "${getShieldImageBaseUrl()}$id.png"
+                    Shirt -> "${getShirtImageBaseUrl()}$id.png"
+                    Partidos -> "${getPartidosImageBaseUrl()}$id.jpg"
+                }
+            }
         }
 
         fun getLocalization(): String {

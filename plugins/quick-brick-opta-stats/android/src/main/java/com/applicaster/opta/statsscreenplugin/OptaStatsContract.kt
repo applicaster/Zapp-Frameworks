@@ -93,11 +93,11 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
         params?.let {
             val baseUrl = params[Constants.PARAM_IMAGE_BASE_URL] as String
-            PluginDataRepository.INSTANCE.setShieldImageBaseUrl("$baseUrl/shields/")
-            PluginDataRepository.INSTANCE.setFlagImageBaseUrl("$baseUrl/flags/")
+            PluginDataRepository.INSTANCE.setShieldImageBaseUrl("$baseUrl/SHIELD-")
+            PluginDataRepository.INSTANCE.setFlagImageBaseUrl("$baseUrl/flag-")
             PluginDataRepository.INSTANCE.setPersonImageBaseUrl(baseUrl)
-            PluginDataRepository.INSTANCE.setShirtImageBaseUrl("$baseUrl/shirts/")
-            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl("$baseUrl/partidos/")
+            PluginDataRepository.INSTANCE.setShirtImageBaseUrl("$baseUrl/SHIRT-")
+            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl("$baseUrl/all-matches-")
 
 //            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString())
 //            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString())
