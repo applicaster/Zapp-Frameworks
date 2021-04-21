@@ -44,7 +44,7 @@
     "source_files": "tvos/**/*.{swift}"
   },
   "vendored_frameworks": [
-    "THEOplayerSDK.framework"
+    "THEOplayerSDK.xcframework"
   ],
   "dependencies": {
     "XrayLogger": []
