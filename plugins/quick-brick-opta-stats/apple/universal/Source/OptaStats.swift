@@ -46,6 +46,8 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
         static let imageBaseUrl = "image_base_url"
         static let showTeam = "show_team"
         static let numberOfMatches = "number_of_matches"
+        static let navbarBgColor = "navbar_bg_color"
+        static let navbarLogoImageUrl = "navbar_logo_image_url"
     }
 
     lazy var pluginParams: PluginParams = {

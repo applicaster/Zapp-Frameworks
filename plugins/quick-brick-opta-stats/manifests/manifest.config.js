@@ -77,7 +77,18 @@ const baseManifest = {
       placeholder: "",
       label_tooltip: "Change how many matches we show in the carrousel",
       type: "text_input"
-    }
+    },
+    {
+      type: "colorpicker",
+      key: "navbar_bg_color",
+      default: "#000000",
+      tooltip_text: "Set Navbar bg color"
+    },
+    {
+      type: "uploader",
+      key: "navbar_logo_image_url",
+      tooltip_text: "Upload NavBar logo image"
+    },
   ],
 };
 
