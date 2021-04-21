@@ -164,7 +164,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
     }
 
-    private val player: PlayerAdapter = PlayerAdapter()
+    private var player: PlayerAdapter? = null
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
@@ -173,6 +173,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
             APLogger.error(TAG, "scriptIdentifier is empty. Analytics agent won't be activated")
             return
         }
+
+        player = PlayerAdapter()
 
         Config.setLoggingEnabled(APDebugUtil.getIsInDebugMode())
         Config.setAppInfo(OSUtil.getPackageName(), OSUtil.getZappAppVersion())
@@ -217,7 +219,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeTimedEventStart(eventName, params))
+        if(true == player?.routeTimedEventStart(eventName, params))
             return
     }
 
@@ -226,7 +228,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeTimedEventEnd(eventName, params))
+        if(true == player?.routeTimedEventEnd(eventName, params))
             return
     }
 
@@ -235,7 +237,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(player.routeEvent(eventName, params))
+        if(true == player?.routeEvent(eventName, params))
             return
         // todo: handle or forward any other event types if needed
     }
