@@ -80,6 +80,7 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
 
         Didomi.shared.onReady {
             self.logger?.verboseLog(message: "Intialization completed successfully")
+            self.saveParamsToSessionStorageIfExists()
         }
 
         subscribeToEventListeners()

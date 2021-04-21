@@ -31,7 +31,7 @@ extension DidomiCMP {
         let eventListener = EventListener()
 
         eventListener.onConsentChanged = { _ in
-            self.saveParamsToSessionStorage()
+            self.saveParamsToSessionStorageIfExists()
         }
 
         eventListener.onNoticeClickAgree = { _ in
@@ -71,7 +71,7 @@ extension DidomiCMP {
         Didomi.shared.addEventListener(listener: eventListener)
     }
 
-    func saveParamsToSessionStorage() {
+    func saveParamsToSessionStorageIfExists() {
         if let didomiGDPRApplies = UserDefaults.standard.string(forKey: "IABTCF_gdprApplies") {
             _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
                                                                            value: didomiGDPRApplies,
