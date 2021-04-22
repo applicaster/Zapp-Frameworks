@@ -30,6 +30,10 @@ extension DidomiCMP {
     func subscribeToEventListenerToRequestTrackingAuthorizationWhenNeeded() {
         let eventListener = EventListener()
 
+        eventListener.onConsentChanged = { _ in
+            self.saveParamsToSessionStorageIfExists()
+        }
+
         eventListener.onNoticeClickAgree = { _ in
             // Click on Agree in the notice
             // Request tracking permission from the user
@@ -65,5 +69,19 @@ extension DidomiCMP {
         }
 
         Didomi.shared.addEventListener(listener: eventListener)
+    }
+
+    func saveParamsToSessionStorageIfExists() {
+        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: Params.didomiGDPRApplies) {
+            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
+                                                                           value: didomiGDPRApplies,
+                                                                           namespace: Params.pluginIdentifier)
+        }
+
+        if let didomiIABConsent = UserDefaults.standard.string(forKey: Params.didomiIABConsent) {
+            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiIABConsent,
+                                                                           value: didomiIABConsent,
+                                                                           namespace: Params.pluginIdentifier)
+        }
     }
 }

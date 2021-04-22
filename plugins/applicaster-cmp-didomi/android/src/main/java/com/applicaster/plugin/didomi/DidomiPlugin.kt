@@ -2,6 +2,7 @@ package com.applicaster.plugin.didomi
 
 import android.app.Application
 import android.content.Context
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -9,8 +10,9 @@ import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
-import com.applicaster.storage.LocalStorage
+import com.applicaster.session.SessionStorage
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
 import com.google.gson.JsonElement
 import io.didomi.sdk.Didomi
 import io.didomi.sdk.events.ConsentChangedEvent
@@ -74,6 +76,7 @@ class DidomiPlugin : GenericPluginI
                     APLogger.info(TAG, "Didomi initialized")
                     if (!shouldConsentBeCollected()) {
                         APLogger.info(TAG, "User consent was already requested or not needed")
+                        storeConsent() // update values just in case
                         listener.onHookFinished()
                     } else if (!presentOnStartup) {
                         APLogger.info(TAG, "User consent presentOnStartup is disabled")
@@ -156,19 +159,22 @@ class DidomiPlugin : GenericPluginI
     }
 
     private fun storeConsent() {
-        Didomi.getInstance().apply{
-            val webViewString = javaScriptForWebView
-            val queryString = queryStringForWebView
-            LocalStorage.set(JSPreferencesKey, webViewString, PluginId)
-            LocalStorage.set(QueryPreferencesKey, queryString, PluginId)
-            APLogger.info(TAG, "queryString $queryString, webViewString $webViewString")
+        PreferenceManager.getDefaultSharedPreferences(AppContext.get()).apply {
+            getInt(didomiGDPRApplies, 0).let {
+                SessionStorage.set(didomiGDPRApplies, it.toString(), PluginId)
+                APLogger.info(TAG, "$didomiGDPRApplies $it")
+            }
+            getString(didomiIABConsent, null)?.let {
+                SessionStorage.set(didomiIABConsent, it, PluginId)
+                APLogger.info(TAG, "$didomiIABConsent $it")
+            }
         }
     }
 
     companion object {
         private const val TAG = "Didomi"
         const val PluginId = "applicaster-cmp-didomi"
-        const val JSPreferencesKey = "javaScriptForWebView"
-        const val QueryPreferencesKey = "queryStringForWebView"
+        const val didomiGDPRApplies = "IABTCF_gdprApplies"
+        const val didomiIABConsent = "IABTCF_TCString"
     }
 }

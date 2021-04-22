@@ -19,6 +19,9 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
         static let apiKey = "api_key"
         static let jsPreferencesKey = "javaScriptForWebView"
         static let pluginIdentifier = "applicaster-cmp-didomi"
+        static let didomiGDPRApplies = "IABTCF_gdprApplies"
+        static let didomiIABConsent = "IABTCF_TCString"
+
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -77,6 +80,7 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
 
         Didomi.shared.onReady {
             self.logger?.verboseLog(message: "Intialization completed successfully")
+            self.saveParamsToSessionStorageIfExists()
         }
 
         subscribeToEventListeners()
