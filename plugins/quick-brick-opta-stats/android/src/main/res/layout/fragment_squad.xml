@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/layout_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_main_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/layout_background"
+        android:clipToPadding="false"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/rl_info_not_available"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/card_background"
+            android:elevation="4dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/info_coming_soon" />
+
+            <TextView
+                style="@style/Theme.Opta.Country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:paddingBottom="40dp"
+                android:text="@string/this_info_is_not_available"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_container"
+            android:layout_width="match_parent"
+            android:layout_height="430dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/card_background"
+            android:elevation="4dp"
+            android:outlineProvider="bounds"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_team_shirt"
+                android:layout_width="220dp"
+                android:layout_height="216dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_team_name_title"
+                style="@style/Theme.Opta.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/team_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_team_name"
+                style="@style/Theme.Opta.BigTitleUbuntu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="-"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_team_shield" />
+
+            <ImageView
+                android:id="@+id/iv_team_flag"
+                android:layout_width="41dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/unknow_flag"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_team_name" />
+
+            <ImageView
+                android:id="@+id/iv_team_shield"
+                android:layout_width="99dp"
+                android:layout_height="113dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_team_name_title" />
+
+            <TextView
+                android:id="@+id/tv_team_statistics_title"
+                style="@style/Theme.Opta.DetailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                android:text="@string/avg_per_match_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_team_flag" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:weightSum="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_team_statistics_title">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_gf_title"
+                        style="@style/Theme.Opta.DetailsTitle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/goals_title" />
+
+                    <TextView
+                        android:id="@+id/tv_gf_value"
+                        style="@style/Theme.Opta.Details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider_team_statistics_1"
+                    android:layout_width="2dp"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/faded_black" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_gc_title"
+                        style="@style/Theme.Opta.DetailsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/goals_conceded" />
+
+                    <TextView
+                        android:id="@+id/tv_gc_value"
+                        style="@style/Theme.Opta.Details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider_team_statistics_2"
+                    android:layout_width="2dp"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/faded_black" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_possesion_title"
+                        style="@style/Theme.Opta.DetailsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/possession" />
+
+                    <TextView
+                        android:id="@+id/tv_possesion_value"
+                        style="@style/Theme.Opta.Details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider_team_statistics_3"
+                    android:layout_width="2dp"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/faded_black" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_pass_accuracy_title"
+                        style="@style/Theme.Opta.DetailsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/pass_accuracy_title" />
+
+                    <TextView
+                        android:id="@+id/tv_pass_accuracy_value"
+                        style="@style/Theme.Opta.Details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_americas_cups_quantity"
+                style="@style/Theme.Opta.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:text="-"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/iv_cup"
+                app:layout_constraintTop_toTopOf="@+id/iv_cup" />
+
+            <ImageView
+                android:id="@+id/iv_cup"
+                android:layout_width="26dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/cup"
+                app:layout_constraintStart_toEndOf="@+id/iv_team_flag"
+                app:layout_constraintTop_toBottomOf="@+id/tv_team_name" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.applicaster.opta.statsscreenplugin.view.StickyRecyclerView
+            android:id="@+id/rv_matches_team"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cl_container"
+            android:nestedScrollingEnabled="true"
+            android:orientation="horizontal"
+            android:visibility="gone" />
+
+        <!-- https://github.com/chahine/pageindicator -->
+        <com.chahinem.pageindicator.PageIndicator
+            android:id="@+id/pi_matches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rv_matches_team"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            app:piDefaultColor="@color/lower_gray"
+            app:piDotSpacing="6dp"
+            app:piSelectedColor="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/ll_team"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pi_matches"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_initial_team_title"
+                style="@style/Theme.Opta.DetailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/initial_team_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_squad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@color/layout_background"
+                android:elevation="4dp"
+                android:outlineProvider="bounds"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

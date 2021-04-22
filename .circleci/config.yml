@@ -232,14 +232,14 @@ workflows:
           filters:
             branches:
               only: master
-      # - apple_unit_tests:
-      #     filters:
-      #       branches:
-      #         ignore: master
+      - apple_unit_tests:
+          filters:
+            branches:
+              ignore: master
       - hold_create_canary:
           type: approval
           requires:
-            # - apple_unit_tests
+            - apple_unit_tests
             - js_unit_tests
           filters:
             branches:

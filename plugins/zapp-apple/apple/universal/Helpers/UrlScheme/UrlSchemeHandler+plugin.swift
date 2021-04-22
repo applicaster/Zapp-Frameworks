@@ -21,7 +21,7 @@ extension UrlSchemeHandler {
             return false
         }
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
-        let pluginAdapter = classType.init(pluginModel: pluginModel)
+        let pluginAdapter = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) ?? classType.init(pluginModel: pluginModel)
         if let pluginAdapter = pluginAdapter as? PluginURLHandlerProtocol {
             return pluginAdapter.handlePluginURLScheme?(with: viewController,
                                                         url: url) ?? false

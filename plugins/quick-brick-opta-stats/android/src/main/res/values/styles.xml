@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Opta" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
+    <!-- used for titles like groups and matches -->
+    <style name="Theme.Opta.Title">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/text_title</item>
+    </style>
+
+    <!-- used for subtitles like the date and the location -->
+    <style name="Theme.Opta.Subtitle">
+        <item name="customtypeface">bebasneue-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_subtitle</item>
+    </style>
+
+    <!-- used for the name of the country -->
+    <style name="Theme.Opta.Country">
+        <item name="customtypeface">bebasneue-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <!-- used for points -->
+    <style name="Theme.Opta.Points">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <!-- used for scores in a match-->
+    <style name="Theme.Opta.Score">
+        <item name="customtypeface">bebasneue-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/score_text_size</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <!-- used for game state (i.e.: first half, second half, etc) -->
+    <style name="Theme.Opta.GameState">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <!-- used for match time -->
+    <style name="Theme.Opta.Time">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <!-- used for player details titles  -->
+    <style name="Theme.Opta.DetailsTitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- used for titles like groups and matches -->
+    <style name="Theme.Opta.BigTitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">52sp</item>
+        <item name="android:textColor">@color/text_title</item>
+    </style>
+
+    <style name="Theme.Opta.BigTitleUbuntu">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">52sp</item>
+        <item name="android:textColor">@color/text_title</item>
+    </style>
+
+    <style name="Theme.Opta.ThinTitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <style name="Theme.Opta.ThinTitleUbuntu">
+        <item name="customtypeface">ubuntu-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/text_title</item>
+    </style>
+
+    <!-- used for player details -->
+    <style name="Theme.Opta.Details">
+        <item name="customtypeface">bebasneue-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <style name="Theme.Opta.DetailsUbuntu">
+        <item name="customtypeface">ubuntu-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <style name="Theme.Opta.DetailsBold">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/faded_black</item>
+    </style>
+
+    <style name="Theme.Opta.HighlightTitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">82sp</item>
+        <item name="android:textColor">@color/title_highlight</item>
+    </style>
+
+    <style name="Theme.Opta.HighlightSmallTitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/title_highlight</item>
+    </style>
+
+    <style name="Theme.Opta.HighlightSmallTitleUbuntu">
+        <item name="customtypeface">ubuntu-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/highlight_small_title_size</item>
+        <item name="android:textColor">@color/title_highlight</item>
+    </style>
+
+    <style name="Theme.Opta.BoldSubtitle">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_subtitle</item>
+    </style>
+
+    <style name="Theme.Opta.BoldSubtitleUbuntu">
+        <item name="customtypeface">ubuntu-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_subtitle</item>
+    </style>
+
+    <style name="Theme.Opta.NumberHighlight">
+        <item name="customtypeface">bebasneue-bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">80dp</item>
+        <item name="android:textColor">@color/text_highlight_number</item>
+    </style>
+</resources>

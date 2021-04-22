@@ -1,0 +1,39 @@
+{
+  "name": "OptaStats",
+  "version": "0.0.1",
+  "swift_versions": ["5.0", "5.1"],
+  "summary": "Opta Stats",
+  "description": "This plugin allow to fetch statistics from Opta",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "Appache 2.0",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/quick-brick-opta-stats/0.0.1"
+  },
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "source_files": "universal/**/*.{h,m,swift}",
+  "resources": "universal/**/*.{xib,storyboard}",
+  "dependencies": {
+    "ZappCore": [],
+    "ZappPlugins": [],
+    "XrayLogger": [],
+    "Alamofire": ["5.4.1"],
+    "SwiftyJSON": ["5.0.1"],
+    "RxSwift": ["4.4.1"],
+    "RxCocoa": ["4.4.1"],
+    "SDWebImage": ["4.4.6"],
+    "MBProgressHUD": ["1.2.0"],
+    "React": []
+  },
+  "xcconfig": {
+    "ENABLE_BITCODE": "YES",
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_TESTABILITY": "YES",
+    "OTHER_CFLAGS": "-fembed-bitcode"
+  },
+  "swift_version": "5.1"
+}

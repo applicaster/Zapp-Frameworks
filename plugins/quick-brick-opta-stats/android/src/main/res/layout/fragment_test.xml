@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_poc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello world!"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_matches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Matches" />
+
+        <Button
+            android:id="@+id/btn_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Team" />
+
+        <Button
+            android:id="@+id/btn_squads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Squads" />
+
+        <Button
+            android:id="@+id/btn_career"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Career" />
+
+        <Button
+            android:id="@+id/btn_all_matches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Matches" />
+
+        <Button
+            android:id="@+id/btn_match_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Match Details" />
+    </LinearLayout>
+
+</RelativeLayout>
