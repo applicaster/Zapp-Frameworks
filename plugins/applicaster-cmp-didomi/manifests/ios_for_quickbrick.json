@@ -44,14 +44,14 @@
   ],
   "identifier": "applicaster-cmp-didomi",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-didomi@0.1.0"
+    "@applicaster/applicaster-cmp-didomi@0.3.0"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.1.0",
-  "dependency_version": "0.1.0",
+  "manifest_version": "0.3.0",
+  "dependency_version": "0.3.0",
   "extra_dependencies": [
     {
       "ZappCMPDidomi": ":path => './node_modules/@applicaster/applicaster-cmp-didomi/apple/ZappCMPDidomi.podspec'"
