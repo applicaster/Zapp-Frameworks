@@ -107,10 +107,6 @@ extension OptaStats {
     func replaceViewController(with newViewController: ViewControllerBase?,
                                on targetViewController: UIViewController?,
                                present: Bool = false) {
-        if let childVC = currentChildViewController?.view {
-            childVC.removeFromSuperview()
-            currentChildViewController = nil
-        }
 
         if let presentVC = currentPresentedViewController {
             presentVC.dismiss(animated: true, completion: nil)
@@ -123,6 +119,10 @@ extension OptaStats {
         if present {
             OptaStats.presentViewControllerModally(viewController: newViewController, on: targetViewController)
         } else if let newView = newViewController.view {
+            if let childVC = currentChildViewController?.view {
+                childVC.removeFromSuperview()
+                currentChildViewController = nil
+            }
             newView.translatesAutoresizingMaskIntoConstraints = false
             targetView?.addSubview(newView)
             currentChildViewController = newViewController
