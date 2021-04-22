@@ -34,6 +34,7 @@ class OptaStatsActivity : AppCompatActivity() {
 
         fun getCallingIntent(@NonNull context: Context, screen: Screen, data: Map<String, String>): Intent {
             val intent = Intent(context, OptaStatsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             when (screen) {
                 Screen.ALL_MATCHES -> {
                     intent.putExtra(TEAM_ID, data[TEAM_ID])
