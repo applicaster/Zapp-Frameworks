@@ -10,7 +10,7 @@ import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
-import com.applicaster.storage.LocalStorage
+import com.applicaster.session.SessionStorage
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
 import com.google.gson.JsonElement
@@ -161,11 +161,11 @@ class DidomiPlugin : GenericPluginI
     private fun storeConsent() {
         PreferenceManager.getDefaultSharedPreferences(AppContext.get()).apply {
             getInt(didomiGDPRApplies, 0).let {
-                LocalStorage.set(didomiGDPRApplies, it.toString(), PluginId)
+                SessionStorage.set(didomiGDPRApplies, it.toString(), PluginId)
                 APLogger.info(TAG, "$didomiGDPRApplies $it")
             }
             getString(didomiIABConsent, null)?.let {
-                LocalStorage.set(didomiIABConsent, it, PluginId)
+                SessionStorage.set(didomiIABConsent, it, PluginId)
                 APLogger.info(TAG, "$didomiIABConsent $it")
             }
         }
