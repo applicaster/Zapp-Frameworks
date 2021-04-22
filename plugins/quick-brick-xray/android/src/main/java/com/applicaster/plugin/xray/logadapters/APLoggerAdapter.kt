@@ -17,6 +17,8 @@ class APLoggerAdapter : IAPLogger {
 
     override fun error(tag: String, msg: String) = logger.e(tag).message(msg)
 
-    override fun error(tag: String, msg: String, t: Throwable) =
-            logger.e(tag).exception(t).message(msg)
+    override fun error(tag: String, msg: String, t: Throwable?) = when (t) {
+        null -> error(tag, msg)
+        else -> logger.e(tag).exception(t).message(msg)
+    }
 }
