@@ -10,8 +10,9 @@ import Foundation
 import GemiusSDK
 
 extension GemiusAnalytics {
-    struct PlyerEvents {
+    struct PlayerEvents {
         static let play = "Player Playing"
+        static let resume = "Player Resume"
         static let paused = "Player Pause"
         static let seeking = "Player Seeking"
         static let seeked = "Player Seeked"
@@ -29,22 +30,22 @@ extension GemiusAnalytics {
         }
 
         switch eventName {
-        case PlyerEvents.created:
+        case PlayerEvents.created:
             retValue = handleCreateEvent(eventName, parameters: parameters)
 
-        case PlyerEvents.dismissed:
+        case PlayerEvents.dismissed:
             retValue = handleDismissEvent(eventName, parameters: parameters)
 
-        case PlyerEvents.play:
+        case PlayerEvents.play, PlayerEvents.resume:
             retValue = handlePlayEvent(eventName, parameters: parameters)
 
-        case PlyerEvents.paused:
+        case PlayerEvents.paused:
             retValue = handlePauseEvent(eventName, parameters: parameters)
 
-        case PlyerEvents.seeked:
+        case PlayerEvents.seeked:
             retValue = handleSeekEvent(eventName, parameters: parameters)
 
-        case PlyerEvents.buffering:
+        case PlayerEvents.buffering:
             retValue = handleBufferEvent(eventName, parameters: parameters)
 
         default:
@@ -103,6 +104,10 @@ extension GemiusAnalytics {
     }
 
     func handleSeekEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        guard adIsPlaying == false else {
+            return true
+        }
+        
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.SEEK,
                                     forProgram: lastProgramID,
@@ -112,6 +117,10 @@ extension GemiusAnalytics {
     }
 
     func handleBufferEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        guard adIsPlaying == false else {
+            return true
+        }
+        
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.BUFFER,
                                     forProgram: lastProgramID,
@@ -121,6 +130,10 @@ extension GemiusAnalytics {
     }
 
     func handlePauseEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        guard adIsPlaying == false else {
+            return true
+        }
+        
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.PAUSE,
                                     forProgram: lastProgramID,
@@ -130,6 +143,10 @@ extension GemiusAnalytics {
     }
 
     func handlePlayEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        guard adIsPlaying == false else {
+            return true
+        }
+        
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.PLAY,
                                     forProgram: lastProgramID,
@@ -139,6 +156,10 @@ extension GemiusAnalytics {
     }
 
     func handleDismissEvent(_ eventName: String, parameters: [String: NSObject]) -> Bool {
+        guard adIsPlaying == false else {
+            return true
+        }
+        
         let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
         gemiusPlayerObject?.program(.STOP,
                                     forProgram: lastProgramID,
