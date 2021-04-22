@@ -1,7 +1,10 @@
 {
   "name": "OptaStats",
-  "version": "0.0.1",
-  "swift_versions": ["5.0", "5.1"],
+  "version": "0.2.0",
+  "swift_versions": [
+    "5.0",
+    "5.1"
+  ],
   "summary": "Opta Stats",
   "description": "This plugin allow to fetch statistics from Opta",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -9,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-opta-stats/0.0.1"
+    "tag": "@@applicaster/quick-brick-opta-stats/0.2.0"
   },
   "platforms": {
     "ios": "12.0",
@@ -21,12 +24,24 @@
     "ZappCore": [],
     "ZappPlugins": [],
     "XrayLogger": [],
-    "Alamofire": ["5.4.1"],
-    "SwiftyJSON": ["5.0.1"],
-    "RxSwift": ["4.4.1"],
-    "RxCocoa": ["4.4.1"],
-    "SDWebImage": ["4.4.6"],
-    "MBProgressHUD": ["1.2.0"],
+    "Alamofire": [
+      "5.4.1"
+    ],
+    "SwiftyJSON": [
+      "5.0.1"
+    ],
+    "RxSwift": [
+      "4.4.1"
+    ],
+    "RxCocoa": [
+      "4.4.1"
+    ],
+    "SDWebImage": [
+      "4.4.6"
+    ],
+    "MBProgressHUD": [
+      "1.2.0"
+    ],
     "React": []
   },
   "xcconfig": {
