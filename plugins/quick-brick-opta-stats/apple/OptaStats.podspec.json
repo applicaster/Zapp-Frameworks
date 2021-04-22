@@ -19,7 +19,7 @@
     "tvos": "12.0"
   },
   "source_files": "universal/**/*.{h,m,swift}",
-  "resources": "universal/**/*.{xib,storyboard}",
+  "resources": "universal/**/*.{jpg,xib,storyboard}",
   "dependencies": {
     "ZappCore": [],
     "ZappPlugins": [],
