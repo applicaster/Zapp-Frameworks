@@ -19,18 +19,19 @@ class EmptySpacerTableViewCell: UITableViewCell {
     lazy var customLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.useRegularFont()
+        label.textColor = UIColor.black
         return label
     }()
 
     override func awakeFromNib() {
         update()
-        contentView.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.white
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         update()
-        contentView.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.white
     }
 
     fileprivate func update() {

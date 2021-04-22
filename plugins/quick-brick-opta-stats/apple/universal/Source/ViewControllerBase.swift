@@ -154,19 +154,15 @@ extension UIViewController {
         case .none:
             break
         case let .genericModal(vc):
-            if let path = Bundle(for: classForCoder).path(forResource: "close-modal-icon", ofType: "png") {
-                let closeButtonImage = UIImage(contentsOfFile: path)
-                let closeButton = UIBarButtonItem(image: closeButtonImage, style: .plain, target: self, action: #selector(vc.dismissAction))
-                rightItems = [closeButton]
-                leftItem = nil
-            }
+            let closeButtonImage = Helpers.closeIcon()
+            let closeButton = UIBarButtonItem(image: closeButtonImage, style: .plain, target: self, action: #selector(vc.dismissAction))
+            rightItems = [closeButton]
+            leftItem = nil
         case let .genericPushed(vc):
-            if let path = Bundle(for: classForCoder).path(forResource: "go-back-icon", ofType: "png") {
-                let backButtonImage = UIImage(contentsOfFile: path)
-                let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(vc.dismissAction))
-                rightItems = nil
-                leftItem = backButton
-            }
+            let backButtonImage = Helpers.backIcon()
+            let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(vc.dismissAction))
+            rightItems = nil
+            leftItem = backButton
         }
 
         if let rightItems = rightItems {

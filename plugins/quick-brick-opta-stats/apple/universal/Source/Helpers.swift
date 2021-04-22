@@ -111,4 +111,32 @@ class Helpers {
 
         return false
     }
+    
+    static func unknownFlagImage() -> UIImage? {
+        guard let path = Bundle.main.path(forResource: "flag-unknown", ofType: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: path)
+    }
+    
+    static func closeIcon() -> UIImage? {
+        guard let path = Bundle.main.path(forResource: "close-modal-icon", ofType: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: path)
+    }
+    
+    static func backIcon() -> UIImage? {
+        guard let path = Bundle.main.path(forResource: "go-back-icon", ofType: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: path)
+    }
+    
+    static func copaIcon() -> UIImage? {
+        guard let path = Bundle.main.path(forResource: "copa-icon", ofType: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: path)
+    }
 }

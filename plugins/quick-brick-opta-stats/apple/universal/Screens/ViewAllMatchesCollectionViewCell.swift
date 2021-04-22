@@ -36,7 +36,7 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
             break
         }
 
-        if let path = Bundle(for: classForCoder).path(forResource: imageToLoad, ofType: "jpg") {
+        if let path = Bundle.main.path(forResource: imageToLoad, ofType: "jpg") {
             allMatchesImageView.image = UIImage(contentsOfFile: path)
         }
         allMatchesImageView.layer.cornerRadius = 9

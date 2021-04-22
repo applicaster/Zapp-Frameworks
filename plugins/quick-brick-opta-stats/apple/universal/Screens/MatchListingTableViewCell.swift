@@ -72,10 +72,9 @@ class MatchListingTableViewCell: UITableViewCell {
         if let team2FlagImageRecognizer = team2FlagImageRecognizer {
             awayFlagImageView.removeGestureRecognizer(team2FlagImageRecognizer)
         }
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            homeFlagImageView.image = UIImage(contentsOfFile: path)
-            awayFlagImageView.image = UIImage(contentsOfFile: path)
-        }
+        
+        homeFlagImageView.image = Helpers.unknownFlagImage()
+        awayFlagImageView.image = Helpers.unknownFlagImage()
 
         roundProgressView()
     }
@@ -101,11 +100,8 @@ class MatchListingTableViewCell: UITableViewCell {
         awayFlagImageView.image = nil
         awayFlagImageView.isUserInteractionEnabled = false
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            homeFlagImageView.image = UIImage(contentsOfFile: path)
-            awayFlagImageView.image = UIImage(contentsOfFile: path)
-        }
-        
+        homeFlagImageView.image = Helpers.unknownFlagImage()
+        awayFlagImageView.image = Helpers.unknownFlagImage()
         matchTimeLabel.text = "-"
 
         matchGroupLabel.text = "-"
@@ -115,10 +111,7 @@ class MatchListingTableViewCell: UITableViewCell {
             return
         }
 
-        var placeholderFlagImage: UIImage?
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            placeholderFlagImage = UIImage(contentsOfFile: path)
-        }
+        var placeholderFlagImage = Helpers.unknownFlagImage()
         
         if let contestants = match.contestants {
             for (index, contestant) in contestants.enumerated() {

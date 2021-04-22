@@ -136,12 +136,8 @@ class MatchView: UIView {
         matchStageLabel.text = matchStat?.matchInfo.stage?.name?.uppercased() ?? ""
         matchLocationLabel.text = matchStat?.matchInfo.venue?.shortName?.uppercased() ?? ""
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            team1FlagImageView.image = UIImage(contentsOfFile: path)
-            team2FlagImageView.image = UIImage(contentsOfFile: path)
-
-        }
-
+        team1FlagImageView.image = Helpers.unknownFlagImage()
+        team2FlagImageView.image = Helpers.unknownFlagImage()
 
         if let contestants = matchStat?.matchInfo.contestants {
             for (index, contestant) in contestants.enumerated() {
@@ -288,10 +284,8 @@ class MatchView: UIView {
         matchStageLabel.text = ""
         matchLocationLabel.text = ""
 
-        if let path = Bundle(for: classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            team1FlagImageView.image = UIImage(contentsOfFile: path)
-            team2FlagImageView.image = UIImage(contentsOfFile: path)
-        }
+        team1FlagImageView.image = Helpers.unknownFlagImage()
+        team2FlagImageView.image = Helpers.unknownFlagImage()
 
         team1CountryLabel.text = "-"
         team2CountryLabel.text = "-"

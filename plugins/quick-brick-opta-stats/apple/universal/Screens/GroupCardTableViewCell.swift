@@ -237,10 +237,7 @@ class GroupCardTableViewCell: UITableViewCell {
         
         groupTitleLabel.text = model.groupName?.uppercased()
         
-        var unknownFlagImage: UIImage?
-        if let path = Bundle(for: self.classForCoder).path(forResource: "flag-unknown", ofType: "png") {
-            unknownFlagImage = UIImage(contentsOfFile: path)
-        }
+        var unknownFlagImage = Helpers.unknownFlagImage()
         
         if let rankings = model.rankings {
             for ranking in rankings {
@@ -349,9 +346,11 @@ class GroupCardTableViewCell: UITableViewCell {
                     }
                 }
                 
-                if let path = Bundle(for: self.classForCoder).path(forResource: "flag-\(ranking.contestantID ?? "")", ofType: "png") {
-                    flagImageView?.image = UIImage(contentsOfFile: path)
-                    detailsFlagImageView?.image = UIImage(contentsOfFile: path)
+
+                if let contestantID = ranking.contestantID {
+                    let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(contestantID).png"
+                    flagImageView?.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
+                    detailsFlagImageView?.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
                 } else {
                     flagImageView?.image = unknownFlagImage
                     detailsFlagImageView?.image = unknownFlagImage

@@ -111,11 +111,7 @@ class TeamCardTableHeaderView: UIView {
         let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(squad.contestantId ?? "").png"
         teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
 
-        if let path = Bundle(for: classForCoder).path(forResource: "copa-icon", ofType: "png") {
-            trophyImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            trophyImageView.image = nil
-        }
+        trophyImageView.image = Helpers.copaIcon()
         trophyImageView.isHidden = true
         amountOfTrophiesLabel.isHidden = true
 
@@ -142,11 +138,7 @@ class TeamCardTableHeaderView: UIView {
         let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(teamCard.contestantStat?.id ?? "").png"
         teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
 
-        if let path = Bundle(for: classForCoder).path(forResource: "copa-icon", ofType: "png") {
-            trophyImageView.image = UIImage(contentsOfFile: path)
-        } else {
-            trophyImageView.image = nil
-        }
+        trophyImageView.image = Helpers.copaIcon()
         trophyImageView.isHidden = true
         amountOfTrophiesLabel.isHidden = true
 
