@@ -55,6 +55,11 @@ const baseManifest = {
       initial_value: "style-fit",
     },
     {
+      type: "uploader",
+      key: "css_url",
+      tooltip_text: "Additional CSS file"
+    },
+    {
       group: true,
       label: "Google IMA",
       tooltip: "Google IMA Settings",
