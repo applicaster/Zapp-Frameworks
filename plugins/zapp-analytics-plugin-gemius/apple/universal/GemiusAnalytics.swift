@@ -51,6 +51,7 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     
     var gemiusPlayerObject: GSMPlayer?
     var lastProgramID: String?
+    var adIsPlaying: Bool = false
     var lastProceededPlayerEvent: String?
     var lastProceededAdEvent: String?
 

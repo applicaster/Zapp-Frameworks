@@ -32,25 +32,28 @@ extension GemiusAnalytics {
         switch eventName {
         case AdEvents.adBreakBegin:
             let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
-            gemiusPlayerObject?.program(.BREAK,
-                                        forProgram: lastProgramID,
-                                        atOffset: NSNumber(value: currentPlayerPosition),
-                                        with: nil)
+            if let lastProgramID = lastProgramID {
+                gemiusPlayerObject?.program(.BREAK,
+                                            forProgram: lastProgramID,
+                                            atOffset: NSNumber(value: currentPlayerPosition),
+                                            with: nil)
+            }
 
             retValue = proceedAdEvent(eventName)
 
         case AdEvents.adBegin:
             let currentPlayerPosition = getCurrentPlayerPosition(from: parameters)
             let data = GSMAdData()
-            gemiusPlayerObject?.newAd(UUID().uuidString,
-                                      with: data)
-
             let adEventParams = parseAdEventParams(from: parameters)
             let adEventData = GSMEventAdData()
+
+            gemiusPlayerObject?.newAd(adEventParams.id,
+                                      with: data)
+
             adEventData.autoPlay = true
             adEventData.adPosition = NSNumber(value: adEventParams.adPosition)
             adEventData.breakSize = NSNumber(value: adEventParams.breakSize)
-
+            adIsPlaying = true
             gemiusPlayerObject?.adEvent(.PLAY,
                                         forProgram: lastProgramID,
                                         forAd: adEventParams.id,
@@ -65,6 +68,7 @@ extension GemiusAnalytics {
             adEventData.autoPlay = true
             adEventData.adPosition = NSNumber(value: adEventParams.adPosition)
             adEventData.breakSize = NSNumber(value: adEventParams.breakSize)
+            adIsPlaying = false
 
             gemiusPlayerObject?.adEvent(.COMPLETE,
                                         forProgram: lastProgramID,
@@ -86,16 +90,13 @@ extension GemiusAnalytics {
 
     fileprivate func parseAdEventParams(from parameters: [String: NSObject]) -> AdEventParams {
         var adParams = AdEventParams()
-        guard let adData = parameters["adData"] as? [String: NSObject] else {
-            return adParams
-        }
 
-        adParams.adPosition = adData["adPosition"] as? Int ?? 0
-        adParams.breakSize = adData["breakSize"] as? Int ?? 0
-        adParams.maxDuration = adData["maxDuration"] as? Double ?? 0.0
-        adParams.maxRemainingDuration = adData["maxRemainingDuration"] as? Double ?? 0.0
-        adParams.timeOffset = adData["timeOffset"] as? Double ?? 0.0
-        adParams.id = adData["id"] as? String ?? ""
+        adParams.adPosition = parameters["adPosition"] as? Int ?? 0
+        adParams.breakSize = parameters["breakSize"] as? Int ?? 0
+        adParams.maxDuration = parameters["maxDuration"] as? Double ?? 0.0
+        adParams.maxRemainingDuration = parameters["maxRemainingDuration"] as? Double ?? 0.0
+        adParams.timeOffset = parameters["timeOffset"] as? Double ?? 0.0
+        adParams.id = parameters["id"] as? String ?? ""
 
         return adParams
     }
