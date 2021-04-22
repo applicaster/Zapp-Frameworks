@@ -9,7 +9,7 @@ class OptaStatsViewManager(context: ReactApplicationContext) : SimpleViewManager
     override fun getName(): String = REACT_CLASS
 
     override fun createViewInstance(reactContext: ThemedReactContext): OptaStatsView =
-            OptaStatsView(reactContext)
+            OptaStatsView(reactContext.currentActivity!!)
 
     companion object {
         const val REACT_CLASS = "OptaStatsContainer"
