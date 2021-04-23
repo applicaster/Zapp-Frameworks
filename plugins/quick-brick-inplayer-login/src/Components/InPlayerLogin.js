@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Platform } from "react-native";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Platform, View } from "react-native";
 // https://github.com/testshallpass/react-native-dropdownalert#usage
 import DropdownAlert from "react-native-dropdownalert";
 import { isWebBasedPlatform } from "../Utils/Platform";
@@ -37,10 +37,10 @@ const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
+const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer")),
+    R.find(R.propEq("id", screenId)),
     R.values
   );
 
@@ -58,17 +58,19 @@ const InPlayerLogin = (props) => {
     USER_ACCOUNT: "UserAccount",
   };
   const navigator = useNavigation();
+  const screenId = navigator?.activeRiver?.id;
   const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
   const [idToken, setIdtoken] = useState(null);
   const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [loading, setLoading] = useState(true);
   const [lastEmailUsed, setLastEmailUsed] = useState(null);
-
   const { callback, payload, rivers } = props;
-  const localizations = getRiversProp("localizations", rivers);
-  const styles = getRiversProp("styles", rivers);
 
-  const screenStyles = getStyles(styles);
+  const localizations = getRiversProp("localizations", rivers, screenId);
+  const styles = getRiversProp("styles", rivers, screenId);
+
+  const screenStyles = useMemo(() => getStyles(styles), [styles]);
+
   const screenLocalizations = getLocalizations(localizations);
 
   const {
@@ -84,19 +86,28 @@ const InPlayerLogin = (props) => {
     const parsedValue = parseInt(in_player_branding_id);
     return isNaN(parsedValue) ? null : parsedValue;
   }, []);
+  let showParentLock =
+    (screenStyles?.import_parent_lock === "1" ||
+      screenStyles?.import_parent_lock === true) &&
+    props?.payload?.extensions?.skip_parent_lock !== true
+      ? true
+      : false;
 
-  const showParentLock =
-    screenStyles?.import_parent_lock === "1" ? true : false;
-
+  navigator.hideNavBar();
+  navigator.hideBottomBar();
   let stillMounted = true;
-
   useEffect(() => {
     setupEnvironment();
+    return () => {
+      navigator.showNavBar();
+      navigator.showBottomBar();
+      stillMounted = false;
+    };
   }, []);
 
-  function checkIfUserAuthenteficated() {
-    return InPlayerService.isAuthenticated(clientId)
-      .then(async (isAuthenticated) => {
+  async function checkIfUserAuthenteficated() {
+    return InPlayerService.isAuthenticated(clientId).then(
+      async (isAuthenticated) => {
         let eventMessage = "Account Flow:";
         const event = logger
           .createEvent()
@@ -106,7 +117,6 @@ const InPlayerLogin = (props) => {
         if (stillMounted) {
           if (isAuthenticated) {
             eventMessage = `${eventMessage} access granted, flow completed`;
-            accountFlowCallback({ success: true });
             return true;
           } else {
             if (showParentLock) {
@@ -118,10 +128,8 @@ const InPlayerLogin = (props) => {
         }
         event.setMessage(eventMessage).send();
         return false;
-      })
-      .finally(() => {
-        stillMounted && setLoading(false);
-      });
+      }
+    );
   }
 
   async function setupEnvironment() {
@@ -157,7 +165,6 @@ const InPlayerLogin = (props) => {
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
-
     if (payload) {
       const authenticationRequired = isAuthenticationRequired({ payload });
       const assetId = inPlayerAssetId({
@@ -179,13 +186,15 @@ const InPlayerLogin = (props) => {
             isAuthenticated,
           },
         });
+        stillMounted && setLoading(false);
+
         stillMounted && setHookType(HookTypeData.PLAYER_HOOK);
       } else {
         logger.debug({
           message: "InPlayer plugin invocation, finishing hook with: success",
           data: { ...logData, isAuthenticated },
         });
-        // callback && callback({ success: true, error: null, payload });
+        accountFlowCallback({ success: true });
       }
     } else {
       setLoading(false);
@@ -211,9 +220,6 @@ const InPlayerLogin = (props) => {
         stillMounted && setHookType(HookTypeData.SCREEN_HOOK);
       }
     }
-    return () => {
-      stillMounted = false;
-    };
   }
 
   const accountFlowCallback = useCallback(
@@ -249,11 +255,13 @@ const InPlayerLogin = (props) => {
               parentLockWasPresented,
             };
           }
+          callback && callback({ success, error: null, payload: newPayload });
+        } else {
+          callback && callback({ success, error: null, payload });
         }
-        callback && callback({ success, error: null, payload: payload });
       }
     },
-    [hookType]
+    [hookType, parentLockWasPresented]
   );
 
   const onLogin = ({ email, password }) => {
@@ -343,7 +351,7 @@ const InPlayerLogin = (props) => {
       });
   }
 
-  function onNewPasswordChange({ password, token }) {
+  function onNewPasswordChange({ password, token, setScreen }) {
     logger.debug({
       message: `Set new password task, password: ${password}, token: ${token}`,
       data: {
@@ -464,7 +472,7 @@ const InPlayerLogin = (props) => {
 
     Platform.isTV || isWebBasedPlatform
       ? showAlert(title, message)
-      : this.dropDownAlertRef.alertWithType(type, title, message);
+      : this.dropDownAlertRef?.alertWithType(type, title, message);
   };
 
   const maybeShowAlertToUser = (title) => async (error) => {
@@ -521,7 +529,9 @@ const InPlayerLogin = (props) => {
 
   function renderAccount() {
     return (
-      <>
+      <View
+        style={{ flex: 1, backgroundColor: screenStyles?.background_color }}
+      >
         <AccountComponents.AccountFlow
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
@@ -537,11 +547,7 @@ const InPlayerLogin = (props) => {
           lastEmailUsed={lastEmailUsed}
           {...props}
         />
-        {!Platform.isTV && !isWebBasedPlatform && (
-          <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
-        )}
-        {loading && <AccountComponents.LoadingScreen />}
-      </>
+      </View>
     );
   }
 
@@ -560,7 +566,7 @@ const InPlayerLogin = (props) => {
     );
   };
 
-  function renderFlow() {
+  function renderScreen() {
     switch (hookType) {
       case HookTypeData.PLAYER_HOOK || HookTypeData.SCREEN_HOOK:
         return renderAccount();
@@ -569,6 +575,24 @@ const InPlayerLogin = (props) => {
       case HookTypeData.UNDEFINED:
         return null;
     }
+  }
+
+  function renderFlow() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: screenStyles?.background_color,
+        }}
+      >
+        {renderScreen()}
+        {loading && <AccountComponents.LoadingScreen />}
+
+        {!Platform.isTV && !isWebBasedPlatform && (
+          <DropdownAlert ref={(ref) => (this.dropDownAlertRef = ref)} />
+        )}
+      </View>
+    );
   }
 
   return renderFlow();

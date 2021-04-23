@@ -4,7 +4,7 @@ import {
   getAccessFees,
 } from "../../Services/inPlayerService";
 import { isWebBasedPlatform } from "../../Utils/Platform";
-
+import MESSAGES from "../Config";
 import {
   prepareInAppPurchaseData,
   retrieveInPlayerFeesData,
@@ -15,6 +15,29 @@ export const logger = createLogger({
   subsystem: Subsystems.ASSET_LOADER,
 });
 
+export async function assetLoaderStandaloneScreen({ props, assetId, store }) {
+  try {
+    const accessForAsset = await checkAccessForAsset({
+      assetId,
+    });
+    const newPayload = await preparePayloadWithPurchaseData({
+      props,
+      assetId,
+      store,
+      accessForAsset,
+    });
+
+    return newPayload;
+  } catch (error) {
+    if (isWebBasedPlatform) {
+      throw Error("Not supported web platform");
+    } else if (error?.requestedToPurchase) {
+      return await preparePayloadWithPurchaseData({ props, assetId, store });
+    } else {
+      handleError(error);
+    }
+  }
+}
 export async function assetLoader({
   props,
   assetId,
@@ -36,7 +59,6 @@ export async function assetLoader({
     });
     const src = assetData?.src;
     const cookies = assetData?.cookies;
-
     if (assetData && src) {
       const newPayload = src && {
         ...payload,
@@ -49,27 +71,40 @@ export async function assetLoader({
   } catch (error) {
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
-    } else if (error?.requestedToPurchase) {
-      const inPlayerFeesData = await preparePurchaseData({
-        props,
-        assetId,
-        store,
-      });
-
-      if (inPlayerFeesData) {
-        const newPayload = payload;
-        newPayload.extensions.in_player_data = { inPlayerFeesData, assetId };
-        newPayload.extensions.in_app_purchase_data = {
-          productsToPurchase: prepareInAppPurchaseData(inPlayerFeesData),
-        };
-
-        return newPayload;
-      }
-      return null;
+    } else if (error?.requestedToPurchase && retryInCaseFail === false) {
+      return await preparePayloadWithPurchaseData({ props, assetId, store });
     } else {
       handleError(error);
     }
   }
+}
+
+async function preparePayloadWithPurchaseData({
+  props,
+  assetId,
+  store,
+  accessForAsset = null,
+}) {
+  const payload = props?.payload;
+
+  const inPlayerFeesData = await preparePurchaseData({
+    props,
+    assetId,
+    store,
+  });
+  if (inPlayerFeesData) {
+    const newPayload = payload;
+    newPayload.extensions.in_player_data = { inPlayerFeesData, assetId };
+    newPayload.extensions.in_app_purchase_data = {
+      productsToPurchase: prepareInAppPurchaseData(
+        inPlayerFeesData,
+        accessForAsset
+      ),
+    };
+
+    return newPayload;
+  }
+  return null;
 }
 
 function handleError(error) {
@@ -80,13 +115,13 @@ function handleError(error) {
       ? MESSAGES.purchase.required
       : statusString;
     const errorWithMessage = { ...error, message };
-    throw Error(errorWithMessage);
+    throw errorWithMessage;
   } else {
     throw Error(MESSAGES.asset.fail);
   }
 }
 
-async function preparePurchaseData({ props, assetId, store }) {
+export async function preparePurchaseData({ props, assetId, store }) {
   const consumable_type_mapper = props?.configuration?.consumable_type_mapper;
   const non_consumable_type_mapper =
     props?.configuration?.non_consumable_type_mapper;
@@ -109,7 +144,6 @@ async function preparePurchaseData({ props, assetId, store }) {
       in_player_environment,
       store,
     });
-
     logger.debug({
       message: "preparePurchaseData: Purchase fee data",
       data: {

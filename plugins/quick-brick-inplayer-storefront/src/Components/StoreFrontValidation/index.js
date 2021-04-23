@@ -50,6 +50,7 @@ async function validatePurchase({ purchasedItem, fee, store }) {
           item_id: itemId,
           access_fee_id: id,
           store,
+          result,
         },
       });
       return result;
