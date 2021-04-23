@@ -8,6 +8,7 @@ object PluginHelper {
     private const val PLUGIN_ID = "zapp-react-native-theo-player"
     private const val LICENSE_KEY = "theoplayer_license_key"
     private const val SCALE_MODE_KEY = "theoplayer_scale_mode"
+    private const val CSS_KEY = "css_url"
     private const val CAST_KEY = "chromecast_app_id"
     private const val MOAT_PARTNER_CODE_KEY = "moat_partner_code";
 
@@ -33,6 +34,12 @@ object PluginHelper {
     fun getMoat(): String? {
         val configuration = getPluginSettings()
         return configuration?.get(MOAT_PARTNER_CODE_KEY)?.asJsonPrimitive?.asString
+    }
+
+    @JvmStatic
+    fun getCSS(): String? {
+        val configuration = getPluginSettings()
+        return configuration?.get(CSS_KEY)?.asJsonPrimitive?.asString
     }
 
     private fun getPluginSettings(): Map<String, JsonElement>? =

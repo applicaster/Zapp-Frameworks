@@ -3,6 +3,7 @@ import React
 import THEOplayerSDK
 import UIKit
 import XrayLogger
+import ZappCore
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -10,6 +11,9 @@ class THEOplayerView: UIView {
 //    private static var eventEmitter: ReactNativeEventEmitter!
 
     var player: THEOplayer!
+    lazy var pluginModel: ZPPluginModel? = {
+        FacadeConnector.connector?.pluginManager?.plugin(for: "zapp-react-native-theo-player")
+    }()
 
     @objc var onPlayerPlay: RCTBubblingEventBlock?
     @objc var onPlayerPlaying: RCTBubblingEventBlock?
@@ -70,7 +74,6 @@ class THEOplayerView: UIView {
     }
 
     deinit {
-
     }
 
     override init(frame: CGRect) {
@@ -157,7 +160,11 @@ class THEOplayerView: UIView {
 
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
-        let stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
+        
+        var stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
+        if let customCss = urlForCustomCss() {
+            stylePaths.append(customCss)
+        }
         let playerConfig = THEOplayerConfiguration(chromeless: false,
                                                    defaultCSS: true,
                                                    cssPaths: stylePaths,
@@ -181,16 +188,23 @@ class THEOplayerView: UIView {
          */
         player.evaluateJavaScript("init({player: player})")
         player.presentationMode = .inline
-        
+
         attachJSEventListeners()
         attachEventListeners()
         player.autoplay = autoplay
         player.source = source
         player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         player.addAsSubview(of: self)
-        if (autoplay) {
+        if autoplay {
             player.play()
         }
+    }
 
+    func urlForCustomCss() -> String? {
+        guard let configurationJSON = pluginModel?.configurationJSON,
+              let cssURL = configurationJSON["css_url"] as? String else {
+            return nil
+        }
+        return cssURL
     }
 }
