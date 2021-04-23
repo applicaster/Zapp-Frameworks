@@ -61,6 +61,11 @@
       "initial_value": "style-fit"
     },
     {
+      "type": "uploader",
+      "key": "css_url",
+      "tooltip_text": "Additional CSS file"
+    },
+    {
       "group": true,
       "label": "Google IMA",
       "tooltip": "Google IMA Settings",
@@ -193,8 +198,8 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.5.0",
-  "manifest_version": "0.5.0",
+  "dependency_version": "0.6.0",
+  "manifest_version": "0.6.0",
   "api": {
     "class_name": "THEOplayerAdapter",
     "modules": [
@@ -208,7 +213,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-react-native-theo-player@0.5.0"
+    "@applicaster/zapp-react-native-theo-player@0.6.0"
   ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
