@@ -5,7 +5,7 @@
   "author_email": "zapp@applicaster.com",
   "name": "inPlayer Storefront",
   "description": "inPlayer Storefront",
-  "type": "login",
+  "type": "payments",
   "screen": true,
   "react_native": true,
   "identifier": "quick-brick-inplayer-storefront",
@@ -21,6 +21,12 @@
       "type": "text",
       "key": "in_player_client_id",
       "tooltip_text": "In Player Client ID",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "standalone_screen_inplayer_asset_id",
+      "label": "Inplayer asset Id with with packages to purchase",
       "default": ""
     },
     {
@@ -111,8 +117,8 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "dependency_version": "0.0.10",
-  "manifest_version": "0.0.10",
+  "dependency_version": "0.0.12",
+  "manifest_version": "0.0.12",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -138,7 +144,7 @@
   "extra_dependencies": [],
   "min_zapp_sdk": "0.1.0-alpha1",
   "npm_dependencies": [
-    "@applicaster/applicaster-iap@0.3.3",
+    "@applicaster/applicaster-iap@1.1.3",
     "@react-native-community/blur@3.4.1"
   ],
   "styles": {
