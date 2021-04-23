@@ -3,7 +3,7 @@ import * as R from "ramda";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { View, Text, TouchableOpacity } from "react-native";
 
-const actionButtonContainerStyle = (screenStyles, customStyle) => {
+const actionButtonContainerStyle = (screenStyles, customStyle, disabled) => {
   const defaultStyle = {
     height: 40,
     width: 230,
@@ -13,10 +13,14 @@ const actionButtonContainerStyle = (screenStyles, customStyle) => {
     borderRadius: 50,
     alignSelf: "center",
   };
-
-  return customStyle
+  const result = customStyle
     ? R.mergeDeepLeft(customStyle, defaultStyle)
     : defaultStyle;
+
+  if (disabled) {
+    return { ...result, backgroundColor: "darkgrey" };
+  }
+  return result;
 };
 
 const actionButtonTextStyle = (screenStyles) => {
@@ -38,13 +42,27 @@ const ActionButton = (props) => {
     title,
     onPress,
     paddingTop = null,
+    disabled,
   } = props;
 
+  console.log({
+    buttonStyle,
+    foo: actionButtonContainerStyle(screenStyles, buttonStyle),
+    screenStyles,
+  });
   const textStyle = labelStyle || actionButtonTextStyle(screenStyles);
-
+  const actionButtonContainerStyles = actionButtonContainerStyle(
+    screenStyles,
+    buttonStyle,
+    disabled
+  );
   return (
-    <TouchableOpacity onPress={onPress} style={{ paddingTop: paddingTop }}>
-      <View style={actionButtonContainerStyle(screenStyles, buttonStyle)}>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={onPress}
+      style={{ paddingTop: paddingTop }}
+    >
+      <View style={actionButtonContainerStyles}>
         <Text style={textStyle}>{title}</Text>
       </View>
     </TouchableOpacity>

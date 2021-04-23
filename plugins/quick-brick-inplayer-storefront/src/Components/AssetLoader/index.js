@@ -2,6 +2,7 @@ import { createLogger, Subsystems } from "../../Services/LoggerService";
 import {
   checkAccessForAsset,
   getAccessFees,
+  getPurchaseHistory,
 } from "../../Services/inPlayerService";
 import { isWebBasedPlatform } from "../../Utils/Platform";
 import MESSAGES from "../Config";
@@ -17,22 +18,21 @@ export const logger = createLogger({
 
 export async function assetLoaderStandaloneScreen({ props, assetId, store }) {
   try {
-    const accessForAsset = await checkAccessForAsset({
+    const purchaseHistory = await getPurchaseHistory({
       assetId,
     });
+    console.log({ purchaseHistory });
     const newPayload = await preparePayloadWithPurchaseData({
       props,
       assetId,
       store,
-      accessForAsset,
+      purchaseHistory,
     });
 
     return newPayload;
   } catch (error) {
     if (isWebBasedPlatform) {
       throw Error("Not supported web platform");
-    } else if (error?.requestedToPurchase) {
-      return await preparePayloadWithPurchaseData({ props, assetId, store });
     } else {
       handleError(error);
     }
@@ -83,7 +83,7 @@ async function preparePayloadWithPurchaseData({
   props,
   assetId,
   store,
-  accessForAsset = null,
+  purchaseHistory = null,
 }) {
   const payload = props?.payload;
 
@@ -98,7 +98,7 @@ async function preparePayloadWithPurchaseData({
     newPayload.extensions.in_app_purchase_data = {
       productsToPurchase: prepareInAppPurchaseData(
         inPlayerFeesData,
-        accessForAsset
+        purchaseHistory
       ),
     };
 
@@ -108,6 +108,7 @@ async function preparePayloadWithPurchaseData({
 }
 
 function handleError(error) {
+  console.log({ error });
   let status = error?.response?.status;
   if (status) {
     const statusString = status.toString();

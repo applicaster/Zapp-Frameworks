@@ -69,7 +69,7 @@ const InPlayer = (props) => {
     standalone_screen_inplayer_asset_id.length > 0
       ? standalone_screen_inplayer_asset_id
       : null;
-
+  console.log({ standaloneScreenInplayerAssetId });
   useLayoutEffect(() => {
     navigator.hideNavBar();
     navigator.hideBottomBar();
@@ -166,6 +166,7 @@ const InPlayer = (props) => {
   }
 
   async function completeStorefrontFlow({ success, error, payload }) {
+    console.log({ success, error, payload });
     try {
       if (success && !error) {
         await validatePayment({ ...props, payload, store });
@@ -184,7 +185,7 @@ const InPlayer = (props) => {
         !isStanaloneScreen() &&
           finishStorefront({ success, error, payload: newPayload });
       } else {
-        !isStanaloneScreen() && finishStorefront({ success, error, payload });
+        finishStorefront({ success, error, payload });
       }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
@@ -205,7 +206,7 @@ const InPlayer = (props) => {
     const {
       configuration: { in_player_environment, in_player_client_id },
     } = props;
-
+    console.log({ isStandalone: isStanaloneScreen() });
     try {
       const isUserAuthenticated = await isAuthenticated(in_player_client_id);
 
@@ -260,7 +261,7 @@ const InPlayer = (props) => {
           });
           finishStorefront({ success: true, error: null, payload });
         }
-      } else if (standaloneScreenInplayerAssetId && !isHook(navigator)) {
+      } else if (isStanaloneScreen()) {
         const mockPayload = {
           id: standaloneScreenInplayerAssetId,
           extensions: {},
@@ -320,6 +321,7 @@ const InPlayer = (props) => {
   };
 
   function finishStorefront({ success, error, payload }) {
+    console.log({ callback, navigator });
     if (callback) {
       callback({ success, error, payload });
     } else {

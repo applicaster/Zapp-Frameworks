@@ -39,6 +39,7 @@ function PaymentOptionView({
     productType,
     purchased,
     expiresAt,
+    disabled,
   } = paymentOptionItem;
   const [
     titleStyle,
@@ -76,6 +77,8 @@ function PaymentOptionView({
       </>
     ) : (
       <ActionButton
+        screenStyles={screenStyles}
+        disabled={disabled}
         labelStyle={labelStyle}
         buttonStyle={buttonStyle}
         title={label}
