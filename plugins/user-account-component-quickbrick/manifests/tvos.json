@@ -1,0 +1,154 @@
+{
+  "api": {},
+  "dependency_repository_url": [],
+  "dependency_name": "@applicaster/quick-brick-user-account",
+  "author_name": "Olga Duk",
+  "author_email": "oduk@scand.com",
+  "name": "Quick Brick User Account Component",
+  "description": "User Account Component",
+  "type": "ui_component",
+  "screen": true,
+  "react_native": true,
+  "identifier": "quick-brick-user-account",
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [
+    "5a4516fa41442c000b0195d6",
+    "5c85455842b06d000836d041"
+  ],
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "preload": true,
+  "general": {
+    "fields": [
+      {
+        "group": true,
+        "label": "Screen Design and Text",
+        "tooltip": "These fields affect the design of the main screen plugin.",
+        "folded": true,
+        "fields": [
+          {
+            "key": "account_component_instructions_text",
+            "type": "text_input",
+            "label": "Account Component Instructions Text",
+            "label_tooltip": "Text to explain briefly the section context.",
+            "initial_value": "Connect to your account",
+            "placeholder": "Connect to your account"
+          },
+          {
+            "key": "account_component_instructions_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Account Component Instructions Text.",
+            "initial_value": "60"
+          },
+          {
+            "key": "account_component_instructions_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Account Component Instructions Text.",
+            "initial_value": "rgb(84, 90, 92)"
+          },
+          {
+            "key": "account_component_greetings_text",
+            "type": "text_input",
+            "label": "Account Component Greetings Text",
+            "label_tooltip": "Text to greet the user.",
+            "initial_value": "Welcome",
+            "placeholder": "Welcome"
+          },
+          {
+            "key": "account_component_greetings_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Account Component Greetings Text.",
+            "initial_value": "60"
+          },
+          {
+            "key": "account_component_greetings_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Account Component Greetings Text.",
+            "initial_value": "rgb(84, 90, 92)"
+          },
+          {
+            "key": "login_action_button_text",
+            "type": "text_input",
+            "label": "Login Action Button Text",
+            "label_tooltip": "Text for the Login Button.",
+            "initial_value": "Log In",
+            "placeholder": "Log In"
+          },
+          {
+            "key": "login_action_button_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Login Action Button Text.",
+            "initial_value": "40"
+          },
+          {
+            "key": "login_action_button_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Login Action Button Text.",
+            "initial_value": "rgb(84, 90, 92)"
+          },
+          {
+            "key": "login_action_button_background_color",
+            "type": "color_picker_rgba",
+            "label": "Login Button Color for Samsung TV",
+            "label_tooltip": "Background Color for the Login Action Button for Samsung TV.",
+            "initial_value": "rgba(39, 218, 134, 1)"
+          },
+          {
+            "key": "logout_action_button_text",
+            "type": "text_input",
+            "label": "Logout Action Button Text",
+            "label_tooltip": "Text for the Logout Button.",
+            "initial_value": "Log Out",
+            "placeholder": "Log Out"
+          },
+          {
+            "key": "logout_action_button_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for Logout Action Button Text.",
+            "initial_value": "40"
+          },
+          {
+            "key": "logout_action_button_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Logout Action Button Text.",
+            "initial_value": "rgb(84, 90, 92)"
+          },
+          {
+            "key": "logout_action_button_background_color",
+            "type": "color_picker_rgba",
+            "label": "Logout Button Color for Samsung TV",
+            "label_tooltip": "Background Color for the Logout Action Button for Samsung TV.",
+            "initial_value": "rgba(39, 218, 134, 1)"
+          },
+          {
+            "key": "authorization_provider_title_fontsize",
+            "type": "number_input",
+            "label_tooltip": "Font Size for authorization provider title.",
+            "initial_value": "24"
+          },
+          {
+            "key": "authorization_provider_title_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for authorization provider title.",
+            "initial_value": "rgb(84, 90, 92)"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_configuration_fields": [
+    {
+      "key": "ios_assets_bundle",
+      "type": "uploader",
+      "label": "tvOS Design Assets",
+      "label_tooltip": "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>."
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "platform": "tvos",
+  "dependency_version": "0.3.5",
+  "manifest_version": "0.3.5",
+  "min_zapp_sdk": "1.0.0"
+}
