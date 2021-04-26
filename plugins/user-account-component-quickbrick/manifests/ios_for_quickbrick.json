@@ -32,10 +32,10 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "dependency_version": "0.3.5",
-  "manifest_version": "0.3.6",
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "ios_for_quickbrick",
+  "manifest_version": "0.3.7",
+  "dependency_version": "0.3.7",
   "general": {
     "fields": [
       {
