@@ -25,7 +25,6 @@ const isPad = isMobile && aspectRatio < 1.6;
 const storeConnector = connectToStore((state) => {
   const loginPlugin = state.plugins.find(({ type }) => type === "login");
 
-  const screenId = "42043a23-6ff1-4a30-b509-cffa075abb66";
   const values = Object.values(state.rivers);
   // eslint-disable-next-line array-callback-return,consistent-return
 
@@ -37,14 +36,13 @@ const storeConnector = connectToStore((state) => {
   const plugin = values.find((item) => {
     if (item && item.type) {
       console.log({ item });
-      if (userAccountPlugin?.general?.custom_screen_id) {
+      if (userAccountPlugin?.general?.custom_screen_id?.length > 0) {
         return item.id === userAccountPlugin?.general?.custom_screen_id;
       }
 
       return item.type === loginPlugin.identifier;
     }
   });
-  console.log({ plugin });
   return { plugin };
 });
 
