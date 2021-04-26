@@ -21,6 +21,9 @@ const baseManifest = {
   custom_configuration_fields: [],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  dependency_version: "0.3.5",
+  manifest_version: "0.3.5",
+  dependency_name: "@applicaster/quick-brick-user-account",
 };
 
 function createManifest({ version, platform }) {
