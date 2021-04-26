@@ -11,7 +11,7 @@ import UIKit
 class GenericViewController: ViewControllerBase {
     @IBOutlet var screenNameLabel: UILabel!
 
-    var screenType: StatsScreenTypes = .undefined
+    var screenType: StatsScreenType = .undefined
 
     override func viewDidLoad() {
         super.viewDidLoad()

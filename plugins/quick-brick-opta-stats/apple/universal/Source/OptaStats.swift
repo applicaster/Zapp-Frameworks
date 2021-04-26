@@ -96,7 +96,7 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     }
 }
 
-enum StatsScreenTypes: String {
+enum StatsScreenType: String {
     case undefined = ""
     case groupScreen = "groups"
     case teamsScreen = "teams"

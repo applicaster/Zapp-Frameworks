@@ -9,11 +9,26 @@ import Foundation
 import ZappCore
 
 extension OptaStats: PluginURLHandlerProtocol {
-    public func handlePluginURLScheme(with rootViewController: UIViewController?, url: URL) -> Bool {
-        var retValue = false
+    struct Actions {
+        static let show = "show"
+        static let stats = "stats"
+        static let showstats = "showstats"
+    }
 
+    public func handlePluginURLScheme(with rootViewController: UIViewController?, url: URL) -> Bool {
         // ca2019://plugin?pluginIdentifier=quick-brick-opta-stats&action=show&type=match&id=bgmp0pbbzbwmubds90nirsyui
         // xcrun simctl openurl booted "ca2019://plugin?pluginIdentifier=quick-brick-opta-stats&action=show&type=match&id=bgmp0pbbzbwmubds90nirsyui"
+
+        guard let params = queryParams(url: url) else {
+            return false
+        }
+
+        return handlePresentScreen(targetViewController: rootViewController,
+                                   params: params)
+    }
+
+    public func canHandlePluginURLScheme(with url: URL) -> Bool {
+        var retValue = false
 
         guard let params = queryParams(url: url),
               let action = params["action"] as? String else {
@@ -21,9 +36,10 @@ extension OptaStats: PluginURLHandlerProtocol {
         }
 
         switch action {
-        case "show":
-            retValue = handlePresentScreen(targetViewController: rootViewController,
-                                           params: params)
+        case Actions.show,
+             Actions.stats,
+             Actions.showstats:
+            retValue = screenType(for: params) != .undefined
         default:
             break
         }
@@ -42,9 +58,18 @@ extension OptaStats: PluginURLHandlerProtocol {
 }
 
 extension OptaStats {
+    fileprivate func screenType(for params: [String: Any]) -> StatsScreenType {
+        guard let screenTypeValue = params["type"] as? String,
+              let type = StatsScreenType(rawValue: screenTypeValue) else {
+            return .undefined
+        }
+
+        return type
+    }
+
     fileprivate func handlePresentScreen(targetViewController: UIViewController?,
                                          params: [String: Any]) -> Bool {
-        guard let screenTypeValue = params["type"] as? String else { return false }
+        var retValue = true
 
         var viewControllerToShow: ViewControllerBase?
 
@@ -55,44 +80,37 @@ extension OptaStats {
             fromPushNotification = valueAsBool
         }
 
-        if let screenType = StatsScreenTypes(rawValue: screenTypeValue) {
-            switch screenType {
-            case .groupScreen:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: GroupCardsViewController.storyboardID) as? GroupCardsViewController
-                viewControllerToShow = viewController
-            case .teamScreen:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController
-                if let teamID = params["id"] as? String {
-                    viewController?.teamID = teamID
-                }
-                viewControllerToShow = viewController
-            case .matchesScreen:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchesCardViewController.storyboardID) as? MatchesCardViewController
-                if let teamID = params["id"] as? String {
-                    viewController?.teamID = teamID
-                }
-                viewControllerToShow = viewController
-            case .matchScreen:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController
-                if let matchID = params["id"] as? String {
-                    viewController?.matchID = Helpers.sanatizeID(matchID, fromPush: fromPushNotification)
-                }
-                viewControllerToShow = viewController
-            case .playerScreen:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as? PlayerDetailsViewController
-                if let playerID = params["id"] as? String {
-                    viewController?.playerID = playerID
-                }
-                viewControllerToShow = viewController
-            default:
-                let viewController = mainStoryboard.instantiateViewController(withIdentifier: "GenericViewController") as? GenericViewController
-                viewController?.screenType = screenType
-                viewControllerToShow = viewController
-            }
-        } else {
-            let viewController = mainStoryboard.instantiateViewController(withIdentifier: "GenericViewController") as? GenericViewController
-            viewController?.screenType = .undefined
+        switch screenType(for: params) {
+        case .groupScreen:
+            let viewController = mainStoryboard.instantiateViewController(withIdentifier: GroupCardsViewController.storyboardID) as? GroupCardsViewController
             viewControllerToShow = viewController
+        case .teamScreen:
+            let viewController = mainStoryboard.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController
+            if let teamID = params["id"] as? String {
+                viewController?.teamID = teamID
+            }
+            viewControllerToShow = viewController
+        case .matchesScreen:
+            let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchesCardViewController.storyboardID) as? MatchesCardViewController
+            if let teamID = params["id"] as? String {
+                viewController?.teamID = teamID
+            }
+            viewControllerToShow = viewController
+        case .matchScreen:
+            let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController
+            if let matchID = params["id"] as? String {
+                viewController?.matchID = Helpers.sanatizeID(matchID, fromPush: fromPushNotification)
+            }
+            viewControllerToShow = viewController
+        case .playerScreen:
+            let viewController = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as? PlayerDetailsViewController
+            if let playerID = params["id"] as? String {
+                viewController?.playerID = playerID
+            }
+            viewControllerToShow = viewController
+        default:
+            retValue = false
+            break
         }
 
         if let vc = viewControllerToShow {
@@ -101,13 +119,12 @@ extension OptaStats {
                                   present: true)
         }
 
-        return true
+        return retValue
     }
 
     func replaceViewController(with newViewController: ViewControllerBase?,
                                on targetViewController: UIViewController?,
                                present: Bool = false) {
-
         if let presentVC = currentPresentedViewController {
             presentVC.dismiss(animated: true, completion: nil)
         }
@@ -115,7 +132,7 @@ extension OptaStats {
         guard let newViewController = newViewController else {
             return
         }
-        
+
         if present {
             OptaStats.presentViewControllerModally(viewController: newViewController, on: targetViewController)
         } else if let newView = newViewController.view {
@@ -136,17 +153,17 @@ extension OptaStats {
         if targetViewController == nil {
             targetViewController = UIApplication.shared.keyWindow?.rootViewController
         }
-        
+
         let navigationController = NavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.navigationBar.setBackgroundImage(targetViewController?.navigationController?.navigationBar.backgroundImage(for: .default), for: .default)
         viewController.isModalPresentation = true
-        
+
         presentController(navigationController, on: targetViewController)
     }
-    
+
     static func presentController(_ viewController: UIViewController, on targetViewController: UIViewController?) {
-        var topmostViewController = targetViewController 
+        var topmostViewController = targetViewController
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.50) {
             while topmostViewController?.presentedViewController != nil {
                 topmostViewController = topmostViewController?.presentedViewController

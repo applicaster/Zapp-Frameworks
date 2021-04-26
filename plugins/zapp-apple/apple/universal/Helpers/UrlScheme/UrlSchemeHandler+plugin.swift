@@ -19,10 +19,11 @@ extension UrlSchemeHandler {
         }
 
         var pluginAdapter: PluginAdapterProtocol?
-        if let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String,
-           let instance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? PluginAdapterProtocol & PluginURLHandlerProtocol,
-           instance.canHandlePluginURLScheme?(with: url) ?? true {
-            pluginAdapter = instance
+        if let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String {
+            if let instance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? PluginAdapterProtocol & PluginURLHandlerProtocol,
+               instance.canHandlePluginURLScheme?(with: url) ?? true {
+                pluginAdapter = instance
+            }
         } else {
             pluginAdapter = FacadeConnector.connector?.pluginManager?.getProviderInstance(pluginType: ZPPluginType.General.rawValue,
                                                                                           condition: { (p) -> Any? in
