@@ -14,12 +14,14 @@ struct PluginURLSchemeKeys {
 
 extension UrlSchemeHandler {
     class func handlePluginURLScheme(url: URL) -> Bool {
-        guard let params = queryParams(url: url) else {
+        let pathComponents = getPathComponents(url: url)
+        let queryParams = queryStringParams(url: url)
+        guard queryParams != nil || pathComponents.count > 0 else {
             return false
         }
 
         var pluginAdapter: PluginAdapterProtocol?
-        if let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String {
+        if let pluginIdentifier = queryParams?[PluginURLSchemeKeys.pluginIdentifier] as? String {
             if let instance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? PluginAdapterProtocol & PluginURLHandlerProtocol,
                instance.canHandlePluginURLScheme?(with: url) ?? true {
                 pluginAdapter = instance

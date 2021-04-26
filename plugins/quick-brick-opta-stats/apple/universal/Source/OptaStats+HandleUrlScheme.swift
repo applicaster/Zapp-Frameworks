@@ -14,12 +14,18 @@ extension OptaStats: PluginURLHandlerProtocol {
         static let stats = "stats"
         static let showstats = "showstats"
     }
+    
+    struct UrlParams {
+        static let action = "action"
+        static let type = "type"
+        static let id = "id"
+    }
 
     public func handlePluginURLScheme(with rootViewController: UIViewController?, url: URL) -> Bool {
         // ca2019://plugin?pluginIdentifier=quick-brick-opta-stats&action=show&type=match&id=bgmp0pbbzbwmubds90nirsyui
         // xcrun simctl openurl booted "ca2019://plugin?pluginIdentifier=quick-brick-opta-stats&action=show&type=match&id=bgmp0pbbzbwmubds90nirsyui"
 
-        guard let params = queryParams(url: url) else {
+        guard let params = getParams(from: url) else {
             return false
         }
 
@@ -30,7 +36,7 @@ extension OptaStats: PluginURLHandlerProtocol {
     public func canHandlePluginURLScheme(with url: URL) -> Bool {
         var retValue = false
 
-        guard let params = queryParams(url: url),
+        guard let params = getParams(from: url),
               let action = params["action"] as? String else {
             return false
         }
@@ -47,13 +53,42 @@ extension OptaStats: PluginURLHandlerProtocol {
         return retValue
     }
 
-    func queryParams(url: URL) -> [String: Any]? {
+    fileprivate func getParams(from url: URL) -> [String: Any]? {
+        var params:[String: Any] = [:]
+        if let queryParams = queryStringParams(from: url) {
+            params = queryParams
+        }
+        else if var pathComponents = getPathComponents(from: url) {
+            params[UrlParams.action] = pathComponents.first
+            pathComponents = getPathComponentsDroppingFirst(pathComponents)
+            if pathComponents.count > 0 {
+                params[UrlParams.type] = pathComponents.first
+            }
+            pathComponents = getPathComponentsDroppingFirst(pathComponents)
+            if pathComponents.count > 0 {
+                params[UrlParams.id] = pathComponents.first
+            }
+        }
+        return params
+    }
+    
+    fileprivate func queryStringParams(from url: URL) -> [String: Any]? {
         guard let components = URLComponents(url: url,
                                              resolvingAgainstBaseURL: true),
             let queryItems = components.queryItems else { return nil }
         return queryItems.reduce(into: [String: String]()) { result, item in
             result[item.name] = item.value
         }
+    }
+    
+    fileprivate func getPathComponents(from url: URL) -> [String]? {
+        let pathComponents = url.pathComponents.dropFirst()
+        guard pathComponents.count > 0 else { return [] }
+        return Array(pathComponents)
+    }
+    
+    fileprivate func getPathComponentsDroppingFirst(_ pathComponents: [String]) -> [String] {
+        return Array(pathComponents.dropFirst())
     }
 }
 
