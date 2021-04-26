@@ -21,8 +21,6 @@ const baseManifest = {
   custom_configuration_fields: [],
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
-  dependency_version: "0.3.5",
-  manifest_version: "0.3.5",
   dependency_name: "@applicaster/quick-brick-user-account",
 };
 
@@ -31,6 +29,7 @@ function createManifest({ version, platform }) {
     ...baseManifest,
     platform,
     manifest_version: version,
+    dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     targets: targets[platform],
     custom_configuration_fields: [
