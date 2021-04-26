@@ -12,4 +12,6 @@ import Foundation
 
     @objc optional func handlePluginURLScheme(with rootViewController: UIViewController?,
                                               url: URL) -> Bool
+    
+    @objc optional func canHandlePluginURLScheme(with url: URL) -> Bool
 }
