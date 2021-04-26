@@ -1,25 +1,51 @@
 {
   "api": {},
   "dependency_repository_url": [],
-  "dependency_name": "@applicaster/quick-brick-user-account",
-  "author_name": "Olga Duk",
-  "author_email": "oduk@scand.com",
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
   "name": "Quick Brick User Account Component",
   "description": "User Account Component",
   "type": "ui_component",
+  "identifier": "quick-brick-user-account",
   "screen": true,
   "react_native": true,
-  "identifier": "quick-brick-user-account",
   "ui_builder_support": true,
   "whitelisted_account_ids": [
-    "5a4516fa41442c000b0195d6",
-    "5c85455842b06d000836d041"
+    "572a0a65373163000b000000",
+    "5a364b49e03b2f000d51a0de"
   ],
+  "min_zapp_sdk": "4.1.0-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
+  "custom_configuration_fields": [
+    {
+      "key": "ios_assets_bundle",
+      "type": "uploader",
+      "label": "iOS Design Assets",
+      "label_tooltip": "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>."
+    }
+  ],
+  "targets": [
+    "tv"
+  ],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "dependency_version": "0.3.5",
+  "manifest_version": "0.3.6",
+  "dependency_name": "@applicaster/quick-brick-user-account",
+  "platform": "tvos_for_quickbrick",
   "general": {
     "fields": [
+      {
+        "key": "custom_screen_id",
+        "type": "text_input",
+        "label": "Screen Id to open from comoponent",
+        "label_tooltip": "Screen Id to open from comoponent",
+        "initial_value": "",
+        "placeholder": "Screen id"
+      },
       {
         "group": true,
         "label": "Screen Design and Text",
@@ -38,7 +64,7 @@
             "key": "account_component_instructions_fontsize",
             "type": "number_input",
             "label_tooltip": "Font Size for Account Component Instructions Text.",
-            "initial_value": "60"
+            "initial_value": "26"
           },
           {
             "key": "account_component_instructions_fontcolor",
@@ -58,7 +84,7 @@
             "key": "account_component_greetings_fontsize",
             "type": "number_input",
             "label_tooltip": "Font Size for Account Component Greetings Text.",
-            "initial_value": "60"
+            "initial_value": "26"
           },
           {
             "key": "account_component_greetings_fontcolor",
@@ -78,7 +104,7 @@
             "key": "login_action_button_fontsize",
             "type": "number_input",
             "label_tooltip": "Font Size for Login Action Button Text.",
-            "initial_value": "40"
+            "initial_value": "24"
           },
           {
             "key": "login_action_button_fontcolor",
@@ -105,7 +131,7 @@
             "key": "logout_action_button_fontsize",
             "type": "number_input",
             "label_tooltip": "Font Size for Logout Action Button Text.",
-            "initial_value": "40"
+            "initial_value": "24"
           },
           {
             "key": "logout_action_button_fontcolor",
@@ -135,20 +161,5 @@
         ]
       }
     ]
-  },
-  "custom_configuration_fields": [
-    {
-      "key": "ios_assets_bundle",
-      "type": "uploader",
-      "label": "tvOS Design Assets",
-      "label_tooltip": "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>."
-    }
-  ],
-  "targets": [
-    "tv"
-  ],
-  "platform": "tvos_for_quickbrick",
-  "dependency_version": "0.3.5",
-  "manifest_version": "0.3.5",
-  "min_zapp_sdk": "0.1.0-alpha1"
+  }
 }

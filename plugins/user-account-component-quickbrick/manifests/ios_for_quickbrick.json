@@ -14,7 +14,7 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "0.1.0-alpha1",
+  "min_zapp_sdk": "4.1.0-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -27,7 +27,7 @@
     }
   ],
   "targets": [
-    "tv"
+    "mobile"
   ],
   "ui_frameworks": [
     "quickbrick"
@@ -35,7 +35,7 @@
   "dependency_version": "0.3.5",
   "manifest_version": "0.3.6",
   "dependency_name": "@applicaster/quick-brick-user-account",
-  "platform": "android_tv_for_quickbrick",
+  "platform": "ios_for_quickbrick",
   "general": {
     "fields": [
       {

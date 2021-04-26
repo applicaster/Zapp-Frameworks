@@ -27,7 +27,7 @@
     }
   ],
   "targets": [
-    "tv"
+    "mobile"
   ],
   "ui_frameworks": [
     "quickbrick"
@@ -35,7 +35,7 @@
   "dependency_version": "0.3.5",
   "manifest_version": "0.3.6",
   "dependency_name": "@applicaster/quick-brick-user-account",
-  "platform": "android_tv_for_quickbrick",
+  "platform": "android_for_quickbrick",
   "general": {
     "fields": [
       {
