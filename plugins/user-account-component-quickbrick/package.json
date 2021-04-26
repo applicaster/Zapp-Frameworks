@@ -38,7 +38,8 @@
       "tvos_for_quickbrick",
       "android_for_quickbrick",
       "android_tv_for_quickbrick",
-      "amazon_fire_tv_for_quickbrick"
+      "amazon_fire_tv_for_quickbrick",
+      "samsung_tv"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   }

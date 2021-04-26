@@ -24,16 +24,23 @@ const isPad = isMobile && aspectRatio < 1.6;
 
 const storeConnector = connectToStore((state) => {
   const loginPlugin = state.plugins.find(({ type }) => type === "login");
+
   const screenId = "42043a23-6ff1-4a30-b509-cffa075abb66";
   const values = Object.values(state.rivers);
   // eslint-disable-next-line array-callback-return,consistent-return
-  console.log({ identifier: loginPlugin.identifier });
+
+  const userAccountPlugin = values.find((item) => {
+    if (item && item.type) {
+      return item.type === "quick-brick-user-account";
+    }
+  });
   const plugin = values.find((item) => {
     if (item && item.type) {
       console.log({ item });
-      if (screenId) {
-        return item.id === screenId;
+      if (userAccountPlugin?.general?.custom_screen_id) {
+        return item.id === userAccountPlugin?.general?.custom_screen_id;
       }
+
       return item.type === loginPlugin.identifier;
     }
   });
@@ -86,7 +93,6 @@ function AccountComponent(props: Props) {
     logoutButtonStyle,
     loginButtonStyle,
     authProviderTitleStyle,
-    ,
   } = createStyleSheet(screenData);
 
   const [authProviderItem, setAuthProviderItem] = useState(null);
