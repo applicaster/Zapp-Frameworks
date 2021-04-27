@@ -41,6 +41,14 @@ const baseManifest = {
 const styles = {
   fields: [
     {
+      type: "switch",
+      key: "is_rtl",
+      label: "Force screen UI Right to left",
+      tooltip_text: "Set UI right to left if true",
+      initial_value: false,
+    },
+
+    {
       key: "background_color",
       type: "color_picker",
       label: "Background font color",
