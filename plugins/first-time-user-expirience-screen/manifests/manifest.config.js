@@ -34,7 +34,6 @@ const baseManifest = {
       },
     ],
   },
-  ui_frameworks: ["quickbrick"],
 };
 
 const styles = {
