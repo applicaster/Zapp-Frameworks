@@ -1,4 +1,5 @@
 const R = require("ramda");
+const Localizations = require("./localizations.config");
 
 const baseManifest = {
   dependency_repository_url: [],
@@ -44,6 +45,82 @@ const styles = {
       type: "color_picker",
       label: "Background font color",
       initial_value: "#161b29ff",
+    },
+
+    {
+      key: "back_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS back button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "back_button_font_android",
+      type: "android_font_selector",
+      label: "Android back button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "back_button_font_size",
+      type: "number_input",
+      label: "Back button font size",
+      initial_value: 15,
+    },
+
+    {
+      key: "next_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS next button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "next_button_font_android",
+      type: "android_font_selector",
+      label: "Android next button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "next_button_font_size",
+      type: "number_input",
+      label: "Next button font size",
+      initial_value: 15,
+    },
+
+    {
+      key: "close_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS close button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "close_button_font_android",
+      type: "android_font_selector",
+      label: "Android close button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "close_button_font_size",
+      type: "number_input",
+      label: "Close button font size",
+      initial_value: 15,
+    },
+
+    {
+      key: "skip_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS skip button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "skip_button_font_android",
+      type: "android_font_selector",
+      label: "Android skip button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "skip_button_font_size",
+      type: "number_input",
+      label: "Skip button font size",
+      initial_value: 15,
     },
   ],
 };
@@ -98,6 +175,7 @@ function createManifest({ version, platform }) {
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
     styles,
     targets: isTV ? ["tv"] : ["mobile"],
+    localizations: isTV ? Localizations.tv : Localizations.mobile,
     general: {
       fields: [
         {
@@ -119,47 +197,69 @@ function createManifest({ version, platform }) {
           initial_value: true,
         },
         {
-          key: "close_button",
-          type: "uploader",
-          label: "Close Button Asset",
-          label_tooltip: "Please upload close button asset",
-        },
-        {
-          key: "next_button",
-          type: "uploader",
-          label: "Close Button Asset",
-          label_tooltip: "Please upload next button asset",
-        },
-        {
-          key: "skip_button",
-          type: "uploader",
-          label: "Skip Button Asset",
-          label_tooltip: "Please upload next button asset",
-        },
-        {
           type: "screen_selector",
           key: "screen_selector_1",
+          label: "Screen 1",
           tooltip_text: "First screen that will be presented",
+        },
+        {
+          type: "switch",
+          key: "can_be_skiped_screen_1",
+          label: "Screen 1 can be skipped",
+          tooltip_text: "Defines if hook can be skiped for screen 1",
+          initial_value: true,
         },
         {
           type: "screen_selector",
           key: "screen_selector_2",
+          label: "Screen 2",
           tooltip_text: "Second screen that will be presented",
+        },
+        {
+          type: "switch",
+          key: "can_be_skiped_screen_2",
+          label: "Screen 2 can be skipped",
+          tooltip_text: "Defines if hook can be skiped for screen 2",
+          initial_value: true,
         },
         {
           type: "screen_selector",
           key: "screen_selector_3",
+          label: "Screen 3",
           tooltip_text: "Third screen that will be presented",
+        },
+        {
+          type: "switch",
+          key: "can_be_skiped_screen_3",
+          label: "Screen 3 can be skipped",
+          tooltip_text: "Defines if hook can be skiped for screen 3",
+          initial_value: true,
         },
         {
           type: "screen_selector",
           key: "screen_selector_4",
+          label: "Screen 4",
           tooltip_text: "Fourth screen that will be presented",
+        },
+        {
+          type: "switch",
+          key: "can_be_skiped_screen_4",
+          label: "Screen 4 can be skipped",
+          tooltip_text: "Defines if hook can be skiped for screen 4",
+          initial_value: true,
         },
         {
           type: "screen_selector",
           key: "screen_selector_5",
+          label: "Screen 5",
           tooltip_text: "Fifth screen that will be presented",
+        },
+        {
+          type: "switch",
+          key: "can_be_skiped_screen_5",
+          label: "Screen 5 can be skipped",
+          tooltip_text: "Defines if hook can be skiped for screen 5",
+          initial_value: true,
         },
       ],
     },
