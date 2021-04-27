@@ -32,15 +32,7 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     targets: targets[platform],
-    custom_configuration_fields: [
-      {
-        key: "ios_assets_bundle",
-        type: "uploader",
-        label: "iOS Design Assets",
-        label_tooltip:
-          "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>.",
-      },
-    ],
+    custom_configuration_fields: custom_configuration_fields[platform],
     general: {
       fields: [
         {
@@ -174,6 +166,32 @@ function createManifest({ version, platform }) {
   };
   return manifest;
 }
+const custom_configuration_fields_android = [
+  {
+    key: "android_assets_bundle",
+    type: "uploader",
+    label: "Android Design Assets",
+    label_tooltip:
+      "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>.",
+  },
+];
+
+const custom_configuration_fields_apple = [
+  {
+    key: "ios_assets_bundle",
+    type: "uploader",
+    label: "iOS Design Assets",
+    label_tooltip:
+      "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>.",
+  },
+];
+
+const custom_configuration_fields = {
+  tvos_for_quickbrick: custom_configuration_fields_apple,
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  android_for_quickbrick: custom_configuration_fields_android,
+  android_tv_for_quickbrick: custom_configuration_fields_android,
+};
 
 const min_zapp_sdk = {
   tvos_for_quickbrick: "4.1.0-dev",
