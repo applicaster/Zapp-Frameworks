@@ -1,12 +1,13 @@
 const R = require("ramda");
 
 const baseManifest = {
+  dependency_repository_url: [],
   dependency_name: "@applicaster/first-time-user-expirience-screen",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "First time user expirience screen",
   description: "Hook to present one time",
-  type: "General",
+  type: "general",
   react_native: true,
   screen: true,
   identifier: "first-time-user-expirience-screen",
@@ -117,11 +118,7 @@ function createManifest({ version, platform }) {
     platform,
     dependency_version: version,
     manifest_version: version,
-    api: withFallback(api, basePlatform),
-    project_dependencies: withFallback(project_dependencies, basePlatform),
-    extra_dependencies: withFallback(extra_dependencies, basePlatform),
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
-    npm_dependencies: withFallback(npm_dependencies, basePlatform),
     styles,
     targets: isTV ? ["tv"] : ["mobile"],
     general: {
