@@ -49,11 +49,14 @@
         <TextView
             android:id="@+id/tv_location"
             style="@style/Theme.Opta.Subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="-"
             android:ellipsize="end"
+            android:gravity="start"
+            android:singleLine="true"
             app:layout_constraintStart_toEndOf="@+id/iv_location"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_phase" />
 
         <ImageView
