@@ -11,7 +11,7 @@ const baseManifest = {
   screen: true,
   identifier: "first-time-user-expirience-screen",
   ui_builder_support: true,
-  whitelisted_account_ids: [""],
+  whitelisted_account_ids: [],
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   targets: ["mobile"],
@@ -123,21 +123,8 @@ function createManifest({ version, platform }) {
     extra_dependencies: withFallback(extra_dependencies, basePlatform),
     min_zapp_sdk: withFallback(min_zapp_sdk, platform),
     npm_dependencies: withFallback(npm_dependencies, basePlatform),
-    styles: styles,
+    styles,
     targets: isTV ? ["tv"] : ["mobile"],
-    data: {
-      fields: [
-        {
-          key: "source",
-          type: "text_input",
-        },
-        {
-          key: "type",
-          type: "select",
-          options: [],
-        },
-      ],
-    },
     general: {
       fields: [
         {
@@ -160,7 +147,7 @@ function createManifest({ version, platform }) {
         },
         {
           type: "screen_selector",
-          key: "fallback",
+          key: "screen_selector",
           tooltip_text: "Screen that will be presented",
         },
       ],
