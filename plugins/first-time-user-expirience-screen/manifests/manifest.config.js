@@ -146,6 +146,12 @@ function createManifest({ version, platform }) {
           disableField: true,
         },
         {
+          type: "text_input",
+          key: "transition_type",
+          initial_value: "modal",
+          disableField: true,
+        },
+        {
           type: "switch",
           key: "show_hook_once",
           tooltip_text:

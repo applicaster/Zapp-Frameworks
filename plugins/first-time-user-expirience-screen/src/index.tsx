@@ -7,5 +7,4 @@ export default {
   isFlowBlocker: () => true,
   presentFullScreen: true,
   Component: connectToStore(R.pick(["rivers"]))(Component),
-  ModalContainer: connectToStore(R.pick(["rivers"]))(Component),
 };
