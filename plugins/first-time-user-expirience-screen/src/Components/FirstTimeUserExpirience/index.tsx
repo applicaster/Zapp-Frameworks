@@ -39,7 +39,6 @@ const FirstTimeUserExpirience = (props) => {
   const styles = getRiversProp("styles", rivers, screenId);
 
   const screenStyles = getStyles(styles);
-  const screenLocalizations = getLocalizations(localizations);
 
   const {
     configuration: {},

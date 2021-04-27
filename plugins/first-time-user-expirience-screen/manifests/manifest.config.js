@@ -125,8 +125,26 @@ function createManifest({ version, platform }) {
     npm_dependencies: withFallback(npm_dependencies, basePlatform),
     styles: styles,
     targets: isTV ? ["tv"] : ["mobile"],
+    data: {
+      fields: [
+        {
+          key: "source",
+          type: "text_input",
+        },
+        {
+          key: "type",
+          type: "select",
+          options: [],
+        },
+      ],
+    },
     general: {
       fields: [
+        {
+          key: "identifier",
+          type: "text_input",
+          disableField: true,
+        },
         {
           type: "switch",
           key: "show_hook_once",
