@@ -65,29 +65,6 @@ const tvPlatforms = [
   "samsung_tv",
 ];
 
-const api = {
-  default: {},
-  web: {
-    excludedNodeModules: [],
-  },
-  android: {},
-};
-
-const project_dependencies = {
-  default: [],
-  android: [],
-};
-
-const extra_dependencies = {
-  apple: [],
-  default: [],
-};
-
-const npm_dependencies = {
-  default: [],
-  web: [],
-};
-
 const min_zapp_sdk = {
   ios_for_quickbrick: "4.1.0-Dev",
   android_for_quickbrick: "0.1.0-alpha1",
@@ -142,9 +119,47 @@ function createManifest({ version, platform }) {
           initial_value: true,
         },
         {
+          key: "close_button",
+          type: "uploader",
+          label: "Close Button Asset",
+          label_tooltip: "Please upload close button asset",
+        },
+        {
+          key: "next_button",
+          type: "uploader",
+          label: "Close Button Asset",
+          label_tooltip: "Please upload next button asset",
+        },
+        {
+          key: "skip_button",
+          type: "uploader",
+          label: "Skip Button Asset",
+          label_tooltip: "Please upload next button asset",
+        },
+        {
           type: "screen_selector",
-          key: "screen_selector",
-          tooltip_text: "Screen that will be presented",
+          key: "screen_selector_1",
+          tooltip_text: "First screen that will be presented",
+        },
+        {
+          type: "screen_selector",
+          key: "screen_selector_2",
+          tooltip_text: "Second screen that will be presented",
+        },
+        {
+          type: "screen_selector",
+          key: "screen_selector_3",
+          tooltip_text: "Third screen that will be presented",
+        },
+        {
+          type: "screen_selector",
+          key: "screen_selector_4",
+          tooltip_text: "Fourth screen that will be presented",
+        },
+        {
+          type: "screen_selector",
+          key: "screen_selector_5",
+          tooltip_text: "Fifth screen that will be presented",
         },
       ],
     },
