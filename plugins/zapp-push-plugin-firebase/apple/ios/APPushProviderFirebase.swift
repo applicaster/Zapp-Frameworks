@@ -30,6 +30,7 @@ open class APPushProviderFirebase: ZPPushProvider {
         }
         Messaging.messaging().delegate = self
         setDefaultTopicIfNeeded()
+        savePluginConfigurationForExtensionsUsage()
 
         // Don't assign the UNUserNotificationCenter delegate because we are already handling the logic in the SDK
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -169,6 +170,16 @@ open class APPushProviderFirebase: ZPPushProvider {
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: localStorageTopicsParam,
                                                                      value: topics,
                                                                      namespace: namespace)
+    }
+
+    fileprivate func savePluginConfigurationForExtensionsUsage() {
+        guard let configurationJSON = configurationJSON,
+              let appGroups = Bundle.main.object(forInfoDictionaryKey: "SupportedAppGroups") as? [String],
+              appGroups.count > 0,
+              let userDefaults = UserDefaults(suiteName: appGroups.first) else {
+            return
+        }
+        userDefaults.setValue(configurationJSON, forKey: "configurationJSON")
     }
 }
 

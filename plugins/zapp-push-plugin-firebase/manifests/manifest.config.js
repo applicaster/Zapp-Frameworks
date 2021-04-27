@@ -76,6 +76,13 @@ const custom_configuration_fields_apple = [
     label: "Default topic",
     default: "general",
     tooltip_text: "Topics to subscribe to, separated with comma"
+  },
+  {
+    key: "notifications_filtering_key",
+    label: "Filtering key",
+    placeholder: "",
+    tooltip_text: "Key indicating unique notification",
+    type: "text"
   }
 ];
 
