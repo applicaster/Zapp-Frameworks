@@ -165,9 +165,7 @@ struct ApiManager {
     }
 
     static func getLanguageCodeParam() -> String {
-        let deviceLocale = NSLocale.current.languageCode
-
-        switch deviceLocale {
+        switch Localized.languageCode {
         case "en":
             return "en-en"
         case "es":

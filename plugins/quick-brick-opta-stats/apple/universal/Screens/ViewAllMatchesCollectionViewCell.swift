@@ -23,7 +23,7 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
     private func setImage() {
         var imageToLoad = "all-matches-es"
 
-        let deviceLocale = NSLocale.current.languageCode
+        let deviceLocale = Localized.languageCode
 
         switch deviceLocale {
         case "en":

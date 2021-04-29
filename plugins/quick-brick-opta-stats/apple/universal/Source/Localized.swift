@@ -19,6 +19,11 @@ class Localized: NSObject {
     static var languageCode: String {
         return instance.languageCode
     }
+    
+    static var locale: Locale {
+        let language = Locale.preferredLanguages.first { Locale(identifier: $0).languageCode == languageCode } ?? "es-es"
+        return Locale(identifier: language)
+    }
 
     // Localized strings
     fileprivate static var localizedStrings = [["es": "EQUIPO", "en": "TEAM", "pt": "EQUIPE"],
