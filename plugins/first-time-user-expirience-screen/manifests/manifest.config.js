@@ -47,6 +47,12 @@ const styles = {
       initial_value: "#161b29ff",
     },
     {
+      key: "indicator_color",
+      type: "color_picker",
+      label: "Activity indicator color",
+      initial_value: "#ffffffff",
+    },
+    {
       key: "top_button_radius",
       type: "number_input",
       label_tooltip: "Top Button radius",
@@ -61,14 +67,14 @@ const styles = {
     {
       key: "top_button_border_color",
       type: "color_picker",
-      label: "Background font color",
+      label: "Top Button bortder color",
       initial_value: "#00000000",
     },
 
     {
       key: "top_button_background_color",
       type: "color_picker",
-      label: "Background font color",
+      label: "Top Button backgrounf color",
       initial_value: "#00000000",
     },
 
@@ -150,6 +156,11 @@ function createManifest({ version, platform }) {
           key: "identifier",
           type: "text_input",
           disableField: true,
+        },
+        {
+          type: "text_input",
+          key: "transition_type",
+          initial_value: "push",
         },
         {
           type: "switch",

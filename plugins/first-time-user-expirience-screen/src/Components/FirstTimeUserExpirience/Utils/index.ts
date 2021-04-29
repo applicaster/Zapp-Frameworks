@@ -41,8 +41,7 @@ export function prepareData(general, rivers) {
   let data: Array<DataModel> = [];
   for (let index = 1; index <= 5; index++) {
     const screenId = general[`screen_selector_${index}`];
-    const canBeSkiped = general[`can_be_skiped_screen_${index}`];
-    const dataModel = dataModelFromScreenData(screenId, canBeSkiped, rivers);
+    const dataModel = dataModelFromScreenData(screenId, rivers);
     if (dataModel) {
       data.push(dataModel);
     }
@@ -50,18 +49,14 @@ export function prepareData(general, rivers) {
   return data;
 }
 
-function dataModelFromScreenData(
-  screenId?: string,
-  canBeSkiped: boolean = true,
-  rivers?: any
-): DataModel {
+function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   if (R.not(R.isNil(screenId)) && R.not(R.isEmpty(screenId))) {
     const Screen: any = pluginByScreenId({
       rivers,
       screenId: screenId,
     });
 
-    return { screenId, canBeSkiped, Screen };
+    return { screenId, Screen };
   }
   return null;
 }

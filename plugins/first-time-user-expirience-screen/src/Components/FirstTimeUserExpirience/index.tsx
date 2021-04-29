@@ -5,7 +5,12 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { Platform, View, SegmentedControlIOSBase } from "react-native";
+import {
+  Platform,
+  View,
+  SegmentedControlIOSBase,
+  ActivityIndicator,
+} from "react-native";
 
 import { isWebBasedPlatform } from "../../Utils/Platform";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -69,12 +74,6 @@ export default function FirstTimeUserExpirience(props) {
 
   useEffect(() => {
     mounted.current && setCurrentScreenIndex(0);
-    logger.debug({
-      message: `Set new data source, screens: ${dataSource.length}`,
-      data: {
-        data_source: dataSource,
-      },
-    });
   }, [dataSource]);
 
   async function setupEnvironment() {
@@ -197,13 +196,21 @@ export default function FirstTimeUserExpirience(props) {
           riverComponents={data?.Screen?.ui_components}
         />
       )}
-      <FloatingButton
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        onNext={onNext}
-        onClose={onClose}
-        isLastScreen={currentScreenIndex === dataSource?.length - 1}
-      />
+      {data && (
+        <FloatingButton
+          screenStyles={screenStyles}
+          screenLocalizations={screenLocalizations}
+          onNext={onNext}
+          onClose={onClose}
+          isLastScreen={currentScreenIndex === dataSource?.length - 1}
+        />
+      )}
+      {!data && (
+        <ActivityIndicator
+          color={screenStyles?.indicator_color}
+          size={"large"}
+        />
+      )}
     </SafeAreaView>
   );
 }
