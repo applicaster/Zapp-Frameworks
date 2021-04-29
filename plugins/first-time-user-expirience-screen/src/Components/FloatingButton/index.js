@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Text, TouchableOpacity } from "react-native";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 
@@ -27,6 +26,7 @@ const FloatingButton = ({
   };
   const buttonStyle = {
     right: 35,
+    top: 50,
     position: "absolute",
     borderRadius: Number(screenStyles?.top_button_radius),
     borderColor: screenStyles?.top_button_border_color,
@@ -34,6 +34,7 @@ const FloatingButton = ({
     backgroundColor: screenStyles?.top_button_background_color,
   };
 
+  console.log({ buttonStyle, textStyle });
   return disabled === true ? null : (
     <TouchableOpacity
       style={buttonStyle}
@@ -44,17 +45,6 @@ const FloatingButton = ({
       </Text>
     </TouchableOpacity>
   );
-};
-
-FloatingButton.propTypes = {
-  title: PropTypes.string,
-  onPress: PropTypes.func,
-  disabled: PropTypes.bool,
-};
-
-FloatingButton.defaultProps = {
-  title: "",
-  screenStyles: {},
 };
 
 export default FloatingButton;

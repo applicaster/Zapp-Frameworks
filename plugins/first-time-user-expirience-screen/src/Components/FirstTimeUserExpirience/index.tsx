@@ -57,6 +57,7 @@ export default function FirstTimeUserExpirience(props) {
   const show_hook_once = general?.show_hook_once || false;
   const present_on_each_new_version =
     general?.present_on_each_new_version || false;
+
   useEffect(() => {
     mounted.current = true;
 
@@ -68,43 +69,92 @@ export default function FirstTimeUserExpirience(props) {
 
   useEffect(() => {
     mounted.current && setCurrentScreenIndex(0);
+    logger.debug({
+      message: `Set new data source, screens: ${dataSource.length}`,
+      data: {
+        data_source: dataSource,
+      },
+    });
   }, [dataSource]);
 
   async function setupEnvironment() {
     try {
-      console.log({ show_hook_once });
+      logger.debug({
+        message: `Starting Hook`,
+        data: {
+          screenLocalizations,
+          general,
+          screenStyles,
+        },
+      });
+
       if (show_hook_once) {
         const presentScreen = await screenShouldBePresented(
           present_on_each_new_version
         );
-        console.log({ presentScreen });
         if (presentScreen) {
           prepareDataSource();
         } else {
+          logger.debug({
+            message: `Hook finished task`,
+            data: {
+              present_screen: presentScreen,
+              show_hook_once,
+            },
+          });
           callback && callback({ success: true, error: null, payload });
         }
       } else {
         await removePresentedInfo();
-        prepareDataSource(); //TODO: Possible remove from local storage data
+        prepareDataSource();
       }
     } catch (error) {
+      logger.error({
+        message: `Hook finished with error`,
+        data: {
+          error,
+        },
+      });
       callback && callback({ success: true, error: null, payload });
     }
   }
 
   function prepareDataSource() {
+    logger.debug({
+      message: `Presenting screen`,
+    });
     mounted.current && setDataSource(prepareData(general, rivers));
   }
 
   const onBack = useCallback(() => {
     if (currentScreenIndex > 0) {
-      mounted.current && setCurrentScreenIndex(currentScreenIndex - 1);
+      const newIndex = currentScreenIndex - 1;
+      const newScreenId = dataSource?.[newIndex]?.screenId;
+      logger.debug({
+        message: `Go back: to index: ${newIndex}, screenId: ${newScreenId}`,
+        data: {
+          new_data_source_index: newIndex,
+          new_screen_id: newScreenId,
+          data_source: dataSource,
+        },
+      });
+      mounted.current && setCurrentScreenIndex(newIndex);
     }
-  }, [currentScreenIndex]);
+  }, [currentScreenIndex, dataSource]);
 
   const onNext = useCallback(() => {
     if (currentScreenIndex < dataSource.length - 1) {
-      mounted.current && setCurrentScreenIndex(currentScreenIndex + 1);
+      const newIndex = currentScreenIndex + 1;
+      const newScreenId = dataSource?.[newIndex]?.screenId;
+      logger.debug({
+        message: `Go forward: to index: ${newIndex}, screenId: ${newScreenId}`,
+        data: {
+          new_data_source_index: newIndex,
+          new_screen_id: newScreenId,
+          data_source: dataSource,
+        },
+      });
+      mounted.current && setCurrentScreenIndex(newIndex);
     }
   }, [currentScreenIndex, dataSource]);
 
@@ -113,6 +163,12 @@ export default function FirstTimeUserExpirience(props) {
       //TODO: Check if it will not fail await on next completion.
       updatePresentedInfo();
     }
+    logger.debug({
+      message: `On Close button, hook finished task`,
+      data: {
+        data_source: dataSource,
+      },
+    });
     callback && callback({ success: true, error: null, payload });
   }
 
@@ -134,6 +190,13 @@ export default function FirstTimeUserExpirience(props) {
         isFistScreen={currentScreenIndex === 0}
         isLastScreen={currentScreenIndex === dataSource?.length - 1}
       /> */}
+
+      {data && (
+        <ComponentsMap
+          riverId={data?.screenId}
+          riverComponents={data?.Screen?.ui_components}
+        />
+      )}
       <FloatingButton
         screenStyles={screenStyles}
         screenLocalizations={screenLocalizations}
@@ -141,12 +204,6 @@ export default function FirstTimeUserExpirience(props) {
         onClose={onClose}
         isLastScreen={currentScreenIndex === dataSource?.length - 1}
       />
-      {data && (
-        <ComponentsMap
-          riverId={data?.screenId}
-          riverComponents={data?.Screen?.ui_components}
-        />
-      )}
     </SafeAreaView>
   );
 }
