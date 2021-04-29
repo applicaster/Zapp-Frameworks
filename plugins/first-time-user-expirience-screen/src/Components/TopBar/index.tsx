@@ -24,14 +24,13 @@ const rightButtonContainer = {
 
 export default function TopBar({
   screenStyles,
-  localizations,
+  screenLocalizations,
   onBack,
   onNext,
   onClose,
-  onSkip,
 }) {
-  console.log({ localizations });
-  const { back_button_text, next_button_text } = localizations;
+  console.log({ screenLocalizations });
+  const { back_button_text, next_button_text } = screenLocalizations;
   const TextStyle = {
     fontFamily: platformSelect({
       ios: screenStyles?.back_button_font_ios,
@@ -53,12 +52,12 @@ export default function TopBar({
         style={leftButtonContainer}
         textStyle={TextStyle}
         title={back_button_text}
-      ></TopButton>
+      />
       <TopButton
         style={rightButtonContainer}
         textStyle={TextStyle}
         title={next_button_text}
-      ></TopButton>
+      />
     </View>
   );
 }

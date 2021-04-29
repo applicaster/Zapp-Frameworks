@@ -1,14 +1,21 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { Platform, View, SegmentedControlIOSBase } from "react-native";
 
 import { isWebBasedPlatform } from "../../Utils/Platform";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
-import { getRiversProp, pluginByScreenId } from "./Utils";
+import { getRiversProp, pluginByScreenId, prepareData } from "./Utils";
 import { getStyles, isHomeScreen } from "../../Utils/Customization";
 import { isHook } from "../../Utils/UserAccount";
 import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Components/River/ComponentsMap";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
 import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
+import { getLocalizations } from "../../Utils/Localizations";
 
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import TopBar from "../TopBar";
@@ -17,6 +24,7 @@ import {
   BaseSubsystem,
   BaseCategories,
 } from "../../Services/LoggerService";
+import { DataModel } from "../../models";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -24,9 +32,12 @@ const logger = createLogger({
 });
 
 export default function FirstTimeUserExpirience(props) {
+  const [dataSource, setDataSource] = useState<Array<DataModel> | null>(null);
+  const [currentScreenIndex, setCurrentScreenIndex] = useState(null);
+  const mounted = useRef(true);
+
   const navigator = useNavigation();
   const dimensions = useSafeAreaFrame();
-  console.log({ dimensions });
 
   // const screenId = isHook(navigator)
   //   ? props?.hookPlugin?.screen_id
@@ -34,34 +45,49 @@ export default function FirstTimeUserExpirience(props) {
   const screenId = props?.hookPlugin?.screen_id;
   const { callback, payload, rivers, configuration } = props;
   const localizations = getRiversProp("localizations", rivers, screenId);
+
   const styles = getRiversProp("styles", rivers, screenId);
   const general = getRiversProp("general", rivers, screenId);
   console.log({ rivers, styles, screenId, props });
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
-  console.log({ general });
-  const screenPlugin = pluginByScreenId({
-    rivers,
-    screenId: general?.screen_selector_1,
-  });
+  const screenLocalizations = getLocalizations(localizations);
 
-  console.log({ screenPlugin });
+  console.log({ general });
+  // const screenPlugin = pluginByScreenId({
+  //   rivers,
+  //   screenId: general?.screen_selector_1,
+  // });
+
   useEffect(() => {
-    navigator.hideNavBar();
-    navigator.hideBottomBar();
+    mounted.current = true;
 
     setupEnvironment();
     return () => {
-      navigator.showNavBar();
-      navigator.showBottomBar();
+      mounted.current = false;
     };
   }, []);
 
-  async function setupEnvironment() {}
-  function onBack() {}
-  function onNext() {}
-  function onClose() {}
-  function onSkip() {}
-  console.log({ navigator });
+  useEffect(() => {
+    mounted.current && setCurrentScreenIndex(0);
+  }, [dataSource]);
+
+  async function setupEnvironment() {
+    mounted.current && setDataSource(prepareData(general, rivers));
+  }
+  function onBack() {
+    if (currentScreenIndex > 0) {
+      mounted.current && setCurrentScreenIndex(currentScreenIndex - 1);
+    }
+  }
+  function onNext() {
+    if (currentScreenIndex < dataSource.length - 1) {
+      mounted.current && setCurrentScreenIndex(currentScreenIndex + 1);
+    }
+  }
+  function onClose() {
+    callback && callback({ success: true, error: null, payload });
+  }
+  const data = dataSource?.[currentScreenIndex] || null;
   return (
     <SafeAreaView
       style={{
@@ -71,16 +97,15 @@ export default function FirstTimeUserExpirience(props) {
     >
       <TopBar
         screenStyles={screenStyles}
-        localizations={localizations}
+        screenLocalizations={screenLocalizations}
         onBack={onBack}
         onNext={onNext}
         onClose={onClose}
-        onSkip={onSkip}
       />
-      {screenPlugin && (
+      {data && (
         <ComponentsMap
-          riverId={screenId}
-          riverComponents={screenPlugin?.ui_components}
+          riverId={data?.screenId}
+          riverComponents={data?.Screen?.ui_components}
         />
       )}
     </SafeAreaView>
