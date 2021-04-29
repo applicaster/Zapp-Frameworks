@@ -65,3 +65,10 @@ extension String {
         return hexString
     }
 }
+
+extension String {
+    public var boolValue: Bool {
+        let trueValues = ["true", "yes", "1"]
+        return trueValues.contains(self.lowercased())
+    }
+}

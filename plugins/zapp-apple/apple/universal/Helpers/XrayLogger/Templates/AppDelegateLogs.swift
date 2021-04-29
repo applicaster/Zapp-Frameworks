@@ -37,4 +37,9 @@ public struct AppDelegateLogs: XrayLoggerTemplateProtocol {
     public static var applicationWillResignActive = LogTemplate(message: "Application will resign active")
     public static var applicationDidRegisterRemoteNotification = LogTemplate(message: "Application did register remote notificaion")
     public static var applicationDidFailRegisterRemoteNotification = LogTemplate(message: "Application did fail register remote notificaion")
+    
+    public static var handleSilentRemoteNotification = LogTemplate(message: "Handle silent remote notification")
+    public static var handleSilentRemoteNotificationPresentLocalPush = LogTemplate(message: "Handle silent remote notification - Present local push")
+    public static var handleSilentRemoteNotificationFailedToAddAttachment = LogTemplate(message: "Handle silent remote notification - Failed to add attachment")
+
 }
