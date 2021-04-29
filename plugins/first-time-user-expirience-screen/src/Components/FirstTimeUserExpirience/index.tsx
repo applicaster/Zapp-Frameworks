@@ -54,6 +54,8 @@ export default function FirstTimeUserExpirience(props) {
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
+  const present_on_each_new_version =
+    general?.present_on_each_new_version || false;
   useEffect(() => {
     mounted.current = true;
 
@@ -71,7 +73,9 @@ export default function FirstTimeUserExpirience(props) {
     try {
       console.log({ show_hook_once });
       if (show_hook_once) {
-        const presentScreen = await screenShouldBePresented();
+        const presentScreen = await screenShouldBePresented(
+          present_on_each_new_version
+        );
         console.log({ presentScreen });
         if (presentScreen) {
           prepareDataSource();

@@ -46,80 +46,48 @@ const styles = {
       label: "Background font color",
       initial_value: "#161b29ff",
     },
-
     {
-      key: "back_button_font_ios",
-      type: "ios_font_selector",
-      label: "iOS back button font",
-      initial_value: "Helvetica-Bold",
-    },
-    {
-      key: "back_button_font_android",
-      type: "android_font_selector",
-      label: "Android back button font",
-      initial_value: "Roboto-Bold",
-    },
-    {
-      key: "back_button_font_size",
+      key: "top_button_radius",
       type: "number_input",
-      label: "Back button font size",
-      initial_value: 15,
+      label_tooltip: "Top Button radius",
+      initial_value: 5,
+    },
+    {
+      key: "top_button_border_size",
+      type: "number_input",
+      label_tooltip: "Top Button border siz",
+      initial_value: 2,
+    },
+    {
+      key: "top_button_border_color",
+      type: "color_picker",
+      label: "Background font color",
+      initial_value: "#00000000",
     },
 
     {
-      key: "next_button_font_ios",
+      key: "top_button_background_color",
+      type: "color_picker",
+      label: "Background font color",
+      initial_value: "#00000000",
+    },
+
+    {
+      key: "top_button_font_ios",
       type: "ios_font_selector",
       label: "iOS next button font",
       initial_value: "Helvetica-Bold",
     },
     {
-      key: "next_button_font_android",
+      key: "top_button_font_android",
       type: "android_font_selector",
       label: "Android next button font",
       initial_value: "Roboto-Bold",
     },
     {
-      key: "next_button_font_size",
+      key: "top_button_font_size",
       type: "number_input",
       label: "Next button font size",
-      initial_value: 15,
-    },
-
-    {
-      key: "close_button_font_ios",
-      type: "ios_font_selector",
-      label: "iOS close button font",
-      initial_value: "Helvetica-Bold",
-    },
-    {
-      key: "close_button_font_android",
-      type: "android_font_selector",
-      label: "Android close button font",
-      initial_value: "Roboto-Bold",
-    },
-    {
-      key: "close_button_font_size",
-      type: "number_input",
-      label: "Close button font size",
-      initial_value: 15,
-    },
-
-    {
-      key: "skip_button_font_ios",
-      type: "ios_font_selector",
-      label: "iOS skip button font",
-      initial_value: "Helvetica-Bold",
-    },
-    {
-      key: "skip_button_font_android",
-      type: "android_font_selector",
-      label: "Android skip button font",
-      initial_value: "Roboto-Bold",
-    },
-    {
-      key: "skip_button_font_size",
-      type: "number_input",
-      label: "Skip button font size",
       initial_value: 15,
     },
   ],

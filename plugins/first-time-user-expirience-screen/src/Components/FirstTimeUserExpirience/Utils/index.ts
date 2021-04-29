@@ -64,10 +64,15 @@ export async function removePresentedInfo() {
   await localStorageRemove();
 }
 
-export async function screenShouldBePresented(): Promise<boolean> {
+export async function screenShouldBePresented(
+  present_on_each_new_version = false
+): Promise<boolean> {
+  console.log({ present_on_each_new_version });
   const currentVersionName = await getBuildNumber();
   const savedVersionName = await localStorageGet();
   console.log({ currentVersionName, savedVersionName });
 
-  return currentVersionName !== savedVersionName;
+  return present_on_each_new_version
+    ? currentVersionName !== savedVersionName
+    : R.isNil(savedVersionName);
 }
