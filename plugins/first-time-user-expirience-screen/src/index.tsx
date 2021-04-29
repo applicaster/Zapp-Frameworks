@@ -1,5 +1,4 @@
 /// <reference types="@applicaster/applicaster-types" />
-import { View } from "react-native";
 import Component from "./Components/FirstTimeUserExpirience";
 import * as R from "ramda";
 
@@ -8,5 +7,4 @@ export default {
   isFlowBlocker: () => true,
   presentFullScreen: true,
   Component: connectToStore(R.pick(["rivers"]))(Component),
-
 };

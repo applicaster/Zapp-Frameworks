@@ -25,8 +25,9 @@ const FloatingButton = ({
     color: screenStyles?.top_button_font_color,
   };
   const buttonStyle = {
-    right: 35,
+    right: 10,
     top: 50,
+    padding: 5,
     position: "absolute",
     borderRadius: Number(screenStyles?.top_button_radius),
     borderColor: screenStyles?.top_button_border_color,
@@ -34,7 +35,6 @@ const FloatingButton = ({
     backgroundColor: screenStyles?.top_button_background_color,
   };
 
-  console.log({ buttonStyle, textStyle });
   return disabled === true ? null : (
     <TouchableOpacity
       style={buttonStyle}

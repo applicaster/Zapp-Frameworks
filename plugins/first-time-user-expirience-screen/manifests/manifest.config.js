@@ -74,7 +74,7 @@ const styles = {
     {
       key: "top_button_background_color",
       type: "color_picker",
-      label: "Top Button backgrounf color",
+      label: "Top Button background color",
       initial_value: "#00000000",
     },
 
@@ -95,6 +95,12 @@ const styles = {
       type: "number_input",
       label: "Next button font size",
       initial_value: 15,
+    },
+    {
+      key: "top_button_font_color",
+      type: "color_picker",
+      label: "Top Button font color",
+      initial_value: "#FFFFFFFF",
     },
   ],
 };
@@ -156,11 +162,6 @@ function createManifest({ version, platform }) {
           key: "identifier",
           type: "text_input",
           disableField: true,
-        },
-        {
-          type: "text_input",
-          key: "transition_type",
-          initial_value: "push",
         },
         {
           type: "switch",
