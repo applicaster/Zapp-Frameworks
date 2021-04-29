@@ -16,13 +16,16 @@ class Localized: NSObject {
        return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) ?? "es"
     }()
     
+    lazy var languageIdentifier: String = {
+       return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageIdentifier", namespace: nil) ?? "es-es"
+    }()
+    
     static var languageCode: String {
         return instance.languageCode
     }
     
     static var locale: Locale {
-        let language = Locale.preferredLanguages.first { Locale(identifier: $0).languageCode == languageCode } ?? "es-es"
-        return Locale(identifier: language)
+        return Locale(identifier: instance.languageIdentifier)
     }
 
     // Localized strings

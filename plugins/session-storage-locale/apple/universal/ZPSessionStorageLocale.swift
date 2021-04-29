@@ -56,17 +56,21 @@ import ZappCore
 
 extension ZPSessionStorageLocale: AppLoadingHookProtocol {
     public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        
-        var languageCode = self.defaultLanguage
+        var languageCode = defaultLanguage
         let preferredLanguageCode = Locale.preferredLanguageCode
-        if self.supportedLanguages.contains(preferredLanguageCode) {
+        if supportedLanguages.contains(preferredLanguageCode) {
             languageCode = preferredLanguageCode
         }
-        
+
         _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "languageCode",
                                                                        value: languageCode,
                                                                        namespace: nil)
 
+        if let identifier = Locale.identifier(for: languageCode) {
+            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "languageIdentifier",
+                                                                           value: identifier,
+                                                                           namespace: nil)
+        }
         completion?()
     }
 }
@@ -76,6 +80,10 @@ extension Locale {
         let defaultLanguage = "en"
         let preferredLanguage = preferredLanguages.first ?? defaultLanguage
         return Locale(identifier: preferredLanguage).languageCode ?? defaultLanguage
+    }
+    
+    static func identifier(for languageCode: String) -> String? {
+        return Locale.preferredLanguages.first { Locale(identifier: $0).languageCode == languageCode }
     }
 
     static var preferredLanguageCodes: [String] {
