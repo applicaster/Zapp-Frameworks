@@ -1,6 +1,10 @@
 import * as R from "ramda";
 import { DataModel } from "../../../models";
-
+import {
+  localStorageSet,
+  localStorageGet,
+  localStorageRemove,
+} from "../../../Services/LocalStorageService";
 export const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
     R.prop(key),
@@ -48,4 +52,16 @@ function dataModelFromScreenData(
     return { screenId, canBeSkiped, Screen };
   }
   return null;
+}
+//TODO: Remove it or add try catch handlers
+export async function updatePresentedInfo() {
+  return await localStorageSet();
+}
+
+export async function removePresentedInfo() {
+  await localStorageRemove();
+}
+
+export async function screenShouldBePresented(): Promise<boolean> {
+  return (await localStorageGet()) === false;
 }

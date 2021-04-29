@@ -1,28 +1,32 @@
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 
 const localStorageNamespace = "first-time-user-expirience-screen";
-
-export async function localStorageSet(key: string, value: string) {
-  return await localStorage.setItem(key, value, localStorageNamespace);
+const screenWasPresentedKey = "screenWasPresented";
+const screenWasPresentedValue = "true";
+export async function localStorageSet() {
+  console.log("localStorageSet");
+  return await localStorage.setItem(
+    screenWasPresentedKey,
+    screenWasPresentedValue,
+    localStorageNamespace
+  );
 }
 
-export async function localStorageRemove(key: string) {
-  return await localStorage.removeItem(key, localStorageNamespace);
+export async function localStorageRemove() {
+  console.log("localStorageRemove");
+
+  return await localStorage.removeItem(
+    screenWasPresentedKey,
+    localStorageNamespace
+  );
 }
 
-export async function localStorageGet(key: string) {
-  return await localStorage.getItem(key, localStorageNamespace);
-}
+export async function localStorageGet(): Promise<boolean> {
+  const result = await localStorage.getItem(
+    screenWasPresentedKey,
+    localStorageNamespace
+  );
+  console.log("localStorageGet", { result });
 
-export async function localStorageSetUserAccount(key: string, value: string) {
-  return await localStorage.setItem(key, value);
-}
-
-export async function localStorageRemoveUserAccount(key: string) {
-  return await localStorage.removeItem(key);
-}
-
-export async function sessionStorageApplicasterGet(key: string) {
-  return await sessionStorage.getItem(key);
+  return result === screenWasPresentedValue;
 }

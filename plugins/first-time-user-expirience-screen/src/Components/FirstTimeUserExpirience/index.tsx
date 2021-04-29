@@ -9,9 +9,14 @@ import { Platform, View, SegmentedControlIOSBase } from "react-native";
 
 import { isWebBasedPlatform } from "../../Utils/Platform";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
-import { getRiversProp, pluginByScreenId, prepareData } from "./Utils";
+import {
+  getRiversProp,
+  prepareData,
+  screenShouldBePresented,
+  updatePresentedInfo,
+  removePresentedInfo,
+} from "./Utils";
 import { getStyles, isHomeScreen } from "../../Utils/Customization";
-import { isHook } from "../../Utils/UserAccount";
 import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Components/River/ComponentsMap";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
 import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
@@ -39,25 +44,16 @@ export default function FirstTimeUserExpirience(props) {
   const navigator = useNavigation();
   const dimensions = useSafeAreaFrame();
 
-  // const screenId = isHook(navigator)
-  //   ? props?.hookPlugin?.screen_id
-  //   : navigator?.activeRiver?.id;
   const screenId = props?.hookPlugin?.screen_id;
   const { callback, payload, rivers, configuration } = props;
   const localizations = getRiversProp("localizations", rivers, screenId);
 
   const styles = getRiversProp("styles", rivers, screenId);
   const general = getRiversProp("general", rivers, screenId);
-  console.log({ rivers, styles, screenId, props });
+
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
   const screenLocalizations = getLocalizations(localizations);
-
-  console.log({ general });
-  // const screenPlugin = pluginByScreenId({
-  //   rivers,
-  //   screenId: general?.screen_selector_1,
-  // });
-
+  const show_hook_once = general?.show_hook_once || false;
   useEffect(() => {
     mounted.current = true;
 
@@ -72,6 +68,26 @@ export default function FirstTimeUserExpirience(props) {
   }, [dataSource]);
 
   async function setupEnvironment() {
+    try {
+      console.log({ show_hook_once });
+      if (show_hook_once) {
+        const presentScreen = await screenShouldBePresented();
+        console.log({ presentScreen });
+        if (presentScreen) {
+          prepareDataSource();
+        } else {
+          callback && callback({ success: true, error: null, payload });
+        }
+      } else {
+        await removePresentedInfo();
+        prepareDataSource(); //TODO: Possible remove from local storage data
+      }
+    } catch (error) {
+      callback && callback({ success: true, error: null, payload });
+    }
+  }
+
+  function prepareDataSource() {
     mounted.current && setDataSource(prepareData(general, rivers));
   }
 
@@ -82,21 +98,21 @@ export default function FirstTimeUserExpirience(props) {
   }, [currentScreenIndex]);
 
   const onNext = useCallback(() => {
-    console.log("OnNEXT");
     if (currentScreenIndex < dataSource.length - 1) {
-      console.log("OnNEXT2", {
-        current: mounted.current,
-        newScreen: currentScreenIndex + 1,
-      });
       mounted.current && setCurrentScreenIndex(currentScreenIndex + 1);
     }
   }, [currentScreenIndex, dataSource]);
 
-  function onClose() {
+  async function onClose() {
+    if (show_hook_once) {
+      //TODO: Check if it will not fail await on next completion.
+      updatePresentedInfo();
+    }
     callback && callback({ success: true, error: null, payload });
   }
+
   const data = dataSource?.[currentScreenIndex] || null;
-  console.log({ dataSource, data });
+  console.log({ dataSource, data, props });
   return (
     <SafeAreaView
       style={{
