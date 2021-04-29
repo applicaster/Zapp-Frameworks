@@ -28,9 +28,15 @@ export default function TopBar({
   onBack,
   onNext,
   onClose,
+  isLastScreen = false,
+  isFistScreen = false,
 }) {
   console.log({ screenLocalizations });
-  const { back_button_text, next_button_text } = screenLocalizations;
+  const {
+    back_button_text,
+    next_button_text,
+    close_button_text,
+  } = screenLocalizations;
   const TextStyle = {
     fontFamily: platformSelect({
       ios: screenStyles?.back_button_font_ios,
@@ -52,11 +58,14 @@ export default function TopBar({
         style={leftButtonContainer}
         textStyle={TextStyle}
         title={back_button_text}
+        onPress={onBack}
+        disabled={isFistScreen}
       />
       <TopButton
         style={rightButtonContainer}
         textStyle={TextStyle}
-        title={next_button_text}
+        title={isLastScreen ? close_button_text : next_button_text}
+        onPress={isLastScreen ? onClose : onNext}
       />
     </View>
   );

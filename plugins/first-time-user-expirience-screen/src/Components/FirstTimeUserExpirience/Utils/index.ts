@@ -23,9 +23,9 @@ export function pluginByScreenId({ rivers, screenId }) {
 
 export function prepareData(general, rivers) {
   let data: Array<DataModel> = [];
-  for (let i = 1; i <= 5; i++) {
-    const screenId = general[`screen_selector_${1}`];
-    const canBeSkiped = general[`can_be_skiped_screen_${1}`];
+  for (let index = 1; index <= 5; index++) {
+    const screenId = general[`screen_selector_${index}`];
+    const canBeSkiped = general[`can_be_skiped_screen_${index}`];
     const dataModel = dataModelFromScreenData(screenId, canBeSkiped, rivers);
     if (dataModel) {
       data.push(dataModel);

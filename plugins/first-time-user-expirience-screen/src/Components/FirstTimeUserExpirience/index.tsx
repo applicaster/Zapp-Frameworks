@@ -74,20 +74,29 @@ export default function FirstTimeUserExpirience(props) {
   async function setupEnvironment() {
     mounted.current && setDataSource(prepareData(general, rivers));
   }
-  function onBack() {
+
+  const onBack = useCallback(() => {
     if (currentScreenIndex > 0) {
       mounted.current && setCurrentScreenIndex(currentScreenIndex - 1);
     }
-  }
-  function onNext() {
+  }, [currentScreenIndex]);
+
+  const onNext = useCallback(() => {
+    console.log("OnNEXT");
     if (currentScreenIndex < dataSource.length - 1) {
+      console.log("OnNEXT2", {
+        current: mounted.current,
+        newScreen: currentScreenIndex + 1,
+      });
       mounted.current && setCurrentScreenIndex(currentScreenIndex + 1);
     }
-  }
+  }, [currentScreenIndex, dataSource]);
+
   function onClose() {
     callback && callback({ success: true, error: null, payload });
   }
   const data = dataSource?.[currentScreenIndex] || null;
+  console.log({ dataSource, data });
   return (
     <SafeAreaView
       style={{
@@ -101,6 +110,8 @@ export default function FirstTimeUserExpirience(props) {
         onBack={onBack}
         onNext={onNext}
         onClose={onClose}
+        isFistScreen={currentScreenIndex === 0}
+        isLastScreen={currentScreenIndex === dataSource?.length - 1}
       />
       {data && (
         <ComponentsMap

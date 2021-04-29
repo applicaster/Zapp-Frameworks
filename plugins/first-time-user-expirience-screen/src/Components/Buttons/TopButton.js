@@ -22,16 +22,10 @@ TopButton.propTypes = {
   title: PropTypes.string,
   onPress: PropTypes.func,
   disabled: PropTypes.bool,
-  screenStyles: PropTypes.shape({
-    back_button_font_ios: PropTypes.string,
-    back_button_font_android: PropTypes.string,
-    back_button_font_size: PropTypes.number,
-    back_button_font_color: PropTypes.string,
-  }),
 };
 
 TopButton.defaultProps = {
-  title: "Back",
+  title: "",
   screenStyles: {},
 };
 
