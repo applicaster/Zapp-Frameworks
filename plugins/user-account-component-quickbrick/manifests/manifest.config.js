@@ -191,6 +191,7 @@ const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_android,
   android_tv_for_quickbrick: custom_configuration_fields_android,
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android
 };
 
 const min_zapp_sdk = {
