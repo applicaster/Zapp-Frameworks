@@ -24,6 +24,7 @@ import { getLocalizations } from "../../Utils/Localizations";
 
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import TopBar from "../TopBar";
+import FloatingButton from "../FloatingButton";
 import {
   createLogger,
   BaseSubsystem,
@@ -124,13 +125,20 @@ export default function FirstTimeUserExpirience(props) {
         backgroundColor: screenStyles?.background_color,
       }}
     >
-      <TopBar
+      {/* <TopBar
         screenStyles={screenStyles}
         screenLocalizations={screenLocalizations}
         onBack={onBack}
         onNext={onNext}
         onClose={onClose}
         isFistScreen={currentScreenIndex === 0}
+        isLastScreen={currentScreenIndex === dataSource?.length - 1}
+      /> */}
+      <FloatingButton
+        screenStyles={screenStyles}
+        screenLocalizations={screenLocalizations}
+        onNext={onNext}
+        onClose={onClose}
         isLastScreen={currentScreenIndex === dataSource?.length - 1}
       />
       {data && (
