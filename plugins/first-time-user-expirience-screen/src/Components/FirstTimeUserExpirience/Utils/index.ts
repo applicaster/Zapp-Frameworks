@@ -4,6 +4,7 @@ import {
   localStorageSet,
   localStorageGet,
   localStorageRemove,
+  getBuildNumber,
 } from "../../../Services/LocalStorageService";
 export const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
@@ -53,9 +54,10 @@ function dataModelFromScreenData(
   }
   return null;
 }
-//TODO: Remove it or add try catch handlers
 export async function updatePresentedInfo() {
-  return await localStorageSet();
+  const currentVersionName = await getBuildNumber();
+  console.log({ currentVersionName });
+  return await localStorageSet(currentVersionName);
 }
 
 export async function removePresentedInfo() {
@@ -63,5 +65,9 @@ export async function removePresentedInfo() {
 }
 
 export async function screenShouldBePresented(): Promise<boolean> {
-  return (await localStorageGet()) === false;
+  const currentVersionName = await getBuildNumber();
+  const savedVersionName = await localStorageGet();
+  console.log({ currentVersionName, savedVersionName });
+
+  return currentVersionName !== savedVersionName;
 }

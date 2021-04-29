@@ -2,19 +2,21 @@ import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/
 
 const localStorageNamespace = "first-time-user-expirience-screen";
 const screenWasPresentedKey = "screenWasPresented";
-const screenWasPresentedValue = "true";
-export async function localStorageSet() {
+
+export async function getBuildNumber() {
+  return await localStorage.getItem("version_name");
+}
+
+export async function localStorageSet(versionName) {
   console.log("localStorageSet");
   return await localStorage.setItem(
     screenWasPresentedKey,
-    screenWasPresentedValue,
+    versionName,
     localStorageNamespace
   );
 }
 
 export async function localStorageRemove() {
-  console.log("localStorageRemove");
-
   return await localStorage.removeItem(
     screenWasPresentedKey,
     localStorageNamespace
@@ -22,11 +24,8 @@ export async function localStorageRemove() {
 }
 
 export async function localStorageGet(): Promise<boolean> {
-  const result = await localStorage.getItem(
+  return await localStorage.getItem(
     screenWasPresentedKey,
     localStorageNamespace
   );
-  console.log("localStorageGet", { result });
-
-  return result === screenWasPresentedValue;
 }

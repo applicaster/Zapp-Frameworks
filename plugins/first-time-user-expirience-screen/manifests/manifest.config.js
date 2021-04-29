@@ -41,14 +41,6 @@ const baseManifest = {
 const styles = {
   fields: [
     {
-      type: "switch",
-      key: "is_rtl",
-      label: "Force screen UI Right to left",
-      tooltip_text: "Set UI right to left if true",
-      initial_value: false,
-    },
-
-    {
       key: "background_color",
       type: "color_picker",
       label: "Background font color",
@@ -194,7 +186,7 @@ function createManifest({ version, platform }) {
         {
           type: "text_input",
           key: "transition_type",
-          initial_value: "modal",
+          initial_value: "push",
           disableField: true,
         },
         {
@@ -205,17 +197,17 @@ function createManifest({ version, platform }) {
           initial_value: true,
         },
         {
+          type: "switch",
+          key: "present_on_each_new_version",
+          label: "Present component on each new application version",
+          tooltip_text: "Present component on each new application version",
+          initial_value: false,
+        },
+        {
           type: "screen_selector",
           key: "screen_selector_1",
           label: "Screen 1",
           tooltip_text: "First screen that will be presented",
-        },
-        {
-          type: "switch",
-          key: "can_be_skiped_screen_1",
-          label: "Screen 1 can be skipped",
-          tooltip_text: "Defines if hook can be skiped for screen 1",
-          initial_value: true,
         },
         {
           type: "screen_selector",
@@ -224,24 +216,10 @@ function createManifest({ version, platform }) {
           tooltip_text: "Second screen that will be presented",
         },
         {
-          type: "switch",
-          key: "can_be_skiped_screen_2",
-          label: "Screen 2 can be skipped",
-          tooltip_text: "Defines if hook can be skiped for screen 2",
-          initial_value: true,
-        },
-        {
           type: "screen_selector",
           key: "screen_selector_3",
           label: "Screen 3",
           tooltip_text: "Third screen that will be presented",
-        },
-        {
-          type: "switch",
-          key: "can_be_skiped_screen_3",
-          label: "Screen 3 can be skipped",
-          tooltip_text: "Defines if hook can be skiped for screen 3",
-          initial_value: true,
         },
         {
           type: "screen_selector",
@@ -250,24 +228,10 @@ function createManifest({ version, platform }) {
           tooltip_text: "Fourth screen that will be presented",
         },
         {
-          type: "switch",
-          key: "can_be_skiped_screen_4",
-          label: "Screen 4 can be skipped",
-          tooltip_text: "Defines if hook can be skiped for screen 4",
-          initial_value: true,
-        },
-        {
           type: "screen_selector",
           key: "screen_selector_5",
           label: "Screen 5",
           tooltip_text: "Fifth screen that will be presented",
-        },
-        {
-          type: "switch",
-          key: "can_be_skiped_screen_5",
-          label: "Screen 5 can be skipped",
-          tooltip_text: "Defines if hook can be skiped for screen 5",
-          initial_value: true,
         },
       ],
     },
