@@ -67,12 +67,12 @@ class TeamCardTableHeaderView: UIView {
         passAccuracyHeaderLabel.useBoldFont()
         passAccuracyLabel.useBoldFont()
 
-        teamHeaderLabel.text = Localized.team[Localized.getLocalizedLanguageCode()] as? String ?? "EQUIPO"
-        statsHeaderLabel.text = Localized.teamCardStatsHeader[Localized.getLocalizedLanguageCode()] as? String ?? "PROMEDIO POR PARTIDO"
-        teamGoalsMadeHeaderLabel.text = Localized.teamGoalsMadeHeader[Localized.getLocalizedLanguageCode()] as? String ?? "GOLES A FAVOR"
-        teamGoalsAgainstHeaderLabel.text = Localized.teamGoalsAgainstHeader[Localized.getLocalizedLanguageCode()] as? String ?? "GOLES EN CONTRA"
-        posessionHeaderLabel.text = Localized.teamPosessionHeader[Localized.getLocalizedLanguageCode()] as? String ?? "POSESIÓN"
-        passAccuracyHeaderLabel.text = Localized.teamPassAccuracyHeader[Localized.getLocalizedLanguageCode()] as? String ?? "EXACTITUD DE PASE"
+        teamHeaderLabel.text = Localized.team[Localized.languageCode] as? String ?? "EQUIPO"
+        statsHeaderLabel.text = Localized.teamCardStatsHeader[Localized.languageCode] as? String ?? "PROMEDIO POR PARTIDO"
+        teamGoalsMadeHeaderLabel.text = Localized.teamGoalsMadeHeader[Localized.languageCode] as? String ?? "GOLES A FAVOR"
+        teamGoalsAgainstHeaderLabel.text = Localized.teamGoalsAgainstHeader[Localized.languageCode] as? String ?? "GOLES EN CONTRA"
+        posessionHeaderLabel.text = Localized.teamPosessionHeader[Localized.languageCode] as? String ?? "POSESIÓN"
+        passAccuracyHeaderLabel.text = Localized.teamPassAccuracyHeader[Localized.languageCode] as? String ?? "EXACTITUD DE PASE"
 
         layer.cornerRadius = 15.0
     }

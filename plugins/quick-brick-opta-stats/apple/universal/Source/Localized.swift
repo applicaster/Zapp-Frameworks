@@ -7,21 +7,20 @@
 //
 
 import Foundation
+import ZappCore
 
 class Localized: NSObject {
-    static func getLocalizedLanguageCode() -> String {
-        let deviceLocale = NSLocale.current.languageCode ?? "es"
-
-        switch deviceLocale {
-        case "en", "es", "pt":
-            return deviceLocale
-        default:
-            return "es"
-        }
+    fileprivate static var instance = Localized()
+    
+    lazy var languageCode: String = {
+       return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) ?? "es"
+    }()
+    
+    static var languageCode: String {
+        return instance.languageCode
     }
 
     // Localized strings
-
     fileprivate static var localizedStrings = [["es": "EQUIPO", "en": "TEAM", "pt": "EQUIPE"],
                                                ["es": "PROMEDIO POR PARTIDO", "en": "AVERAGE PER GAME", "pt": "MÉDIA POR PARTIDA"],
                                                ["es": "GOLES A FAVOR", "en": "GOALS", "pt": "GOLS A FAVOR"],
@@ -70,11 +69,9 @@ class Localized: NSObject {
 
     static func getLocalizedString(from source: String) -> String {
         var result = source
-        let lang = getLocalizedLanguageCode()
-
         for info in localizedStrings {
             if let englishValue = info["en"],
-               let value = info[lang], englishValue == source || englishValue.lowercased() == source.lowercased() {
+               let value = info[languageCode], englishValue == source || englishValue.lowercased() == source.lowercased() {
                 result = value
                 break
             }
