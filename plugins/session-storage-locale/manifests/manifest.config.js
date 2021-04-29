@@ -9,7 +9,9 @@ const baseManifest = {
   screen: false,
   react_native: false,
   ui_builder_support: true,
-  whitelisted_account_ids: [],
+  whitelisted_account_ids: [
+    "5ae06cef8fba0f00084bd3c6",
+  ],
   ui_frameworks: ["quickbrick"],
   min_zapp_sdk: "1.0.0",
   deprecated_since_zapp_sdk: "",
