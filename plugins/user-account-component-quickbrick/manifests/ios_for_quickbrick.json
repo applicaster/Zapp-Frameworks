@@ -34,8 +34,8 @@
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.3.8",
-  "dependency_version": "0.3.8",
+  "manifest_version": "0.3.9",
+  "dependency_version": "0.3.9",
   "general": {
     "fields": [
       {
