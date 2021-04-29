@@ -24,15 +24,7 @@ extension GemiusAnalytics {
     fileprivate var skipKeys: [String] {
         return [
             "video_subtype",
-            "video_type",
-            "sct",
-            "sc"
-        ]
-    }
-    
-    fileprivate var updateKeys: [String: String] {
-        return [
-            "scd": "_SCD"
+            "video_type"
         ]
     }
 
@@ -77,10 +69,7 @@ extension GemiusAnalytics {
         }
 
         lastProgramID = itemId
-        gemiusPlayerObject = GSMPlayer(id: getKey(),
-                                       withHost: hitCollectorHost,
-                                       withGemiusID: scriptIdentifier,
-                                       with: nil)
+
 
         let data = GSMProgramData()
 
@@ -98,13 +87,8 @@ extension GemiusAnalytics {
            let jsonData = jsonString.data(using: String.Encoding.utf8),
            let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: AnyObject] {
             for (key, value) in jsonDictionary {
-                var updatedKey = key.lowercased()
-                updatedKey = updatedKey.first == "_" ? String(updatedKey.dropFirst()) : updatedKey
-                if self.skipKeys.contains(updatedKey) == false {
-                    if updateKeys.keys.contains(updatedKey) {
-                        updatedKey = updateKeys[updatedKey] ?? updatedKey
-                    }
-                    data.addCustomParameter(updatedKey, value: "\(value)")
+                if self.skipKeys.contains(key) == false {
+                    data.addCustomParameter(key, value: "\(value)")
                 }
             }
         }
@@ -112,6 +96,11 @@ extension GemiusAnalytics {
         // set program type
         data.programType = .VIDEO
 
+        gemiusPlayerObject = GSMPlayer(id: getKey(),
+                                       withHost: hitCollectorHost,
+                                       withGemiusID: scriptIdentifier,
+                                       with: nil)
+        
         // set program data
         gemiusPlayerObject?.newProgram(itemId, with: data)
 
