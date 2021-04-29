@@ -17,7 +17,7 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   custom_configuration_fields: [],
-  identifier: "locale_storing",
+  identifier: "session-storage-locale",
   npm_dependencies: [],
   targets: ["mobile"],
 };
