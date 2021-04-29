@@ -56,10 +56,16 @@ import ZappCore
 
 extension ZPSessionStorageLocale: AppLoadingHookProtocol {
     public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        print(Locale.preferredLanguageCode)
-//        _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "advertisingIdentifier",
-//                                                                       value: idfaString,
-//                                                                       namespace: nil)
+        
+        var languageCode = self.defaultLanguage
+        let preferredLanguageCode = Locale.preferredLanguageCode
+        if self.supportedLanguages.contains(preferredLanguageCode) {
+            languageCode = preferredLanguageCode
+        }
+        
+        _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "languageCode",
+                                                                       value: languageCode,
+                                                                       namespace: nil)
 
         completion?()
     }
