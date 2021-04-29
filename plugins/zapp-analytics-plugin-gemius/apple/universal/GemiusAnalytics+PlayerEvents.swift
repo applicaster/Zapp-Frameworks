@@ -20,6 +20,21 @@ extension GemiusAnalytics {
         static let created = "Play VOD Item.start"
         static let buffering = "Player Load Start"
     }
+    
+    fileprivate var skipKeys: [String] {
+        return [
+            "video_subtype",
+            "video_type",
+            "sct",
+            "sc"
+        ]
+    }
+    
+    fileprivate var updateKeys: [String: String] {
+        return [
+            "scd": "_SCD"
+        ]
+    }
 
     func shouldHandlePlayerEvents(for eventName: String, parameters: [String: NSObject]) -> Bool {
         var retValue = false
@@ -69,11 +84,6 @@ extension GemiusAnalytics {
 
         let data = GSMProgramData()
 
-        // set item id
-        if let uuid = parameters["uuid"] as? String {
-            data.addCustomParameter("Video UUID", value: uuid)
-        }
-
         // set item title
         if let title = parameters["Item Name"] as? String {
             data.name = title
@@ -90,7 +100,12 @@ extension GemiusAnalytics {
             for (key, value) in jsonDictionary {
                 var updatedKey = key.lowercased()
                 updatedKey = updatedKey.first == "_" ? String(updatedKey.dropFirst()) : updatedKey
-                data.addCustomParameter(updatedKey, value: "\(value)")
+                if self.skipKeys.contains(updatedKey) == false {
+                    if updateKeys.keys.contains(updatedKey) {
+                        updatedKey = updateKeys[updatedKey] ?? updatedKey
+                    }
+                    data.addCustomParameter(updatedKey, value: "\(value)")
+                }
             }
         }
 
