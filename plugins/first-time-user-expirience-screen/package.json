@@ -24,10 +24,6 @@
     "build": "tsc",
     "prepack": "npm run build"
   },
-  "files": [
-    "manifests/**/*",
-    "src"
-  ],
   "applicaster": {
     "supportedPlatforms": [
       "ios_for_quickbrick",
