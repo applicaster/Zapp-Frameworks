@@ -113,7 +113,13 @@ const custom_configuration_fields_apple = [
   },
 ];
 
-const custom_configuration_fields_android = custom_configuration_fields_apple;
+const custom_configuration_fields_android = custom_configuration_fields_apple.concat(
+    [{
+      "key": "android_assets_bundle",
+      "type": "uploader",
+      "label": "Logo drawables zip",
+      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must be didomi_logo.png"
+    }]);
 
 const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
