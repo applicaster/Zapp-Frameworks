@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
+import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.session.SessionStorage
@@ -73,6 +74,7 @@ class DidomiPlugin : GenericPluginI
                 )
                 addEventListener(this@DidomiPlugin)
                 onReady {
+                    hackLogo()
                     APLogger.info(TAG, "Didomi initialized")
                     if (!shouldConsentBeCollected()) {
                         APLogger.info(TAG, "User consent was already requested or not needed")
@@ -171,10 +173,44 @@ class DidomiPlugin : GenericPluginI
         }
     }
 
+    private fun hackLogo() {
+        val plugin = PluginManager.getInstance().getPlugin(PluginId)
+        val bundleValue = plugin.getConfiguration()?.get(pluginAssetsKey) ?: return
+
+        if (!bundleValue.isJsonPrimitive
+                || !bundleValue.asJsonPrimitive.isString
+                || bundleValue.asJsonPrimitive.asString.isEmpty()) {
+            return
+        }
+
+        // hack to force embedded logo image while still using remote configuration
+        AppContext.get().apply {
+            try {
+                val identifier = resources.getIdentifier(logoDrawableName, "drawable", packageName)
+                if (0 == identifier) {
+                    APLogger.info(TAG, "hackLogo failed, asset bundle zip is present, but logo image file named $logoDrawableName is missing")
+                    return
+                }
+                val logoField = Didomi::class.java.getDeclaredField("l")
+                logoField.isAccessible = true
+                logoField.setInt(Didomi.getInstance(), identifier)
+            } catch (e: NoSuchFieldException) {
+                APLogger.error(TAG, "hackLogo failed, logo resource ID field is missing in the class")
+            } catch (e: Exception) {
+                APLogger.error(TAG, "Failed to set logo image", e)
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "Didomi"
+
         const val PluginId = "applicaster-cmp-didomi"
+
         const val didomiGDPRApplies = "IABTCF_gdprApplies"
         const val didomiIABConsent = "IABTCF_TCString"
+
+        private const val logoDrawableName = "didomi_logo"
+        private const val pluginAssetsKey = "android_assets_bundle"
     }
 }
