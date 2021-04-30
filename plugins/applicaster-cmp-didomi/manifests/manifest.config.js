@@ -118,7 +118,7 @@ const custom_configuration_fields_android = custom_configuration_fields_apple.co
       "key": "android_assets_bundle",
       "type": "uploader",
       "label": "Logo drawables zip",
-      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must be didomi_logo.png"
+      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
     }]);
 
 const custom_configuration_fields = {
