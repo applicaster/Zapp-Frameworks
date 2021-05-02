@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 install! 'cocoapods', :share_schemes_for_development_pods => true
 project '../../../localProject/apple/FrameworksApp.xcodeproj'
 
@@ -8,7 +8,6 @@ install! 'cocoapods', deterministic_uuids: false
 
 source 'https://cdn.cocoapods.org/'
 source 'git@github.com:applicaster/CocoaPods.git'
-source 'git@github.com:applicaster/PluginsBuilderCocoaPods.git'
 
 pre_install do |_installer|
   # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
