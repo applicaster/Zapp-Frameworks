@@ -102,7 +102,7 @@ extension OptaStats {
         return type
     }
 
-    fileprivate func handlePresentScreen(targetViewController: UIViewController?,
+    func handlePresentScreen(targetViewController: UIViewController?,
                                          params: [String: Any]) -> Bool {
         var retValue = true
 
