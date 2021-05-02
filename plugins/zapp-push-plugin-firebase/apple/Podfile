@@ -20,6 +20,10 @@ target 'FrameworksApp' do
 
   pod 'ZappPushPluginFirebase', path: './ZappPushPluginFirebase.podspec', testspecs: ['UnitTests']
   pod 'ZappCore', path: '../../zapp-core/apple/ZappCore.podspec'
+  pod 'QuickBrickXray', path: '../../quick-brick-xray/apple/QuickBrickXray.podspec'
+  pod 'XrayLogger', path: '../../../node_modules/@applicaster/x-ray/apple/Xraylogger.podspec'
+  pod 'Reporter', path: '../../../node_modules/@applicaster/x-ray/apple/Reporter.podspec'
+  pod 'LoggerInfo', path: '../../../node_modules/@applicaster/x-ray/apple/LoggerInfo.podspec'
 
   target 'FrameworksAppTests' do
     inherit! :search_paths
