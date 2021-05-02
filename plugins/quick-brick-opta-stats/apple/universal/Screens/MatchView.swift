@@ -123,8 +123,7 @@ class MatchView: UIView {
     fileprivate func updateUI() {
         resetUI()
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, dd MMMM - HH:mm"
+        let dateFormatter = DateFormatter.create(with: "EEEE, dd MMMM - HH:mm", locale: Localized.locale)
 
         if let date = matchStat?.matchInfo.date {
             let text = dateFormatter.string(from: date)

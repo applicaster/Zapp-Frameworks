@@ -50,9 +50,7 @@ class PlayerDetailsViewController: ViewControllerBase {
     fileprivate let bag = DisposeBag()
 
     fileprivate lazy var dateOfBirthDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd/MM/yyyy"
-        return df
+        return DateFormatter.create(with: "dd/MM/yyyy", locale: Localized.locale)
     }()
 
     override func viewDidLoad() {

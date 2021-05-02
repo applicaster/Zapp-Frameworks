@@ -159,8 +159,7 @@ class MatchListingTableViewCell: UITableViewCell {
             }
         }
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, dd MMMM - HH:mm"
+        let dateFormatter = DateFormatter.create(with: "EEEE, dd MMMM - HH:mm", locale: Localized.locale)
 
         if let date = match.date {
             let text = dateFormatter.string(from: date)

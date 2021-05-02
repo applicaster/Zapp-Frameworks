@@ -42,8 +42,8 @@ class RemoteConfigurationHelper {
     /// - if the device is set to a language that is part of the locales declared in Zapp for that app, we use this
     /// - if not, we pick the first locale in the localizations.json
     private class func getLocaleToUse(_ localeKeys: [String]) -> String? {
-        let deviceLocales = NSLocale.preferredLanguages.map { String($0.split(separator: "-").first ?? "") }
-        let matchingLocales = Set(localeKeys).intersection(deviceLocales)
+        let deviceLocale = NSLocale.preferredLanguages.first?.split(separator: "-").first ?? ""
+        let matchingLocales = Set(localeKeys).intersection([String(deviceLocale)])
 
         if matchingLocales.count > 0 {
             return matchingLocales.first
