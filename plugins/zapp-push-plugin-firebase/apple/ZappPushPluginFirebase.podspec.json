@@ -66,12 +66,5 @@
       }
     }
   ],
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "source_files": "tests/**"
-    }
-  ],
   "swift_version": "5.1"
 }
