@@ -50,7 +50,7 @@ class PlayerDetailsViewController: ViewControllerBase {
     fileprivate let bag = DisposeBag()
 
     fileprivate lazy var dateOfBirthDateFormatter: DateFormatter = {
-        return DateFormatter.create(with: "dd/MM/yyyy", locale: Localized.locale)
+        DateFormatter.create(with: "dd/MM/yyyy", locale: Localized.locale)
     }()
 
     override func viewDidLoad() {
@@ -157,7 +157,7 @@ class PlayerDetailsViewController: ViewControllerBase {
         playerTypeLabel.text = fallbackStringPlayerType
         // playerTypeLabel.text =  Localized.getLocalizedString(from: person?.type?.uppercased() ?? fallbackStringPlayerType) //person?.type?.uppercased() ?? fallbackStringPlayerType
         playerFlagImageView.image = nil
-        
+
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamId).png"
         playerFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
 

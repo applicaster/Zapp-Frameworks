@@ -96,7 +96,7 @@ class TeamCardTableHeaderView: UIView {
         if let teamName = squad.contestantName {
             teamNameLabel.text = teamName
         }
-        
+
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(squad.contestantId ?? "").png"
         teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
         teamFlagImageView.layer.cornerRadius = 4
@@ -106,7 +106,6 @@ class TeamCardTableHeaderView: UIView {
 
         let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(squad.contestantId ?? "").png"
         teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)
-
 
         let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(squad.contestantId ?? "").png"
         teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
@@ -130,7 +129,6 @@ class TeamCardTableHeaderView: UIView {
 
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamCard.contestantStat?.id ?? "").png"
         teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
-
 
         let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(teamCard.contestantStat?.id ?? "").png"
         teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)

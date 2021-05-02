@@ -27,7 +27,7 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
         if let deviceLocale = FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) {
             switch deviceLocale {
             case "en", "pt", "es":
-                imageToLoad = "all-matches-"+deviceLocale
+                imageToLoad = "all-matches-" + deviceLocale
             default:
                 break
             }
