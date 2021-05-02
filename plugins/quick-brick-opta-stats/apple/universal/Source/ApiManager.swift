@@ -9,6 +9,7 @@
 import Alamofire
 import SwiftyJSON
 import UIKit
+import ZappCore
 
 typealias ApiCompletionHandler = (_ success: Bool, _ content: JSON?) -> Void
 
@@ -20,7 +21,7 @@ struct ApiManager {
             "_fmt": "json",
             "fx": fixtureId,
             "detailed": "yes",
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.matchScreen(requestParams: params)) { success, json in
@@ -34,7 +35,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "tmcl": tournamentCalendar,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.groupCards(requestParams: params)) { success, json in
@@ -51,7 +52,7 @@ struct ApiManager {
             "tmcl": tournamentCalendar,
             "ctst": contestantId,
             "detailed": "yes",
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.teamScreen(requestParams: params)) { success, json in
@@ -65,7 +66,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "comp": competitionId,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.tournamentWinners(requestParams: params)) { success, json in
@@ -82,7 +83,7 @@ struct ApiManager {
             "tmcl": tournamentCalendar,
             "ctst": contestantId,
             "detailed": "yes",
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.playerScreenFullSquad(requestParams: params)) { success, json in
@@ -96,7 +97,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "prsn": personId,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.playerScreenCareer(requestParams: params)) { success, json in
@@ -114,7 +115,7 @@ struct ApiManager {
             "_pgSz": "50",
             "_pgNm": "1",
             "live": "yes",
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.allMatchesList(requestParams: params)) { success, json in
@@ -128,7 +129,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "tmcl": tournamentCalendar,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.allMatches(requestParams: params)) { success, json in
@@ -142,7 +143,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "fx": matchId,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.matchDetail(requestParams: params)) { success, json in
@@ -156,7 +157,7 @@ struct ApiManager {
             "_rt": "c",
             "_fmt": "json",
             "ctst": contestantId,
-            "_lcl": getLanguageCodeParam(),
+            "_lcl": languageCode,
         ] as [String: AnyObject]
 
         NetworkService.makeRequest(.lineUp(requestParams: params)) { success, json in
@@ -164,18 +165,20 @@ struct ApiManager {
         }
     }
 
-    static func getLanguageCodeParam() -> String {
-        let deviceLocale = NSLocale.current.languageCode
+    static var languageCode: String {
+        var retValue = "es-es"
 
-        switch deviceLocale {
+        switch Localized.languageCode {
         case "en":
-            return "en-en"
+            retValue = "en-en"
         case "es":
-            return "es-es"
+            retValue = "es-es"
         case "pt":
-            return "pt-br"
+            retValue = "pt-br"
         default:
-            return "es-es"
+           break
         }
+        
+        return retValue
     }
 }

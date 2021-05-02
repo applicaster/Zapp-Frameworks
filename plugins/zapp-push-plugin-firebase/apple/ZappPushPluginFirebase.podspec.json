@@ -18,7 +18,6 @@
   "source_files": "ios/**/*.{swift,m}",
   "default_subspecs": "Base",
   "static_framework": true,
-  "prepare_command": "sh Scripts/prepare_service_extension.sh\nsh Scripts/prepare_content_extension.sh",
   "subspecs": [
     {
       "name": "Base",

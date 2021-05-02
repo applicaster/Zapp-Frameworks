@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import ZappCore
 
 class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
     @IBOutlet var allMatchesImageView: UIImageView!
@@ -23,17 +24,17 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
     private func setImage() {
         var imageToLoad = "all-matches-es"
 
-        let deviceLocale = NSLocale.current.languageCode
-
-        switch deviceLocale {
-        case "en":
-            imageToLoad = "all-matches-en"
-        case "es":
-            imageToLoad = "all-matches-es"
-        case "pt":
-            imageToLoad = "all-matches-pt"
-        default:
-            break
+        if let deviceLocale = FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) {
+            switch deviceLocale {
+            case "en":
+                imageToLoad = "all-matches-en"
+            case "es":
+                imageToLoad = "all-matches-es"
+            case "pt":
+                imageToLoad = "all-matches-pt"
+            default:
+                break
+            }
         }
 
         if let path = Bundle(for: classForCoder).path(forResource: imageToLoad, ofType: "jpg") {
