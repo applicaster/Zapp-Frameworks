@@ -56,8 +56,9 @@ open class APPushProviderFirebase: ZPPushProvider {
 
     open func addTagsToDevice(_ tags: [String]?,
                               completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
-        guard let topics = tags else {
-            completion(true, nil)
+        guard let topics = tags,
+              topics.count > 0 else {
+            completion(true, tags)
             return
         }
 
@@ -151,6 +152,13 @@ open class APPushProviderFirebase: ZPPushProvider {
         }
     }
 
+    fileprivate func cleanRegisteredTopics() {
+        // clean local registered topics
+        registeredTopics.removeAll()
+        // set default
+        setDefaultTopicIfNeeded()
+    }
+
     fileprivate var namespace: String? {
         return model?.identifier
     }
@@ -183,7 +191,8 @@ extension APPushProviderFirebase: MessagingDelegate {
                          data: ["token": fcmToken])
 
         // clean local registered topics
-        registeredTopics.removeAll()
+        cleanRegisteredTopics()
+
         // subscribe to topics appears in local storage
         addTagsToDevice(registeredTopicsInLocalStorage, completion: { _, _ in
             // do nothing
