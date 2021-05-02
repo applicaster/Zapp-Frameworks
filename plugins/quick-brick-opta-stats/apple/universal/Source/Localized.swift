@@ -13,7 +13,7 @@ class Localized: NSObject {
     fileprivate static var instance = Localized()
 
     lazy var languageCode: String = {
-        var retValue = "es"
+        var retValue = "en"
         guard let appLanguageCode = FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) else {
             return retValue
         }
@@ -33,7 +33,7 @@ class Localized: NSObject {
     }
 
     static var locale: Locale {
-        let language = Locale.preferredLanguages.first { Locale(identifier: $0).languageCode == languageCode } ?? "es-es"
+        let language = Locale.preferredLanguages.first { Locale(identifier: $0).languageCode == languageCode } ?? "en-en"
         return Locale(identifier: language)
     }
 
