@@ -49,7 +49,7 @@ async function iosBuildUnitTests({ iosModuleName, pluginPath }) {
         await exec(`mkdir -p ${artifactsFolder}`);
 
         await exec(`cd ${pluginPath}/apple && set -euxo pipefail && xcodebuild \
-        -workspace ./FrameworksApp.xcworkspace \
+        -workspace ../../../localProject/apple/FrameworksApp.xcworkspace \
         -scheme ${iosModuleName} \
         -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12' \
         clean build test | tee xcodebuild.log | xcpretty --report html --output report.html`, function (err, stdout) {
