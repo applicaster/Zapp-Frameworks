@@ -237,7 +237,7 @@ class GroupCardTableViewCell: UITableViewCell {
         
         groupTitleLabel.text = model.groupName?.uppercased()
         
-        var unknownFlagImage = Helpers.unknownFlagImage()
+        let unknownFlagImage = Helpers.unknownFlagImage()
         
         if let rankings = model.rankings {
             for ranking in rankings {

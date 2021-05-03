@@ -216,7 +216,7 @@ class TeamCardViewController: ViewControllerBase {
             }).disposed(by: bag)
 
         teamCardViewModel?.errorOnFetch.asObservable()
-            .subscribe(onNext: { [unowned self] errorOnFetch in
+            .subscribe(onNext: { errorOnFetch in
                 if errorOnFetch {
                     // self.noDataMessageVisible = true
                 }
