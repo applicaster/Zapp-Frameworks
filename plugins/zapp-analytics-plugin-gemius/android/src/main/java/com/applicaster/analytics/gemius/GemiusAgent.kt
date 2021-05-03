@@ -131,13 +131,15 @@ class GemiusAgent : BaseAnalyticsAgent() {
         override fun onAdStart(params: Map<String, Any>?) {
             super.onAdStart(params)
             // todo: other data if needed
-            val id = params?.get("id")?.toString() ?: ""
+            val id = params?.get(KEY_AD_ID)?.toString() ?: ""
+            if(id.isEmpty())
+                APLogger.warn(TAG, "$KEY_AD_ID is missing in the event $AD_START_EVENT data")
             val adata = AdData().apply {
                 adType = AdData.AdType.BREAK
-                when (val d = params?.get("duration")) {
+                when (val d = params?.get(KEY_AD_DURATION)) {
                     is String -> duration = d.toFloat().toInt()
                     is Number -> duration = d.toInt()
-                    else -> APLogger.warn(TAG, "Duration is missing in the ad data")
+                    else -> APLogger.warn(TAG, "$KEY_AD_DURATION is missing in the event $AD_START_EVENT data")
                 }
             }
             player.newAd(id, adata)
@@ -147,17 +149,19 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     Player.EventType.PLAY,
                     EventAdData().apply {
                         autoPlay = true // all our ads are autoplay I assume
-                        when (val d = params?.get("breakSize")) {
+                        when (val d = params?.get(KEY_AD_BREAK_SIZE)) {
                             is String -> breakSize = d.toFloat().toInt()
                             is Number -> breakSize = d.toInt()
-                            else -> APLogger.warn(TAG, "breakSize is missing in the ad data")
+                            else -> APLogger.warn(TAG, "$KEY_AD_BREAK_SIZE is missing in the event $AD_START_EVENT data")
                         }
                     })
         }
 
         override fun onAdEnd(params: Map<String, Any>?) {
             super.onAdEnd(params)
-            val id = params?.get("id")?.toString() ?: ""
+            val id = params?.get(KEY_AD_ID)?.toString() ?: ""
+            if(id.isEmpty())
+                APLogger.warn(TAG, "$KEY_AD_ID is missing in the event $AD_END_EVENT data")
             player.adEvent(
                     getId(),
                     id,

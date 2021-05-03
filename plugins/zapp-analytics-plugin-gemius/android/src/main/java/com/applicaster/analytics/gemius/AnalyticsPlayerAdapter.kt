@@ -197,6 +197,13 @@ open class AnalyticsPlayerAdapter {
         const val KEY_LINK = "Item Link"
         const val KEY_TYPE = "Item Type"
 
+        const val KEY_AD_ID = "Ad Id"
+        const val KEY_AD_DURATION = "Ad Duration" // Single ad duration
+        const val KEY_AD_POSITION = "Ad Position" // Ad index in slot: 0, 1, 2 etc
+        const val KEY_AD_BREAK_OFFSET = "Ad Break Time Offset" // Ad break position in timeline
+        const val KEY_AD_BREAK_SIZE = "Ad Break Size" // Ads count in the break: 1, 2, 3, etc
+        const val KEY_AD_BREAK_MAX_DURATION = "Ad Break Max Duration" // Total ad break max duration
+
         const val KEY_DURATION = "Item Length"
         const val KEY_POSITION = "offset" // must be Position or something like that
         const val KEY_CUSTOM_PROPERTIES = "analyticsCustomProperties"
