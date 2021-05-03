@@ -67,12 +67,12 @@ class TeamCardTableHeaderView: UIView {
         passAccuracyHeaderLabel.useBoldFont()
         passAccuracyLabel.useBoldFont()
 
-        teamHeaderLabel.text = Localized.team[Localized.getLocalizedLanguageCode()] as? String ?? "EQUIPO"
-        statsHeaderLabel.text = Localized.teamCardStatsHeader[Localized.getLocalizedLanguageCode()] as? String ?? "PROMEDIO POR PARTIDO"
-        teamGoalsMadeHeaderLabel.text = Localized.teamGoalsMadeHeader[Localized.getLocalizedLanguageCode()] as? String ?? "GOLES A FAVOR"
-        teamGoalsAgainstHeaderLabel.text = Localized.teamGoalsAgainstHeader[Localized.getLocalizedLanguageCode()] as? String ?? "GOLES EN CONTRA"
-        posessionHeaderLabel.text = Localized.teamPosessionHeader[Localized.getLocalizedLanguageCode()] as? String ?? "POSESIÓN"
-        passAccuracyHeaderLabel.text = Localized.teamPassAccuracyHeader[Localized.getLocalizedLanguageCode()] as? String ?? "EXACTITUD DE PASE"
+        teamHeaderLabel.text = Localized.team[Localized.languageCode] as? String ?? "EQUIPO"
+        statsHeaderLabel.text = Localized.teamCardStatsHeader[Localized.languageCode] as? String ?? "PROMEDIO POR PARTIDO"
+        teamGoalsMadeHeaderLabel.text = Localized.teamGoalsMadeHeader[Localized.languageCode] as? String ?? "GOLES A FAVOR"
+        teamGoalsAgainstHeaderLabel.text = Localized.teamGoalsAgainstHeader[Localized.languageCode] as? String ?? "GOLES EN CONTRA"
+        posessionHeaderLabel.text = Localized.teamPosessionHeader[Localized.languageCode] as? String ?? "POSESIÓN"
+        passAccuracyHeaderLabel.text = Localized.teamPassAccuracyHeader[Localized.languageCode] as? String ?? "EXACTITUD DE PASE"
 
         layer.cornerRadius = 15.0
     }
@@ -96,7 +96,7 @@ class TeamCardTableHeaderView: UIView {
         if let teamName = squad.contestantName {
             teamNameLabel.text = teamName
         }
-        
+
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(squad.contestantId ?? "").png"
         teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
         teamFlagImageView.layer.cornerRadius = 4
@@ -106,7 +106,6 @@ class TeamCardTableHeaderView: UIView {
 
         let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(squad.contestantId ?? "").png"
         teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)
-
 
         let shieldImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIELD-\(squad.contestantId ?? "").png"
         teamShieldImageView.sd_setImage(with: URL(string: shieldImageUrl), placeholderImage: nil)
@@ -130,7 +129,6 @@ class TeamCardTableHeaderView: UIView {
 
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamCard.contestantStat?.id ?? "").png"
         teamFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
-
 
         let shirtImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)SHIRT-\(teamCard.contestantStat?.id ?? "").png"
         teamShirtImageView.sd_setImage(with: URL(string: shirtImageUrl), placeholderImage: nil)
