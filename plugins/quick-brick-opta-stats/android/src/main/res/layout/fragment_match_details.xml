@@ -23,15 +23,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white">
 
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    app:layout_constraintBottom_toTopOf="@+id/v_divider"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     android:id="@+id/tv_date"
                     style="@style/Theme.Opta.Subtitle"
@@ -46,10 +37,13 @@
                 <TextView
                     android:id="@+id/tv_phase"
                     style="@style/Theme.Opta.Title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="start"
                     android:text="-"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
@@ -67,10 +61,10 @@
                     android:layout_width="60dp"
                     android:layout_height="43dp"
                     android:layout_marginStart="18dp"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="30dp"
                     android:src="@drawable/unknow_flag"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
                 <TextView
                     android:id="@+id/tv_country_1"
@@ -91,31 +85,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="30dp"
                     android:text="-"
                     app:layout_constraintStart_toEndOf="@+id/iv_flag_1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
                 <ImageView
                     android:id="@+id/iv_flag_2"
                     android:layout_width="60dp"
                     android:layout_height="43dp"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="18dp"
                     android:src="@drawable/unknow_flag"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
                 <TextView
                     android:id="@+id/tv_goals_2"
                     style="@style/Theme.Opta.Score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="32dp"
                     android:text="-"
                     app:layout_constraintEnd_toStartOf="@+id/iv_flag_2"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
                 <TextView
                     android:id="@+id/tv_game_state"
@@ -123,12 +117,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="140dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="8dp"
                     android:text="-"
                     app:layout_constraintEnd_toStartOf="@+id/tv_goals_2"
                     app:layout_constraintStart_toEndOf="@+id/tv_goals_1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
                 <ProgressBar
                     android:id="@+id/pb_gam_state"
@@ -183,12 +177,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="32dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="32dp"
                     android:background="@color/gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_country_1" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_goals"
