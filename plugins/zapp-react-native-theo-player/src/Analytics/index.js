@@ -123,11 +123,11 @@ export class AnalyticsTracker {
     } = state;
 
     const payload = {
-      id: this.handleId(event, state, entry),
-      title,
-      duration: this.handleDuration(event, state, entry),
+      "Item ID": this.handleId(event, state, entry),
+      "Item Name": title,
+      "Item Length": this.handleDuration(event, state, entry),
       offset: currentTime,
-      extensions,
+      "analyticsCustomProperties": JSON.stringify(extensions["analyticsCustomProperties"])
     };
 
     return this.addNativeData(payload, event, state);

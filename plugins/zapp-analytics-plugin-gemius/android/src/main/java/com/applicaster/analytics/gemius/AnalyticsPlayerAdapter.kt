@@ -197,8 +197,8 @@ open class AnalyticsPlayerAdapter {
         const val KEY_LINK = "Item Link"
         const val KEY_TYPE = "Item Type"
 
-        const val KEY_DURATION = "duration" // must me 'Item Length'
+        const val KEY_DURATION = "Item Length"
         const val KEY_POSITION = "offset" // must be Position or something like that
-        const val KEY_CUSTOM_PROPERTIES = "Custom PropertyanalyticsCustomProperties"
+        const val KEY_CUSTOM_PROPERTIES = "analyticsCustomProperties"
     }
 }
