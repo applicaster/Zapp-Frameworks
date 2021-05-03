@@ -8,21 +8,20 @@
 import Foundation
 import ZappCore
 
-var ZappRemoteConfiguration: RemoteConfigurationHelper.Content? = RemoteConfigurationHelper.retriveData()
-
 class RemoteConfigurationHelper {
     struct Content: Codable {
         let localizations: [String: String]
     }
 
     public class func update() {
-        if let localizations = retriveData()?.localizations,
-           let locale = getLocaleToUse(localizations.keys.sorted()),
-           !locale.isEmpty {
-            SessionStorage.sharedInstance.set(key: ZappStorageKeys.languageCode,
-                                              value: locale,
-                                              namespace: nil)
+        guard let localizations = retriveData()?.localizations,
+              let locale = getLocaleToUse(localizations.keys.sorted()),
+              !locale.isEmpty else {
+            return
         }
+        SessionStorage.sharedInstance.set(key: ZappStorageKeys.languageCode,
+                                          value: locale,
+                                          namespace: nil)
     }
 
     class func retriveData() -> RemoteConfigurationHelper.Content? {
