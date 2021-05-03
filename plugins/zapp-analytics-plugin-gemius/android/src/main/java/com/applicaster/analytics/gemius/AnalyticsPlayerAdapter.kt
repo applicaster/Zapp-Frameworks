@@ -204,7 +204,7 @@ open class AnalyticsPlayerAdapter {
         const val KEY_AD_BREAK_SIZE = "Ad Break Size" // Ads count in the break: 1, 2, 3, etc
         const val KEY_AD_BREAK_MAX_DURATION = "Ad Break Max Duration" // Total ad break max duration
 
-        const val KEY_DURATION = "Item Length"
+        const val KEY_DURATION = "Item Duration"
         const val KEY_POSITION = "offset" // must be Position or something like that
         const val KEY_CUSTOM_PROPERTIES = "analyticsCustomProperties"
     }
