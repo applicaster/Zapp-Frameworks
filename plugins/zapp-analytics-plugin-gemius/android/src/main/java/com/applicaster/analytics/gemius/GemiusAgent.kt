@@ -290,7 +290,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                 "st",
                 "tv",
                 "se",
-                "url_alias")
+                "URL_alias")
 
         // these are reported by SDK itself from inside player object
         private val reportedBySDK = setOf("_SCT", "_SC")
