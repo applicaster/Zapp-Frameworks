@@ -79,11 +79,11 @@ extension GemiusAnalytics {
         }
 
         // set item duration
-        if let duration = parameters["Custom Propertylength"] as? String {
+        if let duration = parameters["Item Duration"] as? String {
             data.duration = NSNumber(value: Int(duration) ?? 0)
         }
 
-        if let jsonString = parameters["Custom PropertyanalyticsCustomProperties"] as? String,
+        if let jsonString = parameters["analyticsCustomProperties"] as? String,
            let jsonData = jsonString.data(using: String.Encoding.utf8),
            let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: AnyObject] {
             for (key, value) in jsonDictionary {
