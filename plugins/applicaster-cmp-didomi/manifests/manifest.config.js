@@ -95,7 +95,7 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 
-const custom_configuration_fields_apple = [
+const custom_configuration_fields_shared = [
   {
     key: "present_on_startup",
     type: "checkbox",
@@ -110,10 +110,24 @@ const custom_configuration_fields_apple = [
     label: "API key",
     default: "",
     tooltip_text: "API key",
-  },
+  }
 ];
 
-const custom_configuration_fields_android = custom_configuration_fields_apple;
+const custom_configuration_fields_apple = custom_configuration_fields_shared.concat(
+  [{
+    key: "ios_assets_bundle",
+    type: "uploader",
+    label: "Logo drawables zip",
+    label_tooltip: "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
+  }]);
+
+const custom_configuration_fields_android = custom_configuration_fields_shared.concat(
+    [{
+      "key": "android_assets_bundle",
+      "type": "uploader",
+      "label": "Logo drawables zip",
+      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
+    }]);
 
 const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
