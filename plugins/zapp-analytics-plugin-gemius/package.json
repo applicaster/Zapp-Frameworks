@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-gemius",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Gemius Analytics provider",
   "repository": {
     "type": "git",

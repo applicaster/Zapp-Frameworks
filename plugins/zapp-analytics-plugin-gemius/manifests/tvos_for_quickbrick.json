@@ -29,7 +29,7 @@
   ],
   "platform": "tvos_for_quickbrick",
   "min_zapp_sdk": "4.1.0-Dev",
-  "manifest_version": "0.3.0",
+  "manifest_version": "0.3.1",
   "extra_dependencies": [
     {
       "GemiusAnalytics": ":path => './node_modules/@applicaster/zapp-analytics-plugin-gemius/apple/GemiusAnalytics.podspec'"
@@ -46,6 +46,6 @@
     "tv"
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-gemius@0.3.0"
+    "@applicaster/zapp-analytics-plugin-gemius@0.3.1"
   ]
 }
