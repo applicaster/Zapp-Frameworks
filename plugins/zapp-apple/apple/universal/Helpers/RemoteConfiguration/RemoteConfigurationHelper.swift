@@ -22,6 +22,10 @@ class RemoteConfigurationHelper {
         SessionStorage.sharedInstance.set(key: ZappStorageKeys.languageCode,
                                           value: locale,
                                           namespace: nil)
+        
+        LocalStorage.sharedInstance.set(key: ZappStorageKeys.languageCode,
+                                          value: locale,
+                                          namespace: nil)
     }
 
     class func retriveData() -> RemoteConfigurationHelper.Content? {
