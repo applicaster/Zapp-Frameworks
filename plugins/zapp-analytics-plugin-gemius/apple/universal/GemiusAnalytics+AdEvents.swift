@@ -91,12 +91,12 @@ extension GemiusAnalytics {
     fileprivate func parseAdEventParams(from parameters: [String: NSObject]) -> AdEventParams {
         var adParams = AdEventParams()
 
-        adParams.adPosition = parameters["adPosition"] as? Int ?? 0
-        adParams.breakSize = parameters["breakSize"] as? Int ?? 0
-        adParams.maxDuration = parameters["maxDuration"] as? Double ?? 0.0
+        adParams.adPosition = parameters["Ad Position"] as? Int ?? 0
+        adParams.breakSize = parameters["Ad Break Size"] as? Int ?? 0
+        adParams.maxDuration = parameters["Ad Break Max Duration"] as? Double ?? 0.0
         adParams.maxRemainingDuration = parameters["maxRemainingDuration"] as? Double ?? 0.0
-        adParams.timeOffset = parameters["timeOffset"] as? Double ?? 0.0
-        adParams.id = parameters["id"] as? String ?? ""
+        adParams.timeOffset = parameters["Ad Break Time Offset"] as? Double ?? 0.0
+        adParams.id = parameters["Ad Id"] as? String ?? ""
 
         return adParams
     }
