@@ -95,7 +95,7 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 
-const custom_configuration_fields = [
+const custom_configuration_fields_shared = [
   {
     key: "present_on_startup",
     type: "checkbox",
@@ -113,7 +113,7 @@ const custom_configuration_fields = [
   }
 ];
 
-const custom_configuration_fields_apple = custom_configuration_fields.concat(
+const custom_configuration_fields_apple = custom_configuration_fields_shared.concat(
   [{
     key: "ios_assets_bundle",
     type: "uploader",
@@ -121,7 +121,7 @@ const custom_configuration_fields_apple = custom_configuration_fields.concat(
     label_tooltip: "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
   }]);
 
-const custom_configuration_fields_android = custom_configuration_fields.concat(
+const custom_configuration_fields_android = custom_configuration_fields_shared.concat(
     [{
       "key": "android_assets_bundle",
       "type": "uploader",
