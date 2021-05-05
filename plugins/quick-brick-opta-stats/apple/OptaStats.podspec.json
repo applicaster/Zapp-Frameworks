@@ -1,6 +1,6 @@
 {
   "name": "OptaStats",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "swift_versions": [
     "5.0",
     "5.1"
@@ -12,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/quick-brick-opta-stats/0.3.0"
+    "tag": "@@applicaster/quick-brick-opta-stats/0.3.1"
   },
   "platforms": {
     "ios": "12.0",
