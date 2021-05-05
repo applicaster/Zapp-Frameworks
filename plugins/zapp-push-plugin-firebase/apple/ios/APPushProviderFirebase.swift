@@ -33,7 +33,7 @@ open class APPushProviderFirebase: ZPPushProvider {
     
     lazy var localizedDefaultTopics: [String] = {
         var topics:[String] = []
-        guard let value = self.configurationJSON?["localized_default_topics"] as? String
+        guard let value = self.configurationJSON?["default_localized_topics"] as? String
         else {
             return topics
         }
