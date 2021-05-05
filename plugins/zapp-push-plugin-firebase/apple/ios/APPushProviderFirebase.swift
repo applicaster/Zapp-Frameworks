@@ -22,7 +22,34 @@ open class APPushProviderFirebase: ZPPushProvider {
     override open func getKey() -> String {
         return model?.identifier ?? "ZappPushPluginFirebase"
     }
-
+    
+    lazy var defaultTopics: [String] = {
+        guard let value = self.configurationJSON?["default_topics"] as? String
+        else {
+            return []
+        }
+        return value.components(separatedBy: ",")
+    }()
+    
+    lazy var localizedDefaultTopics: [String] = {
+        var topics:[String] = []
+        guard let value = self.configurationJSON?["default_localized_topics"] as? String
+        else {
+            return topics
+        }
+        
+        topics = value.components(separatedBy: ",")
+        
+        if let languageCode = languageCode {
+            topics = topics.map { "\($0)-\(languageCode)"}
+        }
+        return topics
+    }()
+    
+    lazy var languageCode: String? = {
+        return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil)
+    }()
+    
     override open func configureProvider() -> Bool {
         logger?.debugLog(message: "Handle Creation and configure plugin")
         if FirebaseApp.app() == nil {
@@ -143,15 +170,16 @@ open class APPushProviderFirebase: ZPPushProvider {
             // topics already defined, no changes needed
         } else {
             // add default value
-            if let defaultTopic = configurationJSON?["default_topic"] as? String,
-               defaultTopic.isEmpty == false {
-                addTagsToDevice([defaultTopic]) { _, _ in
-                    // do nothing
-                }
+            
+            var topics:[String] = defaultTopics
+            topics.append(contentsOf: localizedDefaultTopics)
+
+            addTagsToDevice(topics.unique()) { _, _ in
+                // do nothing
             }
         }
     }
-
+    
     fileprivate func cleanRegisteredTopics() {
         // clean local registered topics
         registeredTopics.removeAll()
