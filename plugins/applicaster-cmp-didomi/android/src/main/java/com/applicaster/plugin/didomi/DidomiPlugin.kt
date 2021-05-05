@@ -74,7 +74,6 @@ class DidomiPlugin : GenericPluginI
                 )
                 addEventListener(this@DidomiPlugin)
                 onReady {
-                    validateLogo()
                     APLogger.info(TAG, "Didomi initialized")
                     if (!shouldConsentBeCollected()) {
                         APLogger.info(TAG, "User consent was already requested or not needed")
@@ -90,6 +89,10 @@ class DidomiPlugin : GenericPluginI
                                 super.hideNotice(event)
                                 removeEventListener(this)
                                 storeConsent()
+                                // Do the logo validation check after the notice was presented,
+                                // since sometimes it's not yet initialized before that,
+                                // and it's still ok to inform the user a bit later.
+                                validateLogo()
                                 listener.onHookFinished()
                             }
                         })
