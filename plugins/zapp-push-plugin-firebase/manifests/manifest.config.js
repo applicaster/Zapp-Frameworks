@@ -71,11 +71,18 @@ const custom_configuration_fields_apple = [
     label_tooltip: "Please upload a zip file to provide the custom sounds mp3 files to be used with FCM custom sound parameter</a>."
   },
   {
-    key: "default_topic",
+    key: "default_topics",
     type: "text",
-    label: "Default topic",
+    label: "Default topics",
     default: "general",
     tooltip_text: "Topics to subscribe to, separated with comma"
+  },
+  {
+    key: "is_default_topics_localized",
+    type: "checkbox",
+    label: "Localize default topics",
+    default: 0,
+    tooltip_text: "Enable to localize default topic (will subscribe to `<topic>-<locale>`)"
   }
 ];
 
