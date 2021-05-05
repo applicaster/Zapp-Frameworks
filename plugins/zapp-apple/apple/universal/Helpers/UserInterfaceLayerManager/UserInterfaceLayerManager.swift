@@ -34,6 +34,9 @@ class UserInterfaceLayerManager {
                                             namespace: nil)
         let reactNativePackagerRoot = sessionStorage.get(key: ZappStorageKeys.reactNativePackagerRoot,
                                                          namespace: nil)
+        
+        let languageCode = sessionStorage.get(key: ZappStorageKeys.languageCode,
+                                                         namespace: nil)
         let applicationData = [
             "bundleIdentifier": bundleIndentifier as Any,
             "accountId": accountId as Any,
@@ -42,7 +45,7 @@ class UserInterfaceLayerManager {
             "apiSecretKey": apiSecretKey as Any,
             "os_type": "ios" as Any,
             "uuid": UUIDManager.deviceID as Any,
-            "languageLocale": NSLocale.current.languageCode as Any,
+            "languageLocale": languageCode as Any,
             "countryLocale": NSLocale.current.regionCode as Any,
             "platform": deviceType as Any,
             "reactNativePackagerRoot": reactNativePackagerRoot as Any,
