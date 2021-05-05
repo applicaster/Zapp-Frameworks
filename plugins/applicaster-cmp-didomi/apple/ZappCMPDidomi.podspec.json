@@ -1,6 +1,6 @@
 {
   "name": "ZappCMPDidomi",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "platforms": {
     "ios": "12.0"
   },
@@ -11,7 +11,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/applicaster-cmp-didomi/0.4.0"
+    "tag": "@@applicaster/applicaster-cmp-didomi/0.4.1"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
