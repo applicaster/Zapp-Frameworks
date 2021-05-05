@@ -78,12 +78,12 @@ const custom_configuration_fields_apple = [
     tooltip_text: "Topics to subscribe to, separated with comma"
   },
   {
-    key: "is_default_topics_localized",
-    type: "checkbox",
-    label: "Localize default topics",
-    default: 0,
-    tooltip_text: "Enable to localize default topic (will subscribe to `<topic>-<locale>`)"
-  }
+    key: "default_localized_topics",
+    type: "text",
+    label: "Default Localized topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma that will have appended language (ex. general-en)"
+  },
 ];
 
 const custom_configuration_fields_android = [

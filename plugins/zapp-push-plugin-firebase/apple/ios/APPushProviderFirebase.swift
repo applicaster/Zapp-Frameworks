@@ -32,31 +32,18 @@ open class APPushProviderFirebase: ZPPushProvider {
     }()
     
     lazy var localizedDefaultTopics: [String] = {
-        guard let languageCode = languageCode else {
-            return defaultTopics
+        var topics:[String] = []
+        guard let value = self.configurationJSON?["localized_default_topics"] as? String
+        else {
+            return topics
         }
         
-        return defaultTopics.map { "\($0)-\(languageCode)"}
-    }()
-    
-    lazy var shouldLocalizeDefaultTopics: Bool = {
-        var retValue: Bool = true
-
-        guard let value = configurationJSON?["is_default_topics_localized"] else {
-            return retValue
+        topics = value.components(separatedBy: ",")
+        
+        if let languageCode = languageCode {
+            topics = topics.map { "\($0)-\(languageCode)"}
         }
-
-        // Check if value bool or string
-        if let stringValue = value as? String {
-            if let boolValue = Bool(stringValue) {
-                retValue = boolValue
-            } else if let intValue = Int(stringValue) {
-                retValue = Bool(truncating: intValue as NSNumber)
-            }
-        } else if let boolValue = value as? Bool {
-            retValue = boolValue
-        }
-        return retValue
+        return topics
     }()
     
     lazy var languageCode: String? = {
@@ -184,14 +171,11 @@ open class APPushProviderFirebase: ZPPushProvider {
         } else {
             // add default value
             
-            if defaultTopics.count > 0 {
-                var topics = defaultTopics
-                if shouldLocalizeDefaultTopics {
-                    topics = localizedDefaultTopics
-                }
-                addTagsToDevice(topics) { _, _ in
-                    // do nothing
-                }
+            var topics:[String] = defaultTopics
+            topics.append(contentsOf: localizedDefaultTopics)
+
+            addTagsToDevice(topics.unique()) { _, _ in
+                // do nothing
             }
         }
     }
