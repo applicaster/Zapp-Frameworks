@@ -1,4 +1,5 @@
 {
+  "api": {},
   "dependency_repository_url": [],
   "dependency_name": "@applicaster/first-time-user-expirience-screen",
   "author_name": "Applicaster",
@@ -38,8 +39,8 @@
     ]
   },
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.1.0",
-  "manifest_version": "0.1.0",
+  "dependency_version": "0.1.1",
+  "manifest_version": "0.1.1",
   "min_zapp_sdk": "0.1.0-alpha1",
   "styles": {
     "fields": [
