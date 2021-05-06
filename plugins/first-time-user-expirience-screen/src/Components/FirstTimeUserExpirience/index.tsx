@@ -172,7 +172,7 @@ export default function FirstTimeUserExpirience(props) {
   }
 
   const data = dataSource?.[currentScreenIndex] || null;
-  console.log({ dataSource, data, props });
+
   return (
     <SafeAreaView
       style={{

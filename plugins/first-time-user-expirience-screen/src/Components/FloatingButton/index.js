@@ -26,15 +26,22 @@ const FloatingButton = ({
     fontSize: screenStyles?.top_button_font_size,
     color: screenStyles?.top_button_font_color,
   };
-  const buttonStyle = {
+  const buttonStyleText = {
     right: insets.right + 10,
     top: insets.top + 10,
-    padding: screenStyles?.top_button_type === "image" ? 0 : 5,
+    padding: 5,
     position: "absolute",
     borderRadius: Number(screenStyles?.top_button_radius),
     borderColor: screenStyles?.top_button_border_color,
     borderWidth: screenStyles?.top_button_border_size,
     backgroundColor: screenStyles?.top_button_background_color,
+  };
+
+  const buttonStyleImage = {
+    right: insets.right + 10,
+    top: insets.top + 10,
+    padding: 0,
+    position: "absolute",
   };
 
   function renderButton() {
@@ -64,7 +71,11 @@ const FloatingButton = ({
   }
   return disabled === true ? null : (
     <TouchableOpacity
-      style={buttonStyle}
+      style={
+        screenStyles?.top_button_type === "image"
+          ? buttonStyleImage
+          : buttonStyleText
+      }
       onPress={isLastScreen ? onClose : onNext}
     >
       {renderButton()}

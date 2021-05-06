@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Image } from "react-native";
 
 const ButtonImage = ({ imageSrc, style }) => (
-  <Image style={style} source={{ uri: imageSrc }} />
+  <Image style={{ width: 44, height: 44 }} source={{ uri: imageSrc }} />
 );
 
-ButtonImage.propTypes = { imageSrc: PropTypes.string, style: {} };
+ButtonImage.propTypes = { imageSrc: PropTypes.strings };
 
 export default ButtonImage;
