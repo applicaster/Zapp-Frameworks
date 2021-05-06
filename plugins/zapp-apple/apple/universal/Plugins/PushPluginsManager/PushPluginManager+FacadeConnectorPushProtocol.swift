@@ -12,7 +12,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     @objc public func addTagsToDevice(_ tags: [String]?,
                                       completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
         var counter = _providers.count
-        guard counter > 0 else {
+        guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
             completion(false, tags)
             return
         }
@@ -39,7 +39,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     @objc public func removeTagsToDevice(_ tags: [String]?,
                                          completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
         var counter = _providers.count
-        guard counter > 0 else {
+        guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
             completion(false, tags)
             return
         }
