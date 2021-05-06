@@ -6,6 +6,6 @@ const ButtonImage = ({ imageSrc, style }) => (
   <Image style={{ width: 44, height: 44 }} source={{ uri: imageSrc }} />
 );
 
-ButtonImage.propTypes = { imageSrc: PropTypes.strings };
+ButtonImage.propTypes = { imageSrc: PropTypes.string };
 
 export default ButtonImage;
