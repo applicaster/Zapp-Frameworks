@@ -183,6 +183,8 @@ open class APPushProviderFirebase: ZPPushProvider {
     fileprivate func cleanRegisteredTopics() {
         // clean local registered topics
         registeredTopics.removeAll()
+        // clean local storage topics
+        updateTopicsInLocalStorage()
         // set default
         setDefaultTopicIfNeeded()
     }
@@ -201,6 +203,11 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     fileprivate func updateTopicsInLocalStorage() {
+        guard registeredTopics.count > 0 else {
+            _ = FacadeConnector.connector?.storage?.localStorageRemoveValue(for: localStorageTopicsParam, namespace: namespace)
+            return
+        }
+        
         let topics = Array(registeredTopics).joined(separator: ",")
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: localStorageTopicsParam,
                                                                      value: topics,
