@@ -53,54 +53,142 @@ const styles = {
       initial_value: "#ffffffff",
     },
     {
+      type: "tag_select",
+      key: "top_button_type",
+      tooltip_text: "Select style of top button",
+      options: [
+        {
+          text: "Image",
+          value: "image",
+        },
+        {
+          text: "Text",
+          value: "text",
+        },
+      ],
+      initial_value: "text",
+    },
+    {
       key: "top_button_radius",
       type: "number_input",
       label_tooltip: "Top Button radius",
       initial_value: 5,
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
     {
       key: "top_button_border_size",
       type: "number_input",
       label_tooltip: "Top Button border siz",
       initial_value: 2,
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
     {
       key: "top_button_border_color",
       type: "color_picker",
       label: "Top Button bortder color",
       initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
-
     {
       key: "top_button_background_color",
       type: "color_picker",
       label: "Top Button background color",
       initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
-
     {
       key: "top_button_font_ios",
       type: "ios_font_selector",
       label: "iOS next button font",
       initial_value: "Helvetica-Bold",
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
     {
       key: "top_button_font_android",
       type: "android_font_selector",
       label: "Android next button font",
       initial_value: "Roboto-Bold",
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
     {
       key: "top_button_font_size",
       type: "number_input",
       label: "Next button font size",
       initial_value: 15,
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
     },
     {
       key: "top_button_font_color",
       type: "color_picker",
       label: "Top Button font color",
       initial_value: "#FFFFFFFF",
+      conditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "text",
+        },
+      ],
+    },
+    {
+      key: "top_button_image_next",
+      type: "uploader",
+      label: "Next Button Image",
+      label_tooltip: "Top button image next. Dimension 44 x44.",
+      placeholder: "W 88 x H 88",
+      onditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "image",
+        },
+      ],
+    },
+    {
+      key: "top_button_image_close",
+      type: "uploader",
+      label: "Close Button Image",
+      label_tooltip: "Close button image next. Dimension 44 x44.",
+      placeholder: "W 88 x H 88",
+      onditional_fields: [
+        {
+          key: "styles/top_button_type",
+          condition_value: "image",
+        },
+      ],
     },
   ],
 };

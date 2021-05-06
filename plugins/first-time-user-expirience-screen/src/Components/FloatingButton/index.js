@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ButtonImage from "../ButtonImage";
 const FloatingButton = ({
   screenStyles,
   screenLocalizations,
@@ -15,6 +16,7 @@ const FloatingButton = ({
     next_button_text,
     close_button_text,
   } = screenLocalizations;
+  const insets = useSafeAreaInsets();
 
   const textStyle = {
     fontFamily: platformSelect({
@@ -25,9 +27,9 @@ const FloatingButton = ({
     color: screenStyles?.top_button_font_color,
   };
   const buttonStyle = {
-    right: 10,
-    top: 50,
-    padding: 5,
+    right: insets.right + 10,
+    top: insets.top + 10,
+    padding: screenStyles?.top_button_type === "image" ? 0 : 5,
     position: "absolute",
     borderRadius: Number(screenStyles?.top_button_radius),
     borderColor: screenStyles?.top_button_border_color,
@@ -35,14 +37,37 @@ const FloatingButton = ({
     backgroundColor: screenStyles?.top_button_background_color,
   };
 
+  function renderButton() {
+    if (screenStyles?.top_button_type === "image") {
+      return renderImage();
+    } else {
+      return renderText();
+    }
+  }
+
+  function renderImage() {
+    const top_button_image_next = screenStyles?.top_button_image_next;
+    const top_button_image_close = screenStyles?.top_button_image_close;
+    return (
+      <ButtonImage
+        imageSrc={isLastScreen ? top_button_image_close : top_button_image_next}
+      />
+    );
+  }
+
+  function renderText() {
+    return (
+      <Text style={textStyle}>
+        {isLastScreen ? close_button_text : next_button_text}
+      </Text>
+    );
+  }
   return disabled === true ? null : (
     <TouchableOpacity
       style={buttonStyle}
       onPress={isLastScreen ? onClose : onNext}
     >
-      <Text style={textStyle}>
-        {isLastScreen ? close_button_text : next_button_text}
-      </Text>
+      {renderButton()}
     </TouchableOpacity>
   );
 };
