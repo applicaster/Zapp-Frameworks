@@ -90,6 +90,6 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
 
 extension GemiusAnalytics {
     func getCurrentPlayerPosition(from parameters: [String: NSObject]) -> Double {
-        return parameters["currentTime"] as? Double ?? 0.00
+        return parameters["offset"] as? Double ?? 0.00
     }
 }

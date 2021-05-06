@@ -37,18 +37,24 @@
       "label": "API key",
       "default": "",
       "tooltip_text": "API key"
+    },
+    {
+      "key": "android_assets_bundle",
+      "type": "uploader",
+      "label": "Logo drawables zip",
+      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
     }
   ],
   "identifier": "applicaster-cmp-didomi",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-didomi@0.3.0"
+    "@applicaster/applicaster-cmp-didomi@0.4.1"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "0.3.0",
-  "dependency_version": "0.3.0",
+  "manifest_version": "0.4.1",
+  "dependency_version": "0.4.1",
   "project_dependencies": [
     {
       "applicaster-cmp-didomi": "node_modules/@applicaster/applicaster-cmp-didomi/android"

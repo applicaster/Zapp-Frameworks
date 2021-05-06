@@ -27,7 +27,7 @@ class TeamCardPlayerTableViewCell: UITableViewCell {
     }
 
     override func awakeFromNib() {
-        self.backgroundColor = UIColor.white
+        backgroundColor = UIColor.white
         playerNumberLabel.text = ""
         playerNameLabel.text = ""
         playerPositionLabel.text = ""

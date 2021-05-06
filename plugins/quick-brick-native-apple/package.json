@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-native-apple",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "iOS and tvOS native code for QuickBrick applications. This package is used to provide native logic for QuickBrick",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

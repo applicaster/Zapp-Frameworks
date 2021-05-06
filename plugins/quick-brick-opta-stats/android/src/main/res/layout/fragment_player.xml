@@ -26,9 +26,9 @@
             android:id="@+id/iv_player_img"
             android:layout_width="235dp"
             android:layout_height="281dp"
-            android:scaleType="fitEnd"
-            android:layout_marginEnd="18dp"
             android:layout_marginTop="25dp"
+            android:layout_marginEnd="18dp"
+            android:scaleType="fitEnd"
             android:src="@drawable/player_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,9 +83,10 @@
             style="@style/Theme.Opta.DetailsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="14dp"
             android:text="NO."
+            app:layout_constraintEnd_toStartOf="@+id/tv_player_goals"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/tv_position_title"
             app:layout_constraintTop_toBottomOf="@+id/divider_big" />
 
@@ -98,6 +99,7 @@
             android:layout_marginTop="14dp"
             android:text="@string/position_title"
             android:textSize="12sp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_big" />
 
@@ -108,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="-"
+            app:layout_constraintEnd_toEndOf="@+id/tv_number_title"
             app:layout_constraintStart_toStartOf="@+id/tv_number_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_number_title" />
 
@@ -193,10 +196,11 @@
             style="@style/Theme.Opta.DetailsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
             android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/americas_cup_title"
-            app:layout_constraintStart_toEndOf="@+id/tv_player_goals_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintTop_toBottomOf="@+id/divider_big" />
 
         <TextView
@@ -204,9 +208,9 @@
             style="@style/Theme.Opta.DetailsUbuntu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="-"
             app:layout_constraintEnd_toEndOf="@+id/tv_americas_cup_title"
             app:layout_constraintHorizontal_bias="0.483"
@@ -217,9 +221,9 @@
             android:id="@+id/divider_big"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
             android:background="@color/faded_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -229,9 +233,9 @@
             android:id="@+id/divider_big_2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:background="@color/faded_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -243,9 +247,10 @@
             style="@style/Theme.Opta.DetailsTitle"
             android:layout_width="wrap_content"
             android:layout_height="13dp"
-            android:layout_marginStart="48dp"
             android:layout_marginTop="14dp"
             android:text="@string/player_goals_title"
+            app:layout_constraintEnd_toStartOf="@+id/tv_americas_cup_title"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/tv_number_title"
             app:layout_constraintTop_toBottomOf="@+id/divider_big" />
 
@@ -254,9 +259,9 @@
             style="@style/Theme.Opta.DetailsUbuntu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="-"
             app:layout_constraintEnd_toEndOf="@+id/tv_player_goals_title"
             app:layout_constraintStart_toStartOf="@+id/tv_player_goals_title"
@@ -311,7 +316,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
             android:layout_marginTop="68dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/player_weight_title"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_height_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_biometry_title" />
 

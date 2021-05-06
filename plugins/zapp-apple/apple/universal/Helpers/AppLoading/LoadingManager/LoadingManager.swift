@@ -12,6 +12,7 @@ import ZappCore
 enum LoadingLoaderTypes {
     case plugins
     case styles
+    case remoteConfiguration
 }
 
 class LoadingManager {
@@ -27,6 +28,14 @@ class LoadingManager {
         if let stylesUrl = SessionStorage.sharedInstance.get(key: ZappStorageKeys.stylesUrl,
                                                              namespace: nil) {
             return fileForUrlString(urlString: stylesUrl)
+        }
+        return nil
+    }()
+    
+    lazy var remoteConfiguration: APFile? = {
+        if let remoteConfigurationUrl = SessionStorage.sharedInstance.get(key: ZappStorageKeys.remoteConfigurationUrl,
+                                                             namespace: nil) {
+            return fileForUrlString(urlString: remoteConfigurationUrl)
         }
         return nil
     }()
@@ -62,6 +71,8 @@ class LoadingManager {
             return plugins
         case .styles:
             return styles
+        case .remoteConfiguration:
+            return remoteConfiguration
         }
     }
 }

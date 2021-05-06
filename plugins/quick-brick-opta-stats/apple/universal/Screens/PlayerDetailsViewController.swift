@@ -50,9 +50,7 @@ class PlayerDetailsViewController: ViewControllerBase {
     fileprivate let bag = DisposeBag()
 
     fileprivate lazy var dateOfBirthDateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd/MM/yyyy"
-        return df
+        DateFormatter.create(with: "dd/MM/yyyy", locale: Localized.locale)
     }()
 
     override func viewDidLoad() {
@@ -126,16 +124,16 @@ class PlayerDetailsViewController: ViewControllerBase {
         playerWeightHeader.useBoldFont()
         playerDetailWeight.useRegularFont()
 
-        playerTypeLabel.text = Localized.playerName[Localized.getLocalizedLanguageCode()] as? String ?? "TIPO"
-        playerPositionHeader.text = Localized.playerPositionHeader[Localized.getLocalizedLanguageCode()] as? String ?? "POSICIÓN"
-        playerGoalsHeader.text = Localized.goalsHeader[Localized.getLocalizedLanguageCode()] as? String ?? "GOLES"
-        playerTournamentsHeader.text = Localized.playerTournamentsHeader[Localized.getLocalizedLanguageCode()] as? String ?? "TORNEOS"
-        playerBirthPlaceHeader.text = Localized.playerPOBHeader[Localized.getLocalizedLanguageCode()] as? String ?? "LUGAR DE NACIMIENTO"
-        playerDOBHeader.text = Localized.playerDOBHeader[Localized.getLocalizedLanguageCode()] as? String ?? "FECHA DE NACIMIENTO"
-        playerClubHeader.text = Localized.playerProfessionalTeamHeader[Localized.getLocalizedLanguageCode()] as? String ?? "EQUIPO PROFESIONAL"
-        playerBiometryHeader.text = Localized.playerBiometryHeader[Localized.getLocalizedLanguageCode()] as? String ?? "BIOMETRÍA"
-        playerHeightHeader.text = Localized.playerHeightHeader[Localized.getLocalizedLanguageCode()] as? String ?? "ALTURA"
-        playerWeightHeader.text = Localized.playerWeightHeader[Localized.getLocalizedLanguageCode()] as? String ?? "PESO"
+        playerTypeLabel.text = Localized.playerName[Localized.languageCode] as? String ?? "TIPO"
+        playerPositionHeader.text = Localized.playerPositionHeader[Localized.languageCode] as? String ?? "POSICIÓN"
+        playerGoalsHeader.text = Localized.goalsHeader[Localized.languageCode] as? String ?? "GOLES"
+        playerTournamentsHeader.text = Localized.playerTournamentsHeader[Localized.languageCode] as? String ?? "TORNEOS"
+        playerBirthPlaceHeader.text = Localized.playerPOBHeader[Localized.languageCode] as? String ?? "LUGAR DE NACIMIENTO"
+        playerDOBHeader.text = Localized.playerDOBHeader[Localized.languageCode] as? String ?? "FECHA DE NACIMIENTO"
+        playerClubHeader.text = Localized.playerProfessionalTeamHeader[Localized.languageCode] as? String ?? "EQUIPO PROFESIONAL"
+        playerBiometryHeader.text = Localized.playerBiometryHeader[Localized.languageCode] as? String ?? "BIOMETRÍA"
+        playerHeightHeader.text = Localized.playerHeightHeader[Localized.languageCode] as? String ?? "ALTURA"
+        playerWeightHeader.text = Localized.playerWeightHeader[Localized.languageCode] as? String ?? "PESO"
     }
 
     fileprivate func getPlayerTeamId(player: SquadPerson?) -> String {
@@ -155,11 +153,11 @@ class PlayerDetailsViewController: ViewControllerBase {
         let person = squadCareerCard.person
         let teamId = getPlayerTeamId(player: person)
 
-        let fallbackStringPlayerType = Localized.playerNameHeader[Localized.getLocalizedLanguageCode()] as? String ?? ""
+        let fallbackStringPlayerType = Localized.playerNameHeader[Localized.languageCode] as? String ?? ""
         playerTypeLabel.text = fallbackStringPlayerType
         // playerTypeLabel.text =  Localized.getLocalizedString(from: person?.type?.uppercased() ?? fallbackStringPlayerType) //person?.type?.uppercased() ?? fallbackStringPlayerType
         playerFlagImageView.image = nil
-        
+
         let flagImageUrl = "\(OptaStats.pluginParams.imageBaseUrl)flag-\(teamId).png"
         playerFlagImageView.sd_setImage(with: URL(string: flagImageUrl), placeholderImage: nil)
 

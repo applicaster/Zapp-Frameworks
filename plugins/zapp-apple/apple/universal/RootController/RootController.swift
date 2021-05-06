@@ -73,18 +73,26 @@ public class RootController: NSObject {
         splashState.stateHandler = loadSplashScreenGroup
         splashState.readableName = "<app-loader-state-machine> Show Splash Screen"
 
-        let plugins = LoadingState()
-        plugins.stateHandler = loadPluginsGroup
-        plugins.readableName = "<app-loader-state-machine> Load plugins"
-
+        let remoteConfiguration = LoadingState()
+        remoteConfiguration.stateHandler = loadRemoteConfigurationGroup
+        remoteConfiguration.readableName = "<app-loader-state-machine> Load RemoteConfiguration"
+        
         let styles = LoadingState()
         styles.stateHandler = loadStylesGroup
         styles.readableName = "<app-loader-state-machine> Load Styles"
 
         // Dependant states
+        
+        let plugins = LoadingState()
+        plugins.stateHandler = loadPluginsGroup
+        plugins.readableName = "<app-loader-state-machine> Load plugins"
+        plugins.dependantStates = [remoteConfiguration.name]
+
+        
         let userInterfaceLayer = LoadingState()
         userInterfaceLayer.stateHandler = loadUserInterfaceLayerGroup
         userInterfaceLayer.readableName = "<app-loader-state-machine> Prepare User Interface Layer"
+        userInterfaceLayer.dependantStates = [remoteConfiguration.name]
 
         let audience = LoadingState()
         audience.stateHandler = trackAudience
@@ -102,6 +110,7 @@ public class RootController: NSObject {
         return [splashState,
                 plugins,
                 styles,
+                remoteConfiguration,
                 audience,
                 userInterfaceLayer,
 

@@ -41,6 +41,19 @@ extension RootController: LoadingStateMachineDataSource {
             }
         }
     }
+    
+    func loadRemoteConfigurationGroup(_ successHandler: @escaping StateCallBack,
+                         _ failHandler: @escaping StateCallBack) {
+        let loadingManager = LoadingManager()
+        loadingManager.loadFile(type: .remoteConfiguration) { success in
+            if success == true {
+                RemoteConfigurationHelper.update()
+                successHandler()
+            } else {
+                failHandler()
+            }
+        }
+    }
 
     func loadUserInterfaceLayerGroup(_ successHandler: @escaping StateCallBack,
                                      _ failHandler: @escaping StateCallBack) {

@@ -5,6 +5,9 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 
 class PluginConfigurationHandler {
+
+    // todo unify with getCallingIntent in OptaBridge
+
     fun handlePluginScheme(context: Context, data: Map<String, String>): Boolean {
         var verified = false
 

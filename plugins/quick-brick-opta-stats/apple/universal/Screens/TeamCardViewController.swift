@@ -116,7 +116,7 @@ class TeamCardViewController: ViewControllerBase {
         tableView.layer.shadowRadius = 20.0
 
         noInformationLabel.useBoldFont()
-        noInformationLabel.text = Localized.informationNotAvailable[Localized.getLocalizedLanguageCode()] as? String ?? "Esta información no está disponible todavía"
+        noInformationLabel.text = Localized.informationNotAvailable[Localized.languageCode] as? String ?? "Esta información no está disponible todavía"
         if let helveticaFont = UIFont(name: "HelveticaNeue-CondensedBold", size: 20) {
             noInformationLabel.font = helveticaFont
         }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
+import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.session.SessionStorage
@@ -88,6 +89,10 @@ class DidomiPlugin : GenericPluginI
                                 super.hideNotice(event)
                                 removeEventListener(this)
                                 storeConsent()
+                                // Do the logo validation check after the notice was presented,
+                                // since sometimes it's not yet initialized before that,
+                                // and it's still ok to inform the user a bit later.
+                                validateLogo()
                                 listener.onHookFinished()
                             }
                         })
@@ -171,10 +176,26 @@ class DidomiPlugin : GenericPluginI
         }
     }
 
+    private fun validateLogo() {
+        val plugin = PluginManager.getInstance().getPlugin(PluginId)
+        val bundleValue = plugin.getConfiguration()?.get(pluginAssetsKey) ?: return
+        if (!bundleValue.isJsonPrimitive
+                || !bundleValue.asJsonPrimitive.isString
+                || bundleValue.asJsonPrimitive.asString.isEmpty()) {
+            return
+        }
+        if (0 != Didomi.getInstance().logoResourceId) return
+        APLogger.error(TAG, "Logo asset bundle zip is present, but logo image file did not match provided one provided in the console")
+    }
+
     companion object {
         private const val TAG = "Didomi"
+
         const val PluginId = "applicaster-cmp-didomi"
+
         const val didomiGDPRApplies = "IABTCF_gdprApplies"
         const val didomiIABConsent = "IABTCF_TCString"
+
+        private const val pluginAssetsKey = "android_assets_bundle"
     }
 }

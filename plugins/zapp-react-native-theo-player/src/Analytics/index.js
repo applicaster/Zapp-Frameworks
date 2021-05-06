@@ -123,11 +123,11 @@ export class AnalyticsTracker {
     } = state;
 
     const payload = {
-      id: this.handleId(event, state, entry),
-      title,
-      duration: this.handleDuration(event, state, entry),
+      "Item ID": this.handleId(event, state, entry),
+      "Item Name": title,
+      "Item Duration": this.handleDuration(event, state, entry),
       offset: currentTime,
-      extensions,
+      "analyticsCustomProperties": JSON.stringify(extensions["analyticsCustomProperties"])
     };
 
     return this.addNativeData(payload, event, state);
@@ -142,10 +142,15 @@ export class AnalyticsTracker {
       "Ad Error"
     ]
 
-    if (adEvents.includes(event)) {
+    if (adEvents.includes(event) && state.adData) {
       return {
         ...payload,
-        adData: state.adData
+        "Ad Id": state.adData.id,
+        "Ad Duration": state.adData.duration, // Single ad duration
+        "Ad Position": state.adData.adPosition, // Ad index in slot: 0, 1, 2 etc
+        "Ad Break Time Offset": state.adData.timeOffset, // Ad break position in timeline
+        "Ad Break Size": state.adData.breakSize, // Ads count in the break: 1, 2, 3, etc
+        "Ad Break Max Duration": state.adData.maxDuration // Total ad break max duration
       }
     }
 
