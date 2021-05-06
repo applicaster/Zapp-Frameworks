@@ -166,11 +166,11 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     fileprivate func setDefaultTopicIfNeeded() {
-        if let _ = registeredTopicsInLocalStorage {
-            // topics already defined, no changes needed
+        if let topics = registeredTopicsInLocalStorage {
+            // topics already defined, no changes needed, update local array
+            registeredTopics = Set(topics)
         } else {
             // add default value
-            
             var topics:[String] = defaultTopics
             topics.append(contentsOf: localizedDefaultTopics)
 
