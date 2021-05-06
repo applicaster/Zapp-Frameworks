@@ -48,11 +48,11 @@ public class RootController: NSObject {
 
     public func reloadApplication() {
         appReadyForUse = false
-        guard let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) else {
+        guard UserInterfaceLayerManager.canCreate() else {
             showErrorMessage(message: RootControllerError.canNotCreateInterfaceLayer)
             return
         }
-        self.userInterfaceLayer = userInterfaceLayer
+        
         splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
         NetworkRequestsManager.startListening()
         pluginsManager.crashlogs.prepareManager { [weak self] success in
