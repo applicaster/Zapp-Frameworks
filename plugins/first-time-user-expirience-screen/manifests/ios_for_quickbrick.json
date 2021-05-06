@@ -38,8 +38,8 @@
     ]
   },
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.0.2-alpha.14",
-  "manifest_version": "0.0.2-alpha.14",
+  "dependency_version": "0.1.0",
+  "manifest_version": "0.1.0",
   "min_zapp_sdk": "4.1.0-Dev",
   "styles": {
     "fields": [
@@ -172,8 +172,8 @@
         "type": "uploader",
         "label": "Next Button Image",
         "label_tooltip": "Top button image next. Dimension 44 x44.",
-        "placeholder": "W 88 x H 88",
-        "onditional_fields": [
+        "placeholder": "W 144 x H 144",
+        "conditional_fields": [
           {
             "key": "styles/top_button_type",
             "condition_value": "image"
@@ -185,8 +185,8 @@
         "type": "uploader",
         "label": "Close Button Image",
         "label_tooltip": "Close button image next. Dimension 44 x44.",
-        "placeholder": "W 88 x H 88",
-        "onditional_fields": [
+        "placeholder": "W 144 x H 144",
+        "conditional_fields": [
           {
             "key": "styles/top_button_type",
             "condition_value": "image"
