@@ -170,7 +170,7 @@ const styles = {
       label: "Next Button Image",
       label_tooltip: "Top button image next. Dimension 44 x44.",
       placeholder: "W 144 x H 144",
-      onditional_fields: [
+      conditional_fields: [
         {
           key: "styles/top_button_type",
           condition_value: "image",
@@ -183,7 +183,7 @@ const styles = {
       label: "Close Button Image",
       label_tooltip: "Close button image next. Dimension 44 x44.",
       placeholder: "W 144 x H 144",
-      onditional_fields: [
+      conditional_fields: [
         {
           key: "styles/top_button_type",
           condition_value: "image",
