@@ -2,6 +2,7 @@ const R = require("ramda");
 const Localizations = require("./localizations.config");
 
 const baseManifest = {
+  api: {},
   dependency_repository_url: [],
   dependency_name: "@applicaster/first-time-user-expirience-screen",
   author_name: "Applicaster",
