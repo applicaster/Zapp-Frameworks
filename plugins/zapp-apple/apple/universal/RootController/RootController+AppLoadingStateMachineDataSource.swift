@@ -57,10 +57,12 @@ extension RootController: LoadingStateMachineDataSource {
 
     func loadUserInterfaceLayerGroup(_ successHandler: @escaping StateCallBack,
                                      _ failHandler: @escaping StateCallBack) {
-        guard let userInterfaceLayer = userInterfaceLayer else {
+        
+        guard let userInterfaceLayer = UserInterfaceLayerManager.layerAdapter(launchOptions: appDelegate?.launchOptions) else {
             failHandler()
             return
         }
+        self.userInterfaceLayer = userInterfaceLayer
 
         userInterfaceLayer.prepareLayerForUse { [weak self] quickBrickViewController, error in
             if let quickBrickViewController = quickBrickViewController {
