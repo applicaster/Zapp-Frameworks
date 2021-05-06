@@ -26,6 +26,7 @@ import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Comp
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
 import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
 import { getLocalizations } from "../../Utils/Localizations";
+import { ScreenResolver } from "@applicaster/zapp-react-native-ui-components/Components/ScreenResolver";
 
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import TopBar from "../TopBar";
@@ -159,7 +160,6 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onClose() {
     if (show_hook_once) {
-      //TODO: Check if it will not fail await on next completion.
       updatePresentedInfo();
     }
     logger.debug({
@@ -173,6 +173,27 @@ export default function FirstTimeUserExpirience(props) {
 
   const data = dataSource?.[currentScreenIndex] || null;
 
+  function renderScreen() {
+    const type = data?.Screen?.type;
+    const id = data?.screenId;
+
+    if (type !== "general_content") {
+      return (
+        <ScreenResolver
+          screenType={type}
+          screenId={id}
+          screenData={data?.Screen}
+        />
+      );
+    }
+
+    return (
+      <ComponentsMap
+        riverId={id}
+        riverComponents={data?.Screen?.ui_components}
+      />
+    );
+  }
   return (
     <SafeAreaView
       style={{
@@ -190,12 +211,7 @@ export default function FirstTimeUserExpirience(props) {
         isLastScreen={currentScreenIndex === dataSource?.length - 1}
       /> */}
 
-      {data && (
-        <ComponentsMap
-          riverId={data?.screenId}
-          riverComponents={data?.Screen?.ui_components}
-        />
-      )}
+      {data && renderScreen()}
       {data && (
         <FloatingButton
           screenStyles={screenStyles}
