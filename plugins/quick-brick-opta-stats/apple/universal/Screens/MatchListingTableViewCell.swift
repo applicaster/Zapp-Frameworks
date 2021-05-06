@@ -111,7 +111,7 @@ class MatchListingTableViewCell: UITableViewCell {
             return
         }
 
-        var placeholderFlagImage = Helpers.unknownFlagImage()
+        let placeholderFlagImage = Helpers.unknownFlagImage()
         
         if let contestants = match.contestants {
             for (index, contestant) in contestants.enumerated() {

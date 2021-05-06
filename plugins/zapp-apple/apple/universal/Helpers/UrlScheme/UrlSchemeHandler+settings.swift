@@ -16,7 +16,7 @@ extension UrlSchemeHandler {
     class func handleSettingsChanges(url: URL,
                                      rootController: RootController?) -> Bool {
         guard let rootController = rootController,
-              let params = queryParams(url: url),
+              let params = queryStringParams(url: url),
               let type = params[SettingsURLSchemeKeys.type] as? String else {
             return false
         }

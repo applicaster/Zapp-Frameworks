@@ -43,12 +43,18 @@ public class UrlSchemeHandler {
         return retValue
     }
 
-    class func queryParams(url: URL) -> [String: Any]? {
+    class func queryStringParams(url: URL) -> [String: Any]? {
         guard let components = URLComponents(url: url,
                                              resolvingAgainstBaseURL: true),
             let queryItems = components.queryItems else { return nil }
         return queryItems.reduce(into: [String: String]()) { result, item in
             result[item.name] = item.value
         }
+    }
+    
+    class func getPathComponents(url: URL) -> [String] {
+        let pathComponents = url.pathComponents.dropFirst()
+        guard pathComponents.count > 0 else { return [] }
+        return Array(pathComponents)
     }
 }

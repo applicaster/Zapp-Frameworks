@@ -14,14 +14,30 @@ struct PluginURLSchemeKeys {
 
 extension UrlSchemeHandler {
     class func handlePluginURLScheme(url: URL) -> Bool {
-        guard let params = queryParams(url: url),
-              let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String,
-              let pluginModel = PluginsManager.pluginModelById(pluginIdentifier),
-              let classType = PluginsManager.adapterClass(pluginModel) as? PluginAdapterProtocol.Type else {
+        let pathComponents = getPathComponents(url: url)
+        let queryParams = queryStringParams(url: url)
+        guard queryParams != nil || pathComponents.count > 0 else {
             return false
         }
+
+        var pluginAdapter: PluginAdapterProtocol?
+        if let pluginIdentifier = queryParams?[PluginURLSchemeKeys.pluginIdentifier] as? String {
+            if let instance = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) as? PluginAdapterProtocol & PluginURLHandlerProtocol,
+               instance.canHandlePluginURLScheme?(with: url) ?? true {
+                pluginAdapter = instance
+            }
+        } else {
+            pluginAdapter = FacadeConnector.connector?.pluginManager?.getProviderInstance(pluginType: ZPPluginType.General.rawValue,
+                                                                                          condition: { (p) -> Any? in
+                                                                                              guard let p = p as? PluginURLHandlerProtocol,
+                                                                                                    p.canHandlePluginURLScheme?(with: url) ?? true else {
+                                                                                                  return false
+                                                                                              }
+                                                                                              return true
+                                                                                          })
+        }
+
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
-        let pluginAdapter = FacadeConnector.connector?.pluginManager?.getProviderInstance(identifier: pluginIdentifier) ?? classType.init(pluginModel: pluginModel)
         if let pluginAdapter = pluginAdapter as? PluginURLHandlerProtocol {
             return pluginAdapter.handlePluginURLScheme?(with: viewController,
                                                         url: url) ?? false
