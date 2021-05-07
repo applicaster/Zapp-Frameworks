@@ -103,6 +103,13 @@ const custom_configuration_fields_android = [
     tooltip_text: "Topics to subscribe to, separated with comma"
   },
   {
+    key: "default_localized_topics",
+    type: "text",
+    label: "Default Localized topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma that will have appended language (ex. general-en)"
+  },
+  {
     key: "notification_channel_name",
     type: "text",
     tooltip_text: "Name of the default notification channel",
@@ -292,7 +299,7 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  android_for_quickbrick: "2.0.1-dev",
+  android_for_quickbrick: "4.0.0",
   ios_for_quickbrick: "3.0.0-Dev",
 };
 

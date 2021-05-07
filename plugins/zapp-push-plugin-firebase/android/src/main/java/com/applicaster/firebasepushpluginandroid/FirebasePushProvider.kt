@@ -24,6 +24,7 @@ import com.applicaster.plugin_manager.push_plugin.listeners.PushTagRegistrationI
 import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
+import com.applicaster.util.AppData
 import com.applicaster.util.StringUtil
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
@@ -44,13 +45,28 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
 
     private var isInitialized = false
 
+    // all registered topics
     private val topics = mutableSetOf<String>()
+
+    // default topics that we register and control automatically
+    private val ownedTopics = mutableSetOf<String>()
 
     override fun initPushProvider(context: Context) {
 
         if(isInitialized) {
             return
         }
+
+        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
+        if (!stored.isNullOrEmpty()) {
+            topics.addAll(stored.split(","))
+        }
+
+        val defStored = LocalStorage.get(localStorageOwnedTopicsParam, pluginId)
+        if (!defStored.isNullOrEmpty()) {
+            ownedTopics.addAll(defStored.split(","))
+        }
+
         // this call is required since we've disabled auto-init in the manifest
         FirebaseMessaging.getInstance().token
                 .addOnCompleteListener {
@@ -69,11 +85,6 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             ensureChannels(context)
         }
         buildSoundLookup(context)
-
-        val stored = LocalStorage.get(localStorageTopicsParam, pluginId)
-        if (!stored.isNullOrEmpty()) {
-            topics.addAll(stored.split(","))
-        }
 
         // mark as initialized even if there is no token, since its plugin state
         isInitialized = true
@@ -163,6 +174,8 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                     if(task.isSuccessful) {
                         topics.add(topic)
                         storeTopics()
+                    } else {
+                        APLogger.error(TAG, "Failed to subscribe to topic $topic", task.exception)
                     }
                     cont.resume(task.isSuccessful)
                 }
@@ -187,33 +200,59 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                     if(task.isSuccessful) {
                         topics.remove(topic)
                         storeTopics()
+                    } else {
+                        APLogger.error(TAG, "Failed to unsubscribe from topic $topic", task.exception)
                     }
                     cont.resume(task.isSuccessful)
                 }
             }
 
     private suspend fun registerDefaultTopics() {
-        if (topics.isNotEmpty()) {
-            return // something was already registered, do not try change it
-        }
         val defaultTopics = getPluginParamByKey(defaultTopicKey)
-        if (TextUtils.isEmpty(defaultTopics)) {
-            return
+        val defaultLocTopics = getPluginParamByKey(defaultLocalizedTopics)
+
+        val allTopics = mutableSetOf<String>()
+
+        if (!TextUtils.isEmpty(defaultTopics)) {
+            val defTopics = defaultTopics
+                    .split(",")
+                    .map { it.trim().toLowerCase(Locale.ENGLISH) }
+                    .filter { it.isNotEmpty() }
+            allTopics.addAll(defTopics)
         }
-        // cleanup user input
-        val normalized = defaultTopics
-                .split(",")
-                .map { it.trim().toLowerCase(Locale.ENGLISH) }
-                .filter { it.isNotEmpty() }
-        if (normalized.isEmpty()) {
-            return
+
+        if(!TextUtils.isEmpty(defaultLocTopics)) {
+            val language = AppData.getLocale().language
+            val locTopics = defaultLocTopics
+                    .split(",")
+                    .map { it.trim().toLowerCase(Locale.ENGLISH) }
+                    .filter { it.isNotEmpty() }
+                    .map { "$it-$language" }
+            allTopics.addAll(locTopics)
         }
-        APLogger.info(TAG, "Registering default topics: $defaultTopics")
-        registerAll(normalized, null)
+
+        val toRemove = ownedTopics - allTopics
+        val toAdd = allTopics - ownedTopics
+
+        APLogger.info(TAG, "Unregistering default topics: $toRemove")
+        toRemove.forEach {
+            if(unregister(it)) { // has error message inside
+                ownedTopics.remove(it)
+            }
+        }
+        APLogger.info(TAG, "Registering default topics: $toAdd")
+        toAdd.forEach {
+            if(register(it)) {  // has error message inside
+                ownedTopics.add(it)
+            }
+        }
+        // needed to store latest ownedTopics update
+        LocalStorage.set(localStorageOwnedTopicsParam, ownedTopics.joinToString ( "," ), pluginId)
     }
 
     private fun storeTopics() {
         LocalStorage.set(localStorageTopicsParam, topics.joinToString ( "," ), pluginId)
+        LocalStorage.set(localStorageOwnedTopicsParam, ownedTopics.joinToString ( "," ), pluginId)
     }
 
     //endregion
@@ -221,10 +260,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun ensureChannels(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-
-        if(null == notificationManager) {
-            return
-        }
+                ?: return
 
         // create all the custom channels, if any
         var i = 1
@@ -326,7 +362,9 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         }
         private const val TAG = "FirebasePushProvider"
         private const val defaultTopicKey = "default_topic"
+        private const val defaultLocalizedTopics = "default_localized_topics"
         private const val localStorageTopicsParam = "topics"
+        private const val localStorageOwnedTopicsParam = "defaultTopics"
         // this field is available in Plugin model now, but for now we keep a copy and check it
         const val pluginId = "ZappPushPluginFirebase"
     }
