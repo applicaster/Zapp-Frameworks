@@ -131,7 +131,10 @@ class APMessagingService : FirebaseMessagingService() {
         // run on UI thread, since some devices can't publish notifications from background threads
         GlobalScope.launch(Dispatchers.Main) {
             with(NotificationManagerCompat.from(this@APMessagingService.applicationContext)) {
-                notify(notificationFactory.generateNotificationId(), notification)
+                if(pushMessage.tag.isEmpty())
+                    notify(notificationFactory.generateNotificationId(), notification)
+                else
+                    notify(pushMessage.tag, notificationFactory.generateNotificationId(), notification)
             }
         }
     }
