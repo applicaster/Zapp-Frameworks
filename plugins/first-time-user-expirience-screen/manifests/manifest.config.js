@@ -44,7 +44,7 @@ const styles = {
     {
       key: "background_color",
       type: "color_picker",
-      label: "Background font color",
+      label: "Background color",
       initial_value: "#161b29ff",
     },
     {
@@ -53,6 +53,305 @@ const styles = {
       label: "Activity indicator color",
       initial_value: "#ffffffff",
     },
+    {
+      type: "tag_select",
+      key: "content_style",
+      tooltip_text: "Select style of screen",
+      options: [
+        {
+          text: "Top Button",
+          value: "top_button",
+        },
+        {
+          text: "Bottom Bar",
+          value: "bottom_bar",
+        },
+      ],
+      initial_value: "bottom_bar",
+    },
+    {
+      key: "bottom_bar_background_color",
+      type: "color_picker",
+      label: "Bottom bar background color",
+      initial_value: "#161b29ff",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "bottom_bar_height",
+      type: "number_input",
+      label_tooltip: "Bottom bar tab",
+      initial_value: 68,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+
+    {
+      key: "is_bar_back_button_hidden",
+      type: "checkbox",
+      label: "Back button hidden",
+      default: 0,
+      tooltip_text: "Make bottom bar back button hidden",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "is_bar_next_button_hidden",
+      type: "checkbox",
+      label: "Next/Close bottom bar hidden",
+      default: 0,
+      tooltip_text: "Make close/back bottom bar hidden",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "is_bar_login_button_hidden",
+      type: "checkbox",
+      label: "Login bottom bar hidden",
+      default: 0,
+      tooltip_text: "Make login bottom bar hidden",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+
+    {
+      key: "navigation_bar_button_height",
+      type: "number_input",
+      label_tooltip: "Navigation bottom bar button height",
+      initial_value: 40,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_radius",
+      type: "number_input",
+      label_tooltip: "Navigation Bottom bar button radius",
+      initial_value: 5,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_border_size",
+      type: "number_input",
+      label_tooltip: "Navigation Bottom bar button border size",
+      initial_value: 2,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_border_color",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button bortder color",
+      initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_background_color",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button background color",
+      initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS Navigation bottom bar Button font",
+      initial_value: "Helvetica-Bold",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_font_android",
+      type: "android_font_selector",
+      label: "Android Navigation Bottom Bar Button font",
+      initial_value: "Roboto-Bold",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_font_size",
+      type: "number_input",
+      label: "Navigation Bottom Bar Button font size",
+      initial_value: 15,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "navigation_bar_button_font_color",
+      type: "color_picker",
+      label: "Navigation Bottom Bar Button font color",
+      initial_value: "#FFFFFFFF",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+
+    {
+      key: "sign_in_bar_button_height",
+      type: "number_input",
+      label_tooltip: "Sign In bottom bar button height",
+      initial_value: 40,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_radius",
+      type: "number_input",
+      label_tooltip: "Sign In Bottom bar button radius",
+      initial_value: 5,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_border_size",
+      type: "number_input",
+      label_tooltip: "Sign In Bottom bar button border size",
+      initial_value: 2,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_border_color",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button bortder color",
+      initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_background_color",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button background color",
+      initial_value: "#00000000",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS Sign In bottom bar Button font",
+      initial_value: "Helvetica-Bold",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_font_android",
+      type: "android_font_selector",
+      label: "Android Sign In Bottom Bar Button font",
+      initial_value: "Roboto-Bold",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_font_size",
+      type: "number_input",
+      label: "Navigation Sign In Bar Button font size",
+      initial_value: 15,
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+    {
+      key: "sign_in_bar_button_font_color",
+      type: "color_picker",
+      label: "Navigation Sign In Bar Button font color",
+      initial_value: "#FFFFFFFF",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "bottom_bar",
+        },
+      ],
+    },
+
     {
       type: "tag_select",
       key: "top_button_type",
@@ -68,6 +367,12 @@ const styles = {
         },
       ],
       initial_value: "text",
+      conditional_fields: [
+        {
+          key: "styles/content_style",
+          condition_value: "top_button",
+        },
+      ],
     },
     {
       key: "top_button_radius",
