@@ -174,6 +174,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                     if(task.isSuccessful) {
                         topics.add(topic)
                         storeTopics()
+                        APLogger.info(TAG, "Subscribed to topics: $topic")
                     } else {
                         APLogger.error(TAG, "Failed to subscribe to topic $topic", task.exception)
                     }
@@ -200,6 +201,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
                     if(task.isSuccessful) {
                         topics.remove(topic)
                         storeTopics()
+                        APLogger.info(TAG, "Unsubscribed from topics: $topic")
                     } else {
                         APLogger.error(TAG, "Failed to unsubscribe from topic $topic", task.exception)
                     }
@@ -208,11 +210,10 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             }
 
     private suspend fun registerDefaultTopics() {
-        val defaultTopics = getPluginParamByKey(defaultTopicKey)
-        val defaultLocTopics = getPluginParamByKey(defaultLocalizedTopics)
 
         val allTopics = mutableSetOf<String>()
 
+        val defaultTopics = getPluginParamByKey(defaultTopicKey)
         if (!TextUtils.isEmpty(defaultTopics)) {
             val defTopics = defaultTopics
                     .split(",")
@@ -221,6 +222,7 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
             allTopics.addAll(defTopics)
         }
 
+        val defaultLocTopics = getPluginParamByKey(defaultLocalizedTopics)
         if(!TextUtils.isEmpty(defaultLocTopics)) {
             val language = AppData.getLocale().language
             val locTopics = defaultLocTopics
@@ -234,13 +236,17 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         val toRemove = ownedTopics - allTopics
         val toAdd = allTopics - ownedTopics
 
-        APLogger.info(TAG, "Unregistering default topics: $toRemove")
+        if(toRemove.isEmpty() && toAdd.isEmpty()) {
+            return
+        }
+
+        APLogger.info(TAG, "Default topics to unsubscribe from: $toRemove, to subscribe to: $toAdd")
+
         toRemove.forEach {
             if(unregister(it)) { // has error message inside
                 ownedTopics.remove(it)
             }
         }
-        APLogger.info(TAG, "Registering default topics: $toAdd")
         toAdd.forEach {
             if(register(it)) {  // has error message inside
                 ownedTopics.add(it)
@@ -298,7 +304,6 @@ class FirebasePushProvider : PushContract, DelayedPlugin, GenericPluginI {
         channel.setSound(soundUrl, Notification.AUDIO_ATTRIBUTES_DEFAULT)
         notificationManager.createNotificationChannel(channel)
     }
-
 
     private fun buildSoundLookup(context: Context) {
         // Build sound lookup table channels for Android before 8
