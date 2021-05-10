@@ -202,7 +202,7 @@ export default function FirstTimeUserExpirience(props) {
       }}
     >
       {data && renderScreen()}
-      {/* {data && (
+      {data && (
         <FloatingButton
           screenStyles={screenStyles}
           screenLocalizations={screenLocalizations}
@@ -210,16 +210,18 @@ export default function FirstTimeUserExpirience(props) {
           onClose={onClose}
           isLastScreen={currentScreenIndex === dataSource?.length - 1}
         />
-      )} */}
-      <TopBar
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        onBack={onBack}
-        onNext={onNext}
-        onClose={onClose}
-        isFistScreen={currentScreenIndex === 0}
-        isLastScreen={currentScreenIndex === dataSource?.length - 1}
-      />
+      )}
+      {data && (
+        <TopBar
+          screenStyles={screenStyles}
+          screenLocalizations={screenLocalizations}
+          onBack={onBack}
+          onNext={onNext}
+          onClose={onClose}
+          isFistScreen={currentScreenIndex === 0}
+          isLastScreen={currentScreenIndex === dataSource?.length - 1}
+        />
+      )}
       {!data && (
         <ActivityIndicator
           color={screenStyles?.indicator_color}

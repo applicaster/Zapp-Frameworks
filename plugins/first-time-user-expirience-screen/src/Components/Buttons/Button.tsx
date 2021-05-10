@@ -4,24 +4,30 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 
 const Button = ({
   onPress,
-  hidden,
+  hidden = false,
+  disabled = false,
   screenStyles,
   title,
   styles,
   textStyle,
 }) => {
   let touchStyles = styles;
-  if (hidden) {
+  if (hidden || disabled) {
     touchStyles = {
       ...touchStyles,
       backgroundColor: "transparent",
       borderColor: "transparent",
     };
+  } else if (disabled) {
   }
-
+  console.log({ hidden, disabled });
   return (
-    <TouchableOpacity style={touchStyles} onPress={onPress}>
-      {!hidden && <Text style={textStyle}>{title}</Text>}
+    <TouchableOpacity
+      disabled={hidden || disabled}
+      style={touchStyles}
+      onPress={onPress}
+    >
+      {!hidden && !disabled && <Text style={textStyle}>{title}</Text>}
     </TouchableOpacity>
   );
 };
