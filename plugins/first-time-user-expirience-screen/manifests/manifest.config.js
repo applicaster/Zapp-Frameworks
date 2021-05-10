@@ -358,7 +358,7 @@ const styles = {
       type: "uploader",
       label: "Next Button Image",
       label_tooltip: "Top button image next. Dimension 44 x44.",
-      placeholder: "W 144 x H 144",
+      placeholder: "W 120 x H 120",
       conditional_fields: [
         {
           key: "styles/top_button_type",
@@ -371,7 +371,7 @@ const styles = {
       type: "uploader",
       label: "Close Button Image",
       label_tooltip: "Close button image next. Dimension 44 x44.",
-      placeholder: "W 144 x H 144",
+      placeholder: "W 120 x H 120",
       conditional_fields: [
         {
           key: "styles/top_button_type",

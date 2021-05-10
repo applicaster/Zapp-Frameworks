@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
-import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 
 const Button = ({
   onPress,
@@ -10,24 +9,25 @@ const Button = ({
   title,
   styles,
   textStyle,
+  stylesDisabled,
+  textStyleDisabled,
 }) => {
-  let touchStyles = styles;
+  let containedStyles = disabled ? stylesDisabled : styles;
+  let textStyles = disabled ? textStyleDisabled : textStyle;
   if (hidden) {
-    touchStyles = {
-      ...touchStyles,
+    containedStyles = {
+      ...containedStyles,
       backgroundColor: "transparent",
       borderColor: "transparent",
     };
-  } else if (disabled) {
   }
-  console.log({ hidden, disabled });
   return (
     <TouchableOpacity
       disabled={hidden || disabled}
-      style={touchStyles}
+      style={containedStyles}
       onPress={onPress}
     >
-      {!hidden && !disabled && <Text style={textStyle}>{title}</Text>}
+      {!hidden && <Text style={textStyles}>{title}</Text>}
     </TouchableOpacity>
   );
 };

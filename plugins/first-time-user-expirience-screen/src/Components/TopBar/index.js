@@ -1,17 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Platform, View, ViewProps } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import Button from "../Buttons/Button";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
-import {
-  createLogger,
-  BaseSubsystem,
-  BaseCategories,
-} from "../../Services/LoggerService";
-
-const logger = createLogger({
-  subsystem: BaseSubsystem,
-  category: BaseCategories.GENERAL,
-});
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TopBar({
   screenStyles,
@@ -19,10 +10,12 @@ export default function TopBar({
   onBack,
   onNext,
   onClose,
+  onSignIn,
   isLastScreen = false,
   isFistScreen = false,
 }) {
-  console.log({ screenLocalizations });
+  const insets = useSafeAreaInsets();
+
   const {
     back_button_text,
     next_button_text,
@@ -40,6 +33,11 @@ export default function TopBar({
     color: screenStyles?.navigation_bar_button_font_color,
   };
 
+  const TextStyleNavigationButtonsDisabled = {
+    ...TextStyleNavigationButtons,
+    color: screenStyles?.navigation_bar_button_font_color_disabled,
+  };
+
   const TextStylSignInButtons = {
     textAlign: "center",
     fontFamily: platformSelect({
@@ -48,6 +46,11 @@ export default function TopBar({
     }),
     fontSize: screenStyles?.sign_in_bar_button_font_size,
     color: screenStyles?.sign_in_bar_button_font_color,
+  };
+
+  const TextStylSignInButtonsDisabled = {
+    ...TextStyleNavigationButtons,
+    color: screenStyles?.sign_in_bar_button_font_color_disabled,
   };
 
   const ContainerStyle = {
@@ -60,6 +63,11 @@ export default function TopBar({
     alignItems: "center",
   };
 
+  const buttonContainerStyle = {
+    backgroundColor: screenStyles?.bottom_bar_background_color,
+    height: insets.bottom,
+  };
+
   const leftButtonContainer = {
     flex: 1,
     height: screenStyles?.navigation_bar_button_height,
@@ -70,19 +78,30 @@ export default function TopBar({
     borderWidth: screenStyles?.navigation_bar_button_border_size,
     backgroundColor: screenStyles?.navigation_bar_button_background_color,
   };
-
+  const leftButtonContainerDisabled = {
+    ...leftButtonContainer,
+    backgroundColor:
+      screenStyles?.navigation_bar_button_background_color_disabled,
+    borderColor: screenStyles?.navigation_bar_button_border_color_disabled,
+  };
   const rightButtonContainer = {
     flex: 1,
     height: screenStyles?.navigation_bar_button_height,
     justifyContent: "center",
     alignItems: "center",
-    // padding: 5,
-    // position: "absolute",
     borderRadius: Number(screenStyles?.navigation_bar_button_radius),
     borderColor: screenStyles?.navigation_bar_button_border_color,
     borderWidth: screenStyles?.navigation_bar_button_border_size,
     backgroundColor: screenStyles?.navigation_bar_button_background_color,
   };
+
+  const rightButtonContainerDisabled = {
+    ...rightButtonContainer,
+    backgroundColor:
+      screenStyles?.navigation_bar_button_background_color_disabled,
+    borderColor: screenStyles?.navigation_bar_button_border_color_disabled,
+  };
+
   const signInButtonContainer = {
     justifyContent: "center",
     alignItems: "center",
@@ -95,32 +114,47 @@ export default function TopBar({
     backgroundColor: screenStyles?.sign_in_bar_button_background_color,
   };
 
+  const signInButtonContainerDisabled = {
+    ...signInButtonContainer,
+    backgroundColor: screenStyles?.sign_in_bar_button_background_color_disabled,
+    borderColor: screenStyles?.sign_in_bar_button_border_color_disabled,
+  };
+
   return (
-    <View style={ContainerStyle}>
-      <Button
-        styles={leftButtonContainer}
-        textStyle={TextStyleNavigationButtons}
-        title={back_button_text}
-        onPress={onBack}
-        disabled={isFistScreen}
-        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
-      />
-      <Button
-        styles={signInButtonContainer}
-        textStyle={TextStylSignInButtons}
-        title={sign_in_button_text}
-        onPress={onBack}
-        disabled={isFistScreen}
-        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
-      />
-      <Button
-        styles={rightButtonContainer}
-        textStyle={TextStyleNavigationButtons}
-        title={isLastScreen ? close_button_text : next_button_text}
-        onPress={isLastScreen ? onClose : onNext}
-        disabled={false}
-        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
-      />
-    </View>
+    <>
+      <View style={ContainerStyle}>
+        <Button
+          styles={leftButtonContainer}
+          stylesDisabled={leftButtonContainerDisabled}
+          textStyle={TextStyleNavigationButtons}
+          textStyleDisabled={TextStyleNavigationButtonsDisabled}
+          title={back_button_text}
+          onPress={onBack}
+          disabled={isFistScreen}
+          hidden={screenStyles?.is_bar_back_button_hidden === "1"}
+        />
+        <Button
+          styles={signInButtonContainer}
+          stylesDisabled={signInButtonContainerDisabled}
+          textStyle={TextStylSignInButtons}
+          textStyleDisabled={TextStylSignInButtonsDisabled}
+          title={sign_in_button_text}
+          onPress={onSignIn}
+          disabled={isFistScreen}
+          hidden={screenStyles?.is_bar_login_button_hidden === "1"}
+        />
+        <Button
+          styles={rightButtonContainer}
+          stylesDisabled={rightButtonContainerDisabled}
+          textStyle={TextStyleNavigationButtons}
+          textStyleDisabled={TextStyleNavigationButtonsDisabled}
+          title={isLastScreen ? close_button_text : next_button_text}
+          onPress={isLastScreen ? onClose : onNext}
+          disabled={false}
+          hidden={screenStyles?.is_bar_next_button_hidden === "1"}
+        />
+      </View>
+      <View style={buttonContainerStyle} />
+    </>
   );
 }
