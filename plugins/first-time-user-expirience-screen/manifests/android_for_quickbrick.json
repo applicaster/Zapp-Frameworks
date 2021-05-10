@@ -39,8 +39,8 @@
     ]
   },
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.2.0-alpha.0",
-  "manifest_version": "0.2.0-alpha.0",
+  "dependency_version": "0.2.0",
+  "manifest_version": "0.2.0",
   "min_zapp_sdk": "0.1.0-alpha1",
   "styles": {
     "fields": [
@@ -72,28 +72,28 @@
         "key": "is_top_button_hidden",
         "type": "checkbox",
         "label": "Top button hidden",
-        "default": 0,
+        "default": "0",
         "tooltip_text": "Make top button hidden"
       },
       {
         "key": "is_bar_back_button_hidden",
         "type": "checkbox",
         "label": "Back button hidden",
-        "default": 0,
+        "default": "0",
         "tooltip_text": "Make bottom bar back button hidden"
       },
       {
         "key": "is_bar_next_button_hidden",
         "type": "checkbox",
         "label": "Next/Close bottom bar hidden",
-        "default": 0,
+        "default": "0",
         "tooltip_text": "Make close/back bottom bar hidden"
       },
       {
         "key": "is_bar_login_button_hidden",
         "type": "checkbox",
         "label": "Login bottom bar hidden",
-        "default": 0,
+        "default": "0",
         "tooltip_text": "Make login bottom bar hidden"
       },
       {
@@ -357,7 +357,7 @@
         "type": "uploader",
         "label": "Next Button Image",
         "label_tooltip": "Top button image next. Dimension 44 x44.",
-        "placeholder": "W 144 x H 144",
+        "placeholder": "W 120 x H 120",
         "conditional_fields": [
           {
             "key": "styles/top_button_type",
@@ -370,7 +370,7 @@
         "type": "uploader",
         "label": "Close Button Image",
         "label_tooltip": "Close button image next. Dimension 44 x44.",
-        "placeholder": "W 144 x H 144",
+        "placeholder": "W 120 x H 120",
         "conditional_fields": [
           {
             "key": "styles/top_button_type",
