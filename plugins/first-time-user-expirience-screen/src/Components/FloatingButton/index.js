@@ -9,8 +9,8 @@ const FloatingButton = ({
   onNext,
   onClose,
   isLastScreen = false,
-  disabled = false,
 }) => {
+  const hidden = screenStyles?.is_top_button_hidden === "1";
   const {
     back_button_text,
     next_button_text,
@@ -69,7 +69,7 @@ const FloatingButton = ({
       </Text>
     );
   }
-  return disabled === true ? null : (
+  return hidden === true ? null : (
     <TouchableOpacity
       style={
         screenStyles?.top_button_type === "image"

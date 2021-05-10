@@ -16,9 +16,9 @@ const common = [
     initial_value: "Close",
   },
   {
-    key: "skip_button_text",
-    label: "Skip button text",
-    initial_value: "Skip",
+    key: "sign_in_button_text",
+    label: "Sign in button text",
+    initial_value: "Sigin In",
   },
 ];
 

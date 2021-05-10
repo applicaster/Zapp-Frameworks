@@ -44,7 +44,7 @@ const styles = {
     {
       key: "background_color",
       type: "color_picker",
-      label: "Background font color",
+      label: "Background color",
       initial_value: "#161b29ff",
     },
     {
@@ -53,6 +53,194 @@ const styles = {
       label: "Activity indicator color",
       initial_value: "#ffffffff",
     },
+    {
+      key: "bottom_bar_background_color",
+      type: "color_picker",
+      label: "Bottom bar background color",
+      initial_value: "#161b29ff",
+    },
+    {
+      key: "bottom_bar_height",
+      type: "number_input",
+      label_tooltip: "Bottom bar tab",
+      initial_value: 68,
+    },
+
+    {
+      key: "is_top_button_hidden",
+      type: "checkbox",
+      label: "Top button hidden",
+      default: "0",
+      tooltip_text: "Make top button hidden",
+    },
+    {
+      key: "is_bar_back_button_hidden",
+      type: "checkbox",
+      label: "Back button hidden",
+      default: "0",
+      tooltip_text: "Make bottom bar back button hidden",
+    },
+    {
+      key: "is_bar_next_button_hidden",
+      type: "checkbox",
+      label: "Next/Close bottom bar hidden",
+      default: "0",
+      tooltip_text: "Make close/back bottom bar hidden",
+    },
+    {
+      key: "is_bar_login_button_hidden",
+      type: "checkbox",
+      label: "Login bottom bar hidden",
+      default: "0",
+      tooltip_text: "Make login bottom bar hidden",
+    },
+
+    {
+      key: "navigation_bar_button_height",
+      type: "number_input",
+      label_tooltip: "Navigation bottom bar button height",
+      initial_value: 40,
+    },
+    {
+      key: "navigation_bar_button_radius",
+      type: "number_input",
+      label_tooltip: "Navigation Bottom bar button radius",
+      initial_value: 5,
+    },
+    {
+      key: "navigation_bar_button_border_size",
+      type: "number_input",
+      label_tooltip: "Navigation Bottom bar button border size",
+      initial_value: 2,
+    },
+    {
+      key: "navigation_bar_button_border_color",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button bortder color",
+      initial_value: "#00000000",
+    },
+    {
+      key: "navigation_bar_button_border_color_disabled",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button bortder color disabled",
+      initial_value: "#00000000",
+    },
+    {
+      key: "navigation_bar_button_background_color",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button background color",
+      initial_value: "#00000000",
+    },
+    {
+      key: "navigation_bar_button_background_color_disabled",
+      type: "color_picker",
+      label: "Navigation Bottom bar Button background color disabled",
+      initial_value: "#00000000",
+    },
+    {
+      key: "navigation_bar_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS Navigation bottom bar Button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "navigation_bar_button_font_android",
+      type: "android_font_selector",
+      label: "Android Navigation Bottom Bar Button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "navigation_bar_button_font_size",
+      type: "number_input",
+      label: "Navigation Bottom Bar Button font size",
+      initial_value: 15,
+    },
+    {
+      key: "navigation_bar_button_font_color",
+      type: "color_picker",
+      label: "Navigation Bottom Bar Button font color",
+      initial_value: "#FFFFFFFF",
+    },
+    {
+      key: "navigation_bar_button_font_color_disabled",
+      type: "color_picker",
+      label: "Navigation Bottom Bar Button font color disabled",
+      initial_value: "#FFFFFFFF",
+    },
+
+    {
+      key: "sign_in_bar_button_height",
+      type: "number_input",
+      label_tooltip: "Sign In bottom bar button height",
+      initial_value: 40,
+    },
+    {
+      key: "sign_in_bar_button_radius",
+      type: "number_input",
+      label_tooltip: "Sign In Bottom bar button radius",
+      initial_value: 5,
+    },
+    {
+      key: "sign_in_bar_button_border_size",
+      type: "number_input",
+      label_tooltip: "Sign In Bottom bar button border size",
+      initial_value: 2,
+    },
+    {
+      key: "sign_in_bar_button_border_color",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button bortder color",
+      initial_value: "#00000000",
+    },
+    {
+      key: "sign_in_bar_button_border_color_disabled",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button bortder color disabled",
+      initial_value: "#00000000",
+    },
+    {
+      key: "sign_in_bar_button_background_color",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button background color",
+      initial_value: "#00000000",
+    },
+    {
+      key: "sign_in_bar_button_background_color_disabled",
+      type: "color_picker",
+      label: "Sign In Bottom bar Button background color disabled",
+      initial_value: "#00000000",
+    },
+    {
+      key: "sign_in_bar_button_font_ios",
+      type: "ios_font_selector",
+      label: "iOS Sign In bottom bar Button font",
+      initial_value: "Helvetica-Bold",
+    },
+    {
+      key: "sign_in_bar_button_font_android",
+      type: "android_font_selector",
+      label: "Android Sign In Bottom Bar Button font",
+      initial_value: "Roboto-Bold",
+    },
+    {
+      key: "sign_in_bar_button_font_size",
+      type: "number_input",
+      label: "Navigation Sign In Bar Button font size",
+      initial_value: 15,
+    },
+    {
+      key: "sign_in_bar_button_font_color",
+      type: "color_picker",
+      label: "Navigation Sign In Bar Button font color",
+      initial_value: "#FFFFFFFF",
+    },
+    {
+      key: "sign_in_bar_button_font_color_disabled",
+      type: "color_picker",
+      label: "Navigation Sign In Bar Button font color disabled",
+      initial_value: "#FFFFFFFF",
+    },
+
     {
       type: "tag_select",
       key: "top_button_type",
@@ -170,7 +358,7 @@ const styles = {
       type: "uploader",
       label: "Next Button Image",
       label_tooltip: "Top button image next. Dimension 44 x44.",
-      placeholder: "W 144 x H 144",
+      placeholder: "W 120 x H 120",
       conditional_fields: [
         {
           key: "styles/top_button_type",
@@ -183,7 +371,7 @@ const styles = {
       type: "uploader",
       label: "Close Button Image",
       label_tooltip: "Close button image next. Dimension 44 x44.",
-      placeholder: "W 144 x H 144",
+      placeholder: "W 120 x H 120",
       conditional_fields: [
         {
           key: "styles/top_button_type",

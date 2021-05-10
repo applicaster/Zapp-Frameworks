@@ -28,7 +28,6 @@ import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
 import { getLocalizations } from "../../Utils/Localizations";
 import { ScreenResolver } from "@applicaster/zapp-react-native-ui-components/Components/ScreenResolver";
 
-import { useSafeAreaFrame } from "react-native-safe-area-context";
 import TopBar from "../TopBar";
 import FloatingButton from "../FloatingButton";
 import {
@@ -47,10 +46,6 @@ export default function FirstTimeUserExpirience(props) {
   const [dataSource, setDataSource] = useState<Array<DataModel> | null>(null);
   const [currentScreenIndex, setCurrentScreenIndex] = useState(null);
   const mounted = useRef(true);
-
-  const navigator = useNavigation();
-  const dimensions = useSafeAreaFrame();
-
   const screenId = props?.hookPlugin?.screen_id;
   const { callback, payload, rivers, configuration } = props;
   const localizations = getRiversProp("localizations", rivers, screenId);
@@ -168,6 +163,32 @@ export default function FirstTimeUserExpirience(props) {
         data_source: dataSource,
       },
     });
+
+    let newPayload = payload;
+    if (newPayload?.extensions) {
+      newPayload.extensions = {
+        ...newPayload?.extensions,
+        skip_hook: true,
+      };
+    } else {
+      newPayload["extensions"] = {
+        skip_hook: true,
+      };
+    }
+
+    callback && callback({ success: true, error: null, newPayload });
+  }
+
+  async function onSignIn() {
+    if (show_hook_once) {
+      updatePresentedInfo();
+    }
+    logger.debug({
+      message: `On Sign In button, hook finished task`,
+      data: {
+        data_source: dataSource,
+      },
+    });
     callback && callback({ success: true, error: null, payload });
   }
 
@@ -195,22 +216,12 @@ export default function FirstTimeUserExpirience(props) {
     );
   }
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: screenStyles?.background_color,
       }}
     >
-      {/* <TopBar
-        screenStyles={screenStyles}
-        screenLocalizations={screenLocalizations}
-        onBack={onBack}
-        onNext={onNext}
-        onClose={onClose}
-        isFistScreen={currentScreenIndex === 0}
-        isLastScreen={currentScreenIndex === dataSource?.length - 1}
-      /> */}
-
       {data && renderScreen()}
       {data && (
         <FloatingButton
@@ -221,12 +232,24 @@ export default function FirstTimeUserExpirience(props) {
           isLastScreen={currentScreenIndex === dataSource?.length - 1}
         />
       )}
+      {data && (
+        <TopBar
+          screenStyles={screenStyles}
+          screenLocalizations={screenLocalizations}
+          onBack={onBack}
+          onNext={onNext}
+          onClose={onClose}
+          onSignIn={onSignIn}
+          isFistScreen={currentScreenIndex === 0}
+          isLastScreen={currentScreenIndex === dataSource?.length - 1}
+        />
+      )}
       {!data && (
         <ActivityIndicator
           color={screenStyles?.indicator_color}
           size={"large"}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 }

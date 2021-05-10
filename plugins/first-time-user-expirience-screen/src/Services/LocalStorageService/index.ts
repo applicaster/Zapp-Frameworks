@@ -9,7 +9,6 @@ export async function getBuildNumber() {
 }
 
 export async function localStorageSet(versionName) {
-  console.log("localStorageSet");
   return await localStorage.setItem(
     screenWasPresentedKey,
     versionName,
