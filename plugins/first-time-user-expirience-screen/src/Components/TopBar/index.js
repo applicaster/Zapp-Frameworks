@@ -31,6 +31,7 @@ export default function TopBar({
   } = screenLocalizations;
 
   const TextStyleNavigationButtons = {
+    textAlign: "center",
     fontFamily: platformSelect({
       ios: screenStyles?.navigation_bar_button_font_ios,
       android: screenStyles?.navigation_bar_button_font_android,
@@ -40,6 +41,7 @@ export default function TopBar({
   };
 
   const TextStylSignInButtons = {
+    textAlign: "center",
     fontFamily: platformSelect({
       ios: screenStyles?.sign_in_bar_button_font_ios,
       android: screenStyles?.sign_in_bar_button_font_android,
@@ -51,40 +53,42 @@ export default function TopBar({
   const ContainerStyle = {
     backgroundColor: screenStyles?.bottom_bar_background_color,
     height: screenStyles?.bottom_bar_height,
+    flexDirection: "row",
+    paddingLeft: 5,
+    paddingRight: 5,
     justifyContent: "center",
+    alignItems: "center",
   };
 
   const leftButtonContainer = {
-    left: 35,
     flex: 1,
     height: screenStyles?.navigation_bar_button_height,
-
-    padding: 5,
-    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: Number(screenStyles?.navigation_bar_button_radius),
     borderColor: screenStyles?.navigation_bar_button_border_color,
     borderWidth: screenStyles?.navigation_bar_button_border_size,
     backgroundColor: screenStyles?.navigation_bar_button_background_color,
   };
-  
+
   const rightButtonContainer = {
-    right: 35,
     flex: 1,
     height: screenStyles?.navigation_bar_button_height,
-
-    padding: 5,
-    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    // padding: 5,
+    // position: "absolute",
     borderRadius: Number(screenStyles?.navigation_bar_button_radius),
     borderColor: screenStyles?.navigation_bar_button_border_color,
     borderWidth: screenStyles?.navigation_bar_button_border_size,
     backgroundColor: screenStyles?.navigation_bar_button_background_color,
   };
   const signInButtonContainer = {
+    justifyContent: "center",
+    alignItems: "center",
     flex: 2,
     height: screenStyles?.sign_in_bar_button_height,
-
-    padding: 5,
-    position: "absolute",
+    marginHorizontal: 15,
     borderRadius: Number(screenStyles?.sign_in_bar_button_radius),
     borderColor: screenStyles?.sign_in_bar_button_border_color,
     borderWidth: screenStyles?.sign_in_bar_button_border_size,
@@ -99,7 +103,7 @@ export default function TopBar({
         title={back_button_text}
         onPress={onBack}
         disabled={isFistScreen}
-        hidden={false}
+        hidden={screenStyles?.is_bar_back_button_hidden}
       />
       <Button
         styles={signInButtonContainer}
@@ -107,15 +111,15 @@ export default function TopBar({
         title={sign_in_button_text}
         onPress={onBack}
         disabled={isFistScreen}
-        hidden={false}
+        hidden={screenStyles?.is_bar_login_button_hidden}
       />
       <Button
         styles={rightButtonContainer}
         textStyle={TextStyleNavigationButtons}
         title={isLastScreen ? close_button_text : next_button_text}
         onPress={isLastScreen ? onClose : onNext}
-        hidden={false}
         disabled={false}
+        hidden={screenStyles?.is_bar_next_button_hidden}
       />
     </View>
   );

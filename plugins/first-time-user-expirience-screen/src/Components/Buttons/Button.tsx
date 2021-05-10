@@ -10,9 +10,18 @@ const Button = ({
   styles,
   textStyle,
 }) => {
-  return hidden === true ? null : (
-    <TouchableOpacity style={styles} onPress={onPress}>
-      <Text style={textStyle}>{title}</Text>
+  let touchStyles = styles;
+  if (hidden) {
+    touchStyles = {
+      ...touchStyles,
+      backgroundColor: "transparent",
+      borderColor: "transparent",
+    };
+  }
+
+  return (
+    <TouchableOpacity style={touchStyles} onPress={onPress}>
+      {!hidden && <Text style={textStyle}>{title}</Text>}
     </TouchableOpacity>
   );
 };
