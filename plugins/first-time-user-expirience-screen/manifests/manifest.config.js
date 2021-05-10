@@ -53,22 +53,6 @@ const styles = {
       label: "Activity indicator color",
       initial_value: "#ffffffff",
     },
-    // {
-    //   type: "tag_select",
-    //   key: "content_style",
-    //   tooltip_text: "Select style of screen",
-    //   options: [
-    //     {
-    //       text: "Top Button",
-    //       value: "top_button",
-    //     },
-    //     {
-    //       text: "Bottom Bar",
-    //       value: "bottom_bar",
-    //     },
-    //   ],
-    //   initial_value: "bottom_bar",
-    // },
     {
       key: "bottom_bar_background_color",
       type: "color_picker",
@@ -86,28 +70,28 @@ const styles = {
       key: "is_top_button_hidden",
       type: "checkbox",
       label: "Top button hidden",
-      default: 0,
+      default: "0",
       tooltip_text: "Make top button hidden",
     },
     {
       key: "is_bar_back_button_hidden",
       type: "checkbox",
       label: "Back button hidden",
-      default: 0,
+      default: "0",
       tooltip_text: "Make bottom bar back button hidden",
     },
     {
       key: "is_bar_next_button_hidden",
       type: "checkbox",
       label: "Next/Close bottom bar hidden",
-      default: 0,
+      default: "0",
       tooltip_text: "Make close/back bottom bar hidden",
     },
     {
       key: "is_bar_login_button_hidden",
       type: "checkbox",
       label: "Login bottom bar hidden",
-      default: 0,
+      default: "0",
       tooltip_text: "Make login bottom bar hidden",
     },
 

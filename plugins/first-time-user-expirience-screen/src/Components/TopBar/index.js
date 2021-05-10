@@ -103,7 +103,7 @@ export default function TopBar({
         title={back_button_text}
         onPress={onBack}
         disabled={isFistScreen}
-        hidden={screenStyles?.is_bar_back_button_hidden}
+        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
       />
       <Button
         styles={signInButtonContainer}
@@ -111,7 +111,7 @@ export default function TopBar({
         title={sign_in_button_text}
         onPress={onBack}
         disabled={isFistScreen}
-        hidden={screenStyles?.is_bar_login_button_hidden}
+        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
       />
       <Button
         styles={rightButtonContainer}
@@ -119,7 +119,7 @@ export default function TopBar({
         title={isLastScreen ? close_button_text : next_button_text}
         onPress={isLastScreen ? onClose : onNext}
         disabled={false}
-        hidden={screenStyles?.is_bar_next_button_hidden}
+        hidden={screenStyles?.is_bar_next_button_hidden === "1"}
       />
     </View>
   );

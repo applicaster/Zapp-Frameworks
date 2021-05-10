@@ -12,7 +12,7 @@ const Button = ({
   textStyle,
 }) => {
   let touchStyles = styles;
-  if (hidden || disabled) {
+  if (hidden) {
     touchStyles = {
       ...touchStyles,
       backgroundColor: "transparent",
