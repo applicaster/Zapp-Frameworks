@@ -1282,6 +1282,23 @@ function createManifest({ version, platform }) {
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
+    general: {
+      fields: [
+        {
+          key: "present_full_screen",
+          type: "switch",
+          initial_value: true,
+          hidden: true,
+        },
+        {
+          type: "switch",
+          key: "show_hook_once",
+          tooltip_text:
+            "Define if hook should be presented on time or each time screen will open",
+          initial_value: false,
+        },
+      ],
+    },
   };
 }
 module.exports = createManifest;

@@ -53,7 +53,7 @@ export const isAuthenticationRequired = ({ payload }) => {
       requires_authentication: requires_authentication,
     },
   });
-  return requires_authentication;
+  return requires_authentication || payload?.type;
 };
 
 export const inPlayerAssetId = ({ payload, configuration }) => {
