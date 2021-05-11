@@ -1103,6 +1103,16 @@ function createManifest({ version, platform }) {
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
+    general: {
+      fields: [
+        {
+          key: "present_full_screen",
+          type: "switch",
+          initial_value: true,
+          hidden: true,
+        },
+      ],
+    },
   };
 }
 module.exports = createManifest;
