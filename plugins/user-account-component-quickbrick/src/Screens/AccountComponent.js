@@ -8,7 +8,6 @@ import {
   Platform,
   Image,
 } from "react-native";
-
 import { connectToStore } from "@applicaster/zapp-react-native-redux";
 import { getFromLocalStorage, isItemInStorage } from "../Utils";
 import Button from "../Components/Button";
@@ -25,25 +24,7 @@ const isPad = isMobile && aspectRatio < 1.6;
 const storeConnector = connectToStore((state) => {
   const loginPlugin = state.plugins.find(({ type }) => type === "login");
 
-  const values = Object.values(state.rivers);
-  // eslint-disable-next-line array-callback-return,consistent-return
-
-  const userAccountPlugin = values.find((item) => {
-    if (item && item.type) {
-      return item.type === "quick-brick-user-account";
-    }
-  });
-  const plugin = values.find((item) => {
-    if (item && item.type) {
-      console.log({ item });
-      if (userAccountPlugin?.general?.custom_screen_id?.length > 0) {
-        return item.id === userAccountPlugin?.general?.custom_screen_id;
-      }
-
-      return item.type === loginPlugin.identifier;
-    }
-  });
-  return { plugin };
+  return { loginPlugin: loginPlugin, rivers: state.rivers };
 });
 
 type Props = {
@@ -72,7 +53,14 @@ type Props = {
 };
 
 function AccountComponent(props: Props) {
-  const { plugin, screenData = {}, navigator, focused, parentFocus } = props;
+  const {
+    screenData = {},
+    navigator,
+    focused,
+    parentFocus,
+    screenId,
+    rivers,
+  } = props;
 
   const {
     general: {
@@ -96,6 +84,29 @@ function AccountComponent(props: Props) {
   const [authProviderItem, setAuthProviderItem] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [loading, setIsLoading] = useState(false);
+  const values = Object.values(rivers);
+
+  // eslint-disable-next-line array-callback-return,consistent-return
+  const userAccountPlugin = values.find((item) => {
+    if (item && item.type) {
+      return item.id === screenId;
+    }
+  });
+
+  let plugin = values.find((item) => {
+    return (
+      item &&
+      item.type &&
+      userAccountPlugin?.general?.custom_screen_id?.length > 0 &&
+      item.id === userAccountPlugin?.general?.custom_screen_id
+    );
+  });
+
+  if (!plugin) {
+    plugin = values.find((item) => {
+      return item.type === props?.loginPlugin?.identifier;
+    });
+  }
 
   useEffect(() => {
     setIsLoading(true);
