@@ -93,8 +93,8 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "dependency_version": "7.0.0",
-  "manifest_version": "7.0.0",
+  "dependency_version": "7.1.0",
+  "manifest_version": "7.1.0",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -495,5 +495,21 @@
   },
   "targets": [
     "mobile"
-  ]
+  ],
+  "general": {
+    "fields": [
+      {
+        "key": "present_full_screen",
+        "type": "switch",
+        "initial_value": true,
+        "hidden": true
+      },
+      {
+        "type": "switch",
+        "key": "show_hook_once",
+        "tooltip_text": "Define if hook should be presented on time or each time screen will open",
+        "initial_value": false
+      }
+    ]
+  }
 }
