@@ -117,8 +117,8 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "dependency_version": "0.0.12",
-  "manifest_version": "0.0.12",
+  "dependency_version": "0.0.13",
+  "manifest_version": "0.0.13",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -766,5 +766,15 @@
   },
   "targets": [
     "tv"
-  ]
+  ],
+  "general": {
+    "fields": [
+      {
+        "key": "present_full_screen",
+        "type": "switch",
+        "initial_value": true,
+        "hidden": true
+      }
+    ]
+  }
 }
