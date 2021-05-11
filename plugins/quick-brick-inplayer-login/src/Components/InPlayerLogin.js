@@ -12,6 +12,7 @@ import { getLocalizations } from "../Utils/Localizations";
 import {
   updatePresentedInfo,
   screenShouldBePresented,
+  removePresentedInfo,
 } from "../Utils/PresentOnce";
 import {
   localStorageGet,
@@ -80,7 +81,6 @@ const InPlayerLogin = (props) => {
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
   const payloadIsScreen = payload?.type;
-
 
   const {
     configuration: {
@@ -181,6 +181,8 @@ const InPlayerLogin = (props) => {
       const presentScreen = await screenShouldBePresented();
       if (presentScreen === false) {
         shouldBeSkipped = true;
+      } else {
+        await removePresentedInfo();
       }
     }
 
