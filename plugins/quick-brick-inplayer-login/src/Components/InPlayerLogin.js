@@ -10,12 +10,18 @@ import * as InPlayerService from "../Services/inPlayerService";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../Utils/Localizations";
 import {
+  updatePresentedInfo,
+  screenShouldBePresented,
+  removePresentedInfo,
+} from "../Utils/PresentOnce";
+import {
   localStorageGet,
   localStorageSet,
   localStorageRemove,
   localStorageSetUserAccount,
   localStorageRemoveUserAccount,
 } from "../Services/LocalStorageService";
+
 import {
   inPlayerAssetId,
   isAuthenticationRequired,
@@ -68,10 +74,13 @@ const InPlayerLogin = (props) => {
 
   const localizations = getRiversProp("localizations", rivers, screenId);
   const styles = getRiversProp("styles", rivers, screenId);
+  const general = getRiversProp("general", rivers, screenId);
 
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
 
   const screenLocalizations = getLocalizations(localizations);
+  const show_hook_once = general?.show_hook_once || false;
+  const payloadIsScreen = payload?.type;
 
   const {
     configuration: {
@@ -165,6 +174,28 @@ const InPlayerLogin = (props) => {
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
+    let shouldBeSkipped = payload?.extensions?.skip_hook;
+    console.log({ shouldBeSkipped, payload });
+
+    if (show_hook_once) {
+      const presentScreen = await screenShouldBePresented();
+      if (presentScreen === false) {
+        shouldBeSkipped = true;
+      } else {
+        await removePresentedInfo();
+      }
+    }
+
+    if (shouldBeSkipped) {
+      logger.debug({
+        message:
+          "InPlayer plugin invocation, finishing hook with: success. Hook should be scipped",
+        data: { should_be_skipped: shouldBeSkipped },
+      });
+      accountFlowCallback({ success: true });
+      return;
+    }
+
     if (payload) {
       const authenticationRequired = isAuthenticationRequired({ payload });
       const assetId = inPlayerAssetId({
@@ -224,6 +255,9 @@ const InPlayerLogin = (props) => {
 
   const accountFlowCallback = useCallback(
     async ({ success }) => {
+      if (show_hook_once) {
+        updatePresentedInfo();
+      }
       let eventMessage = `Account Flow completion: success ${success}, hook_type: ${hookType}`;
 
       const event = logger
@@ -235,6 +269,7 @@ const InPlayerLogin = (props) => {
         const token = await localStorageGet(localStorageTokenKey);
         event.addData({ token });
       }
+      console.log({ hookType });
       if (hookType === HookTypeData.USER_ACCOUNT) {
         event
           .setMessage(`${eventMessage}, plugin finished task: go back`)
@@ -522,9 +557,12 @@ const InPlayerLogin = (props) => {
   function onAccountError({ title, message, type = "warn" }) {
     showAlertToUser({ title, message, type });
   }
-
   function onAccountHandleBackButton() {
-    accountFlowCallback({ success: false });
+    if (payloadIsScreen) {
+      accountFlowCallback({ success: true });
+    } else {
+      accountFlowCallback({ success: false });
+    }
   }
 
   function renderAccount() {
@@ -535,7 +573,7 @@ const InPlayerLogin = (props) => {
         <AccountComponents.AccountFlow
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
-          backButton={!isHomeScreen(navigator)}
+          backButton={!isHomeScreen(navigator) || payloadIsScreen}
           screenStyles={screenStyles}
           screenLocalizations={screenLocalizations}
           onLogin={onLogin}
