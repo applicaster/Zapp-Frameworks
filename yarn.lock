@@ -1603,18 +1603,6 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@inplayer-org/inplayer.js@3.11.0":
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/@inplayer-org/inplayer.js/-/inplayer.js-3.11.0.tgz#657eda29f933f7b3b68c04b98a1dc091b54aea2d"
-  integrity sha512-ZLC6YgxaIuywJkW9CP1lLgYl8y+cf2UQ+nC87solJ+kMHSBc7UGaJCzqEkoeKQO9o8iPkKy6P6Su79LzCObmCg==
-  dependencies:
-    aws-iot-device-sdk "^2.2.6"
-    axios "^0.19.2"
-    core-js "^3.8.2"
-    fingerprintjs2 "^2.1.2"
-    lodash "^4.17.20"
-    qs "^6.9.4"
-
 "@inplayer-org/inplayer.js@3.11.1":
   version "3.11.1"
   resolved "https://registry.yarnpkg.com/@inplayer-org/inplayer.js/-/inplayer.js-3.11.1.tgz#ac42728af305800bf601500c2838d5b98cc62000"
