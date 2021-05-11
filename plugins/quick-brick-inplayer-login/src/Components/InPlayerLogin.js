@@ -79,9 +79,10 @@ const InPlayerLogin = (props) => {
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
 
   const screenLocalizations = getLocalizations(localizations);
+  // We use the hack to able complete login without fail,
+  // this logic needed to provide login on Home screen.
+  // When Login present only time, remove it when we will have better solution
   const show_hook_once = general?.show_hook_once || false;
-  const payloadIsScreen = payload?.type;
-
   const {
     configuration: {
       in_player_client_id: clientId,
@@ -175,7 +176,6 @@ const InPlayerLogin = (props) => {
       data: { configuration: props?.configuration },
     });
     let shouldBeSkipped = payload?.extensions?.skip_hook;
-    console.log({ shouldBeSkipped, payload });
 
     if (show_hook_once) {
       const presentScreen = await screenShouldBePresented();
@@ -269,7 +269,7 @@ const InPlayerLogin = (props) => {
         const token = await localStorageGet(localStorageTokenKey);
         event.addData({ token });
       }
-      console.log({ hookType });
+
       if (hookType === HookTypeData.USER_ACCOUNT) {
         event
           .setMessage(`${eventMessage}, plugin finished task: go back`)
@@ -558,7 +558,7 @@ const InPlayerLogin = (props) => {
     showAlertToUser({ title, message, type });
   }
   function onAccountHandleBackButton() {
-    if (payloadIsScreen) {
+    if (show_hook_once) {
       accountFlowCallback({ success: true });
     } else {
       accountFlowCallback({ success: false });
@@ -573,7 +573,7 @@ const InPlayerLogin = (props) => {
         <AccountComponents.AccountFlow
           setParentLockWasPresented={setParentLockWasPresented}
           shouldShowParentLock={showParentLock}
-          backButton={!isHomeScreen(navigator) || payloadIsScreen}
+          backButton={!isHomeScreen(navigator) || show_hook_once}
           screenStyles={screenStyles}
           screenLocalizations={screenLocalizations}
           onLogin={onLogin}
