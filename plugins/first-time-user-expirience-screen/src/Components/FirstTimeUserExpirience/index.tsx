@@ -216,7 +216,7 @@ export default function FirstTimeUserExpirience(props) {
     );
   }
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: screenStyles?.background_color,
@@ -250,6 +250,6 @@ export default function FirstTimeUserExpirience(props) {
           size={"large"}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }
