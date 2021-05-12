@@ -1,5 +1,6 @@
 package com.applicaster.analytics.gemius
 
+import androidx.annotation.CallSuper
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
@@ -104,6 +105,15 @@ class GemiusAgent : BaseAnalyticsAgent() {
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.PAUSE,
+                    EventProgramData())
+        }
+
+        override fun onResume(params: TreeMap<String, Any>?) {
+            super.onResume(params)
+            player.programEvent(
+                    getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.PLAY,
                     EventProgramData())
         }
 
@@ -292,6 +302,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                 "_SPI",
                 "_SCTE",
                 "st",
+                "_ST",
                 "tv",
                 "se",
                 "URL_alias")
