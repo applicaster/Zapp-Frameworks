@@ -3,7 +3,8 @@ import { View } from "react-native";
 import Button from "../Buttons/Button";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 export default function TopBar({
   screenStyles,
   screenLocalizations,
@@ -15,6 +16,7 @@ export default function TopBar({
   isFistScreen = false,
 }) {
   const insets = useSafeAreaInsets();
+  const dimensions = useSafeAreaFrame();
 
   const {
     back_button_text,
@@ -66,6 +68,9 @@ export default function TopBar({
   const buttonContainerStyle = {
     backgroundColor: screenStyles?.bottom_bar_background_color,
     height: insets.bottom,
+    position: "absolute",
+    bottom: 0,
+    width: dimensions.width,
   };
 
   const leftButtonContainer = {
