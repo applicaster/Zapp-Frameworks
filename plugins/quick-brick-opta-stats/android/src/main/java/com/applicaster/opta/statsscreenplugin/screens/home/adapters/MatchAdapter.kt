@@ -12,6 +12,7 @@ import com.applicaster.opta.statsscreenplugin.data.model.MatchModel
 import com.applicaster.opta.statsscreenplugin.utils.ModelUtils
 import com.applicaster.opta.statsscreenplugin.utils.UrlType
 import com.applicaster.util.AppContext
+import com.applicaster.util.AppData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_all_matches.view.*
 import kotlinx.android.synthetic.main.item_match.view.*
@@ -197,7 +198,7 @@ class AllMatchesViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val resizeWidth = context.resources.displayMetrics.widthPixels - (density * 20)
 
         Picasso.get()
-                .load(ModelUtils.getImageUrl(UrlType.Partidos, CustomApplication.getDefaultDeviceLocale().language))
+                .load(ModelUtils.getImageUrl(UrlType.Partidos, AppData.getLocale().language))
                 .resize(resizeWidth.toInt(), resizeHeight)
                 .into(ivAllMatches)
 
