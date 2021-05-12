@@ -14,7 +14,8 @@ public class NetworkRequestsManager {
     fileprivate static var instance = NetworkRequestsManager()
     lazy var logger = Logger.getLogger(for: NetworkRequestsManagerLogs.subsystem)
     var pendingRequests: [String: [String: Any]] = [:]
-
+    private let semaphore = DispatchSemaphore(value: 1)
+    
     struct Params {
         static let request = "request"
         static let response = "response"
@@ -27,6 +28,7 @@ public class NetworkRequestsManager {
         Sniffer.ignore(extensions: ignoredExtensions)
         Sniffer.ignore(domains: ignoreDomains)
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
+            instance.semaphore.wait()
             switch logType {
             case .request:
                 instance.pendingRequests[url.absoluteString] = content
@@ -49,6 +51,7 @@ public class NetworkRequestsManager {
                                                    Params.statusCode: statusCode,
                                                    Params.url: urlString])
             }
+            instance.semaphore.signal()
         }
         Sniffer.start()
     }
