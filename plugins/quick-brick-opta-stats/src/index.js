@@ -51,7 +51,9 @@ export default NativeScreen = ({ screenData }: Props) => {
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
 
-  if(!screenData['url']) {
+  const { url } = screenData
+
+  if(!url) {
     // show home screen (url is always null for now)
     return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
   }
@@ -104,7 +106,7 @@ export default NativeScreen = ({ screenData }: Props) => {
       // todo: add params
 
       try {
-        const res = await method({});
+        const res = await method({url});
         logger.info(`Received response from native method ${methodName}`, res);
         onDismiss();
       } catch (error) {
