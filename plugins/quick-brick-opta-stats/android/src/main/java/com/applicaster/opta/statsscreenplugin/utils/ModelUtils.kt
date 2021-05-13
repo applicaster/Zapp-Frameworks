@@ -2,7 +2,7 @@ package com.applicaster.opta.statsscreenplugin.utils
 
 import android.content.Context
 import android.util.Log
-import com.applicaster.app.CustomApplication
+import com.applicaster.lesscodeutils.date.DateUtils.Companion.getCurrentDate
 import com.applicaster.opta.statsscreenplugin.R
 import com.applicaster.opta.statsscreenplugin.data.model.AllMatchesModel
 import com.applicaster.opta.statsscreenplugin.data.model.GroupModel
@@ -10,8 +10,8 @@ import com.applicaster.opta.statsscreenplugin.data.model.MatchModel
 import com.applicaster.opta.statsscreenplugin.data.model.TeamModel
 import com.applicaster.opta.statsscreenplugin.plugin.PluginDataRepository
 import com.applicaster.opta.statsscreenplugin.utils.Constants.UTC_DATE_FORMAT
-import com.applicaster.lesscodeutils.date.DateUtils.Companion.getCurrentDate
 import com.applicaster.opta.statsscreenplugin.utils.UrlType.*
+import com.applicaster.util.AppData
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -150,7 +150,7 @@ class ModelUtils {
         }
 
         fun getLocalization(): String {
-            return when (CustomApplication.getDefaultDeviceLocale().language) {
+            return when (AppData.getLocale().language) {
                 "en" -> "en-en"
                 "es" -> "es-es"
                 "pt" -> "pt-br"
