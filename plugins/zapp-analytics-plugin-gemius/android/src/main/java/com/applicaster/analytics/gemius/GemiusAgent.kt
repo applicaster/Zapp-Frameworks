@@ -29,6 +29,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
         override fun onStart(params: Map<String, Any>?) {
             super.onStart(params)
+
             val pdata = ProgramData()
             pdata.name = getName()
             pdata.duration = duration?.toInt()
@@ -108,7 +109,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     EventProgramData())
         }
 
-        override fun onResume(params: TreeMap<String, Any>?) {
+        override fun onResume(params: Map<String, Any>?) {
             super.onResume(params)
             player.programEvent(
                     getId(),
