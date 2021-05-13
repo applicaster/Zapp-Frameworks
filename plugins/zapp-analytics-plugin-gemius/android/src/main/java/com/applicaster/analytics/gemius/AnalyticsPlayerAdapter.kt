@@ -46,7 +46,7 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
-    open fun onResume(params: TreeMap<String, Any>?) {
+    open fun onResume(params: Map<String, Any>?) {
         updatePosition(params)
     }
 
