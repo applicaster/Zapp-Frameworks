@@ -32,7 +32,8 @@ public class UrlSchemeHandler {
                                   rootController: rootViewController)
         case .plugin:
             // This section is experimental, not in use. If not needed in future, please remove it, with handlePluginURLScheme: func
-            retValue = handlePluginURLScheme(url: url)
+            retValue = handlePluginURLScheme(url: url,
+                                             rootController: rootViewController)
         case .settings:
             retValue = handleSettingsChanges(url: url,
                                              rootController: rootViewController)
@@ -51,7 +52,7 @@ public class UrlSchemeHandler {
             result[item.name] = item.value
         }
     }
-    
+
     class func getPathComponents(url: URL) -> [String] {
         let pathComponents = url.pathComponents.dropFirst()
         guard pathComponents.count > 0 else { return [] }
