@@ -101,10 +101,11 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
-const analyticsTracker = new AnalyticsTracker();
 
 export default class THEOPlayer extends Component<Props, State> {
   _root: THEOplayerView;
+
+  analyticsTracker = new AnalyticsTracker();
 
   constructor(props) {
     super(props);
@@ -146,11 +147,11 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   componentDidMount() {
-    analyticsTracker.initialState(this.state, this.props.entry)
+    this.analyticsTracker.initialState(this.state, this.props.entry)
   }
 
   componentDidUpdate() {
-    analyticsTracker.handleChange(this.state);
+    this.analyticsTracker.handleChange(this.state);
 
     if (this.state.playerEnded) {
       this.handleEnded();

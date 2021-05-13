@@ -108,8 +108,26 @@ export class AnalyticsTracker {
   }
 
   initialState(state, entry) {
-    this.state = state,
-      this.entry = entry
+    this.state = state;
+    this.entry = entry;
+    this.playerEvents = {
+      playerCreated: false,
+      entryLoad: false,
+      playerLoadedVideo: false,
+      adBreakBegin: false,
+      adBreakEnd: false,
+      adBegin: false,
+      adEnd: false,
+      playing: false,
+      resume: false,
+      paused: false,
+      seek: false,
+      seekEnd: false,
+      adError: false,
+      playerEnded: false,
+      playerClosed: false,
+      playerBuffering: false
+    };
   }
 
   getAnalyticPayload(entry, state, event) {
