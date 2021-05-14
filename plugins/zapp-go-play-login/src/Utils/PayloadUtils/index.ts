@@ -7,7 +7,7 @@ import {
 
 export const logger = createLogger({
   subsystem: BaseSubsystem,
-  category: BaseCategories.PAYLOAD_HELPER,
+  category: "",
 });
 
 export const isAuthenticationRequired = (payload: ZappEntry) => {

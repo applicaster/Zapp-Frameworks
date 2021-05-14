@@ -11,7 +11,7 @@ const {
   user_first_name,
   user_last_name,
   selligent_id,
-  id_token
+  id_token,
 } = LoginDataKeys;
 
 import {
@@ -97,7 +97,7 @@ export async function syncSessionWithLocalStorage(params: LoginData) {
     await sessionStorageSet(user_last_name, params.user_last_name);
     await sessionStorageSet(user_email, params.user_email);
     await sessionStorageSet(selligent_id, params.selligent_id);
-    await sessionStorageSet(, params.id_token);
+    await sessionStorageSet(id_token, params.id_token);
     return true;
   } catch (error) {
     console.log({ error });
