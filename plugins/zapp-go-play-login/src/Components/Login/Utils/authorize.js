@@ -1,12 +1,9 @@
 // https://github.com/aws-amplify/amplify-js/blob/master/packages/amazon-cognito-identity-js/src/Client.js
 // https://medium.com/tensult/how-to-refresh-aws-cognito-user-pool-tokens-d0e025cedd52
-export async function refresh(
-  refreshToken,
-  region = "eu-west-1",
-  clientId = "3d2nkc5h8m38p7gdg91tlghhs4"
-) {
-  if (!refreshToken || region || clientId) {
-    throw Error("Can not refresh Token no parameters");
+export async function refresh(refreshToken, clientId, region = "eu-west-1") {
+  console.log({ refreshToken, clientId, region });
+  if (!refreshToken || !region || !clientId) {
+    throw Error("Can not refresh Token, no parameters");
   }
   return fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
     headers: {

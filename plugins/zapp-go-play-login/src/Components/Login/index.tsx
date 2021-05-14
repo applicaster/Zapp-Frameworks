@@ -44,7 +44,7 @@ const Login = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const {
-    configuration: { loginURL },
+    configuration: { loginURL, clientId, region },
   } = props;
 
   const mounted = useRef(true);
@@ -65,44 +65,70 @@ const Login = (props) => {
   async function setupEnvironment() {
     try {
       const userNeedsToLogin = await isLoginRequired();
-      console.log({ userNeedsToLogin });
+
       if (userNeedsToLogin) {
+        logger.debug({
+          message: "setupEnvironment: Presenting login screen",
+          data: { userNeedsToLogin },
+        });
         setLoading(false);
       } else {
-        const success = await refreshToken();
-        if (success) {
-          // mounted.current &&
-          //   callback &&
-          //   callback({ success: true, error: null, payload });
-        }
+        console.log({ clientId, region });
+        const success = await refreshToken(clientId, region);
+        logger.debug({
+          message: `setupEnvironment: Hool finished, refresh Token completed: ${success}`,
+          data: { userNeedsToLogin, success },
+        });
+        mounted.current &&
+          callback &&
+          callback({ success: true, error: null, payload });
       }
     } catch (error) {
       setLoading(false);
-      console.log({ error });
+      logger.error({
+        message: "setupEnvironment: Error",
+        data: { error },
+      });
+      showAlert(
+        screenLocalizations?.general_error_title,
+        screenLocalizations?.general_error_message
+      );
     }
   }
 
   async function onMessage(event) {
-    const data = event?.nativeEvent?.data;
-    console.log({ data: event.nativeEvent.data });
-    const result = await saveLoginDataToLocalStorage(data);
-
-    //TODO: Uncommit
-    // mounted.current &&
-    //   callback &&
-    //   callback({ success: true, error: null, payload });
+    try {
+      const data = event?.nativeEvent?.data;
+      console.log({ data: event.nativeEvent.data });
+      logger.debug({
+        message: `onMessage: Login screen send event`,
+        data: { data },
+      });
+      await saveLoginDataToLocalStorage(data);
+      mounted.current &&
+        callback &&
+        callback({ success: true, error: null, payload });
+    } catch (error) {
+      logger.error({
+        message: `onMessage: error`,
+        data: { error },
+      });
+      showAlert(
+        screenLocalizations?.general_error_title,
+        screenLocalizations?.general_error_message
+      );
+    }
   }
-  // {renderScreen()}
-  //       {loading && <AccountComponents.LoadingScreen />}
+
   function renderFlow() {
-    return (
+    return loading === false ? (
       <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: screenStyles?.background_color,
         }}
       >
-        {loading == true && (
+        {loading === false && (
           <WebView
             source={{
               uri: loginURL,
@@ -111,7 +137,7 @@ const Login = (props) => {
           />
         )}
       </SafeAreaView>
-    );
+    ) : null;
   }
 
   return renderFlow();

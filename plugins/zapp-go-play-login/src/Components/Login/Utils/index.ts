@@ -55,12 +55,20 @@ export function isTokenExpired(token: number): boolean {
   return moment(token).isSameOrBefore();
 }
 
-export async function refreshToken(): Promise<boolean> {
+export async function refreshToken(clientId, region): Promise<boolean> {
   try {
     const loginData: LoginData = await localStorageGetLoginData();
 
     if (isTokenExpired(loginData.expires_in)) {
-      const refreshResult = await refresh(loginData.refresh_token);
+      logger.debug({
+        message: `refreshToken: before refresh`,
+        data: { login_data: loginData, is_token_expired: isTokenExpired },
+      });
+      const refreshResult = await refresh(
+        loginData.refresh_token,
+        clientId,
+        region
+      );
       loginData.access_token = refreshResult.access_token;
       loginData.id_token = refreshResult.id_token;
       loginData.expires_in = moment().unix() + refreshResult.expires_in;
@@ -68,10 +76,17 @@ export async function refreshToken(): Promise<boolean> {
       await localStorageSetLoginData(loginData);
       await syncSessionWithLocalStorage(loginData);
 
-      console.log({ refreshResult });
+      logger.debug({
+        message: `refreshToken: completed`,
+        data: { refresh_result: refreshResult, login_data: loginData },
+      });
     }
     return true;
   } catch (error) {
+    logger.warning({
+      message: `refreshToken: error`,
+      data: { error },
+    });
     throw error;
   }
 }
@@ -83,8 +98,11 @@ export async function saveLoginDataToSessionStorage(): Promise<boolean> {
     await syncSessionWithLocalStorage(loginData);
     return true;
   } catch (error) {
-    console.log({ error });
-    return false;
+    logger.warning({
+      message: `saveLoginDataToSessionStorage: error`,
+      data: { error },
+    });
+    throw error;
   }
 }
 export async function syncSessionWithLocalStorage(params: LoginData) {
@@ -100,79 +118,49 @@ export async function syncSessionWithLocalStorage(params: LoginData) {
     await sessionStorageSet(id_token, params.id_token);
     return true;
   } catch (error) {
-    console.log({ error });
-    return false;
+    logger.warning({
+      message: `syncSessionWithLocalStorage: error`,
+      data: { error },
+    });
+    throw error;
   }
 }
 
 export async function isLoginRequired(): Promise<boolean> {
   try {
     const loginData = await localStorageGetLoginData();
-    const title = moment
-      .unix(loginData.expires_in)
-      .format("dddd, MMMM Do - hh:mm");
-    console.log({
-      title,
-      isSameOrAfter: moment(loginData.expires_in).isSameOrBefore(),
+    logger.info({
+      message: `isLoginRequired: ${loginData && !loginData.access_token}`,
+      data: {
+        login_data: loginData,
+        is_login_required: loginData && !loginData.access_token,
+      },
     });
-    if (!loginData.access_token) {
-      return true;
-    }
-
-    return false;
+    return loginData && !loginData.access_token;
   } catch (error) {
-    return true;
+    logger.warning({
+      message: `isLoginRequired: error`,
+      data: { error },
+    });
+    throw error;
   }
 }
 export async function saveLoginDataToLocalStorage(jsonString: string) {
   try {
     const parsedData: LoginData = JSON.parse(jsonString);
     if (parsedData) {
-      console.log({ parsedData });
-
       await localStorageSetLoginData(parsedData);
-
       await syncSessionWithLocalStorage(parsedData);
     }
+    logger.info({
+      message: `saveLoginDataToLocalStorage: completed`,
+      data: { parsedData },
+    });
   } catch (error) {
-    console.log({ error });
+    logger.warning({
+      message: `saveLoginDataToLocalStorage: error`,
+      data: { error },
+    });
+    throw error;
   }
 }
-
-// export async function updatePresentedInfo() {
-//   const currentVersionName = await getBuildNumber();
-//   logger.debug({
-//     message: `Save data to local storage: ${currentVersionName}`,
-//     data: {
-//       current_version_name: currentVersionName,
-//     },
-//   });
-//   return await localStorageSet(currentVersionName);
-// }
-
-// export async function removePresentedInfo() {
-//   logger.debug({
-//     message: `Remove data from local storage`,
-//   });
-//   await localStorageRemove();
-// }
-
-// export async function screenShouldBePresented(
-//   present_on_each_new_version = false
-// ): Promise<boolean> {
-//   const currentVersionName = await getBuildNumber();
-//   const storedVersionName = await localStorageGet();
-//   const result = present_on_each_new_version
-//     ? currentVersionName !== storedVersionName
-//     : R.isNil(storedVersionName);
-
-//   logger.debug({
-//     message: `Screen should be presented: ${result}, currentVersionName:${currentVersionName}, storedVersionName:${storedVersionName}`,
-//     data: {
-//       screen_should_be_presented: result,
-//       current_version_name: currentVersionName,
-//       stored_version_name: storedVersionName,
-//     },
-//   });
-//   return result;
-// }
