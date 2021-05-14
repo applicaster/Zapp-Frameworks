@@ -1,7 +1,7 @@
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import { LoginData, LoginDataKeys } from "../../models/Response";
 
-const localStorageNamespace = "zapp-go-play-login";
+const localStorageNamespace = "cognito-webview-login";
 const loginDataKey = "login-data";
 
 export async function localStorageSet(key: string, value: string) {

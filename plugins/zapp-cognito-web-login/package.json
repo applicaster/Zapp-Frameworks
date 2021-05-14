@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "author": "Zapp Team",
   "license": "ISC",
-  "description": "Go Play Login",
+  "description": "Cognito Web View",
   "main": "lib/index.js",
   "types": "index.d.ts",
   "dependencies": {

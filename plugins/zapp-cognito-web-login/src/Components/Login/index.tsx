@@ -73,7 +73,6 @@ const Login = (props) => {
         });
         setLoading(false);
       } else {
-        console.log({ clientId, region });
         const success = await refreshToken(clientId, region);
         logger.debug({
           message: `setupEnvironment: Hool finished, refresh Token completed: ${success}`,
@@ -99,7 +98,6 @@ const Login = (props) => {
   async function onMessage(event) {
     try {
       const data = event?.nativeEvent?.data;
-      console.log({ data: event.nativeEvent.data });
       logger.debug({
         message: `onMessage: Login screen send event`,
         data: { data },

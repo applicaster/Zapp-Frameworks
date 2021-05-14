@@ -1,6 +1,6 @@
 import XRayLogger from "@applicaster/quick-brick-xray";
 
-export const BaseSubsystem = "plugins/zapp-go-play-login";
+export const BaseSubsystem = "plugins/cognito-webview-login";
 export const BaseCategories = {
   GENERAL: "general",
 };

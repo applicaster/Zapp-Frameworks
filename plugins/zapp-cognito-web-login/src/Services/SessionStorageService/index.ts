@@ -1,6 +1,6 @@
 import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 
-const sessionStorageNamespace = "zapp-go-play-login";
+const sessionStorageNamespace = "cognito-webview-login";
 
 export async function sessionStorageSet(key: string, value: string) {
   return await sessionStorage.setItem(key, value, sessionStorageNamespace);
