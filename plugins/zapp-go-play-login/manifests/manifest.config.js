@@ -2,15 +2,15 @@ const R = require("ramda");
 const Localizations = require("./localizations.config");
 
 const baseManifest = {
-  dependency_name: "@applicaster/zapp-go-play-login",
+  dependency_name: "@applicaster/cognito-webview-login",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "Go Play Login",
-  description: "Go Play Login",
+  name: "Cognito Web Login",
+  description: "Cognito Web Login",
   type: "login",
   react_native: true,
   screen: true,
-  identifier: "zapp-go-play-login",
+  identifier: "cognito-webview-login",
   ui_builder_support: true,
   whitelisted_account_ids: [""],
   deprecated_since_zapp_sdk: "",
