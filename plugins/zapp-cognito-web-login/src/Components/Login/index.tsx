@@ -105,6 +105,12 @@ const Login = (props) => {
         data: { data },
       });
       await saveLoginDataToLocalStorage(data);
+      const success = await refreshToken(clientId, region);
+
+      logger.debug({
+        message: `onMessage: Login screen completed:${success}`,
+        data: { data },
+      });
       mounted.current &&
         callback &&
         callback({ success: true, error: null, payload });
