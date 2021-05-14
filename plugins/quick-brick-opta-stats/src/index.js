@@ -10,6 +10,8 @@ import { styles, stylesError } from "./styles";
 
 import {requireNativeComponent} from 'react-native';
 
+import { schemeHandlerHooks } from "@applicaster/quick-brick-core/App/DeepLinking/URLSchemeHandler/SchemeHandlerHooks/.";
+
 const OptaStatsContainer = requireNativeComponent('OptaStatsContainer');
 
 /**
@@ -43,6 +45,46 @@ function renderError(message: string, onDismiss: () => void) {
   );
 }
 
+schemeHandlerHooks["copa_stats"] = async ({ query, url, onFinish }) => {
+  const packageName = DEFAULT.packageName;
+  const methodName = DEFAULT.methodName;
+  const screenPackage = NativeModules?.[packageName];
+  const method = screenPackage?.[methodName];
+
+  if (!packageName) {
+    logger.warn(`React package name is not set`);
+    onFinish();
+    return;
+  }
+
+  if (!methodName) {
+    logger.warn(`React method name is not set`);
+    onFinish();
+    return;
+  }
+
+  if (!screenPackage) {
+    logger.warn(`Package ${packageName} is not found`);
+    onFinish();
+    return;
+  }
+
+  if (!method) {
+    logger.warn(`Method ${methodName} is not found in the package ${packageName}`);
+    onFinish();
+    return;
+  };
+
+  try {
+    const res = await method({url});
+    logger.info(`Received response from native method ${methodName}`, res);
+    onFinish();
+  } catch (error) {
+    logger.error(`Method ${methodName} the package ${packageName} failed with error ${error}`);
+    onFinish();
+  }
+};
+
 export default NativeScreen = ({ screenData }: Props) => {
   const navigator = useNavigation();
   const generalData = screenData?.general;
@@ -51,7 +93,9 @@ export default NativeScreen = ({ screenData }: Props) => {
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
 
-  if(!screenData['url']) {
+  const { url } = screenData
+
+  if(!url) {
     // show home screen (url is always null for now)
     return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
   }
@@ -104,7 +148,7 @@ export default NativeScreen = ({ screenData }: Props) => {
       // todo: add params
 
       try {
-        const res = await method({});
+        const res = await method({url});
         logger.info(`Received response from native method ${methodName}`, res);
         onDismiss();
       } catch (error) {
