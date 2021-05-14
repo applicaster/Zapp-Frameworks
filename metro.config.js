@@ -5,7 +5,7 @@ const packages = [
   "zapp-react-native-theo-player",
   "zapp-cleeng-login",
   "zapp-cleeng-storefront",
-  "zapp-sbs-authentefication",
+  "zapp-go-play-login",
 ];
 
 const buildExtraNodeModules = (extraNodeModules, packageName) => {

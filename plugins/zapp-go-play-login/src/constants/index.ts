@@ -7,15 +7,3 @@ export const API = {
   purchaseItem: "subscription",
   restore: "restore",
 };
-
-// register,
-// subscriptions,
-// addSubscription,
-// restoreSubscriptions,
-// extendToken,
-// passwordReset,
-// submitConsent,
-// updateCustomerEmail,
-// getCustomer,
-// generateCustomerToken,
-// getFreeAccessToken

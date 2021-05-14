@@ -1,9 +1,9 @@
 const common = [
-  // Fields
+  // Error
   {
-    key: "fields_email_text",
-    label: "Email field placeholder",
-    initial_value: "E-mail",
+    key: "general_error_message",
+    label: "General error message",
+    initial_value: "Something went wrong. Please try again later",
   },
 ];
 

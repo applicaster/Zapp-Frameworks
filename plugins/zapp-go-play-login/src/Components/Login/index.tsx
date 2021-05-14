@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Platform, View } from "react-native";
-// https://github.com/testshallpass/react-native-dropdownalert#usage
-import DropdownAlert from "react-native-dropdownalert";
-import { isWebBasedPlatform } from "../../Utils/Platform";
 import { showAlert } from "../../Utils/Account";
-import AccountComponents from "@applicaster/applicaster-account-components";
-import * as R from "ramda";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../../Utils/Localizations";
-import { isAuthenticationRequired } from "../../Utils/PayloadUtils";
-import { getStyles, isHomeScreen } from "../../Utils/Customization";
-import { isHook } from "../../Utils/UserAccount";
+import { getStyles } from "../../Utils/Customization";
 import { getRiversProp } from "./Utils";
 import { WebView } from "react-native-webview";
-
+import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
+import {
+  saveLoginDataToLocalStorage,
+  isLoginRequired,
+  refreshToken,
+} from "./Utils";
 import {
   createLogger,
   BaseSubsystem,
@@ -34,12 +32,7 @@ const Login = (props) => {
   };
 
   const navigator = useNavigation();
-  const [parentLockWasPresented, setParentLockWasPresented] = useState(false);
-  const [idToken, setIdtoken] = useState(null);
-  const [hookType, setHookType] = useState(HookTypeData.UNDEFINED);
   const [loading, setLoading] = useState(true);
-  const [lastEmailUsed, setLastEmailUsed] = useState(null);
-  const [dropDownAlertRef, setDropDownAlertRef] = useState(null);
   const { callback, payload, rivers } = props;
   const screenId = navigator?.activeRiver?.id;
 
@@ -51,10 +44,9 @@ const Login = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const {
-    configuration: { publisherId, logout_completion_action = "go_back" },
+    configuration: { loginURL },
   } = props;
-  const showParentLock =
-    screenStyles?.import_parent_lock === "1" ? true : false;
+
   const mounted = useRef(true);
 
   useEffect(() => {
@@ -70,54 +62,55 @@ const Login = (props) => {
     };
   }, []);
 
-  async function setupEnvironment() {}
-
-  function renderAccount() {
-    return (
-      <View
-        style={{ flex: 1, backgroundColor: screenStyles?.background_color }}
-      ></View>
-    );
-  }
-
-  const renderUACFlow = () => {
-    return idToken ? null : renderAccount();
-  };
-
-  function renderScreen() {
-    switch (hookType) {
-      case HookTypeData.PLAYER_HOOK || HookTypeData.SCREEN_HOOK:
-        return renderAccount();
-      case HookTypeData.USER_ACCOUNT:
-        return renderUACFlow();
-      case HookTypeData.UNDEFINED:
-        return null;
+  async function setupEnvironment() {
+    try {
+      const userNeedsToLogin = await isLoginRequired();
+      console.log({ userNeedsToLogin });
+      if (userNeedsToLogin) {
+        setLoading(false);
+      } else {
+        const success = await refreshToken();
+        if (success) {
+          // mounted.current &&
+          //   callback &&
+          //   callback({ success: true, error: null, payload });
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log({ error });
     }
   }
 
+  async function onMessage(event) {
+    const data = event?.nativeEvent?.data;
+    console.log({ data: event.nativeEvent.data });
+    const result = await saveLoginDataToLocalStorage(data);
+
+    //TODO: Uncommit
+    // mounted.current &&
+    //   callback &&
+    //   callback({ success: true, error: null, payload });
+  }
   // {renderScreen()}
   //       {loading && <AccountComponents.LoadingScreen />}
   function renderFlow() {
     return (
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: screenStyles?.background_color,
         }}
       >
-        <WebView
-          source={{
-            uri: "https://github.com/react-native-webview/react-native-webview",
-          }}
-          onMessage={(event) => {
-            console.log({ data: event.nativeEvent.data });
-          }}
-        />
-
-        {!Platform.isTV && !isWebBasedPlatform && (
-          <DropdownAlert ref={(ref) => setDropDownAlertRef(ref)} />
+        {loading == true && (
+          <WebView
+            source={{
+              uri: loginURL,
+            }}
+            onMessage={onMessage}
+          />
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 
