@@ -58,7 +58,7 @@ export function isTokenExpired(token: number): boolean {
 export async function refreshToken(clientId, region): Promise<boolean> {
   try {
     const loginData: LoginData = await localStorageGetLoginData();
-
+    console.log({ loginData });
     if (isTokenExpired(loginData.expires_in)) {
       logger.debug({
         message: `refreshToken: before refresh`,
@@ -129,14 +129,25 @@ export async function syncSessionWithLocalStorage(params: LoginData) {
 export async function isLoginRequired(): Promise<boolean> {
   try {
     const loginData = await localStorageGetLoginData();
-    logger.info({
-      message: `isLoginRequired: ${loginData && !loginData.access_token}`,
-      data: {
-        login_data: loginData,
-        is_login_required: loginData && !loginData.access_token,
-      },
-    });
-    return loginData && !loginData.access_token;
+    if (loginData) {
+      const is_login_required = loginData?.access_token === false;
+      logger.info({
+        message: `isLoginRequired: ${is_login_required}`,
+        data: {
+          login_data: !!loginData,
+          is_login_required: !!is_login_required,
+        },
+      });
+      return is_login_required;
+    } else {
+      logger.info({
+        message: `isLoginRequired: no data in local storage`,
+        data: {
+          is_login_required: true,
+        },
+      });
+      return true;
+    }
   } catch (error) {
     logger.warning({
       message: `isLoginRequired: error`,
