@@ -16,7 +16,7 @@ import {
 } from "./Utils";
 import { getStyles } from "../../Utils/Customization";
 import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Components/River/ComponentsMap";
-import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { getLocalizations } from "../../Utils/Localizations";
 import { ScreenResolver } from "@applicaster/zapp-react-native-ui-components/Components/ScreenResolver";
 import { isTablet } from "@applicaster/zapp-react-native-utils/reactHooks";
@@ -216,7 +216,7 @@ export default function FirstTimeUserExpirience(props) {
       style={{
         flex: 1,
         backgroundColor: screenStyles?.background_color,
-        ...(isAndroidTablet && { paddingTop: 0 }),
+        ...(isAndroidTablet && { paddingTop: 0, paddingBottom: 24 }),
       }}
     >
       {data && renderScreen()}
