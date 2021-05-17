@@ -12,12 +12,16 @@ import android.os.Build
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.applicaster.identityservice.UUIDUtil
 import com.applicaster.plugin.xray.logadapters.APLoggerAdapter
 import com.applicaster.plugin.xray.logadapters.FLogAdapter
 import com.applicaster.plugin.xray.logadapters.PrinterAdapter
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.model.Settings
+import com.applicaster.plugin.xray.sinks.LogzSink
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.*
@@ -37,7 +41,6 @@ import com.facebook.debug.holder.NoopPrinter
 import com.facebook.debug.holder.PrinterHolder
 import com.google.gson.GsonBuilder
 import java.util.*
-import kotlin.collections.HashMap
 
 // Adapter plugin that configures APLogger to use X-Ray for logging
 class XRayPlugin : CrashlogPlugin {
@@ -54,6 +57,8 @@ class XRayPlugin : CrashlogPlugin {
         // public constants
         const val fileSinkFileName = "xray_log.txt"
         const val inMemorySinkName = "in_memory_sink"
+
+        const val logzSinkName = "logz_io_sink"
 
         const val pluginId = "xray_logging_plugin"
 
@@ -93,6 +98,7 @@ class XRayPlugin : CrashlogPlugin {
     }
 
     fun getEffectiveSettings(): Settings = Settings.merge(pluginSettings, localSettings)
+    fun observeEffectiveSettings() : LiveData<Settings> = effectiveSettingsObservable
 
     override fun activate(applicationContext: Application) {
 
@@ -203,19 +209,42 @@ class XRayPlugin : CrashlogPlugin {
         // add shortcut
         setupShortcut(true == settings.shortcutEnabled)
 
+        triggerTiming(settings)
+
+        triggerRemote(settings)
+
+        effectiveSettingsObservable.postValue(settings)
+    }
+
+    private fun triggerTiming(settings: Settings) {
         val timingSink = Core.get().getSink("timing")
-        if(true == settings.timingLogging) {
-            if(null == timingSink) {
+        if (true == settings.timingLogging) {
+            if (null == timingSink) {
                 Core.get().addSink("timing", TimingSink())
             }
-        }
-        else if(null != timingSink) {
+        } else if (null != timingSink) {
             Core.get().removeSink(timingSink)
             (timingSink as? TimingSink)?.close()
             TimingSink.file.delete()
         }
+    }
 
-        effectiveSettingsObservable.postValue(settings)
+    private fun triggerRemote(settings: Settings) {
+        val logzSink = Core.get().getSink(logzSinkName)
+        if (true == settings.logzToken?.isNotEmpty()) {
+            if (!APDebugUtil.getIsInDebugMode()) {
+                Toast.makeText(context, R.string.msg_remote_log_release, Toast.LENGTH_LONG).show()
+            } else {
+                if (null == logzSink) {
+                    Core.get().addSink(logzSinkName, LogzSink("pDqSekjZxUYbOBPmLeBVrXvULApiKrFt", UUIDUtil.getUUID()))
+                    APLogger.warn(TAG, "Logz.io sink was enabled")
+                    Toast.makeText(context, R.string.lbl_xray_remote_log, Toast.LENGTH_LONG).show()
+                }
+            }
+        } else if (null != logzSink) {
+            Core.get().removeSink(logzSink)
+            APLogger.info(TAG, "Logz.io sink was disabled")
+        }
     }
 
     private fun hookRNLogger(level: LogLevel?) {
