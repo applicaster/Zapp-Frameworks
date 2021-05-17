@@ -1,13 +1,13 @@
 export interface LoginData {
-  client_id: string;
-  access_token: string;
-  expires_in: number;
-  refresh_token: string;
-  user_email: string;
-  user_first_name: string;
-  user_last_name: string;
-  selligent_id: string;
-  id_token: string;
+  client_id?: string;
+  access_token?: string;
+  expires_in?: number;
+  refresh_token?: string;
+  user_email?: string;
+  user_first_name?: string;
+  user_last_name?: string;
+  selligent_id?: string;
+  id_token?: string;
 }
 
 export interface LoginDataRefresh {

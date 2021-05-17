@@ -8,9 +8,10 @@ import { getRiversProp } from "./Utils";
 import { WebView } from "react-native-webview";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
 import {
-  saveLoginDataToLocalStorage,
+  saveLoginDataToStorages,
   isLoginRequired,
   refreshToken,
+  removeDataFromStorages,
 } from "./Utils";
 import {
   createLogger,
@@ -50,15 +51,11 @@ const Login = (props) => {
   const mounted = useRef(true);
 
   useEffect(() => {
-    navigator.hideNavBar();
-    navigator.hideBottomBar();
     mounted.current = true;
 
     setupEnvironment();
     return () => {
       mounted.current = false;
-      navigator.showNavBar();
-      navigator.showBottomBar();
     };
   }, []);
 
@@ -75,12 +72,17 @@ const Login = (props) => {
       } else {
         const success = await refreshToken(clientId, region);
         logger.debug({
-          message: `setupEnvironment: Hool finished, refresh Token completed: ${success}`,
+          message: `setupEnvironment: Hook finished, refresh Token completed: ${success}`,
           data: { userNeedsToLogin, success },
         });
-        mounted.current &&
-          callback &&
-          callback({ success: true, error: null, payload });
+
+        if (callback) {
+          mounted.current &&
+            callback &&
+            callback({ success: true, error: null, payload });
+        } else {
+          setLoading(false);
+        }
       }
     } catch (error) {
       setLoading(false);
@@ -102,16 +104,20 @@ const Login = (props) => {
         message: `onMessage: Login screen send event`,
         data: { data },
       });
-      await saveLoginDataToLocalStorage(data);
-      const success = await refreshToken(clientId, region);
+      if (data?.action === "logout") {
+        await removeDataFromStorages();
+      } else {
+        await saveLoginDataToStorages(data);
+        const success = await refreshToken(clientId, region);
 
-      logger.debug({
-        message: `onMessage: Login screen completed:${success}`,
-        data: { data },
-      });
-      mounted.current &&
-        callback &&
-        callback({ success: true, error: null, payload });
+        logger.debug({
+          message: `onMessage: Login screen completed: ${success}`,
+          data: { data },
+        });
+        mounted.current &&
+          callback &&
+          callback({ success: true, error: null, payload });
+      }
     } catch (error) {
       logger.error({
         message: `onMessage: error`,

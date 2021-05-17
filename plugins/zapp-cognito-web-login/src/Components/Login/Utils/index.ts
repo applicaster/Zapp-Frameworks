@@ -15,12 +15,16 @@ const {
 } = LoginDataKeys;
 
 import {
-  localStorageSetLoginData,
-  localStorageGetLoginData,
-  localStorageRemoveLoginData,
+  localStorageGet,
+  localStorageSet,
+  localStorageRemove,
 } from "../../../Services/LocalStorageService";
 
-import { sessionStorageSet } from "../../../Services/SessionStorageService";
+import {
+  sessionStorageSet,
+  sessionStorageRemove,
+} from "../../../Services/SessionStorageService";
+
 const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
@@ -57,24 +61,24 @@ export function isTokenExpired(token: number): boolean {
 
 export async function refreshToken(clientId, region): Promise<boolean> {
   try {
-    const loginData: LoginData = await localStorageGetLoginData();
-    console.log({ loginData });
-    if (isTokenExpired(loginData.expires_in)) {
+    const expiresIn = await localStorageGet(expires_in);
+    const refreshToken = await localStorageGet(refresh_token);
+
+    const expired = isTokenExpired(expiresIn);
+    if (expired) {
       logger.debug({
         message: `refreshToken: before refresh`,
-        data: { login_data: loginData, is_token_expired: isTokenExpired },
+        data: { is_token_expired: expired },
       });
-      const refreshResult = await refresh(
-        loginData.refresh_token,
-        clientId,
-        region
-      );
-      loginData.access_token = refreshResult.access_token;
-      loginData.id_token = refreshResult.id_token;
-      loginData.expires_in = moment().unix() + refreshResult.expires_in;
+      const refreshResult = await refresh(refreshToken, clientId, region);
 
+      const loginData: LoginData = {
+        access_token: refreshResult.access_token,
+        id_token: refreshResult.id_token,
+        expires_in: moment().unix() + refreshResult.expires_in,
+      };
       await localStorageSetLoginData(loginData);
-      await syncSessionWithLocalStorage(loginData);
+      await sessionStorageSetLoginData(loginData);
 
       logger.debug({
         message: `refreshToken: completed`,
@@ -91,35 +95,62 @@ export async function refreshToken(clientId, region): Promise<boolean> {
   }
 }
 
-export async function saveLoginDataToSessionStorage(): Promise<boolean> {
+export async function localStorageSetLoginData(params: LoginData) {
   try {
-    const loginData = await localStorageGetLoginData();
-
-    await syncSessionWithLocalStorage(loginData);
+    params.client_id && (await localStorageSet(client_id, params.client_id));
+    params.access_token &&
+      (await localStorageSet(access_token, params.access_token));
+    params.expires_in &&
+      (await localStorageSet(expires_in, params.expires_in.toString()));
+    params.refresh_token &&
+      (await localStorageSet(refresh_token, params.refresh_token));
+    params.user_first_name &&
+      (await localStorageSet(user_first_name, params.user_first_name));
+    params.user_last_name &&
+      (await localStorageSet(user_last_name, params.user_last_name));
+    params.user_email && (await localStorageSet(user_email, params.user_email));
+    params.selligent_id &&
+      (await localStorageSet(selligent_id, params.selligent_id));
+    params.id_token && (await localStorageSet(id_token, params.id_token));
+    logger.debug({
+      message: `localStorageSetLoginData: success`,
+      data: { new_data: params },
+    });
     return true;
   } catch (error) {
     logger.warning({
-      message: `saveLoginDataToSessionStorage: error`,
+      message: `localStorageSetLoginData: error`,
       data: { error },
     });
     throw error;
   }
 }
-export async function syncSessionWithLocalStorage(params: LoginData) {
+export async function sessionStorageSetLoginData(params: LoginData) {
   try {
-    await sessionStorageSet(client_id, params.client_id);
-    await sessionStorageSet(access_token, params.access_token);
-    await sessionStorageSet(expires_in, params.expires_in.toString());
-    await sessionStorageSet(refresh_token, params.refresh_token);
-    await sessionStorageSet(user_first_name, params.user_first_name);
-    await sessionStorageSet(user_last_name, params.user_last_name);
-    await sessionStorageSet(user_email, params.user_email);
-    await sessionStorageSet(selligent_id, params.selligent_id);
-    await sessionStorageSet(id_token, params.id_token);
+    params.client_id && (await sessionStorageSet(client_id, params.client_id));
+    params.access_token &&
+      (await sessionStorageSet(access_token, params.access_token));
+    params.expires_in &&
+      (await sessionStorageSet(expires_in, params.expires_in.toString()));
+    params.refresh_token &&
+      (await sessionStorageSet(refresh_token, params.refresh_token));
+    params.user_first_name &&
+      (await sessionStorageSet(user_first_name, params.user_first_name));
+    params.user_last_name &&
+      (await sessionStorageSet(user_last_name, params.user_last_name));
+    params.user_email &&
+      (await sessionStorageSet(user_email, params.user_email));
+    params.selligent_id &&
+      (await sessionStorageSet(selligent_id, params.selligent_id));
+    params.id_token && (await sessionStorageSet(id_token, params.id_token));
+    logger.debug({
+      message: `sessionStorageSetLoginData: success`,
+      data: { new_data: params },
+    });
     return true;
   } catch (error) {
     logger.warning({
-      message: `syncSessionWithLocalStorage: error`,
+      message: `sessionStorageSetLoginData: error`,
       data: { error },
     });
     throw error;
@@ -128,13 +159,14 @@ export async function syncSessionWithLocalStorage(params: LoginData) {
 
 export async function isLoginRequired(): Promise<boolean> {
   try {
-    const loginData = await localStorageGetLoginData();
-    if (loginData) {
-      const is_login_required = loginData?.access_token === false;
+    const accessToken = await localStorageGet(access_token);
+
+    if (accessToken) {
+      const is_login_required = !!accessToken === false;
       logger.info({
         message: `isLoginRequired: ${is_login_required}`,
         data: {
-          login_data: !!loginData,
+          access_token: !!accessToken === false,
           is_login_required: !!is_login_required,
         },
       });
@@ -156,20 +188,46 @@ export async function isLoginRequired(): Promise<boolean> {
     throw error;
   }
 }
-export async function saveLoginDataToLocalStorage(jsonString: string) {
+export async function removeDataFromStorages() {
+  await localStorageRemove(client_id);
+  await localStorageRemove(access_token);
+  await localStorageRemove(expires_in);
+  await localStorageRemove(refresh_token);
+  await localStorageRemove(user_first_name);
+  await localStorageRemove(user_last_name);
+  await localStorageRemove(user_email);
+  await localStorageRemove(selligent_id);
+  await localStorageRemove(id_token);
+
+  await sessionStorageRemove(client_id);
+  await sessionStorageRemove(access_token);
+  await sessionStorageRemove(expires_in);
+  await sessionStorageRemove(refresh_token);
+  await sessionStorageRemove(user_first_name);
+  await sessionStorageRemove(user_last_name);
+  await sessionStorageRemove(user_email);
+  await sessionStorageRemove(selligent_id);
+  await sessionStorageRemove(id_token);
+
+  logger.debug({
+    message: `removeDataFromStorages: success`,
+  });
+}
+
+export async function saveLoginDataToStorages(jsonString: string) {
   try {
     const parsedData: LoginData = JSON.parse(jsonString);
     if (parsedData) {
       await localStorageSetLoginData(parsedData);
-      await syncSessionWithLocalStorage(parsedData);
+      await sessionStorageSetLoginData(parsedData);
     }
     logger.info({
-      message: `saveLoginDataToLocalStorage: completed`,
-      data: { parsedData },
+      message: `saveLoginDataToStorages: completed`,
+      data: { parsed_data: parsedData },
     });
   } catch (error) {
     logger.warning({
-      message: `saveLoginDataToLocalStorage: error`,
+      message: `saveLoginDataToStorages: error`,
       data: { error },
     });
     throw error;
