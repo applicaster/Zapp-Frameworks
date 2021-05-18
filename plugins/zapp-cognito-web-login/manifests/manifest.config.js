@@ -234,8 +234,6 @@ const stylesMobile = {
     },
   ],
 };
-  ],
-};
 
 const androidPlatforms = [
   "android_for_quickbrick",
