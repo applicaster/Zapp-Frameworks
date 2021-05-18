@@ -138,7 +138,7 @@ open class AnalyticsPlayerAdapter {
 
     fun getLink() : String? = data?.get(KEY_LINK) as String?
 
-    fun getId() : String = data?.get(KEY_ID) as String? ?: ""
+    open fun getId() : String = data?.get(KEY_ID) as String? ?: ""
 
     fun getType() : String? = data?.get(KEY_TYPE) as String?
 

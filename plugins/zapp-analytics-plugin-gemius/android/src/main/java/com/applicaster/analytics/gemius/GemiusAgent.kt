@@ -22,13 +22,18 @@ class GemiusAgent : BaseAnalyticsAgent() {
     inner class PlayerAdapter : AnalyticsPlayerAdapter() {
 
         private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
+        private var idOverride: String? = null
 
-        init{
+        init {
             player.setContext(AppContext.get())
         }
 
+        override fun getId(): String = idOverride ?: super.getId()
+
         override fun onStart(params: Map<String, Any>?) {
             super.onStart(params)
+
+            idOverride = null
 
             val pdata = ProgramData()
             pdata.name = getName()
@@ -36,7 +41,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
             // todo: need to determine type
             pdata.programType = ProgramData.ProgramType.VIDEO
 
-            val id = getId()
+            var id = super.getId()
 
             // copy all custom fields
             (params?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
@@ -60,7 +65,9 @@ class GemiusAgent : BaseAnalyticsAgent() {
                         if("_SC" == k) {
                             val sc = jsonObject.get(k).toString()
                             if(id != sc) {
-                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc")
+                                id = sc
+                                idOverride = sc
+                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc, it will be overridden")
                             }
                             continue
                         }
@@ -81,7 +88,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     APLogger.error(TAG, "Failed to deserialize custom properties block", e)
                 }
             }
-            player.newProgram(getId(), pdata)
+            player.newProgram(id, pdata)
         }
 
         override fun onPlay(params: Map<String, Any>?) {
