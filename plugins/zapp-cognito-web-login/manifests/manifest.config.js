@@ -38,6 +38,22 @@ const baseManifest = {
       default: "",
     },
     {
+      type: "tag_select",
+      key: "logout_completion_action",
+      tooltip_text: "Defines what action plugin should do after user log out. ",
+      options: [
+        {
+          text: "Stay on current screen",
+          value: "stay_on_screen",
+        },
+        {
+          text: "Go back to home screen",
+          value: "go_home",
+        },
+      ],
+      initial_value: "go_back",
+    },
+    {
       group: true,
       label: "Debug",
       tooltip: "For development purposes",

@@ -47,7 +47,7 @@ const Login = (props) => {
   const screenLocalizations = getLocalizations(localizations);
 
   const {
-    configuration: { loginURL, clientId, region },
+    configuration: { loginURL, clientId, region, logout_completion_action },
   } = props;
 
   const mounted = useRef(true);
@@ -147,6 +147,9 @@ const Login = (props) => {
           throw Error("onMessage: Logout failed from the web service");
         }
         await removeDataFromStorages();
+        if (logout_completion_action === "go_home") {
+          navigator.goHome();
+        }
       } else {
         await saveLoginDataToStorages(parsedData);
         const success = await refreshToken(clientId, region);
