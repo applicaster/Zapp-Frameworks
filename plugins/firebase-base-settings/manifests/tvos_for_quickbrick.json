@@ -16,7 +16,7 @@
   "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
-  "min_zapp_sdk": "3.0.0-Dev",
+  "min_zapp_sdk": "4.1.0-Dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -46,6 +46,23 @@
       "label": "Deactivate analytics collection",
       "initial_value": "NO",
       "tooltip_text": "If you need to deactivate Analytics collection permanently in a version of your app set value to Deactivate"
+    },
+    {
+      "key": "skip_extra_dependencies",
+      "type": "select",
+      "options": [
+        {
+          "text": "On",
+          "value": "YES"
+        },
+        {
+          "text": "Off",
+          "value": "NO"
+        }
+      ],
+      "label": "Prevent adding Firebase specific version",
+      "initial_value": "NO",
+      "tooltip_text": "Set to On if you want to prevent adding Firebase dependency that utilize IDFA"
     }
   ],
   "targets": [
@@ -55,7 +72,7 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "2.1.1",
+  "manifest_version": "2.1.2",
   "extra_dependencies": [
     {
       "Firebase": "= '6.25.0'"
