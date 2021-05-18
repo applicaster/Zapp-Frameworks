@@ -17,15 +17,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function THEOplayerView(props) {
+const THEOplayerView = React.forwardRef((props, ref) => {
   const window = useDimensions("window");
 
   return (
     <View style={styles.container}>
       <THEOplayerViewNative
         {...props}
+        ref={ref}
         style={{ ...styles.player, width: window?.width }}
       />
     </View>
   );
-}
+});
+
+export default THEOplayerView;
