@@ -270,7 +270,7 @@ class XRayPlugin : CrashlogPlugin {
         pluginSettings.crashReporting = APDebugUtil.getIsInDebugMode()
                 && StringUtil.booleanValue(configuration?.get(crashReportingKey))
 
-        pluginSettings.reactNativeLogLevel = if(APDebugUtil.getIsInDebugMode()) LogLevelSetting(LogLevel.debug) else null
+        pluginSettings.reactNativeLogLevel = if(APDebugUtil.getIsInDebugMode()) LogLevelSetting(LogLevel.info) else null
 
         pluginSettings.reactNativeDebugLogging = if(StringUtil.booleanValue(configuration?.get(debugRNKey))) true else null
 
