@@ -98,7 +98,7 @@ const extra_dependencies_apple = [
     Firebase: "= '6.25.0'",
   },
   {
-    GoogleUtilities: "= '7.4.1'",
+    GoogleUtilities: [],
   },
 ];
 
