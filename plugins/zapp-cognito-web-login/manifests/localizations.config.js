@@ -10,6 +10,11 @@ const common = [
     label: "General error message",
     initial_value: "Something went wrong. Please try again later",
   },
+  {
+    key: "close_button_text",
+    label: "Close button text",
+    initial_value: "Close",
+  },
 ];
 
 const mobile = [];

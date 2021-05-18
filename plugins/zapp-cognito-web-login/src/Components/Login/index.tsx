@@ -20,6 +20,7 @@ import {
   BaseSubsystem,
   BaseCategories,
 } from "../../Services/LoggerService";
+import FloatingButton from "../FloatingButton";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,
@@ -174,6 +175,8 @@ const Login = (props) => {
     }
   }
 
+  function onClose() {}
+
   function renderFlow() {
     return loading === false ? (
       <SafeAreaView
@@ -190,6 +193,11 @@ const Login = (props) => {
             onMessage={onMessage}
           />
         )}
+        <FloatingButton
+          screenStyles={screenStyles}
+          screenLocalizations={screenLocalizations}
+          onClose={onClose}
+        />
       </SafeAreaView>
     ) : null;
   }
