@@ -122,9 +122,13 @@ const api_android = {
 };
 
 const api_apple = {
-  require_startup_execution: false,
+  require_startup_execution: true,
   class_name: "APAnalyticsProviderFirebase",
-  modules: ["ZappAnalyticsPluginFirebase"]
+  modules: ["ZappAnalyticsPluginFirebase"],
+  plist: {
+    NSUserTrackingUsageDescription:
+      "This identifier will be used to deliver personalized ads to you.",
+  },
 };
 
 const api = {
