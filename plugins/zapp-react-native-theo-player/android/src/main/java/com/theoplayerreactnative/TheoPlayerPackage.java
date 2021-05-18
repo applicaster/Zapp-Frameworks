@@ -30,5 +30,4 @@ public class TheoPlayerPackage implements ReactPackage {
         return Collections.singletonList(theoPlayerViewManager);
     }
 
-
 }

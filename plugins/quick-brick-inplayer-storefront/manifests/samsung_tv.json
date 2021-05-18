@@ -5,7 +5,7 @@
   "author_email": "zapp@applicaster.com",
   "name": "inPlayer Storefront",
   "description": "inPlayer Storefront",
-  "type": "login",
+  "type": "payments",
   "screen": true,
   "react_native": true,
   "identifier": "quick-brick-inplayer-storefront",
@@ -21,6 +21,12 @@
       "type": "text",
       "key": "in_player_client_id",
       "tooltip_text": "In Player Client ID",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "standalone_screen_inplayer_asset_id",
+      "label": "Inplayer asset Id with with packages to purchase",
       "default": ""
     },
     {
@@ -111,8 +117,8 @@
     "quickbrick"
   ],
   "platform": "samsung_tv",
-  "dependency_version": "0.0.8",
-  "manifest_version": "0.0.8",
+  "dependency_version": "0.0.14",
+  "manifest_version": "0.0.14",
   "api": {
     "excludedNodeModules": [
       "@applicaster/applicaster-iap",
@@ -743,5 +749,15 @@
   },
   "targets": [
     "tv"
-  ]
+  ],
+  "general": {
+    "fields": [
+      {
+        "key": "present_full_screen",
+        "type": "switch",
+        "initial_value": true,
+        "hidden": true
+      }
+    ]
+  }
 }

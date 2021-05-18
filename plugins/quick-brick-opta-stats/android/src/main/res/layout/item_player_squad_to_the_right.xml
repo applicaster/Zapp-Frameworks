@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_item_player"
+    android:layout_width="match_parent"
+    android:layout_height="95dp"
+    android:background="@color/white">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/item_player_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_player_in_squad"
+        android:layout_width="90dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_player_tshirt_number"
+        style="@style/Theme.Opta.NumberHighlight"
+        android:layout_width="92dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        tools:text="77"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_player_in_squad_name"
+        style="@style/Theme.Opta.HighlightSmallTitleUbuntu"
+        android:layout_width="@dimen/max_height_player_name"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="end"
+        android:text="Marcelo"
+        app:layout_constraintEnd_toStartOf="@+id/tv_player_tshirt_number"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_player_in_squad_position"
+        style="@style/Theme.Opta.BoldSubtitleUbuntu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="DEFENDER"
+        app:layout_constraintEnd_toStartOf="@+id/tv_player_tshirt_number"
+        app:layout_constraintTop_toBottomOf="@+id/tv_player_in_squad_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

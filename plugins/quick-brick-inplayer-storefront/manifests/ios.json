@@ -5,14 +5,12 @@
   "author_email": "zapp@applicaster.com",
   "name": "inPlayer Login & Payments",
   "description": "inPlayer Login & Payments",
-  "type": "login",
+  "type": "payments",
   "screen": true,
   "react_native": true,
-  "identifier": "quick-brick-inplayer",
+  "identifier": "quick-brick-inplayer-storefront",
   "ui_builder_support": true,
-  "whitelisted_account_ids": [
-    "5c9ce7917b225c000f02dfbc"
-  ],
+  "whitelisted_account_ids": ["5c9ce7917b225c000f02dfbc"],
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
@@ -107,13 +105,8 @@
       }
     ]
   },
-  "targets": [
-    "mobile",
-    "tv"
-  ],
-  "ui_frameworks": [
-    "quickbrick"
-  ],
+  "targets": ["mobile", "tv"],
+  "ui_frameworks": ["quickbrick"],
   "platform": "ios",
   "dependency_version": "2.0.0",
   "manifest_version": "2.0.0",

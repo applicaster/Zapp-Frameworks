@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/layout_background"
+        android:paddingBottom="60dp">
+
+        <TextView
+            android:id="@+id/tv_player_name_title"
+            style="@style/Theme.Opta.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/player_name_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_player_img"
+            android:layout_width="235dp"
+            android:layout_height="281dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="18dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/player_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_player_name"
+            style="@style/Theme.Opta.BigTitleUbuntu"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="-"
+            android:textColor="@color/player_text_title"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_player_img"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_player_flag"
+            android:layout_width="55dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/unknow_flag"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_name_title" />
+
+        <TextView
+            android:id="@+id/tv_player_name_title_2"
+            style="@style/Theme.Opta.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/player_name_title_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_player_img" />
+
+        <TextView
+            android:id="@+id/tv_player_full_name"
+            style="@style/Theme.Opta.ThinTitle"
+            android:layout_width="253dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:text="-"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_name_title_2" />
+
+        <TextView
+            android:id="@+id/tv_number_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="NO."
+            app:layout_constraintEnd_toStartOf="@+id/tv_player_goals"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/tv_position_title"
+            app:layout_constraintTop_toBottomOf="@+id/divider_big" />
+
+        <TextView
+            android:id="@+id/tv_position_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/position_title"
+            android:textSize="12sp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_big" />
+
+        <TextView
+            android:id="@+id/tv_player_number"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="@+id/tv_number_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_number_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_number_title" />
+
+        <TextView
+            android:id="@+id/tv_player_position"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="@+id/tv_position_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_position_title" />
+
+        <TextView
+            android:id="@+id/tv_player_pob_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/player_pob_title"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_big_2" />
+
+        <TextView
+            android:id="@+id/tv_player_pob"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_pob_title" />
+
+        <TextView
+            android:id="@+id/tv_player_dob_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/player_dob_title"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_pob" />
+
+        <TextView
+            android:id="@+id/tv_player_dob"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="@+id/tv_player_dob_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_player_dob_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_dob_title" />
+
+        <TextView
+            android:id="@+id/tv_professional_team_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/professional_team"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_dob" />
+
+        <TextView
+            android:id="@+id/tv_profesional_team"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_professional_team_title" />
+
+        <TextView
+            android:id="@+id/tv_americas_cup_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/americas_cup_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/divider_big" />
+
+        <TextView
+            android:id="@+id/tv_americas_cup"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="@+id/tv_americas_cup_title"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="@+id/tv_americas_cup_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_americas_cup_title" />
+
+        <View
+            android:id="@+id/divider_big"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/faded_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_full_name" />
+
+        <View
+            android:id="@+id/divider_big_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/faded_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_americas_cup" />
+
+
+        <TextView
+            android:id="@+id/tv_player_goals_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="13dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/player_goals_title"
+            app:layout_constraintEnd_toStartOf="@+id/tv_americas_cup_title"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/tv_number_title"
+            app:layout_constraintTop_toBottomOf="@+id/divider_big" />
+
+        <TextView
+            android:id="@+id/tv_player_goals"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="@+id/tv_player_goals_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_player_goals_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_goals_title" />
+
+        <TextView
+            android:id="@+id/tv_biometry_title"
+            style="@style/Theme.Opta.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/player_biometry_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profesional_team" />
+
+        <ImageView
+            android:id="@+id/iv_biometry"
+            android:layout_width="143dp"
+            android:layout_height="132dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_biometry_title"
+            app:srcCompat="@drawable/biometry" />
+
+        <TextView
+            android:id="@+id/tv_height_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="68dp"
+            android:text="@string/height_title"
+            app:layout_constraintStart_toEndOf="@+id/iv_biometry"
+            app:layout_constraintTop_toBottomOf="@+id/tv_biometry_title" />
+
+        <TextView
+            android:id="@+id/tv_player_height"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="@+id/tv_height_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_height_title" />
+
+        <TextView
+            android:id="@+id/tv_player_weight_title"
+            style="@style/Theme.Opta.DetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/player_weight_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_height_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_biometry_title" />
+
+        <TextView
+            android:id="@+id/tv_player_weight"
+            style="@style/Theme.Opta.DetailsUbuntu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="-"
+            app:layout_constraintStart_toStartOf="@+id/tv_player_weight_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_weight_title" />
+
+        <ImageView
+            android:id="@+id/iv_player_shield"
+            android:layout_width="31dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/iv_player_flag"
+            app:layout_constraintTop_toBottomOf="@+id/tv_player_name_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

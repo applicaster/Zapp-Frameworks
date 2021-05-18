@@ -8,7 +8,7 @@ const baseManifest = {
   author_email: "zapp@applicaster.com",
   name: "inPlayer Storefront",
   description: "inPlayer Storefront",
-  type: "login",
+  type: "payments",
   screen: true,
   react_native: true,
   identifier: "quick-brick-inplayer-storefront",
@@ -22,6 +22,12 @@ const baseManifest = {
       type: "text",
       key: "in_player_client_id",
       tooltip_text: "In Player Client ID",
+      default: "",
+    },
+    {
+      type: "text_input",
+      key: "standalone_screen_inplayer_asset_id",
+      label: "Inplayer asset Id with with packages to purchase",
       default: "",
     },
     {
@@ -1053,7 +1059,7 @@ const extra_dependencies = {
 
 const npm_dependencies = {
   default: [
-    "@applicaster/applicaster-iap@0.3.3",
+    "@applicaster/applicaster-iap@1.1.3",
     "@react-native-community/blur@3.4.1",
   ],
   web: [],
@@ -1097,6 +1103,16 @@ function createManifest({ version, platform }) {
     styles: isTV ? stylesTv : stylesMobile,
     localizations: isTV ? Localizations.tv : Localizations.mobile,
     targets: isTV ? ["tv"] : ["mobile"],
+    general: {
+      fields: [
+        {
+          key: "present_full_screen",
+          type: "switch",
+          initial_value: true,
+          hidden: true,
+        },
+      ],
+    },
   };
 }
 module.exports = createManifest;

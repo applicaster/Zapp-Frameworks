@@ -74,10 +74,12 @@ const Login = (props) => {
 
   useEffect(() => {
     navigator.hideNavBar();
+    navigator.hideBottomBar();
 
     setupEnvironment();
     return () => {
       navigator.showNavBar();
+      navigator.showBottomBar();
     };
   }, []);
 
@@ -194,10 +196,11 @@ const Login = (props) => {
             };
           }
         }
+
         callback && callback({ success, error: null, payload: payload });
       }
     },
-    [hookType]
+    [hookType, parentLockWasPresented]
   );
 
   const onLogin = async ({ email, password }) => {

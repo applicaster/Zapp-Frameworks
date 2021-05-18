@@ -1,6 +1,6 @@
-import React, { useState, useLayoutEffect } from "react";
-
-import { assetLoader } from "./AssetLoader";
+import React, { useState, useLayoutEffect, useMemo } from "react";
+import { View } from "react-native";
+import { assetLoader, assetLoaderStandaloneScreen } from "./AssetLoader";
 import * as R from "ramda";
 import Storefront from "@applicaster/applicaster-storefront-component";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
@@ -18,7 +18,7 @@ import {
 } from "../Utils/PayloadUtils";
 import InPlayerSDK from "@inplayer-org/inplayer.js";
 import LoadingScreen from "./LoadingScreen";
-import { showAlert } from "../Utils/Helper";
+import { showAlert, isHook, isRestoreEmpty } from "../Utils/Helper";
 import { setConfig, isAuthenticated } from "../Services/inPlayerService";
 import { getStyles, getMessageOrDefault } from "../Utils/Customization";
 import {
@@ -33,10 +33,10 @@ export const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const getRiversProp = (key, rivers = {}) => {
+const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
     R.prop(key),
-    R.find(R.propEq("type", "quick-brick-inplayer-storefront")),
+    R.find(R.propEq("id", screenId)),
     R.values
   );
 
@@ -50,17 +50,30 @@ const InPlayer = (props) => {
   const { store } = useSelector(R.prop("appData"));
 
   const navigator = useNavigation();
+  const screenId = navigator?.activeRiver?.id;
+
   const [payloadWithPurchaseData, setPayloadWithPurchaseData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [itemAssetId, setItemAssetId] = useState(null);
 
   const { callback, payload, rivers } = props;
-  const localizations = getRiversProp("localizations", rivers);
-  const styles = getRiversProp("styles", rivers);
-  const screenStyles = getStyles(styles);
+  const localizations = getRiversProp("localizations", rivers, screenId);
+  const styles = getRiversProp("styles", rivers, screenId);
+  const screenStyles = useMemo(() => getStyles(styles), [styles]);
+
   const screenLocalizations = getLocalizations(localizations);
+  const standalone_screen_inplayer_asset_id =
+    props?.configuration?.standalone_screen_inplayer_asset_id;
+  const standaloneScreenInplayerAssetId =
+    standalone_screen_inplayer_asset_id &&
+    standalone_screen_inplayer_asset_id.length > 0
+      ? standalone_screen_inplayer_asset_id
+      : null;
 
   useLayoutEffect(() => {
+    navigator.hideNavBar();
+    navigator.hideBottomBar();
+
     InPlayerSDK.tokenStorage.overrides = {
       setItem: async function (
         defaultTokenKey, // 'inplayer_token'
@@ -81,11 +94,25 @@ const InPlayer = (props) => {
         await localStorageRemoveUserAccount(userAccountStorageTokenKey);
       },
     };
-
     setupEnvironment();
+    return () => {
+      navigator.showNavBar();
+      navigator.showBottomBar();
+    };
   }, []);
 
   async function onRestoreCompleted(restoreData) {
+    if (isRestoreEmpty(restoreData)) {
+      showAlert(
+        screenLocalizations?.warning_title,
+        screenLocalizations?.restore_failed_no_items_message
+      );
+      logger.debug({
+        message: `onRestoreCompleted -> No items to restore`,
+        data: { restoreData },
+      });
+      return;
+    }
     try {
       setIsLoading(true);
       await validateRestore({ ...props, restoreData, store });
@@ -95,20 +122,47 @@ const InPlayer = (props) => {
           payload,
         },
       });
-      const newPayload = await assetLoader({
-        props,
-        assetId: itemAssetId,
-        store,
-        retryInCaseFail: true,
-      });
-      if (newPayload) {
-        callback && callback({ success, error, payload: newPayload });
-      } else {
+      if (isStanaloneScreen()) {
         setIsLoading(false);
+      } else {
+        const newPayload = await assetLoader({
+          props,
+          assetId: itemAssetId,
+          store,
+          retryInCaseFail: true,
+        });
+
+        if (newPayload) {
+          showAlert(
+            screenLocalizations?.restore_success_title,
+            screenLocalizations?.restore_success_message,
+            () => {
+              finishStorefront({
+                success: true,
+                error: null,
+                payload: newPayload,
+              });
+            }
+          );
+        } else {
+          showAlert(
+            screenLocalizations?.restore_failed_title,
+            screenLocalizations?.restore_failed_message
+          );
+          setIsLoading(false);
+        }
       }
     } catch (error) {
+      showAlert(
+        screenLocalizations?.restore_failed_title,
+        screenLocalizations?.restore_failed_message
+      );
       setIsLoading(false);
     }
+  }
+
+  function isStanaloneScreen() {
+    return (standaloneScreenInplayerAssetId && !isHook(navigator)) === true;
   }
 
   async function completeStorefrontFlow({ success, error, payload }) {
@@ -124,12 +178,13 @@ const InPlayer = (props) => {
         logger.debug({
           message: "Validation payment completed",
           data: {
-            payload,
+            newPayload,
           },
         });
-        callback && callback({ success, error, payload: newPayload });
+        !isStanaloneScreen() &&
+          finishStorefront({ success, error, payload: newPayload });
       } else {
-        callback && callback({ success, error, payload });
+        !isStanaloneScreen() && finishStorefront({ success, error, payload });
       }
     } catch (error) {
       const message = getMessageOrDefault(error, screenLocalizations);
@@ -142,8 +197,8 @@ const InPlayer = (props) => {
         },
       });
 
-      showAlert("General Error!", message);
-      callback && callback({ success: false, error, payload });
+      showAlert(screenLocalizations?.general_error_title, message);
+      finishStorefront({ success: false, error, payload });
     }
   }
   const setupEnvironment = async () => {
@@ -162,14 +217,13 @@ const InPlayer = (props) => {
         },
       });
 
-      setConfig(in_player_environment);
+      await setConfig(in_player_environment);
 
       if (payload) {
         const assetId = await inPlayerAssetId({
           payload,
           configuration: props.configuration,
         });
-
         const authenticationRequired = isAuthenticationRequired({ payload });
 
         if (authenticationRequired && isUserAuthenticated && assetId) {
@@ -193,6 +247,7 @@ const InPlayer = (props) => {
           } else {
             setItemAssetId(assetId);
             setPayloadWithPurchaseData(payloadWithAsset);
+            setIsLoading(false);
           }
         } else {
           logger.debug({
@@ -203,9 +258,47 @@ const InPlayer = (props) => {
               in_player_client_id,
             },
           });
-
-          callback && callback({ success: true, error: null, payload });
+          finishStorefront({ success: true, error: null, payload });
         }
+      } else if (standaloneScreenInplayerAssetId && !isHook(navigator)) {
+        const mockPayload = {
+          id: standaloneScreenInplayerAssetId,
+          extensions: {},
+        };
+        const assetId = standaloneScreenInplayerAssetId;
+        if (isUserAuthenticated && assetId) {
+          const payloadWithAsset = await assetLoaderStandaloneScreen({
+            props: { ...props, payload: mockPayload },
+            assetId: assetId,
+            store,
+          });
+          logger.debug({
+            message: "Asset loader finished task  ",
+            data: {
+              in_player_environment,
+              in_player_client_id,
+              payloadWithAsset,
+            },
+          });
+          setItemAssetId(assetId);
+          setPayloadWithPurchaseData(payloadWithAsset);
+          setIsLoading(false);
+        } else {
+          logger.debug({
+            message:
+              "Data source not support InPlayer plugin invocation, finishing hook with: success",
+            data: {
+              in_player_environment,
+              in_player_client_id,
+            },
+          });
+          finishStorefront({ success: true, error: null, payload });
+        }
+      } else {
+        logger.error({
+          message: "Plugin could not started, no data exist",
+        });
+        finishStorefront({ success: false, error: null, payload });
       }
     } catch (error) {
       if (error) {
@@ -219,25 +312,40 @@ const InPlayer = (props) => {
           },
         });
 
-        showAlert("General Error!", message);
+        showAlert(screenLocalizations?.general_error_title, message);
       }
-      callback && callback({ success: false, error, payload });
+
+      finishStorefront({ success: false, error, payload });
     }
   };
-  return payloadWithPurchaseData ? (
-    <>
+
+  function finishStorefront({ success, error, payload }) {
+    if (callback) {
+      callback({ success, error, payload });
+    } else {
+      !callback && navigator.goBack();
+    }
+  }
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: screenStyles?.payment_screen_background,
+      }}
+    >
+      {payloadWithPurchaseData && (
+        <Storefront
+          {...props}
+          onStorefrontFinished={completeStorefrontFlow}
+          onRestoreCompleted={onRestoreCompleted}
+          screenLocalizations={screenLocalizations}
+          screenStyles={screenStyles}
+          payload={payloadWithPurchaseData}
+          isDebugModeEnabled={false}
+        />
+      )}
       {isLoading && <LoadingScreen />}
-      <Storefront
-        {...props}
-        onStorefrontFinished={completeStorefrontFlow}
-        onRestoreCompleted={onRestoreCompleted}
-        screenLocalizations={screenLocalizations}
-        screenStyles={screenStyles}
-        payload={payloadWithPurchaseData}
-      />
-    </>
-  ) : (
-    <LoadingScreen />
+    </View>
   );
 };
 

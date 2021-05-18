@@ -71,24 +71,6 @@
         }
       ],
       "initial_value": "go_back"
-    },
-    {
-      "type": "text",
-      "key": "consumable_type_mapper",
-      "tooltip_text": "Mapping key for consumable purchase",
-      "default": "consumable"
-    },
-    {
-      "type": "text",
-      "key": "non_consumable_type_mapper",
-      "tooltip_text": "Mapping key for non consumable purchase",
-      "default": "ppv"
-    },
-    {
-      "type": "text",
-      "key": "subscription_type_mapper",
-      "tooltip_text": "Mapping key for subscription purchase",
-      "default": "subscription"
     }
   ],
   "hooks": {
@@ -111,8 +93,8 @@
     "quickbrick"
   ],
   "platform": "tvos_for_quickbrick",
-  "dependency_version": "5.0.0",
-  "manifest_version": "5.0.0",
+  "dependency_version": "7.1.1",
+  "manifest_version": "7.1.1",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -1179,5 +1161,21 @@
   },
   "targets": [
     "tv"
-  ]
+  ],
+  "general": {
+    "fields": [
+      {
+        "key": "present_full_screen",
+        "type": "switch",
+        "initial_value": true,
+        "hidden": true
+      },
+      {
+        "type": "switch",
+        "key": "show_hook_once",
+        "tooltip_text": "Define if hook should be presented on time or each time screen will open",
+        "initial_value": false
+      }
+    ]
+  }
 }

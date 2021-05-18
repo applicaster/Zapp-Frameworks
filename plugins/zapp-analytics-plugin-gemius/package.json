@@ -1,0 +1,36 @@
+{
+  "name": "@applicaster/zapp-analytics-plugin-gemius",
+  "version": "0.3.1",
+  "description": "Gemius Analytics provider",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [
+    "gemius",
+    "analytics"
+  ],
+  "author": "Applicaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "applicaster": {
+    "supportedPlatforms": [
+      "amazon_fire_tv_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "android_for_quickbrick",
+      "ios_for_quickbrick",
+      "tvos_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  },
+  "files": [
+    "apple",
+    "android"
+  ]
+}

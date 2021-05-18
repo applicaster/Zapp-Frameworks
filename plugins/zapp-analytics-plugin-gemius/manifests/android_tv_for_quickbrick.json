@@ -1,0 +1,47 @@
+{
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Gemius Analytics",
+  "identifier": "gemius_analytics",
+  "description": "Gemius Analytics",
+  "type": "analytics",
+  "react_native": true,
+  "custom_configuration_fields": [
+    {
+      "section": "configuration",
+      "type": "text",
+      "key": "script_identifier",
+      "tooltip_text": "Script Identifier",
+      "default": ""
+    },
+    {
+      "section": "configuration",
+      "type": "text",
+      "key": "hit_collector_host",
+      "tooltip_text": "Collector Host",
+      "default": ""
+    }
+  ],
+  "whitelisted_account_ids": [],
+  "ui_builder_support": false,
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "platform": "android_tv_for_quickbrick",
+  "min_zapp_sdk": "4.0.0",
+  "manifest_version": "0.3.1",
+  "project_dependencies": [
+    {
+      "zapp-analytics-plugin-gemius": "node_modules/@applicaster/zapp-analytics-plugin-gemius/android"
+    }
+  ],
+  "api": {
+    "class_name": "com.applicaster.analytics.gemius.GemiusAgent"
+  },
+  "targets": [
+    "tv"
+  ],
+  "npm_dependencies": [
+    "@applicaster/zapp-analytics-plugin-gemius@0.3.1"
+  ]
+}

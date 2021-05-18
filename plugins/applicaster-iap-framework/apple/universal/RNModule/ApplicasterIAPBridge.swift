@@ -100,9 +100,13 @@ class ApplicasterIAPBridge: NSObject, RCTBridgeModule {
             switch result {
             case let .success(transactions):
                 let purchasedItemIDs = transactions.map({ $0.payment.productIdentifier })
+                let products = transactions.compactMap({ [ ReacеNativeRestorePurchasesKeys.productIdentifier: $0.payment.productIdentifier,
+                                                           ReacеNativeRestorePurchasesKeys.transactionIdentifier: $0.transactionIdentifier] })
+
                 resolver([
                     ReacеNativeRestorePurchasesKeys.receipt: Utils.receiptInBase64String() as Any,
                     ReacеNativeRestorePurchasesKeys.restoreProductsIDs: purchasedItemIDs,
+                    ReacеNativeRestorePurchasesKeys.products: products,
                 ])
             case let .failure(error):
                 rejecter(ApplicasterIAPBridgeErrors.generalError,

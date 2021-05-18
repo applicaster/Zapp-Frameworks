@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:applicaster="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/horizontal_margin_item_group_list"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="@dimen/horizontal_margin_item_group_list"
+    android:layout_marginBottom="10dp"
+    applicaster:cardCornerRadius="@dimen/card_corner_radius"
+    applicaster:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_main_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/tv_group_name"
+                style="@style/Theme.Opta.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="GRUPO A"
+                android:textColor="@color/text_title" />
+
+            <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_width="38dp"
+                android:layout_height="31dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/arrow_down_plugin" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_rank_profile_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/horizontal_margin_teams_list"
+                android:layout_marginTop="100dp"
+                android:layout_marginRight="@dimen/horizontal_margin_teams_list"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:scrollbarDefaultDelayBeforeFade="0"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="horizontal"
+                applicaster:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="16dp"
+            android:background="@color/layout_background"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_rank_profile_statistic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="32dp"
+            android:visibility="gone"
+            applicaster:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

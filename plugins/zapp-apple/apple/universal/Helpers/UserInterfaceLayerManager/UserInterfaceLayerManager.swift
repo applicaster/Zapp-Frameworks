@@ -11,11 +11,29 @@ import XrayLogger
 import ZappCore
 
 class UserInterfaceLayerManager {
+    static let adapterClass = "QuickBrickApple.ReactNativeManager"
+    
+    class func interfaceLayerAdapterClass(from className: String) -> UserInterfaceLayerProtocol.Type? {
+        guard let userInterfaceLayer = NSClassFromString(adapterClass) as? UserInterfaceLayerProtocol.Type else {
+            return nil
+        }
+        return userInterfaceLayer
+    }
+    
+    class func canCreate() -> Bool {
+        let logger = Logger.getLogger(for: UserInterfaceLayerMangerLogs.subsystem)
+
+        guard let _ = interfaceLayerAdapterClass(from: adapterClass) else {
+            logger?.errorLog(template: UserInterfaceLayerMangerLogs.canNotCreateUserInterfaceLayer)
+            return false
+        }
+        return true
+    }
+    
     class func layerAdapter(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> UserInterfaceLayerProtocol? {
         let logger = Logger.getLogger(for: UserInterfaceLayerMangerLogs.subsystem)
 
-        guard let UserInterfaceLayer = NSClassFromString("QuickBrickApple.ReactNativeManager") as? UserInterfaceLayerProtocol.Type else {
-            logger?.errorLog(template: UserInterfaceLayerMangerLogs.canNotCreateUserInterfaceLayer)
+        guard let userInterfaceLayer = interfaceLayerAdapterClass(from: adapterClass) else {
             return nil
         }
 
@@ -34,6 +52,9 @@ class UserInterfaceLayerManager {
                                             namespace: nil)
         let reactNativePackagerRoot = sessionStorage.get(key: ZappStorageKeys.reactNativePackagerRoot,
                                                          namespace: nil)
+        
+        let languageCode = sessionStorage.get(key: ZappStorageKeys.languageCode,
+                                                         namespace: nil)
         let applicationData = [
             "bundleIdentifier": bundleIndentifier as Any,
             "accountId": accountId as Any,
@@ -42,7 +63,7 @@ class UserInterfaceLayerManager {
             "apiSecretKey": apiSecretKey as Any,
             "os_type": "ios" as Any,
             "uuid": UUIDManager.deviceID as Any,
-            "languageLocale": NSLocale.current.languageCode as Any,
+            "languageLocale": languageCode as Any,
             "countryLocale": NSLocale.current.regionCode as Any,
             "platform": deviceType as Any,
             "reactNativePackagerRoot": reactNativePackagerRoot as Any,
@@ -52,7 +73,7 @@ class UserInterfaceLayerManager {
         logger?.debugLog(template: UserInterfaceLayerMangerLogs.canNotCreateUserInterfaceLayer,
                          data: applicationData)
         // TODO: In case we will have more plugins this implamentation must be rewritten to get first layer plugin not quick brick
-        return UserInterfaceLayer.init(launchOptions: launchOptions,
+        return userInterfaceLayer.init(launchOptions: launchOptions,
                                   applicationData: applicationData)
     }
 }

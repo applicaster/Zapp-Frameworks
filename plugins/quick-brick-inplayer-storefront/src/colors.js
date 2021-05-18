@@ -15,3 +15,4 @@ export default {
   inputBorderColorActive: defaultColors.red,
   buttonActive: defaultColors.red,
 };
+

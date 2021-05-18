@@ -20,7 +20,7 @@ export interface ResetPasswordData {
 export interface RequestCustomData {
   base_URL_api: string;
   login_api_endpoint: string;
-  signin_api_endpoint: string;
+  register_api_endpoint: string;
   password_reset_api_endpoint: string;
 }
 
@@ -60,17 +60,4 @@ export interface RestoreData {
   receipts: { productId: string; transactionId: string }[];
   token: string;
   receiptData: RecieptInfo;
-}
-
-export interface Account {
-  signIn(data: SignInData): Promise<AxiosResponse>;
-  createAccount(data: CreateAccountData): Promise<AxiosResponse>;
-  resetPassword(data: ResetPasswordData): Promise<AxiosResponse>;
-  extendToken(data: ExtendTokenData): Promise<AxiosResponse>;
-  getAllSubscriptions(data: SubscriptionsData): Promise<AxiosResponse>;
-  purchaseItem(data: PurchaseItemData): Promise<AxiosResponse>;
-  purchaseItemWithCoupon(
-    data: PurchaseItemWithCouponData
-  ): Promise<AxiosResponse>;
-  restore(data: RestoreData): Promise<AxiosResponse>;
 }

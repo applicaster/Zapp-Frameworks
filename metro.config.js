@@ -1,7 +1,11 @@
 const { resolve } = require("path");
 const R = require("ramda");
 
-const packages = ["zapp-react-native-theo-player", "zapp-cleeng-login"];
+const packages = [
+  "zapp-react-native-theo-player",
+  "zapp-cleeng-login",
+  "zapp-cleeng-storefront",
+];
 
 const buildExtraNodeModules = (extraNodeModules, packageName) => {
   return R.assoc(

@@ -39,7 +39,7 @@ const baseManifest = {
     },
     {
       type: "text",
-      key: "signin_api_endpoint",
+      key: "register_api_endpoint",
       label: "Create Account End Point",
       default: "register",
     },

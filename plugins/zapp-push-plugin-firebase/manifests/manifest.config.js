@@ -71,12 +71,19 @@ const custom_configuration_fields_apple = [
     label_tooltip: "Please upload a zip file to provide the custom sounds mp3 files to be used with FCM custom sound parameter</a>."
   },
   {
-    key: "default_topic",
+    key: "default_topics",
     type: "text",
-    label: "Default topic",
+    label: "Default topics",
     default: "general",
     tooltip_text: "Topics to subscribe to, separated with comma"
-  }
+  },
+  {
+    key: "default_localized_topics",
+    type: "text",
+    label: "Default Localized topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma that will have appended language (ex. general-en)"
+  },
 ];
 
 const custom_configuration_fields_android = [
@@ -94,6 +101,13 @@ const custom_configuration_fields_android = [
     label: "Default topics",
     default: "general",
     tooltip_text: "Topics to subscribe to, separated with comma"
+  },
+  {
+    key: "default_localized_topics",
+    type: "text",
+    label: "Default Localized topics",
+    default: "general",
+    tooltip_text: "Topics to subscribe to, separated with comma that will have appended language (ex. general-en)"
   },
   {
     key: "notification_channel_name",
@@ -285,8 +299,8 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  android_for_quickbrick: "2.0.1-dev",
-  ios_for_quickbrick: "3.0.0-Dev",
+  android_for_quickbrick: "4.0.0",
+  ios_for_quickbrick: "4.1.0-Dev",
 };
 
 const extra_dependencies_apple = [

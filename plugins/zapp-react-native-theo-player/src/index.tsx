@@ -1,17 +1,18 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { Platform } from "react-native";
+import { View, Platform } from "react-native";
 import * as R from "ramda";
 
-import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
+import { AnalyticsTracker } from "./Analytics";
 import { fetchImageFromMetaByKey } from "./Utils";
-import { StyleSheet, View } from "react-native";
 import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 
 console.disableYellowBox = true;
+
 type PluginConfiguration = {
+  theoplayer_scale_mode: string;
   theoplayer_license_key: string;
   moat_partner_code: string;
 };
@@ -24,6 +25,11 @@ type Content = {
 type Entry = {
   content: Content;
   media_group: any;
+  id: string;
+  title: string;
+  extensions: {
+    analyticsCustomProperties: object
+  };
 };
 
 type Props = {
@@ -55,19 +61,37 @@ type VideoStyle = {
 };
 
 type State = {
-  showControls: boolean;
-  showPoster: boolean;
+  playerCreated: boolean;
+  loadStart: boolean;
+  loadedVideo: boolean;
+  readyState: string;
+  adBreakBegin: boolean;
+  adBreakEnd: boolean;
+  adBegin: boolean;
+  adEnd: boolean;
+  adError: boolean;
+  canplay: boolean;
   currentTime: number;
   duration: number;
+  adBreakDuration: number;
+  adDuration: number;
+  adId: string;
+  adData: object;
   paused: boolean;
   playing: boolean;
-  seek: object;
-  subtitles: [];
-  audioTracks: [];
-  subtitlesLanguage: string;
-  audioTrackLanguage: string;
-  showNativeSubtitles: boolean;
+  resume: boolean;
+  seek: boolean;
+  seekEnd: boolean;
   playbackRate: number;
+  volume: number;
+  muted: boolean;
+  advertismentPlaying: boolean;
+  autoplay: boolean;
+  rate: number;
+  error: boolean;
+  playerEnded: boolean;
+  playerClosed: boolean;
+  buffering: Boolean;
 };
 
 const videoStyles = ({ width, height }) => ({
@@ -77,10 +101,8 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
-const manifestJson = platformSelect({
-  ios: require("../manifests/ios_for_quickbrick.json"),
-  android: require("../manifests/android_for_quickbrick.json"),
-});
+const analyticsTracker = new AnalyticsTracker();
+
 export default class THEOPlayer extends Component<Props, State> {
   _root: THEOplayerView;
 
@@ -88,108 +110,237 @@ export default class THEOPlayer extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showControls: false,
-      showPoster: true,
-      currentTime: 0,
+      playerCreated: false,
+      loadStart: false,
+      loadedVideo: false,
+      readyState: "",
+      adBreakBegin: false,
+      adBreakEnd: false,
+      adBegin: false,
+      adEnd: false,
+      adError: false,
+      adBreakDuration: 0,
+      adDuration: 0,
       duration: 0,
-      paused: false,
+      currentTime: 0,
+      adId: "",
+      adData: {},
+      canplay: false,
       playing: false,
-      seek: {},
-      subtitles: [],
-      audioTracks: [],
-      subtitlesLanguage: "Off",
-      audioTrackLanguage: null,
-      showNativeSubtitles: false,
+      resume: false,
+      paused: false,
+      seek: false,
+      seekEnd: false,
+      volume: 0,
+      muted: false,
       playbackRate: 0,
+      advertismentPlaying: false,
+      autoplay: true,
+      rate: 0,
+      error: null,
+      playerEnded: false,
+      playerClosed: false,
+      buffering: false
     };
+
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    analyticsTracker.initialState(this.state, this.props.entry)
+  }
+
+  componentDidUpdate() {
+    analyticsTracker.handleChange(this.state);
+
+    if (this.state.playerEnded) {
+      this.handleEnded();
+    }
+
+    if (this.state.playerClosed) {
+      this.handleClosed();
+    }
+  }
 
   onPlayerPlay = ({ nativeEvent }) => {};
 
-  onPlayerPlaying = ({ nativeEvent }) => {};
-
-  onPlayerPause = ({ nativeEvent }) => {
+  onPlayerPlaying = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-    const duration = this.state?.duration;
-    // this.props?.onPause({ currentTime, duration });
+    const { loadedVideo, seek } = this.state;
+
+    if (seek) {
+      this.setState({ seek: false, seekEnd: true });
+      return;
+    }
+
+    if (loadedVideo && currentTime < 1) {
+      this.setState({ playing: true, paused: false });
+    }
+
+    if (loadedVideo && currentTime > 1) {
+      this.setState({ resume: true, paused: false });
+    } 
   };
 
-  onPlayerProgress = ({ nativeEvent }) => {
-    const { currentTime } = nativeEvent;
-    const { duration } = this.state;
-    if (!R.isNil(this.props?.onProgress)) {
-      this.props?.onProgress({ currentTime, duration });
+  onPlayerPause = ({ nativeEvent }) => {
+    const {
+      paused,
+      readyState,
+      loadedVideo
+    } = this.state;
+
+    const willSeek = readyState === "HAVE_METADATA";
+
+    if (loadedVideo && !willSeek && !paused) {
+      this.setState({ paused: true, playing: false, resume: false });
     }
   };
 
-  onPlayerSeeking = ({ nativeEvent }) => {};
+  onPlayerProgress = ({ nativeEvent }) => {};
 
-  onPlayerSeeked = ({ nativeEvent }) => {};
+  onPlayerSeeking = ({ nativeEvent }) => {
+    if (this.state.loadedVideo) {
+      this.setState({ seek: true, seekEnd: false });
+    }
+  };
+
+  onPlayerSeeked = ({ nativeEvent }) => {
+    const { seek } = this.state;
+    if(seek) {
+      this.setState({ seek: false, seekEnd: true });
+    }
+  };
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
-  onPlayerTimeUpdate = ({ nativeEvent }) => {};
-
-  onPlayerRateChange = ({ nativeEvent }) => {
-    const { playbackRate } = nativeEvent;
-    this.setState({ playbackRate });
-    if (!R.isNil(this.props?.onPlaybackRateChange)) {
-      this.props?.onPlaybackRateChange({ playbackRate });
-    }
+  onPlayerTimeUpdate = ({ nativeEvent }) => {
+    const { currentTime } = nativeEvent;
+    this.setState({ currentTime });
   };
 
-  onPlayerReadyStateChange = ({ nativeEvent }) => {};
+  onPlayerRateChange = ({ nativeEvent }) => {};
+
+  onPlayerReadyStateChange = ({ nativeEvent }) => {
+   let buffering = false;
+
+    const { readyState } = nativeEvent;
+    const haveCurrentData = this.state.readyState === "HAVE_CURRENT_DATA";
+    const enoughData = readyState === "HAVE_ENOUGH_DATA";
+
+    if (haveCurrentData && enoughData) {
+      buffering = true;
+    }
+
+    this.setState({ readyState, buffering })
+  };
 
   onPlayerLoadedMetaData = ({ nativeEvent }) => {};
 
   onPlayerLoadedData = ({ nativeEvent }) => {
     const { duration } = this.state;
     const { currentTime } = nativeEvent;
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration, currentTime });
-    }
+
+    this.props.onLoad({ duration, currentTime });
+    this.setState({ loadedVideo: true });
   };
 
-  onPlayerLoadStart = ({ nativeEvent }) => {};
+  onPlayerLoadStart = ({ nativeEvent }) => {
+    this.setState({ loadStart: true });
+  };
 
-  onPlayerCanPlay = ({ nativeEvent }) => {};
+  onPlayerCanPlay = ({ nativeEvent }) => {
+    this.setState({
+      buffering: false
+    })
+  };
 
-  onPlayerCanPlayThrough = ({ nativeEvent }) => {};
+  onPlayerCanPlayThrough = ({ nativeEvent }) => {
+    this.setState({ 
+      canplay: true, 
+      playing: false, 
+      resume: false, 
+    });
+  };
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
+
     this.setState({ duration });
-    if (!R.isNil(this.props?.onLoad)) {
-      this.props?.onLoad({ duration: duration, currentTime: -1 });
-    }
+    this.props.onLoad({ duration, currentTime: 0 });
   };
 
-  onPlayerSourceChange = ({ nativeEvent }) => {};
+  onPlayerSourceChange = ({ nativeEvent }) => {
+    this.setState({ playerCreated: true });
+  };
 
   onPlayerPresentationModeChange = ({ nativeEvent }) => {};
 
-  onPlayerVolumeChange = ({ nativeEvent }) => {};
+  onPlayerVolumeChange = ({ nativeEvent }) => {
+    const { volume } = nativeEvent;
+    
+    this.setState({ volume })
+  };
 
   onPlayerResize = ({ nativeEvent }) => {};
 
   onPlayerDestroy = ({ nativeEvent }) => {};
 
   onPlayerEnded = ({ nativeEvent }) => {
-    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
-      this.props?.onEnd();
-    }
-
-    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
-      this.props?.onEnded();
-    }
+    this.setState({ playerEnded: true });
   };
 
   onPlayerError = ({ nativeEvent }) => {
     if (!R.isNil(this.props?.onError)) {
       this.props?.onError(nativeEvent);
     }
+  };
+
+  onAdBreakBegin = ({ nativeEvent }) => {
+    const { maxDuration } = nativeEvent;
+
+    this.setState({ 
+      adBreakBegin: true, 
+      adBreakEnd: false, 
+      adBreakDuration: maxDuration,
+      adData: nativeEvent
+    })
+  };
+
+  onAdBreakEnd = ({ nativeEvent }) => {
+    const { maxDuration } = nativeEvent;
+
+    this.setState({ 
+      adBreakEnd: true, 
+      adBreakBegin: false, 
+      adBreakDuration: maxDuration,
+      adData: nativeEvent
+    })
+  };
+
+  onAdError = ({ nativeEvent }) => {
+    this.setState({ adError: true });
+  };
+
+  onAdBegin = ({ nativeEvent }) => {
+    const { duration, id} = nativeEvent;
+
+    this.setState({ 
+      adBegin: true, 
+      adEnd: false, 
+      adDuration: duration,
+      adId: id,
+      adData: nativeEvent
+    });
+  };
+
+  onAdEnd = ({ nativeEvent }) => {
+    const { duration, id} = nativeEvent;
+    this.setState({
+      adEnd: true,
+      adBegin: false,
+      adDuration: duration,
+      adId: id,
+      adData: nativeEvent
+    });
   };
 
   onJSWindowEvent = ({ nativeEvent }) => {
@@ -208,6 +359,20 @@ export default class THEOPlayer extends Component<Props, State> {
     this._root = component;
   };
 
+  handleEnded() {
+    this.setState({ playerClosed: true });
+  }
+
+  handleClosed() {
+    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
+      this.props?.onEnd();
+    }
+
+    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
+      this.props?.onEnded();
+    }
+  }
+
   render() {
     const {
       entry,
@@ -216,9 +381,12 @@ export default class THEOPlayer extends Component<Props, State> {
       source,
       pluginConfiguration,
     } = this.props;
+
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
+    const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
+
     return (
       <View
         style={
@@ -255,8 +423,13 @@ export default class THEOPlayer extends Component<Props, State> {
           onPlayerDestroy={this.onPlayerDestroy}
           onPlayerEnded={this.onPlayerEnded}
           onPlayerError={this.onPlayerError}
+          onAdBreakBegin={this.onAdBreakBegin}
+          onAdBreakEnd={this.onAdBreakEnd}
+          onAdError={this.onAdError}
+          onAdBegin={this.onAdBegin}
+          onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          licenceData={{ theoplayer_license_key, moat_partner_code }}
+          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
           source={{
             sources: [
               {

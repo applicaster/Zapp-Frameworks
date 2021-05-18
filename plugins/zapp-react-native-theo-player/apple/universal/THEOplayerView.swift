@@ -3,6 +3,7 @@ import React
 import THEOplayerSDK
 import UIKit
 import XrayLogger
+import ZappCore
 
 @objc(THEOplayerView)
 class THEOplayerView: UIView {
@@ -10,6 +11,9 @@ class THEOplayerView: UIView {
 //    private static var eventEmitter: ReactNativeEventEmitter!
 
     var player: THEOplayer!
+    lazy var pluginModel: ZPPluginModel? = {
+        FacadeConnector.connector?.pluginManager?.plugin(for: "zapp-react-native-theo-player")
+    }()
 
     @objc var onPlayerPlay: RCTBubblingEventBlock?
     @objc var onPlayerPlaying: RCTBubblingEventBlock?
@@ -35,7 +39,13 @@ class THEOplayerView: UIView {
     @objc var onPlayerEnded: RCTBubblingEventBlock?
     @objc var onPlayerError: RCTBubblingEventBlock?
     @objc var onJSWindowEvent: RCTBubblingEventBlock?
-    @objc var licenceData: NSDictionary? {
+    @objc var onAdBreakBegin: RCTBubblingEventBlock?
+    @objc var onAdBreakEnd: RCTBubblingEventBlock?
+    @objc var onAdError: RCTBubblingEventBlock?
+    @objc var onAdBegin: RCTBubblingEventBlock?
+    @objc var onAdEnd: RCTBubblingEventBlock?
+
+    @objc var configurationData: NSDictionary? {
         didSet {
             setupTheoPlayer()
         }
@@ -124,8 +134,13 @@ class THEOplayerView: UIView {
         onPlayerDestroy = nil
         onPlayerEnded = nil
         onPlayerError = nil
-        onJSWindowEvent = nil
+        onAdBreakBegin = nil
+        onAdBreakEnd = nil
+        onAdBegin = nil
+        onAdEnd = nil
+        onAdError = nil
         onPlayerPresentationModeChange = nil
+        onJSWindowEvent = nil
         source = nil
     }
 
@@ -134,17 +149,22 @@ class THEOplayerView: UIView {
     private func setupTheoPlayer() {
         logger?.debugLog(message: "Initialize player",
                          data: [:])
-        let theoplayerLicenseKey = licenceData?["theoplayer_license_key"] as? String
+        let theoplayerLicenseKey = configurationData?["theoplayer_license_key"] as? String
+        let playerScaleMode = configurationData?["theoplayer_scale_mode"] as? String
 
         var analytics = [AnalyticsDescription]()
-        if let moatPartnerCode = licenceData?["moat_partner_code"] as? String {
+        if let moatPartnerCode = configurationData?["moat_partner_code"] as? String {
             analytics.append(MoatOptions(partnerCode: moatPartnerCode,
                                          debugLoggingEnabled: true))
         }
 
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
-        let stylePaths = [bundle.path(forResource: "style", ofType: "css")].compactMap { $0 }
+        
+        var stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
+        if let customCss = urlForCustomCss() {
+            stylePaths.append(customCss)
+        }
         let playerConfig = THEOplayerConfiguration(chromeless: false,
                                                    defaultCSS: true,
                                                    cssPaths: stylePaths,
@@ -168,16 +188,23 @@ class THEOplayerView: UIView {
          */
         player.evaluateJavaScript("init({player: player})")
         player.presentationMode = .inline
-        
+
         attachJSEventListeners()
         attachEventListeners()
         player.autoplay = autoplay
         player.source = source
         player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         player.addAsSubview(of: self)
-        if (autoplay) {
+        if autoplay {
             player.play()
         }
+    }
 
+    func urlForCustomCss() -> String? {
+        guard let configurationJSON = pluginModel?.configurationJSON,
+              let cssURL = configurationJSON["css_url"] as? String else {
+            return nil
+        }
+        return cssURL
     }
 }

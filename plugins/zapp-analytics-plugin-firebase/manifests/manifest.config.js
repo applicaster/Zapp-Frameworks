@@ -89,7 +89,7 @@ const ui_frameworks = {
 
 const min_zapp_sdk = {
   android_for_quickbrick: "1.0.0",
-  ios_for_quickbrick: "2.0.2-Dev"
+  ios_for_quickbrick: "4.1.0-Dev"
 };
 
 const extra_dependencies_apple = [
@@ -122,9 +122,13 @@ const api_android = {
 };
 
 const api_apple = {
-  require_startup_execution: false,
+  require_startup_execution: true,
   class_name: "APAnalyticsProviderFirebase",
-  modules: ["ZappAnalyticsPluginFirebase"]
+  modules: ["ZappAnalyticsPluginFirebase"],
+  plist: {
+    NSUserTrackingUsageDescription:
+      "This identifier will be used to deliver personalized ads to you.",
+  },
 };
 
 const api = {

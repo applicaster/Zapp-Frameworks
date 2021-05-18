@@ -1,0 +1,116 @@
+{
+  "api": {
+    "require_startup_execution": true,
+    "class_name": "DidomiCMP",
+    "modules": [
+      "ZappCMPDidomi"
+    ],
+    "plist": {
+      "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+    }
+  },
+  "dependency_repository_url": [],
+  "dependency_name": "@applicaster/applicaster-cmp-didomi",
+  "author_name": "Applicaster",
+  "author_email": "zapp@applicaster.com",
+  "name": "Applicaster Didomi",
+  "description": "Didomi user consent screen",
+  "type": "general",
+  "screen": true,
+  "react_native": true,
+  "ui_builder_support": true,
+  "whitelisted_account_ids": [],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "min_zapp_sdk": "4.1.0-Dev",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "key": "present_on_startup",
+      "type": "checkbox",
+      "default": 1,
+      "label": "Present on startup",
+      "label_tooltip": "If enabled, consent screen will be shown on first application launch"
+    },
+    {
+      "key": "api_key",
+      "type": "text",
+      "label": "API key",
+      "default": "",
+      "tooltip_text": "API key"
+    },
+    {
+      "key": "ios_assets_bundle",
+      "type": "uploader",
+      "label": "Logo drawables zip",
+      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the Didomi web console"
+    }
+  ],
+  "identifier": "applicaster-cmp-didomi",
+  "npm_dependencies": [
+    "@applicaster/applicaster-cmp-didomi@0.4.1"
+  ],
+  "targets": [
+    "mobile"
+  ],
+  "platform": "ios_for_quickbrick",
+  "manifest_version": "0.4.1",
+  "dependency_version": "0.4.1",
+  "extra_dependencies": [
+    {
+      "ZappCMPDidomi": ":path => './node_modules/@applicaster/applicaster-cmp-didomi/apple/ZappCMPDidomi.podspec'"
+    }
+  ],
+  "general": {
+    "fields": [
+      {
+        "type": "hidden",
+        "key": "package_name",
+        "tooltip_text": "Didomi Package Name",
+        "default": "DidomiBridge"
+      },
+      {
+        "type": "hidden",
+        "key": "method_name",
+        "tooltip_text": "Default Method to Retreive",
+        "default": "showPreferences"
+      },
+      {
+        "type": "hidden",
+        "key": "on_dismiss",
+        "label": "On Dismiss",
+        "label_tooltip": "On dismiss of native screen do this",
+        "rules": "conditional",
+        "options": [
+          {
+            "text": "Navigate to screen",
+            "value": "screen"
+          },
+          {
+            "text": "Navigate to Home",
+            "value": "home"
+          },
+          {
+            "text": "Navigate back",
+            "value": "back"
+          }
+        ],
+        "initial_value": "back"
+      },
+      {
+        "type": "hidden",
+        "key": "to_screen",
+        "label": "Dismiss to Screen",
+        "tooltip_text": "Fallback or navigate to this screen after dismiss of native",
+        "conditional_fields": [
+          {
+            "key": "styles/title_text_data_key",
+            "condition_value": "screen"
+          }
+        ]
+      }
+    ]
+  }
+}

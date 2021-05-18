@@ -1,0 +1,27 @@
+{
+  "name": "@applicaster/crash-logs-ms-app-center-android",
+  "version": "0.2.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "applicaster": {
+    "supportedPlatforms": [
+      "android_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "amazon_fire_tv_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
+}

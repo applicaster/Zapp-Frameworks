@@ -63,6 +63,23 @@ const custom_configuration_fields_apple = [
     label: "Deactivate analytics collection",
     initial_value: "NO",
     tooltip_text: "If you need to deactivate Analytics collection permanently in a version of your app set value to Deactivate"
+  },
+  {
+    key: "skip_extra_dependencies",
+    type: "select",
+    options: [
+      {
+        "text": "On",
+        "value": "YES"
+      },
+      {
+        "text": "Off",
+        "value": "NO"
+      }
+    ],
+    label: "Prevent adding Firebase specific version",
+    initial_value: "NO",
+    tooltip_text: "Set to On if you want to prevent adding Firebase dependency that utilize IDFA"
   }
 ];
 
@@ -72,8 +89,8 @@ const custom_configuration_fields = {
 };
 
 const min_zapp_sdk = {
-  ios_for_quickbrick: "3.0.0-Dev",
-  tvos_for_quickbrick: "3.0.0-Dev",
+  ios_for_quickbrick: "4.1.0-Dev",
+  tvos_for_quickbrick: "4.1.0-Dev",
 };
 
 const extra_dependencies_apple = [

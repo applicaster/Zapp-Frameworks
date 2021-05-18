@@ -2,21 +2,22 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 import StoreFrontMobile from "./StoreFrontMobile";
 import StoreFrontTv from "./StoreFrontTv";
 import React, { useState, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
 import LoadingScreen from "./LoadingScreen";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MESSAGES from "./Config";
 import { showAlert } from "./Helper";
 import { useToggleNavBar } from "./Utils/Hooks";
 import { isApplePlatform } from "./Utils/Platform";
-import ParentLockPlugin from "@applicaster/quick-brick-parent-lock";
+import { usePickFromState } from "@applicaster/zapp-react-native-redux/hooks";
 
 import {
   purchaseAnItem,
   retrieveProducts,
   restore,
   initialize,
+  setDebugEnabled,
 } from "./Services/iAPService";
+
 import { createLogger } from "./Services/LoggerService";
 import * as R from "ramda";
 export const logger = createLogger({
@@ -25,7 +26,19 @@ export const logger = createLogger({
 import { useSelector } from "react-redux";
 
 export default function Storefront(props) {
-  const showParentLock = props?.screenStyles?.import_parent_lock;
+  const { plugins } = usePickFromState(["plugins"]);
+  const parentLockPlugin = plugins.find(
+    (plugin) => plugin.identifier === "parent-lock-qb"
+  );
+  const ParentLockPlugin = parentLockPlugin?.module;
+
+  let showParentLock =
+    (props?.screenStyles?.import_parent_lock === "1" ||
+      props?.screenStyles?.import_parent_lock === true) &&
+    props?.payload?.extensions?.skip_parent_lock !== true
+      ? true
+      : false;
+  const isDebugModeEnabled = props?.isDebugModeEnabled === true;
 
   useToggleNavBar();
 
@@ -49,6 +62,9 @@ export default function Storefront(props) {
 
   async function initializeIap() {
     try {
+      // Enables stubs for iap
+      setDebugEnabled(isDebugModeEnabled);
+
       logger.debug({
         message: "initializeIap: Initializing IAP plugin`",
       });
@@ -88,10 +104,14 @@ export default function Storefront(props) {
       const storeFee = storeFeesData[i];
       for (let i = 0; i < productsToPurchase.length; i++) {
         const productToPurchase = productsToPurchase[i];
+        console.log({ productToPurchase });
         if (
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
           storeFee.productType = productToPurchase.productType;
+          storeFee.purchased = productToPurchase.purchased;
+          storeFee.expiresAt = productToPurchase.expiresAt;
+
           if (!storeFee.title && productToPurchase.title) {
             storeFee.title = productToPurchase.title;
           }
@@ -106,7 +126,6 @@ export default function Storefront(props) {
     try {
       const productsToPurchase =
         props?.payload?.extensions?.in_app_purchase_data?.productsToPurchase;
-
       const storeFeesData = await retrieveProducts(productsToPurchase);
       if (storeFeesData.length === 0) {
         throw new Error(MESSAGES.validation.emptyStore);
@@ -183,18 +202,13 @@ export default function Storefront(props) {
 
     restore()
       .then(async (data) => {
-        const alertTitle = MESSAGES.restore.success;
-        const alertMessage = MESSAGES.restore.successInfo;
         const onRestoreCompleted = props?.onRestoreCompleted;
 
         await onRestoreCompleted(data);
         onRestoreSuccess();
-
-        showAlert(alertTitle, alertMessage, hideLoader);
       })
       .catch((err) => {
-        const alertTitle = MESSAGES.restore.fail;
-        showAlert(alertTitle, err.message, hideLoader);
+        throw err;
       });
   }
 

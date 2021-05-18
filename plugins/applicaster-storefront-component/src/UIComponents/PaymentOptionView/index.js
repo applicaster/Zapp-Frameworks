@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import PropTypes from "prop-types";
 import { mapKeyToStyle } from "../../Utils/Customization";
+import moment from "moment";
 import {
   paymentOptionStyleKeys,
   styles,
@@ -11,11 +12,16 @@ import {
 import ActionButton from "../Buttons/ActionButton.js";
 
 const paymentActions = {
-  subscribe: "Subscribe",
-  buy: "Buy",
+  subscribe: "Subscribe for:",
+  buy: "Buy for:",
 };
 
-function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
+function PaymentOptionView({
+  screenStyles,
+  paymentOptionItem,
+  onPress,
+  screenLocalizations,
+}) {
   const isLandscape = () => {
     const { width, height } = Dimensions.get("window");
     return width >= height;
@@ -26,8 +32,14 @@ function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
     payment_option_button_background: backgroundColor = "",
   } = screenStyles;
 
-  const { title, description, price, productType } = paymentOptionItem;
-
+  const {
+    title,
+    description,
+    price,
+    productType,
+    purchased,
+    expiresAt,
+  } = paymentOptionItem;
   const [
     titleStyle,
     descriptionStyle,
@@ -36,12 +48,41 @@ function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
 
   const actionForLabel =
     productType === "subscription"
-      ? paymentActions.subscribe
-      : paymentActions.buy;
+      ? screenLocalizations?.payment_option_action_text_type_subscribe ||
+        paymentActions.subscribe
+      : screenLocalizations?.payment_option_action_text_type_buy ||
+        paymentActions.buy;
 
   const buttonStyle = getButtonStyle(radius, backgroundColor);
 
-  const label = `${actionForLabel} for ${price}`.toUpperCase();
+  const label = `${actionForLabel} ${price}`.toUpperCase();
+  function renderPaymmentAction() {
+    return purchased ? (
+      <>
+        <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
+          {screenLocalizations?.purchased_message}
+        </Text>
+        {expiresAt && (
+          <Text style={description} numberOfLines={1} ellipsizeMode="tail">
+            {`${
+              screenLocalizations?.subscription_expiration_date_message
+            } ${moment
+              .unix(expiresAt)
+              .format(
+                screenLocalizations?.subscription_expiration_data_date_format
+              )}`}
+          </Text>
+        )}
+      </>
+    ) : (
+      <ActionButton
+        labelStyle={labelStyle}
+        buttonStyle={buttonStyle}
+        title={label}
+        onPress={onPress}
+      />
+    );
+  }
   return (
     <View style={getBoxStyles(screenStyles, isLandscape)}>
       <Text style={titleStyle} numberOfLines={1} ellipsizeMode="tail">
@@ -54,12 +95,7 @@ function PaymentOptionView({ screenStyles, paymentOptionItem, onPress }) {
       >
         {description}
       </Text>
-      <ActionButton
-        labelStyle={labelStyle}
-        buttonStyle={buttonStyle}
-        title={label}
-        onPress={onPress}
-      />
+      {renderPaymmentAction()}
     </View>
   );
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:weightSum="9">
+
+    <ImageView
+        android:id="@+id/team"
+        android:layout_width="@dimen/mini_flag_width"
+        android:layout_height="@dimen/mini_flag_height" />
+
+    <TextView
+        android:id="@+id/played"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/games_played"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/won"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/win_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/lost_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/drawn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/drawn_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/gf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/goals_for_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/gc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/goals_against_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/plus_less"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="+/-"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/points_title"
+        android:textColor="@color/details_text"
+        android:textStyle="bold" />
+</LinearLayout>
+
+

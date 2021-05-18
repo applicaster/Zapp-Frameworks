@@ -23,42 +23,42 @@ class PluginManagerTests: XCTestCase {
         static let playerPluginsListEmpty = "[PluginManager] - Player plugins not exists"
     }
 
-    func testAnalyticsPlugins() {
-        pluginsInitialization { (pluginModels) in
-            let pluginsManager = AnalyticsManager()
-            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
-                XCTAssert(false, ErrorMessages.analyticsPluginsListEmpty)
-                return
-            }
+    // func testAnalyticsPlugins() {
+    //     pluginsInitialization { (pluginModels) in
+    //         let pluginsManager = AnalyticsManager()
+    //         guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+    //             XCTAssert(false, ErrorMessages.analyticsPluginsListEmpty)
+    //             return
+    //         }
 
-            XCTAssertTrue(models.count > 0, ErrorMessages.analyticsPluginsListEmpty)
-        }
-    }
+    //         XCTAssertTrue(models.count > 0, ErrorMessages.analyticsPluginsListEmpty)
+    //     }
+    // }
 
-    func testGeneralPlugins() {
-        pluginsInitialization { (pluginModels) in
-            let pluginsManager = GeneralPluginsManager()
-            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
-                XCTAssert(false, ErrorMessages.generalPluginsListEmpty)
-                return
-            }
+    // func testGeneralPlugins() {
+    //     pluginsInitialization { (pluginModels) in
+    //         let pluginsManager = GeneralPluginsManager()
+    //         guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+    //             XCTAssert(false, ErrorMessages.generalPluginsListEmpty)
+    //             return
+    //         }
 
-            XCTAssertTrue(models.count > 0, ErrorMessages.generalPluginsListEmpty)
-        }
+    //         XCTAssertTrue(models.count > 0, ErrorMessages.generalPluginsListEmpty)
+    //     }
         
-    }
+    // }
 
-    func testPlayerPlugins() {
-        pluginsInitialization { (pluginModels) in
-            let pluginsManager = PlayerPluginsManager()
-            guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
-                XCTAssert(false, ErrorMessages.playerPluginsListEmpty)
-                return
-            }
+    // func testPlayerPlugins() {
+    //     pluginsInitialization { (pluginModels) in
+    //         let pluginsManager = PlayerPluginsManager()
+    //         guard let models = self.plugins(for: pluginsManager.pluginType, in: pluginModels) else {
+    //             XCTAssert(false, ErrorMessages.playerPluginsListEmpty)
+    //             return
+    //         }
 
-            XCTAssertTrue(models.count > 0, ErrorMessages.playerPluginsListEmpty)
-        }
-    }
+    //         XCTAssertTrue(models.count > 0, ErrorMessages.playerPluginsListEmpty)
+    //     }
+    // }
 }
 
 extension PluginManagerTests {

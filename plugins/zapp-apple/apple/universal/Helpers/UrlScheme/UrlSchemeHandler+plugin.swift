@@ -13,15 +13,36 @@ struct PluginURLSchemeKeys {
 }
 
 extension UrlSchemeHandler {
-    class func handlePluginURLScheme(url: URL) -> Bool {
-        guard let params = queryParams(url: url),
-              let pluginIdentifier = params[PluginURLSchemeKeys.pluginIdentifier] as? String,
-              let pluginModel = PluginsManager.pluginModelById(pluginIdentifier),
-              let classType = PluginsManager.adapterClass(pluginModel) as? PluginAdapterProtocol.Type else {
+    class func handlePluginURLScheme(url: URL,
+                                     rootController: RootController?) -> Bool {
+        let pathComponents = getPathComponents(url: url)
+        let queryParams = queryStringParams(url: url)
+        guard queryParams != nil || pathComponents.count > 0 else {
             return false
         }
+
+        var pluginAdapter: PluginAdapterProtocol?
+        // in case url has the following format: scheme://plugin?pluginIdentifier=xxxxx&a=1&b=2,
+        // look for the plugin by identifier
+        if let pluginIdentifier = queryParams?[PluginURLSchemeKeys.pluginIdentifier] as? String {
+            if let instance = rootController?.pluginsManager.getProviderInstance(identifier: pluginIdentifier) as? PluginAdapterProtocol & PluginURLHandlerProtocol,
+               instance.canHandlePluginURLScheme?(with: url) ?? true {
+                pluginAdapter = instance
+            }
+        } else {
+            // in case url has the following format: scheme://plugin?a=1&b=2
+            // look for all plugin implementing PluginURLHandlerProtocol and call canHandlePluginURLScheme to get fist provider that can handle the url
+            pluginAdapter = rootController?.pluginsManager.getProviderInstance(pluginType: ZPPluginType.General.rawValue,
+                                                                                          condition: { (p) -> Any? in
+                                                                                              guard let p = p as? PluginURLHandlerProtocol,
+                                                                                                    p.canHandlePluginURLScheme?(with: url) ?? true else {
+                                                                                                  return false
+                                                                                              }
+                                                                                              return true
+                                                                                          })
+        }
+
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
-        let pluginAdapter = classType.init(pluginModel: pluginModel)
         if let pluginAdapter = pluginAdapter as? PluginURLHandlerProtocol {
             return pluginAdapter.handlePluginURLScheme?(with: viewController,
                                                         url: url) ?? false

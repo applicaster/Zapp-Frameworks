@@ -13,6 +13,23 @@ const baseManifest = {
   unsupported_since_zapp_sdk: "",
   targets: ["mobile"],
   ui_frameworks: ["quickbrick"],
+  hooks: {
+    fields: [
+      {
+        group: true,
+        label: "Before Load",
+        folded: true,
+        fields: [
+          {
+            key: "preload_plugins",
+            type: "preload_plugins_selector",
+            label: "Select Plugins",
+            initial_value: [],
+          },
+        ],
+      },
+    ],
+  },
   screen: true,
   custom_configuration_fields: [
     {
@@ -20,6 +37,27 @@ const baseManifest = {
       key: "theoplayer_license_key",
       tooltip_text: "Theoplayer licence key",
       default: "",
+    },
+    {
+      type: "tag_select",
+      key: "theoplayer_scale_mode",
+      tooltip_text: "Set player scale mode",
+      options: [
+        {
+          text: "scale to fit",
+          value: "style-fit",
+        },
+        {
+          text: "scale to fill",
+          value: "style-fill",
+        },
+      ],
+      initial_value: "style-fit",
+    },
+    {
+      type: "uploader",
+      key: "css_url",
+      tooltip_text: "Additional CSS file"
     },
     {
       group: true,

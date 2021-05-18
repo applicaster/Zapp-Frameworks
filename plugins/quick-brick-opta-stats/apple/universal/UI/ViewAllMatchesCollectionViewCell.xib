@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ViewAllMatchesCollectionViewCell" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="all_matches_poster.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="jz9-on-tb4">
+                    <rect key="frame" x="8" y="8" width="359" height="216"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_down.png" translatesAutoresizingMaskIntoConstraints="NO" id="DuY-nY-wCg">
+                    <rect key="frame" x="323" y="24" width="28" height="28"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="28" id="LnE-un-oQD"/>
+                        <constraint firstAttribute="height" constant="28" id="SUB-F3-gDq"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="jz9-on-tb4" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-8" id="4du-Oo-8Px"/>
+                <constraint firstItem="DuY-nY-wCg" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="24" id="GQY-vd-C3i"/>
+                <constraint firstItem="jz9-on-tb4" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-8" id="JP5-P6-tGa"/>
+                <constraint firstItem="jz9-on-tb4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="Y1r-IH-qTR"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="DuY-nY-wCg" secondAttribute="trailing" constant="24" id="g4x-Mz-Gle"/>
+                <constraint firstItem="jz9-on-tb4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="vhr-fb-1oL"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="allMatchesImageView" destination="jz9-on-tb4" id="xuS-Ud-u0A"/>
+            </connections>
+            <point key="canvasLocation" x="138.40000000000001" y="153.82308845577214"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="all_matches_poster.jpg" width="686" height="464"/>
+        <image name="arrow_down.png" width="60" height="60"/>
+    </resources>
+</document>

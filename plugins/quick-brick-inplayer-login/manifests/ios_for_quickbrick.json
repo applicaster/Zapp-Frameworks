@@ -71,24 +71,6 @@
         }
       ],
       "initial_value": "go_back"
-    },
-    {
-      "type": "text",
-      "key": "consumable_type_mapper",
-      "tooltip_text": "Mapping key for consumable purchase",
-      "default": "consumable"
-    },
-    {
-      "type": "text",
-      "key": "non_consumable_type_mapper",
-      "tooltip_text": "Mapping key for non consumable purchase",
-      "default": "ppv"
-    },
-    {
-      "type": "text",
-      "key": "subscription_type_mapper",
-      "tooltip_text": "Mapping key for subscription purchase",
-      "default": "subscription"
     }
   ],
   "hooks": {
@@ -111,8 +93,8 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "5.0.0",
-  "manifest_version": "5.0.0",
+  "dependency_version": "7.1.1",
+  "manifest_version": "7.1.1",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [
@@ -136,7 +118,7 @@
         "key": "title_font_ios",
         "type": "ios_font_selector",
         "label": "iOS title font",
-        "initial_value": "Roboto-Bold"
+        "initial_value": "Helvetica-Bold"
       },
       {
         "key": "title_font_android",
@@ -160,7 +142,7 @@
         "key": "back_button_font_ios",
         "type": "ios_font_selector",
         "label": "iOS back button font",
-        "initial_value": "Roboto-Bold"
+        "initial_value": "Helvetica-Bold"
       },
       {
         "key": "back_button_font_android",
@@ -184,7 +166,7 @@
         "key": "fields_font_ios",
         "type": "ios_font_selector",
         "label": "iOS input fields title font",
-        "initial_value": "Roboto-Bold"
+        "initial_value": "Helvetica-Bold"
       },
       {
         "key": "fields_font_android",
@@ -220,7 +202,7 @@
         "key": "forgot_password_font_ios",
         "type": "ios_font_selector",
         "label": "iOS forgot password font",
-        "initial_value": "Roboto-Regular"
+        "initial_value": "Helvetica"
       },
       {
         "key": "forgot_password_font_android",
@@ -250,7 +232,7 @@
         "key": "action_button_font_ios",
         "type": "ios_font_selector",
         "label": "iOS action button font",
-        "initial_value": "Roboto-Bold"
+        "initial_value": "Helvetica-Bold"
       },
       {
         "key": "action_button_font_android",
@@ -274,7 +256,7 @@
         "key": "create_account_link_font_ios",
         "type": "ios_font_selector",
         "label": "iOS Create account link font",
-        "initial_value": "Roboto-Regular"
+        "initial_value": "Helvetica"
       },
       {
         "key": "create_account_link_font_android",
@@ -304,7 +286,7 @@
         "key": "logout_title_font_ios",
         "type": "ios_font_selector",
         "label": "Logout iOS title font",
-        "initial_value": "Roboto-Bold"
+        "initial_value": "Helvetica-Bold"
       },
       {
         "key": "logout_title_font_android",
@@ -507,5 +489,21 @@
   },
   "targets": [
     "mobile"
-  ]
+  ],
+  "general": {
+    "fields": [
+      {
+        "key": "present_full_screen",
+        "type": "switch",
+        "initial_value": true,
+        "hidden": true
+      },
+      {
+        "type": "switch",
+        "key": "show_hook_once",
+        "tooltip_text": "Define if hook should be presented on time or each time screen will open",
+        "initial_value": false
+      }
+    ]
+  }
 }

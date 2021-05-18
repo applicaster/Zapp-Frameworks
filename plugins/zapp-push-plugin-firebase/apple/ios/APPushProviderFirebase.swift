@@ -22,7 +22,34 @@ open class APPushProviderFirebase: ZPPushProvider {
     override open func getKey() -> String {
         return model?.identifier ?? "ZappPushPluginFirebase"
     }
-
+    
+    lazy var defaultTopics: [String] = {
+        guard let value = self.configurationJSON?["default_topics"] as? String
+        else {
+            return []
+        }
+        return value.components(separatedBy: ",")
+    }()
+    
+    lazy var localizedDefaultTopics: [String] = {
+        var topics:[String] = []
+        guard let value = self.configurationJSON?["default_localized_topics"] as? String
+        else {
+            return topics
+        }
+        
+        topics = value.components(separatedBy: ",")
+        
+        if let languageCode = languageCode {
+            topics = topics.map { "\($0)-\(languageCode)"}
+        }
+        return topics
+    }()
+    
+    lazy var languageCode: String? = {
+        return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil)
+    }()
+    
     override open func configureProvider() -> Bool {
         logger?.debugLog(message: "Handle Creation and configure plugin")
         if FirebaseApp.app() == nil {
@@ -56,8 +83,9 @@ open class APPushProviderFirebase: ZPPushProvider {
 
     open func addTagsToDevice(_ tags: [String]?,
                               completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
-        guard let topics = tags else {
-            completion(true, nil)
+        guard let topics = tags,
+              topics.count > 0 else {
+            completion(true, tags)
             return
         }
 
@@ -138,17 +166,27 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     fileprivate func setDefaultTopicIfNeeded() {
-        if let _ = registeredTopicsInLocalStorage {
-            // topics already defined, no changes needed
+        if let topics = registeredTopicsInLocalStorage {
+            // topics already defined, no changes needed, update local array
+            registeredTopics = Set(topics)
         } else {
             // add default value
-            if let defaultTopic = configurationJSON?["default_topic"] as? String,
-               defaultTopic.isEmpty == false {
-                addTagsToDevice([defaultTopic]) { _, _ in
-                    // do nothing
-                }
+            var topics:[String] = defaultTopics
+            topics.append(contentsOf: localizedDefaultTopics)
+
+            addTagsToDevice(topics.unique()) { _, _ in
+                // do nothing
             }
         }
+    }
+    
+    fileprivate func cleanRegisteredTopics() {
+        // clean local registered topics
+        registeredTopics.removeAll()
+        // clean local storage topics
+        updateTopicsInLocalStorage()
+        // set default
+        setDefaultTopicIfNeeded()
     }
 
     fileprivate var namespace: String? {
@@ -165,6 +203,11 @@ open class APPushProviderFirebase: ZPPushProvider {
     }
 
     fileprivate func updateTopicsInLocalStorage() {
+        guard registeredTopics.count > 0 else {
+            _ = FacadeConnector.connector?.storage?.localStorageRemoveValue(for: localStorageTopicsParam, namespace: namespace)
+            return
+        }
+        
         let topics = Array(registeredTopics).joined(separator: ",")
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: localStorageTopicsParam,
                                                                      value: topics,
@@ -183,7 +226,8 @@ extension APPushProviderFirebase: MessagingDelegate {
                          data: ["token": fcmToken])
 
         // clean local registered topics
-        registeredTopics.removeAll()
+        cleanRegisteredTopics()
+
         // subscribe to topics appears in local storage
         addTagsToDevice(registeredTopicsInLocalStorage, completion: { _, _ in
             // do nothing

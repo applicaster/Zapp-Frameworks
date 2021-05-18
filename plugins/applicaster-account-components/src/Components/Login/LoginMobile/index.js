@@ -238,5 +238,4 @@ LoginMobile.defaultProps = {
   screenStyles: {},
   screenLocalizations: {},
 };
-
 export default LoginMobile;

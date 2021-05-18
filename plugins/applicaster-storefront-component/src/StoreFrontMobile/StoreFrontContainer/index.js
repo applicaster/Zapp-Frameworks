@@ -63,6 +63,7 @@ export default function StoreFrontContainer(props) {
         >
           {dataSource.map((item, index) => (
             <PaymentOptionView
+              screenLocalizations={screenLocalizations}
               screenStyles={screenStyles}
               paymentOptionItem={item}
               key={item.productIdentifier}

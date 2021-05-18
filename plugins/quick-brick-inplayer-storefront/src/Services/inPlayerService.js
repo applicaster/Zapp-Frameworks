@@ -39,7 +39,7 @@ export async function setConfig(environment = "production") {
     })
     .setMessage(`Set InPlayer environment: ${environment}`)
     .send();
-  await InPlayer.setConfig("development"); //TODO: Remove hard coded value
+  await InPlayer.setConfig(environment);
 }
 
 export async function getAssetByExternalId(payload) {
@@ -188,7 +188,6 @@ export async function checkAccessForAsset({
       });
     } else {
       const isPurchaseRequired = assetPaymentRequired(error);
-
       if (isPurchaseRequired) {
         logger.debug({
           message: `InPlayer.Asset.checkAccessForAsset >> status: ${error?.response?.status}, url: ${error?.response?.request?.responseURL}, is_purchase_required: ${isPurchaseRequired}`,
@@ -200,7 +199,6 @@ export async function checkAccessForAsset({
             error,
           },
         });
-
         throw { ...error, requestedToPurchase: isPurchaseRequired };
       }
       logger.error({
@@ -525,6 +523,7 @@ export async function validateExternalPayment({
     if (!access_fee_id) {
       throw new Error("Payment access_fee_id is a required parameter!");
     }
+
     const response = await InPlayer.Payment.validateReceipt({
       platform: platformName(store),
       itemId: item_id,

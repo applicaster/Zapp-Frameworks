@@ -1,5 +1,9 @@
 import { Platform } from "react-native";
-import { ApplicasterIAPModule } from "@applicaster/applicaster-iap";
+import {
+  ApplicasterIAPModule,
+  ApplicasterIAPModuleStubs,
+} from "@applicaster/applicaster-iap";
+
 import * as R from "ramda";
 import MESSAGES from "../../Config";
 import {
@@ -7,6 +11,16 @@ import {
   BaseSubsystem,
   BaseCategories,
 } from "../../Services/LoggerService";
+
+let isDebugEnabled = false;
+
+function iAPModule() {
+  return isDebugEnabled ? ApplicasterIAPModuleStubs : ApplicasterIAPModule;
+}
+
+export function setDebugEnabled(enabled) {
+  isDebugEnabled = enabled;
+}
 
 export const logger = createLogger({
   subsystem: `${BaseSubsystem}/${BaseCategories.IAP_SERVICE}`,
@@ -26,12 +40,12 @@ export async function initialize(store) {
     );
   }
 
-  const isInitialized = await ApplicasterIAPModule.isInitialized();
+  const isInitialized = await iAPModule().isInitialized();
   if (isInitialized) {
     return true;
   }
 
-  const initializationResult = await ApplicasterIAPModule.initialize(store);
+  const initializationResult = await iAPModule().initialize(store);
 
   if (!initializationResult) {
     throw new Error(
@@ -60,7 +74,7 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
       },
     });
 
-    const purchaseCompletion = await ApplicasterIAPModule.purchase({
+    const purchaseCompletion = await iAPModule().purchase({
       productIdentifier,
       finishing: false,
       productType,
@@ -75,7 +89,7 @@ export async function purchaseAnItem({ productIdentifier, productType }) {
       },
     });
 
-    const result = await ApplicasterIAPModule.finishPurchasedTransaction({
+    const result = await iAPModule().finishPurchasedTransaction({
       ...purchaseCompletion,
       productType,
     });
@@ -104,9 +118,8 @@ export async function retrieveProducts(purchasableItems) {
         },
       });
 
-      let result = await ApplicasterIAPModule.products(purchasableItems);
+      let result = await iAPModule().products(purchasableItems);
       result = R.prop("products")(result);
-
       logger.debug({
         message: `retrieveProducts: ApplicasterIAPModule.products >> Availible products to purchase recieved`,
         data: {
@@ -138,7 +151,7 @@ export async function restore() {
       message: `ApplicasterIAPModule.restore >> Restore purched items`,
     });
 
-    const restoreResultFromStore = await ApplicasterIAPModule.restore();
+    const restoreResultFromStore = await iAPModule().restore();
     logger.debug({
       message: `ApplicasterIAPModule.restore >> Restore complete`,
       data: { restored_data: restoreResultFromStore },
