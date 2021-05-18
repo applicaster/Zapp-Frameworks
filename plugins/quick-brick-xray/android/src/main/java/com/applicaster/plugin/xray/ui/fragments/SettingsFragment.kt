@@ -14,10 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.applicaster.identityservice.UUIDUtil
 import com.applicaster.plugin.xray.R
-import com.applicaster.plugin.xray.TimingSink
 import com.applicaster.plugin.xray.XRayPlugin
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.model.Settings
+import com.applicaster.plugin.xray.sinks.TimingSink
 import com.applicaster.plugin_manager.PluginManager
 import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.crashreporter.Reporting

@@ -22,6 +22,7 @@ import com.applicaster.plugin.xray.logadapters.PrinterAdapter
 import com.applicaster.plugin.xray.model.LogLevelSetting
 import com.applicaster.plugin.xray.model.Settings
 import com.applicaster.plugin.xray.sinks.LogzSink
+import com.applicaster.plugin.xray.sinks.TimingSink
 import com.applicaster.plugin.xray.ui.LogActivity
 import com.applicaster.plugin_manager.crashlog.CrashlogPlugin
 import com.applicaster.util.*
@@ -163,25 +164,7 @@ class XRayPlugin : CrashlogPlugin {
 
     private fun apply(settings: Settings) {
 
-        Core.get().removeSink(fileSinkKey)
-
-        val reportEmail = configuration?.get(reportEmailKey)
-
-        val fileLogLevel = settings.fileLogLevel?.level
-        if(null != fileLogLevel) {
-            val fileSink = when {
-                maxLogFileSize <= 0 -> PackageFileLogSink(context, fileSinkFileName)
-                else -> PackageFileLogSink(context, fileSinkFileName, maxLogFileSize)
-            }
-            Core.get()
-                    .addSink(fileSinkKey, fileSink)
-                    .setFilter(fileSinkKey, "", DefaultSinkFilter(fileLogLevel))
-            // enable our own crash reports sending, but do not handle crashes
-            Reporting.init(reportEmail ?: "", fileSink.file)
-        } else {
-            // enable basic reporting without file (not very useful)
-            Reporting.init(reportEmail ?: "", null)
-        }
+        val fileLogLevel = toggleFileLog(settings)
 
         @Suppress("ControlFlowWithEmptyBody")
         if(true == settings.crashReporting) {
@@ -197,26 +180,53 @@ class XRayPlugin : CrashlogPlugin {
             XRayNotification.hide(context)
         }
 
-        hookRNLogger(settings.reactNativeLogLevel?.level)
+        toggleRNLogger(settings.reactNativeLogLevel?.level)
 
-        if(true == settings.reactNativeDebugLogging) {
+        toggleRNPrinter(settings)
+
+        // add shortcut
+        setupShortcut(true == settings.shortcutEnabled)
+
+        toggleTiming(settings)
+
+        toggleRemote(settings)
+
+        effectiveSettingsObservable.postValue(settings)
+    }
+
+    private fun toggleRNPrinter(settings: Settings) {
+        if (true == settings.reactNativeDebugLogging) {
             PrinterHolder.setPrinter(PrinterAdapter())
             pluginLogger.i(TAG).message("React native printer is now intercepted by X-Ray")
         } else {
             PrinterHolder.setPrinter(NoopPrinter.INSTANCE)
         }
-
-        // add shortcut
-        setupShortcut(true == settings.shortcutEnabled)
-
-        triggerTiming(settings)
-
-        triggerRemote(settings)
-
-        effectiveSettingsObservable.postValue(settings)
     }
 
-    private fun triggerTiming(settings: Settings) {
+    private fun toggleFileLog(settings: Settings): LogLevel? {
+        Core.get().removeSink(fileSinkKey)
+
+        val reportEmail = configuration?.get(reportEmailKey)
+
+        val fileLogLevel = settings.fileLogLevel?.level
+        if (null != fileLogLevel) {
+            val fileSink = when {
+                maxLogFileSize <= 0 -> PackageFileLogSink(context, fileSinkFileName)
+                else -> PackageFileLogSink(context, fileSinkFileName, maxLogFileSize)
+            }
+            Core.get()
+                    .addSink(fileSinkKey, fileSink)
+                    .setFilter(fileSinkKey, "", DefaultSinkFilter(fileLogLevel))
+            // enable our own crash reports sending, but do not handle crashes
+            Reporting.init(reportEmail ?: "", fileSink.file)
+        } else {
+            // enable basic reporting without file (not very useful)
+            Reporting.init(reportEmail ?: "", null)
+        }
+        return fileLogLevel
+    }
+
+    private fun toggleTiming(settings: Settings) {
         val timingSink = Core.get().getSink("timing")
         if (true == settings.timingLogging) {
             if (null == timingSink) {
@@ -229,7 +239,7 @@ class XRayPlugin : CrashlogPlugin {
         }
     }
 
-    private fun triggerRemote(settings: Settings) {
+    private fun toggleRemote(settings: Settings) {
         val logzSink = Core.get().getSink(logzSinkName)
         if (true == settings.logzToken?.isNotEmpty()) {
             if (!APDebugUtil.getIsInDebugMode()) {
@@ -247,7 +257,7 @@ class XRayPlugin : CrashlogPlugin {
         }
     }
 
-    private fun hookRNLogger(level: LogLevel?) {
+    private fun toggleRNLogger(level: LogLevel?) {
         if(null == level){
             FLog.setLoggingDelegate(FLogDefaultLoggingDelegate.getInstance())
             pluginLogger.i(TAG).message("React native logger is not intercepted by X-Ray anymore")
