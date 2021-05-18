@@ -26,7 +26,6 @@ const MESSAGES = {
 };
 const ios = require("../../../manifests/ios_for_quickbrick.json");
 const android = require("../../../manifests/android_for_quickbrick.json");
-
 const manifestJson = () => {
   try {
     return platformSelect({
@@ -42,26 +41,16 @@ export function pluginIdentifier() {
   return manifestJson().identifier;
 }
 
-export let styles = null;
 export function getStyles(screenStyles) {
-  return styles ? styles : prepareStyles(screenStyles);
+  return prepareStyles(screenStyles);
 }
 
 export function prepareStyles(screenStyles) {
-  styles = populateConfigurationValues(manifestJson().styles.fields)(
+  const styles = populateConfigurationValues(manifestJson().styles.fields)(
     screenStyles
   );
-  styles.import_parent_lock = screenStyles.import_parent_lock
-    ? screenStyles.import_parent_lock
-    : false;
-
   return styles;
 }
-
-export const isHomeScreen = (navigator) => {
-  return R.pathOr(false, ["payload", "home"], navigator.screenData);
-};
-
 const mapInputKeyToStyle = (key, obj) => {
   return {
     backgroundColor: obj?.[`${key}_background`],
@@ -156,16 +145,4 @@ const normalizeKeys = (obj) => {
     return [keyArr.join("_"), val];
   });
   return Object.fromEntries(objEntries);
-};
-
-export const splitInputTypeStyles = (styles) => {
-  const focused = pickByKey("_focused")(styles);
-  const filled = pickByKey("_filled")(styles);
-  const _default = R.omit([...R.keys(filled), ...R.keys(focused)])(styles);
-
-  return {
-    focused: normalizeKeys(focused),
-    filled: normalizeKeys(filled),
-    default: _default,
-  };
 };

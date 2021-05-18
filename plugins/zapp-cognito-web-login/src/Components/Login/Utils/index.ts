@@ -50,12 +50,7 @@ export function isPlayerHook(payload: ZappEntry): boolean {
   if (!payload) {
     return false;
   }
-  console.log({
-    isPlayerHook: R.compose(
-      R.propEq("plugin_type", "player"),
-      R.prop(["targetScreen"])
-    )(payload),
-  });
+
   return R.compose(
     R.propEq("plugin_type", "player"),
     R.prop(["targetScreen"])

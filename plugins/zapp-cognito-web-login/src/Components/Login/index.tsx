@@ -47,7 +47,7 @@ const Login = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-
+  console.log(styles, navigator, screenStyles);
   const {
     configuration: { loginURL, clientId, region, logout_completion_action },
   } = props;
