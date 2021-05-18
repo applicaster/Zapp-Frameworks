@@ -71,6 +71,10 @@ export function pluginByScreenId({ rivers, screenId }) {
   return plugin || null;
 }
 
+export const isHomeScreen = (navigator) => {
+  return R.pathOr(false, ["payload", "home"], navigator.screenData);
+};
+
 export const isAuthenticationRequired = (payload: ZappEntry) => {
   const requires_authentication = R.path([
     "extensions",

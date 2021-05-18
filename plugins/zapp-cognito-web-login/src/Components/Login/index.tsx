@@ -14,6 +14,7 @@ import {
   removeDataFromStorages,
   isAuthenticationRequired,
   isPlayerHook,
+  isHomeScreen,
 } from "./Utils";
 import {
   createLogger,
@@ -67,20 +68,7 @@ const Login = (props) => {
       const playerHook = isPlayerHook(props?.payload);
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
-      console.log({
-        testEnvironmentEnabled:
-          props?.configuration?.force_authentication_on_all,
-        payload: props?.payload,
-        playerHook,
-        isAuthenticationRequired: isAuthenticationRequired(payload),
-        "testEnvironmentEnabled === off": testEnvironmentEnabled === "off",
-        "isAuthenticationRequired(payload) === false":
-          isAuthenticationRequired(payload) === false,
-        result:
-          playerHook === true &&
-          (testEnvironmentEnabled === "off" ||
-            isAuthenticationRequired(payload) === false),
-      });
+
       if (
         playerHook === true &&
         testEnvironmentEnabled === "off" &&
@@ -175,7 +163,14 @@ const Login = (props) => {
     }
   }
 
-  function onClose() {}
+  function onClose() {
+    mounted.current &&
+      callback &&
+      callback({ success: false, error: null, payload });
+    logger.debug({
+      message: `onClose: Close button pushed`,
+    });
+  }
 
   function renderFlow() {
     return loading === false ? (
@@ -193,11 +188,13 @@ const Login = (props) => {
             onMessage={onMessage}
           />
         )}
-        <FloatingButton
-          screenStyles={screenStyles}
-          screenLocalizations={screenLocalizations}
-          onClose={onClose}
-        />
+        {loading === false && !payload && isHomeScreen(navigator) === false && (
+          <FloatingButton
+            screenStyles={screenStyles}
+            screenLocalizations={screenLocalizations}
+            onClose={onClose}
+          />
+        )}
       </SafeAreaView>
     ) : null;
   }
