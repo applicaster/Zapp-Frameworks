@@ -66,14 +66,18 @@ const Login = (props) => {
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
 
-      if (payload && payloadIsScreen === false && (testEnvironmentEnabled === "on" || isAuthenticationRequired(payload)) {
+      if (
+        payload &&
+        payloadIsScreen === false &&
+        (testEnvironmentEnabled === "on" || isAuthenticationRequired(payload))
+      ) {
         logger.debug({
           message: `setupEnvironment: Hook finished, no authentefication required, skipping`,
         });
         mounted.current &&
-        callback &&
-        callback({ success: true, error: null, payload });
-        return
+          callback &&
+          callback({ success: true, error: null, payload });
+        return;
       }
 
       const userNeedsToLogin = await isLoginRequired();
