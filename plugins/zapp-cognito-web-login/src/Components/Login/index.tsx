@@ -13,6 +13,7 @@ import {
   refreshToken,
   removeDataFromStorages,
   isAuthenticationRequired,
+  isPlayerHook,
 } from "./Utils";
 import {
   createLogger,
@@ -37,7 +38,6 @@ const Login = (props) => {
   const [loading, setLoading] = useState(true);
   const { callback, payload, rivers } = props;
   const screenId = navigator?.activeRiver?.id;
-  const payloadIsScreen = payload?.type;
 
   const localizations = getRiversProp("localizations", rivers, screenId);
   const styles = getRiversProp("styles", rivers, screenId);
@@ -63,20 +63,38 @@ const Login = (props) => {
 
   async function setupEnvironment() {
     try {
+      const playerHook = isPlayerHook(props?.payload);
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
-
+      console.log({
+        testEnvironmentEnabled:
+          props?.configuration?.force_authentication_on_all,
+        payload: props?.payload,
+        playerHook,
+        isAuthenticationRequired: isAuthenticationRequired(payload),
+        "testEnvironmentEnabled === off": testEnvironmentEnabled === "off",
+        "isAuthenticationRequired(payload) === false":
+          isAuthenticationRequired(payload) === false,
+        result:
+          playerHook === true &&
+          (testEnvironmentEnabled === "off" ||
+            isAuthenticationRequired(payload) === false),
+      });
       if (
-        payload &&
-        payloadIsScreen === false &&
-        (testEnvironmentEnabled === "on" || isAuthenticationRequired(payload))
+        playerHook === true &&
+        testEnvironmentEnabled === "off" &&
+        isAuthenticationRequired(payload) === false
       ) {
         logger.debug({
           message: `setupEnvironment: Hook finished, no authentefication required, skipping`,
         });
         mounted.current &&
           callback &&
-          callback({ success: true, error: null, payload });
+          callback({
+            success: true,
+            error: null,
+            payload,
+          });
         return;
       }
 

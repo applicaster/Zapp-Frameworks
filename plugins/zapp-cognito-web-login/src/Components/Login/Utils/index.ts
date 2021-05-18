@@ -46,6 +46,22 @@ export const getRiversProp = (key, rivers = {}, screenId = "") => {
   return getPropByKey(rivers);
 };
 
+export function isPlayerHook(payload: ZappEntry): boolean {
+  if (!payload) {
+    return false;
+  }
+  console.log({
+    isPlayerHook: R.compose(
+      R.propEq("plugin_type", "player"),
+      R.prop(["targetScreen"])
+    )(payload),
+  });
+  return R.compose(
+    R.propEq("plugin_type", "player"),
+    R.prop(["targetScreen"])
+  )(payload);
+}
+
 export function pluginByScreenId({ rivers, screenId }) {
   let plugin = null;
   if (screenId && screenId?.length > 0) {
@@ -62,12 +78,12 @@ export const isAuthenticationRequired = (payload: ZappEntry) => {
   ])(payload);
 
   logger.debug({
-    message: `Payload entry is requires_authentication: ${requires_authentication}`,
+    message: `Payload entry is requires_authentication: ${!!requires_authentication}`,
     data: {
-      requires_authentication: requires_authentication,
+      requires_authentication: !!requires_authentication,
     },
   });
-  return requires_authentication;
+  return !!requires_authentication;
 };
 
 export function isTokenExpired(expiresIn: number): boolean {
