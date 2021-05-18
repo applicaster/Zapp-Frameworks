@@ -206,7 +206,7 @@ class XRayPlugin : CrashlogPlugin {
     private fun toggleFileLog(settings: Settings): LogLevel? {
         Core.get().removeSink(fileSinkKey)
 
-        val reportEmail = configuration?.get(reportEmailKey)
+        val reportEmail = configuration?.get(reportEmailKey) ?: ""
 
         val fileLogLevel = settings.fileLogLevel?.level
         if (null != fileLogLevel) {
@@ -218,10 +218,10 @@ class XRayPlugin : CrashlogPlugin {
                     .addSink(fileSinkKey, fileSink)
                     .setFilter(fileSinkKey, "", DefaultSinkFilter(fileLogLevel))
             // enable our own crash reports sending, but do not handle crashes
-            Reporting.init(reportEmail ?: "", fileSink.file)
+            Reporting.init(reportEmail, fileSink.file)
         } else {
             // enable basic reporting without file (not very useful)
-            Reporting.init(reportEmail ?: "", null)
+            Reporting.init(reportEmail, null)
         }
         return fileLogLevel
     }
@@ -247,13 +247,13 @@ class XRayPlugin : CrashlogPlugin {
             } else {
                 if (null == logzSink) {
                     Core.get().addSink(logzSinkName, LogzSink("pDqSekjZxUYbOBPmLeBVrXvULApiKrFt", UUIDUtil.getUUID()))
-                    APLogger.warn(TAG, "Logz.io sink was enabled")
+                    pluginLogger.w(TAG).message("Logz.io sink was enabled")
                     Toast.makeText(context, R.string.lbl_xray_remote_log, Toast.LENGTH_LONG).show()
                 }
             }
         } else if (null != logzSink) {
             Core.get().removeSink(logzSink)
-            APLogger.info(TAG, "Logz.io sink was disabled")
+            pluginLogger.i(TAG).message( "Logz.io sink was disabled")
         }
     }
 
