@@ -65,9 +65,9 @@ class GemiusAgent : BaseAnalyticsAgent() {
                         if("_SC" == k) {
                             val sc = jsonObject.get(k).toString()
                             if(id != sc) {
+                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc, it will be overridden")
                                 id = sc
                                 idOverride = sc
-                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc, it will be overridden")
                             }
                             continue
                         }
