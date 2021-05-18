@@ -1,6 +1,6 @@
 {
   "name": "ZappAnalyticsPluginFirebase",
-  "version": "9.1.0",
+  "version": "9.2.0",
   "summary": "ZappAnalyticsPluginFirebase",
   "description": "ZappAnalyticsPluginFirebase container.",
   "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
@@ -8,7 +8,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/zapp-analytics-plugin-firebase/9.1.0"
+    "tag": "@@applicaster/zapp-analytics-plugin-firebase/9.2.0"
   },
   "platforms": {
     "ios": "12.0"
