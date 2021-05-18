@@ -34,7 +34,6 @@ const FloatingButton = ({ screenStyles, screenLocalizations, onClose }) => {
     padding: 0,
     position: "absolute",
   };
-  console.log({ screenStyles });
   function renderButton() {
     if (screenStyles?.top_button_type === "image") {
       return renderImage();

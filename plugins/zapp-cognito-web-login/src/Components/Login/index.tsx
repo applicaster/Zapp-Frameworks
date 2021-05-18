@@ -47,7 +47,6 @@ const Login = (props) => {
 
   const screenStyles = getStyles(styles);
   const screenLocalizations = getLocalizations(localizations);
-  console.log(styles, navigator, screenStyles);
   const {
     configuration: { loginURL, clientId, region, logout_completion_action },
   } = props;
@@ -174,28 +173,30 @@ const Login = (props) => {
 
   function renderFlow() {
     return loading === false ? (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: screenStyles?.background_color,
-        }}
-      >
-        {loading === false && (
-          <WebView
-            source={{
-              uri: loginURL,
-            }}
-            onMessage={onMessage}
-          />
-        )}
-        {loading === false && !payload && isHomeScreen(navigator) === false && (
+      <>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: screenStyles?.background_color,
+          }}
+        >
+          {loading === false && (
+            <WebView
+              source={{
+                uri: loginURL,
+              }}
+              onMessage={onMessage}
+            />
+          )}
+        </SafeAreaView>
+        {loading === false && payload && isHomeScreen(navigator) === false && (
           <FloatingButton
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             onClose={onClose}
           />
         )}
-      </SafeAreaView>
+      </>
     ) : null;
   }
 
