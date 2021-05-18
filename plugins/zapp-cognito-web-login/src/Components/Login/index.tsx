@@ -12,6 +12,7 @@ import {
   isLoginRequired,
   refreshToken,
   removeDataFromStorages,
+  isAuthenticationRequired,
 } from "./Utils";
 import {
   createLogger,
@@ -36,6 +37,7 @@ const Login = (props) => {
   const [loading, setLoading] = useState(true);
   const { callback, payload, rivers } = props;
   const screenId = navigator?.activeRiver?.id;
+  const payloadIsScreen = payload?.type;
 
   const localizations = getRiversProp("localizations", rivers, screenId);
   const styles = getRiversProp("styles", rivers, screenId);
@@ -61,8 +63,20 @@ const Login = (props) => {
 
   async function setupEnvironment() {
     try {
-      const userNeedsToLogin = await isLoginRequired();
+      const testEnvironmentEnabled =
+        props?.configuration?.force_authentication_on_all || "off";
 
+      if (payload && payloadIsScreen === false && (testEnvironmentEnabled === "on" || isAuthenticationRequired(payload)) {
+        logger.debug({
+          message: `setupEnvironment: Hook finished, no authentefication required, skipping`,
+        });
+        mounted.current &&
+        callback &&
+        callback({ success: true, error: null, payload });
+        return
+      }
+
+      const userNeedsToLogin = await isLoginRequired();
       if (userNeedsToLogin) {
         logger.debug({
           message: "setupEnvironment: Presenting login screen",
@@ -100,14 +114,19 @@ const Login = (props) => {
   async function onMessage(event) {
     try {
       const data = event?.nativeEvent?.data;
+      const parsedData = JSON.parse(data);
+
       logger.debug({
         message: `onMessage: Login screen send event`,
-        data: { data },
+        data: { data, parsed_data: parsedData },
       });
-      if (data?.action === "logout") {
+      if (parsedData?.action === "logout") {
+        if (parsedData?.success === false) {
+          throw Error("onMessage: Logout failed from the web service");
+        }
         await removeDataFromStorages();
       } else {
-        await saveLoginDataToStorages(data);
+        await saveLoginDataToStorages(parsedData);
         const success = await refreshToken(clientId, region);
 
         logger.debug({

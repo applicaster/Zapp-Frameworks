@@ -55,8 +55,23 @@ export function pluginByScreenId({ rivers, screenId }) {
   return plugin || null;
 }
 
-export function isTokenExpired(token: number): boolean {
-  return moment(token).isSameOrBefore();
+export const isAuthenticationRequired = (payload: ZappEntry) => {
+  const requires_authentication = R.path([
+    "extensions",
+    "requires_authentication",
+  ])(payload);
+
+  logger.debug({
+    message: `Payload entry is requires_authentication: ${requires_authentication}`,
+    data: {
+      requires_authentication: requires_authentication,
+    },
+  });
+  return requires_authentication;
+};
+
+export function isTokenExpired(expiresIn: number): boolean {
+  return moment(expiresIn).isSameOrAfter();
 }
 
 export async function refreshToken(clientId, region): Promise<boolean> {
@@ -64,11 +79,15 @@ export async function refreshToken(clientId, region): Promise<boolean> {
     const expiresIn = await localStorageGet(expires_in);
     const refreshToken = await localStorageGet(refresh_token);
 
-    const expired = isTokenExpired(expiresIn);
+    const expired = isTokenExpired(parseInt(expiresIn));
     if (expired) {
       logger.debug({
         message: `refreshToken: before refresh`,
-        data: { is_token_expired: expired },
+        data: {
+          is_token_expired: expired,
+          expires_in: expiresIn,
+          refreshToken: refresh_token,
+        },
       });
       const refreshResult = await refresh(refreshToken, clientId, region);
 
@@ -83,6 +102,15 @@ export async function refreshToken(clientId, region): Promise<boolean> {
       logger.debug({
         message: `refreshToken: completed`,
         data: { refresh_result: refreshResult, login_data: loginData },
+      });
+    } else {
+      logger.debug({
+        message: `refreshToken: completed, no need to refresh`,
+        data: {
+          is_token_expired: expired,
+          expires_in: expiresIn,
+          refreshToken: refresh_token,
+        },
       });
     }
     return true;
@@ -214,9 +242,9 @@ export async function removeDataFromStorages() {
   });
 }
 
-export async function saveLoginDataToStorages(jsonString: string) {
+export async function saveLoginDataToStorages(data) {
   try {
-    const parsedData: LoginData = JSON.parse(jsonString);
+    const parsedData: LoginData = data;
     if (parsedData) {
       await localStorageSetLoginData(parsedData);
       await sessionStorageSetLoginData(parsedData);
