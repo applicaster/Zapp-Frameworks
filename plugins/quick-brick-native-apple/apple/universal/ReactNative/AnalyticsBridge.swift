@@ -35,6 +35,16 @@ class AnalyticsBridge: NSObject, RCTBridgeModule {
         EventsBus.post(event)
     }
 
+    @objc func postScreenEvent(_ eventName: String, payload: [String: Any]?) {
+        let event = EventsBus.Event(type: EventsBusType(.analytics(.sendScreenEvent)),
+                                    source: "\(kNativeSubsystemPath)/AnalyticsBridge",
+                                    data: [
+                                        "name": eventName,
+                                        "parameters": payload ?? [:],
+                                    ])
+        EventsBus.post(event)
+    }
+    
     @objc func postTimedEvent(_ eventName: String, payload: [String: Any]?) {
         let event = EventsBus.Event(type: EventsBusType(.analytics(.startObserveTimedEvent)),
                                     source: "\(kNativeSubsystemPath)/AnalyticsBridge",
