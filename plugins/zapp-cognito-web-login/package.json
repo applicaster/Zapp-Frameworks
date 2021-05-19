@@ -17,6 +17,7 @@
     "@applicaster/applicaster-types": "*",
     "react": "16.11.0",
     "react-native": "0.62.2"
+    "react-native-safe-area-context": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
