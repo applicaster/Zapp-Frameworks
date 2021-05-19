@@ -1,6 +1,6 @@
 import React from "react";
-import { requireNativeComponent, View, StyleSheet } from "react-native";
-import { useDimensions } from "@applicaster/zapp-react-native-utils/reactHooks";
+import { requireNativeComponent, StyleSheet } from "react-native";
+import { SafeAreaView, useSafeAreaFrame } from "react-native-safe-area-context";
 
 const THEOplayerViewNative = requireNativeComponent(
   "THEOplayerView",
@@ -18,16 +18,16 @@ const styles = StyleSheet.create({
 });
 
 const THEOplayerView = React.forwardRef((props, ref) => {
-  const window = useDimensions("window");
+  const frame = useSafeAreaFrame();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <THEOplayerViewNative
         {...props}
         ref={ref}
-        style={{ ...styles.player, width: window?.width }}
+        style={{ ...styles.player, width: frame?.width }}
       />
-    </View>
+    </SafeAreaView>
   );
 });
 
