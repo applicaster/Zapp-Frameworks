@@ -83,25 +83,25 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     }
     
     func showScreen(with screenArguments: NSDictionary, completion: ((_ success: Bool) -> Void)?) {
-        guard let params = screenArguments as? [String: Any] else {
+        guard let screenArguments = screenArguments as? [String: Any] else {
             return
         }
         
         let targetViewController = UIApplication.shared.keyWindow?.rootViewController
-        let success = handlePresentScreen(targetViewController: targetViewController, params: params)
+        let success = handlePresentScreen(targetViewController: targetViewController, screenArguments: screenArguments)
         
         completion?(success)
     }
 }
 
 enum StatsScreenType: String {
-    case undefined = ""
+    case undefined = "home_screen"
     case groupScreen = "groups"
-    case teamsScreen = "teams"
-    case teamScreen = "team"
-    case matchesScreen = "matches"
-    case matchScreen = "match"
-    case playerScreen = "player"
+    case teamsScreen = "all_teams_screen"
+    case teamScreen = "team_screen"
+    case matchesScreen = "all_matches_screen"
+    case matchScreen = "match_details_screen"
+    case playerScreen = "player_screen"
 }
 
 public struct PluginParams {
