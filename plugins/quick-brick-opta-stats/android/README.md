@@ -14,12 +14,14 @@ We predefined a set of screens which you can open through a URL scheme from anyw
 ### URL Scheme to open a screen
 
  - `<app_schema_id>://present?screen_id==<screen_id>&type==<type>&<other_data_key>=<other_data_value>`
-Where screen_id is screen ID from zapp CMS.
-Has limitations when inside the app already on the COPA home screen (can be solved by creating 2 separate screens: for Home and internal ones).
+
+Has a limitation: when the app is already running, and COPA home screen is open, nothing will happen.
+Can be solved by creating 2 separate screens: for Home and internal ones.
 
  - `<app_schema_id>://copa_stats?type==<type>&<other_data_key>=<other_data_value>`
  Has no limitations.
 
+- `screen_id` is screen ID from Zapp CMS (required for screen url only).
 - `<app_schema_id>` **(Required)**: Application scheme id.
 - `<type>` **(Required)**: A predefined `<type>` from one of the following options:
   - `home`
@@ -38,6 +40,7 @@ Has limitations when inside the app already on the COPA home screen (can be solv
 Note escaped ampersands.
 
 `adb shell am start -a "android.intent.action.VIEW" -d "ca2019://present?screen_id=082ac1b2-783f-4f41-b95a-f4a486a4acd6\&type=all_matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
+
 `adb shell am start -a "android.intent.action.VIEW" -d "ca2019://copa_stats?type=all_matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
 
 #### Match details & Push option
