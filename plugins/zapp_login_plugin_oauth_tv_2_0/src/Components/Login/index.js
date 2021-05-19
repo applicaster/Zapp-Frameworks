@@ -1,13 +1,25 @@
 // @flow
-import * as React from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
+import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+
 import IntroScreen from "../../screens/IntroScreen";
 import SignInScreen from "../../screens/SignInScreen";
 import WelcomeScreen from "../../screens/WelcomeScreen";
 import LoadingScreen from "../../screens/LoadingScreen";
-import LegalScreen from "../../screens/LegalScreen";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
-// import { uuidv4 } from "./utils";
+import XRayLogger from "@applicaster/quick-brick-xray";
+
+import { ScreenData, getRiversProp } from "../../Utils/Helpers";
+import { BaseSubsystem, BaseCategories } from "../../Services/LoggerService";
+import { getStyles } from "../../Utils/Customization";
+import { getLocalizations } from "../../Utils/Localizations";
 
 const NAMESPACE = "quick-brick-oc-login-plugin";
 const TOKEN = "oc_access_token";
@@ -16,100 +28,66 @@ const SKIP = "skip-prehook";
 
 let skipStatus;
 
-export class OCLoginPluginComponent extends React.Component {
-  constructor(props) {
-    super(props);
+const logger = new XRayLogger(BaseCategories.GENERAL, BaseSubsystem);
+console.disableYellowBox = true;
 
-    console.disableYellowBox = true; // please keep this for clean debug on osTV
+const OAuth = (props) => {
+  const navigator = useNavigation();
+  const [screen, setScreen] = useState(ScreenData.LOADING);
 
-    this.state = {
-      screen: "LOADING",
-      isPrehook: Boolean(this.props.callback),
-      userName: "",
-      forceFocus: false,
-      deviceId: "",
+  const { callback, payload, rivers } = props;
+  const screenId = navigator?.activeRiver?.id;
+
+  const localizations = getRiversProp("localizations", rivers, screenId);
+  const styles = getRiversProp("styles", rivers, screenId);
+  const general = getRiversProp("general", rivers, screenId);
+
+  const screenStyles = useMemo(() => getStyles(styles), [styles]);
+  const screenLocalizations = getLocalizations(localizations);
+  const mounted = useRef(true);
+  const isPrehook = !!props?.callback;
+  useEffect(() => {
+    mounted.current = true;
+
+    setupEnvironment();
+    return () => {
+      mounted.current = false;
     };
+  }, []);
 
-    this.renderScreen = this.renderScreen.bind(this);
-    this.goToScreen = this.goToScreen.bind(this);
-    this.checkTokenStatus = this.checkTokenStatus.bind(this);
+  async function setupEnvironment() {
+    try {
+      const accessToken = await localStorage
+        .getItem(TOKEN, NAMESPACE)
+        .catch((err) => console.log(err, TOKEN));
+      const skipPrehook = await localStorage
+        .getItem(SKIP, NAMESPACE)
+        .catch((err) => console.log(err, SKIP));
+      const userName = await localStorage
+        .getItem(USERNAME, NAMESPACE)
+        .catch((err) => console.log(err, USERNAME));
+
+      console.log({ isPrehook, accessToken, skipPrehook });
+      if (isPrehook && (accessToken || skipPrehook)) {
+        skipStatus = true;
+        this.props.callback({ success: true, payload: payload });
+      } else if (!isPrehook && accessToken && accessToken !== "NOT_SET") {
+        console.log("Logout");
+        setScreen(ScreenData.LOG_OUT);
+      } else {
+        console.log("Intro");
+        setScreen(ScreenData.INTRO);
+      }
+    } catch (error) {}
   }
 
-  async componentDidMount() {
-    let deviceId = await sessionStorage.getItem(
-      "advertisingIdentifier",
-      "applicaster.v2"
-    );
-
-    //Fallback if advertisingIdentifier is not available
-    if (!deviceId) {
-      //   deviceId = uuidv4();
-      await localStorage.setItem("uuid", deviceId, NAMESPACE);
-    }
-
-    this.setState(
-      {
-        deviceId,
-      },
-      () => this.checkTokenStatus()
-    );
-  }
-
-  async checkTokenStatus() {
-    const accessToken = await localStorage
-      .getItem(TOKEN, NAMESPACE)
-      .catch((err) => console.log(err, TOKEN));
-    const skipPrehook = await localStorage
-      .getItem(SKIP, NAMESPACE)
-      .catch((err) => console.log(err, SKIP));
-    const userName = await localStorage
-      .getItem(USERNAME, NAMESPACE)
-      .catch((err) => console.log(err, USERNAME));
-
-    const { isPrehook } = this.state;
-
-    if (isPrehook && (accessToken || skipPrehook)) {
-      skipStatus = true;
-      this.props.callback({ success: true, payload: this.props.payload });
-    } else if (!isPrehook && accessToken && accessToken !== "NOT_SET") {
-      this.setState({
-        screen: "WELCOME",
-        userName,
-        accessToken,
-      });
-    } else if (isPrehook && !accessToken) {
-      this.setState({
-        screen: "LEGAL",
-      });
-    } else {
-      this.setState({
-        screen: "INTRO",
-      });
-    }
-  }
-
-  goToScreen(screen, forceFocus, changeFocus) {
-    if (!changeFocus) {
-      this.setState({
-        screen,
-        forceFocus,
-      });
-    } else {
-      this.setState({
-        forceFocus,
-      });
-    }
-  }
-
-  renderScreen(screen) {
-    const {
-      configuration,
-      screenData,
-      payload,
-      callback,
-      parentFocus,
-      focused,
-    } = this.props;
+  function renderScreen() {
+    console.log({ props });
+    const configuration = props;
+    const screenData = props;
+    const payload = props;
+    const parentFocus = props;
+    const focused = props;
 
     const getGroupId = () => {
       if (screenData) {
@@ -122,7 +100,6 @@ export class OCLoginPluginComponent extends React.Component {
 
     const {
       segment_key,
-      legal_content,
       gygia_create_device_url,
       gygia_get_device_by_pin_url,
       gygia_qr_url,
@@ -134,25 +111,15 @@ export class OCLoginPluginComponent extends React.Component {
     const screenOptions = {
       segmentKey: segment_key,
       groupId: getGroupId(),
-      isPrehook: this.state.isPrehook,
-      goToScreen: this.goToScreen,
+      isPrehook: isPrehook,
+      goToScreen: goToScreen,
     };
 
     switch (screen) {
-      case "LOADING": {
+      case ScreenData.LOADING: {
         return <LoadingScreen {...screenOptions} />;
       }
-      case "LEGAL": {
-        return (
-          <LegalScreen
-            {...screenOptions}
-            legalContent={legal_content}
-            parentFocus={parentFocus}
-            focused={focused}
-          />
-        );
-      }
-      case "INTRO": {
+      case ScreenData.INTRO: {
         return (
           <IntroScreen
             {...screenOptions}
@@ -165,7 +132,7 @@ export class OCLoginPluginComponent extends React.Component {
           />
         );
       }
-      case "WELCOME": {
+      case ScreenData.LOG_OUT: {
         return (
           <WelcomeScreen
             {...screenOptions}
@@ -183,7 +150,7 @@ export class OCLoginPluginComponent extends React.Component {
           />
         );
       }
-      case "SIGNIN": {
+      case ScreenData.LOG_IN: {
         return (
           <SignInScreen
             {...screenOptions}
@@ -202,11 +169,95 @@ export class OCLoginPluginComponent extends React.Component {
       }
     }
   }
-  render() {
-    return this.renderScreen(this.state.screen);
-  }
-}
+  return renderScreen();
+};
 
-export function shouldSkipPrehook() {
-  return skipStatus;
+function goToScreen(screen, forceFocus, changeFocus) {
+  // if (!changeFocus) {
+  //   this.setState({
+  //     screen,
+  //     forceFocus,
+  //   });
+  // } else {
+  //   this.setState({
+  //     forceFocus,
+  //   });
+  // }
 }
+export default OAuth;
+
+// export class OCLoginPluginComponent extends React.Component {
+//   constructor(props) {
+//     super(props);
+
+//     console.disableYellowBox = true; // please keep this for clean debug on osTV
+
+//     this.state = {
+//       screen: "LOADING",
+//       isPrehook: Boolean(this.props.callback),
+//       userName: "",
+//       forceFocus: false,
+//       deviceId: "",
+//     };
+
+//     this.renderScreen = this.renderScreen.bind(this);
+//     this.goToScreen = this.goToScreen.bind(this);
+//     this.checkTokenStatus = this.checkTokenStatus.bind(this);
+//   }
+
+//   async componentDidMount() {
+//     let deviceId = await sessionStorage.getItem(
+//       "advertisingIdentifier",
+//       "applicaster.v2"
+//     );
+
+//     //Fallback if advertisingIdentifier is not available
+//     if (!deviceId) {
+//       //   deviceId = uuidv4();
+//       await localStorage.setItem("uuid", deviceId, NAMESPACE);
+//     }
+
+//     this.setState(
+//       {
+//         deviceId,
+//       },
+//       () => this.checkTokenStatus()
+//     );
+//   }
+
+// async checkTokenStatus() {
+// const accessToken = await localStorage
+//   .getItem(TOKEN, NAMESPACE)
+//   .catch((err) => console.log(err, TOKEN));
+// const skipPrehook = await localStorage
+//   .getItem(SKIP, NAMESPACE)
+//   .catch((err) => console.log(err, SKIP));
+// const userName = await localStorage
+//   .getItem(USERNAME, NAMESPACE)
+//   .catch((err) => console.log(err, USERNAME));
+
+// const { isPrehook } = this.state;
+
+// if (isPrehook && (accessToken || skipPrehook)) {
+//   skipStatus = true;
+//   this.props.callback({ success: true, payload: this.props.payload });
+// } else if (!isPrehook && accessToken && accessToken !== "NOT_SET") {
+//   console.log("1");
+//   this.setState({
+//     screen: "WELCOME",
+//     userName,
+//     accessToken,
+//   });
+// } else {
+//   console.log("3");
+//   this.setState({
+//     screen: "INTRO",
+//   });
+// }
+// }
+
+// }
+
+// export function shouldSkipPrehook() {
+//   return skipStatus;
+// }

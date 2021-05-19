@@ -17,18 +17,7 @@ const baseManifest = {
   deprecated_since_zapp_sdk: "",
   unsupported_since_zapp_sdk: "",
   preload: true,
-  general: {
-    fields: [
-      {
-        type: "switch",
-        label: "Show full screen",
-        tooltip:
-          "Enabling this setting will hide both the nav bar and the menu on the screen",
-        key: "allow_screen_plugin_presentation",
-        initial_value: true,
-      },
-    ],
-  },
+  general: {},
   hooks: {
     fields: [
       {
@@ -49,6 +38,10 @@ const baseManifest = {
 };
 
 const stylesMobile = {
+  fields: [],
+};
+
+const stylesTv = {
   fields: [
     {
       group: true,
@@ -56,48 +49,23 @@ const stylesMobile = {
       folded: true,
       fields: [
         {
-          key: "background_image",
-          type: "uploader",
-          label: "Background Image",
-          label_tooltip:
-            "Background image. It is recommended to use an image that could be centered in the different screen sizes.",
-        },
-        {
           key: "background_color",
           type: "color_picker",
           label: "Background color",
-          initial_value: "#161b29ff",
+          initial_value: "#f1f1f1FF",
         },
-      ],
-    },
-    {
-      group: true,
-      label: "Logo",
-      folded: true,
-      fields: [
         {
-          key: "client_logo_position",
-          type: "tag_select",
-          initial_value: "middle",
-          label: "Logo position",
-          label_tooltip: "Position of the logo on the screen",
-          options: [
-            {
-              text: "Top",
-              value: "top",
-            },
-            {
-              text: "Middle",
-              value: "middle",
-            },
-          ],
+          key: "background_color_prehook",
+          type: "color_picker",
+          label: "Background color",
+          initial_value: "#00000000",
         },
         {
           key: "client_logo",
           type: "uploader",
           label: "Logo",
-          label_tooltip: "Logo image. Dimension 200x44 pixels.",
-          placeholder: "W 200px x H 44px",
+          label_tooltip: "Logo image. Dimension 350x350 pixels.",
+          placeholder: "W 350 x H 350px",
         },
       ],
     },
@@ -134,123 +102,6 @@ const stylesMobile = {
     },
     {
       group: true,
-      label: "Sub title",
-      folded: true,
-      fields: [
-        {
-          key: "subtitle",
-          type: "switch",
-          initial_value: false,
-          label: "Display subtitle",
-        },
-        {
-          key: "subtitle_font_ios",
-          type: "ios_font_selector",
-          label: "iOS font family",
-          initial_value: "Helvetica-Bold",
-          conditional_fields: [
-            {
-              key: "styles/subtitle",
-              condition_value: true,
-            },
-          ],
-        },
-        {
-          key: "subtitle_font_android",
-          type: "android_font_selector",
-          label: "Android font family",
-          initial_value: "Roboto-Bold",
-          conditional_fields: [
-            {
-              key: "styles/subtitle",
-              condition_value: true,
-            },
-          ],
-        },
-        {
-          key: "subtitle_font_size",
-          type: "number_input",
-          label: "Font size",
-          initial_value: 15,
-          conditional_fields: [
-            {
-              key: "styles/subtitle",
-              condition_value: true,
-            },
-          ],
-        },
-        {
-          key: "subtitle_font_color",
-          type: "color_picker",
-          label: "Color",
-          initial_value: "#ffffffff",
-          conditional_fields: [
-            {
-              key: "styles/subtitle",
-              condition_value: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      group: true,
-      label: "Back button",
-      folded: true,
-      fields: [
-        {
-          key: "back_button_force_display",
-          type: "switch",
-          initial_value: false,
-          label: "Force display",
-          label_tooltip:
-            "If true, then the button will always be displayed. If false, then only on the player's hook",
-        },
-        {
-          key: "back_button_position",
-          type: "tag_select",
-          initial_value: "top",
-          label: "Back button position",
-          label_tooltip: "Position of the back button on the screen",
-          options: [
-            {
-              text: "Top & Left",
-              value: "top",
-            },
-            {
-              text: "Bottom",
-              value: "bottom",
-            },
-          ],
-        },
-        {
-          key: "back_button_font_ios",
-          type: "ios_font_selector",
-          label: "iOS font family",
-          initial_value: "Helvetica-Bold",
-        },
-        {
-          key: "back_button_font_android",
-          type: "android_font_selector",
-          label: "Android font family",
-          initial_value: "Roboto-Bold",
-        },
-        {
-          key: "back_button_font_size",
-          type: "number_input",
-          label: "Font size",
-          initial_value: 15,
-        },
-        {
-          key: "back_button_font_color",
-          type: "color_picker",
-          label: "Color",
-          initial_value: "#ffffffff",
-        },
-      ],
-    },
-    {
-      group: true,
       label: "Action button",
       folded: true,
       fields: [
@@ -276,27 +127,29 @@ const stylesMobile = {
           key: "action_button_font_color",
           type: "color_picker",
           label: "Color",
+          initial_value: "#5D5D5DFF",
+        },
+        {
+          key: "action_button_font_color_focused",
+          type: "color_picker",
+          label: "Color",
           initial_value: "#ffffffff",
         },
         {
           key: "action_button_background_color",
           type: "color_picker",
           label: "Background color",
-          initial_value: "#F1AD12ff",
+          initial_value: "#D8D8D8ff",
         },
         {
-          key: "action_button_border_radius",
-          type: "number_input",
-          label: "Border radius",
-          initial_value: 10,
+          key: "action_button_background_color_focused",
+          type: "color_picker",
+          label: "Background color",
+          initial_value: "#0081C8FF",
         },
       ],
     },
   ],
-};
-
-const stylesTv = {
-  fields: [],
 };
 
 const androidPlatforms = [

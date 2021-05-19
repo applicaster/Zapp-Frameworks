@@ -49,7 +49,7 @@ export const logger = createLogger({
   category: BaseCategories.GENERAL,
 });
 
-const OAuth = (props) => {
+const OAuth2 = (props) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const navigator = useNavigation();
@@ -78,7 +78,6 @@ const OAuth = (props) => {
 
   useLayoutEffect(() => {
     const configuration = props?.configuration;
-    addContext({ configuration, oauth_config: oAuthConfig });
     logger
       .createEvent()
       .setLevel(XRayLogLevel.debug)
@@ -267,12 +266,26 @@ const OAuth = (props) => {
           <View style={containerStyle}>
             <BackButton
               title={back_button_text}
-              disabled={!(hookType === HookTypeData.PLAYER_HOOK || screenStyles?.back_button_force_display)}
+              disabled={
+                !(
+                  hookType === HookTypeData.PLAYER_HOOK ||
+                  screenStyles?.back_button_force_display
+                )
+              }
               screenStyles={screenStyles}
               onPress={onBackButton}
             />
-            <TitleLabel screenStyles={screenStyles} title={title_text} subtitle={subtitle_text} />
-            <View style={[clientLogoView.default, clientLogoView[screenStyles?.client_logo_position]]}>
+            <TitleLabel
+              screenStyles={screenStyles}
+              title={title_text}
+              subtitle={subtitle_text}
+            />
+            <View
+              style={[
+                clientLogoView.default,
+                clientLogoView[screenStyles?.client_logo_position],
+              ]}
+            >
               <ClientLogo imageSrc={screenStyles.client_logo} />
             </View>
             <ActionButton
@@ -288,4 +301,4 @@ const OAuth = (props) => {
   );
 };
 
-export default OAuth;
+export default OAuth2;

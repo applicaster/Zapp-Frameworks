@@ -3,58 +3,24 @@
 const common = [
   {
     key: "title_text",
-    label: "Title label text",
-    initial_value: "My Company",
+    label: "Main screen title to screen",
+    initial_value: "WELCOME TO THE MY APPLICATION",
   },
   {
-    key: "subtitle_text",
-    label: "Subtitle label text",
-    initial_value: "Subtitle",
+    key: "title_text_hook",
+    label: "Main screen title to screen hook",
+    initial_value:
+      "Create an account to personalize your my application experience",
   },
   {
-    key: "login_text",
-    label: "Login button text",
-    initial_value: "Login",
+    key: "sing_in_button",
+    label: "Sign in button text",
+    initial_value: "Sign In / Register",
   },
   {
-    key: "logout_text",
-    label: "Logout button text",
-    initial_value: "Login",
-  },
-  {
-    key: "back_button_text",
-    label: "Back button title",
-    initial_value: "Back",
-  },
-  {
-    key: "alert_fail_title",
-    label: "Alert fail title",
-    initial_value: "Error",
-  },
-  {
-    key: "alert_login_fail_message",
-    label: "Alert message on user failed to authenticate",
-    initial_value: "Authentication failed",
-  },
-  {
-    key: "alert_logout_fail_message",
-    label: "Alert message on user failed to revoke access",
-    initial_value: "Logout failed",
-  },
-  {
-    key: "alert_succeed_title",
-    label: "Alert succeed title",
-    initial_value: "Success",
-  },
-  {
-    key: "alert_login_succeed_message",
-    label: "Alert message on successful authentication",
-    initial_value: "Authentication completed",
-  },
-  {
-    key: "alert_logout_succeed_message",
-    label: "Alert message on successful authentication",
-    initial_value: "Logout completed",
+    key: "sing_in_later",
+    label: "Sign in later button text",
+    initial_value: "Maybe Later",
   },
 ];
 
