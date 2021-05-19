@@ -15,7 +15,6 @@ import com.applicaster.util.AppContext
 import com.google.gson.internal.LinkedTreeMap
 import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
 class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
 
@@ -99,7 +98,7 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
             PluginDataRepository.INSTANCE.setFlagImageBaseUrl("$baseUrl/flag-")
             PluginDataRepository.INSTANCE.setPersonImageBaseUrl(baseUrl)
             PluginDataRepository.INSTANCE.setShirtImageBaseUrl("$baseUrl/SHIRT-")
-            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl("$baseUrl/all-matches-")
+            PluginDataRepository.INSTANCE.setPartidosImageBaseUrl("$baseUrl/all-matches-2021-") // todo: make suffix a settings
 
 //            PluginDataRepository.INSTANCE.setShieldImageBaseUrl(params[Constants.PARAM_SHIELD_IMAGE_BASE_URL].toString())
 //            PluginDataRepository.INSTANCE.setFlagImageBaseUrl(params[Constants.PARAM_FLAG_IMAGE_BASE_URL].toString())
