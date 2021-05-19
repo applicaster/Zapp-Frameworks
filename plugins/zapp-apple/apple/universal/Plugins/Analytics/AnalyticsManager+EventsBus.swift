@@ -84,7 +84,7 @@ extension AnalyticsManager {
 
         let parameters = eventDetails.data?[Constants.parameters] as? [String: Any]
         let name = eventDetails.data?[Constants.name] as? String ?? ""
-        let screenTitle = eventDetails.data?[Constants.screenTitle] as? String ?? ""
+        let screenTitle = eventDetails.data?[Constants.name] as? String ?? ""
         let url = eventDetails.data?[Constants.url] as? URL
 
         return (name, parameters, screenTitle, url)
