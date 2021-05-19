@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/cognito-webview-login",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Zapp Team",
   "license": "ISC",
   "description": "Cognito Web View",
