@@ -18,6 +18,8 @@ RCT_EXTERN_METHOD(quickBrickEvent:(NSString *)eventName
 @interface RCT_EXTERN_MODULE (AnalyticsBridge, NSObject)
 RCT_EXTERN_METHOD(postEvent:(NSString *)event
                       payload:(NSDictionary *)payload);
+RCT_EXTERN_METHOD(postScreenEvent:(NSString *)event
+                      payload:(NSDictionary *)payload);
 RCT_EXTERN_METHOD(postTimedEvent:(NSString *)event
                       payload:(NSDictionary *)payload);
 RCT_EXTERN_METHOD(endTimedEvent:(NSString *)event
