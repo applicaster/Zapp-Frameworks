@@ -95,13 +95,13 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
 }
 
 enum StatsScreenType: String {
-    case undefined = "home_screen"
+    case undefined = "home"
     case groupScreen = "groups"
-    case teamsScreen = "all_teams_screen"
-    case teamScreen = "team_screen"
-    case matchesScreen = "all_matches_screen"
-    case matchScreen = "match_details_screen"
-    case playerScreen = "player_screen"
+    case teamsScreen = "teams"
+    case teamScreen = "team"
+    case matchesScreen = "matches"
+    case matchScreen = "match"
+    case playerScreen = "player"
 }
 
 public struct PluginParams {
