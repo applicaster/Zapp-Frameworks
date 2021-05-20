@@ -8,6 +8,7 @@ import { fetchImageFromMetaByKey } from "./Utils";
 import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
+import { EVENTS } from "./Utils/const";
 
 console.disableYellowBox = true;
 
@@ -28,7 +29,7 @@ type Entry = {
   id: string;
   title: string;
   extensions: {
-    analyticsCustomProperties: object
+    analyticsCustomProperties: object;
   };
 };
 
@@ -101,9 +102,8 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
-
 export default class THEOPlayer extends Component<Props, State> {
-  _root: THEOplayerView;
+  _root;
 
   analyticsTracker = new AnalyticsTracker();
 
@@ -141,13 +141,12 @@ export default class THEOPlayer extends Component<Props, State> {
       error: null,
       playerEnded: false,
       playerClosed: false,
-      buffering: false
+      buffering: false,
     };
-
   }
 
   componentDidMount() {
-    this.analyticsTracker.initialState(this.state, this.props.entry)
+    this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
   componentDidUpdate() {
@@ -156,10 +155,10 @@ export default class THEOPlayer extends Component<Props, State> {
     if (this.state.playerEnded) {
       this.handleEnded();
     }
+  }
 
-    if (this.state.playerClosed) {
-      this.handleClosed();
-    }
+  componentWillUnmount() {
+    this.analyticsTracker.handleAnalyticEvent(EVENTS.playerClosed);
   }
 
   onPlayerPlay = ({ nativeEvent }) => {};
@@ -179,15 +178,11 @@ export default class THEOPlayer extends Component<Props, State> {
 
     if (loadedVideo && currentTime > 1) {
       this.setState({ resume: true, paused: false });
-    } 
+    }
   };
 
   onPlayerPause = ({ nativeEvent }) => {
-    const {
-      paused,
-      readyState,
-      loadedVideo
-    } = this.state;
+    const { paused, readyState, loadedVideo } = this.state;
 
     const willSeek = readyState === "HAVE_METADATA";
 
@@ -206,7 +201,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerSeeked = ({ nativeEvent }) => {
     const { seek } = this.state;
-    if(seek) {
+    if (seek) {
       this.setState({ seek: false, seekEnd: true });
     }
   };
@@ -221,7 +216,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerRateChange = ({ nativeEvent }) => {};
 
   onPlayerReadyStateChange = ({ nativeEvent }) => {
-   let buffering = false;
+    let buffering = false;
 
     const { readyState } = nativeEvent;
     const haveCurrentData = this.state.readyState === "HAVE_CURRENT_DATA";
@@ -231,7 +226,7 @@ export default class THEOPlayer extends Component<Props, State> {
       buffering = true;
     }
 
-    this.setState({ readyState, buffering })
+    this.setState({ readyState, buffering });
   };
 
   onPlayerLoadedMetaData = ({ nativeEvent }) => {};
@@ -250,15 +245,15 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerCanPlay = ({ nativeEvent }) => {
     this.setState({
-      buffering: false
-    })
+      buffering: false,
+    });
   };
 
   onPlayerCanPlayThrough = ({ nativeEvent }) => {
-    this.setState({ 
-      canplay: true, 
-      playing: false, 
-      resume: false, 
+    this.setState({
+      canplay: true,
+      playing: false,
+      resume: false,
     });
   };
 
@@ -277,8 +272,8 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerVolumeChange = ({ nativeEvent }) => {
     const { volume } = nativeEvent;
-    
-    this.setState({ volume })
+
+    this.setState({ volume });
   };
 
   onPlayerResize = ({ nativeEvent }) => {};
@@ -298,23 +293,23 @@ export default class THEOPlayer extends Component<Props, State> {
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
 
-    this.setState({ 
-      adBreakBegin: true, 
-      adBreakEnd: false, 
+    this.setState({
+      adBreakBegin: true,
+      adBreakEnd: false,
       adBreakDuration: maxDuration,
-      adData: nativeEvent
-    })
+      adData: nativeEvent,
+    });
   };
 
   onAdBreakEnd = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
 
-    this.setState({ 
-      adBreakEnd: true, 
-      adBreakBegin: false, 
+    this.setState({
+      adBreakEnd: true,
+      adBreakBegin: false,
       adBreakDuration: maxDuration,
-      adData: nativeEvent
-    })
+      adData: nativeEvent,
+    });
   };
 
   onAdError = ({ nativeEvent }) => {
@@ -322,25 +317,25 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onAdBegin = ({ nativeEvent }) => {
-    const { duration, id} = nativeEvent;
+    const { duration, id } = nativeEvent;
 
-    this.setState({ 
-      adBegin: true, 
-      adEnd: false, 
+    this.setState({
+      adBegin: true,
+      adEnd: false,
       adDuration: duration,
       adId: id,
-      adData: nativeEvent
+      adData: nativeEvent,
     });
   };
 
   onAdEnd = ({ nativeEvent }) => {
-    const { duration, id} = nativeEvent;
+    const { duration, id } = nativeEvent;
     this.setState({
       adEnd: true,
       adBegin: false,
       adDuration: duration,
       adId: id,
-      adData: nativeEvent
+      adData: nativeEvent,
     });
   };
 
@@ -351,12 +346,12 @@ export default class THEOPlayer extends Component<Props, State> {
       if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
         this.props?.onFullscreenPlayerDidDismiss();
       } else if (this.props?.playerEvent) {
-        this.props?.playerEvent("close");
+        this.handleClosed();
       }
     }
   };
 
-  _assignRoot = (component: THEOplayerView) => {
+  _assignRoot = (component) => {
     this._root = component;
   };
 
@@ -375,13 +370,7 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   render() {
-    const {
-      entry,
-      style: videoStyle,
-      inline,
-      source,
-      pluginConfiguration,
-    } = this.props;
+    const { entry, style: videoStyle, pluginConfiguration } = this.props;
 
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
@@ -430,7 +419,11 @@ export default class THEOPlayer extends Component<Props, State> {
           onAdBegin={this.onAdBegin}
           onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
+          configurationData={{
+            theoplayer_license_key,
+            theoplayer_scale_mode,
+            moat_partner_code,
+          }}
           source={{
             sources: [
               {
