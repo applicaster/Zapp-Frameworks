@@ -3,11 +3,11 @@ import { View, Text, Platform, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import Button from "../components2/Button";
-import QRCode from "../components2/QRCode";
-import Layout from "../components2/Layout";
-import { skipPrehook } from "../utils";
-import { mapKeyToStyle } from "../Utils/Customization";
+import Button from "../../components2/Button";
+import QRCode from "../../components2/QRCode";
+import Layout from "../../components2/Layout";
+import { skipPrehook } from "../../utils";
+import { mapKeyToStyle } from "../../Utils/Customization";
 
 const HEARBEAT_INTERVAL = 10000;
 
@@ -28,7 +28,7 @@ const SignInScreen = (props) => {
   } = props;
 
   const { activity_indicator_color, line_separator_color } = screenStyles;
-
+  console.log({ activity_indicator_color, line_separator_color, screenStyles });
   const styles = {
     container: {
       flex: 1,
