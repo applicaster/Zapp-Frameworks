@@ -19,7 +19,7 @@ class PluginUtils {
             val data: MutableMap<String, String> =
                     hashMapOf("type" to "general",
                             "action" to "stats_open_screen",
-                            "screen_id" to "match_details",
+                            "screen_id" to "match",
                             "match_id" to matchId)
             configurationHandler.handlePluginScheme(AppContext.get(), data)
         }
