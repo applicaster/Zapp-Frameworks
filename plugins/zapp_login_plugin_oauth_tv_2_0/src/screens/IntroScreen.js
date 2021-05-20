@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import Button from "../components2/Button";
 import Layout from "../components2/Layout";
 import { trackEvent } from "../analytics/segment/index";
-import { skipPrehook } from '../utils';
-
+import { skipPrehook } from "../utils";
+import { mapKeyToStyle } from "../Utils/Customization";
 const IntroScreen = (props) => {
   const {
     segmentKey,
@@ -17,92 +17,120 @@ const IntroScreen = (props) => {
     goToScreen,
     focused,
     parentFocus,
-    forceFocus
+    forceFocus,
+    screenStyles,
+    screenLocalizations,
   } = props;
 
   const signInButton = useRef(null);
   const laterButton = useRef(null);
-
+  const {
+    title_text,
+    title_text_hook,
+    sing_in_button,
+    sing_in_later,
+  } = screenLocalizations;
   useEffect(() => {
     trackEvent("User Login Started");
     if (forceFocus) {
-      goToScreen(null, false, true)
+      goToScreen(null, false, true);
     }
-  }, [])
+  }, []);
 
-  const onMaybeLaterPress = useCallback(() => skipPrehook(skip, namespace, closeHook, 
-      {
+  const onMaybeLaterPress = useCallback(
+    () =>
+      skipPrehook(skip, namespace, closeHook, {
         name: "User Login Started",
-        data: { buttonPressed: "Maybe Later" }
+        data: { buttonPressed: "Maybe Later" },
       }),
-    [skip, namespace, closeHook])
+    [skip, namespace, closeHook]
+  );
 
-  const handleRemoteControlEvent = useCallback((comp, { eventType }) => {
-    if (eventType === "menu") {
-      onMaybeLaterPress()
-    }
-  }, [onMaybeLaterPress]);
+  const handleRemoteControlEvent = useCallback(
+    (comp, { eventType }) => {
+      if (eventType === "menu") {
+        onMaybeLaterPress();
+      }
+    },
+    [onMaybeLaterPress]
+  );
 
-
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     useInitialFocus(isPrehook || forceFocus ? true : focused, signInButton);
   }
 
   return (
-    <Layout tvEventHandler={handleRemoteControlEvent} isPrehook={isPrehook}>
+    <Layout
+      tvEventHandler={handleRemoteControlEvent}
+      screenStyles={screenStyles}
+      isPrehook={isPrehook}
+    >
       <View style={styles.container}>
-        <Text style={isPrehook ? styles.title : styles.subTitle}>
-          {isPrehook ? 'WELCOME TO THE OLYMPIC CHANNEL' : 'Create an account to personalize your Olympic Channel experience'}
+        <Text
+          style={
+            isPrehook
+              ? {
+                  ...styles.title,
+                  ...mapKeyToStyle("title_font", screenStyles),
+                }
+              : {
+                  ...styles.subTitle,
+                  ...mapKeyToStyle("title_font", screenStyles),
+                }
+          }
+        >
+          {isPrehook ? title_text_hook : title_text}
         </Text>
         <View style={styles.buttonContainer}>
           <Button
-            label="Sign In / Register"
+            screenStyles={screenStyles}
+            label={sing_in_button}
             onPress={() => goToScreen("SIGNIN")}
             preferredFocus={true}
             groupId={groupId}
             style={styles.focusContainer}
             buttonRef={signInButton}
-            id={'sign-in-button'}
+            id={"sign-in-button"}
             nextFocusLeft={parentFocus ? parentFocus.nextFocusLeft : null}
             nextFocusDown={isPrehook ? laterButton : null}
           />
-          {
-            isPrehook &&
+          {isPrehook && (
             <Button
-              label="Maybe Later"
+              screenStyles={screenStyles}
+              label={sing_in_later}
               groupId={groupId}
               onPress={onMaybeLaterPress}
               style={styles.focusContainer}
               buttonRef={laterButton}
               nextFocusUp={signInButton}
-              id={'sign-in-later'}
+              id={"sign-in-later"}
             />
-          }
+          )}
         </View>
       </View>
     </Layout>
-  )
-}
+  );
+};
 
 const styles = {
   container: {
     flex: 1,
-    alignItems: 'center',
-    marginTop: 100
+    alignItems: "center",
+    marginTop: 100,
   },
   iconsContainer: {
     width: 1100,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
     marginTop: 50,
     marginBottom: 90,
   },
   title: {
     color: "#525A5C",
     fontSize: 42,
-    fontWeight: 'bold',
-    marginBottom: 300
+    fontWeight: "bold",
+    marginBottom: 300,
   },
   subTitle: {
     color: "#525A5C",
@@ -111,20 +139,20 @@ const styles = {
   altSubTitle: {
     color: "#525A5C",
     fontSize: 32,
-    marginBottom: 300
+    marginBottom: 300,
   },
   buttonContainer: {
     marginTop: 20,
-    width: '100%',
+    width: "100%",
     height: 200,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   focusContainer: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    justifyContent: "center",
+    alignItems: "center",
+  },
 };
 
-IntroScreen.displayName = 'IntroScreen';
+IntroScreen.displayName = "IntroScreen";
 export default IntroScreen;

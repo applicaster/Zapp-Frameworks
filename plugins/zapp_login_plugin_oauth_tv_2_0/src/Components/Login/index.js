@@ -123,6 +123,8 @@ const OAuth = (props) => {
         return (
           <IntroScreen
             {...screenOptions}
+            screenStyles={screenStyles}
+            screenLocalizations={screenLocalizations}
             closeHook={callback}
             namespace={NAMESPACE}
             skip={SKIP}
@@ -136,6 +138,8 @@ const OAuth = (props) => {
         return (
           <WelcomeScreen
             {...screenOptions}
+            screenStyles={screenStyles}
+            screenLocalizations={screenLocalizations}
             closeHook={callback}
             userName={this.state.userName}
             name={USERNAME}
@@ -154,6 +158,8 @@ const OAuth = (props) => {
         return (
           <SignInScreen
             {...screenOptions}
+            screenStyles={screenStyles}
+            screenLocalizations={screenLocalizations}
             closeHook={callback}
             namespace={NAMESPACE}
             skip={SKIP}

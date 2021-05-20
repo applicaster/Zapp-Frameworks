@@ -62,8 +62,8 @@ export const mapKeyToStyle = R.curry((key, obj) => {
       samsung_tv: obj?.[`${key}_font_samsung_tv`],
       lg_tv: obj?.[`${key}_font_lg_tv`],
     }),
-    fontSize: obj?.[`${key}_fontsize`],
-    color: obj?.[`${key}_fontcolor`],
+    fontSize: obj?.[`${key}_font_size`],
+    color: obj?.[`${key}_font_color`],
     ...(isInputKey && inputStyleObj),
   };
 });

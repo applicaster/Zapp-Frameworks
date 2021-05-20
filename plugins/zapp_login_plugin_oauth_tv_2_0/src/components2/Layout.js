@@ -7,6 +7,12 @@ const { height } = Dimensions.get("window");
 
 class Layout extends Component {
   render() {
+    const {
+      background_color,
+      background_color_prehook,
+      client_logo,
+    } = this.props.screenStyles;
+
     return (
       <TVEventHandlerComponent
         tvEventHandler={this.props.tvEventHandler || noop}
@@ -14,7 +20,9 @@ class Layout extends Component {
         <View
           style={{
             ...styles.container,
-            backgroundColor: this.props.isPrehook ? "#f1f1f1" : "transparent",
+            backgroundColor: this.props.isPrehook
+              ? background_color
+              : background_color_prehook,
           }}
         >
           {this.props.isPrehook && (
@@ -23,8 +31,7 @@ class Layout extends Component {
                 style={styles.logo}
                 resizeMode="contain"
                 source={{
-                  uri:
-                    "https://assets-production.applicaster.com/static/olympic-channel/images/oc-logo.png",
+                  uri: client_logo,
                 }}
               />
             </View>

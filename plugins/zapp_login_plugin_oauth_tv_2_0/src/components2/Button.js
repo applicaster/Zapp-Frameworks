@@ -2,7 +2,7 @@ import * as React from "react";
 import { FocusableGroup } from "@applicaster/zapp-react-native-ui-components/Components/FocusableGroup";
 import { Focusable } from "@applicaster/zapp-react-native-ui-components/Components/Focusable";
 import { View, Text, Platform } from "react-native";
-
+import { mapKeyToStyle } from "../Utils/Customization";
 export default function Button(props) {
   const {
     id,
@@ -14,8 +14,56 @@ export default function Button(props) {
     nextFocusLeft,
     nextFocusDown,
     nextFocusUp,
-    style
+    style,
   } = props;
+  const {
+    action_button_background_color,
+    action_button_background_color_focused,
+    action_button_font_color,
+    action_button_font_color_focused,
+  } = screenStyles;
+
+  const button = {
+    width: 600,
+    height: 80,
+    backgroundColor: action_button_background_color,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  };
+
+  const buttonText = {
+    fontSize: 24,
+    fontWeight: "bold",
+    ...mapKeyToStyle("action_button", screenStyles),
+    color: action_button_font_color,
+  };
+
+  const styles = {
+    focused: {
+      button: {
+        ...button,
+        backgroundColor: action_button_background_color_focused,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 6,
+        },
+        width: 650,
+        shadowOpacity: 0.37,
+        shadowRadius: 7.49,
+        elevation: 12,
+      },
+      buttonText: {
+        ...buttonText,
+        color: action_button_font_color_focused,
+      },
+    },
+    default: {
+      button,
+      buttonText,
+    },
+  };
 
   const renderButton = (focused, label) => {
     const buttonStyles = styles[focused ? "focused" : "default"];
@@ -23,78 +71,37 @@ export default function Button(props) {
       <View style={buttonStyles.button}>
         <Text style={buttonStyles.buttonText}>{label}</Text>
       </View>
-    )
+    );
   };
 
-  return (
-    Platform.OS !== 'android'
-      ? <FocusableGroup
-        id={id}
-        style={style}
+  return Platform.OS !== "android" ? (
+    <FocusableGroup
+      id={id}
+      style={style}
+      preferredFocus={preferredFocus}
+      groupId={groupId}
+    >
+      <Focusable
+        id={label}
+        groupId={id}
+        onPress={onPress}
         preferredFocus={preferredFocus}
-        groupId={groupId}
       >
-        <Focusable
-          id={`oc-adobe-${label}`}
-          groupId={id}
-          onPress={onPress}
-          preferredFocus={preferredFocus}
-        >
-          {focused => renderButton(focused, label)}
-        </Focusable>
-      </FocusableGroup>
-      : <View style={style}>
-        <Focusable
-          ref={buttonRef}
-          id={id}
-          onPress={onPress}
-          nextFocusLeft={nextFocusLeft}
-          nextFocusDown={nextFocusDown}
-          nextFocusUp={nextFocusUp}
-        >
-          {(focused) => renderButton(focused, label)}
-        </Focusable>
-      </View>
+        {(focused) => renderButton(focused, label)}
+      </Focusable>
+    </FocusableGroup>
+  ) : (
+    <View style={style}>
+      <Focusable
+        ref={buttonRef}
+        id={id}
+        onPress={onPress}
+        nextFocusLeft={nextFocusLeft}
+        nextFocusDown={nextFocusDown}
+        nextFocusUp={nextFocusUp}
+      >
+        {(focused) => renderButton(focused, label)}
+      </Focusable>
+    </View>
   );
 }
-
-const button = {
-  width: 600,
-  height: 80,
-  backgroundColor: "#D8D8D8",
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginBottom: 20,
-};
-
-const buttonText = {
-  color: "#5D5D5D",
-  fontSize: 24,
-  fontWeight: 'bold'
-};
-
-const styles = {
-  focused: {
-    button: {
-      ...button,
-      backgroundColor: "#0081C8",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 6,
-      },
-      width: 650,
-      shadowOpacity: 0.37,
-      shadowRadius: 7.49,
-      elevation: 12,
-    },
-    buttonText: {
-      ...buttonText,
-      color: "#ffffff"
-    }
-  },
-  default: {
-    button,
-    buttonText
-  }
-};
