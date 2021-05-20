@@ -1,96 +1,20 @@
 {
   "dependency_repository_url": [],
-  "dependency_name": "@applicaster/quick-brick-inplayer",
+  "dependency_name": "@applicaster/zapp_login_plugin_oauth_tv_2_0",
   "author_name": "Applicaster",
   "author_email": "zapp@applicaster.com",
-  "name": "inPlayer Login & Payments",
-  "description": "inPlayer Login & Payments",
+  "name": "TV Oauth 2.0 Login",
+  "description": "TV Oauth 2.0 Login",
   "type": "login",
   "screen": true,
   "react_native": true,
-  "identifier": "quick-brick-inplayer",
+  "identifier": "zapp_login_plugin_oauth_tv_2_0",
   "ui_builder_support": true,
-  "whitelisted_account_ids": [
-    "5c9ce7917b225c000f02dfbc"
-  ],
+  "whitelisted_account_ids": [],
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
-  "custom_configuration_fields": [
-    {
-      "type": "text",
-      "key": "in_player_client_id",
-      "tooltip_text": "In Player Client ID",
-      "default": ""
-    },
-    {
-      "type": "number_input",
-      "key": "in_player_branding_id",
-      "tooltip_text": "In Player Branding ID"
-    },
-    {
-      "type": "text",
-      "key": "in_player_referrer",
-      "tooltip_text": "In Player Referrer URL",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "key": "in_player_custom_asset_key",
-      "tooltip_text": "Custom asset key",
-      "default": "extensions.event_inplayer_id"
-    },
-    {
-      "type": "tag_select",
-      "key": "in_player_environment",
-      "tooltip_text": "InPlayer working environment",
-      "options": [
-        {
-          "text": "Development",
-          "value": "develop"
-        },
-        {
-          "text": "Production",
-          "value": "prod"
-        }
-      ],
-      "initial_value": "prod"
-    },
-    {
-      "type": "tag_select",
-      "key": "logout_completion_action",
-      "tooltip_text": "Defines what action plugin should do after user log out. ",
-      "options": [
-        {
-          "text": "Go back to previous screen",
-          "value": "go_back"
-        },
-        {
-          "text": "Go back to home screen",
-          "value": "go_home"
-        }
-      ],
-      "initial_value": "go_back"
-    },
-    {
-      "type": "text",
-      "key": "consumable_type_mapper",
-      "tooltip_text": "Mapping key for consumable purchase",
-      "default": "consumable"
-    },
-    {
-      "type": "text",
-      "key": "non_consumable_type_mapper",
-      "tooltip_text": "Mapping key for non consumable purchase",
-      "default": "ppv"
-    },
-    {
-      "type": "text",
-      "key": "subscription_type_mapper",
-      "tooltip_text": "Mapping key for subscription purchase",
-      "default": "subscription"
-    }
-  ],
+  "general": {},
   "hooks": {
     "fields": [
       {
@@ -111,1320 +35,192 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "dependency_version": "3.0.10",
-  "manifest_version": "3.0.10",
+  "dependency_version": "0.0.2-alpha.1",
+  "manifest_version": "0.0.2-alpha.1",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
-      "com.applicaster.iap.reactnative.IAPPackage",
-      "com.cmcewen.blurview.BlurViewPackage"
+      "com.rnappauth.RNAppAuthPackage"
     ],
     "proguard_rules": "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }"
   },
-  "project_dependencies": [
-    {
-      "iap": "node_modules/@applicaster/applicaster-iap/android/iap"
-    },
-    {
-      "iap-uni": "node_modules/@applicaster/applicaster-iap/android/iap-uni"
-    },
-    {
-      "iap-rn": "node_modules/@applicaster/applicaster-iap/android/iap-rn"
-    },
-    {
-      "react-native-community_blur": "node_modules/@react-native-community/blur/android"
-    }
-  ],
+  "project_dependencies": [],
   "extra_dependencies": [],
-  "min_zapp_sdk": "0.1.0-alpha1",
-  "npm_dependencies": [
-    "@applicaster/applicaster-iap@0.3.3",
-    "@react-native-community/blur@3.4.1"
+  "min_zapp_sdk": "3.0.0-dev",
+  "npm_dependencies": [],
+  "custom_configuration_fields": [
+    {
+      "type": "text_input",
+      "key": "clientId",
+      "label": "Client Id",
+      "tooltip_text": "REQUIRED: Client Id",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "deviceEndPoint",
+      "label": "Device Endpoint",
+      "tooltip_text": "REQUIRED: Device Endpoint",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "tokenEndPoint",
+      "label": "Token Endpoint",
+      "tooltip_text": "REQUIRED: Token Endpoint",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "refreshEndPoint",
+      "label": "Refresh Endpoint",
+      "tooltip_text": "REQUIRED: Refresh Endpoint",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "logoutEndPoint",
+      "label": "Logout Endpoint",
+      "tooltip_text": "OPTIONAL: Logout Endpoint",
+      "default": ""
+    },
+    {
+      "type": "text_input",
+      "key": "session_storage_key",
+      "label": "Session Storage Key",
+      "tooltip_text": "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
+      "default": "access_token"
+    },
+    {
+      "group": true,
+      "label": "Debug",
+      "tooltip": "For development purposes",
+      "folded": true,
+      "fields": [
+        {
+          "type": "tag_select",
+          "key": "force_authentication_on_all",
+          "tooltip_text": "If On, all video entries will be marked as required login",
+          "options": [
+            {
+              "text": "On",
+              "value": "on"
+            },
+            {
+              "text": "Off",
+              "value": "off"
+            }
+          ],
+          "initial_value": "off"
+        }
+      ]
+    }
   ],
   "styles": {
     "fields": [
       {
-        "key": "client_logo",
-        "type": "uploader",
-        "label": "Client Logo",
-        "label_tooltip": "Client logo image. Dimension 200 x44.",
-        "placeholder": "W 200px x H 44px"
-      },
-      {
         "group": true,
-        "label": "Logout Screen",
-        "tooltip": "This fields affect logout screen.",
+        "label": "Background",
         "folded": true,
         "fields": [
           {
-            "key": "logout_background_color",
+            "key": "background_color",
             "type": "color_picker",
-            "label": "Logout background font color",
-            "initial_value": "#161b29ff"
+            "label": "Background color",
+            "initial_value": "#f1f1f1FF"
           },
           {
-            "key": "logout_title_font_tvos",
-            "type": "tvos_font_selector",
-            "label": "Logout tvOS title font",
+            "key": "background_color_prehook",
+            "type": "color_picker",
+            "label": "Background color",
+            "initial_value": "#00000000"
+          },
+          {
+            "key": "client_logo",
+            "type": "uploader",
+            "label": "Logo",
+            "label_tooltip": "Logo image. Dimension 350x350 pixels.",
+            "placeholder": "W 350 x H 350px"
+          }
+        ]
+      },
+      {
+        "group": true,
+        "label": "Title",
+        "folded": true,
+        "fields": [
+          {
+            "key": "title_font_ios",
+            "type": "ios_font_selector",
+            "label": "iOS font family",
             "initial_value": "Helvetica-Bold"
           },
           {
-            "key": "logout_title_font_android_tv",
+            "key": "title_font_android",
             "type": "android_font_selector",
-            "label": "Logout Android title font",
+            "label": "Android font family",
             "initial_value": "Roboto-Bold"
           },
           {
-            "key": "logout_title_font_size",
+            "key": "title_font_size",
             "type": "number_input",
-            "label": "Logout title font size",
-            "initial_value": 30
+            "label": "Font size",
+            "initial_value": 15
           },
           {
-            "key": "logout_title_font_color",
+            "key": "title_font_color",
             "type": "color_picker",
-            "label": "Logout title font color",
+            "label": "Color",
             "initial_value": "#ffffffff"
           }
         ]
       },
       {
         "group": true,
-        "label": "Subscriber Agreement Design and Text",
-        "tooltip": "These fields affect the design of the subscriber agreement screen.",
+        "label": "Action button",
         "folded": true,
         "fields": [
           {
-            "key": "privacy_screen_background_color",
-            "type": "color_picker_rgba",
-            "label": "Background Color for the payment screen.",
-            "label_tooltip": "Background Color for the payment screen.",
-            "initial_value": "rgba(60, 65, 75, 1)"
-          },
-          {
-            "key": "privacy_text_area_background_color",
-            "type": "color_picker_rgba",
-            "label": "Background Color for the text area where the Agreement and Privacy are shown.",
-            "label_tooltip": "Background Color for the text area where the Agreement and Privacy are shown.",
-            "initial_value": "rgba(54, 60, 71, 1)"
-          },
-          {
-            "key": "privacy_main_title_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Main Title for the agreement and privacy screen for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "privacy_main_title_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Main Title for the agreement and privacy screen for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "privacy_main_title_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size Main Title for the agreement and privacy screen.",
-            "initial_value": "50"
-          },
-          {
-            "key": "privacy_main_title_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color Main Title for the agreement and privacy screen",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "privacy_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the text for the agreement and privacy screen for Android TV.",
-            "initial_value": "Roboto-Medium"
-          },
-          {
-            "key": "privacy_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the text for the agreement and privacy screen for TvOS.",
-            "initial_value": "HelveticaNeue-Medium"
-          },
-          {
-            "key": "privacy_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size text for the agreement and privacy screen.",
-            "initial_value": "30"
-          },
-          {
-            "key": "privacy_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color text for the agreement and privacy screen",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          }
-        ]
-      },
-      {
-        "group": true,
-        "label": "StoreFront Design and Text",
-        "tooltip": "These fields affect the design of the storefront screen plugin.",
-        "folded": true,
-        "fields": [
-          {
-            "key": "storefront_screen_background_color",
-            "type": "color_picker_rgba",
-            "label": "Storefront Screen Background Color",
-            "label_tooltip": "Background Color for the payment screen.",
-            "initial_value": "rgba(54, 61, 71, 1)"
-          },
-          {
-            "key": "subscription_default_title_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Main Title for the payment screen for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "subscription_default_title_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Main Title for the payment screent for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "subscription_default_title_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size Main Title for the payment screen.",
-            "initial_value": "50"
-          },
-          {
-            "key": "subscription_default_title_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color Main Title for the payment screen",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "event_schedule_text_date_format",
-            "type": "text_input",
-            "label": "Event Schedule ISO date format",
-            "label_tooltip": "Event Schedule ISO date format.",
-            "initial_value": "dddd, MMMM Do - hh:mm",
-            "placeholder": "Choose Your Subscription"
-          },
-          {
-            "key": "event_schedule_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Event Schedule for Android TV.",
-            "initial_value": "Roboto-Medium"
-          },
-          {
-            "key": "event_schedule_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Event Schedule for the payment screent for TvOS.",
-            "initial_value": "HelveticaNeue-Medium"
-          },
-          {
-            "key": "event_schedule_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font for the Event Schedule for the payment screen.",
-            "initial_value": "24"
-          },
-          {
-            "key": "event_schedule_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font for the Event Schedule for the payment screen",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "subscription_default_description_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Description text for the subscription for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "subscription_default_description_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Description text for the subscription for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "subscription_default_description_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the Description text for the subscription",
-            "initial_value": "30"
-          },
-          {
-            "key": "subscription_default_description_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the Description text for the subscription",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "policy_agreement_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the policy agreement for Android TV.",
-            "initial_value": "Roboto-Medium"
-          },
-          {
-            "key": "policy_agreement_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the policy agreement for TvOS.",
-            "initial_value": "HelveticaNeue"
-          },
-          {
-            "key": "policy_agreement_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the policy agreement",
-            "initial_value": "24"
-          },
-          {
-            "key": "policy_agreement_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the policy agreement",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "payment_option_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Background Color for the Payment Option.",
-            "initial_value": "rgba(42, 45, 52, 1)"
-          },
-          {
-            "key": "payment_option_active_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Background Color for the Active Payment Option.",
-            "initial_value": "rgba(42, 45, 52, 1)"
-          },
-          {
-            "key": "payment_option_corner_radius",
-            "type": "number_input",
-            "label": "Payment Option Corner Radius",
-            "label_tooltip": "Corner Radius for the Payment Option.",
-            "initial_value": "10"
-          },
-          {
-            "key": "payment_option_active_border_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Border Color for the Active Payment Option.",
-            "initial_value": "rgba(42, 45, 52, 1)"
-          },
-          {
-            "key": "payment_option_active_border_width",
-            "type": "number_input",
-            "label": "Payment Option active border width",
-            "label_tooltip": "Width for the Active Payment Option.",
-            "initial_value": "3"
-          },
-          {
-            "key": "payment_option_default_action_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Default Background Color for the Payment Option Action.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "payment_option_active_default_action_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Default Background Color for the Payment Option Action.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "payment_option_title_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the payment option title for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "payment_option_title_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the payment option title for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "payment_option_title_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the payment option title",
-            "initial_value": "18"
-          },
-          {
-            "key": "payment_option_title_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the payment option title",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "payment_option_description_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the payment option description for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "payment_option_description_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the payment option description for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "payment_option_description_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the payment option description",
-            "initial_value": "18"
-          },
-          {
-            "key": "payment_option_description_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the payment option description",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "payment_option_fee_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the payment option fee for Android TV.",
-            "initial_value": "Roboto-Dark"
-          },
-          {
-            "key": "payment_option_fee_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the payment option fee for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "payment_option_fee_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the payment option fee",
-            "initial_value": "36"
-          },
-          {
-            "key": "payment_option_fee_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the payment option fee",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "payment_option_action_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the payment option action button for Android TV.",
-            "initial_value": "Roboto-Regular"
-          },
-          {
-            "key": "payment_option_action_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the payment option action button for TvOS.",
-            "initial_value": "HelveticaNeue-Bold"
-          },
-          {
-            "key": "payment_option_action_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font size for the payment option action button",
-            "initial_value": "30"
-          },
-          {
-            "key": "payment_option_action_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for the payment option action button",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "restore_purchase_action_button_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Main Title for the restore purchases button for Android TV.",
-            "initial_value": "Roboto-Regular"
-          },
-          {
-            "key": "restore_purchase_action_button_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Main Title for the restore purchases button for TvOS.",
-            "initial_value": "HelveticaNeue"
-          },
-          {
-            "key": "restore_purchase_action_button_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size Main Title for the restore purchases button.",
-            "initial_value": "30"
-          },
-          {
-            "key": "restore_purchase_action_button_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color Main Title for the restore purchases button",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "restore_purchase_action_button_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Default Background Color for the Restore Purchases Button.",
-            "initial_value": "rgba(70, 79, 97, 1)"
-          },
-          {
-            "key": "restore_purchase_active_action_button_background_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Default Background Color for the Active Restore Purchases Button.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "subscriber_agreement_and_privacy_policy_text_font_android_tv",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for the Subscriber Agreement and Privacy Policy Link for Android TV.",
-            "initial_value": "Roboto-Medium"
-          },
-          {
-            "key": "subscriber_agreement_and_privacy_policy_text_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for the Subscriber Agreement and Privacy Policy Link for TvOS.",
-            "initial_value": "HelveticaNeue-Medium"
-          },
-          {
-            "key": "subscriber_agreement_and_privacy_policy_text_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size Subscriber Agreement and Privacy Policy Link.",
-            "initial_value": "24"
-          },
-          {
-            "key": "subscriber_agreement_and_privacy_policy_text_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color Subscriber Agreement and Privacy Policy Link",
-            "initial_value": "rgba(255, 255, 255, 1)"
-          },
-          {
-            "key": "subscriber_agreement_and_privacy_policy_text_active_color",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Color for the Active Subscriber Agreement and Privacy Policy Link ",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          }
-        ]
-      },
-      {
-        "group": true,
-        "label": "Account Design and Text",
-        "tooltip": "These fields affect the design of the screen plugin.",
-        "folded": true,
-        "fields": [
-          {
-            "key": "login_title_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Login Title Text for TvOS.",
+            "key": "action_button_font_ios",
+            "type": "ios_font_selector",
+            "label": "iOS font family",
             "initial_value": "Helvetica-Bold"
           },
           {
-            "key": "login_title_font_android",
+            "key": "action_button_font_android",
             "type": "android_font_selector",
-            "label_tooltip": "Font for Login Title Text for Android TV.",
+            "label": "Android font family",
             "initial_value": "Roboto-Bold"
           },
           {
-            "key": "login_title_fontsize",
+            "key": "action_button_font_size",
             "type": "number_input",
-            "label_tooltip": "Font Size for Login Title Text.",
-            "initial_value": "60"
+            "label": "Font size",
+            "initial_value": 15
           },
           {
-            "key": "login_title_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Login Title Text.",
-            "initial_value": "#545A5C"
+            "key": "action_button_font_color",
+            "type": "color_picker",
+            "label": "Color",
+            "initial_value": "#5D5D5DFF"
           },
           {
-            "key": "main_description_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Main Description Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
+            "key": "action_button_font_color_focused",
+            "type": "color_picker",
+            "label": "Color",
+            "initial_value": "#ffffffff"
           },
           {
-            "key": "main_description_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Main Description Text for Android TV.",
-            "initial_value": "Roboto-Bold"
+            "key": "action_button_background_color",
+            "type": "color_picker",
+            "label": "Background color",
+            "initial_value": "#D8D8D8ff"
           },
           {
-            "key": "main_description_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Main Description Text.",
-            "initial_value": "38"
-          },
-          {
-            "key": "main_description_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Main Description Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "optional_instructions_1_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Optional Instructions 1 Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "optional_instructions_1_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Optional Instructions 1 Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "optional_instructions_1_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Optional Instructions 1 Text.",
-            "initial_value": "26"
-          },
-          {
-            "key": "optional_instructions_1_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Optional Instructions 1 Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "optional_instructions_2_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Optional Instructions 2 Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "optional_instructions_2_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Optional Instructions 2 Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "optional_instructions_2_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Optional Instructions 2 Text.",
-            "initial_value": "26"
-          },
-          {
-            "key": "optional_instructions_2_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Optional Instructions 2 Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "use_dark_keyboard",
-            "type": "switch",
-            "label": "Use Dark Keyboard",
-            "label_tooltip": "Enables the dark keyboard appearance.",
-            "initial_value": "false"
-          },
-          {
-            "key": "email_input_background",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color",
-            "label_tooltip": "Background Color for the Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color (focused)",
-            "label_tooltip": "Background Color for the Focused Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_background_filled",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color (filled)",
-            "label_tooltip": "Background Color for the Filled Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_border_color",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color",
-            "label_tooltip": "Border Color for the Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_border_color_focused",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color (focused)",
-            "label_tooltip": "Border Color for the Focused Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_border_color_filled",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color (filled)",
-            "label_tooltip": "Border Color for the Filled Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "email_input_placeholder_color",
-            "type": "color_picker_rgba",
-            "label": "Email Input Placeholder Color (filled)",
-            "label_tooltip": "Color for the Email Input Placeholder.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "email_input_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Email Input Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "email_input_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Email Input Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "email_input_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Email Input Field.",
-            "initial_value": "30"
-          },
-          {
-            "key": "email_input_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Email Input Field.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "password_input_background",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color",
-            "label_tooltip": "Background Color for the Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color (focused)",
-            "label_tooltip": "Background Color for the Focused Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_background_filled",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color (filled)",
-            "label_tooltip": "Background Color for the Filled Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_border_color",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color",
-            "label_tooltip": "Border Color for the Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_border_color_focused",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color (focused)",
-            "label_tooltip": "Border Color for the Focused Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_border_color_filled",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color (filled)",
-            "label_tooltip": "Border Color for the Filled Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "password_input_placeholder_color",
-            "type": "color_picker_rgba",
-            "label": "Password Input Placeholder Color",
-            "label_tooltip": "Color for the Password Input Placeholder.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "password_input_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Password Input Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "password_input_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Password Input Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "password_input_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Password Input Field.",
-            "initial_value": "30"
-          },
-          {
-            "key": "password_input_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Password Input Field.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "login_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Login Action Button Background Color",
-            "label_tooltip": "Background Color for the Login Action Button.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "login_action_button_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Login Action Button Focused Background Color",
-            "label_tooltip": "Background Color for the Login Action Button",
-            "initial_value": "rgba(93, 2, 13, 1)"
-          },
-          {
-            "key": "login_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Login Action Button Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "login_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Login Action Button Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "login_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Login Action Button Text.",
-            "initial_value": "40"
-          },
-          {
-            "key": "login_action_button_border_radius",
-            "type": "number_input",
-            "label": "Login Action Button Corner Radius",
-            "label_tooltip": "Corner radius for a login button.",
-            "initial_value": "5"
-          },
-          {
-            "key": "login_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Login Action Button Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "login_action_button_fontcolor_focused",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Focused Login Action Button Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "enable_skip_functionality",
-            "type": "switch",
-            "label": "Enable Skip Functionality",
-            "label_tooltip": "Enables the ability to skip the login by using the back button or activating the skip button in the UI.",
-            "initial_value": "true"
-          },
-          {
-            "key": "skip_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Skip Action Button Background Color",
-            "label_tooltip": "Background Color for the Skip Action Button.",
-            "initial_value": "rgba(39, 218, 134, 1)",
-            "conditional_fields": [
-              {
-                "condition_value": [
-                  true
-                ],
-                "key": "general/enable_skip_functionality"
-              }
-            ]
-          },
-          {
-            "key": "skip_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Skip Action Button Text for TvOS.",
-            "initial_value": "Helvetica-Bold",
-            "conditional_fields": [
-              {
-                "condition_value": [
-                  true
-                ],
-                "key": "general/enable_skip_functionality"
-              }
-            ]
-          },
-          {
-            "key": "skip_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Skip Action Button Text for Android TV.",
-            "initial_value": "Roboto-Bold",
-            "conditional_fields": [
-              {
-                "condition_value": [
-                  true
-                ],
-                "key": "general/enable_skip_functionality"
-              }
-            ]
-          },
-          {
-            "key": "skip_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Skip Action Button Text.",
-            "initial_value": "40",
-            "conditional_fields": [
-              {
-                "condition_value": [
-                  true
-                ],
-                "key": "general/enable_skip_functionality"
-              }
-            ]
-          },
-          {
-            "key": "skip_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Skip Action Button Text.",
-            "initial_value": "#545A5C",
-            "conditional_fields": [
-              {
-                "condition_value": [
-                  true
-                ],
-                "key": "general/enable_skip_functionality"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "group": true,
-        "label": "Confirmation Screen Design and Text",
-        "tooltip": "These fields affect the design of plugin confirmation screen.",
-        "folded": true,
-        "fields": [
-          {
-            "key": "confirmation_message_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Confirmation Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "confirmation_message_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Confirmation Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "confirmation_message_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for confirmation text.",
-            "initial_value": "41"
-          },
-          {
-            "key": "confirmation_message_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for confirmation text.",
-            "initial_value": "#FFFFFF"
-          },
-          {
-            "key": "confirm_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Confirm Action Button Background Color",
-            "label_tooltip": "Background Color for the Confirm Action Button.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "confirm_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Confirm Button for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "confirm_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Confirm Button for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "confirm_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Confirm Action Button Text.",
-            "initial_value": "40"
-          },
-          {
-            "key": "confirm_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Confirm Action Button Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "cancel_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Cancel Action Button Background Color",
-            "label_tooltip": "Background Color for the Cancel Action Button.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "cancel_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Cancel Button for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "cancel_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Cancel Button for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "cancel_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Cancel Action Button Text.",
-            "initial_value": "40"
-          },
-          {
-            "key": "cancel_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Cancel Action Button Text.",
-            "initial_value": "#545A5C"
-          }
-        ]
-      },
-      {
-        "group": true,
-        "label": "Alert Design and Text",
-        "tooltip": "These fields affect the design of plugin alert component.",
-        "folded": true,
-        "fields": [
-          {
-            "key": "error_description_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Description Text for TvOS.",
-            "initial_value": "Helvetica"
-          },
-          {
-            "key": "error_description_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Description Text for Android TV.",
-            "initial_value": "Roboto-Regular"
-          },
-          {
-            "key": "error_description_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Description Text.",
-            "initial_value": "36"
-          },
-          {
-            "key": "error_description_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Description Text.",
-            "initial_value": "rgba(84, 90, 92, 1)"
-          },
-          {
-            "key": "close_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Alert “OK” Action Button Background Color",
-            "label_tooltip": "Background Color for the Alert “OK” Action Button. Will be used if no assets found.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "close_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for “OK” Action button Text for TvOS.",
-            "initial_value": "Helvetica"
-          },
-          {
-            "key": "close_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for “OK” Action button Text for Android TV.",
-            "initial_value": "Roboto-Regular"
-          },
-          {
-            "key": "close_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Alert “OK” Action Button Text.",
-            "initial_value": "41"
-          },
-          {
-            "key": "close_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Alert “OK” Action Button Text.",
-            "initial_value": "rgba(84, 90, 92, 1)"
-          }
-        ]
-      },
-      {
-        "group": true,
-        "label": "Signup screen designs",
-        "tooltip": "These fields affect the design of the signup screen",
-        "folded": true,
-        "fields": [
-          {
-            "key": "signup_title_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Signup Title Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "signup_title_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Signup Title Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "signup_title_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Signup Title Text.",
-            "initial_value": "60"
-          },
-          {
-            "key": "signup_title_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Signup Title Text.",
-            "initial_value": "rgba(33, 35, 36, 1)"
-          },
-          {
-            "key": "signup_action_button_background",
-            "type": "color_picker_rgba",
-            "label": "Sign Up Action Button Background Color",
-            "label_tooltip": "Background Color for the Sign Up Action Button.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_action_button_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Sign Up Action Button Focused Background Color",
-            "label_tooltip": "Background Color for the Sign Up Action Button",
-            "initial_value": "rgba(93, 2, 13, 1)"
-          },
-          {
-            "key": "signup_action_button_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Sign Up Action Button Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "signup_action_button_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Sign Up Action Button Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "signup_action_button_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Sign Up Action Button Text.",
-            "initial_value": "40"
-          },
-          {
-            "key": "signup_action_button_border_radius",
-            "type": "number_input",
-            "label": "Sign Up Action Button Corner Radius",
-            "label_tooltip": "Corner radius for a Sign Up button.",
-            "initial_value": "5"
-          },
-          {
-            "key": "signup_action_button_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Sign Up Action Button Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "signup_action_button_fontcolor_focused",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Focused Sign Up Action Button Text.",
-            "initial_value": "#545A5C"
-          },
-          {
-            "key": "signup_password_input_background",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color",
-            "label_tooltip": "Background Color for the Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color (focused)",
-            "label_tooltip": "Background Color for the Focused Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_background_filled",
-            "type": "color_picker_rgba",
-            "label": "Password Input Background Color (filled)",
-            "label_tooltip": "Background Color for the Filled Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_border_color",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color",
-            "label_tooltip": "Border Color for the Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_border_color_focused",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color (focused)",
-            "label_tooltip": "Border Color for the Focused Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_border_color_filled",
-            "type": "color_picker_rgba",
-            "label": "Password Input Border Color (filled)",
-            "label_tooltip": "Border Color for the Filled Password Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_password_input_placeholder_color",
-            "type": "color_picker_rgba",
-            "label": "Password Input Placeholder Color",
-            "label_tooltip": "Color for the Password Input Placeholder.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "signup_password_input_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Password Input Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "signup_password_input_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Password Input Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "signup_password_input_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Password Input Field.",
-            "initial_value": "30"
-          },
-          {
-            "key": "signup_password_input_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Password Input Field.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "signup_full_name_input_background",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Background Color",
-            "label_tooltip": "Background Color for the Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Background Color (focused)",
-            "label_tooltip": "Background Color for the Focused Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_background_filled",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Background Color (filled)",
-            "label_tooltip": "Background Color for the Filled Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_border_color",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Border Color",
-            "label_tooltip": "Border Color for the Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_border_color_focused",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Border Color (focused)",
-            "label_tooltip": "Border Color for the Focused Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_border_color_filled",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Border Color (filled)",
-            "label_tooltip": "Border Color for the Filled Full Name Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_full_name_input_placeholder_color",
-            "type": "color_picker_rgba",
-            "label": "Full Name Input Placeholder Color",
-            "label_tooltip": "Color for the Full Name Input Placeholder.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "signup_full_name_input_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Full Name Input Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "signup_full_name_input_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Full Name Input Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "signup_full_name_input_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Full Name Input Field.",
-            "initial_value": "30"
-          },
-          {
-            "key": "signup_full_name_input_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Full Name Input Field.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "signup_email_input_background",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color",
-            "label_tooltip": "Background Color for the Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_background_focused",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color (focused)",
-            "label_tooltip": "Background Color for the Focused Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_background_filled",
-            "type": "color_picker_rgba",
-            "label": "Email Input Background Color (filled)",
-            "label_tooltip": "Background Color for the Filled Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_border_color",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color",
-            "label_tooltip": "Border Color for the Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_border_color_focused",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color (focused)",
-            "label_tooltip": "Border Color for the Focused Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_border_color_filled",
-            "type": "color_picker_rgba",
-            "label": "Email Input Border Color (filled)",
-            "label_tooltip": "Border Color for the Filled Email Input.",
-            "initial_value": "rgba(39, 218, 134, 1)"
-          },
-          {
-            "key": "signup_email_input_placeholder_color",
-            "type": "color_picker_rgba",
-            "label": "Email Input Placeholder Color",
-            "label_tooltip": "Color for the Email Input Placeholder.",
-            "initial_value": "#9B9B9B"
-          },
-          {
-            "key": "signup_email_input_font_tvos",
-            "type": "tvos_font_selector",
-            "label_tooltip": "Font for Email Input Text for TvOS.",
-            "initial_value": "Helvetica-Bold"
-          },
-          {
-            "key": "signup_email_input_font_android",
-            "type": "android_font_selector",
-            "label_tooltip": "Font for Email Input Text for Android TV.",
-            "initial_value": "Roboto-Bold"
-          },
-          {
-            "key": "signup_email_input_fontsize",
-            "type": "number_input",
-            "label_tooltip": "Font Size for Email Input Field.",
-            "initial_value": "30"
-          },
-          {
-            "key": "signup_email_input_fontcolor",
-            "type": "color_picker_rgba",
-            "label_tooltip": "Font Color for Email Input Field.",
-            "initial_value": "#9B9B9B"
+            "key": "action_button_background_color_focused",
+            "type": "color_picker",
+            "label": "Background color",
+            "initial_value": "#0081C8FF"
           }
         ]
       }
@@ -1433,199 +229,24 @@
   "localizations": {
     "fields": [
       {
-        "key": "fields_email_text",
-        "label": "Email field placeholder",
-        "initial_value": "E-mail"
+        "key": "title_text",
+        "label": "Main screen title to screen",
+        "initial_value": "WELCOME TO THE MY APPLICATION"
       },
       {
-        "key": "fields_password_text",
-        "label": "Password field placeholder",
-        "initial_value": "Password"
+        "key": "title_text_hook",
+        "label": "Main screen title to screen hook",
+        "initial_value": "Create an account to personalize your my application experience"
       },
       {
-        "key": "fields_name_text",
-        "label": "Name field placeholder",
-        "initial_value": "Enter your name"
+        "key": "sing_in_button",
+        "label": "Sign in button text",
+        "initial_value": "Sign In / Register"
       },
       {
-        "key": "action_button_login_text",
-        "label": "Login button title",
-        "initial_value": "LOG IN"
-      },
-      {
-        "key": "action_button_signup_text",
-        "label": "Signup button title",
-        "initial_value": "SIGN UP"
-      },
-      {
-        "key": "video_stream_exception_message",
-        "label": "Message in case video url is empty",
-        "initial_value": "Video stream in not available. Please try again later"
-      },
-      {
-        "key": "general_error_message",
-        "label": "General error message",
-        "initial_value": "Something went wrong. Please try again later"
-      },
-      {
-        "key": "signup_title_error_text",
-        "label": "Error signup title",
-        "initial_value": "Sign-up failed"
-      },
-      {
-        "key": "login_title_error_text",
-        "label": "Error login title",
-        "initial_value": "Login failed"
-      },
-      {
-        "key": "logout_title_succeed_text",
-        "label": "Successful logout title",
-        "initial_value": "Successfully Logged Out"
-      },
-      {
-        "key": "logout_title_fail_text",
-        "label": "Error logout title",
-        "initial_value": "Logout Failed"
-      },
-      {
-        "key": "reset_password_success_title",
-        "label": "Successful password reset title",
-        "initial_value": "Set New Password Success"
-      },
-      {
-        "key": "reset_password_success_text",
-        "label": "Successful password reset message",
-        "initial_value": "Your password was successfully updated"
-      },
-      {
-        "key": "reset_password_error_title",
-        "label": "Password reset error title",
-        "initial_value": "Set New Password"
-      },
-      {
-        "key": "reset_password_error_text",
-        "label": "Password reset error message",
-        "initial_value": "New password could not be set. Please try again."
-      },
-      {
-        "key": "request_password_success_title",
-        "label": "Successful password request title",
-        "initial_value": "Request Password Success"
-      },
-      {
-        "key": "request_password_error_title",
-        "label": "Password request error title",
-        "initial_value": "Request Password Fail"
-      },
-      {
-        "key": "request_password_error_text",
-        "label": "Password request error message",
-        "initial_value": "Can not request password"
-      },
-      {
-        "key": "login_title_validation_error",
-        "label": "Login validation error title",
-        "initial_value": "Login form issue"
-      },
-      {
-        "key": "signup_title_validation_error",
-        "label": "Signup validation error title",
-        "initial_value": "Sign Up form issue"
-      },
-      {
-        "key": "new_password_title_validation_error",
-        "label": "New password validation error title",
-        "initial_value": "Set New Password form issue"
-      },
-      {
-        "key": "login_email_validation_error",
-        "label": "Error message for not valid EMAIL",
-        "initial_value": "Email is not valid"
-      },
-      {
-        "key": "signup_name_validation_error",
-        "label": "Error message for not valid NAME",
-        "initial_value": "Name can not be empty"
-      },
-      {
-        "key": "signup_password_validation_error",
-        "label": "Error message for not valid PASSWORD",
-        "initial_value": "Password must be at least 8 characters and contain one lower case, one upper case, one special character and one number"
-      },
-      {
-        "key": "signup_password_confirmation_validation_error",
-        "label": "Error message for not valid PASSWORD CONFIRMATION",
-        "initial_value": "Password not equal confirmation password"
-      },
-      {
-        "key": "new_password_token_validation_error",
-        "label": "Error message for not valid TOKEN",
-        "initial_value": "Token should not be empty"
-      },
-      {
-        "key": "privacy_main_title_text",
-        "label": "Agreement and privacy screen title",
-        "initial_value": "Subscriber Agreement & Privacy Policy"
-      },
-      {
-        "key": "privacy_text",
-        "label": "Agreement and privacy text",
-        "initial_value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet nunc dui. Sed nec dignissim erat. Praesent molestie, odio et lacinia dapibus, lacus felis interdum justo, a viverra eros mauris vel nibh. Nullam consequat urna at lorem interdum, non mattis elit interdum. Cras libero erat, mattis ut mattis in, ornare ut ante. Duis id mi condimentum elit sagittis scelerisque. Duis facilisis vel lectus eu fermentum. Etiam venenatis fermentum felis nec ornare. Nullam pretium iaculis ligula sed accumsan.\n\n\nDonec id libero sit amet ligula cursus tempor. Donec urna felis, vestibulum id fringilla in, elementum ac diam. Nunc pretium, ligula ac accumsan accumsan, ipsum ante tristique nisi, et dictum dui arcu eu ex. Duis vel lectus quis nisl fringilla dictum. Praesent vulputate justo ligula, at commodo lorem sodales sed. Cras quis rhoncus ante. Nunc ultricies orci eget purus elementum, eget posuere elit semper. Suspendisse quis dignissim elit, eget dictum sem. Sed in nisl dui. Curabitur at sapien consectetur, lacinia turpis vitae, pharetra nisl. Nullam accumsan odio orci, quis elementum ex luctus id. Cras nec eros orci. Vestibulum eget convallis lectus. Donec eu lorem at purus elementum tempo."
-      },
-      {
-        "key": "subscription_default_title_text",
-        "label": "Subscription default title",
-        "initial_value": "Choose Your Subscription"
-      },
-      {
-        "key": "policy_agreement_text",
-        "label": "Policy agreement text",
-        "initial_value": "By clicking “Subscribe” or “Buy” below, you also agree to the [Client’s App Name] Agreement and acknowledge that you have read our Privacy Policy"
-      },
-      {
-        "key": "subscriber_agreement_and_privacy_policy_text",
-        "label": "Subscriber Agreement and Privacy policy text",
-        "initial_value": "[Client’s Name App] Subscriber Agreement and Privacy Policy"
-      },
-      {
-        "key": "restore_purchase_action_button_text",
-        "label": "Restore purchases button title",
-        "initial_value": "Restore"
-      },
-      {
-        "key": "payment_option_action_text_type_buy",
-        "label": "Buy button title",
-        "initial_value": "Buy"
-      },
-      {
-        "key": "payment_option_action_text_type_subscribe",
-        "label": "Subscribe button title",
-        "initial_value": "Subscribe"
-      },
-      {
-        "key": "login_title_text",
-        "label": "Login title",
-        "initial_value": "Welcome To The App"
-      },
-      {
-        "key": "main_description_text",
-        "label": "Main description text",
-        "initial_value": "Helping companies maximize any cloud infrastructure, reduce costs, increase engagement, and significantly improve time to market and speed of ongoing innovation."
-      },
-      {
-        "key": "optional_instructions_1_text",
-        "label": "Optional instructions 1",
-        "initial_value": "Optional Instructions"
-      },
-      {
-        "key": "optional_instructions_2_text",
-        "label": "Optional instructions 2",
-        "initial_value": "Optional Instructions"
-      },
-      {
-        "key": "signup_title_text",
-        "label": "Signup title",
-        "initial_value": "Registration"
+        "key": "sing_in_later",
+        "label": "Sign in later button text",
+        "initial_value": "Maybe Later"
       }
     ]
   },
