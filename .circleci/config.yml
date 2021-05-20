@@ -127,6 +127,10 @@ jobs:
           name: Publishing plugins
           command: node ./scripts/publish_plugins.js
 
+      - store_artifacts:
+          name: Artifacts - Build logs
+          path: /root/.npm/_logs
+
   deploy_plugins_canary:
     <<: *defaults
     docker:
