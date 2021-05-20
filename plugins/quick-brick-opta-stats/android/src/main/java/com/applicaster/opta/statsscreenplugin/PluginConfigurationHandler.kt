@@ -28,7 +28,7 @@ class PluginConfigurationHandler {
 
     private fun getActivityByScreenId(screenId: String, context: Context, data: Map<String, String>): Intent {
         return when (screenId) {
-            "match_details" -> {
+            "match" -> {
                 OptaStatsActivity
                         .getCallingIntent(context, OptaStatsActivity.Companion.Screen.MATCH_DETAILS, data)
             }
@@ -40,7 +40,7 @@ class PluginConfigurationHandler {
                 OptaStatsActivity
                         .getCallingIntent(context, OptaStatsActivity.Companion.Screen.TEAM, data)
             }
-            "all_matches" -> {
+            "matches" -> {
                 OptaStatsActivity
                         .getCallingIntent(context, OptaStatsActivity.Companion.Screen.ALL_MATCHES, data)
             }
