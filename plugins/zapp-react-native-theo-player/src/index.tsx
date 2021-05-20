@@ -28,7 +28,7 @@ type Entry = {
   id: string;
   title: string;
   extensions: {
-    analyticsCustomProperties: object
+    analyticsCustomProperties: object;
   };
 };
 
@@ -101,10 +101,10 @@ const videoStyles = ({ width, height }) => ({
   },
 });
 
-const analyticsTracker = new AnalyticsTracker();
-
 export default class THEOPlayer extends Component<Props, State> {
-  _root: THEOplayerView;
+  _root;
+
+  analyticsTracker = new AnalyticsTracker();
 
   constructor(props) {
     super(props);
@@ -140,25 +140,33 @@ export default class THEOPlayer extends Component<Props, State> {
       error: null,
       playerEnded: false,
       playerClosed: false,
-      buffering: false
+      buffering: false,
     };
-
   }
 
   componentDidMount() {
-    analyticsTracker.initialState(this.state, this.props.entry)
+    this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
   componentDidUpdate() {
-    analyticsTracker.handleChange(this.state);
-
+    this.analyticsTracker.handleChange(this.state);
+    console.log(
+      "meanwhile componentDidUpdate handles any state change? with this.handleChange(this.state)"
+    );
     if (this.state.playerEnded) {
+      console.log("if the playerEnded well, handleEnded, is that right?", {
+        state: this.state,
+      });
       this.handleEnded();
     }
+  }
 
-    if (this.state.playerClosed) {
-      this.handleClosed();
-    }
+  componentWillUnmount() {
+    console.log("The component will unmount and then call handleClosed", {
+      props: this.props,
+      state: this.state,
+    });
+    this.handleClosed();
   }
 
   onPlayerPlay = ({ nativeEvent }) => {};
@@ -178,15 +186,11 @@ export default class THEOPlayer extends Component<Props, State> {
 
     if (loadedVideo && currentTime > 1) {
       this.setState({ resume: true, paused: false });
-    } 
+    }
   };
 
   onPlayerPause = ({ nativeEvent }) => {
-    const {
-      paused,
-      readyState,
-      loadedVideo
-    } = this.state;
+    const { paused, readyState, loadedVideo } = this.state;
 
     const willSeek = readyState === "HAVE_METADATA";
 
@@ -205,7 +209,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerSeeked = ({ nativeEvent }) => {
     const { seek } = this.state;
-    if(seek) {
+    if (seek) {
       this.setState({ seek: false, seekEnd: true });
     }
   };
@@ -220,7 +224,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerRateChange = ({ nativeEvent }) => {};
 
   onPlayerReadyStateChange = ({ nativeEvent }) => {
-   let buffering = false;
+    let buffering = false;
 
     const { readyState } = nativeEvent;
     const haveCurrentData = this.state.readyState === "HAVE_CURRENT_DATA";
@@ -230,7 +234,7 @@ export default class THEOPlayer extends Component<Props, State> {
       buffering = true;
     }
 
-    this.setState({ readyState, buffering })
+    this.setState({ readyState, buffering });
   };
 
   onPlayerLoadedMetaData = ({ nativeEvent }) => {};
@@ -249,15 +253,15 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerCanPlay = ({ nativeEvent }) => {
     this.setState({
-      buffering: false
-    })
+      buffering: false,
+    });
   };
 
   onPlayerCanPlayThrough = ({ nativeEvent }) => {
-    this.setState({ 
-      canplay: true, 
-      playing: false, 
-      resume: false, 
+    this.setState({
+      canplay: true,
+      playing: false,
+      resume: false,
     });
   };
 
@@ -276,8 +280,8 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerVolumeChange = ({ nativeEvent }) => {
     const { volume } = nativeEvent;
-    
-    this.setState({ volume })
+
+    this.setState({ volume });
   };
 
   onPlayerResize = ({ nativeEvent }) => {};
@@ -297,23 +301,23 @@ export default class THEOPlayer extends Component<Props, State> {
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
 
-    this.setState({ 
-      adBreakBegin: true, 
-      adBreakEnd: false, 
+    this.setState({
+      adBreakBegin: true,
+      adBreakEnd: false,
       adBreakDuration: maxDuration,
-      adData: nativeEvent
-    })
+      adData: nativeEvent,
+    });
   };
 
   onAdBreakEnd = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
 
-    this.setState({ 
-      adBreakEnd: true, 
-      adBreakBegin: false, 
+    this.setState({
+      adBreakEnd: true,
+      adBreakBegin: false,
       adBreakDuration: maxDuration,
-      adData: nativeEvent
-    })
+      adData: nativeEvent,
+    });
   };
 
   onAdError = ({ nativeEvent }) => {
@@ -321,25 +325,25 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onAdBegin = ({ nativeEvent }) => {
-    const { duration, id} = nativeEvent;
+    const { duration, id } = nativeEvent;
 
-    this.setState({ 
-      adBegin: true, 
-      adEnd: false, 
+    this.setState({
+      adBegin: true,
+      adEnd: false,
       adDuration: duration,
       adId: id,
-      adData: nativeEvent
+      adData: nativeEvent,
     });
   };
 
   onAdEnd = ({ nativeEvent }) => {
-    const { duration, id} = nativeEvent;
+    const { duration, id } = nativeEvent;
     this.setState({
       adEnd: true,
       adBegin: false,
       adDuration: duration,
       adId: id,
-      adData: nativeEvent
+      adData: nativeEvent,
     });
   };
 
@@ -348,28 +352,40 @@ export default class THEOPlayer extends Component<Props, State> {
 
     if (type === "onCloseButtonHandle") {
       if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
+        console.log("onFullscreenPlayerDidDismiss");
         this.props?.onFullscreenPlayerDidDismiss();
       } else if (this.props?.playerEvent) {
-        this.props?.playerEvent("close");
+        console.log("playerEvent(close)");
+
+        this.handleClosed();
       }
     }
   };
 
-  _assignRoot = (component: THEOplayerView) => {
+  _assignRoot = (component) => {
     this._root = component;
   };
 
   handleEnded() {
     this.setState({ playerClosed: true });
+    console.log(
+      "handleEnded is now setting the state of playerClosed to true",
+      { state: this.state }
+    );
   }
 
   handleClosed() {
+    console.log("handle closed then will check if it is android or ios");
     if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
       this.props?.onEnd();
     }
 
     if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
-      this.props?.onEnded();
+      this.setState({ playerClosed: true }, () => this.props?.onEnded());
+      console.log(
+        "if we have a property called onEnded for android we try to invoke it",
+        { props: this.props, state: this.state }
+      );
     }
   }
 
@@ -429,7 +445,11 @@ export default class THEOPlayer extends Component<Props, State> {
           onAdBegin={this.onAdBegin}
           onAdEnd={this.onAdEnd}
           onJSWindowEvent={this.onJSWindowEvent}
-          configurationData={{ theoplayer_license_key, theoplayer_scale_mode, moat_partner_code }}
+          configurationData={{
+            theoplayer_license_key,
+            theoplayer_scale_mode,
+            moat_partner_code,
+          }}
           source={{
             sources: [
               {
