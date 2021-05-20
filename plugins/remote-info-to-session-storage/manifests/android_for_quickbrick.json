@@ -51,13 +51,13 @@
   ],
   "identifier": "remote_info_to_session_storage",
   "npm_dependencies": [
-    "@applicaster/remote-info-to-session-storage@0.1.0"
+    "@applicaster/remote-info-to-session-storage@0.1.1"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "0.1.0",
+  "manifest_version": "0.1.1",
   "project_dependencies": [
     {
       "remote-info-to-session-storage": "node_modules/@applicaster/remote-info-to-session-storage/android"
