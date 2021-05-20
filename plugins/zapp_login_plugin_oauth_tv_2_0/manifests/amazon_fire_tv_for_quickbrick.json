@@ -35,8 +35,8 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "dependency_version": "0.0.2-alpha.1",
-  "manifest_version": "0.0.2-alpha.1",
+  "dependency_version": "0.0.2-alpha.2",
+  "manifest_version": "0.0.2-alpha.2",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -120,7 +120,7 @@
     "fields": [
       {
         "group": true,
-        "label": "Background",
+        "label": "Environment",
         "folded": true,
         "fields": [
           {
@@ -141,12 +141,24 @@
             "label": "Logo",
             "label_tooltip": "Logo image. Dimension 350x350 pixels.",
             "placeholder": "W 350 x H 350px"
+          },
+          {
+            "key": "activity_indicator_color",
+            "type": "color_picker",
+            "label": "Activity indicator color",
+            "initial_value": "#525A5CFF"
+          },
+          {
+            "key": "line_separator_color",
+            "type": "color_picker",
+            "label": "Sign in screen verticall separator",
+            "initial_value": "#979797"
           }
         ]
       },
       {
         "group": true,
-        "label": "Title",
+        "label": "Header text",
         "folded": true,
         "fields": [
           {
@@ -165,13 +177,106 @@
             "key": "title_font_size",
             "type": "number_input",
             "label": "Font size",
-            "initial_value": 15
+            "initial_value": 42
           },
           {
             "key": "title_font_color",
             "type": "color_picker",
             "label": "Color",
             "initial_value": "#ffffffff"
+          }
+        ]
+      },
+      {
+        "group": true,
+        "label": "Text",
+        "folded": true,
+        "fields": [
+          {
+            "key": "text_font_ios",
+            "type": "ios_font_selector",
+            "label": "iOS font family",
+            "initial_value": "Helvetica-Bold"
+          },
+          {
+            "key": "text_font_android",
+            "type": "android_font_selector",
+            "label": "Android font family",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "text_font_size",
+            "type": "number_input",
+            "label": "Font size",
+            "initial_value": 32
+          },
+          {
+            "key": "text_font_color",
+            "type": "color_picker",
+            "label": "Color",
+            "initial_value": "#525A5C"
+          }
+        ]
+      },
+      {
+        "group": true,
+        "label": "Text URL",
+        "folded": true,
+        "fields": [
+          {
+            "key": "text_url_font_ios",
+            "type": "ios_font_selector",
+            "label": "iOS font family",
+            "initial_value": "Helvetica-Bold"
+          },
+          {
+            "key": "text_url_font_android",
+            "type": "android_font_selector",
+            "label": "Android font family",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "text_url_font_size",
+            "type": "number_input",
+            "label": "Font size",
+            "initial_value": 20
+          },
+          {
+            "key": "text_url_font_color",
+            "type": "color_picker",
+            "label": "Color",
+            "initial_value": "#525A5C"
+          }
+        ]
+      },
+      {
+        "group": true,
+        "label": "Text Code",
+        "folded": true,
+        "fields": [
+          {
+            "key": "text_code_font_ios",
+            "type": "ios_font_selector",
+            "label": "iOS font family",
+            "initial_value": "Helvetica-Bold"
+          },
+          {
+            "key": "text_code_font_android",
+            "type": "android_font_selector",
+            "label": "Android font family",
+            "initial_value": "Roboto-Bold"
+          },
+          {
+            "key": "text_code_font_size",
+            "type": "number_input",
+            "label": "Font size",
+            "initial_value": 20
+          },
+          {
+            "key": "text_code_font_color",
+            "type": "color_picker",
+            "label": "Color",
+            "initial_value": "#525A5C"
           }
         ]
       },
@@ -207,7 +312,7 @@
           {
             "key": "action_button_font_color_focused",
             "type": "color_picker",
-            "label": "Color",
+            "label": "Color Focused",
             "initial_value": "#ffffffff"
           },
           {
@@ -219,7 +324,7 @@
           {
             "key": "action_button_background_color_focused",
             "type": "color_picker",
-            "label": "Background color",
+            "label": "Background color focused",
             "initial_value": "#0081C8FF"
           }
         ]
@@ -247,6 +352,36 @@
         "key": "sing_in_later",
         "label": "Sign in later button text",
         "initial_value": "Maybe Later"
+      },
+      {
+        "key": "sing_in_title",
+        "label": "Sign in screen title",
+        "initial_value": "SIGN IN INTO YOUR APPLICATION ACCOUNT"
+      },
+      {
+        "key": "sign_in_go_to_title",
+        "label": "Go to title",
+        "initial_value": "Go to:"
+      },
+      {
+        "key": "sign_in_pin_url",
+        "label": "pin url",
+        "initial_value": "google.com"
+      },
+      {
+        "key": "sign_in_activation_code_title",
+        "label": "Activation code label",
+        "initial_value": "Enter the activation code below"
+      },
+      {
+        "key": "sign_in_support_title",
+        "label": "Sign in support title",
+        "initial_value": "If you need support, please visit"
+      },
+      {
+        "key": "sign_in_support_link",
+        "label": "support link",
+        "initial_value": "google.com"
       }
     ]
   },
