@@ -1,11 +1,10 @@
 package com.applicaster.opta.statsscreenplugin.utils
 
 import android.content.Context
-import com.applicaster.app.CustomApplication
-import com.applicaster.opta.statsscreenplugin.PluginConfigurationHandler
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.util.Log
+import com.applicaster.opta.statsscreenplugin.PluginConfigurationHandler
 import com.applicaster.opta.statsscreenplugin.plugin.PluginDataRepository
 import com.applicaster.util.AppContext
 
@@ -20,7 +19,7 @@ class PluginUtils {
             val data: MutableMap<String, String> =
                     hashMapOf("type" to "general",
                             "action" to "stats_open_screen",
-                            "screen_id" to "match_details_screen",
+                            "screen_id" to "match",
                             "match_id" to matchId)
             configurationHandler.handlePluginScheme(AppContext.get(), data)
         }
@@ -29,7 +28,7 @@ class PluginUtils {
             val data: MutableMap<String, String> =
                     hashMapOf("type" to "general",
                             "action" to "stats_open_screen",
-                            "screen_id" to "team_screen",
+                            "screen_id" to "team",
                             "team_id" to teamId)
             configurationHandler.handlePluginScheme(AppContext.get(), data)
         }
@@ -39,7 +38,7 @@ class PluginUtils {
                 val data: MutableMap<String, String> =
                         hashMapOf("type" to "general",
                                 "action" to "stats_open_screen",
-                                "screen_id" to "player_screen",
+                                "screen_id" to "player",
                                 "player_id" to playerId)
                 configurationHandler.handlePluginScheme(AppContext.get(), data)
             } else {

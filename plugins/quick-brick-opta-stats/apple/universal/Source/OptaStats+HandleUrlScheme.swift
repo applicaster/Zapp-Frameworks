@@ -103,6 +103,17 @@ extension OptaStats {
     }
 
     func handlePresentScreen(targetViewController: UIViewController?,
+                             screenArguments: [String: Any]) -> Bool {
+        guard let urlString = screenArguments["url"] as? String,
+              let url = URL(string: urlString),
+              let params = getParams(from: url) else {
+            return false
+        }
+        
+        return handlePresentScreen(targetViewController: targetViewController, params: params)
+    }
+    
+    func handlePresentScreen(targetViewController: UIViewController?,
                                          params: [String: Any]) -> Bool {
         var retValue = true
 
@@ -121,25 +132,25 @@ extension OptaStats {
             viewControllerToShow = viewController
         case .teamScreen:
             let viewController = mainStoryboard.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController
-            if let teamID = params["id"] as? String {
+            if let teamID = params["team_id"] as? String {
                 viewController?.teamID = teamID
             }
             viewControllerToShow = viewController
         case .matchesScreen:
             let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchesCardViewController.storyboardID) as? MatchesCardViewController
-            if let teamID = params["id"] as? String {
+            if let teamID = params["team_id"] as? String {
                 viewController?.teamID = teamID
             }
             viewControllerToShow = viewController
         case .matchScreen:
             let viewController = mainStoryboard.instantiateViewController(withIdentifier: MatchDetailViewController.storyboardID) as? MatchDetailViewController
-            if let matchID = params["id"] as? String {
+            if let matchID = params["match_id"] as? String {
                 viewController?.matchID = Helpers.sanatizeID(matchID, fromPush: fromPushNotification)
             }
             viewControllerToShow = viewController
         case .playerScreen:
             let viewController = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as? PlayerDetailsViewController
-            if let playerID = params["id"] as? String {
+            if let playerID = params["player_id"] as? String {
                 viewController?.playerID = playerID
             }
             viewControllerToShow = viewController

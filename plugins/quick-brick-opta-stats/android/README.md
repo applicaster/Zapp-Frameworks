@@ -12,20 +12,36 @@ The Opta Statistic Plugin is being developed primarily to show the statistics fo
 We predefined a set of screens which you can open through a URL scheme from anywhere in the application. In order to do so, we need to define a well-known URL schema. These are the proposed schemas for this integration.
 
 ### URL Scheme to open a screen
-`<app_schema_id>://plugin?type=general&action=stats_open_screen&screen_id=<screen_id>&<other_data_key>=<other_data_value>`
 
+ - `<app_schema_id>://present?screen_id==<screen_id>&type==<type>&<other_data_key>=<other_data_value>`
+
+Has a limitation: when the app is already running, and COPA home screen is open, nothing will happen.
+Can be solved by creating 2 separate screens: for Home and internal ones.
+
+ - `<app_schema_id>://copa_stats?type==<type>&<other_data_key>=<other_data_value>`
+ Has no limitations.
+
+- `screen_id` is screen ID from Zapp CMS (required for screen url only).
 - `<app_schema_id>` **(Required)**: Application scheme id.
-- `<screen_id>` **(Required)**: A predefined `<screen_id>` from one of the following options:
-  - `home_screen`
-  - `match_details_screen`
-  - `all_matches_screen`
-  - `all_teams_screen`
-  - `team_screen`
-  - `player_screen`
+- `<type>` **(Required)**: A predefined `<type>` from one of the following options:
+  - `home`
+  - `match`
+  - `matches`
+  - `teams`
+  - `team`
+  - `player`
 - `<other_data_key>` **(Required for specific screens)**: To show values from a specific entity:
   - `match_id=<op_id>&push=<true_or_false>`
-  - `team_id` (`team_screen` and `all_matches_screen`)
-  - `player_id` (`player_screen`)
+  - `team_id` (for screens of type `team` and `all_matches`)
+  - `player_id` (for screen of type `player`)
+
+#### Android testing example using ADB
+
+Note escaped ampersands.
+
+`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://present?screen_id=082ac1b2-783f-4f41-b95a-f4a486a4acd6\&type=matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
+
+`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://copa_stats?type=matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
 
 #### Match details & Push option
 When opening match details screen through URL scheme, there is another key named push which indicates if the URL scheme comes from the push or if it’s being opened within the app.

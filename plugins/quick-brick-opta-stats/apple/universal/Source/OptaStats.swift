@@ -83,19 +83,19 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     }
     
     func showScreen(with screenArguments: NSDictionary, completion: ((_ success: Bool) -> Void)?) {
-        guard let params = screenArguments as? [String: Any] else {
+        guard let screenArguments = screenArguments as? [String: Any] else {
             return
         }
         
         let targetViewController = UIApplication.shared.keyWindow?.rootViewController
-        let success = handlePresentScreen(targetViewController: targetViewController, params: params)
+        let success = handlePresentScreen(targetViewController: targetViewController, screenArguments: screenArguments)
         
         completion?(success)
     }
 }
 
 enum StatsScreenType: String {
-    case undefined = ""
+    case undefined = "home"
     case groupScreen = "groups"
     case teamsScreen = "teams"
     case teamScreen = "team"
