@@ -26,8 +26,8 @@ Can be solved by creating 2 separate screens: for Home and internal ones.
 - `<type>` **(Required)**: A predefined `<type>` from one of the following options:
   - `home`
   - `match`
-  - `all_matches`
-  - `all_teams`
+  - `matches`
+  - `teams`
   - `team`
   - `player`
 - `<other_data_key>` **(Required for specific screens)**: To show values from a specific entity:
@@ -39,9 +39,9 @@ Can be solved by creating 2 separate screens: for Home and internal ones.
 
 Note escaped ampersands.
 
-`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://present?screen_id=082ac1b2-783f-4f41-b95a-f4a486a4acd6\&type=all_matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
+`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://present?screen_id=082ac1b2-783f-4f41-b95a-f4a486a4acd6\&type=matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
 
-`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://copa_stats?type=all_matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
+`adb shell am start -a "android.intent.action.VIEW" -d "ca2019://copa_stats?type=matches\&team_id=ajab3nmpoltsoeqcuoyi4pwzx"`
 
 #### Match details & Push option
 When opening match details screen through URL scheme, there is another key named push which indicates if the URL scheme comes from the push or if it’s being opened within the app.
