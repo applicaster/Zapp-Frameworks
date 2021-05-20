@@ -45,7 +45,7 @@ const stylesTv = {
   fields: [
     {
       group: true,
-      label: "Background",
+      label: "Environment",
       folded: true,
       fields: [
         {
@@ -67,11 +67,23 @@ const stylesTv = {
           label_tooltip: "Logo image. Dimension 350x350 pixels.",
           placeholder: "W 350 x H 350px",
         },
+        {
+          key: "activity_indicator_color",
+          type: "color_picker",
+          label: "Activity indicator color",
+          initial_value: "#525A5CFF",
+        },
+        {
+          key: "line_separator_color",
+          type: "color_picker",
+          label: "Sign in screen verticall separator",
+          initial_value: "#979797",
+        },
       ],
     },
     {
       group: true,
-      label: "Title",
+      label: "Header text",
       folded: true,
       fields: [
         {
@@ -90,13 +102,106 @@ const stylesTv = {
           key: "title_font_size",
           type: "number_input",
           label: "Font size",
-          initial_value: 15,
+          initial_value: 42,
         },
         {
           key: "title_font_color",
           type: "color_picker",
           label: "Color",
           initial_value: "#ffffffff",
+        },
+      ],
+    },
+    {
+      group: true,
+      label: "Text",
+      folded: true,
+      fields: [
+        {
+          key: "text_font_ios",
+          type: "ios_font_selector",
+          label: "iOS font family",
+          initial_value: "Helvetica-Bold",
+        },
+        {
+          key: "text_font_android",
+          type: "android_font_selector",
+          label: "Android font family",
+          initial_value: "Roboto-Bold",
+        },
+        {
+          key: "text_font_size",
+          type: "number_input",
+          label: "Font size",
+          initial_value: 32,
+        },
+        {
+          key: "text_font_color",
+          type: "color_picker",
+          label: "Color",
+          initial_value: "#525A5C",
+        },
+      ],
+    },
+    {
+      group: true,
+      label: "Text URL",
+      folded: true,
+      fields: [
+        {
+          key: "text_url_font_ios",
+          type: "ios_font_selector",
+          label: "iOS font family",
+          initial_value: "Helvetica-Bold",
+        },
+        {
+          key: "text_url_font_android",
+          type: "android_font_selector",
+          label: "Android font family",
+          initial_value: "Roboto-Bold",
+        },
+        {
+          key: "text_url_font_size",
+          type: "number_input",
+          label: "Font size",
+          initial_value: 20,
+        },
+        {
+          key: "text_url_font_color",
+          type: "color_picker",
+          label: "Color",
+          initial_value: "#525A5C",
+        },
+      ],
+    },
+    {
+      group: true,
+      label: "Text Code",
+      folded: true,
+      fields: [
+        {
+          key: "text_code_font_ios",
+          type: "ios_font_selector",
+          label: "iOS font family",
+          initial_value: "Helvetica-Bold",
+        },
+        {
+          key: "text_code_font_android",
+          type: "android_font_selector",
+          label: "Android font family",
+          initial_value: "Roboto-Bold",
+        },
+        {
+          key: "text_code_font_size",
+          type: "number_input",
+          label: "Font size",
+          initial_value: 20,
+        },
+        {
+          key: "text_code_font_color",
+          type: "color_picker",
+          label: "Color",
+          initial_value: "#525A5C",
         },
       ],
     },
@@ -132,7 +237,7 @@ const stylesTv = {
         {
           key: "action_button_font_color_focused",
           type: "color_picker",
-          label: "Color",
+          label: "Color Focused",
           initial_value: "#ffffffff",
         },
         {
@@ -144,7 +249,7 @@ const stylesTv = {
         {
           key: "action_button_background_color_focused",
           type: "color_picker",
-          label: "Background color",
+          label: "Background color focused",
           initial_value: "#0081C8FF",
         },
       ],

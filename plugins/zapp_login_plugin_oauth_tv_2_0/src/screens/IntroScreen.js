@@ -3,9 +3,10 @@ import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import Button from "../components2/Button";
 import Layout from "../components2/Layout";
-import { trackEvent } from "../analytics/segment/index";
 import { skipPrehook } from "../utils";
 import { mapKeyToStyle } from "../Utils/Customization";
+import { ScreenData } from "../Utils/Helpers";
+
 const IntroScreen = (props) => {
   const {
     segmentKey,
@@ -24,14 +25,9 @@ const IntroScreen = (props) => {
 
   const signInButton = useRef(null);
   const laterButton = useRef(null);
-  const {
-    title_text,
-    title_text_hook,
-    sing_in_button,
-    sing_in_later,
-  } = screenLocalizations;
+  const { title_text, title_text_hook, sing_in_button, sing_in_later } =
+    screenLocalizations;
   useEffect(() => {
-    trackEvent("User Login Started");
     if (forceFocus) {
       goToScreen(null, false, true);
     }
@@ -71,11 +67,11 @@ const IntroScreen = (props) => {
             isPrehook
               ? {
                   ...styles.title,
-                  ...mapKeyToStyle("title_font", screenStyles),
+                  ...mapKeyToStyle("title", screenStyles),
                 }
               : {
                   ...styles.subTitle,
-                  ...mapKeyToStyle("title_font", screenStyles),
+                  ...mapKeyToStyle("title", screenStyles),
                 }
           }
         >
@@ -85,7 +81,7 @@ const IntroScreen = (props) => {
           <Button
             screenStyles={screenStyles}
             label={sing_in_button}
-            onPress={() => goToScreen("SIGNIN")}
+            onPress={() => goToScreen(ScreenData.LOG_IN)}
             preferredFocus={true}
             groupId={groupId}
             style={styles.focusContainer}

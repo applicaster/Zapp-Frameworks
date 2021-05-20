@@ -178,7 +178,6 @@ const OAuth = (props) => {
             gygiaGetDeviceByPinUrl={gygia_get_device_by_pin_url}
             gygiaQrUrl={gygia_qr_url}
             gygiaSupportUrl={gygia_support_url}
-            deviceId={this.state.deviceId}
           />
         );
       }

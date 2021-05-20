@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const common = [
+  // Title Screen
   {
     key: "title_text",
     label: "Main screen title to screen",
@@ -21,6 +22,38 @@ const common = [
     key: "sing_in_later",
     label: "Sign in later button text",
     initial_value: "Maybe Later",
+  },
+
+  // Sign In
+  {
+    key: "sing_in_title",
+    label: "Sign in screen title",
+    initial_value: "SIGN IN INTO YOUR APPLICATION ACCOUNT",
+  },
+  {
+    key: "sign_in_go_to_title",
+    label: "Go to title",
+    initial_value: "Go to:",
+  },
+  {
+    key: "sign_in_pin_url",
+    label: "pin url",
+    initial_value: "google.com",
+  },
+  {
+    key: "sign_in_activation_code_title",
+    label: "Activation code label",
+    initial_value: "Enter the activation code below",
+  },
+  {
+    key: "sign_in_support_title",
+    label: "Sign in support title",
+    initial_value: "If you need support, please visit",
+  },
+  {
+    key: "sign_in_support_link",
+    label: "support link",
+    initial_value: "google.com",
   },
 ];
 
