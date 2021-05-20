@@ -103,8 +103,7 @@ const videoStyles = ({ width, height }) => ({
 });
 
 export default class THEOPlayer extends Component<Props, State> {
-  _root;
-
+  _root: typeof THEOplayerView;
   analyticsTracker = new AnalyticsTracker();
 
   constructor(props) {
@@ -351,7 +350,7 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  _assignRoot = (component) => {
+  _assignRoot = (component: typeof THEOplayerView) => {
     this._root = component;
   };
 
