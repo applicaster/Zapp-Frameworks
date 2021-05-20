@@ -1,5 +1,6 @@
 package com.applicaster.analytics.gemius
 
+import androidx.annotation.CallSuper
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
@@ -21,20 +22,26 @@ class GemiusAgent : BaseAnalyticsAgent() {
     inner class PlayerAdapter : AnalyticsPlayerAdapter() {
 
         private val player: Player = Player(playerID, serverHost, scriptIdentifier, PlayerData())
+        private var idOverride: String? = null
 
-        init{
+        init {
             player.setContext(AppContext.get())
         }
 
+        override fun getId(): String = idOverride ?: super.getId()
+
         override fun onStart(params: Map<String, Any>?) {
             super.onStart(params)
+
+            idOverride = null
+
             val pdata = ProgramData()
             pdata.name = getName()
             pdata.duration = duration?.toInt()
             // todo: need to determine type
             pdata.programType = ProgramData.ProgramType.VIDEO
 
-            val id = getId()
+            var id = super.getId()
 
             // copy all custom fields
             (params?.get(KEY_CUSTOM_PROPERTIES) as? String)?.let {
@@ -58,7 +65,9 @@ class GemiusAgent : BaseAnalyticsAgent() {
                         if("_SC" == k) {
                             val sc = jsonObject.get(k).toString()
                             if(id != sc) {
-                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc")
+                                APLogger.warn(TAG, "Content ID in the feed and analytics extension do not match: $id vs $sc, it will be overridden")
+                                id = sc
+                                idOverride = sc
                             }
                             continue
                         }
@@ -79,7 +88,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                     APLogger.error(TAG, "Failed to deserialize custom properties block", e)
                 }
             }
-            player.newProgram(getId(), pdata)
+            player.newProgram(id, pdata)
         }
 
         override fun onPlay(params: Map<String, Any>?) {
@@ -104,6 +113,15 @@ class GemiusAgent : BaseAnalyticsAgent() {
             player.programEvent(getId(),
                     position?.toInt() ?: 0,
                     Player.EventType.PAUSE,
+                    EventProgramData())
+        }
+
+        override fun onResume(params: Map<String, Any>?) {
+            super.onResume(params)
+            player.programEvent(
+                    getId(),
+                    position?.toInt() ?: 0,
+                    Player.EventType.PLAY,
                     EventProgramData())
         }
 
@@ -292,6 +310,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
                 "_SPI",
                 "_SCTE",
                 "st",
+                "_ST",
                 "tv",
                 "se",
                 "URL_alias")

@@ -1,5 +1,5 @@
 import { postAnalyticEvent } from "@applicaster/zapp-react-native-utils/analyticsUtils/manager";
-
+import { EVENTS } from "../Utils/const";
 export class AnalyticsTracker {
   constructor(entry) {
     this.entry = entry;
@@ -20,118 +20,129 @@ export class AnalyticsTracker {
       adError: false,
       playerEnded: false,
       playerClosed: false,
-      playerBuffering: false
+      playerBuffering: false,
     };
 
     this.analyticsEvents = [
       {
-        eventName: "Player Created",
-        validState: ({ playerCreated }) => this.handlePlayerCreated(playerCreated),
-        shouldReport: () => !this.playerEvents.playerCreated
+        eventName: EVENTS.playerCreated,
+        validState: ({ playerCreated }) =>
+          this.handlePlayerCreated(playerCreated),
+        shouldReport: () => !this.playerEvents.playerCreated,
       },
       {
-        eventName: "Media Entry Load",
+        eventName: EVENTS.mediaLoad,
         validState: ({ loadStart }) => this.handleEntryLoad(loadStart),
-        shouldReport: () => !this.playerEvents.entryLoad
+        shouldReport: () => !this.playerEvents.entryLoad,
       },
       {
-        eventName: "Ad Break Started",
+        eventName: EVENTS.adBreakStarted,
         validState: ({ adBreakBegin }) => this.handleAdBreakBegin(adBreakBegin),
-        shouldReport: () => !this.playerEvents.adBreakBegin
+        shouldReport: () => !this.playerEvents.adBreakBegin,
       },
       {
-        eventName: "Ad Begin",
+        eventName: EVENTS.adBegin,
         validState: ({ adBegin }) => this.handleAdBegin(adBegin),
-        shouldReport: () => !this.playerEvents.adBegin
+        shouldReport: () => !this.playerEvents.adBegin,
       },
       {
-        eventName: "Ad End",
+        eventName: EVENTS.adEnd,
         validState: ({ adEnd }) => this.handleAdEnd(adEnd),
-        shouldReport: () => !this.playerEvents.adEnd
+        shouldReport: () => !this.playerEvents.adEnd,
       },
       {
-        eventName: "Ad Error",
+        eventName: EVENTS.adError,
         validState: ({ adError }) => this.handleAdError(adError),
-        shouldReport: () => !this.playerEvents.adError
+        shouldReport: () => !this.playerEvents.adError,
       },
       {
-        eventName: "Ad Break Ended",
+        eventName: EVENTS.adBreakEnd,
         validState: ({ adBreakEnd }) => this.handleAdBreakEnd(adBreakEnd),
-        shouldReport: () => !this.playerEvents.adBreakEnd
+        shouldReport: () => !this.playerEvents.adBreakEnd,
       },
       {
-        eventName: "Player Loaded Video",
+        eventName: EVENTS.playerLoadedVideo,
         validState: ({ loadedVideo }) => this.handleLoadedVideo(loadedVideo),
-        shouldReport: () => !this.playerEvents.playerLoadedVideo
+        shouldReport: () => !this.playerEvents.playerLoadedVideo,
       },
       {
-        eventName: "Player Playing",
+        eventName: EVENTS.playerPlaying,
         validState: (state) => this.handlePlaying(state),
-        shouldReport: () => !this.playerEvents.playing
+        shouldReport: () => !this.playerEvents.playing,
       },
       {
-        eventName: "Player Resume",
+        eventName: EVENTS.playerResumed,
         validState: (state) => this.handleResume(state),
-        shouldReport: () => !this.playerEvents.resume
+        shouldReport: () => !this.playerEvents.resume,
       },
       {
-        eventName: "Player Pause",
+        eventName: EVENTS.playerPaused,
         validState: (state) => this.handlePause(state),
-        shouldReport: () => !this.playerEvents.paused
+        shouldReport: () => !this.playerEvents.paused,
       },
       {
-        eventName: "Player Seek",
+        eventName: EVENTS.playerSeek,
         validState: ({ seek }) => this.handleSeek(seek),
-        shouldReport: () => !this.playerEvents.seek
+        shouldReport: () => !this.playerEvents.seek,
       },
       {
-        eventName: "Player Seek End",
+        eventName: EVENTS.playerSeekEnd,
         validState: ({ seekEnd }) => this.handleSeekEnd(seekEnd),
-        shouldReport: () => !this.playerEvents.seekEnd
+        shouldReport: () => !this.playerEvents.seekEnd,
       },
       {
-        eventName: "Player Ended",
+        eventName: EVENTS.playerEnded,
         validState: ({ playerEnded }) => this.handlePlayerEnded(playerEnded),
-        shouldReport: () => !this.playerEvents.playerEnded
+        shouldReport: () => !this.playerEvents.playerEnded,
       },
       {
-        eventName: "Player Closed",
-        validState: ({ playerClosed }) => this.handlePlayerClosed(playerClosed),
-        shouldReport: () => !this.playerEvents.playerClosed
-      },
-      {
-        eventName: "Player Buffering",
+        eventName: EVENTS.playerBuffering,
         validState: ({ buffering }) => this.handlePlayerCreated(buffering),
-        shouldReport: () => !this.playerEvents.playerBuffering
+        shouldReport: () => !this.playerEvents.playerBuffering,
       },
     ];
   }
 
   initialState(state, entry) {
-    this.state = state,
-      this.entry = entry
+    this.state = state;
+    this.entry = entry;
+    this.playerEvents = {
+      playerCreated: false,
+      entryLoad: false,
+      playerLoadedVideo: false,
+      adBreakBegin: false,
+      adBreakEnd: false,
+      adBegin: false,
+      adEnd: false,
+      playing: false,
+      resume: false,
+      paused: false,
+      seek: false,
+      seekEnd: false,
+      adError: false,
+      playerEnded: false,
+      playerClosed: false,
+      playerBuffering: false,
+    };
   }
 
   getAnalyticPayload(entry, state, event) {
-    const {
-      title,
-      extensions
-    } = entry;
+    const { title, extensions } = entry;
 
-    const {
-      currentTime
-    } = state;
+    const { currentTime } = state;
 
     const payload = {
       "Item ID": this.handleId(event, state, entry),
       "Item Name": title,
       "Item Duration": this.handleDuration(event, state, entry),
       offset: currentTime,
-      "analyticsCustomProperties": JSON.stringify(extensions["analyticsCustomProperties"])
+      analyticsCustomProperties: JSON.stringify(
+        extensions["analyticsCustomProperties"]
+      ),
     };
 
     return this.addNativeData(payload, event, state);
-  };
+  }
 
   addNativeData(payload, event, state) {
     const adEvents = [
@@ -139,8 +150,8 @@ export class AnalyticsTracker {
       "Ad Break Ended",
       "Ad Begin",
       "Ad End",
-      "Ad Error"
-    ]
+      "Ad Error",
+    ];
 
     if (adEvents.includes(event) && state.adData) {
       return {
@@ -150,8 +161,8 @@ export class AnalyticsTracker {
         "Ad Position": state.adData.adPosition, // Ad index in slot: 0, 1, 2 etc
         "Ad Break Time Offset": state.adData.timeOffset, // Ad break position in timeline
         "Ad Break Size": state.adData.breakSize, // Ads count in the break: 1, 2, 3, etc
-        "Ad Break Max Duration": state.adData.maxDuration // Total ad break max duration
-      }
+        "Ad Break Max Duration": state.adData.maxDuration, // Total ad break max duration
+      };
     }
 
     return payload;
@@ -163,20 +174,18 @@ export class AnalyticsTracker {
     const {
       adBreakDuration,
       adDuration,
-      duration: nativeEventDuration
+      duration: nativeEventDuration,
     } = state;
 
-    const {
-      duration: entryDuration
-    } = entry.extensions;
+    const { duration: entryDuration } = entry.extensions;
 
     const adEvents = {
       "Ad Break Started": adBreakDuration,
       "Ad Break Ended": adBreakDuration,
       "Ad Begin": adDuration,
       "Ad End": adDuration,
-      "Ad Error": adDuration
-    }
+      "Ad Error": adDuration,
+    };
 
     if (adEvents[event]) {
       duration = adEvents[event];
@@ -190,19 +199,11 @@ export class AnalyticsTracker {
   }
 
   handleId(event, state, entry) {
-    const {
-      adId,
-    } = state;
+    const { adId } = state;
 
-    const {
-      id: entryId
-    } = entry;
+    const { id: entryId } = entry;
 
-    const noIdEvents = [
-      "Ad Break Started", 
-      "Ad Break Ended"
-    ];
-
+    const noIdEvents = ["Ad Break Started", "Ad Break Ended"];
     if (noIdEvents.includes(event)) {
       return null;
     }
@@ -210,8 +211,8 @@ export class AnalyticsTracker {
     const adEvents = {
       "Ad Begin": adId,
       "Ad End": adId,
-      "Ad Error": adId
-    }
+      "Ad Error": adId,
+    };
 
     return adEvents[event] || entryId;
   }
@@ -219,25 +220,21 @@ export class AnalyticsTracker {
   handleChange(state) {
     this.state = state;
 
-    this.analyticsEvents.forEach(analyticEvent => {
-      const {
-        eventName,
-        validState,
-        shouldReport
-      } = analyticEvent;
+    this.analyticsEvents.forEach((analyticEvent) => {
+      const { eventName, validState, shouldReport } = analyticEvent;
 
       if (shouldReport() && validState(state)) {
         this.handleAnalyticEvent(eventName);
       }
     });
-  };
+  }
 
   handleAnalyticEvent(event) {
     postAnalyticEvent(
       event,
       this.getAnalyticPayload(this.entry, this.state, event)
     );
-  };
+  }
 
   handlePlayerCreated(playerCreated) {
     if (playerCreated) {
@@ -283,10 +280,7 @@ export class AnalyticsTracker {
   }
 
   handlePlaying(state) {
-    const {
-      playing,
-      adBreakBegin,
-    } = state;
+    const { playing, adBreakBegin } = state;
 
     if (!adBreakBegin && playing) {
       this.playerEvents.playing = true;
@@ -297,10 +291,7 @@ export class AnalyticsTracker {
   }
 
   handleResume(state) {
-    const {
-      adBreakBegin,
-      resume
-    } = state;
+    const { adBreakBegin, resume } = state;
 
     if (!adBreakBegin && resume) {
       this.playerEvents.resume = true;
@@ -311,10 +302,7 @@ export class AnalyticsTracker {
   }
 
   handlePause(state) {
-    const {
-      paused,
-      adBreakBegin
-    } = state;
+    const { paused, adBreakBegin } = state;
 
     if (!adBreakBegin && paused) {
       this.playerEvents.paused = true;
