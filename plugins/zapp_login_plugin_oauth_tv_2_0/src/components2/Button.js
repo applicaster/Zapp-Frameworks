@@ -15,6 +15,7 @@ export default function Button(props) {
     nextFocusDown,
     nextFocusUp,
     style,
+    screenStyles,
   } = props;
   const {
     action_button_background_color,

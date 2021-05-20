@@ -34,7 +34,7 @@ console.disableYellowBox = true;
 const OAuth = (props) => {
   const navigator = useNavigation();
   const [screen, setScreen] = useState(ScreenData.LOADING);
-
+  const [forceFocus, setForceFocus] = useState(false);
   const { callback, payload, rivers } = props;
   const screenId = navigator?.activeRiver?.id;
 
@@ -79,6 +79,15 @@ const OAuth = (props) => {
         setScreen(ScreenData.INTRO);
       }
     } catch (error) {}
+  }
+
+  function goToScreen(screen, forceFocus, changeFocus) {
+    if (!changeFocus) {
+      setScreen(screen);
+      setForceFocus(forceFocus);
+    } else {
+      setForceFocus(forceFocus);
+    }
   }
 
   function renderScreen() {
@@ -130,7 +139,7 @@ const OAuth = (props) => {
             skip={SKIP}
             parentFocus={parentFocus}
             focused={focused}
-            forceFocus={this.state.forceFocus}
+            forceFocus={forceFocus}
           />
         );
       }
@@ -149,7 +158,7 @@ const OAuth = (props) => {
             gygiaLogoutUrl={gygia_logout_url}
             parentFocus={parentFocus}
             focused={focused}
-            forceFocus={this.state.forceFocus}
+            forceFocus={forceFocus}
             accountUrl={account_url || "olympicchannel.com/account"}
           />
         );
@@ -178,18 +187,6 @@ const OAuth = (props) => {
   return renderScreen();
 };
 
-function goToScreen(screen, forceFocus, changeFocus) {
-  // if (!changeFocus) {
-  //   this.setState({
-  //     screen,
-  //     forceFocus,
-  //   });
-  // } else {
-  //   this.setState({
-  //     forceFocus,
-  //   });
-  // }
-}
 export default OAuth;
 
 // export class OCLoginPluginComponent extends React.Component {
