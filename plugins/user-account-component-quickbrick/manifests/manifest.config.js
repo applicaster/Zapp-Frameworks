@@ -25,6 +25,7 @@ const baseManifest = {
 };
 
 function createManifest({ version, platform }) {
+  console.log({ version, platform });
   const manifest = {
     ...baseManifest,
     platform,
@@ -200,8 +201,7 @@ const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
-  lg_tv: "0.1.0-alpha1",
-  samsung_tv: "0.1.0-alpha1",
+  lg_tv: "2.0.0-dev",
 };
 
 const mobileTarget = ["mobile"];
