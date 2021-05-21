@@ -201,7 +201,8 @@ const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
-  lg_tv: "2.0.0-dev",
+  lg_tv: "0.1.0-alpha1",
+  samsung_tv: "0.1.0-alpha1",
 };
 
 const mobileTarget = ["mobile"];
@@ -214,6 +215,8 @@ const targets = {
   tvos_for_quickbrick: tvTarget,
   android_tv_for_quickbrick: tvTarget,
   amazon_fire_tv_for_quickbrick: tvTarget,
+  lg_tv: tvTarget,
+  samsung_tv: tvTarget,
 };
 
 module.exports = createManifest;
