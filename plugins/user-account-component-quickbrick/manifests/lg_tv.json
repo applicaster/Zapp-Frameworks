@@ -14,26 +14,14 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
-  "min_zapp_sdk": "4.1.0-dev",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
-  "custom_configuration_fields": [
-    {
-      "key": "ios_assets_bundle",
-      "type": "uploader",
-      "label": "iOS Design Assets",
-      "label_tooltip": "Please upload a zip file to provide the design assets for this plugin. For guidance and proper naming of the assets, please refer to this <a href='https://assets-production.applicaster.com.s3.amazonaws.com/applicaster-employees/marketplace/OPT/Login%20Plugin%20-%20Designer%20Documentation.sketch'>resource</a>."
-    }
-  ],
-  "targets": [
-    "mobile"
-  ],
   "ui_frameworks": [
     "quickbrick"
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
-  "platform": "ios_for_quickbrick",
+  "platform": "lg_tv",
   "manifest_version": "0.3.11",
   "dependency_version": "0.3.11",
   "general": {

@@ -22,8 +22,8 @@
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "samsung_tv",
-  "manifest_version": "0.3.10",
-  "dependency_version": "0.3.10",
+  "manifest_version": "0.3.11",
+  "dependency_version": "0.3.11",
   "general": {
     "fields": [
       {
