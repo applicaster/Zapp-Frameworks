@@ -83,14 +83,14 @@ const custom_configuration_fields_apple = [
   },
 ];
 
-const custom_configuration_fields = {
-  ios_for_quickbrick: custom_configuration_fields_apple,
-  tvos_for_quickbrick: custom_configuration_fields_apple,
-};
-
 const min_zapp_sdk = {
   ios_for_quickbrick: "4.1.0-Dev",
   tvos_for_quickbrick: "4.1.0-Dev",
+};
+
+const custom_configuration_fields = {
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
 };
 
 const extra_dependencies_apple = [
