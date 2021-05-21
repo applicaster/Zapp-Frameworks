@@ -1210,6 +1210,7 @@ const api = {
     excludedNodeModules: [
       "react-native-dropdownalert",
       "react-native-keyboard-aware-scroll-view",
+      "@applicaster/applicaster-account-components",
     ],
   },
   android: {
