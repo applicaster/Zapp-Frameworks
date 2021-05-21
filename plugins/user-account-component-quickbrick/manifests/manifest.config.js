@@ -191,7 +191,7 @@ const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
   android_for_quickbrick: custom_configuration_fields_android,
   android_tv_for_quickbrick: custom_configuration_fields_android,
-  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android,
 };
 
 const min_zapp_sdk = {
@@ -200,6 +200,8 @@ const min_zapp_sdk = {
   android_for_quickbrick: "0.1.0-alpha1",
   android_tv_for_quickbrick: "0.1.0-alpha1",
   amazon_fire_tv_for_quickbrick: "0.1.0-alpha1",
+  lg_tv: "0.1.0-alpha1",
+  samsung_tv: "0.1.0-alpha1",
 };
 
 const mobileTarget = ["mobile"];
