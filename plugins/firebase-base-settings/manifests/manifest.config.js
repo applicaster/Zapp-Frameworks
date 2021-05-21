@@ -4,10 +4,8 @@ const baseManifest = {
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
   name: "Firebase Base Settings 2.0",
-  description:
-    "Firebase Base Settings 2.0",
-  cover_image:
-    "",
+  description: "Firebase Base Settings 2.0",
+  cover_image: "",
   type: "general",
   identifier: "firebase_base_settings",
   screen: false,
@@ -40,47 +38,49 @@ const custom_configuration_fields_apple = [
   {
     type: "uploader",
     key: "enterprise_app_config",
-    tooltip_text: "Upload GoogleService-Info.plist of enterprise app"
+    tooltip_text: "Upload GoogleService-Info.plist of enterprise app",
   },
   {
     type: "uploader",
     key: "production_app_config",
-    tooltip_text: "Upload GoogleService-Info.plist of production app"
+    tooltip_text: "Upload GoogleService-Info.plist of production app",
   },
   {
     key: "plist.FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED",
     type: "select",
     options: [
-        {
-            "text": "Deactivate",
-            "value": "YES"
-        },
-        {
-            "text": "Enabled",
-            "value": "NO"
-        }
+      {
+        text: "Deactivate",
+        value: "YES",
+      },
+      {
+        text: "Enabled",
+        value: "NO",
+      },
     ],
     label: "Deactivate analytics collection",
     initial_value: "NO",
-    tooltip_text: "If you need to deactivate Analytics collection permanently in a version of your app set value to Deactivate"
+    tooltip_text:
+      "If you need to deactivate Analytics collection permanently in a version of your app set value to Deactivate",
   },
   {
     key: "skip_extra_dependencies",
     type: "select",
     options: [
       {
-        "text": "On",
-        "value": "YES"
+        text: "On",
+        value: "YES",
       },
       {
-        "text": "Off",
-        "value": "NO"
-      }
+        text: "Off",
+        value: "NO",
+      },
     ],
     label: "Prevent adding Firebase specific version",
     initial_value: "NO",
-    tooltip_text: "Set to On if you want to prevent adding Firebase dependency that utilize IDFA"
-  }
+    tooltip_text:
+      "Set to On if you want to prevent adding Firebase dependency that utilize IDFA",
+  },
 ];
 
 const custom_configuration_fields = {
@@ -95,7 +95,7 @@ const min_zapp_sdk = {
 
 const extra_dependencies_apple = [
   {
-    Firebase: "= '6.25.0'"
+    Firebase: "= '8.0.0'",
   },
 ];
 
