@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-user-account",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "description": "User Account Component",
   "main": "index.js",
   "scripts": {
