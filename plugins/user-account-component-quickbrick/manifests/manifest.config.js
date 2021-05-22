@@ -214,6 +214,8 @@ const targets = {
   tvos_for_quickbrick: tvTarget,
   android_tv_for_quickbrick: tvTarget,
   amazon_fire_tv_for_quickbrick: tvTarget,
+  lg_tv: tvTarget,
+  samsung_tv: tvTarget,
 };
 
 module.exports = createManifest;
