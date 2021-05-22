@@ -34,9 +34,7 @@
         "ZappPlugins": [],
         "ZappCore": [],
         "GoogleUtilities": [],
-        "Firebase/Messaging": [
-          "6.25.0"
-        ],
+        "Firebase/Messaging": [],
         "FirebaseInstallations": [],
         "XrayLogger": []
       }
@@ -51,9 +49,7 @@
       },
       "dependencies": {
         "GoogleUtilities": [],
-        "Firebase/Messaging": [
-          "6.25.0"
-        ]
+        "Firebase/Messaging": []
       }
     },
     {
@@ -66,9 +62,7 @@
       },
       "dependencies": {
         "GoogleUtilities": [],
-        "Firebase/Messaging": [
-          "6.25.0"
-        ]
+        "Firebase/Messaging": []
       }
     }
   ],
