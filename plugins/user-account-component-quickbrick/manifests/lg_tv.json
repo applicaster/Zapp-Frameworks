@@ -14,16 +14,20 @@
     "572a0a65373163000b000000",
     "5a364b49e03b2f000d51a0de"
   ],
+  "min_zapp_sdk": "0.1.0-alpha1",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "preload": true,
+  "targets": [
+    "tv"
+  ],
   "ui_frameworks": [
     "quickbrick"
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "lg_tv",
-  "manifest_version": "0.3.11",
-  "dependency_version": "0.3.11",
+  "manifest_version": "0.3.20",
+  "dependency_version": "0.3.20",
   "general": {
     "fields": [
       {

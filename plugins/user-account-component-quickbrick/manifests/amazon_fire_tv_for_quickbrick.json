@@ -34,8 +34,8 @@
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "amazon_fire_tv_for_quickbrick",
-  "manifest_version": "0.3.11",
-  "dependency_version": "0.3.11",
+  "manifest_version": "0.3.20",
+  "dependency_version": "0.3.20",
   "general": {
     "fields": [
       {
