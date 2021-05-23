@@ -48,8 +48,14 @@ extension DidomiCMP {
                 case .notDetermined:
                     break
                 }
+                self.procceedWithProcessCompletion()
             }
         }
+        
+        eventListener.onNoticeClickDisagree = { _ in
+            self.procceedWithProcessCompletion()
+        }
+            
 
         eventListener.onPreferencesClickAgreeToAll = { _ in
             // Click on Agree to all in the Preferences popup
@@ -83,5 +89,10 @@ extension DidomiCMP {
                                                                            value: didomiIABConsent,
                                                                            namespace: Params.pluginIdentifier)
         }
+    }
+    
+    func procceedWithProcessCompletion() {
+        self.presentationCompletion?()
+        self.presentationCompletion = nil
     }
 }

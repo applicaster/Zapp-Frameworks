@@ -14,7 +14,8 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
     public var model: ZPPluginModel?
     public var configurationJSON: NSDictionary?
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/DidomiConsentManagement")
-
+    var presentationCompletion: (() -> Void)?
+    
     struct Params {
         static let apiKey = "api_key"
         static let jsPreferencesKey = "javaScriptForWebView"

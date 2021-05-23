@@ -12,7 +12,7 @@ import XrayLogger
 import ZappCore
 
 extension DidomiCMP: AppLoadingHookProtocol {
-    public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
+    public func executeOnLaunch(completion: (() -> Void)?) {
         DispatchQueue.main.async {
             guard let displayViewController = UIApplication.shared.delegate?.window??.rootViewController else {
                 self.logger?.infoLog(message: "Unable to present user consent")
@@ -22,13 +22,17 @@ extension DidomiCMP: AppLoadingHookProtocol {
 
             guard self.shouldPresentOnStartup == true else {
                 self.logger?.infoLog(message: "User consent presentOnStartup is disabled")
-
                 completion?()
                 return
             }
 
+            guard Didomi.shared.shouldConsentBeCollected() else {
+                completion?()
+                return
+            }
+            
+            self.presentationCompletion = completion
             Didomi.shared.setupUI(containerController: displayViewController)
-            completion?()
         }
     }
 }
