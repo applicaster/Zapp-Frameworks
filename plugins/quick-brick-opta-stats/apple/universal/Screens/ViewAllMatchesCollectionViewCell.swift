@@ -22,7 +22,7 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
     }
 
     private func setImage() {
-        var imageToLoad = "\(OptaStats.pluginParams.imageBaseUrl)all-matches-\(Helpers.currentYear)-\(Localized.languageCode).png"
+        let imageToLoad = "\(OptaStats.pluginParams.imageBaseUrl)all-matches-\(Helpers.currentYear)-\(Localized.languageCode).png"
         allMatchesImageView.sd_setImage(with: URL(string: imageToLoad), placeholderImage: nil)
         
         allMatchesImageView.layer.cornerRadius = 9
