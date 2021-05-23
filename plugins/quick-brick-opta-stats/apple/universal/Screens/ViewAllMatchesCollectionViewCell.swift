@@ -22,20 +22,9 @@ class ViewAllMatchesCollectionViewCell: UICollectionViewCell {
     }
 
     private func setImage() {
-        var imageToLoad = "all-matches-es"
-
-        if let deviceLocale = FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) {
-            switch deviceLocale {
-            case "en", "pt", "es":
-                imageToLoad = "all-matches-" + deviceLocale
-            default:
-                break
-            }
-        }
-
-        if let path = Bundle(for: classForCoder).path(forResource: imageToLoad, ofType: "jpg") {
-            allMatchesImageView.image = UIImage(contentsOfFile: path)
-        }
+        var imageToLoad = "\(OptaStats.pluginParams.imageBaseUrl)all-matches-\(Helpers.currentYear)-\(Localized.languageCode).png"
+        allMatchesImageView.sd_setImage(with: URL(string: imageToLoad), placeholderImage: nil)
+        
         allMatchesImageView.layer.cornerRadius = 9
         allMatchesImageView.clipsToBounds = true
     }
