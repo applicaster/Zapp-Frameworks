@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
-import Button from "../components2/Button";
-import Layout from "../components2/Layout";
+import Button from "../Components/Button";
+import Layout from "../Components/Layout";
 import { skipPrehook } from "../utils";
 import { mapKeyToStyle } from "../Utils/Customization";
 import { ScreenData } from "../Utils/Helpers";

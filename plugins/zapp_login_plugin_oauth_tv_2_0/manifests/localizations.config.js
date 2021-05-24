@@ -36,11 +36,6 @@ const common = [
     initial_value: "Go to:",
   },
   {
-    key: "sign_in_pin_url",
-    label: "pin url",
-    initial_value: "google.com",
-  },
-  {
     key: "sign_in_activation_code_title",
     label: "Activation code label",
     initial_value: "Enter the activation code below",

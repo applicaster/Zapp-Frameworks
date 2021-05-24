@@ -1,34 +1,35 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { View, Text, Platform, ActivityIndicator } from "react-native";
-import axios from "axios";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import Button from "../../components2/Button";
-import QRCode from "../../components2/QRCode";
-import Layout from "../../components2/Layout";
+import Button from "../../Components/Button";
+import QRCode from "../../Components/QRCode";
+import Layout from "../../Components/Layout";
 import { skipPrehook } from "../../utils";
 import { mapKeyToStyle } from "../../Utils/Customization";
-
-const HEARBEAT_INTERVAL = 10000;
+import { getDevicePin, getDeviceToken } from "../../Services/OAuth2Service";
+import { ScreenData } from "../../Utils/Helpers";
 
 const SignInScreen = (props) => {
   const {
-    segmentKey,
     skip,
     namespace,
     closeHook,
     isPrehook,
     groupId,
     goToScreen,
-    focused,
-    parentFocus,
-    forceFocus,
     screenStyles,
     screenLocalizations,
+    configuration,
   } = props;
 
   const { activity_indicator_color, line_separator_color } = screenStyles;
-  console.log({ activity_indicator_color, line_separator_color, screenStyles });
   const styles = {
     container: {
       flex: 1,
@@ -102,7 +103,6 @@ const SignInScreen = (props) => {
     sing_in_later,
     sing_in_title,
     sign_in_go_to_title,
-    sign_in_pin_url,
     sign_in_activation_code_title,
     sign_in_support_title,
     sign_in_support_link,
@@ -113,82 +113,68 @@ const SignInScreen = (props) => {
       const { eventType } = event;
 
       if (isPrehook && eventType === "menu") {
-        goToScreen("INTRO");
+        goToScreen(ScreenData.INTRO);
       }
     },
     [goToScreen, isPrehook]
   );
 
-  const [devicePinCode, setDevicePinCode] = useState("");
+  const [deviceData, setDeviceData] = useState(null);
+  const [signInStatusUpdater, setSignInStatusUpdater] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const skipButton = useRef(null);
   useInitialFocus(Platform.OS === "android", skipButton);
 
-  const getSignInStatus = useCallback(() => {
-    axios
-      .get(`${props.gygiaGetDeviceByPinUrl}/${devicePinCode}`, {
-        headers: {
-          accept: "application/json",
-        },
-      })
-      .then(async (response) => {
-        if (response.data.access_token) {
-          const { access_token, firstname } = response.data;
-
-          await localStorage.setItem(
-            props.token,
-            access_token,
-            props.namespace
-          );
-
-          await localStorage.setItem(
-            props.userName,
-            firstname,
-            props.namespace
-          );
-
-          if (props.isPrehook) {
-            props.closeHook({ success: true });
-          } else {
-            props.goToScreen("WELCOME", true);
-          }
+  const getSignInStatus = useCallback(async () => {
+    try {
+      const data = await getDeviceToken(configuration, deviceData?.device_code);
+      console.log("getSignInStatus", { data });
+      if (data?.access_token) {
+        const { access_token } = data;
+        clearStatusUpdater();
+        await localStorage.setItem(props.token, access_token, props.namespace);
+        console.log("I am in !!!!", { props });
+        if (props.isPrehook) {
+          props.closeHook({ success: true });
+        } else {
+          props.goToScreen(ScreenData.LOG_OUT, true);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [props, devicePinCode]);
-
-  useEffect(() => {
-    if (devicePinCode) {
-      const heartbeat = setInterval(getSignInStatus, HEARBEAT_INTERVAL);
-      return () => clearInterval(heartbeat);
+      }
+    } catch (error) {
+      console.log({ error });
     }
-  }, [devicePinCode]);
+  }, [deviceData, signInStatusUpdater]);
 
   useEffect(() => {
-    const { gygiaCreateDeviceUrl, segmentKey, deviceId } = props;
-
-    axios
-      .post(
-        `${gygiaCreateDeviceUrl}`,
-        {
-          deviceId: deviceId,
-        },
-        {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        setDevicePinCode(response.data.devicePinCode);
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
+    console.log("Will try to load", { props });
+    loadDeviceData();
   }, []);
+
+  useLayoutEffect(() => {
+    if (deviceData) {
+      setLoading(false);
+      const data = setInterval(getSignInStatus, deviceData?.interval * 1000);
+      console.log({ data });
+      setSignInStatusUpdater(data);
+      setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
+      return () => clearStatusUpdater();
+    }
+  }, [deviceData]);
+
+  function clearStatusUpdater() {
+    clearInterval(signInStatusUpdater);
+    setSignInStatusUpdater(null);
+  }
+
+  async function loadDeviceData() {
+    try {
+      const result = await getDevicePin(configuration);
+      setDeviceData(result);
+    } catch (error) {
+      //Logs and fail
+    }
+  }
 
   const onMaybeLaterPress = useCallback(
     () =>
@@ -198,6 +184,7 @@ const SignInScreen = (props) => {
       }),
     [skip, namespace, closeHook]
   );
+  console.log({ deviceData });
   return (
     <Layout
       tvEventHandler={handleRemoteControlEvent}
@@ -212,7 +199,7 @@ const SignInScreen = (props) => {
               {sign_in_go_to_title}
             </Text>
             <Text style={[styles.text, styles.url]} adjustsFontSizeToFit>
-              {sign_in_pin_url}
+              {deviceData?.verification_uri}
             </Text>
             <Text
               style={[styles.text, { marginBottom: 30 }]}
@@ -229,7 +216,7 @@ const SignInScreen = (props) => {
               </View>
             ) : (
               <Text style={styles.pinCode} adjustsFontSizeToFit>
-                {devicePinCode}
+                {deviceData?.user_code}
               </Text>
             )}
           </View>
@@ -241,9 +228,9 @@ const SignInScreen = (props) => {
                   color={activity_indicator_color}
                 />
               </View>
-            ) : (
-              <QRCode url={`${props.gygiaQrUrl}${devicePinCode}`} />
-            )}
+            ) : deviceData?.verification_uri ? (
+              <QRCode url={deviceData?.verification_uri} />
+            ) : null}
           </View>
         </View>
         <View style={styles.bottomText}>

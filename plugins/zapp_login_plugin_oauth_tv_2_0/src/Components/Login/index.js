@@ -41,6 +41,7 @@ const OAuth = (props) => {
   const localizations = getRiversProp("localizations", rivers, screenId);
   const styles = getRiversProp("styles", rivers, screenId);
   const general = getRiversProp("general", rivers, screenId);
+  const configuration = props?.configuration;
 
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
   const screenLocalizations = getLocalizations(localizations);
@@ -92,7 +93,7 @@ const OAuth = (props) => {
 
   function renderScreen() {
     console.log({ props });
-    const configuration = props;
+    const configuration = props?.configuration;
     const screenData = props;
     const payload = props;
     const parentFocus = props;
@@ -167,6 +168,7 @@ const OAuth = (props) => {
         return (
           <SignInScreen
             {...screenOptions}
+            configuration={configuration}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}

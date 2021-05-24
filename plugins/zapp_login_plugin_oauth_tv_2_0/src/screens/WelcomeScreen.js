@@ -3,9 +3,8 @@ import axios from "axios";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import { trackEvent } from "../analytics/segment/index";
-import Button from "../components2/Button";
-import Layout from "../components2/Layout";
+import Button from "../Components/Button";
+import Layout from "../Components/Layout";
 
 const WelcomeScreen = (props) => {
   const {
@@ -62,7 +61,6 @@ const WelcomeScreen = (props) => {
       .then(async (res) => {
         if (res.data.succeeded) {
           localStorage.setItem(token, "NOT_SET", namespace);
-          trackEvent("Signed Out", { userName, accessToken }, "Welcome");
           goToScreen("INTRO", true);
         }
       })

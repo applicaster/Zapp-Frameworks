@@ -1,5 +1,4 @@
 import * as R from "ramda";
-import { Alert } from "react-native";
 
 export const getRiversProp = (key, rivers = {}, screenId = "") => {
   const getPropByKey = R.compose(
