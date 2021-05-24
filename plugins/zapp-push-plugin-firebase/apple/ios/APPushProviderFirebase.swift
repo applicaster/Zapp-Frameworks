@@ -96,7 +96,12 @@ open class APPushProviderFirebase: ZPPushProvider {
         for topic in topics {
             dispatchGroup.enter()
             Messaging.messaging().subscribe(toTopic: topic) { error in
-                if error == nil {
+                if error != nil {
+                    self.logger?.errorLog(message: "Unable to subscribe to topic",
+                                          data: ["topic": topic,
+                                                 "error": error.debugDescription])
+                }
+                else {
                     self.registeredTopics.insert(topic)
                 }
                 dispatchGroup.leave()
