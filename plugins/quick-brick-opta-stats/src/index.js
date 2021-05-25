@@ -10,12 +10,6 @@ import {requireNativeComponent} from 'react-native';
 
 const OptaStatsContainer = requireNativeComponent('OptaStatsContainer');
 
-type Props = {
-  screenData: {
-    general: any,
-  },
-};
-
 const logger = createLogger();
 
 useUrlSchemeHandler = async ({ query, url, onFinish }) => {
@@ -24,41 +18,46 @@ useUrlSchemeHandler = async ({ query, url, onFinish }) => {
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
 
+  const complete = () => {
+    onFinish((done) => {
+      done();
+    });
+  }
+
   if (!packageName) {
-    logger.warn(`React package name is not set`);
-    onFinish();
+    logger.error(`React package name is not set`);
+    complete();
     return;
   }
 
   if (!methodName) {
-    logger.warn(`React method name is not set`);
-    onFinish();
+    logger.error(`React method name is not set`);
+    complete();
     return;
   }
 
   if (!screenPackage) {
-    logger.warn(`Package ${packageName} is not found`);
-    onFinish();
+    logger.error(`Package ${packageName} is not found`);
+    complete();
     return;
   }
 
   if (!method) {
-    logger.warn(`Method ${methodName} is not found in the package ${packageName}`);
-    onFinish();
+    logger.error(`Method ${methodName} is not found in the package ${packageName}`);
+    complete();
     return;
   };
 
   try {
     const res = await method({url});
     logger.info(`Received response from native method ${methodName}`, res);
-    onFinish();
   } catch (error) {
     logger.error(`Method ${methodName} the package ${packageName} failed with error ${error}`);
-    onFinish();
   }
+  complete();
 };
 
-export default StatScreens = ({ screenData }: Props) => {
+export default StatScreens = ({}) => {
   return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
 };
 
