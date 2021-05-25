@@ -14,7 +14,7 @@ import ZappCore
 extension DidomiCMP: AppLoadingHookProtocol {
     public func executeOnLaunch(completion: (() -> Void)?) {
         DispatchQueue.main.async {
-            guard let displayViewController = UIApplication.shared.delegate?.window??.rootViewController else {
+            guard let displayViewController = UIApplication.shared.keyWindow?.rootViewController else {
                 self.logger?.infoLog(message: "Unable to present user consent")
                 completion?()
                 return
@@ -26,13 +26,22 @@ extension DidomiCMP: AppLoadingHookProtocol {
                 return
             }
 
-            guard Didomi.shared.shouldConsentBeCollected() else {
+            switch self.cmpStatus {
+            case .undefined:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.executeOnLaunch(completion: completion)
+                }
+            case .ready:
+                guard Didomi.shared.shouldConsentBeCollected() else {
+                    completion?()
+                    return
+                }
+
+                self.presentationCompletion = completion
+                Didomi.shared.setupUI(containerController: displayViewController)
+            case .error:
                 completion?()
-                return
             }
-            
-            self.presentationCompletion = completion
-            Didomi.shared.setupUI(containerController: displayViewController)
         }
     }
 }
