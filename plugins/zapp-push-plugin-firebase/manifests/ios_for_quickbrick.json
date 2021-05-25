@@ -72,7 +72,7 @@
     "quickbrick"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "3.6.4",
+  "manifest_version": "3.6.5",
   "extra_dependencies": [
     {
       "ZappPushPluginFirebase": ":path => './node_modules/@applicaster/zapp-push-plugin-firebase/apple/ZappPushPluginFirebase.podspec'"
@@ -89,6 +89,6 @@
     }
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.6.4"
+    "@applicaster/zapp-push-plugin-firebase@3.6.5"
   ]
 }
