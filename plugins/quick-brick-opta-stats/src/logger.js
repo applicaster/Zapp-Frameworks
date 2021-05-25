@@ -19,17 +19,17 @@ export const SYSTEM = "ZappFrameworkPlugins";
  * This constant could be used to initialize the logger subsystem
  * in all of the frameworks repo
  */
-export const PLUGINS = { cmpOpta: "quick-brick-opta-stats" };
+export const PLUGINS = { scrOpta: "quick-brick-opta-stats" };
 
 /**
  * Default subsystem for this X-ray logger instance
  * In this case the default subsystem is the plugin
  */
-export const SUBSYSTEM = `plugins/${PLUGINS.cmpOpta}`;
+export const SUBSYSTEM = `plugins/${PLUGINS.scrOpta}`;
 
 /**
  * Catogories used to sort and filter through X-ray logs by
- * In the case of Didomi filtering by screen type
+ * In the case of OptaNativeScreen filtering by screen type
  */
 export const CATEGORIES = {
   nativeScreen: "OptaNativeScreen",
@@ -37,7 +37,7 @@ export const CATEGORIES = {
 };
 
 /**
- * Create a logger instance for the Didomi plugin
+ * Create a logger instance for the OptaNativeScreen plugin
  * @param config the configuration object used to initialize logger
  * @param {string} config.category the category of logs you are creating
  * @param {string} config.subsystem the subsystem you are initializing logger for
