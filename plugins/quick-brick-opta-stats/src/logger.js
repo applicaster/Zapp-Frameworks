@@ -19,21 +19,21 @@ export const SYSTEM = "ZappFrameworkPlugins";
  * This constant could be used to initialize the logger subsystem
  * in all of the frameworks repo
  */
-export const PLUGINS = { cmpDidomi: "applicaster-cmp-didomi" };
+export const PLUGINS = { cmpOpta: "quick-brick-opta-stats" };
 
 /**
  * Default subsystem for this X-ray logger instance
  * In this case the default subsystem is the plugin
  */
-export const SUBSYSTEM = `plugins/${PLUGINS.cmpDidomi}`;
+export const SUBSYSTEM = `plugins/${PLUGINS.cmpOpta}`;
 
 /**
  * Catogories used to sort and filter through X-ray logs by
  * In the case of Didomi filtering by screen type
  */
 export const CATEGORIES = {
-  nativeScreen: "DidomiNativeScreen",
-  errorScreen: "DidomiErrorScreen",
+  nativeScreen: "OptaNativeScreen",
+  errorScreen: "OptaErrorScreen",
 };
 
 /**
