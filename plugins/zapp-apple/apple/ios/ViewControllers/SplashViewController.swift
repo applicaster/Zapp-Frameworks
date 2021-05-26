@@ -138,6 +138,11 @@ class SplashViewController: UIViewController {
                                                selector: #selector(playerDidFinishPlaying(_:)),
                                                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                object: playerViewController.player?.currentItem)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerDidFinishPlaying(_:)),
+                                               name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime,
+                                               object: playerViewController.player?.currentItem)
     }
 
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -181,7 +186,7 @@ class SplashViewController: UIViewController {
 }
 
 extension SplashViewController {
-    @objc func playerDidFinishPlaying(_ note: Notification) {
+    @objc func playerDidFinishPlaying(_ notification: Notification) {
         rootViewController?.facadeConnector.audioSession?.notifyBackgroundAudioToContinuePlaying()
         playerViewController.player?.replaceCurrentItem(with: nil)
         playerDidFinishTask()
