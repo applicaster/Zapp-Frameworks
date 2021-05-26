@@ -1,11 +1,19 @@
 import axios from "axios";
 import moment from "moment";
 import { AuthDataKeys } from "../StorageService";
+import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
+
+const logger = createLogger({
+  subsystem: BaseSubsystem,
+  category: BaseCategories.GENERAL,
+});
 
 export async function getDevicePin(oAuthConfig) {
   const clientId = oAuthConfig?.clientId;
   const deviceEndPoint = oAuthConfig?.deviceEndPoint;
-  console.log({ oAuthConfig, clientId, deviceEndPoint });
+  logger.debug({
+    message: "getDevicePin: before",
+  });
   try {
     const request = {
       url: deviceEndPoint,
@@ -19,15 +27,23 @@ export async function getDevicePin(oAuthConfig) {
     };
 
     const response = await axios(request);
+    logger.debug({
+      message: "getDevicePin: completed",
+      data: { clientId, deviceEndPoint, oAuthConfig, response },
+    });
+    const data = response?.data;
     console.log({ response });
-    return response?.data;
+    return data;
   } catch (error) {
-    console.log({ error });
+    logger.error({
+      message: "getDevicePin: error",
+      data: { clientId, deviceEndPoint, oAuthConfig, error },
+    });
+    throw error;
   }
 }
 
 export async function getDeviceToken(oAuthConfig, device_code) {
-  console.log("getDeviceToken", { oAuthConfig, device_code });
   const clientId = oAuthConfig?.clientId;
   const tokenEndPoint = oAuthConfig?.tokenEndPoint;
 
@@ -49,12 +65,33 @@ export async function getDeviceToken(oAuthConfig, device_code) {
     console.log("getDeviceToken - response", { response });
 
     const data = response?.data;
-
-    return {
+    const newData = {
       ...data,
       [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
     };
+    logger.debug({
+      message: "getDeviceToken: completed",
+      data: {
+        clientId,
+        tokenEndPoint,
+        oAuthConfig,
+        device_code,
+        response,
+        newData,
+      },
+    });
+    return;
   } catch (error) {
+    logger.error({
+      message: "getDeviceToken: error",
+      data: {
+        clientId,
+        tokenEndPoint,
+        oAuthConfig,
+        device_code,
+        error,
+      },
+    });
     throw error;
   }
 }
@@ -62,7 +99,18 @@ export async function getDeviceToken(oAuthConfig, device_code) {
 export async function getRefreshToken(oAuthConfig, refresh_token) {
   const clientId = oAuthConfig?.clientId;
   const refreshEndPoint = oAuthConfig?.refreshEndPoint;
-  console.log({ oAuthConfig, clientId, refreshEndPoint });
+  if (!refreshEndPoint) {
+    logger.debug({
+      message: "getRefreshToken: completed, no refresh end point provided",
+      data: {
+        clientId,
+        refreshEndPoint,
+        oAuthConfig,
+        refresh_token,
+      },
+    });
+    return;
+  }
   try {
     const request = {
       url: refreshEndPoint,
@@ -77,28 +125,58 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
     };
 
     const response = await axios(request);
-    console.log({ response });
-    return {
+    const data = response?.data;
+    const newData = {
       ...data,
       [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
     };
+    logger.debug({
+      message: "getRefreshToken: completed",
+      data: {
+        clientId,
+        refreshEndPoint,
+        oAuthConfig,
+        refresh_token,
+        newData,
+        response,
+      },
+    });
+    return newData;
   } catch (error) {
+    logger.error({
+      message: "getRefreshToken: error",
+      data: {
+        clientId,
+        refreshEndPoint,
+        oAuthConfig,
+        refresh_token,
+        error,
+      },
+    });
     throw error;
   }
 }
 
-//TODO:Ask Ran
 export async function pleaseLogOut(oAuthConfig, access_token) {
   const clientId = oAuthConfig?.clientId;
   const logoutEndPoint = oAuthConfig?.logoutEndPoint;
+  console.log({ logoutEndPoint });
   if (!logoutEndPoint) {
-    //TODO: add logs
+    logger.debug({
+      message: "pleaseLogOut: completed, no logout end point provided",
+      data: {
+        clientId,
+        oAuthConfig,
+        access_token,
+        logoutEndPoint,
+      },
+    });
     return;
   }
   console.log({ oAuthConfig, clientId, logoutEndPoint });
   try {
     const request = {
-      url: refreshEndPoint,
+      url: logoutEndPoint,
       method: "POST",
       headers: {
         "Content-Type": "x-www-form-urlencoded",
@@ -110,12 +188,29 @@ export async function pleaseLogOut(oAuthConfig, access_token) {
     };
 
     const response = await axios(request);
-    console.log({ response });
-    return {
-      ...data,
-      [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
-    };
+    const data = response?.data;
+    logger.debug({
+      message: "pleaseLogOut: completed",
+      data: {
+        clientId,
+        oAuthConfig,
+        access_token,
+        logoutEndPoint,
+        response,
+      },
+    });
+    return data;
   } catch (error) {
+    logger.debug({
+      message: "pleaseLogOut: Error",
+      data: {
+        clientId,
+        oAuthConfig,
+        access_token,
+        logoutEndPoint,
+        error,
+      },
+    });
     throw error;
   }
 }

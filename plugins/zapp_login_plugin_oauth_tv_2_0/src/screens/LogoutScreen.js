@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
-import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 import { pleaseLogOut } from "../Services/OAuth2Service";
 import { mapKeyToStyle } from "../Utils/Customization";
-
+import { showAlert, ScreenData } from "../Components/Login/utils";
 import {
   removeDataFromStorages,
-  getItem,
+  storageGet,
   AuthDataKeys,
 } from "../Services/StorageService";
 import {
@@ -34,10 +32,10 @@ const LogoutScreen = (props) => {
     screenStyles,
     screenLocalizations,
     configuration,
+    isPrehook,
   } = props;
 
   const { sing_out, sing_out_url_text, sing_out_url } = screenLocalizations;
-  const [accessToken, setAccessToken] = useState("");
 
   const signoutButton = useRef(null);
 
@@ -70,22 +68,34 @@ const LogoutScreen = (props) => {
   };
 
   useEffect(() => {
-    getAccessData();
+    prepareComponent();
   }, []);
 
-  const getAccessData = async () => {
-    const accessToken = await getItem(
-      AuthDataKeys.access_toke,
-      namespace
-    ).catch((err) => console.log(err));
-    setAccessToken(accessToken);
+  const prepareComponent = async () => {
     if (forceFocus) {
       goToScreen(null, false, true);
     }
   };
 
   const handleSignOut = async () => {
-    await pleaseLogOut(configuration, accessToken);
+    try {
+      const accessToken = await storageGet(AuthDataKeys.access_token);
+      await pleaseLogOut(configuration, accessToken);
+      await removeDataFromStorages();
+      goToScreen(ScreenData.INTRO);
+      logger.debug({
+        message: "handleSignOut: Sign out complete",
+      });
+    } catch (error) {
+      logger.debug({
+        message: "handleSignOut: error",
+        data: { error },
+      });
+      showAlert(
+        screenLocalizations?.general_error_title,
+        screenLocalizations?.general_error_message
+      );
+    }
   };
 
   if (Platform.OS === "android") {
@@ -93,9 +103,12 @@ const LogoutScreen = (props) => {
   }
 
   return (
-    <Layout screenStyles={screenStyles}>
+    <Layout screenStyles={screenStyles} isPrehook={isPrehook}>
       <View style={styles.container}>
-        <Text style={styles.text}>{`${sing_out_url_text} `}</Text>
+        <Text style={styles.text}>
+          {`${sing_out_url_text} `}
+          <Text style={styles.url}>{sing_out_url}</Text>
+        </Text>
         <Button
           screenStyles={screenStyles}
           label={sing_out}

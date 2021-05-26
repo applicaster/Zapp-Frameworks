@@ -1,5 +1,7 @@
 import moment from "moment";
 import * as R from "ramda";
+import { Alert } from "react-native";
+import { isWebBasedPlatform } from "../../Utils/Platform";
 import {
   AuthDataKeys,
   storageGet,

@@ -80,7 +80,7 @@ const OAuth = (props) => {
           });
         return;
       }
-
+      isPrehook;
       const userNeedsToLogin = await isLoginRequired();
       if (userNeedsToLogin) {
         logger.debug({
@@ -172,6 +172,7 @@ const OAuth = (props) => {
         return (
           <LogoutScreen
             {...screenOptions}
+            configuration={configuration}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
