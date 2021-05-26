@@ -160,7 +160,7 @@ const OAuth = (props) => {
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
-            accountUrl={account_url || "olympicchannel.com/account"}
+            accountUrl={account_url}
           />
         );
       }

@@ -8,6 +8,11 @@ import React, {
 import { View, Text, Platform, ActivityIndicator } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
+import {
+  createLogger,
+  BaseSubsystem,
+  BaseCategories,
+} from "../../Services/LoggerService";
 import Button from "../../Components/Button";
 import QRCode from "../../Components/QRCode";
 import Layout from "../../Components/Layout";
@@ -16,7 +21,12 @@ import { mapKeyToStyle } from "../../Utils/Customization";
 import { getDevicePin, getDeviceToken } from "../../Services/OAuth2Service";
 import { ScreenData } from "../../Utils/Helpers";
 
-const SignInScreen = (props) => {
+const logger = createLogger({
+  subsystem: BaseSubsystem,
+  category: BaseCategories.GENERAL,
+});
+let timeOut = null;
+function SignInScreen(props) {
   const {
     skip,
     namespace,
@@ -113,68 +123,144 @@ const SignInScreen = (props) => {
       const { eventType } = event;
 
       if (isPrehook && eventType === "menu") {
+        logger.debug({
+          message: `User handle menu button`,
+          data: {
+            is_prehook: isPrehook,
+            event_type: eventType,
+          },
+        });
+        setSignInStatusAutoupdate(false);
         goToScreen(ScreenData.INTRO);
       }
     },
-    [goToScreen, isPrehook]
+    [signInStatusAutoupdate, setSignInStatusAutoupdate, goToScreen, isPrehook]
   );
 
   const [deviceData, setDeviceData] = useState(null);
-  const [signInStatusUpdater, setSignInStatusUpdater] = useState(null);
+  const [signInStatusAutoupdate, setSignInStatusAutoupdate] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const mounted = useRef(true);
 
   const skipButton = useRef(null);
   useInitialFocus(Platform.OS === "android", skipButton);
 
   const getSignInStatus = useCallback(async () => {
+    console.log({ signInStatusAutoupdate, deviceData });
+
     try {
       const data = await getDeviceToken(configuration, deviceData?.device_code);
-      console.log("getSignInStatus", { data });
+      console.log({ data });
       if (data?.access_token) {
+        logger.debug({
+          message: `Get device token complete`,
+          data: {
+            data,
+            access_token: data?.access_token,
+          },
+        });
         const { access_token } = data;
-        clearStatusUpdater();
-        await localStorage.setItem(props.token, access_token, props.namespace);
-        console.log("I am in !!!!", { props });
-        if (props.isPrehook) {
-          props.closeHook({ success: true });
-        } else {
-          props.goToScreen(ScreenData.LOG_OUT, true);
-        }
+        setSignInStatusAutoupdate(false);
+        // await locaslStorage.setItem(props.token, access_token, props.namespace);
+        // if (props.isPrehook) {
+        //   props.closeHook({ success: true });
+        // } else {
+        //   props.goToScreen(ScreenData.LOG_OUT, true);
+        // }
+      } else {
+        logger.debug({
+          message: `Get device token complete, access token not exists`,
+          data: {
+            data,
+          },
+        });
       }
     } catch (error) {
-      console.log({ error });
+      const data = {
+        error: error,
+        deviceData,
+        signInStatusAutoupdate,
+      };
+      if (mounted.current && signInStatusAutoupdate) {
+        if (!timeOut) {
+          timeOut = setTimeout(getSignInStatus, deviceData?.interval * 1000);
+        }
+        logger.info({
+          message: `Get token failed, no data, checking again getSignInStatus:`,
+          data,
+        });
+      } else {
+        logger.info({
+          message: `Get token failed, no data, autoupdate canceled`,
+          data,
+        });
+      }
     }
-  }, [deviceData, signInStatusUpdater]);
+  }, [deviceData, signInStatusAutoupdate]);
 
-  useEffect(() => {
-    console.log("Will try to load", { props });
+  useLayoutEffect(() => {
     loadDeviceData();
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
   }, []);
+
+  useLayoutEffect(() => {
+    console.log("useLayoutEffect", { signInStatusAutoupdate });
+    if (signInStatusAutoupdate === true) {
+      getSignInStatus();
+    } else {
+      clearTimeout(timeOut);
+      timeOut = null;
+    }
+  }, [signInStatusAutoupdate]);
 
   useLayoutEffect(() => {
     if (deviceData) {
       setLoading(false);
-      const data = setInterval(getSignInStatus, deviceData?.interval * 1000);
-      console.log({ data });
-      setSignInStatusUpdater(data);
-      setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
-      return () => clearStatusUpdater();
+      logger.debug({
+        message: `New device data, updated`,
+        data: {
+          device_data: deviceData,
+        },
+      });
+      applySignInStatusCheck();
     }
   }, [deviceData]);
 
-  function clearStatusUpdater() {
-    clearInterval(signInStatusUpdater);
-    setSignInStatusUpdater(null);
-  }
+  const applySignInStatusCheck = useCallback(() => {
+    setSignInStatusAutoupdate(true);
+    console.log("applySignInStatusCheck", {
+      signInStatusAutoupdate,
+      deviceData,
+    });
 
-  async function loadDeviceData() {
+    setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
+  }, [signInStatusAutoupdate, deviceData]);
+
+  const loadDeviceData = useCallback(async () => {
     try {
+      setSignInStatusAutoupdate(false);
       const result = await getDevicePin(configuration);
+
+      logger.debug({
+        message: `loadDeviceData: completed`,
+        data: {
+          device_data: result,
+        },
+      });
       setDeviceData(result);
     } catch (error) {
-      //Logs and fail
+      logger.error({
+        message: `loadDeviceData: failed`,
+        data: {
+          error: error,
+        },
+      });
     }
-  }
+  }, [signInStatusAutoupdate, deviceData]);
 
   const onMaybeLaterPress = useCallback(
     () =>
@@ -256,7 +342,7 @@ const SignInScreen = (props) => {
       </View>
     </Layout>
   );
-};
+}
 
 SignInScreen.displayName = "SignInScreen";
 export default SignInScreen;

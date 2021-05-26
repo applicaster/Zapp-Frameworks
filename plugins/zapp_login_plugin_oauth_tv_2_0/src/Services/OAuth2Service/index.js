@@ -47,6 +47,6 @@ export async function getDeviceToken(oAuthConfig, device_code) {
     console.log("getDeviceToken - response", { response });
     return response?.data;
   } catch (error) {
-    console.log({ error });
+    throw error;
   }
 }
