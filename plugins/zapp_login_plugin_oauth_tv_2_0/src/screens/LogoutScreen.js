@@ -77,7 +77,7 @@ const LogoutScreen = (props) => {
     const accessToken = await getItem(
       AuthDataKeys.access_toke,
       namespace
-    ).catch((err) => console.log(err, name));
+    ).catch((err) => console.log(err));
     setAccessToken(accessToken);
     if (forceFocus) {
       goToScreen(null, false, true);
@@ -95,10 +95,7 @@ const LogoutScreen = (props) => {
   return (
     <Layout screenStyles={screenStyles}>
       <View style={styles.container}>
-        <Text style={styles.text}>
-          {`${sing_out_url_text} `}
-          <Text style={styles.url}>{sing_out_url}</Text>
-        </Text>
+        <Text style={styles.text}>{`${sing_out_url_text} `}</Text>
         <Button
           screenStyles={screenStyles}
           label={sing_out}
