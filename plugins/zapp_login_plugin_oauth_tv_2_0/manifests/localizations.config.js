@@ -66,6 +66,22 @@ const common = [
     label: "support link",
     initial_value: "google.com",
   },
+  // Sign Out
+  {
+    key: "sing_out",
+    label: "Sign Out button text",
+    initial_value: "Sign Out",
+  },
+  {
+    key: "sing_out_url_text",
+    label: "Sign Out url descriptin",
+    initial_value: "To update your account please visit",
+  },
+  {
+    key: "sing_out_url",
+    label: "Sign Out url",
+    initial_value: "www.google.com",
+  },
 ];
 
 const mobile = [];

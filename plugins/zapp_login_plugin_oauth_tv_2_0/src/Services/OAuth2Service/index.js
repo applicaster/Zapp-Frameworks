@@ -86,3 +86,36 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
     throw error;
   }
 }
+
+//TODO:Ask Ran
+export async function pleaseLogOut(oAuthConfig, access_token) {
+  const clientId = oAuthConfig?.clientId;
+  const logoutEndPoint = oAuthConfig?.logoutEndPoint;
+  if (!logoutEndPoint) {
+    //TODO: add logs
+    return;
+  }
+  console.log({ oAuthConfig, clientId, logoutEndPoint });
+  try {
+    const request = {
+      url: refreshEndPoint,
+      method: "POST",
+      headers: {
+        "Content-Type": "x-www-form-urlencoded",
+      },
+      params: {
+        client_id: clientId,
+        [AuthDataKeys.access_token]: access_token,
+      },
+    };
+
+    const response = await axios(request);
+    console.log({ response });
+    return {
+      ...data,
+      [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
+    };
+  } catch (error) {
+    throw error;
+  }
+}

@@ -5,66 +5,87 @@ import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManag
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
+import { pleaseLogOut } from "../Services/OAuth2Service";
+import { mapKeyToStyle } from "../Utils/Customization";
+
+import {
+  removeDataFromStorages,
+  getItem,
+  AuthDataKeys,
+} from "../Services/StorageService";
+import {
+  createLogger,
+  BaseSubsystem,
+  BaseCategories,
+} from "../Services/LoggerService";
+
+const logger = createLogger({
+  subsystem: BaseSubsystem,
+  category: BaseCategories.GENERAL,
+});
 
 const LogoutScreen = (props) => {
   const {
-    segmentKey,
-    name,
-    namespace,
-    token,
-    gygiaLogoutUrl,
     groupId,
     parentFocus,
     focused,
     goToScreen,
     forceFocus,
-    accountUrl,
+    screenStyles,
+    screenLocalizations,
+    configuration,
   } = props;
 
-  const [userName, setUserName] = useState("");
+  const { sing_out, sing_out_url_text, sing_out_url } = screenLocalizations;
   const [accessToken, setAccessToken] = useState("");
 
   const signoutButton = useRef(null);
+
+  const styles = {
+    container: {
+      flex: 1,
+      alignItems: "flex-start",
+      marginTop: 100,
+    },
+    text: {
+      ...mapKeyToStyle("text", screenStyles),
+      fontSize: 32,
+      marginBottom: 20,
+    },
+
+    url: {
+      ...mapKeyToStyle("text_url", screenStyles),
+
+      fontWeight: "bold",
+      fontSize: 36,
+      marginBottom: 60,
+    },
+    buttonContainer: {
+      marginTop: 80,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+  };
 
   useEffect(() => {
     getAccessData();
   }, []);
 
   const getAccessData = async () => {
-    const userName = await localStorage
-      .getItem(name, namespace)
-      .catch((err) => console.log(err, name));
-    const accessToken = await localStorage
-      .getItem(token, namespace)
-      .catch((err) => console.log(err, name));
-    setUserName(userName);
+    const accessToken = await getItem(
+      AuthDataKeys.access_toke,
+      namespace
+    ).catch((err) => console.log(err, name));
     setAccessToken(accessToken);
     if (forceFocus) {
       goToScreen(null, false, true);
     }
   };
 
-  const handleSignOut = () => {
-    axios
-      .post(
-        `${gygiaLogoutUrl}`,
-        {
-          access_token: accessToken,
-        },
-        {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.succeeded) {
-          localStorage.setItem(token, "NOT_SET", namespace);
-          goToScreen("INTRO", true);
-        }
-      })
-      .catch((err) => console.log(err));
+  const handleSignOut = async () => {
+    await pleaseLogOut(configuration, accessToken);
   };
 
   if (Platform.OS === "android") {
@@ -72,17 +93,15 @@ const LogoutScreen = (props) => {
   }
 
   return (
-    <Layout>
+    <Layout screenStyles={screenStyles}>
       <View style={styles.container}>
         <Text style={styles.text}>
-          Hi <Text style={styles.userName}>{userName || userName}!</Text>
-        </Text>
-        <Text style={styles.text}>
-          To update your account please visit{" "}
-          <Text style={styles.url}>{accountUrl}</Text>
+          {`${sing_out_url_text} `}
+          <Text style={styles.url}>{sing_out_url}</Text>
         </Text>
         <Button
-          label="Sign Out"
+          screenStyles={screenStyles}
+          label={sing_out}
           onPress={() => handleSignOut()}
           preferredFocus={true}
           groupId={groupId}
@@ -96,41 +115,5 @@ const LogoutScreen = (props) => {
   );
 };
 
-const styles = {
-  container: {
-    flex: 1,
-    alignItems: "flex-start",
-    marginTop: 100,
-  },
-  text: {
-    color: "#525A5C",
-    fontSize: 32,
-    marginBottom: 20,
-  },
-  userName: {
-    fontWeight: "bold",
-    fontSize: 36,
-    marginBottom: 60,
-    color: "#525A5C",
-  },
-  url: {
-    fontWeight: "bold",
-    fontSize: 36,
-    marginBottom: 60,
-    color: "#525A5C",
-  },
-  subTitle: {
-    color: "#525A5C",
-    fontSize: 32,
-  },
-  buttonContainer: {
-    marginTop: 80,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-};
-
-LogoutScreen.displayName = "LogoutScreens";
+LogoutScreen.displayName = "LogoutScreen";
 export default LogoutScreen;
