@@ -24,10 +24,10 @@ class OptaBridge(reactContext: ReactApplicationContext)
                     APLogger.error(TAG, "Screen 'type' argument is missing in URL")
                     OptaStatsActivity.Companion.Screen.HOME
                 }
-                "match_details_screen" -> OptaStatsActivity.Companion.Screen.MATCH_DETAILS
-                "player_screen" -> OptaStatsActivity.Companion.Screen.PLAYER_DETAILS
-                "team_screen" -> OptaStatsActivity.Companion.Screen.TEAM
-                "all_matches_screen" -> OptaStatsActivity.Companion.Screen.ALL_MATCHES
+                "match" -> OptaStatsActivity.Companion.Screen.MATCH_DETAILS
+                "player" -> OptaStatsActivity.Companion.Screen.PLAYER_DETAILS
+                "team" -> OptaStatsActivity.Companion.Screen.TEAM
+                "matches" -> OptaStatsActivity.Companion.Screen.ALL_MATCHES
                 else -> {
                     APLogger.error(TAG, "Screen 'type' $screenType URL argument is not supported")
                     OptaStatsActivity.Companion.Screen.ALL_MATCHES

@@ -14,7 +14,9 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
     public var model: ZPPluginModel?
     public var configurationJSON: NSDictionary?
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/DidomiConsentManagement")
-
+    var presentationCompletion: (() -> Void)?
+    public var cmpStatus: DidomiCMPStatus = .undefined
+    
     struct Params {
         static let apiKey = "api_key"
         static let jsPreferencesKey = "javaScriptForWebView"
@@ -76,11 +78,12 @@ public class DidomiCMP: NSObject, GeneralProviderProtocol {
         Didomi.shared.onError(callback: { event in
             self.logger?.errorLog(message: "Intialization failed",
                                   data: ["error": event.descriptionText])
+            self.cmpStatus = .error
         })
-
         Didomi.shared.onReady {
             self.logger?.verboseLog(message: "Intialization completed successfully")
             self.saveParamsToSessionStorageIfExists()
+            self.cmpStatus = .ready
         }
 
         subscribeToEventListeners()
@@ -101,4 +104,10 @@ public enum AuthorizationStatus: UInt {
     case restricted = 1
     case denied = 2
     case authorized = 3
+}
+
+public enum DidomiCMPStatus {
+    case undefined
+    case ready
+    case error
 }

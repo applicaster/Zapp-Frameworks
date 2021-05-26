@@ -34,6 +34,13 @@ class Helpers {
         return df
     }()
 
+    static var currentYear: Int {
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year], from: date)
+        return components.year ?? 2021
+    }
+    
     static func shortDate(from dateString: String) -> Date? {
         return shortDateFormatter.date(from: dateString)
     }

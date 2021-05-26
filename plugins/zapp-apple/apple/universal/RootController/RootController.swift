@@ -53,8 +53,15 @@ public class RootController: NSObject {
             return
         }
         
-        splashViewController = UIApplication.shared.delegate?.window??.rootViewController as? SplashViewController
+        guard let window = UIApplication.shared.delegate?.window else {
+            return
+        }
+        
+        window?.makeKeyAndVisible()
+        splashViewController = window?.rootViewController as? SplashViewController
+        #if os(iOS)
         NetworkRequestsManager.startListening()
+        #endif
         pluginsManager.crashlogs.prepareManager { [weak self] success in
             guard let self = self else { return }
             if success {
@@ -119,19 +126,13 @@ public class RootController: NSObject {
 
     func makeSplashAsRootViewContoroller() {
         DispatchQueue.main.async { [weak self] in
-            guard let window = UIApplication.shared.delegate?.window else {
-                return
-            }
-            window?.rootViewController = self?.splashViewController
+            UIApplication.shared.keyWindow?.rootViewController = self?.splashViewController
         }
     }
 
     func makeInterfaceLayerAsRootViewContoroller() {
         DispatchQueue.main.async { [weak self] in
-            guard let window = UIApplication.shared.delegate?.window else {
-                return
-            }
-            window?.rootViewController = self?.userInterfaceLayerViewController
+            UIApplication.shared.keyWindow?.rootViewController = self?.userInterfaceLayerViewController
         }
     }
 

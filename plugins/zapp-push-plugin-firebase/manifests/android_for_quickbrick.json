@@ -249,9 +249,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "3.6.1",
+  "manifest_version": "3.6.5",
   "npm_dependencies": [
-    "@applicaster/zapp-push-plugin-firebase@3.6.1"
+    "@applicaster/zapp-push-plugin-firebase@3.6.5"
   ],
   "project_dependencies": [
     {

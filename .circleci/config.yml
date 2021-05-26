@@ -111,14 +111,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-npm-{{ checksum "yarn.lock" }}
+            - v2-npm-{{ checksum "yarn.lock" }}
 
       - run:
           name: Install npm dependencies
           command: yarn
 
       - save_cache:
-          key: v1-npm-{{  checksum "yarn.lock" }}
+          key: v2-npm-{{  checksum "yarn.lock" }}
           paths:
             - .yarn
             - node_modules
@@ -126,6 +126,10 @@ jobs:
       - run:
           name: Publishing plugins
           command: node ./scripts/publish_plugins.js
+
+      - store_artifacts:
+          name: Artifacts - Npm logs
+          path: /root/.npm/_logs
 
   deploy_plugins_canary:
     <<: *defaults
@@ -142,14 +146,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-npm-{{ checksum "yarn.lock" }}
+            - v2-npm-{{ checksum "yarn.lock" }}
 
       - run:
           name: Install npm dependencies
           command: yarn
 
       - save_cache:
-          key: v1-npm-{{  checksum "yarn.lock" }}
+          key: v2-npm-{{  checksum "yarn.lock" }}
           paths:
             - .yarn
             - node_modules
@@ -173,14 +177,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-npm-{{ checksum "yarn.lock" }}
+            - v2-npm-{{ checksum "yarn.lock" }}
 
       - run:
           name: Install npm dependencies
           command: yarn
 
       - save_cache:
-          key: v1-npm-{{  checksum "yarn.lock" }}
+          key: v2-npm-{{  checksum "yarn.lock" }}
           paths:
             - .yarn
             - node_modules

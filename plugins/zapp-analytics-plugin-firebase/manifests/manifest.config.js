@@ -53,6 +53,13 @@ const custom_configuration_fields_apple = [
     key: "user_id",
     label: "User ID",
     tooltip_text: "Please do not populate the user id field unless your app is legally authorised (for further information, please reach support)."
+  },
+  {
+    type: "text",
+    key: "plist.NSUserTrackingUsageDescription",
+    label: "ATT description",
+    default: "This identifier will be used to deliver personalized ads to you.",
+    tooltip_text: "Please enter the description for ATT"
   }
 ];
 
@@ -89,7 +96,7 @@ const ui_frameworks = {
 
 const min_zapp_sdk = {
   android_for_quickbrick: "1.0.0",
-  ios_for_quickbrick: "2.0.2-Dev"
+  ios_for_quickbrick: "4.1.0-Dev"
 };
 
 const extra_dependencies_apple = [
@@ -122,9 +129,9 @@ const api_android = {
 };
 
 const api_apple = {
-  require_startup_execution: false,
+  require_startup_execution: true,
   class_name: "APAnalyticsProviderFirebase",
-  modules: ["ZappAnalyticsPluginFirebase"]
+  modules: ["ZappAnalyticsPluginFirebase"],
 };
 
 const api = {

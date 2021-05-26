@@ -46,6 +46,11 @@ open class AnalyticsPlayerAdapter {
     }
 
     @CallSuper
+    open fun onResume(params: Map<String, Any>?) {
+        updatePosition(params)
+    }
+
+    @CallSuper
     open fun onAdBreakStart(params: Map<String, Any>?) {
         updatePosition(params)
     }
@@ -112,6 +117,7 @@ open class AnalyticsPlayerAdapter {
             ENTRY_LOADED_EVENT -> onLoaded(params)
 
             PLAYER_PLAYING_EVENT -> onPlay(params)
+            PLAYER_RESUME_EVENT -> onResume(params)
             PLAYER_PAUSE_EVENT -> onPause(params)
             PLAYER_SEEK_EVENT -> onSeek(params)
             PLAYER_SEEK_EVENT_END -> onSeekEnd(params)
@@ -132,7 +138,7 @@ open class AnalyticsPlayerAdapter {
 
     fun getLink() : String? = data?.get(KEY_LINK) as String?
 
-    fun getId() : String = data?.get(KEY_ID) as String? ?: ""
+    open fun getId() : String = data?.get(KEY_ID) as String? ?: ""
 
     fun getType() : String? = data?.get(KEY_TYPE) as String?
 
@@ -167,6 +173,9 @@ open class AnalyticsPlayerAdapter {
 
         // User initiated pause action
         const val PLAYER_PAUSE_EVENT = "Player Pause"
+
+        // User initiated play action
+        const val PLAYER_RESUME_EVENT = "Player Resume"
 
         // Buffering caused by stream interruption (no data), not seek, ad, or start
         const val PLAYER_BUFFERING_EVENT = "Player Buffering"

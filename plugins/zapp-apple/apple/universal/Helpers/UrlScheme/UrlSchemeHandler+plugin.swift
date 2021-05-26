@@ -42,7 +42,7 @@ extension UrlSchemeHandler {
                                                                                           })
         }
 
-        let viewController = UIApplication.shared.delegate?.window??.rootViewController
+        let viewController = UIApplication.shared.keyWindow?.rootViewController
         if let pluginAdapter = pluginAdapter as? PluginURLHandlerProtocol {
             return pluginAdapter.handlePluginURLScheme?(with: viewController,
                                                         url: url) ?? false

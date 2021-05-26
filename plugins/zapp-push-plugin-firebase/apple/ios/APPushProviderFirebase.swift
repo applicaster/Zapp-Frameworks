@@ -46,6 +46,13 @@ open class APPushProviderFirebase: ZPPushProvider {
         return topics
     }()
     
+    lazy var defaultTopicsToRegister: [String] = {
+        var topics:[String] = defaultTopics
+        topics.append(contentsOf: localizedDefaultTopics)
+        
+        return topics.unique()
+    }()
+    
     lazy var languageCode: String? = {
         return FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil)
     }()
@@ -96,7 +103,12 @@ open class APPushProviderFirebase: ZPPushProvider {
         for topic in topics {
             dispatchGroup.enter()
             Messaging.messaging().subscribe(toTopic: topic) { error in
-                if error == nil {
+                if error != nil {
+                    self.logger?.errorLog(message: "Unable to subscribe to topic",
+                                          data: ["topic": topic,
+                                                 "error": error.debugDescription])
+                }
+                else {
                     self.registeredTopics.insert(topic)
                 }
                 dispatchGroup.leave()
@@ -170,11 +182,7 @@ open class APPushProviderFirebase: ZPPushProvider {
             // topics already defined, no changes needed, update local array
             registeredTopics = Set(topics)
         } else {
-            // add default value
-            var topics:[String] = defaultTopics
-            topics.append(contentsOf: localizedDefaultTopics)
-
-            addTagsToDevice(topics.unique()) { _, _ in
+            addTagsToDevice(defaultTopicsToRegister) { _, _ in
                 // do nothing
             }
         }
@@ -185,8 +193,6 @@ open class APPushProviderFirebase: ZPPushProvider {
         registeredTopics.removeAll()
         // clean local storage topics
         updateTopicsInLocalStorage()
-        // set default
-        setDefaultTopicIfNeeded()
     }
 
     fileprivate var namespace: String? {
@@ -228,8 +234,9 @@ extension APPushProviderFirebase: MessagingDelegate {
         // clean local registered topics
         cleanRegisteredTopics()
 
-        // subscribe to topics appears in local storage
-        addTagsToDevice(registeredTopicsInLocalStorage, completion: { _, _ in
+        // subscribe to topics appears in local storage, add default if not there
+        let topicsToRegister = registeredTopicsInLocalStorage ?? [] + defaultTopicsToRegister
+        addTagsToDevice(topicsToRegister.unique(), completion: { _, _ in
             // do nothing
         })
     }

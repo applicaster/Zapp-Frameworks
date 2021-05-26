@@ -140,12 +140,12 @@ class ModelUtils {
         fun getImageUrl(type: UrlType, id: String): String {
             PluginDataRepository.INSTANCE.apply {
                 return when (type) {
-                    Flag -> "${getFlagImageBaseUrl()}$id.png"
-                    Person -> "${getPersonImageBaseUrl()}$id.png"
-                    Shield -> "${getShieldImageBaseUrl()}$id.png"
-                    Shirt -> "${getShirtImageBaseUrl()}$id.png"
-                    Partidos -> "${getPartidosImageBaseUrl()}$id.jpg"
-                }
+                    Flag -> getFlagImageBaseUrl()
+                    Person -> getPersonImageBaseUrl()
+                    Shield -> getShieldImageBaseUrl()
+                    Shirt -> getShirtImageBaseUrl()
+                    Partidos -> getPartidosImageBaseUrl()
+                } + "$id.png"
             }
         }
 

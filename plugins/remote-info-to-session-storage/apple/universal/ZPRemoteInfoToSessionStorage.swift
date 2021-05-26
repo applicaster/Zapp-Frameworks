@@ -6,7 +6,6 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import AdSupport
 import XrayLogger
 import ZappCore
 
