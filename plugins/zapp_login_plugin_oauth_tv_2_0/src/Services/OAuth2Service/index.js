@@ -1,4 +1,6 @@
 import axios from "axios";
+import moment from "moment";
+import { AuthDataKeys } from "../StorageService";
 
 export async function getDevicePin(oAuthConfig) {
   const clientId = oAuthConfig?.clientId;
@@ -45,7 +47,41 @@ export async function getDeviceToken(oAuthConfig, device_code) {
 
     const response = await axios(request);
     console.log("getDeviceToken - response", { response });
-    return response?.data;
+
+    const data = response?.data;
+
+    return {
+      ...data,
+      [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getRefreshToken(oAuthConfig, refresh_token) {
+  const clientId = oAuthConfig?.clientId;
+  const refreshEndPoint = oAuthConfig?.refreshEndPoint;
+  console.log({ oAuthConfig, clientId, refreshEndPoint });
+  try {
+    const request = {
+      url: refreshEndPoint,
+      method: "POST",
+      headers: {
+        "Content-Type": "x-www-form-urlencoded",
+      },
+      params: {
+        client_id: clientId,
+        [AuthDataKeys.refresh_token]: refresh_token,
+      },
+    };
+
+    const response = await axios(request);
+    console.log({ response });
+    return {
+      ...data,
+      [AuthDataKeys.expires_in]: moment().unix() + data.expires_in,
+    };
   } catch (error) {
     throw error;
   }

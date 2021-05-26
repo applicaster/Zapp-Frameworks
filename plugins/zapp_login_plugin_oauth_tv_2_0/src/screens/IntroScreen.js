@@ -5,7 +5,7 @@ import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 import { skipPrehook } from "../utils";
 import { mapKeyToStyle } from "../Utils/Customization";
-import { ScreenData } from "../Utils/Helpers";
+import { ScreenData } from "../Components/Login/utils";
 
 const IntroScreen = (props) => {
   const {
@@ -25,8 +25,12 @@ const IntroScreen = (props) => {
 
   const signInButton = useRef(null);
   const laterButton = useRef(null);
-  const { title_text, title_text_hook, sing_in_button, sing_in_later } =
-    screenLocalizations;
+  const {
+    title_text,
+    title_text_hook,
+    sing_in_button,
+    sing_in_later,
+  } = screenLocalizations;
   useEffect(() => {
     if (forceFocus) {
       goToScreen(null, false, true);

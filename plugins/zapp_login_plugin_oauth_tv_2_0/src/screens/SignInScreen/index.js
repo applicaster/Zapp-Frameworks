@@ -19,7 +19,7 @@ import Layout from "../../Components/Layout";
 import { skipPrehook } from "../../utils";
 import { mapKeyToStyle } from "../../Utils/Customization";
 import { getDevicePin, getDeviceToken } from "../../Services/OAuth2Service";
-import { ScreenData } from "../../Utils/Helpers";
+import { ScreenData } from "../../Components/Login/utils";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,

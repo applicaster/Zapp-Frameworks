@@ -12,11 +12,14 @@ import IntroScreen from "../../screens/IntroScreen";
 import SignInScreen from "../../screens/SignInScreen";
 import LogoutScreen from "../../screens/LogoutScreen";
 import LoadingScreen from "../../screens/LoadingScreen";
-import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 import XRayLogger from "@applicaster/quick-brick-xray";
-import { AuthDataKeys, storageGet } from "../../Services/StorageService";
-import { ScreenData, getRiversProp } from "../../Utils/Helpers";
+import {
+  ScreenData,
+  getRiversProp,
+  isLoginRequired,
+  isPlayerHook,
+  showAlert,
+} from "./utils";
 import { BaseSubsystem, BaseCategories } from "../../Services/LoggerService";
 import { getStyles } from "../../Utils/Customization";
 import { getLocalizations } from "../../Utils/Localizations";
@@ -54,22 +57,65 @@ const OAuth = (props) => {
 
   async function setupEnvironment() {
     try {
-      const accessToken = await storageGet(AuthDataKeys.access_token);
+      mounted.current && setScreen(ScreenData.LOG_OUT);
+      return;
+      const playerHook = isPlayerHook(props?.payload);
+      const testEnvironmentEnabled =
+        props?.configuration?.force_authentication_on_all || "off";
 
-      console.log({ isPrehook, accessToken, skipPrehook });
-      if (isPrehook && (accessToken || skipPrehook)) {
-        skipStatus = true;
-        this.props.callback({ success: true, payload: payload });
-      } else if (!isPrehook && accessToken) {
-        console.log("Logout");
-        setScreen(ScreenData.LOG_OUT);
-      } else {
-        console.log("Intro");
-        setScreen(ScreenData.LOG_OUT); //TODO:Remove - for test
-
-        setScreen(ScreenData.INTRO);
+      if (
+        playerHook === true &&
+        testEnvironmentEnabled === "off" &&
+        isAuthenticationRequired(payload) === false
+      ) {
+        logger.debug({
+          message: `setupEnvironment: Hook finished, no authentefication required, skipping`,
+        });
+        mounted.current &&
+          callback &&
+          callback({
+            success: true,
+            error: null,
+            payload,
+          });
+        return;
       }
-    } catch (error) {}
+
+      const userNeedsToLogin = await isLoginRequired();
+      if (userNeedsToLogin) {
+        logger.debug({
+          message: "setupEnvironment: Presenting login screen",
+          data: { userNeedsToLogin },
+        });
+        mounted.current && setScreen(ScreenData.INTRO);
+      } else {
+        const success = await refreshToken(configuration);
+        logger.debug({
+          message: `setupEnvironment: Hook finished, refresh Token completed: ${success}`,
+          data: { userNeedsToLogin, success },
+        });
+
+        if (isPrehook) {
+          mounted.current &&
+            callback &&
+            callback({ success: true, error: null, payload });
+        } else {
+          mounted.current && setScreen(ScreenData.LOG_OUT);
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+      logger.error({
+        message: "setupEnvironment: Error",
+        data: { error },
+      });
+      showAlert(
+        screenLocalizations?.general_error_title,
+        screenLocalizations?.general_error_message
+      );
+    }
+
+    console.log({ isPrehook });
   }
 
   function goToScreen(screen, forceFocus, changeFocus) {
@@ -129,7 +175,6 @@ const OAuth = (props) => {
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
-            accessToken={this.state.accessToken}
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
@@ -144,7 +189,6 @@ const OAuth = (props) => {
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
-            skip={SKIP}
           />
         );
       }
@@ -154,79 +198,3 @@ const OAuth = (props) => {
 };
 
 export default OAuth;
-
-// export class OCLoginPluginComponent extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     console.disableYellowBox = true; // please keep this for clean debug on osTV
-
-//     this.state = {
-//       screen: "LOADING",
-//       isPrehook: Boolean(this.props.callback),
-//       userName: "",
-//       forceFocus: false,
-//       deviceId: "",
-//     };
-
-//     this.renderScreen = this.renderScreen.bind(this);
-//     this.goToScreen = this.goToScreen.bind(this);
-//     this.checkTokenStatus = this.checkTokenStatus.bind(this);
-//   }
-
-//   async componentDidMount() {
-//     let deviceId = await sessionStorage.getItem(
-//       "advertisingIdentifier",
-//       "applicaster.v2"
-//     );
-
-//     //Fallback if advertisingIdentifier is not available
-//     if (!deviceId) {
-//       //   deviceId = uuidv4();
-//       await localStorage.setItem("uuid", deviceId, NAMESPACE);
-//     }
-
-//     this.setState(
-//       {
-//         deviceId,
-//       },
-//       () => this.checkTokenStatus()
-//     );
-//   }
-
-// async checkTokenStatus() {
-// const accessToken = await localStorage
-//   .getItem(TOKEN, NAMESPACE)
-//   .catch((err) => console.log(err, TOKEN));
-// const skipPrehook = await localStorage
-//   .getItem(SKIP, NAMESPACE)
-//   .catch((err) => console.log(err, SKIP));
-// const userName = await localStorage
-//   .getItem(USERNAME, NAMESPACE)
-//   .catch((err) => console.log(err, USERNAME));
-
-// const { isPrehook } = this.state;
-
-// if (isPrehook && (accessToken || skipPrehook)) {
-//   skipStatus = true;
-//   this.props.callback({ success: true, payload: this.props.payload });
-// } else if (!isPrehook && accessToken && accessToken !== "NOT_SET") {
-//   console.log("1");
-//   this.setState({
-//     screen: "WELCOME",
-//     userName,
-//     accessToken,
-//   });
-// } else {
-//   console.log("3");
-//   this.setState({
-//     screen: "INTRO",
-//   });
-// }
-// }
-
-// }
-
-// export function shouldSkipPrehook() {
-//   return skipStatus;
-// }

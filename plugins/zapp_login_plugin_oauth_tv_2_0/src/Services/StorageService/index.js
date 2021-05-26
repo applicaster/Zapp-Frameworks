@@ -12,6 +12,7 @@ export const AuthDataKeys = {
 
 export async function saveDataToStorages(data) {
   const access_token = data?.access_token;
+  console.log("saveDataToStorages", { data });
   await saveToStorages(AuthDataKeys.access_token, access_token);
 
   const id_token = data?.id_token;
