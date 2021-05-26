@@ -10,21 +10,16 @@ import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/n
 
 import IntroScreen from "../../screens/IntroScreen";
 import SignInScreen from "../../screens/SignInScreen";
-import WelcomeScreen from "../../screens/WelcomeScreen";
+import LogoutScreen from "../../screens/LogoutScreen";
 import LoadingScreen from "../../screens/LoadingScreen";
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
 import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 import XRayLogger from "@applicaster/quick-brick-xray";
-
+import { AuthDataKeys, storageGet } from "../../Services/StorageService";
 import { ScreenData, getRiversProp } from "../../Utils/Helpers";
 import { BaseSubsystem, BaseCategories } from "../../Services/LoggerService";
 import { getStyles } from "../../Utils/Customization";
 import { getLocalizations } from "../../Utils/Localizations";
-
-const NAMESPACE = "quick-brick-oc-login-plugin";
-const TOKEN = "oc_access_token";
-const USERNAME = "oc_username";
-const SKIP = "skip-prehook";
 
 let skipStatus;
 
@@ -47,6 +42,7 @@ const OAuth = (props) => {
   const screenLocalizations = getLocalizations(localizations);
   const mounted = useRef(true);
   const isPrehook = !!props?.callback;
+
   useEffect(() => {
     mounted.current = true;
 
@@ -58,25 +54,19 @@ const OAuth = (props) => {
 
   async function setupEnvironment() {
     try {
-      const accessToken = await localStorage
-        .getItem(TOKEN, NAMESPACE)
-        .catch((err) => console.log(err, TOKEN));
-      const skipPrehook = await localStorage
-        .getItem(SKIP, NAMESPACE)
-        .catch((err) => console.log(err, SKIP));
-      const userName = await localStorage
-        .getItem(USERNAME, NAMESPACE)
-        .catch((err) => console.log(err, USERNAME));
+      const accessToken = await storageGet(AuthDataKeys.access_token);
 
       console.log({ isPrehook, accessToken, skipPrehook });
       if (isPrehook && (accessToken || skipPrehook)) {
         skipStatus = true;
         this.props.callback({ success: true, payload: payload });
-      } else if (!isPrehook && accessToken && accessToken !== "NOT_SET") {
+      } else if (!isPrehook && accessToken) {
         console.log("Logout");
         setScreen(ScreenData.LOG_OUT);
       } else {
         console.log("Intro");
+        setScreen(ScreenData.LOG_OUT); //TODO:Remove - for test
+
         setScreen(ScreenData.INTRO);
       }
     } catch (error) {}
@@ -108,18 +98,8 @@ const OAuth = (props) => {
       }
     };
 
-    const {
-      segment_key,
-      gygia_create_device_url,
-      gygia_get_device_by_pin_url,
-      gygia_qr_url,
-      gygia_logout_url,
-      gygia_support_url,
-      account_url,
-    } = configuration;
-
     const screenOptions = {
-      segmentKey: segment_key,
+      segmentKey: null,
       groupId: getGroupId(),
       isPrehook: isPrehook,
       goToScreen: goToScreen,
@@ -136,8 +116,6 @@ const OAuth = (props) => {
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
-            namespace={NAMESPACE}
-            skip={SKIP}
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
@@ -146,21 +124,15 @@ const OAuth = (props) => {
       }
       case ScreenData.LOG_OUT: {
         return (
-          <WelcomeScreen
+          <LogoutScreen
             {...screenOptions}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
-            userName={this.state.userName}
-            name={USERNAME}
             accessToken={this.state.accessToken}
-            token={TOKEN}
-            namespace={NAMESPACE}
-            gygiaLogoutUrl={gygia_logout_url}
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
-            accountUrl={account_url}
           />
         );
       }
@@ -172,14 +144,7 @@ const OAuth = (props) => {
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
             closeHook={callback}
-            namespace={NAMESPACE}
             skip={SKIP}
-            userName={USERNAME}
-            token={TOKEN}
-            gygiaCreateDeviceUrl={gygia_create_device_url}
-            gygiaGetDeviceByPinUrl={gygia_get_device_by_pin_url}
-            gygiaQrUrl={gygia_qr_url}
-            gygiaSupportUrl={gygia_support_url}
           />
         );
       }

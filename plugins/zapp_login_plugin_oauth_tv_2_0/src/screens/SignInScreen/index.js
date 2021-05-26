@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { View, Text, Platform, ActivityIndicator } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
-import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
+import { saveDataToStorages } from "../../Services/StorageService";
 import {
   createLogger,
   BaseSubsystem,
@@ -25,7 +25,6 @@ const logger = createLogger({
   subsystem: BaseSubsystem,
   category: BaseCategories.GENERAL,
 });
-let timeOut = null;
 function SignInScreen(props) {
   const {
     skip,
@@ -118,6 +117,23 @@ function SignInScreen(props) {
     sign_in_support_link,
   } = screenLocalizations;
 
+  const clearAllTimeouts = useCallback(() => {
+    clearSignInStatusTimeout();
+    clearLoadDeviceDataTimeout();
+  }, [signInStatusAutoupdate, loadDeviceDataTimeout]);
+
+  const clearSignInStatusTimeout = useCallback(() => {
+    signInStatusAutoupdateTimeout &&
+      clearTimeout(signInStatusAutoupdateTimeout);
+    setSignInStatusAutoupdateTimeout(null);
+    setSignInStatusAutoupdate(false);
+  }, [signInStatusAutoupdate]);
+
+  const clearLoadDeviceDataTimeout = useCallback(() => {
+    loadDeviceDataTimeout && clearTimeout(loadDeviceDataTimeout);
+    setLoadDeviceDataTimeout(null);
+  }, [loadDeviceDataTimeout]);
+
   const handleRemoteControlEvent = useCallback(
     (comp, event) => {
       const { eventType } = event;
@@ -130,15 +146,20 @@ function SignInScreen(props) {
             event_type: eventType,
           },
         });
-        setSignInStatusAutoupdate(false);
+        clearAllTimeouts();
         goToScreen(ScreenData.INTRO);
       }
     },
-    [signInStatusAutoupdate, setSignInStatusAutoupdate, goToScreen, isPrehook]
+    [signInStatusAutoupdate, goToScreen, isPrehook, loadDeviceDataTimeout]
   );
 
   const [deviceData, setDeviceData] = useState(null);
   const [signInStatusAutoupdate, setSignInStatusAutoupdate] = useState(false);
+  const [
+    signInStatusAutoupdateTimeout,
+    setSignInStatusAutoupdateTimeout,
+  ] = useState(null);
+  const [loadDeviceDataTimeout, setLoadDeviceDataTimeout] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const mounted = useRef(true);
@@ -158,11 +179,16 @@ function SignInScreen(props) {
           data: {
             data,
             access_token: data?.access_token,
+            signInStatusAutoupdateTimeout,
           },
         });
         const { access_token } = data;
         setSignInStatusAutoupdate(false);
-        // await locaslStorage.setItem(props.token, access_token, props.namespace);
+        await saveDataToStorages(data);
+
+        //TODO:
+        props.goToScreen(ScreenData.LOG_OUT, true);
+
         // if (props.isPrehook) {
         //   props.closeHook({ success: true });
         // } else {
@@ -181,11 +207,19 @@ function SignInScreen(props) {
         error: error,
         deviceData,
         signInStatusAutoupdate,
+        interval: deviceData?.interval * 1000,
       };
       if (mounted.current && signInStatusAutoupdate) {
-        if (!timeOut) {
-          timeOut = setTimeout(getSignInStatus, deviceData?.interval * 1000);
+        if (signInStatusAutoupdateTimeout) {
+          clearTimeout(signInStatusAutoupdateTimeout);
         }
+        const timeOut = setTimeout(
+          getSignInStatus,
+          deviceData?.interval * 1000
+        );
+        console.log({ timeOut });
+        setSignInStatusAutoupdateTimeout(timeOut);
+
         logger.info({
           message: `Get token failed, no data, checking again getSignInStatus:`,
           data,
@@ -197,7 +231,7 @@ function SignInScreen(props) {
         });
       }
     }
-  }, [deviceData, signInStatusAutoupdate]);
+  }, [deviceData, signInStatusAutoupdate, signInStatusAutoupdateTimeout]);
 
   useLayoutEffect(() => {
     loadDeviceData();
@@ -209,11 +243,8 @@ function SignInScreen(props) {
 
   useLayoutEffect(() => {
     console.log("useLayoutEffect", { signInStatusAutoupdate });
-    if (signInStatusAutoupdate === true) {
+    if (signInStatusAutoupdate && signInStatusAutoupdateTimeout === null) {
       getSignInStatus();
-    } else {
-      clearTimeout(timeOut);
-      timeOut = null;
     }
   }, [signInStatusAutoupdate]);
 
@@ -237,12 +268,14 @@ function SignInScreen(props) {
       deviceData,
     });
 
-    setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
-  }, [signInStatusAutoupdate, deviceData]);
+    const timeout = setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
+    setLoadDeviceDataTimeout(timeout);
+  }, [signInStatusAutoupdate, deviceData, loadDeviceDataTimeout]);
 
   const loadDeviceData = useCallback(async () => {
     try {
-      setSignInStatusAutoupdate(false);
+      clearAllTimeouts();
+
       const result = await getDevicePin(configuration);
 
       logger.debug({
@@ -260,16 +293,22 @@ function SignInScreen(props) {
         },
       });
     }
-  }, [signInStatusAutoupdate, deviceData]);
+  }, [signInStatusAutoupdate, deviceData, loadDeviceDataTimeout]);
 
-  const onMaybeLaterPress = useCallback(
-    () =>
-      skipPrehook(skip, namespace, closeHook, {
-        name: "User Sign in Skipped",
-        data: { buttonPressed: "Skip" },
-      }),
-    [skip, namespace, closeHook]
-  );
+  const onMaybeLaterPress = useCallback(() => {
+    clearAllTimeouts();
+
+    skipPrehook(skip, namespace, closeHook, {
+      name: "User Sign in Skipped",
+      data: { buttonPressed: "Skip" },
+    });
+  }, [
+    skip,
+    namespace,
+    closeHook,
+    loadDeviceDataTimeout,
+    signInStatusAutoupdate,
+  ]);
   console.log({ deviceData });
   return (
     <Layout

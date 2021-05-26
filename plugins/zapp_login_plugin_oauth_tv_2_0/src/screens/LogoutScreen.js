@@ -6,7 +6,7 @@ import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 
-const WelcomeScreen = (props) => {
+const LogoutScreen = (props) => {
   const {
     segmentKey,
     name,
@@ -132,5 +132,5 @@ const styles = {
   },
 };
 
-WelcomeScreen.displayName = "WelcomeScreen";
-export default WelcomeScreen;
+LogoutScreen.displayName = "LogoutScreens";
+export default LogoutScreen;
