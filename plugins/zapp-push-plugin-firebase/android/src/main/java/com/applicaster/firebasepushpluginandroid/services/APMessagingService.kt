@@ -9,6 +9,7 @@ import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.FirebasePushProvider
 import com.applicaster.firebasepushpluginandroid.factory.DefaultNotificationFactory
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -93,6 +94,12 @@ class APMessagingService : FirebaseMessagingService() {
             if (message.data.containsKey("tag")) tag = message.data["tag"]
             if (message.data.containsKey("android_channel_id")) channel = message.data["android_channel_id"]
             if (message.data.containsKey("image") && !TextUtils.isEmpty(message.data["image"])) image = Uri.parse(message.data["image"])
+
+            if(!tag.isNullOrBlank() && !shouldPresent(tag)) {
+                // todo: maybe add a plugin settings on that behavior
+                APLogger.info(TAG, "Notification belongs to the event (tag) that was already seen, discarding")
+                return
+            }
         }
         val action = message.data["url"]
 
@@ -123,7 +130,21 @@ class APMessagingService : FirebaseMessagingService() {
                 image = image
         )
         notify(notificationFactory, pushMsg)
+        if(!tag.isNullOrBlank()) {
+            storePresented(tag)
+        }
     }
+
+    private fun storePresented(tag: String) {
+        // store seen time just in case we will later want to improve the logic
+        LocalStorage.set(tag, "" + System.currentTimeMillis(), seenNamespace)
+    }
+
+    private fun shouldPresent(tag: String): Boolean {
+        return LocalStorage.get(tag, seenNamespace).isNullOrEmpty()
+    }
+
+    private val seenNamespace get() = FirebasePushProvider.pluginId + ".seenEvents"
 
     // set up notification manager, create notification and notify
     private fun notify(notificationFactory: DefaultNotificationFactory, pushMessage: PushMessage) {
