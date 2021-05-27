@@ -78,16 +78,35 @@ export const isAuthenticationRequired = (payload) => {
 };
 
 export function isTokenExpired(expiresIn) {
-  return moment(expiresIn).isSameOrAfter();
+  console.log({
+    expiresIn,
+    moment,
+  });
+  return moment(expiresIn).diff(moment()) <= 0;
 }
 
 export async function refreshToken(oAuthConfig) {
+  const refreshEndPoint = oAuthConfig?.refreshEndPoint;
+  if (!refreshEndPoint) {
+    logger.debug({
+      message: "refreshToken: completed, no refresh end point provided",
+      data: {
+        clientId,
+        refreshEndPoint,
+        oAuthConfig,
+        refresh_token,
+      },
+    });
+    return;
+  }
+
   try {
-    console.log({ oAuthConfig });
     const expiresIn = await storageGet(AuthDataKeys.expires_in);
     const refresh_token = await storageGet(AuthDataKeys.refresh_token);
 
     const expired = isTokenExpired(parseInt(expiresIn));
+    console.log({ expiresIn, refresh_token, expired });
+
     if (expired) {
       logger.debug({
         message: `refreshToken: before refresh`,
@@ -98,13 +117,20 @@ export async function refreshToken(oAuthConfig) {
         },
       });
       const loginData = await getRefreshToken(oAuthConfig, refresh_token);
-
-      await saveDataToStorages(loginData);
-
-      logger.debug({
-        message: `refreshToken: completed`,
-        data: { refresh_result: refreshResult, login_data: loginData },
-      });
+      if (loginData) {
+        await saveDataToStorages(loginData);
+        logger.debug({
+          message: `refreshToken: completed`,
+          data: { refresh_result: refreshResult, login_data: loginData },
+        });
+        return true;
+      } else {
+        logger.debug({
+          message: `refreshToken: failed, no data from refresh token`,
+          data: { refresh_result: refreshResult, login_data: loginData },
+        });
+        return false;
+      }
     } else {
       logger.debug({
         message: `refreshToken: completed, no need to refresh`,
@@ -118,16 +144,16 @@ export async function refreshToken(oAuthConfig) {
     return true;
   } catch (error) {
     logger.warning({
-      message: `refreshToken: error`,
+      message: `refreshToken: error, message:${error?.message}`,
       data: { error },
     });
-    throw error;
+    return false;
   }
 }
 export async function isLoginRequired() {
   try {
     const accessToken = await storageGet(AuthDataKeys.access_token);
-
+    console.log({ accessToken });
     if (accessToken) {
       const is_login_required = !!accessToken === false;
       logger.info({
@@ -148,8 +174,8 @@ export async function isLoginRequired() {
       return true;
     }
   } catch (error) {
-    logger.warning({
-      message: `isLoginRequired: error`,
+    logger.error({
+      message: `isLoginRequired: error, message: ${error?.message}`,
       data: { error },
     });
     throw error;

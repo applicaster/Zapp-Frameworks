@@ -19,12 +19,12 @@ import {
   isLoginRequired,
   isPlayerHook,
   showAlert,
+  refreshToken,
 } from "./utils";
+import { removeDataFromStorages } from "../../Services/StorageService";
 import { BaseSubsystem, BaseCategories } from "../../Services/LoggerService";
 import { getStyles } from "../../Utils/Customization";
 import { getLocalizations } from "../../Utils/Localizations";
-
-let skipStatus;
 
 const logger = new XRayLogger(BaseCategories.GENERAL, BaseSubsystem);
 console.disableYellowBox = true;
@@ -57,8 +57,6 @@ const OAuth = (props) => {
 
   async function setupEnvironment() {
     try {
-      mounted.current && setScreen(ScreenData.LOG_OUT);
-      return;
       const playerHook = isPlayerHook(props?.payload);
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
@@ -80,7 +78,6 @@ const OAuth = (props) => {
           });
         return;
       }
-      isPrehook;
       const userNeedsToLogin = await isLoginRequired();
       if (userNeedsToLogin) {
         logger.debug({
@@ -95,20 +92,27 @@ const OAuth = (props) => {
           data: { userNeedsToLogin, success },
         });
 
-        if (isPrehook) {
-          mounted.current &&
-            callback &&
-            callback({ success: true, error: null, payload });
+        if (success) {
+          if (isPrehook) {
+            mounted.current &&
+              callback &&
+              callback({ success: true, error: null, payload });
+          } else {
+            mounted.current && setScreen(ScreenData.LOG_OUT);
+          }
         } else {
-          mounted.current && setScreen(ScreenData.LOG_OUT);
+          await removeDataFromStorages();
+
+          mounted.current && setScreen(ScreenData.INTRO);
         }
       }
     } catch (error) {
-      setLoading(false);
       logger.error({
-        message: "setupEnvironment: Error",
+        message: `setupEnvironment: Error, ${error?.message}`,
         data: { error },
       });
+      mounted.current && setScreen(ScreenData.INTRO);
+
       showAlert(
         screenLocalizations?.general_error_title,
         screenLocalizations?.general_error_message

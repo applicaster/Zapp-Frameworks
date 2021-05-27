@@ -36,7 +36,7 @@ export async function getDevicePin(oAuthConfig) {
     return data;
   } catch (error) {
     logger.error({
-      message: "getDevicePin: error",
+      message: `getDevicePin: error, message: ${error?.message}`,
       data: { clientId, deviceEndPoint, oAuthConfig, error },
     });
     throw error;
@@ -80,10 +80,10 @@ export async function getDeviceToken(oAuthConfig, device_code) {
         newData,
       },
     });
-    return;
+    return newData;
   } catch (error) {
-    logger.error({
-      message: "getDeviceToken: error",
+    logger.debug({
+      message: `getDeviceToken: error, message: ${error?.message}`,
       data: {
         clientId,
         tokenEndPoint,
@@ -109,7 +109,7 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
         refresh_token,
       },
     });
-    return;
+    return null;
   }
   try {
     const request = {
@@ -144,7 +144,7 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
     return newData;
   } catch (error) {
     logger.error({
-      message: "getRefreshToken: error",
+      message: `getRefreshToken: error, message: ${error?.message}`,
       data: {
         clientId,
         refreshEndPoint,
@@ -187,8 +187,8 @@ export async function pleaseLogOut(oAuthConfig, access_token) {
       },
     };
 
-    const response = await axios(request);
-    const data = response?.data;
+    await axios(request);
+
     logger.debug({
       message: "pleaseLogOut: completed",
       data: {
@@ -199,10 +199,10 @@ export async function pleaseLogOut(oAuthConfig, access_token) {
         response,
       },
     });
-    return data;
+    return true;
   } catch (error) {
     logger.debug({
-      message: "pleaseLogOut: Error",
+      message: `pleaseLogOut: Error, message: ${error?.message}`,
       data: {
         clientId,
         oAuthConfig,
