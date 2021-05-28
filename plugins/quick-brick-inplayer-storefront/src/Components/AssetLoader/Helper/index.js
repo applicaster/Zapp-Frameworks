@@ -3,28 +3,45 @@ import { externalIdForPlatform } from "../../../Services/InPlayerServiceHelper";
 
 export function prepareInAppPurchaseData(
   inPlayerFeesData,
-  accessForAsset = null
+  purchaseHistory = null
 ) {
-  const asset = accessForAsset?.asset;
   const result = R.map((item) => {
+    console.log({ item });
     const { externalFeeId, productType, title, productIdentifier } = item;
     item.storePurchaseID = externalFeeId || productIdentifier;
+
+    let purchased = false;
+    let expiresAt = null;
+
+    if (purchaseHistory) {
+      const purchasedItem = R.find((purchasedItem) => {
+        console.log({ purchasedItem });
+        const id = `${purchasedItem?.item_id}_${purchasedItem?.purchased_access_fee_id}`;
+        console.log({ id, productIdentifier });
+        return id === productIdentifier;
+      })(purchaseHistory);
+      if (purchasedItem) {
+        console.log({ purchasedItem });
+        purchased = true;
+        expiresAt = purchasedItem?.expires_at;
+      }
+    }
 
     if (externalFeeId) {
       return {
         productType,
         title,
         productIdentifier: externalFeeId,
-        purchased: asset?.expires_at ? true : false,
-        expiresAt: asset?.expires_at,
+        purchased,
+        expiresAt,
       };
     } else {
       return {
         productIdentifier,
         productType,
         title,
-        purchased: asset?.expires_at ? true : false,
-        expiresAt: asset?.expires_at,
+        purchased,
+        expiresAt,
       };
     }
   })(inPlayerFeesData);

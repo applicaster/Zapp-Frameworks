@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function NavbarComponent({ buttonUrl, logoUrl, buttonAction }) {
+  console.log({ buttonAction });
   return (
     <View style={styles.navbar}>
       <Image style={styles.logo} source={{ uri: logoUrl }} />
