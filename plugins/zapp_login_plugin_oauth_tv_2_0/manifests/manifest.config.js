@@ -360,7 +360,7 @@ function createManifest({ version, platform }) {
       type: "text_input",
       key: "refreshEndPoint",
       label: "Refresh Endpoint",
-      tooltip_text: "REQUIRED: Refresh Endpoint",
+      tooltip_text: "OPTIONAL: Refresh Endpoint",
       default: "",
     },
     {
@@ -369,14 +369,6 @@ function createManifest({ version, platform }) {
       label: "Logout Endpoint",
       tooltip_text: "OPTIONAL: Logout Endpoint",
       default: "",
-    },
-    {
-      type: "text_input",
-      key: "session_storage_key",
-      label: "Session Storage Key",
-      tooltip_text:
-        "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
-      default: "access_token",
     },
     {
       group: true,
