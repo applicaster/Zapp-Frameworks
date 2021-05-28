@@ -117,8 +117,8 @@
     "quickbrick"
   ],
   "platform": "samsung_tv",
-  "dependency_version": "0.0.15",
-  "manifest_version": "0.0.15",
+  "dependency_version": "0.0.16",
+  "manifest_version": "0.0.16",
   "api": {
     "excludedNodeModules": [
       "@applicaster/applicaster-iap",
