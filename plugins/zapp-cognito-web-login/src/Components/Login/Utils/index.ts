@@ -119,6 +119,7 @@ export async function refreshToken(clientId, region): Promise<boolean> {
         data: { refresh_result: refreshResult, login_data: loginData },
       });
     } else {
+      await copyLocalStorageDataToSessionStorage();
       logger.debug({
         message: `refreshToken: completed, no need to refresh`,
         data: {
@@ -136,6 +137,30 @@ export async function refreshToken(clientId, region): Promise<boolean> {
     });
     throw error;
   }
+}
+
+async function copyLocalStorageDataToSessionStorage() {
+  const clientId = await localStorageGet(client_id);
+  const accessToken = await localStorageGet(access_token);
+  const expiresIn = await localStorageGet(expires_in);
+  const refreshToken = await localStorageGet(refresh_token);
+  const userFirstName = await localStorageGet(user_first_name);
+  const userLastName = await localStorageGet(user_last_name);
+  const userEmail = await localStorageGet(user_email);
+  const selligentId = await localStorageGet(selligent_id);
+  const idToken = await localStorageGet(id_token);
+
+  await sessionStorageSetLoginData({
+    client_id: clientId,
+    access_token: accessToken,
+    expires_in: expiresIn,
+    refresh_token: refreshToken,
+    user_first_name: userFirstName,
+    user_last_name: userLastName,
+    user_email: userEmail,
+    selligent_id: selligentId,
+    id_token: idToken,
+  });
 }
 
 export async function localStorageSetLoginData(params: LoginData) {
