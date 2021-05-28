@@ -42,7 +42,6 @@ export const OAuth = (props) => {
   useEffect(() => {
     mounted.current = true;
 
-    console.log({ payload });
     setupEnvironment();
     return () => {
       mounted.current = false;
@@ -54,7 +53,6 @@ export const OAuth = (props) => {
       const playerHook = isPlayerHook(props?.payload);
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
-      console.log({ payload });
 
       if (
         playerHook === true &&
@@ -79,7 +77,11 @@ export const OAuth = (props) => {
           message: "setupEnvironment: Presenting login screen",
           data: { userNeedsToLogin },
         });
-        mounted.current && setScreen(ScreenData.INTRO);
+        if (playerHook) {
+          mounted.current && setScreen(ScreenData.LOG_IN);
+        } else {
+          mounted.current && setScreen(ScreenData.INTRO);
+        }
       } else {
         const success = await refreshToken(configuration);
         logger.debug({
@@ -98,7 +100,11 @@ export const OAuth = (props) => {
         } else {
           // await removeDataFromStorages();
 
-          mounted.current && setScreen(ScreenData.INTRO);
+          if (playerHook) {
+            mounted.current && setScreen(ScreenData.LOG_IN);
+          } else {
+            mounted.current && setScreen(ScreenData.INTRO);
+          }
         }
       }
     } catch (error) {
@@ -125,7 +131,6 @@ export const OAuth = (props) => {
   }
 
   function renderScreen() {
-    console.log({ props });
     const configuration = props?.configuration;
     const screenData = props;
     const payload = props;
@@ -148,14 +153,38 @@ export const OAuth = (props) => {
       goToScreen: goToScreen,
     };
 
-    function finishHook() {
-      console.log({ callback, payload });
+    function onMaybeLater() {
+      const playerHook = isPlayerHook(props?.payload);
+      const success = playerHook ? false : true;
+      callback &&
+        callback({
+          success: success,
+          error: null,
+          payload: payload?.payload,
+        });
+    }
+
+    function onSignedIn() {
       callback &&
         callback({
           success: true,
           error: null,
           payload: payload?.payload,
         });
+    }
+
+    function onMenuButtonClickedSignIn() {
+      const playerHook = isPlayerHook(props?.payload);
+      if (playerHook) {
+        callback &&
+          callback({
+            success: false,
+            error: null,
+            payload: payload?.payload,
+          });
+      } else {
+        goToScreen(ScreenData.INTRO);
+      }
     }
 
     switch (screen) {
@@ -171,7 +200,7 @@ export const OAuth = (props) => {
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
-            finishHook={finishHook}
+            onSignedIn={onSignedIn}
           />
         );
       }
@@ -195,7 +224,9 @@ export const OAuth = (props) => {
             configuration={configuration}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
-            finishHook={finishHook}
+            onSignedIn={onSignedIn}
+            onMenuButtonClicked={onMenuButtonClickedSignIn}
+            onMaybeLater={onMaybeLater}
           />
         );
       }

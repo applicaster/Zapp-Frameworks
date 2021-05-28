@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useRef, useCallback, useLayoutEffect } from "react";
 import { View, Text, Platform, ActivityIndicator } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { saveDataToStorages } from "../../Services/StorageService";
@@ -33,7 +27,9 @@ function SignInScreen(props) {
     screenLocalizations,
     configuration,
     callback,
-    finishHook,
+    onMaybeLater,
+    onSignedIn,
+    onMenuButtonClicked,
   } = props;
 
   const { activity_indicator_color, line_separator_color } = screenStyles;
@@ -145,7 +141,7 @@ function SignInScreen(props) {
           },
         });
         clearAllTimeouts();
-        goToScreen(ScreenData.INTRO);
+        onMenuButtonClicked()
       }
     },
     [signInStatusAutoupdate, goToScreen, isPrehook, loadDeviceDataTimeout]
@@ -166,11 +162,8 @@ function SignInScreen(props) {
   useInitialFocus(Platform.OS === "android", skipButton);
 
   const getSignInStatus = useCallback(async () => {
-    console.log({ signInStatusAutoupdate, deviceData });
-
     try {
       const data = await getDeviceToken(configuration, deviceData?.device_code);
-      console.log({ data });
       if (data?.access_token) {
         logger.debug({
           message: `Get device token complete`,
@@ -184,7 +177,7 @@ function SignInScreen(props) {
         await saveDataToStorages(data);
 
         if (props.isPrehook) {
-          finishHook();
+          onSignedIn();
         } else {
           props.goToScreen(ScreenData.LOG_OUT, true);
         }
@@ -211,7 +204,6 @@ function SignInScreen(props) {
           getSignInStatus,
           deviceData?.interval * 1000
         );
-        console.log({ timeOut });
         setSignInStatusAutoupdateTimeout(timeOut);
 
         logger.info({
@@ -241,7 +233,6 @@ function SignInScreen(props) {
   }, []);
 
   useLayoutEffect(() => {
-    console.log("useLayoutEffect", { signInStatusAutoupdate });
     if (signInStatusAutoupdate && signInStatusAutoupdateTimeout === null) {
       getSignInStatus();
     }
@@ -262,10 +253,6 @@ function SignInScreen(props) {
 
   const applySignInStatusCheck = useCallback(() => {
     setSignInStatusAutoupdate(true);
-    console.log("applySignInStatusCheck", {
-      signInStatusAutoupdate,
-      deviceData,
-    });
 
     const timeout = setTimeout(loadDeviceData, deviceData?.expires_in * 1000);
     setLoadDeviceDataTimeout(timeout);
@@ -296,9 +283,8 @@ function SignInScreen(props) {
 
   const onMaybeLaterPress = useCallback(() => {
     clearAllTimeouts();
-    finishHook();
+    onMaybeLater()
   }, [loadDeviceDataTimeout, signInStatusAutoupdate]);
-  console.log({ deviceData });
   return (
     <Layout
       tvEventHandler={handleRemoteControlEvent}

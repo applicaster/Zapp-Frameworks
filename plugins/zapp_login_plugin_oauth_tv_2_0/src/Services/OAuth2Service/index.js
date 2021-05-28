@@ -32,7 +32,6 @@ export async function getDevicePin(oAuthConfig) {
       data: { clientId, deviceEndPoint, oAuthConfig, response },
     });
     const data = response?.data;
-    console.log({ response });
     return data;
   } catch (error) {
     logger.error({
@@ -62,7 +61,6 @@ export async function getDeviceToken(oAuthConfig, device_code) {
     };
 
     const response = await axios(request);
-    console.log("getDeviceToken - response", { response });
 
     const data = response?.data;
     const newData = {
@@ -99,6 +97,7 @@ export async function getDeviceToken(oAuthConfig, device_code) {
 export async function getRefreshToken(oAuthConfig, refresh_token) {
   const clientId = oAuthConfig?.clientId;
   const refreshEndPoint = oAuthConfig?.refreshEndPoint;
+
   if (!refreshEndPoint) {
     logger.debug({
       message: "getRefreshToken: completed, no refresh end point provided",
@@ -162,7 +161,6 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
 export async function pleaseLogOut(oAuthConfig, access_token) {
   const clientId = oAuthConfig?.clientId;
   const logoutEndPoint = oAuthConfig?.logoutEndPoint;
-  console.log({ logoutEndPoint });
   if (!logoutEndPoint) {
     logger.debug({
       message: "pleaseLogOut: completed, no logout end point provided",
@@ -175,7 +173,6 @@ export async function pleaseLogOut(oAuthConfig, access_token) {
     });
     return;
   }
-  console.log({ oAuthConfig, clientId, logoutEndPoint });
   try {
     const request = {
       url: logoutEndPoint,

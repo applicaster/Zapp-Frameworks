@@ -78,10 +78,6 @@ export const isAuthenticationRequired = (payload) => {
 };
 
 export function isTokenExpired(expiresIn) {
-  console.log({
-    expiresIn,
-    moment,
-  });
   return moment(expiresIn).diff(moment()) <= 0;
 }
 
@@ -91,7 +87,6 @@ export async function refreshToken(oAuthConfig) {
     const refresh_token = await storageGet(AuthDataKeys.refresh_token);
 
     const expired = isTokenExpired(parseInt(expiresIn));
-    console.log({ expiresIn, refresh_token, expired });
 
     if (expired) {
       const refreshEndPoint = oAuthConfig?.refreshEndPoint;
@@ -99,8 +94,6 @@ export async function refreshToken(oAuthConfig) {
         logger.debug({
           message: "refreshToken: completed, no refresh end point provided",
           data: {
-            clientId,
-            refreshEndPoint,
             oAuthConfig,
             refresh_token,
             expired,
@@ -153,7 +146,6 @@ export async function refreshToken(oAuthConfig) {
 export async function isLoginRequired() {
   try {
     const accessToken = await storageGet(AuthDataKeys.access_token);
-    console.log({ accessToken });
     if (accessToken) {
       const is_login_required = !!accessToken === false;
       logger.info({

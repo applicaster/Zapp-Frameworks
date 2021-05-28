@@ -17,7 +17,7 @@ const IntroScreen = (props) => {
     forceFocus,
     screenStyles,
     screenLocalizations,
-    finishHook,
+    onSignedIn,
   } = props;
 
   const signInButton = useRef(null);
@@ -37,14 +37,14 @@ const IntroScreen = (props) => {
   const handleRemoteControlEvent = useCallback(
     (comp, { eventType }) => {
       if (eventType === "menu") {
-        finishHook();
+        onSignedIn();
       }
     },
     [callback]
   );
 
   const onSkipPrehook = useCallback(() => {
-    finishHook();
+    onSignedIn();
   }, [callback]);
 
   if (Platform.OS === "android") {
