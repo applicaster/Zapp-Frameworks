@@ -6,7 +6,6 @@ export function prepareInAppPurchaseData(
   purchaseHistory = null
 ) {
   const result = R.map((item) => {
-    console.log({ item });
     const { externalFeeId, productType, title, productIdentifier } = item;
     item.storePurchaseID = externalFeeId || productIdentifier;
 
@@ -15,13 +14,10 @@ export function prepareInAppPurchaseData(
 
     if (purchaseHistory) {
       const purchasedItem = R.find((purchasedItem) => {
-        console.log({ purchasedItem });
         const id = `${purchasedItem?.item_id}_${purchasedItem?.purchased_access_fee_id}`;
-        console.log({ id, productIdentifier });
         return id === productIdentifier;
       })(purchaseHistory);
       if (purchasedItem) {
-        console.log({ purchasedItem });
         purchased = true;
         expiresAt = purchasedItem?.expires_at;
       }

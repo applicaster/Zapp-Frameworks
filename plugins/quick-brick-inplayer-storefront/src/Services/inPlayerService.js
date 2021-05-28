@@ -540,7 +540,6 @@ export async function validateExternalPayment({
       receipt: receipt,
       amazonUserId: isAmazonPlatform(store) ? amazon_user_id : null,
     });
-    console.log({ response });
     logger.debug({
       message: `InPlayer validate external payment >> succeed: true`,
       data: {

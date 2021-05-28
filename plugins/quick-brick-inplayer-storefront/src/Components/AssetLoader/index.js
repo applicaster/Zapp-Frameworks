@@ -21,7 +21,6 @@ export async function assetLoaderStandaloneScreen({ props, assetId, store }) {
     const purchaseHistory = await getPurchaseHistory({
       assetId,
     });
-    console.log({ purchaseHistory });
     const newPayload = await preparePayloadWithPurchaseData({
       props,
       assetId,
@@ -108,7 +107,6 @@ async function preparePayloadWithPurchaseData({
 }
 
 function handleError(error) {
-  console.log({ error });
   let status = error?.response?.status;
   if (status) {
     const statusString = status.toString();
