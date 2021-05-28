@@ -16,7 +16,6 @@ import {
 import Button from "../../Components/Button";
 import QRCode from "../../Components/QRCode";
 import Layout from "../../Components/Layout";
-import { skipPrehook } from "../../utils";
 import { mapKeyToStyle } from "../../Utils/Customization";
 import { getDevicePin, getDeviceToken } from "../../Services/OAuth2Service";
 import { ScreenData } from "../../Components/Login/utils";
@@ -27,15 +26,14 @@ const logger = createLogger({
 });
 function SignInScreen(props) {
   const {
-    skip,
-    namespace,
-    closeHook,
     isPrehook,
     groupId,
     goToScreen,
     screenStyles,
     screenLocalizations,
     configuration,
+    callback,
+    finishHook,
   } = props;
 
   const { activity_indicator_color, line_separator_color } = screenStyles;
@@ -182,18 +180,14 @@ function SignInScreen(props) {
             signInStatusAutoupdateTimeout,
           },
         });
-        const { access_token } = data;
         setSignInStatusAutoupdate(false);
         await saveDataToStorages(data);
 
-        //TODO:
-        props.goToScreen(ScreenData.LOG_OUT, true);
-
-        // if (props.isPrehook) {
-        //   props.closeHook({ success: true });
-        // } else {
-        //   props.goToScreen(ScreenData.LOG_OUT, true);
-        // }
+        if (props.isPrehook) {
+          finishHook();
+        } else {
+          props.goToScreen(ScreenData.LOG_OUT, true);
+        }
       } else {
         logger.debug({
           message: `Get device token complete, access token not exists`,
@@ -231,7 +225,12 @@ function SignInScreen(props) {
         });
       }
     }
-  }, [deviceData, signInStatusAutoupdate, signInStatusAutoupdateTimeout]);
+  }, [
+    deviceData,
+    signInStatusAutoupdate,
+    signInStatusAutoupdateTimeout,
+    callback,
+  ]);
 
   useLayoutEffect(() => {
     loadDeviceData();
@@ -297,18 +296,8 @@ function SignInScreen(props) {
 
   const onMaybeLaterPress = useCallback(() => {
     clearAllTimeouts();
-
-    skipPrehook(skip, namespace, closeHook, {
-      name: "User Sign in Skipped",
-      data: { buttonPressed: "Skip" },
-    });
-  }, [
-    skip,
-    namespace,
-    closeHook,
-    loadDeviceDataTimeout,
-    signInStatusAutoupdate,
-  ]);
+    finishHook();
+  }, [loadDeviceDataTimeout, signInStatusAutoupdate]);
   console.log({ deviceData });
   return (
     <Layout

@@ -40,3 +40,4 @@ export async function removeDataFromStorages() {
 export async function storageGet(key) {
   return await localStorage.getItem(key, namespace);
 }
+

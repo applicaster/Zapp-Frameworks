@@ -117,8 +117,10 @@ export async function getRefreshToken(oAuthConfig, refresh_token) {
       method: "POST",
       headers: {
         "Content-Type": "x-www-form-urlencoded",
+        Authorization: "Basic aSdxd892iujendek328uedj",
       },
       params: {
+        grant_type: "refresh_token",
         client_id: clientId,
         [AuthDataKeys.refresh_token]: refresh_token,
       },

@@ -1,4 +1,4 @@
-import OAuth from "./src/Components/Login";
+import { OAuth } from "./src/Components/Login";
 import * as R from "ramda";
 
 import { connectToStore } from "@applicaster/zapp-react-native-redux";

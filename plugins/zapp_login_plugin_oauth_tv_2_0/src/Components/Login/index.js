@@ -2,9 +2,9 @@
 import React, {
   useState,
   useEffect,
-  useCallback,
   useRef,
   useMemo,
+  useCallback,
 } from "react";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 
@@ -21,7 +21,6 @@ import {
   showAlert,
   refreshToken,
 } from "./utils";
-import { removeDataFromStorages } from "../../Services/StorageService";
 import { BaseSubsystem, BaseCategories } from "../../Services/LoggerService";
 import { getStyles } from "../../Utils/Customization";
 import { getLocalizations } from "../../Utils/Localizations";
@@ -29,7 +28,7 @@ import { getLocalizations } from "../../Utils/Localizations";
 const logger = new XRayLogger(BaseCategories.GENERAL, BaseSubsystem);
 console.disableYellowBox = true;
 
-const OAuth = (props) => {
+export const OAuth = (props) => {
   const navigator = useNavigation();
   const [screen, setScreen] = useState(ScreenData.LOADING);
   const [forceFocus, setForceFocus] = useState(false);
@@ -49,6 +48,7 @@ const OAuth = (props) => {
   useEffect(() => {
     mounted.current = true;
 
+    console.log({ payload });
     setupEnvironment();
     return () => {
       mounted.current = false;
@@ -60,6 +60,7 @@ const OAuth = (props) => {
       const playerHook = isPlayerHook(props?.payload);
       const testEnvironmentEnabled =
         props?.configuration?.force_authentication_on_all || "off";
+      console.log({ payload });
 
       if (
         playerHook === true &&
@@ -101,7 +102,7 @@ const OAuth = (props) => {
             mounted.current && setScreen(ScreenData.LOG_OUT);
           }
         } else {
-          await removeDataFromStorages();
+          // await removeDataFromStorages();
 
           mounted.current && setScreen(ScreenData.INTRO);
         }
@@ -118,8 +119,6 @@ const OAuth = (props) => {
         screenLocalizations?.general_error_message
       );
     }
-
-    console.log({ isPrehook });
   }
 
   function goToScreen(screen, forceFocus, changeFocus) {
@@ -155,6 +154,16 @@ const OAuth = (props) => {
       goToScreen: goToScreen,
     };
 
+    function finishHook() {
+      console.log({ callback, payload });
+      callback &&
+        callback({
+          success: true,
+          error: null,
+          payload: payload?.payload,
+        });
+    }
+
     switch (screen) {
       case ScreenData.LOADING: {
         return <LoadingScreen {...screenOptions} />;
@@ -165,10 +174,10 @@ const OAuth = (props) => {
             {...screenOptions}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
-            closeHook={callback}
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
+            finishHook={finishHook}
           />
         );
       }
@@ -179,7 +188,6 @@ const OAuth = (props) => {
             configuration={configuration}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
-            closeHook={callback}
             parentFocus={parentFocus}
             focused={focused}
             forceFocus={forceFocus}
@@ -193,7 +201,7 @@ const OAuth = (props) => {
             configuration={configuration}
             screenStyles={screenStyles}
             screenLocalizations={screenLocalizations}
-            closeHook={callback}
+            finishHook={finishHook}
           />
         );
       }
@@ -201,5 +209,3 @@ const OAuth = (props) => {
   }
   return renderScreen();
 };
-
-export default OAuth;

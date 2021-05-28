@@ -3,16 +3,12 @@ import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
-import { skipPrehook } from "../utils";
 import { mapKeyToStyle } from "../Utils/Customization";
 import { ScreenData } from "../Components/Login/utils";
 
 const IntroScreen = (props) => {
   const {
-    segmentKey,
-    skip,
-    namespace,
-    closeHook,
+    callback,
     isPrehook,
     groupId,
     goToScreen,
@@ -21,6 +17,7 @@ const IntroScreen = (props) => {
     forceFocus,
     screenStyles,
     screenLocalizations,
+    finishHook,
   } = props;
 
   const signInButton = useRef(null);
@@ -37,23 +34,18 @@ const IntroScreen = (props) => {
     }
   }, []);
 
-  const onMaybeLaterPress = useCallback(
-    () =>
-      skipPrehook(skip, namespace, closeHook, {
-        name: "User Login Started",
-        data: { buttonPressed: "Maybe Later" },
-      }),
-    [skip, namespace, closeHook]
-  );
-
   const handleRemoteControlEvent = useCallback(
     (comp, { eventType }) => {
       if (eventType === "menu") {
-        onMaybeLaterPress();
+        finishHook();
       }
     },
-    [onMaybeLaterPress]
+    [callback]
   );
+
+  const onSkipPrehook = useCallback(() => {
+    finishHook();
+  }, [callback]);
 
   if (Platform.OS === "android") {
     useInitialFocus(isPrehook || forceFocus ? true : focused, signInButton);
@@ -99,7 +91,7 @@ const IntroScreen = (props) => {
               screenStyles={screenStyles}
               label={sing_in_later}
               groupId={groupId}
-              onPress={onMaybeLaterPress}
+              onPress={onSkipPrehook}
               style={styles.focusContainer}
               buttonRef={laterButton}
               nextFocusUp={signInButton}
