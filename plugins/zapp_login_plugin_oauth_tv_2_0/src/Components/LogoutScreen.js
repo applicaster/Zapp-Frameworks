@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
-import Button from "../Components/Button";
-import Layout from "../Components/Layout";
+import Button from "./Button";
+import Layout from "./Layout";
 import { pleaseLogOut } from "../Services/OAuth2Service";
 import { mapKeyToStyle } from "../Utils/Customization";
-import { showAlert, ScreenData } from "../Components/Login/utils";
+import { showAlert, ScreenData } from "./Login/utils";
 import {
   removeDataFromStorages,
   storageGet,

@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 
-import IntroScreen from "../../screens/IntroScreen";
-import SignInScreen from "../../screens/SignInScreen";
-import LogoutScreen from "../../screens/LogoutScreen";
-import LoadingScreen from "../../screens/LoadingScreen";
+import IntroScreen from "../IntroScreen";
+import SignInScreen from "../SignInScreen";
+import LogoutScreen from "../LogoutScreen";
+import LoadingScreen from "../LoadingScreen";
 import XRayLogger from "@applicaster/quick-brick-xray";
 import {
   ScreenData,

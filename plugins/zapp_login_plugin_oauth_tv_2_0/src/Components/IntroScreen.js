@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
-import Button from "../Components/Button";
-import Layout from "../Components/Layout";
+import Button from "./Button";
+import Layout from "./Layout";
 import { mapKeyToStyle } from "../Utils/Customization";
-import { ScreenData } from "../Components/Login/utils";
+import { ScreenData } from "./Login/utils";
 
 const IntroScreen = (props) => {
   const {

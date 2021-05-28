@@ -13,12 +13,12 @@ import {
   BaseSubsystem,
   BaseCategories,
 } from "../../Services/LoggerService";
-import Button from "../../Components/Button";
-import QRCode from "../../Components/QRCode";
-import Layout from "../../Components/Layout";
+import Button from "../Button";
+import QRCode from "../QRCode";
+import Layout from "../Layout";
 import { mapKeyToStyle } from "../../Utils/Customization";
 import { getDevicePin, getDeviceToken } from "../../Services/OAuth2Service";
-import { ScreenData } from "../../Components/Login/utils";
+import { ScreenData } from "../Login/utils";
 
 const logger = createLogger({
   subsystem: BaseSubsystem,
