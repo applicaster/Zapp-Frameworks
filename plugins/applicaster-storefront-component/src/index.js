@@ -101,7 +101,6 @@ export default function Storefront(props) {
   }
   function syncPurchaseData({ productsToPurchase, storeFeesData }) {
     let retVal = [];
-    console.log({ productsToPurchase });
     for (let i = 0; i < storeFeesData.length; i++) {
       const storeFee = storeFeesData[i];
       const hasPurchased = !!R.find((item) => {
@@ -112,7 +111,6 @@ export default function Storefront(props) {
         if (
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
-          console.log({ productToPurchase, hasPurchased });
           storeFee.productType = productToPurchase.productType;
           storeFee.purchased = productToPurchase.purchased;
           storeFee.expiresAt = productToPurchase.expiresAt;
@@ -126,7 +124,6 @@ export default function Storefront(props) {
         }
       }
     }
-    console.log({ retVal });
     return retVal;
   }
   async function preparePurchaseData() {
@@ -220,7 +217,6 @@ export default function Storefront(props) {
   }
 
   const onHandleBack = () => {
-    console.log("onHandleBack", screen, onStorefrontCompleted);
     if (screen === ScreensData.PRIVACY_POLICY) {
       setScreen(ScreensData.STOREFRONT);
     } else if (screen === ScreensData.STOREFRONT) {
@@ -229,7 +225,6 @@ export default function Storefront(props) {
   };
 
   function onStorefrontCompleted({ success, error, payload }) {
-    console.log({ onStoreFrontFinished: props?.onStorefrontFinished });
     props?.onStorefrontFinished?.({ success, error, payload });
   }
   const mobile = (

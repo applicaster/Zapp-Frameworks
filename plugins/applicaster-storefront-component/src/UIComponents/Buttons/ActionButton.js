@@ -45,11 +45,6 @@ const ActionButton = (props) => {
     disabled,
   } = props;
 
-  console.log({
-    buttonStyle,
-    foo: actionButtonContainerStyle(screenStyles, buttonStyle),
-    screenStyles,
-  });
   const textStyle = labelStyle || actionButtonTextStyle(screenStyles);
   const actionButtonContainerStyles = actionButtonContainerStyle(
     screenStyles,
