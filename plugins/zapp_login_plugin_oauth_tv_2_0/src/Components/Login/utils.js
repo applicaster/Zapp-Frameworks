@@ -86,20 +86,6 @@ export function isTokenExpired(expiresIn) {
 }
 
 export async function refreshToken(oAuthConfig) {
-  const refreshEndPoint = oAuthConfig?.refreshEndPoint;
-  if (!refreshEndPoint) {
-    logger.debug({
-      message: "refreshToken: completed, no refresh end point provided",
-      data: {
-        clientId,
-        refreshEndPoint,
-        oAuthConfig,
-        refresh_token,
-      },
-    });
-    return;
-  }
-
   try {
     const expiresIn = await storageGet(AuthDataKeys.expires_in);
     const refresh_token = await storageGet(AuthDataKeys.refresh_token);
@@ -108,6 +94,20 @@ export async function refreshToken(oAuthConfig) {
     console.log({ expiresIn, refresh_token, expired });
 
     if (expired) {
+      const refreshEndPoint = oAuthConfig?.refreshEndPoint;
+      if (!refreshEndPoint) {
+        logger.debug({
+          message: "refreshToken: completed, no refresh end point provided",
+          data: {
+            clientId,
+            refreshEndPoint,
+            oAuthConfig,
+            refresh_token,
+            expired,
+          },
+        });
+        return true;
+      }
       logger.debug({
         message: `refreshToken: before refresh`,
         data: {

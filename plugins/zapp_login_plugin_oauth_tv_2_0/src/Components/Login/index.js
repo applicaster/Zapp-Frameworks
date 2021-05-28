@@ -1,11 +1,5 @@
 // @flow
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 
 import IntroScreen from "../../screens/IntroScreen";
