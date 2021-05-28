@@ -130,7 +130,7 @@ export async function refreshToken(clientId, region): Promise<boolean> {
     }
     return true;
   } catch (error) {
-    logger.warning({
+    logger.debug({
       message: `refreshToken: error`,
       data: { error },
     });
