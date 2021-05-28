@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Platform, View } from "react-native";
+import { Platform, KeyboardAvoidingView } from "react-native";
 import { showAlert } from "../../Utils/Account";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
 import { getLocalizations } from "../../Utils/Localizations";
@@ -7,7 +7,6 @@ import { getStyles } from "../../Utils/Customization";
 import { getRiversProp } from "./Utils";
 import { WebView } from "react-native-webview";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
-import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import {
   saveLoginDataToStorages,
@@ -183,15 +182,18 @@ const Login = (props) => {
           }}
         >
           {loading === false && (
-            <>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior="padding"
+              enabled={Platform.OS === "android"}
+            >
               <WebView
                 source={{
                   uri: loginURL,
                 }}
                 onMessage={onMessage}
               />
-              <KeyboardSpacer />
-            </>
+            </KeyboardAvoidingView>
           )}
         </SafeAreaView>
         {loading === false && payload && isHomeScreen(navigator) === false && (
