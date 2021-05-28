@@ -1,3 +1,4 @@
+import * as R from "ramda";
 import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils";
 import StoreFrontMobile from "./StoreFrontMobile";
 import StoreFrontTv from "./StoreFrontTv";
@@ -19,7 +20,7 @@ import {
 } from "./Services/iAPService";
 
 import { createLogger } from "./Services/LoggerService";
-import * as R from "ramda";
+
 export const logger = createLogger({
   subsystem: "Storefront",
 });
@@ -102,16 +103,19 @@ export default function Storefront(props) {
     let retVal = [];
     for (let i = 0; i < storeFeesData.length; i++) {
       const storeFee = storeFeesData[i];
+      const hasPurchased = !!R.find((item) => {
+        return item.purchased === true;
+      })(productsToPurchase);
       for (let i = 0; i < productsToPurchase.length; i++) {
         const productToPurchase = productsToPurchase[i];
-        console.log({ productToPurchase });
         if (
           productToPurchase.productIdentifier === storeFee.productIdentifier
         ) {
           storeFee.productType = productToPurchase.productType;
           storeFee.purchased = productToPurchase.purchased;
           storeFee.expiresAt = productToPurchase.expiresAt;
-
+          storeFee.disabled =
+            hasPurchased && productToPurchase.purchased === false;
           if (!storeFee.title && productToPurchase.title) {
             storeFee.title = productToPurchase.title;
           }
