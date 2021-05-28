@@ -35,8 +35,8 @@
     "quickbrick"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "dependency_version": "0.0.2-alpha.2",
-  "manifest_version": "0.0.2-alpha.2",
+  "dependency_version": "0.0.2",
+  "manifest_version": "0.0.2",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
@@ -74,7 +74,7 @@
       "type": "text_input",
       "key": "refreshEndPoint",
       "label": "Refresh Endpoint",
-      "tooltip_text": "REQUIRED: Refresh Endpoint",
+      "tooltip_text": "OPTIONAL: Refresh Endpoint",
       "default": ""
     },
     {
@@ -83,13 +83,6 @@
       "label": "Logout Endpoint",
       "tooltip_text": "OPTIONAL: Logout Endpoint",
       "default": ""
-    },
-    {
-      "type": "text_input",
-      "key": "session_storage_key",
-      "label": "Session Storage Key",
-      "tooltip_text": "Session storage key that will be used to save oauth token data. This is used to fetch data, please verify with your DSP developer in case you wish to change it.",
-      "default": "access_token"
     },
     {
       "group": true,
@@ -334,6 +327,21 @@
   "localizations": {
     "fields": [
       {
+        "key": "general_error_title",
+        "label": "General error title",
+        "initial_value": "Error"
+      },
+      {
+        "key": "general_error_message",
+        "label": "General error message",
+        "initial_value": "Something went wrong. Please try again later"
+      },
+      {
+        "key": "close_button_text",
+        "label": "Close button text",
+        "initial_value": "Close"
+      },
+      {
         "key": "title_text",
         "label": "Main screen title to screen",
         "initial_value": "WELCOME TO THE MY APPLICATION"
@@ -364,11 +372,6 @@
         "initial_value": "Go to:"
       },
       {
-        "key": "sign_in_pin_url",
-        "label": "pin url",
-        "initial_value": "google.com"
-      },
-      {
         "key": "sign_in_activation_code_title",
         "label": "Activation code label",
         "initial_value": "Enter the activation code below"
@@ -382,6 +385,21 @@
         "key": "sign_in_support_link",
         "label": "support link",
         "initial_value": "google.com"
+      },
+      {
+        "key": "sing_out",
+        "label": "Sign Out button text",
+        "initial_value": "Sign Out"
+      },
+      {
+        "key": "sing_out_url_text",
+        "label": "Sign Out url descriptin",
+        "initial_value": "To update your account please visit"
+      },
+      {
+        "key": "sing_out_url",
+        "label": "Sign Out url",
+        "initial_value": "www.google.com"
       }
     ]
   },

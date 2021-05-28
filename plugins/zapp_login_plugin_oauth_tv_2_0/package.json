@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp_login_plugin_oauth_tv_2_0",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
