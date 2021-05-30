@@ -52,7 +52,6 @@
                         <constraint firstItem="wFw-Gp-kFm" firstAttribute="centerY" secondItem="4Kv-Kg-e1C" secondAttribute="centerY" id="Rin-Zx-AJ4"/>
                         <constraint firstItem="JC2-A4-3AM" firstAttribute="centerY" secondItem="4Kv-Kg-e1C" secondAttribute="centerY" id="bje-bR-i4Q"/>
                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="JC2-A4-3AM" secondAttribute="bottom" constant="8" id="ngm-fD-wzk"/>
-                        <constraint firstAttribute="height" constant="60" id="rUm-4O-WAg"/>
                         <constraint firstItem="wFw-Gp-kFm" firstAttribute="leading" secondItem="4Kv-Kg-e1C" secondAttribute="leading" constant="8" id="vJf-BT-hxH"/>
                     </constraints>
                 </view>
