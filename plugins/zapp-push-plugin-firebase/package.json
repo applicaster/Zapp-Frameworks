@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-push-plugin-firebase",
-  "version": "3.6.5",
+  "version": "3.7.0",
   "description": "Firebase Push Notifications for Applicaster",
   "repository": {
     "type": "git",
