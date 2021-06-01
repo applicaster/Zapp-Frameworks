@@ -86,7 +86,7 @@ export const isAuthenticationRequired = (payload: ZappEntry) => {
 };
 
 export function isTokenExpired(expiresIn: number): boolean {
-  return moment(expiresIn).isSameOrAfter();
+  return moment(expiresIn).diff(moment()) <= 0;
 }
 
 export async function refreshToken(clientId, region): Promise<boolean> {
