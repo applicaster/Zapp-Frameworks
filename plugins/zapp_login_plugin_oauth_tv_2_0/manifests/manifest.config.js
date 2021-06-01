@@ -281,6 +281,7 @@ const api = {
     excludedNodeModules: [
       "react-native-dropdownalert",
       "react-native-keyboard-aware-scroll-view",
+      "@applicaster/zapp_login_plugin_oauth_tv_2_0",
     ],
   },
   android: {
