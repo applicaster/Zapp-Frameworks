@@ -77,10 +77,10 @@ public class ChromecastPlayableItem: NSObject {
     
     lazy var sourceAsContentId: Bool = {
         let value = extensions?[Metadata.sourceAsContentId] as? Int ?? 0
-        return true //Bool(truncating: value as NSNumber)
+        return value == 1
     }()
     
     lazy public var customData: Any? = {
-        return extensions?[Metadata.customData] as? String ?? ["clipId": "puls4-at","country":"at"]
+        return extensions?[Metadata.customData]
     }()
 }
