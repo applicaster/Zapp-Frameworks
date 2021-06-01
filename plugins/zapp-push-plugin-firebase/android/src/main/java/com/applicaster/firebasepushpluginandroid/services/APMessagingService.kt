@@ -79,6 +79,7 @@ class APMessagingService : FirebaseMessagingService() {
         var tag: String? = ""
         var channel: String? = FIREBASE_DEFAULT_CHANNEL_ID
         var image: Uri? = null
+        var groupId: String? = null
 
         if(null != message.notification) {
             APLogger.info(TAG, "The message received had notification attached, using it to retrieve params")
@@ -94,10 +95,10 @@ class APMessagingService : FirebaseMessagingService() {
             if (message.data.containsKey("tag")) tag = message.data["tag"]
             if (message.data.containsKey("android_channel_id")) channel = message.data["android_channel_id"]
             if (message.data.containsKey("image") && !TextUtils.isEmpty(message.data["image"])) image = Uri.parse(message.data["image"])
+            if (message.data.containsKey("groupid")) groupId = message.data["groupid"]
 
-            if(!tag.isNullOrBlank() && !shouldPresent(tag)) {
-                // todo: maybe add a plugin settings on that behavior
-                APLogger.info(TAG, "Notification belongs to the event (tag) that was already seen, discarding")
+            if(!groupId.isNullOrBlank() && !shouldPresent(groupId)) {
+                APLogger.info(TAG, "Notification belongs to the groupid that was already seen, discarding")
                 return
             }
         }
@@ -130,8 +131,8 @@ class APMessagingService : FirebaseMessagingService() {
                 image = image
         )
         notify(notificationFactory, pushMsg)
-        if(!tag.isNullOrBlank()) {
-            storePresented(tag)
+        if(!groupId.isNullOrBlank()) {
+            storePresented(groupId)
         }
     }
 
