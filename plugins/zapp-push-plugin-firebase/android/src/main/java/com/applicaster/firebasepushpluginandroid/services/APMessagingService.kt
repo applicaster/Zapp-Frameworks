@@ -98,7 +98,7 @@ class APMessagingService : FirebaseMessagingService() {
             if (message.data.containsKey("groupid")) groupId = message.data["groupid"]
 
             if(!groupId.isNullOrBlank() && !shouldPresent(groupId)) {
-                APLogger.info(TAG, "Notification belongs to the groupid that was already seen, discarding")
+                APLogger.info(TAG, "Notification belongs to the groupid '$groupId' that was already seen, discarding")
                 return
             }
         }
