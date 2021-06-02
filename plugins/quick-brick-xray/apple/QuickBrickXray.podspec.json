@@ -33,20 +33,5 @@
     "Reporter": [],
     "LoggerInfo": []
   },
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "ios": {
-        "source_files": "tests/**/*.{swift}",
-        "resources": [
-          "tests/iOS/**/*.{png}"
-        ]
-      },
-      "tvos": {
-        "source_files": "tests/**/Dummy.swift"
-      }
-    }
-  ],
   "swift_version": "5.1"
 }
