@@ -152,6 +152,8 @@ extension QuickBrickXray {
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsEnabled,
                                                                      value: networkRequestsEnabled,
                                                                      namespace: pluginNameSpace)
+        UserDefaults.standard.setValue(settings?.networkRequestEnabled,
+                                       forKey: PluginConfigurationKeys.NetworkRequestsEnabled)
         
         let networkRequestsIgnoredExtensions = settings?.networkRequestsIgnoredExtensions.joined(separator: ";") ?? ""
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,

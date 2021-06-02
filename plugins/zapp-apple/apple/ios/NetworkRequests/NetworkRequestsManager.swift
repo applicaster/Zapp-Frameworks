@@ -61,14 +61,8 @@ public class NetworkRequestsManager {
     }
 
     static var networkRequestsLoggingEnabled: Bool {
-        let pluginNameSpace = "xray_logging_plugin"
         let key = "networkRequestsEnabled"
-        guard let networkRequestsEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: key,
-                                                                                                       namespace: pluginNameSpace),
-            let networkRequestsEnabled = Bool(networkRequestsEnabledString) else {
-            return false
-        }
-        return networkRequestsEnabled
+        return UserDefaults.standard.bool(forKey: key)
     }
 
     static var ignoredExtensions: [String] {
