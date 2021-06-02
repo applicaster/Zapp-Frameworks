@@ -101,6 +101,8 @@ extension SettingsViewController {
                 enabled = settings.shortcutEnabled
             } else if SettingsIndexesHelper.isXRayFloatingButtonEnabled(in: indexPath) {
                 enabled = settings.showXrayFloatingButtonEnabled
+            } else if SettingsIndexesHelper.isNetworkRequestEnabled(in: indexPath) {
+                enabled = settings.networkRequestEnabled
             }
 
             cell.update(title: cellData.title,
@@ -110,7 +112,7 @@ extension SettingsViewController {
         } else if let cell = cell as? LogLevelSelectCell {
             cell.update(title: cellData.title,
                         value: fileLogLevelOptions)
-        
+
         } else if let cell = cell as? NetworkRequestsIgnoreContentCell {
             cell.update(title: cellData.title)
         }
@@ -121,7 +123,7 @@ extension SettingsViewController {
     override func tableView(_ tableView: UITableView,
                             titleForFooterInSection section: Int) -> String? {
         let section = SettingsHelper.settingsDataSource[section]
-        return section.footterText
+        return section.footerText
     }
 
     override func tableView(_ tableView: UITableView,
@@ -135,11 +137,11 @@ extension SettingsViewController {
         if let controller = segue.destination as? LogLevelViewController {
             controller.delegate = self
         }
-        
+
         if let controller = segue.destination as? NetworkRequestsIgnoredExtensionSettingsViewController {
             controller.delegate = self
         }
-        
+
         if let controller = segue.destination as? NetworkRequestsIgnoredDomainsSettingsViewController {
             controller.delegate = self
         }
@@ -158,6 +160,43 @@ extension SettingsViewController: SwitchCellDelegate {
         } else if SettingsIndexesHelper.isXRayFloatingButtonEnabled(in: indexPath) {
             settings.showXrayFloatingButtonEnabled = value
             applyNewSettings()
+        } else if SettingsIndexesHelper.isNetworkRequestEnabled(in: indexPath) {
+            presentAlertForAppReloading(newValue: value) {
+                self.settings.networkRequestEnabled = value
+                self.applyNewSettings()
+            }
         }
+    }
+
+    fileprivate func presentAlertForAppReloading(newValue value: Bool, completion: (() -> Void)?) {
+        let title = "App Reload"
+        let description = "App reload is required to perform selected operation"
+        let continueTitle = "Continue"
+        let cancelTitle = "Cancel"
+
+        let alert = UIAlertController(title: title,
+                                      message: description,
+                                      preferredStyle: .alert)
+
+        let continueButton = UIAlertAction(title: continueTitle,
+                                           style: .destructive,
+                                           handler: { _ in
+                                               completion?()
+                                               exit(0)
+                                           })
+
+        let cancelButton = UIAlertAction(title: cancelTitle,
+                                         style: .cancel,
+                                         handler: { _ in
+                                             alert.dismiss(animated: true, completion: {
+                                                 //
+                                             })
+                                         })
+        alert.addAction(continueButton)
+        alert.addAction(cancelButton)
+
+        present(alert,
+                animated: true,
+                completion: nil)
     }
 }

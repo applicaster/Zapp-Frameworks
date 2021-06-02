@@ -28,6 +28,7 @@ struct Settings {
     var showXrayFloatingButtonEnabled: Bool = false
     var shortcutEnabled: Bool = false
     var fileLogLevel: LogLevel?
+    var networkRequestEnabled: Bool = false
     var networkRequestsIgnoredExtensions: [String] = []
     var networkRequestsIgnoredDomains:[String] = []
 

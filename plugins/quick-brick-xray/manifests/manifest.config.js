@@ -237,6 +237,7 @@ const project_dependencies = {
 };
 
 const api_apple = {
+  require_startup_execution: true,
   class_name: "QuickBrickXray",
   modules: ["QuickBrickXray"],
 };
