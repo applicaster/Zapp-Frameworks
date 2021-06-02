@@ -38,16 +38,7 @@ extension DidomiCMP {
             // Click on Agree in the notice
             // Request tracking permission from the user
             self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
+                Didomi.shared.setUserAgreeToAll()
                 self.procceedWithProcessCompletion()
             }
         }
@@ -61,16 +52,7 @@ extension DidomiCMP {
             // Click on Agree to all in the Preferences popup
             // Request tracking permission from the user
             self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
+                Didomi.shared.setUserAgreeToAll()
             }
         }
 
