@@ -23,8 +23,8 @@ function mapDRMToTheoData(drmData) {
   const fairplay = drmData?.fairplay;
   if (fairplay) {
     retVal["fairplay"] = {
-      licenseAcquisitionURL: fairplay?.license_url,
-      certificate_url: fairplay?.certificate_url,
+      licenseAcquisitionURL: fairplay?.license_server_url,
+      certificateURL: fairplay?.certificate_url,
     };
   }
 
@@ -38,7 +38,7 @@ function mapDRMToTheoData(drmData) {
     retVal["widevine"] = { licenseAcquisitionURL: playreadyCerteficateURL };
   }
 
-  return null;
+  return retVal;
 }
 
 // let licenseAcquisitionURL: String = "<LICENSE_KEY_URL_FAIRPLAY>"
