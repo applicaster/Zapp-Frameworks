@@ -24,7 +24,7 @@ function mapDRMToTheoData(drmData) {
   if (fairplay) {
     retVal["fairplay"] = {
       licenseAcquisitionURL: fairplay?.license_url,
-      certificate_url: fairplay?.certificate_url,
+      certificateURL: fairplay?.certificate_url,
     };
   }
 
