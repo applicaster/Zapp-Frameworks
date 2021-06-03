@@ -38,7 +38,7 @@ function mapDRMToTheoData(drmData) {
     retVal["widevine"] = { licenseAcquisitionURL: playreadyCerteficateURL };
   }
 
-  return null;
+  return retVal;
 }
 
 // let licenseAcquisitionURL: String = "<LICENSE_KEY_URL_FAIRPLAY>"
