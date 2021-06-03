@@ -1,7 +1,7 @@
 {
   "api": {
     "require_startup_execution": true,
-    "class_name": "ZPSessionStorageIdfa",
+    "class_name": "SessionStorageIdfa",
     "modules": [
       "ZappSessionStorageIdfa"
     ],
