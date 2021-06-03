@@ -44,4 +44,10 @@ extension DidomiCMP: AppLoadingHookProtocol {
             }
         }
     }
+    
+    public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
+        self.saveParamsToSessionStorageIfExists()
+
+        completion?()
+    }
 }
