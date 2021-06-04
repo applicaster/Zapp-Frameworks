@@ -284,9 +284,12 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onPlayerError = ({ nativeEvent }) => {
-    if (!R.isNil(this.props?.onError)) {
-      this.props?.onError(nativeEvent);
-    }
+    console.log({ nativeEvent });
+    // if (!R.isNil(this.props?.onError)) {
+    //   this.props?.onError({
+    //     error: Error(nativeEvent?.message),
+    //   });
+    // }
   };
 
   onAdBreakBegin = ({ nativeEvent }) => {
@@ -376,6 +379,14 @@ export default class THEOPlayer extends Component<Props, State> {
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
     const drm = getDRMData({ entry });
+    console.log("Render Theo", {
+      drm,
+      sources: {
+        type: entry?.content?.type,
+        src: entry?.content?.src,
+        drm,
+      },
+    });
 
     return (
       <View
@@ -429,7 +440,7 @@ export default class THEOPlayer extends Component<Props, State> {
               {
                 type: entry?.content?.type,
                 src: entry?.content?.src,
-                drm
+                drm,
               },
             ],
             ads: getIMAData({ entry, pluginConfiguration }),
