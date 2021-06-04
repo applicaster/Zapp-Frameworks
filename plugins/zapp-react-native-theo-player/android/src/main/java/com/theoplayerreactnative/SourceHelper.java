@@ -135,7 +135,10 @@ public class SourceHelper {
         Iterator<String> drmKeys = drm.keys();
         while (drmKeys.hasNext()) {
             String key = drmKeys.next().toLowerCase();
-            JSONObject drmObject = drm.getJSONObject(key);
+            Object obj = drm.get(key);
+            if(!(obj instanceof JSONObject))
+                continue;
+            JSONObject drmObject = (JSONObject) obj;
             switch (key) {
                 case "widevine":
                     builder.widevine(drmObject.getString("licenseAcquisitionURL"));
@@ -169,7 +172,10 @@ public class SourceHelper {
         Iterator<String> drmKeys = drm.keys();
         while (drmKeys.hasNext()) {
             String key = drmKeys.next().toLowerCase();
-            JSONObject drmObject = drm.getJSONObject(key);
+            Object obj = drm.get(key);
+            if(!(obj instanceof JSONObject))
+                continue;
+            JSONObject drmObject = (JSONObject) obj;
             switch (key) {
                 case "widevine":
                     widevine = new KeySystemConfiguration(drmObject.getString("licenseAcquisitionURL"));
