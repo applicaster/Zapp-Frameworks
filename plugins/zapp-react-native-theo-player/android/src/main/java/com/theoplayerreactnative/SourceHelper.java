@@ -34,6 +34,8 @@ import static com.theoplayer.android.api.source.drm.preintegration.KeyOSDRMConfi
 public class SourceHelper {
 
     private static final String TAG = TheoPlayerViewManager.TAG;
+    private static final String adsIntegrationGoogleIma = "google-ima";
+    private static final String adsIntegrationTheo = "theo";
 
     public static SourceDescription parseSourceFromJS(ReadableMap source) {
         try {
@@ -97,16 +99,18 @@ public class SourceHelper {
                 for (int i = 0; i < jsonAds.length(); i++) {
                     JSONObject jsonAdDescription = (JSONObject) jsonAds.get(i);
                     String integration = "";
-                    String integrationGoogleIma = "google-ima";
 
                     if (jsonAdDescription.has("integration")) {
                         integration = jsonAdDescription.getString("integration");
                     }
 
-                    if (integration.equals(integrationGoogleIma)) {
+                    if (adsIntegrationTheo.equals(integration)) {
+                        ads.add(parseTheoAdFromJS(jsonAdDescription));
+                    } else if (adsIntegrationGoogleIma.equals(integration)) {
                         ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
                     } else {
-                        ads.add(parseTheoAdFromJS(jsonAdDescription));
+                        APLogger.debug(TAG, "Ad integration type is not specified, defaulting to Google IMA");
+                        ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
                     }
                 }
             }
@@ -124,6 +128,7 @@ public class SourceHelper {
     }
 
     private static DRMConfiguration parseKeyOSDRM(JSONObject drm) throws JSONException {
+        APLogger.debug(TAG, "Using KeyOS DRM");
         String customdata = drm.getString("customdata");
         KeyOSDRMConfiguration.Builder builder = KeyOSDRMConfiguration.Builder.keyOsDrm();
         if(TextUtils.isEmpty(customdata)) {
@@ -169,6 +174,7 @@ public class SourceHelper {
         @Nullable KeySystemConfiguration playready = null;
         @Nullable KeySystemConfiguration widevine = null;
         @Nullable ClearkeyKeySystemConfiguration clearkey = null;
+        APLogger.debug(TAG, "Using Generic DRM");
         Iterator<String> drmKeys = drm.keys();
         while (drmKeys.hasNext()) {
             String key = drmKeys.next().toLowerCase();
