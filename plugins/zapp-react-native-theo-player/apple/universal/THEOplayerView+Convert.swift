@@ -8,7 +8,10 @@ import THEOplayerSDK
                          data: ["source": json])
 
         if let src = RCTConvert.nsString(json["src"]),
-           let type = RCTConvert.nsString(json["type"]) {
+           var type = RCTConvert.nsString(json["type"]) {
+            if type == "video/hls" {
+                type = "application/vnd.apple.mpegurl"
+            }
             if let drm = RCTConvert.nsDictionary(json["drm"]),
                let fairplay = RCTConvert.nsDictionary(drm["fairplay"]),
                let integrationType = RCTConvert.nsString(drm["integration"]) {
@@ -37,7 +40,7 @@ import THEOplayerSDK
                     break
                 }
 
-                return TypedSource(src: src, type: "application/x-mpegurl", drm: baseDrm)
+                return TypedSource(src: src, type: type, drm: baseDrm)
             } else {
                 return TypedSource(src: src, type: type)
             }
