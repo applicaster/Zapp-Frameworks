@@ -6,7 +6,7 @@ import THEOplayerSDK
     class func typedSource(_ json: [String: AnyObject]) -> TypedSource? {
         logger?.debugLog(message: "New data source recieved",
                          data: ["source": json])
-        
+
         if let src = RCTConvert.nsString(json["src"]),
            let type = RCTConvert.nsString(json["type"]) {
             if let drm = RCTConvert.nsDictionary(json["drm"]),
@@ -37,7 +37,7 @@ import THEOplayerSDK
                     break
                 }
 
-                return TypedSource(src: src, type: type, drm: baseDrm)
+                return TypedSource(src: src, type: "application/x-mpegurl", drm: baseDrm)
             } else {
                 return TypedSource(src: src, type: type)
             }

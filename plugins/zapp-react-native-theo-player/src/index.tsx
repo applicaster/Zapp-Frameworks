@@ -285,11 +285,11 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerError = ({ nativeEvent }) => {
     console.log({ nativeEvent });
-    // if (!R.isNil(this.props?.onError)) {
-    //   this.props?.onError({
-    //     error: Error(nativeEvent?.message),
-    //   });
-    // }
+    if (!R.isNil(this.props?.onError)) {
+      this.props?.onError({
+        error: Error(nativeEvent?.message),
+      });
+    }
   };
 
   onAdBreakBegin = ({ nativeEvent }) => {

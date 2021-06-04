@@ -23,7 +23,6 @@ function getDRMFromEntry(entry) {
 function mapDRMToTheoData(drmData) {
   let retVal = {};
   console.log({ drmData });
-  retVal["customdata"] = drmData?.customParams?.custom_data;
 
   const fairplay = drmData?.fairplay;
   if (fairplay) {
@@ -70,20 +69,20 @@ function mapDRMToTheoData(drmData) {
     }
   }
 
-  const customdataPlayready = playreadyCerteficateURL?.extensions?.integration;
-  const customdataWidevine = widevineCerteficateURL?.extensions?.custom_data;
+  const customdataPlayready = drmData?.playready?.extensions?.custom_data;
+  const customdataWidevine = drmData?.widevine?.extensions?.custom_data;
   const customdataFairplay = fairplay?.extensions?.custom_data;
-
+  console.log({ customdataPlayready, customdataWidevine, customdataFairplay });
   const customdataSet = new Set();
 
   if (customdataFairplay) {
-    integrationSet.add(customdataFairplay);
+    customdataSet.add(customdataFairplay);
   }
   if (customdataWidevine) {
-    integrationSet.add(customdataWidevine);
+    customdataSet.add(customdataWidevine);
   }
   if (customdataPlayready) {
-    integrationSet.add(customdataPlayready);
+    customdataSet.add(customdataPlayready);
   }
 
   if (customdataSet.size > 0) {
