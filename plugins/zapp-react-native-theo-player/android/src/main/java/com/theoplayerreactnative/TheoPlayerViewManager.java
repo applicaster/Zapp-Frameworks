@@ -293,12 +293,10 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         playerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
-
+                window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     window
                             .getAttributes()
@@ -309,6 +307,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
             @Override
             public void onViewDetachedFromWindow(View v) {
                 playerView.onDestroy();
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     window
                             .getAttributes()
