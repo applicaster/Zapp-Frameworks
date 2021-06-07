@@ -1,4 +1,10 @@
 import * as R from "ramda";
+import { createLogger, BaseSubsystem, BaseCategories } from "../LoggerService";
+
+const logger = createLogger({
+  category: BaseCategories.DRM,
+  subsystem: BaseSubsystem,
+});
 
 export function getDRMData({ entry }) {
   const drmData = getDRMFromEntry(entry);
@@ -17,9 +23,6 @@ function getDRMFromEntry(entry) {
 function mapDRMToTheoData(drmData) {
   let retVal = {};
 
-  retVal["integration"] = drmData?.customParams?.integration;
-  retVal["customdata"] = drmData?.customParams?.custom_data;
-
   const fairplay = drmData?.fairplay;
   if (fairplay) {
     retVal["fairplay"] = {
@@ -36,6 +39,60 @@ function mapDRMToTheoData(drmData) {
   const widevineCerteficateURL = drmData?.widevine?.license_url;
   if (widevineCerteficateURL) {
     retVal["widevine"] = { licenseAcquisitionURL: playreadyCerteficateURL };
+  }
+
+  const integrationPlayready = playreadyCerteficateURL?.extensions?.integration;
+  const integrationWidevine = widevineCerteficateURL?.extensions?.integration;
+  const integrationFairplay = fairplay?.extensions?.integration;
+
+  const integrationSet = new Set();
+  if (integrationFairplay) {
+    integrationSet.add(integrationFairplay);
+  }
+  if (integrationWidevine) {
+    integrationSet.add(integrationWidevine);
+  }
+  if (integrationPlayready) {
+    integrationSet.add(integrationPlayready);
+  }
+
+  if (integrationSet.size > 0) {
+    retVal["integration"] = integrationSet.values().next().value;
+    if (integrationSet.size > 1) {
+      logger.warning({
+        message: "DRM has different integration type for different provider",
+        data: {
+          drmData,
+        },
+      });
+    }
+  }
+
+  const customdataPlayready = drmData?.playready?.extensions?.custom_data;
+  const customdataWidevine = drmData?.widevine?.extensions?.custom_data;
+  const customdataFairplay = fairplay?.extensions?.custom_data;
+  const customdataSet = new Set();
+
+  if (customdataFairplay) {
+    customdataSet.add(customdataFairplay);
+  }
+  if (customdataWidevine) {
+    customdataSet.add(customdataWidevine);
+  }
+  if (customdataPlayready) {
+    customdataSet.add(customdataPlayready);
+  }
+
+  if (customdataSet.size > 0) {
+    retVal["customdata"] = customdataSet.values().next().value;
+    if (customdataSet.size > 1) {
+      logger.warning({
+        message: "DRM has different custom data type for different provider",
+        data: {
+          drmData,
+        },
+      });
+    }
   }
 
   return retVal;

@@ -66,7 +66,7 @@ dependencies {
     api "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '19.0.0')}"
 
     //implementation fileTree(dir: "./src/main/libs/", include: ["*.jar", "*.aar"])
-    implementation files("./src/main/libs/theoplayer-android-dist-56fffd95-3465-4f64-9eaa-9130e9c4b135-2.83.0-minapi21-release.aar")
+    implementation files("./src/main/libs/theoplayer-android-dist-56fffd95-3465-4f64-9eaa-9130e9c4b135-2.85.1-minapi21-release.aar")
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.23.0'
     implementation "com.facebook.react:react-native:+"
     implementation "androidx.annotation:annotation:1.1.0"
