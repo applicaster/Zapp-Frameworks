@@ -95,13 +95,6 @@ function mapDRMToTheoData(drmData) {
     }
   }
 
-  // logger.debug({
-  //   message: "DRM prepared",
-  //   data: {
-  //     drm: retVal,
-  //   },
-  // });
-
   return retVal;
 }
 
