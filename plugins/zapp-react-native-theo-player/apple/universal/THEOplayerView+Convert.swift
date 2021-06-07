@@ -58,12 +58,10 @@ import THEOplayerSDK
     }
 
     @objc(AdDescription:)
-    class func adDescription(_ json: [String: AnyObject]) -> THEOAdDescription? {
+    class func adDescription(_ json: [String: AnyObject]) -> GoogleImaAdDescription? {
         if let src = RCTConvert.nsString(json["sources"]) {
-            return THEOAdDescription(
-                src: src,
-                timeOffset: RCTConvert.nsString(json["timeOffset"]),
-                skipOffset: RCTConvert.nsString(json["skipOffset"])
+            return GoogleImaAdDescription(
+                src: src
             )
         } else {
             return nil
@@ -71,9 +69,13 @@ import THEOplayerSDK
     }
 
     @objc(AdDescriptionArray:)
-    class func adDescriptionArray(_ json: [AnyObject]) -> [THEOAdDescription]? {
+    class func adDescriptionArray(_ json: [AnyObject]) -> [GoogleImaAdDescription]? {
         let sources = RCTConvertArrayValue(#selector(adDescription), json)
-            .compactMap { $0 as? THEOAdDescription }
+            .compactMap { (item) -> GoogleImaAdDescription? in
+                var foo = item as? GoogleImaAdDescription
+                foo?.integration = .google_ima
+                return foo
+            }
         return sources.count > 0 ? sources : nil
     }
 

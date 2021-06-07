@@ -22,7 +22,6 @@ function getDRMFromEntry(entry) {
 
 function mapDRMToTheoData(drmData) {
   let retVal = {};
-  console.log({ drmData });
 
   const fairplay = drmData?.fairplay;
   if (fairplay) {
@@ -72,7 +71,6 @@ function mapDRMToTheoData(drmData) {
   const customdataPlayready = drmData?.playready?.extensions?.custom_data;
   const customdataWidevine = drmData?.widevine?.extensions?.custom_data;
   const customdataFairplay = fairplay?.extensions?.custom_data;
-  console.log({ customdataPlayready, customdataWidevine, customdataFairplay });
   const customdataSet = new Set();
 
   if (customdataFairplay) {
@@ -97,12 +95,12 @@ function mapDRMToTheoData(drmData) {
     }
   }
 
-  logger.debug({
-    message: "DRM prepared",
-    data: {
-      drm: retVal,
-    },
-  });
+  // logger.debug({
+  //   message: "DRM prepared",
+  //   data: {
+  //     drm: retVal,
+  //   },
+  // });
 
   return retVal;
 }

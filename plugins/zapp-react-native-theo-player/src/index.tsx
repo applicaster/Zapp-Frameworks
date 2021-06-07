@@ -148,10 +148,10 @@ export default class THEOPlayer extends Component<Props, State> {
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.analyticsTracker.handleChange(this.state);
 
-    if (this.state.playerEnded) {
+    if (prevState?.playerEnded === false && this.state.playerEnded) {
       this.handleEnded();
     }
   }
@@ -209,6 +209,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
+
     this.setState({ currentTime });
   };
 
@@ -235,6 +236,7 @@ export default class THEOPlayer extends Component<Props, State> {
     const { currentTime } = nativeEvent;
 
     this.props.onLoad({ duration, currentTime });
+
     this.setState({ loadedVideo: true });
   };
 
@@ -293,7 +295,6 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-
     this.setState({
       adBreakBegin: true,
       adBreakEnd: false,
@@ -331,6 +332,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdEnd = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
+
     this.setState({
       adEnd: true,
       adBegin: false,
@@ -358,6 +360,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   handleEnded() {
     this.setState({ playerClosed: true });
+    this.handleClosed();
   }
 
   handleClosed() {
