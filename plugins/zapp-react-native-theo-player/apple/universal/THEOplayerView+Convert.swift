@@ -72,9 +72,9 @@ import THEOplayerSDK
     class func adDescriptionArray(_ json: [AnyObject]) -> [GoogleImaAdDescription]? {
         let sources = RCTConvertArrayValue(#selector(adDescription), json)
             .compactMap { (item) -> GoogleImaAdDescription? in
-                var foo = item as? GoogleImaAdDescription
-                foo?.integration = .google_ima
-                return foo
+                var googleIMAadDiscription = item as? GoogleImaAdDescription
+                googleIMAadDiscription?.integration = .google_ima
+                return googleIMAadDiscription
             }
         return sources.count > 0 ? sources : nil
     }
