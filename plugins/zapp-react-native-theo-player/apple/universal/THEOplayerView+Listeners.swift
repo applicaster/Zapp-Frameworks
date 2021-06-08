@@ -221,6 +221,7 @@ extension THEOplayerView {
                          data: [RNTHEOplayerKeys.type: event.type,
                                 RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                                 RNTHEOplayerKeys.readyState: event.readyState.toString()])
+       
         onPlayerLoadedData?([RNTHEOplayerKeys.type: event.type,
                              RNTHEOplayerKeys.currentTime: event.getPatchedCurrentTime,
                              RNTHEOplayerKeys.readyState: event.readyState.toString()])

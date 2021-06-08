@@ -15,7 +15,7 @@ const THEOplayerViewNative: HostComponent<TheoProps> = requireNativeComponent(
 type NativeEventFn = ({ nativeEvent }: { nativeEvent: any }) => void;
 
 type TheoProps = {
-  ref?: React.Ref<any>;
+  refPlayer?: React.Ref<any>;
   style: ViewStyle;
   fullscreenOrientationCoupling: boolean;
   autoplay: boolean;
@@ -78,20 +78,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const THEOplayerView = React.forwardRef((props: TheoProps) => {
-  const window = useDimensions("window");
-
-  return (
-    <View style={styles.container}>
-      <THEOplayerViewNative
-        {...props}
-        style={{
-          ...styles.player,
-          maxWidth: window?.width,
-        }}
-      />
-    </View>
-  );
-});
+const THEOplayerView = React.forwardRef(
+  (props: TheoProps, ref: React.Ref<any>) => {
+    const window = useDimensions("window");
+    return (
+      <View style={styles.container}>
+        <THEOplayerViewNative
+          {...props}
+          ref={ref}
+          style={{
+            ...styles.player,
+            maxWidth: window?.width,
+          }}
+        />
+      </View>
+    );
+  }
+);
 
 export default THEOplayerView;

@@ -1,6 +1,6 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, findNodeHandle, UIManager } from "react-native";
 import * as R from "ramda";
 
 import { AnalyticsTracker } from "./Analytics";
@@ -30,6 +30,7 @@ type Entry = {
   title: string;
   extensions: {
     analyticsCustomProperties: object;
+    duration: number;
   };
 };
 
@@ -92,7 +93,8 @@ type State = {
   error: boolean;
   playerEnded: boolean;
   playerClosed: boolean;
-  buffering: Boolean;
+  buffering: boolean;
+  isContinueWatchingTimeSet: boolean;
 };
 
 const videoStyles = ({ width, height }) => ({
@@ -103,7 +105,7 @@ const videoStyles = ({ width, height }) => ({
 });
 
 export default class THEOPlayer extends Component<Props, State> {
-  _root: typeof THEOplayerView;
+  playerRef: React.Component<any, any, any>;
   analyticsTracker = new AnalyticsTracker();
 
   constructor(props) {
@@ -141,6 +143,7 @@ export default class THEOPlayer extends Component<Props, State> {
       playerEnded: false,
       playerClosed: false,
       buffering: false,
+      isContinueWatchingTimeSet: false,
     };
   }
 
@@ -234,12 +237,27 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerLoadedData = ({ nativeEvent }) => {
     const { duration } = this.state;
     const { currentTime } = nativeEvent;
-
+    if (this.state.adBegin === false) {
+      this.setCurrentTime();
+    }
     this.props.onLoad({ duration, currentTime });
-
     this.setState({ loadedVideo: true });
   };
 
+  setCurrentTime() {
+    console.log({ payload: this.props.entry });
+    const duration = this.props?.entry?.extensions?.duration;
+    if (duration && this.state.isContinueWatchingTimeSet === false) {
+      this.setState({ isContinueWatchingTimeSet: true });
+
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(this.playerRef),
+        UIManager.getViewManagerConfig("THEOplayerView").Commands
+          .setCurrentTime,
+        [duration]
+      );
+    }
+  }
   onPlayerLoadStart = ({ nativeEvent }) => {
     this.setState({ loadStart: true });
   };
@@ -333,6 +351,8 @@ export default class THEOPlayer extends Component<Props, State> {
   onAdEnd = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
 
+    this.setCurrentTime();
+
     this.setState({
       adEnd: true,
       adBegin: false,
@@ -354,8 +374,8 @@ export default class THEOPlayer extends Component<Props, State> {
     }
   };
 
-  _assignRoot = (component: typeof THEOplayerView) => {
-    this._root = component;
+  _assignRoot = (component: React.Component<any, any, any>) => {
+    this.playerRef = component;
   };
 
   handleEnded() {
@@ -375,7 +395,6 @@ export default class THEOPlayer extends Component<Props, State> {
 
   render() {
     const { entry, style: videoStyle, pluginConfiguration } = this.props;
-
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
