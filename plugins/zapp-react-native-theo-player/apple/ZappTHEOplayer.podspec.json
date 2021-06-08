@@ -24,10 +24,10 @@
       "OTHER_CFLAGS": "-fembed-bitcode"
     },
     "dependencies": {
-      "GoogleAds-IMA-iOS-SDK": ["= 3.11.4"],
+      "GoogleAds-IMA-iOS-SDK": ["= 3.14.3"],
       "React": [],
       "ZappCore": [],
-      "google-cast-sdk": ["= 4.3.0"]
+      "google-cast-sdk": ["= 4.6.0"]
     },
     "source_files": "ios/**/*.{swift}"
   },
