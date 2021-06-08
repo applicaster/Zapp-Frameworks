@@ -95,6 +95,12 @@ extension QuickBrickXray {
             let showXrayFloatingButtonEnabled = Bool(showXrayFloatingButtonEnabledString) {
             settings.showXrayFloatingButtonEnabled = showXrayFloatingButtonEnabled
         }
+        
+        if let networkRequestsEnabledString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.NetworkRequestsEnabled,
+                                                                                                           namespace: pluginNameSpace),
+            let networkRequestsEnabled = Bool(networkRequestsEnabledString) {
+            settings.networkRequestEnabled = networkRequestsEnabled
+        }
 
         if let networkRequestsIgnoredExtensionsString = FacadeConnector.connector?.storage?.localStorageValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,
                                                                                                               namespace: pluginNameSpace) {
@@ -141,6 +147,13 @@ extension QuickBrickXray {
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.ShowXrayFloatingButtonEnabled,
                                                                      value: showXrayFloatingButtonEnabled,
                                                                      namespace: pluginNameSpace)
+        
+        let networkRequestsEnabled = settings?.networkRequestEnabled ?? false ? "true" : "false"
+        _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsEnabled,
+                                                                     value: networkRequestsEnabled,
+                                                                     namespace: pluginNameSpace)
+        UserDefaults.standard.setValue(settings?.networkRequestEnabled,
+                                       forKey: PluginConfigurationKeys.NetworkRequestsEnabled)
         
         let networkRequestsIgnoredExtensions = settings?.networkRequestsIgnoredExtensions.joined(separator: ";") ?? ""
         _ = FacadeConnector.connector?.storage?.localStorageSetValue(for: PluginConfigurationKeys.NetworkRequestsIgnoredExtensions,

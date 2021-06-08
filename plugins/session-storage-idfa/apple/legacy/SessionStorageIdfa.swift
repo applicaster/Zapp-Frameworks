@@ -1,5 +1,5 @@
 //
-//  ZPSessionStorageIdfa.swift
+//  SessionStorageIdfa.swift
 //  ZappSessionStorageIdfa
 //
 //  Created by Alex Zchut on 11/08/2020.
@@ -7,9 +7,8 @@
 //
 
 import ZappPlugins
-import AdSupport
 
-@objc public class ZPSessionStorageIdfa : NSObject {
+@objc public class SessionStorageIdfa : NSObject {
     public var model: ZPPluginModel?
     public var configurationJSON: NSDictionary?
 
@@ -28,27 +27,9 @@ import AdSupport
     }
 }
 
-extension ZPSessionStorageIdfa: ZPAppLoadingHookProtocol {
-    @objc open func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        
-        // Check whether advertising tracking is enabled
-        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-            let idfaString = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-            
-            _ = ZAAppConnector.sharedInstance().storageDelegate?.sessionStorageSetValue(for: "idfa",
-                                                                                        value: idfaString,
-                                                                                        namespace: nil)
-            
-            _ = ZAAppConnector.sharedInstance().storageDelegate?.sessionStorageSetValue(for: "advertisingIdentifier",
-                                                                                        value: idfaString,
-                                                                                        namespace: nil)
-        }
-        
-        completion?()
-    }
-}
 
-extension ZPSessionStorageIdfa: ZPGeneralPluginProtocol {
+
+extension SessionStorageIdfa: ZPGeneralPluginProtocol {
     @objc open func activate(options: [AnyHashable: Any]?) {
         //leaving empty as it is default implementation
     }

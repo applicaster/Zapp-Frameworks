@@ -25,6 +25,10 @@ public class NetworkRequestsManager {
     }
 
     public static func startListening() {
+        guard networkRequestsLoggingEnabled == true else {
+            return
+        }
+        
         Sniffer.ignore(extensions: ignoredExtensions)
         Sniffer.ignore(domains: ignoreDomains)
         Sniffer.onLogger = { (url: URL, logType: Sniffer.LogType, content: [String: Any]) in
@@ -54,6 +58,11 @@ public class NetworkRequestsManager {
             instance.semaphore.signal()
         }
         Sniffer.start()
+    }
+
+    static var networkRequestsLoggingEnabled: Bool {
+        let key = "networkRequestsEnabled"
+        return UserDefaults.standard.bool(forKey: key)
     }
 
     static var ignoredExtensions: [String] {

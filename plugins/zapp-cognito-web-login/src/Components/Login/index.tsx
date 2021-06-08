@@ -7,6 +7,8 @@ import { getStyles } from "../../Utils/Customization";
 import { getRiversProp } from "./Utils";
 import { WebView } from "react-native-webview";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
+import KeyboardSpacer from "react-native-keyboard-spacer";
+
 import {
   saveLoginDataToStorages,
   isLoginRequired,
@@ -181,12 +183,15 @@ const Login = (props) => {
           }}
         >
           {loading === false && (
-            <WebView
-              source={{
-                uri: loginURL,
-              }}
-              onMessage={onMessage}
-            />
+            <>
+              <WebView
+                source={{
+                  uri: loginURL,
+                }}
+                onMessage={onMessage}
+              />
+              <KeyboardSpacer />
+            </>
           )}
         </SafeAreaView>
         {loading === false && payload && isHomeScreen(navigator) === false && (

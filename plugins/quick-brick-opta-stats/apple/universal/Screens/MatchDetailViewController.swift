@@ -322,7 +322,9 @@ class MatchDetailViewController: ViewControllerBase, UITableViewDelegate, UITabl
     fileprivate func showPlayerDetails(id: String) {
         if id.isEmpty { return }
 
-        let vc = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as! PlayerDetailsViewController
+        guard let vc = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as? PlayerDetailsViewController else {
+            return
+        }
         vc.personID = id
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -9,6 +9,7 @@ import com.applicaster.firebasepushpluginandroid.FIREBASE_DEFAULT_CHANNEL_ID
 import com.applicaster.firebasepushpluginandroid.FirebasePushProvider
 import com.applicaster.firebasepushpluginandroid.factory.DefaultNotificationFactory
 import com.applicaster.firebasepushpluginandroid.push.PushMessage
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -78,6 +79,7 @@ class APMessagingService : FirebaseMessagingService() {
         var tag: String? = ""
         var channel: String? = FIREBASE_DEFAULT_CHANNEL_ID
         var image: Uri? = null
+        var groupId: String? = null
 
         if(null != message.notification) {
             APLogger.info(TAG, "The message received had notification attached, using it to retrieve params")
@@ -93,6 +95,12 @@ class APMessagingService : FirebaseMessagingService() {
             if (message.data.containsKey("tag")) tag = message.data["tag"]
             if (message.data.containsKey("android_channel_id")) channel = message.data["android_channel_id"]
             if (message.data.containsKey("image") && !TextUtils.isEmpty(message.data["image"])) image = Uri.parse(message.data["image"])
+            if (message.data.containsKey("groupid")) groupId = message.data["groupid"]
+
+            if(!groupId.isNullOrBlank() && !shouldPresent(groupId)) {
+                APLogger.info(TAG, "Notification belongs to the groupid '$groupId' that was already seen, discarding")
+                return
+            }
         }
         val action = message.data["url"]
 
@@ -123,7 +131,21 @@ class APMessagingService : FirebaseMessagingService() {
                 image = image
         )
         notify(notificationFactory, pushMsg)
+        if(!groupId.isNullOrBlank()) {
+            storePresented(groupId)
+        }
     }
+
+    private fun storePresented(tag: String) {
+        // store seen time just in case we will later want to improve the logic
+        LocalStorage.set(tag, "" + System.currentTimeMillis(), seenNamespace)
+    }
+
+    private fun shouldPresent(tag: String): Boolean {
+        return LocalStorage.get(tag, seenNamespace).isNullOrEmpty()
+    }
+
+    private val seenNamespace get() = FirebasePushProvider.pluginId + ".seenEvents"
 
     // set up notification manager, create notification and notify
     private fun notify(notificationFactory: DefaultNotificationFactory, pushMessage: PushMessage) {

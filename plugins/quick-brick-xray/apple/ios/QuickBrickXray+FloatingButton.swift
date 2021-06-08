@@ -33,12 +33,10 @@ extension QuickBrickXray {
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
 
-        if targetView.subviews.count > 1,
-           let lastView = targetView.subviews.last {
-            targetView.insertSubview(button, belowSubview: lastView)
-        }
-        else {
-            targetView.addSubview(button)
+        targetView.addSubview(button)
+        
+        DispatchQueue.main.async {
+            targetView.bringSubviewToFront(button)
         }
         
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true

@@ -17,6 +17,7 @@ struct PluginConfigurationKeys {
     static let FileLogLevel = "fileLogLevel"
     static let ShortcutEnabled = "shortcutEnabled"
     static let ShowXrayFloatingButtonEnabled = "showXrayFloatingButtonEnabled"
+    static let NetworkRequestsEnabled = "networkRequestsEnabled"
     static let NetworkRequestsIgnoredExtensions = "networkRequestsIgnoredExtensions"
     static let NetworkRequestsIgnoredDomains = "networkRequestsIgnoredDomains"
 

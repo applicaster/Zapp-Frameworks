@@ -18,7 +18,10 @@ public class ChromecastPlayableItem: NSObject {
         static let analytics = "analytics"
         static let imageUrl = "imageUrl"
         static let posterUrl = "posterUrl"
-
+        static let contentId = "contentId"
+        static let customData = "customData"
+        static let extensions = "extensions"
+        static let sourceAsContentId = "sourceAsContentId"
     }
     
     public var entry: [String: Any]?
@@ -40,8 +43,12 @@ public class ChromecastPlayableItem: NSObject {
         return entry?[Metadata.duration] as? TimeInterval ?? 0.00
     }()
     
+    lazy var mediaUrl: String? = {
+        return entry?[Metadata.mediaUrl] as? String
+    }()
+    
     lazy public var src: String? = {
-        return entry?[Metadata.mediaUrl]  as? String
+        return sourceAsContentId ? "" : mediaUrl
     }()
     
     lazy public var analytics: NSDictionary? = {
@@ -58,5 +65,22 @@ public class ChromecastPlayableItem: NSObject {
     
     lazy public var chromecastPosterImageUrl: String? = {
         return entry?[Metadata.posterUrl]  as? String
+    }()
+    
+    lazy public var extensions: [String: Any]? = {
+        return entry?[Metadata.extensions] as? [String: Any]
+    }()
+    
+    lazy public var contentId: String? = {
+        return sourceAsContentId ? mediaUrl : extensions?[Metadata.contentId] as? String
+    }()
+    
+    lazy var sourceAsContentId: Bool = {
+        let value = extensions?[Metadata.sourceAsContentId] as? Int ?? 0
+        return value == 1
+    }()
+    
+    lazy public var customData: Any? = {
+        return extensions?[Metadata.customData]
     }()
 }

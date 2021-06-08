@@ -29,6 +29,10 @@ struct SettingsIndexesHelper {
     static func isXRayFloatingButtonEnabled(in indexPath: IndexPath) -> Bool {
         return indexPath == IndexPath(row: 0, section: 3)
     }
+    
+    static func isNetworkRequestEnabled(in indexPath: IndexPath) -> Bool {
+        return indexPath == IndexPath(row: 0, section: 4)
+    }
 }
 
 struct Cell {
@@ -37,7 +41,7 @@ struct Cell {
 }
 
 struct Section {
-    var footterText: String?
+    var footerText: String?
     var cells: [Cell] = []
 }
 
@@ -84,7 +88,7 @@ class SettingsHelper {
     }
 
     static func customSettingsData() -> Section {
-        var customSettings = Section(footterText: "Please note: This switch will enable custom settings for logger plugin that will override plugin configuration settings and environment rules. Will take effect until will not be disabled")
+        var customSettings = Section(footerText: "Please note: This switch will enable custom settings for logger plugin that will override plugin configuration settings and environment rules. Will take effect until will not be disabled")
         let cell = Cell(title: "Custom settings",
                         cellIdentifier: switchCellIndentifier)
         customSettings.cells.append(cell)
@@ -92,7 +96,7 @@ class SettingsHelper {
     }
 
     static func shortcutAccess() -> Section {
-        var shortcutAccess = Section(footterText: "Enables option to start logger from application shortcut icon.")
+        var shortcutAccess = Section(footerText: "Enables option to start logger from application shortcut icon.")
         let cell = Cell(title: "Shortcut access",
                         cellIdentifier: switchCellIndentifier)
         shortcutAccess.cells.append(cell)
@@ -100,7 +104,7 @@ class SettingsHelper {
     }
 
     static func fileLogLevel() -> Section {
-        var fileLogLevel = Section(footterText: "Defines minimum log level that will be saved to log file. If Off will not save any data to local file")
+        var fileLogLevel = Section(footerText: "Defines minimum log level that will be saved to log file. If Off will not save any data to local file")
         let cell = Cell(title: "File log level",
                         cellIdentifier: logLevelCellIndentifier)
         fileLogLevel.cells.append(cell)
@@ -108,7 +112,7 @@ class SettingsHelper {
     }
     
     static func showXrayFloatingButton() -> Section {
-        var xRayFloatingButton = Section(footterText: "Enables appearance of XRay floating button on screen")
+        var xRayFloatingButton = Section(footerText: "Enables appearance of XRay floating button on screen")
         let cell = Cell(title: "Show Xray floating button",
                         cellIdentifier: switchCellIndentifier)
         xRayFloatingButton.cells.append(cell)
@@ -116,14 +120,19 @@ class SettingsHelper {
     }
     
     static func networkRequests() -> Section {
-        var fileLogLevel = Section(footterText: "Defines Parameters for Network Requests")
+        var networkRequestsSection = Section(footerText: "Defines Parameters for Network Requests")
+
+        let cell = Cell(title: "Enable network requests logging",
+                        cellIdentifier: switchCellIndentifier)
+        networkRequestsSection.cells.append(cell)
+        
         let extensionsCell = Cell(title: "Ignored Extensions",
                         cellIdentifier: networkRequestsIgnoreExtensionsCellIdentifier)
-        fileLogLevel.cells.append(extensionsCell)
+        networkRequestsSection.cells.append(extensionsCell)
         
         let domainsCell = Cell(title: "Ignored Domains",
                         cellIdentifier: networkRequestsIgnoreDomainsCellIdentifier)
-        fileLogLevel.cells.append(domainsCell)
-        return fileLogLevel
+        networkRequestsSection.cells.append(domainsCell)
+        return networkRequestsSection
     }
 }

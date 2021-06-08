@@ -37,40 +37,21 @@ extension DidomiCMP {
         eventListener.onNoticeClickAgree = { _ in
             // Click on Agree in the notice
             // Request tracking permission from the user
-            self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
+            self.requestTrackingAuthorization { _ in
+                Didomi.shared.setUserAgreeToAll()
                 self.procceedWithProcessCompletion()
             }
         }
-        
+
         eventListener.onNoticeClickDisagree = { _ in
             self.procceedWithProcessCompletion()
         }
-            
 
         eventListener.onPreferencesClickAgreeToAll = { _ in
             // Click on Agree to all in the Preferences popup
             // Request tracking permission from the user
-            self.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    Didomi.shared.setUserAgreeToAll()
-                case .denied:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .restricted:
-                    Didomi.shared.setUserDisagreeToAll()
-                case .notDetermined:
-                    break
-                }
+            self.requestTrackingAuthorization { _ in
+                Didomi.shared.setUserAgreeToAll()
             }
         }
 
@@ -78,21 +59,23 @@ extension DidomiCMP {
     }
 
     func saveParamsToSessionStorageIfExists() {
-        if let didomiGDPRApplies = UserDefaults.standard.string(forKey: Params.didomiGDPRApplies) {
-            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
-                                                                           value: didomiGDPRApplies,
-                                                                           namespace: Params.pluginIdentifier)
-        }
+        DispatchQueue.main.async {
+            if let didomiGDPRApplies = UserDefaults.standard.string(forKey: Params.didomiGDPRApplies) {
+                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiGDPRApplies,
+                                                                               value: didomiGDPRApplies,
+                                                                               namespace: Params.pluginIdentifier)
+            }
 
-        if let didomiIABConsent = UserDefaults.standard.string(forKey: Params.didomiIABConsent) {
-            _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiIABConsent,
-                                                                           value: didomiIABConsent,
-                                                                           namespace: Params.pluginIdentifier)
+            if let didomiIABConsent = UserDefaults.standard.string(forKey: Params.didomiIABConsent) {
+                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.didomiIABConsent,
+                                                                               value: didomiIABConsent,
+                                                                               namespace: Params.pluginIdentifier)
+            }
         }
     }
-    
+
     func procceedWithProcessCompletion() {
-        self.presentationCompletion?()
-        self.presentationCompletion = nil
+        presentationCompletion?()
+        presentationCompletion = nil
     }
 }
