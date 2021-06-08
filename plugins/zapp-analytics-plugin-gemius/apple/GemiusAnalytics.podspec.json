@@ -1,6 +1,6 @@
 {
   "name": "GemiusAnalytics",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0"
@@ -17,7 +17,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-analytics-plugin-gemius/0.3.2"
+    "tag": "@@applicaster/zapp-analytics-plugin-gemius/0.4.0"
   },
   "frameworks": [
     "Foundation",

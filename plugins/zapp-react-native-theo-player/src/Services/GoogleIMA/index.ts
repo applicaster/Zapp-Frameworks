@@ -75,6 +75,5 @@ function getZappAdsData({ entry, pluginConfiguration }) {
       ad_url: tag_midroll_url,
     });
   }
-
   return video_ads;
 }

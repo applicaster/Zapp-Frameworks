@@ -24,10 +24,20 @@ extension GemiusAnalytics {
         static let videoLoaded = "Player Loaded Video"
     }
     
+    struct GemiusCustomParams {
+        static let sc = "_SC"
+        static let sct = "_SCT"
+        static let scd = "_SCD"
+
+    }
+    
     fileprivate var skipKeys: [String] {
         return [
             "video_subtype",
-            "video_type"
+            "video_type",
+            GemiusCustomParams.sc,
+            GemiusCustomParams.scd,
+            GemiusCustomParams.sct
         ]
     }
 
@@ -93,6 +103,26 @@ extension GemiusAnalytics {
            let jsonData = jsonString.data(using: String.Encoding.utf8),
            let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: AnyObject] {
             for (key, value) in jsonDictionary {
+                switch key {
+                case GemiusCustomParams.sc:
+                    //update id
+                    if let value = jsonDictionary[key] as? String {
+                        lastProgramID = value
+                    }
+                case GemiusCustomParams.sct:
+                    //update name
+                    if let value = jsonDictionary[key] as? String {
+                        data.name = value
+                    }
+                case GemiusCustomParams.scd:
+                    //update duration
+                    if let value = jsonDictionary[key] as? Int {
+                        data.duration = NSNumber(value: value)
+                    }
+                default:
+                    break
+                }
+                
                 if self.skipKeys.contains(key) == false {
                     data.addCustomParameter(key, value: "\(value)")
                 }
@@ -108,7 +138,7 @@ extension GemiusAnalytics {
                                        with: nil)
         
         // set program data
-        gemiusPlayerObject?.newProgram(itemId, with: data)
+        gemiusPlayerObject?.newProgram(lastProgramID, with: data)
 
         return proceedPlayerEvent(eventName)
     }

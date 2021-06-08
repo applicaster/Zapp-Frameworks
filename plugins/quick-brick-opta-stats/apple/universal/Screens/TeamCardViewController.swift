@@ -344,6 +344,7 @@ extension TeamCardViewController: UITableViewDataSource {
             var itemsCount = 0
 
             if let list = squadCardViewModel.squadCard.value?.squad?.persons {
+                squadMembers = list
                 itemsCount = list.count
             } else if let list = teamCardViewModel.teamCard.value?.players {
                 itemsCount = list.count
@@ -364,17 +365,15 @@ extension TeamCardViewController: UITableViewDataSource {
                 var cell = UITableViewCell()
                 let index = indexPath.row - 1
 
-                if index % 2 == 0 {
-                    cell = tableView.dequeueReusableCell(withIdentifier: "TeamCardPlayerTableViewCell", for: indexPath) as! TeamCardPlayerTableViewCell
-                } else {
-                    cell = tableView.dequeueReusableCell(withIdentifier: "TeamCardPlayerTableViewCellAlt", for: indexPath) as! TeamCardPlayerTableViewCell
-                }
+                let identifier = index % 2 == 0 ? "TeamCardPlayerTableViewCell" : "TeamCardPlayerTableViewCellAlt"
+                cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! TeamCardPlayerTableViewCell
 
-                if cell is TeamCardPlayerTableViewCell && index < squadMembers.count {
-                    (cell as! TeamCardPlayerTableViewCell).person = squadMembers[index]
-                }
-                if let list = teamCardViewModel.teamCard.value?.players, cell is TeamCardPlayerTableViewCell && index < list.count {
-                    (cell as! TeamCardPlayerTableViewCell).player = list[index]
+                if let cell = cell as? TeamCardPlayerTableViewCell {
+                    if index < squadMembers.count {
+                        cell.person = squadMembers[index]
+                    } else if let list = teamCardViewModel.teamCard.value?.players, index < list.count {
+                        cell.player = list[index]
+                    }
                 }
 
                 cell.selectionStyle = .none
@@ -429,7 +428,9 @@ extension TeamCardViewController: UITableViewDelegate {
 
         let index = indexPath.row - 1
 
-        let viewController = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as! PlayerDetailsViewController
+        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: PlayerDetailsViewController.storyboardID) as? PlayerDetailsViewController else {
+            return
+        }
 
         if index < squadMembers.count {
             let person = squadMembers[index]

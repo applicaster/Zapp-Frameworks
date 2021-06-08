@@ -6,9 +6,12 @@ import THEOplayerSDK
     class func typedSource(_ json: [String: AnyObject]) -> TypedSource? {
         logger?.debugLog(message: "New data source recieved",
                          data: ["source": json])
-        
+
         if let src = RCTConvert.nsString(json["src"]),
-           let type = RCTConvert.nsString(json["type"]) {
+           var type = RCTConvert.nsString(json["type"]) {
+            if type == "video/hls" {
+                type = "application/vnd.apple.mpegurl"
+            }
             if let drm = RCTConvert.nsDictionary(json["drm"]),
                let fairplay = RCTConvert.nsDictionary(drm["fairplay"]),
                let integrationType = RCTConvert.nsString(drm["integration"]) {
@@ -55,12 +58,10 @@ import THEOplayerSDK
     }
 
     @objc(AdDescription:)
-    class func adDescription(_ json: [String: AnyObject]) -> THEOAdDescription? {
+    class func adDescription(_ json: [String: AnyObject]) -> GoogleImaAdDescription? {
         if let src = RCTConvert.nsString(json["sources"]) {
-            return THEOAdDescription(
-                src: src,
-                timeOffset: RCTConvert.nsString(json["timeOffset"]),
-                skipOffset: RCTConvert.nsString(json["skipOffset"])
+            return GoogleImaAdDescription(
+                src: src
             )
         } else {
             return nil
@@ -68,9 +69,13 @@ import THEOplayerSDK
     }
 
     @objc(AdDescriptionArray:)
-    class func adDescriptionArray(_ json: [AnyObject]) -> [THEOAdDescription]? {
+    class func adDescriptionArray(_ json: [AnyObject]) -> [GoogleImaAdDescription]? {
         let sources = RCTConvertArrayValue(#selector(adDescription), json)
-            .compactMap { $0 as? THEOAdDescription }
+            .compactMap { (item) -> GoogleImaAdDescription? in
+                var googleIMAadDiscription = item as? GoogleImaAdDescription
+                googleIMAadDiscription?.integration = .google_ima
+                return googleIMAadDiscription
+            }
         return sources.count > 0 ? sources : nil
     }
 

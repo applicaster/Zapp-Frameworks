@@ -42,6 +42,15 @@ export async function setConfig(environment = "production") {
   await InPlayer.setConfig(environment);
 }
 
+export async function getPurchaseHistory() {
+  try {
+    const result = await InPlayer.Payment.getPurchaseHistory("active", 0, 10);
+    return result?.data?.collection;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getAssetByExternalId(payload) {
   const assetData = externalAssetData({ payload });
   const errorEvent = logger
@@ -531,7 +540,6 @@ export async function validateExternalPayment({
       receipt: receipt,
       amazonUserId: isAmazonPlatform(store) ? amazon_user_id : null,
     });
-
     logger.debug({
       message: `InPlayer validate external payment >> succeed: true`,
       data: {

@@ -181,32 +181,6 @@ extension MatchesCardViewController: UITableViewDataSource {
         }
         cell.match = match
 
-        /* if let matchID = match.id {
-             if let matchDetail = self.matchDetailForMatchId[matchID] {
-                 cell.matchDetail = matchDetail
-             } else {
-                 let operation = BlockOperation {
-                     let matchStatsCardViewModel = MatchStatsCardViewModel(fixtureId: matchID)
-                     matchStatsCardViewModel.matchStatsCard.asObservable().subscribe { e in
-                         switch e {
-                         case .next(_):
-                             if let statCard = matchStatsCardViewModel.matchStatsCard.value {
-                                 cell.matchDetail = statCard
-                                 self.matchDetailForMatchId[matchID] = statCard
-                             }
-                         case .error(let error):
-                             print("Error: \(error)")
-                         case .completed:
-                             break
-                         }
-                         }.disposed(by: self.bag)
-
-                     matchStatsCardViewModel.fetch()
-                 }
-
-                 operationQueue.addOperation(operation)
-             }
-         } */
         cell.selectionStyle = .none
         cell.clipsToBounds = false
         return cell

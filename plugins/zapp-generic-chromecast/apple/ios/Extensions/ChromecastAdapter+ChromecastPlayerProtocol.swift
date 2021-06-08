@@ -52,12 +52,15 @@ extension ChromecastAdapter: ChromecastPlayerProtocol {
         let mediaTracks = getGCKMediaTracks(item: item)
         let duration = getDuration(item: item)
         let trackStyle = getTrackStyle(item: item)
+        let customData = getCustomData(item: item)
 
-        guard let contentUrl = URL(string: contentSource) else {
-            return nil
+        let mediaInfoBuilder: GCKMediaInformationBuilder
+        if let contentUrl = URL(string: contentSource) {
+            mediaInfoBuilder = GCKMediaInformationBuilder(contentURL: contentUrl)
+        } else {
+            mediaInfoBuilder = GCKMediaInformationBuilder(entity: "")
         }
         
-        let mediaInfoBuilder = GCKMediaInformationBuilder(contentURL: contentUrl)
         mediaInfoBuilder.contentID = contentId
         mediaInfoBuilder.streamType = streamType
         mediaInfoBuilder.contentType = contentType
@@ -65,6 +68,8 @@ extension ChromecastAdapter: ChromecastPlayerProtocol {
         mediaInfoBuilder.mediaTracks = mediaTracks
         mediaInfoBuilder.textTrackStyle = trackStyle
         mediaInfoBuilder.streamDuration = duration
+        mediaInfoBuilder.customData = customData
+
         return mediaInfoBuilder.build()
     }
 
@@ -127,7 +132,7 @@ extension ChromecastAdapter: ChromecastPlayerProtocol {
     }
 
     fileprivate func getContentID(item: ChromecastPlayableItem) -> String {
-        return item.src ?? ""
+        return item.contentId ?? ""
     }
     
     fileprivate func getContentSource(item: ChromecastPlayableItem) -> String {
@@ -142,6 +147,9 @@ extension ChromecastAdapter: ChromecastPlayerProtocol {
         return ""
     }
 
+    fileprivate func getCustomData(item: ChromecastPlayableItem) -> Any? {
+        return item.customData
+    }
     /**
      * Loads the currently selected item in the current cast media session.
      * @param appending If YES, the item is appended to the current queue if there

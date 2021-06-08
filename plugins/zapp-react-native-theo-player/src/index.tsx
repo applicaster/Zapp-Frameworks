@@ -148,10 +148,10 @@ export default class THEOPlayer extends Component<Props, State> {
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.analyticsTracker.handleChange(this.state);
 
-    if (this.state.playerEnded) {
+    if (prevState?.playerEnded === false && this.state.playerEnded) {
       this.handleEnded();
     }
   }
@@ -209,6 +209,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
+
     this.setState({ currentTime });
   };
 
@@ -235,6 +236,7 @@ export default class THEOPlayer extends Component<Props, State> {
     const { currentTime } = nativeEvent;
 
     this.props.onLoad({ duration, currentTime });
+
     this.setState({ loadedVideo: true });
   };
 
@@ -285,13 +287,14 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerError = ({ nativeEvent }) => {
     if (!R.isNil(this.props?.onError)) {
-      this.props?.onError(nativeEvent);
+      this.props?.onError({
+        error: Error(nativeEvent?.message),
+      });
     }
   };
 
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-
     this.setState({
       adBreakBegin: true,
       adBreakEnd: false,
@@ -329,6 +332,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdEnd = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
+
     this.setState({
       adEnd: true,
       adBegin: false,
@@ -356,6 +360,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   handleEnded() {
     this.setState({ playerClosed: true });
+    this.handleClosed();
   }
 
   handleClosed() {
@@ -375,6 +380,7 @@ export default class THEOPlayer extends Component<Props, State> {
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
+    const drm = getDRMData({ entry });
 
     return (
       <View
@@ -428,10 +434,11 @@ export default class THEOPlayer extends Component<Props, State> {
               {
                 type: entry?.content?.type,
                 src: entry?.content?.src,
+                drm,
               },
             ],
             ads: getIMAData({ entry, pluginConfiguration }),
-            drm: getDRMData({ entry }),
+            drm,
             poster: posterImage,
           }}
         />

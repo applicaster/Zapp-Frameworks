@@ -29,15 +29,27 @@ function createManifest({ version, platform }) {
     extra_dependencies: extra_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/session-storage-idfa@${version}`],
+    custom_configuration_fields: custom_configuration_fields[platform],
     targets: targets[platform],
     ui_frameworks: ui_frameworks[platform]
   };
   return manifest;
 }
 const min_zapp_sdk = {
+  ios: "16.0.0-Dev",
   ios_for_quickbrick: "2.0.2-Dev",
   tvos_for_quickbrick: "2.0.2-Dev",
 };
+
+const custom_configuration_fields_apple = [
+  {
+    type: "text",
+    key: "plist.NSUserTrackingUsageDescription",
+    label: "ATT description",
+    default: "This identifier will be used to deliver personalized ads to you.",
+    tooltip_text: "Please enter the description for ATT"
+  }
+];
 
 const extra_dependencies_apple = {
   ZappSessionStorageIdfa:
@@ -63,13 +75,16 @@ const extra_dependencies = {
   tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
+const custom_configuration_fields = {
+  ios: custom_configuration_fields_apple,
+  ios_for_quickbrick: custom_configuration_fields_apple,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
+};
+
 const api_apple = {
   require_startup_execution: true,
-  class_name: "ZPSessionStorageIdfa",
+  class_name: "SessionStorageIdfa",
   modules: ["ZappSessionStorageIdfa"],
-  plist: {
-    NSUserTrackingUsageDescription: "This identifier will be used to deliver personalized ads to you.",
-  },
 };
 
 const api = {

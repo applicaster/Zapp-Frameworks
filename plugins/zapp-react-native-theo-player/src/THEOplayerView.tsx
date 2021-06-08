@@ -59,6 +59,7 @@ type TheoProps = {
       {
         type: string;
         src: string;
+        drm: any;
       }
     ];
     ads: any;

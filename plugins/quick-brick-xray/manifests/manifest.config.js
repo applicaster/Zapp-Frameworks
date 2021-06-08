@@ -201,7 +201,7 @@ function extra_npm_dependencies(platform) {
     platform === "android_tv_for_quickbrick" ||
     platform === "amazon_fire_tv_for_quickbrick"
   ) {
-    return ["@applicaster/x-ray@0.1.7"];
+    return ["@applicaster/x-ray@0.2.1"];
   }
   return [];
 }
@@ -237,6 +237,7 @@ const project_dependencies = {
 };
 
 const api_apple = {
+  require_startup_execution: true,
   class_name: "QuickBrickXray",
   modules: ["QuickBrickXray"],
 };

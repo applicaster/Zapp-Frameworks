@@ -1,6 +1,6 @@
 {
   "name": "ZappTHEOplayer",
-  "version": "0.6.3",
+  "version": "0.6.7",
   "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.3"
+    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.7"
   },
   "static_framework": true,
   "ios": {
@@ -25,7 +25,7 @@
     },
     "dependencies": {
       "GoogleAds-IMA-iOS-SDK": [
-        "= 3.13.0"
+        "= 3.11.4"
       ],
       "React": [],
       "ZappCore": [],
