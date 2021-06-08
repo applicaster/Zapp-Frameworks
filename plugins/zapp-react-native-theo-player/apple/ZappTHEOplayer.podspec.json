@@ -27,7 +27,7 @@
       "GoogleAds-IMA-iOS-SDK": ["= 3.14.3"],
       "React": [],
       "ZappCore": [],
-      "google-cast-sdk": ["= 4.6.0"]
+      "google-cast-sdk-no-bluetooth": ["= 4.6.0"]
     },
     "source_files": "ios/**/*.{swift}"
   },

@@ -8,6 +8,7 @@ import CoreData
 import CoreGraphics
 import CoreMedia
 import Foundation
+import GoogleCast
 import GoogleInteractiveMediaAds
 import MediaPlayer
 import Swift
@@ -1548,6 +1549,8 @@ public protocol Chromecast : THEOplayerSDK.EventDispatcherProtocol {
   var receiverName: Swift.String? { get }
   var source: THEOplayerSDK.SourceDescription? { get set }
   var state: THEOplayerSDK.PlayerCastState? { get }
+  var castButtonDelegate: GoogleCast.GCKUICastButtonDelegate? { get }
+  func setCastButtonDelegate(_ delegate: GoogleCast.GCKUICastButtonDelegate?)
   func start()
   func stop()
   func join()
@@ -1824,6 +1827,11 @@ public protocol Track : THEOplayerSDK.EventDispatcherProtocol {
   var label: Swift.String { get }
   var id: Swift.String { get }
   var uid: Swift.Int { get }
+}
+@_hasMissingDesignatedInitializers public class THEOplayerCastHelper {
+  public static var theoplayerReceiverApplicationID: Swift.String
+  public static func setGCKCastContextSharedInstanceWithDefaultCastOptions()
+  @objc deinit
 }
 extension SourceDescription {
   public var ads: [THEOplayerSDK.AdDescription]? {
