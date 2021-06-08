@@ -7,22 +7,18 @@ import { styles } from "./styles";
 
 import {requireNativeComponent} from 'react-native';
 
+import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+
 
 const OptaStatsContainer = requireNativeComponent('OptaStatsContainer');
 
 const logger = createLogger();
 
-useUrlSchemeHandler = async ({ query, url, onFinish }) => {
+openScreen = async(url, complete) => {
   const packageName = DEFAULT.packageName;
   const methodName = DEFAULT.methodName;
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
-
-  const complete = () => {
-    onFinish((done) => {
-      done();
-    });
-  }
 
   if (!packageName) {
     logger.error(`React package name is not set`);
@@ -57,7 +53,34 @@ useUrlSchemeHandler = async ({ query, url, onFinish }) => {
   complete();
 };
 
-export default StatScreens = ({}) => {
+useUrlSchemeHandler = async ({ query, url, onFinish }) => {
+
+  const complete = () => {
+    onFinish((done) => {
+      done();
+    });
+  }
+  openScreen(url, complete);
+
+};
+
+export default StatScreens = (params: Any) => {
+  const url = params?.screenData?.link?.href;
+  if(url) {
+    logger.info({message: "COPA url", data: {url}});
+    const navigator = useNavigation();
+    const onDismiss = () => {
+      if (navigator.canGoBack()) {
+        logger.info("Dismissed native screen, going back");
+        navigator.goBack();
+      } else {
+        logger.warn("Dismissed native screen, can't go back, trying to go home");
+        navigator.goHome();
+      }
+    };
+    openScreen(url, onDismiss);
+    //return <View style={styles.container}></View>; //fake screen does not work
+  }
   return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
 };
 
