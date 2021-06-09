@@ -1,6 +1,9 @@
 package com.applicaster.firebasepushpluginandroid.services
 
+import android.app.NotificationManager
+import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.text.TextUtils
 import androidx.annotation.WorkerThread
@@ -155,9 +158,24 @@ class APMessagingService : FirebaseMessagingService() {
             with(NotificationManagerCompat.from(this@APMessagingService.applicationContext)) {
                 if(pushMessage.tag.isEmpty())
                     notify(notificationFactory.generateNotificationId(), notification)
-                else
-                    notify(pushMessage.tag, notificationFactory.generateNotificationId(), notification)
+                else {
+                    val id = getId(pushMessage.tag)
+                    notify(pushMessage.tag, id, notification)
+                }
             }
         }
+    }
+
+    private fun getId(tag: String): Int {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.activeNotifications?.let {
+                val tagged = it.filterNotNull().firstOrNull { tag == it.tag }
+                if(null != tagged) {
+                    return tagged.id
+                }
+            }
+        }
+        return tag.hashCode()
     }
 }
