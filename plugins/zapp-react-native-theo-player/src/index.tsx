@@ -31,6 +31,7 @@ type Entry = {
   extensions: {
     analyticsCustomProperties: object;
     duration: number;
+    resumeTime: string;
   };
 };
 
@@ -110,6 +111,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   constructor(props) {
     super(props);
+    this.getCurrentTime = this.getCurrentTime.bind(this);
 
     this.state = {
       playerCreated: false,
@@ -148,6 +150,7 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   componentDidMount() {
+    console.log("I am alive!!!");
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
@@ -210,9 +213,14 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
+  getCurrentTime() {
+    console.log("CallMe! getCurrentTime");
+    return this.state.currentTime;
+  }
+
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-
+    // this.props?.onProgress && this.props?.onProgress({ currentTime });
     this.setState({ currentTime });
   };
 
@@ -246,15 +254,26 @@ export default class THEOPlayer extends Component<Props, State> {
 
   setCurrentTime() {
     console.log({ payload: this.props.entry });
-    const duration = this.props?.entry?.extensions?.duration;
-    if (duration && this.state.isContinueWatchingTimeSet === false) {
+    const resumeTime = this.props?.entry?.extensions?.resumeTime;
+    const resumeTimeInt = parseInt(resumeTime);
+    console.log({ resumeTimeInt });
+    if (
+      resumeTimeInt &&
+      resumeTimeInt > 0 &&
+      this.state.isContinueWatchingTimeSet === false
+    ) {
+      console.log({
+        resumeTimeInt,
+        isContinueWatchingTimeSet:
+          this.state.isContinueWatchingTimeSet === false,
+      });
       this.setState({ isContinueWatchingTimeSet: true });
 
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(this.playerRef),
         UIManager.getViewManagerConfig("THEOplayerView").Commands
           .setCurrentTime,
-        [duration]
+        [resumeTimeInt]
       );
     }
   }
@@ -367,7 +386,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
     if (type === "onCloseButtonHandle") {
       if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
-        this.props?.onFullscreenPlayerDidDismiss();
+        this.handleClosed();
       } else if (this.props?.playerEvent) {
         this.handleClosed();
       }
@@ -384,11 +403,14 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   handleClosed() {
-    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
-      this.props?.onEnd();
+    console.log("handleClosed");
+    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnded)) {
+      console.log("handleClosed1");
+      this.props?.onEnded();
     }
 
     if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
+      console.log("handleClosed2");
       this.props?.onEnded();
     }
   }
@@ -400,7 +422,6 @@ export default class THEOPlayer extends Component<Props, State> {
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
     const drm = getDRMData({ entry });
-
     return (
       <View
         style={
