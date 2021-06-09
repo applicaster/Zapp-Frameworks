@@ -1,7 +1,9 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, StatusBar } from "react-native";
 import * as R from "ramda";
+
+import { isTV } from "@applicaster/zapp-react-native-utils/reactUtils";
 
 import { AnalyticsTracker } from "./Analytics";
 import { fetchImageFromMetaByKey } from "./Utils";
@@ -442,6 +444,7 @@ export default class THEOPlayer extends Component<Props, State> {
             poster: posterImage,
           }}
         />
+      {!isTV() && <StatusBar hidden={true} showHideTransition="fade" animated />}
       </View>
     );
   }
