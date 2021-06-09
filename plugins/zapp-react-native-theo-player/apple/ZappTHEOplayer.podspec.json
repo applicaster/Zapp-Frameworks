@@ -1,6 +1,6 @@
 {
   "name": "ZappTHEOplayer",
-  "version": "0.6.6",
+  "version": "0.6.8",
   "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.6"
+    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.8"
   },
   "ios": {
     "xcconfig": {
@@ -41,8 +41,12 @@
   "dependencies": {
     "XrayLogger": []
   },
-  "source_files": ["universal/**/*.{h,m,swift}"],
-  "resources": ["ui_customization/**/*"],
+  "source_files": [
+    "universal/**/*.{h,m,swift}"
+  ],
+  "resources": [
+    "ui_customization/**/*"
+  ],
   "testspecs": [
     {
       "name": "UnitTests",

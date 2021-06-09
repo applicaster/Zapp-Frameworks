@@ -19,36 +19,36 @@ extension QuickBrickXray {
             delayPresentationOfEnabledXRayButton()
             return
         }
-        // remove current button if exists
-        currentXRayFloatingButton()?.removeFromSuperview()
-
-        let button = FloatingButton(frame: CGRect.zero)
-        button.tag = xRayFloatingButtonTag()
-        button.setTitle("XRay", for: .normal)
-        button.backgroundColor = UIColor.darkGray
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.layer.cornerRadius = 15.0
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        targetView.addSubview(button)
         
         DispatchQueue.main.async {
-            targetView.bringSubviewToFront(button)
-        }
-        
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        button.leftAnchor.constraintEqualTo(anchor: targetView.leftAnchor, constant: 40, identifier: "\(button.tag)_left").isActive = true
-        button.topAnchor.constraintEqualTo(anchor: targetView.topAnchor, constant: 100, identifier: "\(button.tag)_top").isActive = true
+            // remove current button if exists
+            self.currentXRayFloatingButton()?.removeFromSuperview()
 
-        if #available(iOS 14.0, *) {
-            button.addAction(UIAction(handler: xRayButtonPressed), for: .touchUpInside)
-        } else {
-            // Fallback on earlier versions
-            button.addTarget(self, action: #selector(xRayButtonPressed(_:)), for: .touchUpInside)
+            let button = FloatingButton(frame: CGRect.zero)
+            button.tag = self.xRayFloatingButtonTag()
+            button.setTitle("XRay", for: .normal)
+            button.backgroundColor = UIColor.darkGray
+            button.setTitleColor(UIColor.white, for: .normal)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            button.layer.cornerRadius = 15.0
+            button.layer.borderWidth = 2
+            button.layer.borderColor = UIColor.lightGray.cgColor
+            button.translatesAutoresizingMaskIntoConstraints = false
+
+            targetView.addSubview(button)
+            targetView.bringSubviewToFront(button)
+            
+            button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+            button.leftAnchor.constraintEqualTo(anchor: targetView.leftAnchor, constant: 40, identifier: "\(button.tag)_left").isActive = true
+            button.topAnchor.constraintEqualTo(anchor: targetView.topAnchor, constant: 100, identifier: "\(button.tag)_top").isActive = true
+
+            if #available(iOS 14.0, *) {
+                button.addAction(UIAction(handler: self.xRayButtonPressed), for: .touchUpInside)
+            } else {
+                // Fallback on earlier versions
+                button.addTarget(self, action: #selector(self.xRayButtonPressed(_:)), for: .touchUpInside)
+            }
         }
     }
 

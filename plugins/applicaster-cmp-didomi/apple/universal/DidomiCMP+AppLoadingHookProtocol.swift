@@ -47,7 +47,13 @@ extension DidomiCMP: AppLoadingHookProtocol {
     
     public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
         self.saveParamsToSessionStorageIfExists()
-
+        
+        DispatchQueue.main.async {
+            if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+                Didomi.shared.setupUI(containerController: rootController)
+            }
+        }
+        
         completion?()
     }
 }
