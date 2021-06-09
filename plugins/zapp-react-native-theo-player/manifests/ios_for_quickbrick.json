@@ -198,8 +198,8 @@
     }
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.6.7",
-  "manifest_version": "0.6.7",
+  "dependency_version": "0.6.8",
+  "manifest_version": "0.6.8",
   "api": {
     "class_name": "THEOplayerAdapter",
     "modules": [
@@ -213,7 +213,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-react-native-theo-player@0.6.7"
+    "@applicaster/zapp-react-native-theo-player@0.6.8"
   ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
