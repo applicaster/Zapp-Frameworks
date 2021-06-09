@@ -159,14 +159,14 @@ class APMessagingService : FirebaseMessagingService() {
                 if(pushMessage.tag.isEmpty())
                     notify(notificationFactory.generateNotificationId(), notification)
                 else {
-                    val id = getId(pushMessage.tag)
+                    val id = getId(notificationFactory, pushMessage.tag)
                     notify(pushMessage.tag, id, notification)
                 }
             }
         }
     }
 
-    private fun getId(tag: String): Int {
+    private fun getId(notificationFactory: DefaultNotificationFactory, tag: String): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.activeNotifications?.let {
@@ -175,6 +175,7 @@ class APMessagingService : FirebaseMessagingService() {
                     return tagged.id
                 }
             }
+            return notificationFactory.generateNotificationId()
         }
         return tag.hashCode()
     }
