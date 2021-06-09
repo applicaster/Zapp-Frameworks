@@ -1,6 +1,12 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { View, Platform, findNodeHandle, UIManager, StatusBar } from "react-native";
+import {
+  View,
+  Platform,
+  findNodeHandle,
+  UIManager,
+  StatusBar,
+} from "react-native";
 import * as R from "ramda";
 
 import { isTV } from "@applicaster/zapp-react-native-utils/reactUtils";
@@ -11,6 +17,7 @@ import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 import { EVENTS } from "./Utils/const";
+import { duration } from "moment";
 
 console.disableYellowBox = true;
 
@@ -152,7 +159,6 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log("I am alive!!!");
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
@@ -216,13 +222,16 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerWaiting = ({ nativeEvent }) => {};
 
   getCurrentTime() {
-    console.log("CallMe! getCurrentTime");
     return this.state.currentTime;
+  }
+
+  getDuration() {
+    return this.state.duration;
   }
 
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-    // this.props?.onProgress && this.props?.onProgress({ currentTime });
+    this.props?.onProgress && this.props?.onProgress({ currentTime });
     this.setState({ currentTime });
   };
 
@@ -255,29 +264,24 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   setCurrentTime() {
-    console.log({ payload: this.props.entry });
-    const resumeTime = this.props?.entry?.extensions?.resumeTime;
-    const resumeTimeInt = parseInt(resumeTime);
-    console.log({ resumeTimeInt });
-    if (
-      resumeTimeInt &&
-      resumeTimeInt > 0 &&
-      this.state.isContinueWatchingTimeSet === false
-    ) {
-      console.log({
-        resumeTimeInt,
-        isContinueWatchingTimeSet:
-          this.state.isContinueWatchingTimeSet === false,
-      });
-      this.setState({ isContinueWatchingTimeSet: true });
+    setTimeout(() => {
+      const resumeTime = this.props?.entry?.extensions?.resumeTime;
+      const resumeTimeInt = parseInt(resumeTime);
+      if (
+        resumeTimeInt &&
+        resumeTimeInt > 0 &&
+        this.state.isContinueWatchingTimeSet === false
+      ) {
+        this.setState({ isContinueWatchingTimeSet: true });
 
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(this.playerRef),
-        UIManager.getViewManagerConfig("THEOplayerView").Commands
-          .setCurrentTime,
-        [resumeTimeInt]
-      );
-    }
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(this.playerRef),
+          UIManager.getViewManagerConfig("THEOplayerView").Commands
+            .setCurrentTime,
+          [resumeTimeInt]
+        );
+      }
+    }, 300);
   }
   onPlayerLoadStart = ({ nativeEvent }) => {
     this.setState({ loadStart: true });
@@ -405,14 +409,7 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   handleClosed() {
-    console.log("handleClosed");
-    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnded)) {
-      console.log("handleClosed1");
-      this.props?.onEnded();
-    }
-
-    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
-      console.log("handleClosed2");
+    if (!R.isNil(this.props?.onEnded)) {
       this.props?.onEnded();
     }
   }
@@ -484,7 +481,9 @@ export default class THEOPlayer extends Component<Props, State> {
             poster: posterImage,
           }}
         />
-      {!isTV() && <StatusBar hidden={true} showHideTransition="fade" animated />}
+        {!isTV() && (
+          <StatusBar hidden={true} showHideTransition="fade" animated />
+        )}
       </View>
     );
   }
