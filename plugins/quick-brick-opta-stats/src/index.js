@@ -32,14 +32,14 @@ openScreen = async (url, complete) => {
   }
 
   if (!screenPackage) {
-    logger.error("Package ${packageName} is not found");
+    logger.error(`Package ${packageName} is not found`);
     complete();
     return;
   }
 
   if (!method) {
     logger.error(
-      "Method ${methodName} is not found in the package ${packageName}"
+      `Method ${methodName} is not found in the package ${packageName}`
     );
     complete();
     return;
@@ -47,10 +47,10 @@ openScreen = async (url, complete) => {
 
   try {
     const res = await method({ url });
-    logger.info("Received response from native method ${methodName}", res);
+    logger.info(`Received response from native method ${methodName}`, res);
   } catch (error) {
     logger.error(
-      "Method ${methodName} the package ${packageName} failed with error ${error}"
+      `Method ${methodName} the package ${packageName} failed with error ${error}`
     );
   }
   complete();
@@ -78,14 +78,14 @@ export default StatScreens = (props: Any) => {
   }
 
   React.useEffect(() => {
-    logger.info({ message: "Render for some reason", data: { url } });
+    logger.info({ message: "Render COPA screen", data: { url } });
     renderedStats = true;
     return () => (renderedStats = false);
   }, [url]);
 
   const renderUrl = React.useCallback(() => {
     // You have URL Screen
-    logger.info({ message: "COPA url", data: { url } });
+    logger.info({ message: "Render COPA url", data: { url } });
     const onDismiss = () => {
       if (navigator.canGoBack()) {
         logger.info("Dismissed native screen, going back");
@@ -106,7 +106,7 @@ export default StatScreens = (props: Any) => {
   }, [url]);
 
   function renderStats() {
-    logger.info({ message: "Render stats screen", data: { url } });
+    logger.info({ message: "Render COPA stats", data: { url } });
 
     return <OptaStatsContainer style={styles.container}></OptaStatsContainer>;
   }
