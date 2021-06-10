@@ -82,10 +82,10 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "1.8.1",
+  "manifest_version": "1.8.2",
   "extra_dependencies": null,
   "npm_dependencies": [
-    "@applicaster/quick-brick-xray@1.8.1",
+    "@applicaster/quick-brick-xray@1.8.2",
     "@applicaster/x-ray@0.2.1"
   ],
   "project_dependencies": [
