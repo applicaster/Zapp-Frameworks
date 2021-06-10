@@ -60,9 +60,14 @@ import THEOplayerSDK
     @objc(AdDescription:)
     class func adDescription(_ json: [String: AnyObject]) -> GoogleImaAdDescription? {
         if let src = RCTConvert.nsString(json["sources"]) {
-            return GoogleImaAdDescription(
-                src: src
-            )
+            if src.validURL == true {
+                return GoogleImaAdDescription(
+                    src: src
+                )
+            } else {
+                // TODO: add logs
+                return nil
+            }
         } else {
             return nil
         }
@@ -72,7 +77,7 @@ import THEOplayerSDK
     class func adDescriptionArray(_ json: [AnyObject]) -> [GoogleImaAdDescription]? {
         let sources = RCTConvertArrayValue(#selector(adDescription), json)
             .compactMap { (item) -> GoogleImaAdDescription? in
-                var googleIMAadDiscription = item as? GoogleImaAdDescription
+                let googleIMAadDiscription = item as? GoogleImaAdDescription
                 googleIMAadDiscription?.integration = .google_ima
                 return googleIMAadDiscription
             }
@@ -118,5 +123,11 @@ import THEOplayerSDK
         } else {
             return nil
         }
+    }
+}
+
+extension String {
+    var validURL: Bool {
+        return NSURL(string: self) != nil
     }
 }

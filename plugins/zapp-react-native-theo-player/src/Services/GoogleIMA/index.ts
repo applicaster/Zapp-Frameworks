@@ -1,6 +1,10 @@
 import * as R from "ramda";
 
 export function getIMAData({ entry, pluginConfiguration }) {
+  if (pluginConfiguration?.advertisment_type === "OFF") {
+    return null;
+  }
+
   const adsData = getZappAdsData({ entry, pluginConfiguration });
   if (R.is(String)(adsData)) {
     return [
