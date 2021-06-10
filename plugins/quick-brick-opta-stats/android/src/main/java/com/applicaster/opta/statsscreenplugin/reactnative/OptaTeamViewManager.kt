@@ -1,9 +1,9 @@
 package com.applicaster.opta.statsscreenplugin.reactnative
 
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.annotations.ReactProp
 
 class OptaTeamViewManager(context: ReactApplicationContext) : SimpleViewManager<OptaTeamView>() {
 
@@ -12,7 +12,7 @@ class OptaTeamViewManager(context: ReactApplicationContext) : SimpleViewManager<
     override fun createViewInstance(reactContext: ThemedReactContext): OptaTeamView =
             OptaTeamView(reactContext.currentActivity!!)
 
-    @ReactMethod
+    @ReactProp(name = "team")
     fun setTeam(view: OptaTeamView, teamId: String) = view.setTeam(teamId)
 
     companion object {

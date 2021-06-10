@@ -27,7 +27,6 @@ import com.applicaster.opta.statsscreenplugin.utils.UrlType
 import com.applicaster.util.APLogger
 import com.applicaster.util.StringUtil
 import com.chahinem.pageindicator.PageIndicator
-import com.facebook.react.bridge.ReactMethod
 import com.squareup.picasso.Picasso
 
 class OptaTeamView(context: Context)
