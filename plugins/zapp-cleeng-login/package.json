@@ -9,7 +9,7 @@
   "dependencies": {
     "@applicaster/applicaster-account-components": "0.1.1",
     "@applicaster/quick-brick-parent-lock": "*",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "jwt-decode": "3.1.2",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
