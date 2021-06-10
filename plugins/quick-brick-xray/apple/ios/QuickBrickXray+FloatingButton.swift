@@ -11,7 +11,9 @@ import Foundation
 extension QuickBrickXray {
     func prepareXRayFloatingButton() {
         guard currentSettings?.showXrayFloatingButtonEnabled == true else {
-            currentXRayFloatingButton()?.removeFromSuperview()
+            DispatchQueue.main.async {
+                self.currentXRayFloatingButton()?.removeFromSuperview()
+            }
             return
         }
         
