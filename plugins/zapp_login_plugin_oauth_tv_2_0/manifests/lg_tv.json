@@ -34,19 +34,18 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "platform": "android_tv_for_quickbrick",
+  "platform": "lg_tv",
   "dependency_version": "0.0.3",
   "manifest_version": "0.0.3",
   "api": {
-    "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
-    "react_packages": [
-      "com.rnappauth.RNAppAuthPackage"
-    ],
-    "proguard_rules": "-keep public class * extends com.facebook.react.ReactPackage {*;} -keepclasseswithmembers,includedescriptorclasses class * { @com.facebook.react.bridge.ReactMethod <methods>;} -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; } -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }"
+    "excludedNodeModules": [
+      "react-native-dropdownalert",
+      "react-native-keyboard-aware-scroll-view",
+      "@applicaster/zapp_login_plugin_oauth_tv_2_0"
+    ]
   },
   "project_dependencies": [],
   "extra_dependencies": [],
-  "min_zapp_sdk": "3.0.0-dev",
   "npm_dependencies": [],
   "custom_configuration_fields": [
     {

@@ -35,12 +35,13 @@
     "quickbrick"
   ],
   "platform": "samsung_tv",
-  "dependency_version": "0.0.2",
-  "manifest_version": "0.0.2",
+  "dependency_version": "0.0.3",
+  "manifest_version": "0.0.3",
   "api": {
     "excludedNodeModules": [
       "react-native-dropdownalert",
-      "react-native-keyboard-aware-scroll-view"
+      "react-native-keyboard-aware-scroll-view",
+      "@applicaster/zapp_login_plugin_oauth_tv_2_0"
     ]
   },
   "project_dependencies": [],
