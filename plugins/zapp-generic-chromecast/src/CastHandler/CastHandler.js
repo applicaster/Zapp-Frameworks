@@ -42,8 +42,13 @@ export function CastHandler(props: Props) {
     free: item?.extensions?.free,
   };
 
+  const mediaItem = Object.assign(
+      { ...media, analytics },
+      item?.extensions?.receiverMetaData || {}
+  );
+
   React.useEffect(() => {
-    Cast.castMedia({ ...media, analytics })
+    Cast.castMedia(mediaItem)
       .then(() => {
         Cast.launchExpandedControls();
         navigator.goBack();
