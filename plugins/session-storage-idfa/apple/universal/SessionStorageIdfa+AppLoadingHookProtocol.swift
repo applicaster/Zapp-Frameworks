@@ -13,26 +13,26 @@ import ZappCore
 extension SessionStorageIdfa: AppLoadingHookProtocol {
     public func executeOnLaunch(completion: (() -> Void)?) {
         requestTrackingAuthorization { status in
+            var idfaString = "00000000-0000-0000-0000-000000000000"
             switch status {
             case .authorized:
-                self.saveDataToStorage()
+                idfaString = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                 break
             default:
                 break
             }
+            self.saveDataToStorage(idfaString)
             completion?()
         }
     }
 
-    func saveDataToStorage() {
-        let idfaString = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-
+    func saveDataToStorage(_ idfaString: String) {
         _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "idfa",
-                                                                        value: idfaString,
-                                                                        namespace: nil)
+                                                                       value: idfaString,
+                                                                       namespace: nil)
 
         _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: "advertisingIdentifier",
-                                                                        value: idfaString,
-                                                                        namespace: nil)
+                                                                       value: idfaString,
+                                                                       namespace: nil)
     }
 }
