@@ -100,7 +100,7 @@ export default StatScreens = (props: Any) => {
 
     setTimeout(() => {
       openScreen(url, onDismiss);
-    }, 1);
+    }, 150);
 
     return renderLoading();
   }, [url]);
