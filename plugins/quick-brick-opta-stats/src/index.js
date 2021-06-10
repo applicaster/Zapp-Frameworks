@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NativeModules, View } from "react-native";
+import { NativeModules, View, ActivityIndicator } from "react-native";
 
 import { createLogger } from "./logger";
 import { DEFAULT } from "./utils";
@@ -12,7 +12,7 @@ import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/n
 const OptaStatsContainer = requireNativeComponent("OptaStatsContainer");
 
 const logger = createLogger();
-
+let renderedStats = null;
 openScreen = async (url, complete) => {
   const packageName = DEFAULT.packageName;
   const methodName = DEFAULT.methodName;
@@ -20,26 +20,26 @@ openScreen = async (url, complete) => {
   const method = screenPackage?.[methodName];
 
   if (!packageName) {
-    logger.error(`React package name is not set`);
+    logger.error("React package name is not set");
     complete();
     return;
   }
 
   if (!methodName) {
-    logger.error(`React method name is not set`);
+    logger.error("React method name is not set");
     complete();
     return;
   }
 
   if (!screenPackage) {
-    logger.error(`Package ${packageName} is not found`);
+    logger.error("Package ${packageName} is not found");
     complete();
     return;
   }
 
   if (!method) {
     logger.error(
-      `Method ${methodName} is not found in the package ${packageName}`
+      "Method ${methodName} is not found in the package ${packageName}"
     );
     complete();
     return;
@@ -47,10 +47,10 @@ openScreen = async (url, complete) => {
 
   try {
     const res = await method({ url });
-    logger.info(`Received response from native method ${methodName}`, res);
+    logger.info("Received response from native method ${methodName}", res);
   } catch (error) {
     logger.error(
-      `Method ${methodName} the package ${packageName} failed with error ${error}`
+      "Method ${methodName} the package ${packageName} failed with error ${error}"
     );
   }
   complete();
@@ -65,12 +65,27 @@ useUrlSchemeHandler = async ({ query, url, onFinish }) => {
   openScreen(url, complete);
 };
 
-export default StatScreens = (params: Any) => {
-  const url = params?.screenData?.link?.href;
+export default StatScreens = (props: Any) => {
+  const url = props?.screenData?.extensions?.url;
+  const navigator = useNavigation();
 
-  if (url) {
+  function renderLoading() {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    );
+  }
+
+  React.useEffect(() => {
+    logger.info({ message: "Render for some reason", data: { url } });
+    renderedStats = true;
+    return () => (renderedStats = false);
+  }, [url]);
+
+  const renderUrl = React.useCallback(() => {
+    // You have URL Screen
     logger.info({ message: "COPA url", data: { url } });
-    const navigator = useNavigation();
     const onDismiss = () => {
       if (navigator.canGoBack()) {
         logger.info("Dismissed native screen, going back");
@@ -83,14 +98,20 @@ export default StatScreens = (params: Any) => {
       }
     };
 
-    React.useEffect(() => {
-      url && openScreen(url, onDismiss);
-    }, []);
+    setTimeout(() => {
+      openScreen(url, onDismiss);
+    }, 1);
 
-    return <View style={styles.container} />;
+    return renderLoading();
+  }, [url]);
+
+  function renderStats() {
+    logger.info({ message: "Render stats screen", data: { url } });
+
+    return <OptaStatsContainer style={styles.container}></OptaStatsContainer>;
   }
 
-  return <OptaStatsContainer style={styles.container}></OptaStatsContainer>;
+  return url && !renderedStats ? renderUrl() : renderStats();
 };
 
 StatScreens.urlScheme = {
