@@ -264,7 +264,7 @@ const androidPlatforms = [
   "amazon_fire_tv_for_quickbrick",
 ];
 
-const webPlatforms = ["samsung_tv"];
+const webPlatforms = ["samsung_tv", "lg_tv"];
 
 const applePlatforms = ["ios", "ios_for_quickbrick", "tvos_for_quickbrick"];
 
@@ -273,6 +273,7 @@ const tvPlatforms = [
   "android_tv_for_quickbrick",
   "amazon_fire_tv_for_quickbrick",
   "samsung_tv",
+  "lg_tv",
 ];
 
 const api = {
@@ -281,6 +282,7 @@ const api = {
     excludedNodeModules: [
       "react-native-dropdownalert",
       "react-native-keyboard-aware-scroll-view",
+      "@applicaster/zapp_login_plugin_oauth_tv_2_0",
     ],
   },
   android: {
