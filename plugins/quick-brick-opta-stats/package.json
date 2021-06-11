@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-opta-stats",
-  "version": "0.5.6",
+  "version": "0.5.7-alpha.4",
   "description": "",
   "main": "src/index.js",
   "scripts": {
