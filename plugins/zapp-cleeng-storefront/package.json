@@ -32,10 +32,10 @@
     "@applicaster/zapp-react-native-tvos-ui-components": "*",
     "@applicaster/zapp-react-native-utils": "*",
     "react": "16.11.0",
-    "react-native": "0.62.2"
+    "react-native": "0.62.2",
+    "@types/node": "*"
   },
   "devDependencies": {
-    "@types/node": "^14.0.26",
     "@types/react-native": "^0.63.1",
     "typescript": "^3.9.7"
   },

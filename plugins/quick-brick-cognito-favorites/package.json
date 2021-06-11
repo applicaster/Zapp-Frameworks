@@ -1,0 +1,38 @@
+{
+  "name": "@applicaster/quick-brick-cognito-favorites",
+  "version": "1.0.1-beta.4",
+  "description": "Quick Brick plugin for Cognito Favorites",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "npm run build",
+    "build": "tsc"
+  },
+  "author": "Zapp Team",
+  "license": "ISC",
+  "dependencies": {
+    "@applicaster/amazon-cognito-js": "1.1.3",
+    "aws-sdk": "2.890.0",
+    "ramda": "^0.26.1"
+  },
+  "peerDependencies": {
+    "@applicaster/applicaster-types": "*",
+    "@applicaster/zapp-react-native-bridge": "*",
+    "@applicaster/zapp-react-native-utils": "*",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "files": [
+    "index.d.ts",
+    "manifests",
+    "lib",
+    "src"
+  ],
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e4d3752157a050008e973fc"
+  }
+}
