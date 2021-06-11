@@ -35,9 +35,6 @@ class OptaTeamView(context: Context)
         GroupAdapter.OnTeamFlagClickListener, MatchAdapter.OnMatchClickListener {
 
     private var ll_team: TextView
-    private var rv_group_cards: RecyclerView
-    private var rv_matches: RecyclerView
-    private var pb_loading: ProgressBar
 
     private var tv_gf_value: TextView
     private var tv_gc_value: TextView
@@ -73,9 +70,6 @@ class OptaTeamView(context: Context)
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_squad, this, false)
 
         ll_team = view.findViewById(R.id.ll_team)
-        rv_group_cards = view.findViewById(R.id.rv_group_cards)
-        rv_matches = view.findViewById(R.id.rv_matches)
-        pb_loading = view.findViewById(R.id.pb_loading)
 
         tv_gf_value = view.findViewById(R.id.tv_gf_value)
         tv_gc_value = view.findViewById(R.id.tv_gc_value)
