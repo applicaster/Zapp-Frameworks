@@ -8,6 +8,9 @@ import { usePickFromState } from "@applicaster/zapp-react-native-redux/hooks";
 import { getDatasetData, updateDataset, getPluginConfiguration } from "./utils";
 import { defaultAsset, defaultActiveAsset } from "./defaultAssets";
 import { Context } from "./Context";
+import XRayLogger from "@applicaster/quick-brick-xray";
+
+const logger = new XRayLogger("quick-brick-cognito-favorites", "general");
 
 const activeState = {
   state: 1,
@@ -32,11 +35,7 @@ export function ContextProvider(Component: ReactComponent<any>) {
     const isInFavourites = useCallback(
       (entry: ZappEntry) => {
         const entryState = state.map((item) => item.id);
-        console.log("isInFavourites", {
-          entryState,
-          entry,
-          entryID: entry?.id,
-        });
+
         return R.includes(entry?.id, entryState);
       },
       [state.length]
@@ -48,16 +47,19 @@ export function ContextProvider(Component: ReactComponent<any>) {
         entry,
         config,
       };
-      console.log({ state, entry, config });
+
       const newFavourites = await updateDataset(datasetParams, false);
 
+      logger.debug({
+        message: `Add favorite for id: ${entry?.id}`,
+        data: { entry, id: entry?.id, state, config, newFavourites },
+      });
       setState(newFavourites);
 
       return newFavourites;
     };
 
     const removeFavourite = async (entry): Promise<ZappEntry[]> => {
-      console.log("RemoveFavorites", { state, entry, config });
       const datasetParams = {
         state,
         entry,
@@ -65,7 +67,10 @@ export function ContextProvider(Component: ReactComponent<any>) {
       };
 
       const newFavourites = await updateDataset(datasetParams, true);
-
+      logger.debug({
+        message: `Remove favorite for id: ${entry?.id}`,
+        data: { entry, id: entry?.id, state, config, newFavourites },
+      });
       setState(newFavourites);
 
       return newFavourites;
@@ -78,7 +83,10 @@ export function ContextProvider(Component: ReactComponent<any>) {
 
     const invokeAction = useCallback(
       (entry: ZappEntry, options: InvokeArgsOptions) => {
-        console.log("INVOKE ACTION", { entry, options });
+        logger.debug({
+          message: `Invoke action`,
+          data: { entry, options },
+        });
         const { updateState } = options || {};
 
         if (isInFavourites(entry)) {
