@@ -1,9 +1,9 @@
 import * as React from "react";
+import { NativeModules, requireNativeComponent } from "react-native";
 
 import { createLogger } from "./logger";
 import { styles } from "./styles";
-
-import { requireNativeComponent } from "react-native";
+import { DEFAULT } from "./utils";
 
 const OptaStatsContainer = requireNativeComponent("OptaStatsContainer");
 const OptaTeamContainer = requireNativeComponent("OptaTeamContainer");
