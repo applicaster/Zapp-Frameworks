@@ -34,7 +34,7 @@ class OptaTeamView(context: Context)
         SquadAdapter.OnPlayerClickedListener,
         GroupAdapter.OnTeamFlagClickListener, MatchAdapter.OnMatchClickListener {
 
-    private var ll_team: TextView
+    private var ll_team: LinearLayout
 
     private var tv_gf_value: TextView
     private var tv_gc_value: TextView
