@@ -73,12 +73,23 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     func showScreen(on targetView: UIView) {
         self.targetView = targetView
 
-        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: "GroupCardsViewController") as? GroupCardsViewController else {
+        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: GroupCardsViewController.storyboardID) as? GroupCardsViewController else {
             return
         }
         
         let viewModel = GroupCardsViewModel()
         viewController.groupCardViewModel = viewModel
+        replaceViewController(with: viewController, on: nil)
+    }
+    
+    func showTeamScreen(on targetView: UIView, teamId: String) {
+        self.targetView = targetView
+
+        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: TeamCardViewController.storyboardID) as? TeamCardViewController else {
+            return
+        }
+        
+        viewController.teamID = teamId
         replaceViewController(with: viewController, on: nil)
     }
     
