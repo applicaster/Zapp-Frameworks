@@ -5,7 +5,7 @@ const baseManifest = {
   author_email: "zapp@applicaster.com",
   name: "Quick Brick User Account Component",
   description: "User Account Component",
-  type: "ui_component",
+  type: "general",
   identifier: "quick-brick-user-account",
   screen: true,
   react_native: true,
