@@ -236,10 +236,10 @@ workflows:
           filters:
             branches:
               only: master
-      - apple_unit_tests:
-          filters:
-            branches:
-              ignore: master
+      # - apple_unit_tests:
+      #     filters:
+      #       branches:
+      #         ignore: master
       - hold_create_canary:
           type: approval
           requires:
