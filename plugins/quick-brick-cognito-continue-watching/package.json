@@ -1,0 +1,35 @@
+{
+  "name": "@applicaster/quick-brick-cognito-continue-watching",
+  "version": "1.0.0",
+  "description": "Continue Watching with Cognito Sync",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@applicaster/amazon-cognito-js": "1.1.3",
+    "aws-sdk": "2.890.0",
+    "axios": "^0.21.1",
+    "ramda": "^0.26.1"
+  },
+  "peerDependencies": {
+    "@applicaster/applicaster-types": "*",
+    "@applicaster/zapp-react-native-bridge": "*",
+    "@applicaster/zapp-react-native-redux": "*",
+    "@applicaster/zapp-react-native-ui-components": "*",
+    "@applicaster/zapp-react-native-utils": "*",
+    "react": "16.11.0",
+    "react-native": "0.62.2"
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e4d3752157a050008e973fc"
+  }
+}
