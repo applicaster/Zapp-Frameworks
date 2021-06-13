@@ -84,7 +84,6 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
-    project_dependencies: project_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/applicaster-cmp-onetrust@${version}`],
     targets: targets[platform],
