@@ -6,7 +6,11 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import OneTrust
+#if os(tvOS) && canImport(OTPublishersHeadlessSDKtvOS)
+    import OTPublishersHeadlessSDKtvOS
+#elseif os(iOS) && canImport(OTPublishersHeadlessSDK)
+    import OTPublishersHeadlessSDK
+#endif
 import XrayLogger
 import ZappCore
 
@@ -16,14 +20,14 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/OneTrustConsentManagement")
     var presentationCompletion: (() -> Void)?
     public var cmpStatus: OneTrustCmpStatus = .undefined
-    
+
     struct Params {
-        static let apiKey = "api_key"
-        static let jsPreferencesKey = "javaScriptForWebView"
+        static let domainIdentifier = "domain_identifier"
+        static let storageLocation = "storage_location"
+
         static let pluginIdentifier = "applicaster-cmp-onetrust"
         static let onetrustGDPRApplies = "IABTCF_gdprApplies"
         static let onetrustIABConsent = "IABTCF_TCString"
-
     }
 
     public required init(pluginModel: ZPPluginModel) {
@@ -35,8 +39,20 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
         return String(describing: Self.self)
     }
 
-    lazy var apiKey: String? = {
-        configurationJSON?["api_key"] as? String
+    lazy var domainIdentifier: String? = {
+        configurationJSON?[Params.domainIdentifier] as? String
+    }()
+
+    lazy var storageLocation: String? = {
+        configurationJSON?[Params.storageLocation] as? String
+    }()
+
+    var languageCode: String = {
+        var retValue = "en"
+        guard let appLanguageCode = FacadeConnector.connector?.storage?.sessionStorageValue(for: "languageCode", namespace: nil) else {
+            return retValue
+        }
+        return appLanguageCode
     }()
 
     lazy var shouldPresentOnStartup: Bool = {
@@ -61,33 +77,34 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
 
     public func prepareProvider(_ defaultParams: [String: Any],
                                 completion: ((_ isReady: Bool) -> Void)?) {
-        guard let apiKey = apiKey else {
-            logger?.errorLog(message: "Api Key not defined")
+        guard let domainIdentifier = domainIdentifier else {
+            logger?.errorLog(message: "Api Identifier not defined")
             completion?(true)
             return
         }
 
-        OneTrust.shared.initialize(
-            apiKey: apiKey,
-            localConfigurationPath: nil,
-            remoteConfigurationURL: nil,
-            providerId: nil,
-            disableOneTrustRemoteConfig: false
-        )
+        guard let storageLocation = storageLocation else {
+            logger?.errorLog(message: "Storage location not defined")
+            completion?(true)
+            return
+        }
 
-        OneTrust.shared.onError(callback: { event in
-            self.logger?.errorLog(message: "Intialization failed",
-                                  data: ["error": event.descriptionText])
-            self.cmpStatus = .error
-        })
-        OneTrust.shared.onReady {
-            self.logger?.verboseLog(message: "Intialization completed successfully")
-            self.saveParamsToSessionStorageIfExists()
-            self.cmpStatus = .ready
+        let sdkParams = OTSdkParams()
+        OTPublishersHeadlessSDK.shared.startSDK(
+            storageLocation: storageLocation,
+            domainIdentifier: domainIdentifier,
+            languageCode: languageCode,
+            params: sdkParams
+        ) { response in
+
+            if response.status {
+                self.cmpStatus = .ready
+            } else if let _ = response.error {
+                self.cmpStatus = .error
+            }
         }
 
         subscribeToEventListeners()
-        
 
         completion?(true)
     }
@@ -96,8 +113,6 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
         completion?(true)
     }
 }
-
-
 
 public enum AuthorizationStatus: UInt {
     case notDetermined = 0

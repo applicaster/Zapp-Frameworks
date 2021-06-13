@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 #if canImport(AppTrackingTransparency)
     import AppTrackingTransparency
 #endif

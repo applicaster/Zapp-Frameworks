@@ -105,42 +105,38 @@ const custom_configuration_fields_shared = [
       "If enabled, consent screen will be shown on first application launch",
   },
   {
-    key: "api_key",
+    key: "domain_identifier",
     type: "text",
-    label: "API key",
+    label: "Domain Identifier",
     default: "",
-    tooltip_text: "API key",
+    tooltip_text: "Domain Identifier",
+  },
+  {
+    key: "storage_location",
+    type: "text",
+    label: "Storage Location",
+    default: "cdn.cookielaw.org",
+    tooltip_text: "Storage Location",
   }
 ];
 
 const custom_configuration_fields_apple = custom_configuration_fields_shared.concat(
   [{
-    key: "ios_assets_bundle",
-    type: "uploader",
-    label: "Logo drawables zip",
-    label_tooltip: "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the OneTrust web console"
+    type: "text",
+    key: "plist.NSUserTrackingUsageDescription",
+    label: "ATT description",
+    default: "This identifier will be used to deliver personalized ads to you.",
+    tooltip_text: "Please enter the description for ATT"
   }]);
-
-const custom_configuration_fields_android = custom_configuration_fields_shared.concat(
-    [{
-      "key": "android_assets_bundle",
-      "type": "uploader",
-      "label": "Logo drawables zip",
-      "label_tooltip": "Please upload a zip file to provide the logo assets for this plugin. File name must match json override in the OneTrust web console"
-    }]);
 
 const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
-  android_for_quickbrick: custom_configuration_fields_android,
-  android_tv_for_quickbrick: custom_configuration_fields_android,
-  amazon_fire_tv_for_quickbrick: custom_configuration_fields_android,
+  tvos_for_quickbrick: custom_configuration_fields_apple,
 };
 
 const min_zapp_sdk = {
   ios_for_quickbrick: "4.1.0-Dev",
-  android_for_quickbrick: "4.0.0",
-  android_tv_for_quickbrick: "4.0.0",
-  amazon_fire_tv_for_quickbrick: "4.0.0",
+  tvos_for_quickbrick: "4.1.0-Dev",
 };
 
 const extra_dependencies_apple = {
@@ -151,58 +147,30 @@ const extra_dependencies_apple = {
 const ui_frameworks_qb = ["quickbrick"];
 const ui_frameworks = {
   ios_for_quickbrick: ui_frameworks_qb,
-  android_for_quickbrick: ui_frameworks_qb,
-  android_tv_for_quickbrick: ui_frameworks_qb,
-  amazon_fire_tv_for_quickbrick: ui_frameworks_qb,
+  tvos_for_quickbrick: ui_frameworks_qb,
 };
 
 const extra_dependencies = {
   ios_for_quickbrick: [extra_dependencies_apple],
-};
-
-const project_dependencies_android = [
-  {
-    "applicaster-cmp-onetrust":
-      "node_modules/@applicaster/applicaster-cmp-onetrust/android",
-  },
-];
-
-const project_dependencies = {
-  android_for_quickbrick: project_dependencies_android,
-  android_tv_for_quickbrick: project_dependencies_android,
-  amazon_fire_tv_for_quickbrick: project_dependencies_android,
+  tvos_for_quickbrick: [extra_dependencies_apple],
 };
 
 const api_apple = {
   require_startup_execution: true,
   class_name: "OneTrustCmp",
   modules: ["ZappCmpOneTrust"],
-  plist: {
-    NSUserTrackingUsageDescription:
-      "This identifier will be used to deliver personalized ads to you.",
-  },
-};
-
-const api_android = {
-  require_startup_execution: true,
-  class_name: "com.applicaster.plugin.onetrust.OneTrustPlugin",
-  react_packages: ["com.applicaster.plugin.onetrust.reactnative.OneTrustPackage"],
 };
 
 const api = {
   ios_for_quickbrick: api_apple,
-  android_for_quickbrick: api_android,
-  android_tv_for_quickbrick: api_android,
-  amazon_fire_tv_for_quickbrick: api_android,
+  tvos_for_quickbrick: api_apple,
 };
 
 const mobileTarget = ["mobile"];
 const tvTarget = ["tv"];
 const targets = {
   ios_for_quickbrick: mobileTarget,
-  android_for_quickbrick: mobileTarget,
-  android_tv_for_quickbrick: tvTarget,
-  amazon_fire_tv_for_quickbrick: tvTarget,
+  tvos_for_quickbrick: tvTarget,
 };
 
 module.exports = createManifest;

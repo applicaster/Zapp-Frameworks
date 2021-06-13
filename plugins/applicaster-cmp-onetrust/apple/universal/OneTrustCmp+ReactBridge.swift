@@ -6,27 +6,32 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import OneTrust
+#if os(tvOS) && canImport(OTPublishersHeadlessSDKtvOS)
+    import OTPublishersHeadlessSDKtvOS
+#elseif os(iOS) && canImport(OTPublishersHeadlessSDK)
+    import OTPublishersHeadlessSDK
+#endif
+
 import Foundation
 
 extension OneTrustCmp {
-    public func showPreferences() -> (success: Bool, errorDescription: String? ) {
-        guard OneTrust.shared.isReady() == true else {
+    public func showPreferences() -> (success: Bool, errorDescription: String?) {
+        guard cmpStatus == .ready else {
             return (false, "OneTrust is not ready")
         }
 
-        OneTrust.shared.showPreferences()
-        
+        OTPublishersHeadlessSDK.shared.showPreferenceCenterUI()
+
         return (true, nil)
     }
-    
-    public func showNotice() -> (success: Bool, errorDescription: String? ) {
-        guard OneTrust.shared.isReady() == true else {
+
+    public func showNotice() -> (success: Bool, errorDescription: String?) {
+        guard cmpStatus == .ready else {
             return (false, "OneTrust is not ready")
         }
-        
-        OneTrust.shared.showNotice()
-        
+
+        OTPublishersHeadlessSDK.shared.showBannerUI()
+
         return (true, nil)
     }
 }

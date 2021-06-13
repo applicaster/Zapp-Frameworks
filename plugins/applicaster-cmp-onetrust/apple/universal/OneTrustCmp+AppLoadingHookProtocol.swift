@@ -6,7 +6,12 @@
 //  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
-import OneTrust
+#if os(tvOS) && canImport(OTPublishersHeadlessSDKtvOS)
+    import OTPublishersHeadlessSDKtvOS
+#elseif os(iOS) && canImport(OTPublishersHeadlessSDK)
+    import OTPublishersHeadlessSDK
+#endif
+
 import Foundation
 import XrayLogger
 import ZappCore
@@ -32,28 +37,28 @@ extension OneTrustCmp: AppLoadingHookProtocol {
                     self.executeOnLaunch(completion: completion)
                 }
             case .ready:
-                guard OneTrust.shared.shouldConsentBeCollected() else {
+                guard OTPublishersHeadlessSDK.shared.shouldShowBanner() else {
                     completion?()
                     return
                 }
 
                 self.presentationCompletion = completion
-                OneTrust.shared.setupUI(containerController: displayViewController)
+                OTPublishersHeadlessSDK.shared.setupUI(displayViewController, UIType: .banner)
             case .error:
                 completion?()
             }
         }
     }
-    
+
     public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
-        self.saveParamsToSessionStorageIfExists()
-        
+        saveParamsToSessionStorageIfExists()
+
         DispatchQueue.main.async {
             if let rootController = UIApplication.shared.keyWindow?.rootViewController {
-                OneTrust.shared.setupUI(containerController: rootController)
+                OTPublishersHeadlessSDK.shared.setupUI(rootController)
             }
         }
-        
+
         completion?()
     }
 }
