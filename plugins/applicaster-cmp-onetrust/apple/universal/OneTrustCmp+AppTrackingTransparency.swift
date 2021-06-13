@@ -12,12 +12,12 @@ import Foundation
 #endif
 
 extension OneTrustCmp {
-    public func requestTrackingAuthorization(_ completion: @escaping (AuthorizationStatus) -> Void) {
+    public func requestTrackingAuthorization(_ completion: @escaping (OTAuthorizationStatus) -> Void) {
         if #available(iOS 14, tvOS 14, *) {
             #if canImport(AppTrackingTransparency)
                 ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
                     // Tracking authorization completed. Start loading ads.
-                    completion(AuthorizationStatus(rawValue: status.rawValue) ?? .notDetermined)
+                    completion(OTAuthorizationStatus(rawValue: status.rawValue) ?? .notDetermined)
                 })
             #else
                 completion(.notDetermined)

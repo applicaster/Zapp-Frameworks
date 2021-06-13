@@ -89,7 +89,7 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
             return
         }
 
-        let sdkParams = OTSdkParams()
+        let sdkParams:OTSdkParams? = nil
         OTPublishersHeadlessSDK.shared.startSDK(
             storageLocation: storageLocation,
             domainIdentifier: domainIdentifier,
@@ -114,7 +114,7 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
     }
 }
 
-public enum AuthorizationStatus: UInt {
+public enum OTAuthorizationStatus: UInt {
     case notDetermined = 0
     case restricted = 1
     case denied = 2
