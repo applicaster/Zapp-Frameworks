@@ -57,7 +57,6 @@ class OptaStatsView(context: Context) : FrameLayout(context),
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-
         homePresenter.getAllMatchesFromDate()
         homePresenter.getGroups()
     }

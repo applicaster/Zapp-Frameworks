@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp_login_plugin_oauth_tv_2_0",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -38,7 +38,8 @@
       "tvos_for_quickbrick",
       "android_tv_for_quickbrick",
       "amazon_fire_tv_for_quickbrick",
-      "samsung_tv"
+      "samsung_tv",
+      "lg_tv"
     ],
     "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
   }

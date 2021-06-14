@@ -114,6 +114,8 @@ class OptaStatsContract : /*PluginScreen, PluginSchemeI,*/ GenericPluginI {
             PluginDataRepository.INSTANCE.setShowTeam(params[Constants.PARAM_SHOW_TEAM])
             PluginDataRepository.INSTANCE.setTeamsCount(params[Constants.PARAM_TEAMS_COUNT].toString().toIntOrNull())
 
+            PluginDataRepository.INSTANCE.setLogoUrl(params[Constants.PARAM_LOGO_URL].toString())
+
             (params[Constants.PARAM_NAV_BAR_COLOR] as? String)?.let {
                 try {
                     val color = Color.parseColor(it)

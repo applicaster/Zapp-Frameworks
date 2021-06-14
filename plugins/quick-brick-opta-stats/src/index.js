@@ -1,14 +1,12 @@
 import * as React from "react";
-import { NativeModules } from "react-native";
+import { NativeModules, requireNativeComponent } from "react-native";
 
 import { createLogger } from "./logger";
-import { DEFAULT } from "./utils";
 import { styles } from "./styles";
+import { DEFAULT } from "./utils";
 
-import {requireNativeComponent} from 'react-native';
-
-
-const OptaStatsContainer = requireNativeComponent('OptaStatsContainer');
+const OptaStatsContainer = requireNativeComponent("OptaStatsContainer");
+const OptaTeamContainer = requireNativeComponent("OptaTeamContainer");
 
 const logger = createLogger();
 
@@ -22,7 +20,7 @@ useUrlSchemeHandler = async ({ query, url, onFinish }) => {
     onFinish((done) => {
       done();
     });
-  }
+  };
 
   if (!packageName) {
     logger.error(`React package name is not set`);
@@ -43,25 +41,43 @@ useUrlSchemeHandler = async ({ query, url, onFinish }) => {
   }
 
   if (!method) {
-    logger.error(`Method ${methodName} is not found in the package ${packageName}`);
+    logger.error(
+      `Method ${methodName} is not found in the package ${packageName}`
+    );
     complete();
     return;
-  };
+  }
 
   try {
-    const res = await method({url});
+    const res = await method({ url });
     logger.info(`Received response from native method ${methodName}`, res);
   } catch (error) {
-    logger.error(`Method ${methodName} the package ${packageName} failed with error ${error}`);
+    logger.error(
+      `Method ${methodName} the package ${packageName} failed with error ${error}`
+    );
   }
   complete();
 };
 
-export default StatScreens = ({}) => {
-  return <OptaStatsContainer style={styles.container}></OptaStatsContainer>
+export default StatScreens = (props) => {
+  const teamId = props?.screenData?.extensions?.teamId;
+
+  const renderTeam = () => {
+    logger.info({ message: "Render COPA Team", data: { teamId } });
+
+    return <OptaTeamContainer team={teamId} style={styles.container} />;
+  };
+
+  function renderStats() {
+    logger.info({ message: "Render COPA stats" });
+
+    return <OptaStatsContainer style={styles.container}></OptaStatsContainer>;
+  }
+
+  return teamId ? renderTeam() : renderStats();
 };
 
 StatScreens.urlScheme = {
   host: "copa_stats",
   handler: useUrlSchemeHandler,
-}
+};
