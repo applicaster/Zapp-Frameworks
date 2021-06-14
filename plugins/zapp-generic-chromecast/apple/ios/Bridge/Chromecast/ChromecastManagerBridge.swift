@@ -122,7 +122,7 @@ class ChromecastManager: NSObject, RCTBridgeModule {
                                    rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
             guard let currentSession = GCKCastContext.sharedInstance().sessionManager.currentSession else {
-                rejecter("1", "cast session is not active", nil)
+                rejecter("1", "Cast session is not active", nil)
                 return
             }
             
