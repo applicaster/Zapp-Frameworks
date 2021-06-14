@@ -121,18 +121,20 @@ class ChromecastManager: NSObject, RCTBridgeModule {
     @objc public func getConnectedDeviceInfo(_ resolver: @escaping RCTPromiseResolveBlock,
                                    rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
-            guard let currentSession = GCKCastContext.sharedInstance().sessionManager.currentSession else {
-                rejecter("1", "Cast session is not active", nil)
+            
+            guard let pluginInstance = self.pluginInstance else {
+                rejecter("0", "plugin not available", nil)
                 return
             }
             
-            var connctedDeviceInfo = Dictionary<String,Any>()
-            connctedDeviceInfo["id"] = currentSession.device.deviceID
-            connctedDeviceInfo["version"] = currentSession.device.deviceVersion
-            connctedDeviceInfo["name"] = currentSession.device.friendlyName
-            connctedDeviceInfo["model"] = currentSession.device.modelName
-            
-            resolver(connctedDeviceInfo)
+            do {
+                let connctedDeviceInfo = try pluginInstance.connctedDeviceInfo()
+                resolver(connctedDeviceInfo)
+            } catch ChromecastAdapterError.castSessionIsDown {
+                rejecter("1", "The cast session is down, can't find a connected device info", nil)
+            } catch {
+                rejecter("2", "General chromecast problem", nil)
+            }
         }
     }
 
