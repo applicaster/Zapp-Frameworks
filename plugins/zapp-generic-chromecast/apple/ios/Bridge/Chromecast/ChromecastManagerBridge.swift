@@ -9,6 +9,8 @@
 import Foundation
 import React
 import ZappCore
+import GoogleCast
+
 
 @objc(RNGoogleCast)
 class ChromecastManager: NSObject, RCTBridgeModule {
@@ -113,6 +115,24 @@ class ChromecastManager: NSObject, RCTBridgeModule {
             }
 
             resolver(pluginInstance.getCurrentCastState())
+        }
+    }
+    
+    @objc public func getConnectedDeviceInfo(_ resolver: @escaping RCTPromiseResolveBlock,
+                                   rejecter: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            guard let currentSession = GCKCastContext.sharedInstance().sessionManager.currentSession else {
+                rejecter("1", "cast session is not active", nil)
+                return
+            }
+            
+            var connctedDeviceInfo = Dictionary<String,Any>()
+            connctedDeviceInfo["id"] = currentSession.device.deviceID
+            connctedDeviceInfo["version"] = currentSession.device.deviceVersion
+            connctedDeviceInfo["name"] = currentSession.device.friendlyName
+            connctedDeviceInfo["model"] = currentSession.device.modelName
+            
+            resolver(connctedDeviceInfo)
         }
     }
 
