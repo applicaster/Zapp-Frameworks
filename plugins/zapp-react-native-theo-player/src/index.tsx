@@ -6,8 +6,10 @@ import {
   findNodeHandle,
   UIManager,
   StatusBar,
+  NativeModules,
 } from "react-native";
 import * as R from "ramda";
+const { THEOplayerViewManager } = NativeModules;
 
 import { isTV } from "@applicaster/zapp-react-native-utils/reactUtils";
 
@@ -273,13 +275,7 @@ export default class THEOPlayer extends Component<Props, State> {
         this.state.isContinueWatchingTimeSet === false
       ) {
         this.setState({ isContinueWatchingTimeSet: true });
-
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(this.playerRef),
-          UIManager.getViewManagerConfig("THEOplayerView").Commands
-            .setCurrentTime,
-          [resumeTimeInt]
-        );
+        THEOplayerViewManager.setCurrentTime(resumeTimeInt);
       }
     }, 300);
   }
