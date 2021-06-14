@@ -45,7 +45,7 @@ RCT_EXTERN_METHOD(stop);
 RCT_EXTERN_METHOD(scheduleAd:(nonnull NSDictionary *)jsAdDescription);
 
 RCT_EXTERN_METHOD(getCurrentTime:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock *));
-RCT_EXTERN_METHOD(setCurrentTime:(nonnull NSNumber *)tag newValue:(nonnull NSNumber *)newValue);
+RCT_EXTERN_METHOD(setCurrentTime:(nonnull NSNumber *)newValue);
 RCT_EXTERN_METHOD(getDuration:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock *)reject);
 RCT_EXTERN_METHOD(getDurationWithCallback:(RCTResponseSenderBlock)callback);
 RCT_EXTERN_METHOD(getPaused:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock *)reject);
