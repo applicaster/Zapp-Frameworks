@@ -97,19 +97,19 @@ extension ChromecastAdapter: ChromecastProtocol {
         return GCKCastContext.sharedInstance().sessionManager.currentSession?.device.friendlyName
     }
     
-    public func connctedDeviceInfo() throws -> Dictionary<String,Any>? {
+    public func connectedDeviceInfo() throws -> Dictionary<String,Any>? {
         guard hasConnectedCastSession(),
               let currentSession = GCKCastContext.sharedInstance().sessionManager.currentSession else {
             throw ChromecastAdapterError.castSessionIsDown
         }
         
-        var connctedDeviceInfo = Dictionary<String,Any>()
-        connctedDeviceInfo["id"] = currentSession.device.deviceID
-        connctedDeviceInfo["version"] = currentSession.device.deviceVersion
-        connctedDeviceInfo["name"] = currentSession.device.friendlyName
-        connctedDeviceInfo["model"] = currentSession.device.modelName
+        var connectedDeviceInfo = Dictionary<String,Any>()
+        connectedDeviceInfo["id"] = currentSession.device.deviceID
+        connectedDeviceInfo["version"] = currentSession.device.deviceVersion
+        connectedDeviceInfo["name"] = currentSession.device.friendlyName
+        connectedDeviceInfo["model"] = currentSession.device.modelName
         
-        return connctedDeviceInfo
+        return connectedDeviceInfo
     }
     
     public func createChromecastButton(frame: CGRect,

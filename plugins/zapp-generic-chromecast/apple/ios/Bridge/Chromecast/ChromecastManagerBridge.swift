@@ -9,8 +9,6 @@
 import Foundation
 import React
 import ZappCore
-import GoogleCast
-
 
 @objc(RNGoogleCast)
 class ChromecastManager: NSObject, RCTBridgeModule {
@@ -128,8 +126,8 @@ class ChromecastManager: NSObject, RCTBridgeModule {
             }
             
             do {
-                let connctedDeviceInfo = try pluginInstance.connctedDeviceInfo()
-                resolver(connctedDeviceInfo)
+                let connectedDeviceInfo = try pluginInstance.connectedDeviceInfo()
+                resolver(connectedDeviceInfo)
             } catch ChromecastAdapterError.castSessionIsDown {
                 rejecter("1", "The cast session is down, can't find a connected device info", nil)
             } catch {
