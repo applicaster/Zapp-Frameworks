@@ -219,7 +219,7 @@ public class GoogleCastModule
     }
 
     @ReactMethod
-    public void getCastDevice(final Promise promise) {
+    public void getConnectedDeviceInfo(final Promise promise) {
         runOnUiQueueThread(() -> {
             if (mCastSession == null) {
                 promise.resolve(null);
