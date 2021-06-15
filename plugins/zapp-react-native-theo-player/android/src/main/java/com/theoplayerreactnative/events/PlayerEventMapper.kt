@@ -1,8 +1,10 @@
 package com.theoplayerreactnative.events
 
+import com.applicaster.util.APLogger
 import com.facebook.react.bridge.Arguments.createMap
 import com.facebook.react.bridge.WritableMap
 import com.theoplayer.android.api.event.player.*
+import com.theoplayerreactnative.TheoPlayerViewManager
 
 object PlayerEventMapper {
 
@@ -102,6 +104,7 @@ object PlayerEventMapper {
 
     @JvmStatic
     fun toRN(event: ErrorEvent): WritableMap = createMap().apply {
+        APLogger.error(TAG, "ErrorEvent:" + event.errorObject.message)
         putString("error", event.errorObject.message)
     }
 
@@ -115,6 +118,7 @@ object PlayerEventMapper {
     @JvmStatic
     fun toRN(event: ContentProtectionErrorEvent): WritableMap = createMap().apply {
         // can explode the object if needed
+        APLogger.error(TAG, "ContentProtectionErrorEvent:" + event.errorObject.toString())
         putString("error", event.errorObject.toString())
     }
 
@@ -144,4 +148,6 @@ object PlayerEventMapper {
     private fun fixNan(time: Double): Double = if(time.isFinite()) time else 0.0
 
     private fun fixTime(currentTime: String): Double = currentTime.toDoubleOrNull() ?: 0.0
+
+    private const val TAG = TheoPlayerViewManager.TAG + ".PlayerEventMapper"
 }

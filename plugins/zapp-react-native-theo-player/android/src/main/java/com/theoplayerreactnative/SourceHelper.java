@@ -152,10 +152,10 @@ public class SourceHelper {
                     builder.playready(drmObject.getString("licenseAcquisitionURL"));
                     break;
                 case "fairplay":
-                    APLogger.error(TAG, "FairPlay is not supported by KeyOS DRM provider");
+                    APLogger.warn(TAG, "FairPlay is not supported by KeyOS DRM provider on Android");
                     break;
                 case "clearkey":
-                    APLogger.error(TAG, "ClearKey is not supported by KeyOS DRM provider");
+                    APLogger.warn(TAG, "ClearKey is not supported by KeyOS DRM provider on Android");
                     break;
             }
         }
@@ -196,7 +196,7 @@ public class SourceHelper {
                     break;
                 case "clearkey":
                     // todo: have no examples so far to test it
-                    APLogger.error(TAG, "Clearkey is not yet supported");
+                    APLogger.warn(TAG, "Clearkey is not yet supported on Android");
                     break;
             }
         }
