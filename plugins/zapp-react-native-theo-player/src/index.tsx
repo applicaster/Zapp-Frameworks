@@ -10,6 +10,16 @@ import {
 } from "react-native";
 import * as R from "ramda";
 const { THEOplayerViewManager } = NativeModules;
+import {
+  createLogger,
+  BaseSubsystem,
+  BaseCategories,
+} from "./Services/LoggerService";
+
+const logger = createLogger({
+  category: BaseCategories.GENERAL,
+  subsystem: BaseSubsystem,
+});
 
 import { isTV } from "@applicaster/zapp-react-native-utils/reactUtils";
 
@@ -258,9 +268,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerLoadedData = ({ nativeEvent }) => {
     const { duration } = this.state;
     const { currentTime } = nativeEvent;
-    if (this.state.adBegin === false) {
-      this.setCurrentTime();
-    }
+
     this.props.onLoad({ duration, currentTime });
     this.setState({ loadedVideo: true });
   };
@@ -269,11 +277,30 @@ export default class THEOPlayer extends Component<Props, State> {
     setTimeout(() => {
       const resumeTime = this.props?.entry?.extensions?.resumeTime;
       const resumeTimeInt = parseInt(resumeTime);
-      if (
+      const isNewTimeOffsetNeeded =
+        this.state.adBegin === false &&
+        this.state.adBreakBegin === false &&
         resumeTimeInt &&
         resumeTimeInt > 0 &&
-        this.state.isContinueWatchingTimeSet === false
-      ) {
+        this.state.isContinueWatchingTimeSet === false;
+
+      logger.info({
+        message: `setCurrentTime: Check if needed to set new time offset: ${isNewTimeOffsetNeeded}`,
+        data: {
+          resumeTimeInt,
+          adBegin: this.state.adBegin,
+          adBreakBegin: this.state.adBreakBegin,
+        },
+      });
+
+      if (isNewTimeOffsetNeeded) {
+        logger.debug({
+          message: `setCurrentTime: Continue watching set new time offset ${resumeTimeInt}`,
+          data: {
+            resumeTimeInt,
+          },
+        });
+
         this.setState({ isContinueWatchingTimeSet: true });
         THEOplayerViewManager.setCurrentTime(resumeTimeInt);
       }
@@ -299,6 +326,14 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
+    logger.info({
+      message: `onPlayerDurationChange: new duration ${duration}`,
+      data: {
+        duration,
+      },
+    });
+
+    this.setCurrentTime();
 
     this.setState({ duration });
     this.props.onLoad({ duration, currentTime: 0 });
@@ -334,6 +369,13 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
+    logger.info({
+      message: "onAdBreakBegin:",
+      data: {
+        maxDuration,
+        nativeEvent,
+      },
+    });
     this.setState({
       adBreakBegin: true,
       adBreakEnd: false,
@@ -344,7 +386,13 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakEnd = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-
+    logger.info({
+      message: "onAdBreakEnd:",
+      data: {
+        maxDuration,
+        nativeEvent,
+      },
+    });
     this.setState({
       adBreakEnd: true,
       adBreakBegin: false,
@@ -354,11 +402,23 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onAdError = ({ nativeEvent }) => {
+    logger.error({
+      message: "onAdError:",
+      data: { nativeEvent },
+    });
     this.setState({ adError: true });
   };
 
   onAdBegin = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
+
+    logger.info({
+      message: "onAdBegin:",
+      data: {
+        duration,
+        id,
+      },
+    });
 
     this.setState({
       adBegin: true,
@@ -372,7 +432,13 @@ export default class THEOPlayer extends Component<Props, State> {
   onAdEnd = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
 
-    this.setCurrentTime();
+    logger.info({
+      message: "onAdEnd:",
+      data: {
+        duration,
+        id,
+      },
+    });
 
     this.setState({
       adEnd: true,
