@@ -60,7 +60,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
     //static
     private static final String RCT_MODULE_NAME = "THEOplayerView";
     private static final String JavaScriptMessageListener = "onJSMessageReceived";
-    public static final String TAG = RCT_MODULE_NAME;
+    public static final String TAG = "TheoPlayerViewManager";
 
     private enum InternalAndGlobalEventPair {
 
