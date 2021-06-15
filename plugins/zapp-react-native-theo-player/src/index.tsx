@@ -410,7 +410,7 @@ export default class THEOPlayer extends Component<Props, State> {
       message: "onAdError:",
       data: { nativeEvent },
     });
-    this.setState({ adError: true });
+    this.setState({ adError: true, adBegin: false, adBreakEnd: false });
   };
 
   onAdBegin = ({ nativeEvent }) => {
