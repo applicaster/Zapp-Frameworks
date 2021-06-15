@@ -290,6 +290,8 @@ export default class THEOPlayer extends Component<Props, State> {
           resumeTimeInt,
           adBegin: this.state.adBegin,
           adBreakBegin: this.state.adBreakBegin,
+          duration: this.getDuration(),
+          progress: this.getCurrentTime(),
         },
       });
 
@@ -298,6 +300,8 @@ export default class THEOPlayer extends Component<Props, State> {
           message: `setCurrentTime: Continue watching set new time offset ${resumeTimeInt}`,
           data: {
             resumeTimeInt,
+            duration: this.getDuration(),
+            progress: this.getCurrentTime(),
           },
         });
 
@@ -466,11 +470,25 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   handleEnded() {
+    logger.debug({
+      message: `handleEnded:`,
+      data: {
+        duration: this.getDuration(),
+        progress: this.getCurrentTime(),
+      },
+    });
     this.setState({ playerClosed: true });
     this.handleClosed();
   }
 
   handleClosed() {
+    logger.debug({
+      message: `handleClosed:`,
+      data: {
+        duration: this.getDuration(),
+        progress: this.getCurrentTime(),
+      },
+    });
     if (!R.isNil(this.props?.onEnded)) {
       this.props?.onEnded();
     }
