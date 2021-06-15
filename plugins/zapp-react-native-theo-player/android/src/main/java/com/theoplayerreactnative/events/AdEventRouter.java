@@ -38,8 +38,8 @@ public class AdEventRouter<T extends AdEvent<T>> implements IEventRouter {
             return;
 
         EventListener<T> eventListener = e -> {
-            APLogger.verbose(TAG, "Received player ad event " + type.getName());
             WritableMap event = cast.toRN(e);
+            APLogger.verbose(TAG, "Received player ad event " + type.getName() + ": " + event);
             reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                     playerView.getId(),
                     internalEvent,

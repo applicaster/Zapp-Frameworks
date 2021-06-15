@@ -33,8 +33,8 @@ public class PlayerEventRouter<T extends PlayerEvent<T>> implements IEventRouter
                           @NotNull String internalEvent) {
 
         EventListener<T> eventListener = e -> {
-            APLogger.verbose(TAG, "Received player event " + type.getName());
             WritableMap event = cast.toRN(e);
+            APLogger.verbose(TAG, "Received player event " + type.getName() + ": " + event);
             reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                     playerView.getId(),
                     internalEvent,
