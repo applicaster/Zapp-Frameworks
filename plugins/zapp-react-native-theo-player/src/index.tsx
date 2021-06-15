@@ -66,6 +66,7 @@ type Props = {
   onLoad: (arg: any) => void;
   onEnd: () => void;
   onProgress: (arg: any) => void;
+  onTimeUpdate: (arg: any) => void;
   onEnded: () => void;
   onPause: (arg: any) => void;
   onError: (arg: any) => void;
@@ -244,6 +245,7 @@ export default class THEOPlayer extends Component<Props, State> {
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
     this.props?.onProgress && this.props?.onProgress({ currentTime });
+    this.props?.onTimeUpdate && this.props?.onTimeUpdate({ currentTime });
     this.setState({ currentTime });
   };
 
