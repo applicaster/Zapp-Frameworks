@@ -344,7 +344,6 @@ extension TeamCardViewController: UITableViewDataSource {
             var itemsCount = 0
 
             if let list = squadCardViewModel.squadCard.value?.squad?.persons {
-                squadMembers = list
                 itemsCount = list.count
             } else if let list = teamCardViewModel.teamCard.value?.players {
                 itemsCount = list.count

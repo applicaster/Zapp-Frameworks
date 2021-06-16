@@ -20,7 +20,7 @@ RCT_EXTERN_METHOD(launchExpandedControls)
 RCT_EXTERN_METHOD(castMedia:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
 RCT_EXTERN_METHOD(hasConnectedCastSession:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
 RCT_EXTERN_METHOD(getCastState:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
-
+RCT_EXTERN_METHOD(getConnectedDeviceInfo:(RCTPromiseResolveBlock)resolve rejecter: (RCTPromiseRejectBlock) reject);
 @end
 
 @interface RCT_EXTERN_MODULE(RNGoogleCastEventEmitter, RCTEventEmitter)
