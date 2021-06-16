@@ -32,12 +32,5 @@
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "YES"
   },
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "source_files": "tests/**"
-    }
-  ],
   "swift_version": "5.1"
 }
