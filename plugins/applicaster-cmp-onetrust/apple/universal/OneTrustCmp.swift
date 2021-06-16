@@ -122,13 +122,15 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
     }
 
     func updateAnalyticsProvidersIfNeeded() {
-        switch cmpAcceptanceStatus {
-        case .given:
-            _ = FacadeConnector.connector?.pluginManager?.enableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
-        case .notGiven:
-            _ = FacadeConnector.connector?.pluginManager?.disableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
-        default:
-            break
+        DispatchQueue.main.async {
+            switch self.cmpAcceptanceStatus {
+            case .given:
+                _ = FacadeConnector.connector?.pluginManager?.enableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
+            case .notGiven:
+                _ = FacadeConnector.connector?.pluginManager?.disableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
+            default:
+                break
+            }
         }
     }
 }
