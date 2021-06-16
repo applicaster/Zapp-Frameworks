@@ -1,6 +1,6 @@
 {
   "name": "ZappTHEOplayer",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.9"
+    "tag": "@@applicaster/zapp-react-native-theo-player/0.6.10"
   },
   "ios": {
     "xcconfig": {
@@ -23,7 +23,9 @@
       "OTHER_CFLAGS": "-fembed-bitcode"
     },
     "dependencies": {
-      "GoogleAds-IMA-iOS-SDK": ["= 3.14.3"],
+      "GoogleAds-IMA-iOS-SDK": [
+        "= 3.14.3"
+      ],
       "React": [],
       "ZappCore": []
     },
@@ -37,7 +39,10 @@
     },
     "source_files": "tvos/**/*.{swift}"
   },
-  "vendored_frameworks": ["THEOplayerSDK.xcframework", "GoogleCast.framework"],
+  "vendored_frameworks": [
+    "THEOplayerSDK.xcframework",
+    "GoogleCast.framework"
+  ],
   "dependencies": {
     "XrayLogger": []
   },
