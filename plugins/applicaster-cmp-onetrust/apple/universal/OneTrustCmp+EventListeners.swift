@@ -72,7 +72,6 @@ extension OneTrustCmp: OTEventListener {
     public func onBannerClickedAcceptAll() {
         // Request tracking permission from the user
         requestTrackingAuthorization { _ in
-            OTPublishersHeadlessSDK.shared.optIntoSaleOfData()
             self.procceedWithProcessCompletion()
         }
     }
@@ -88,14 +87,21 @@ extension OneTrustCmp: OTEventListener {
 
     /// Conform to this method to get notified when user selects `Accept All` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterAcceptAll() {
+        // Request tracking permission from the user
+        requestTrackingAuthorization { _ in
+            OTPublishersHeadlessSDK.shared.optIntoSaleOfData()
+            self.procceedWithProcessCompletion()
+        }
     }
 
     /// Conform to this method to get notified when user selects `Reject All` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterRejectAll() {
+        procceedWithProcessCompletion()
     }
 
     /// Conform to this method to get notified when user selects `Confirm Choices` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterConfirmChoices() {
+        saveParamsToSessionStorageIfExists()
     }
 
     /// Conform to this method to get notified when user selects `Close` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
@@ -104,6 +110,7 @@ extension OneTrustCmp: OTEventListener {
 
     /// Conform to this method to get notified when user selects `Confirm Choices` option from the Vendor List view and the Vendor List view gets dismissed from the view hierarchy.
     public func onVendorConfirmChoices() {
+        saveParamsToSessionStorageIfExists()
     }
 
     /// Conform to this method to get notified when user selects `Back` button from the vendor list view and the Vendor List view gets dismissed from the view hierarchy.

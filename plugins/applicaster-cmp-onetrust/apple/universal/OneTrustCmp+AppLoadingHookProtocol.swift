@@ -44,6 +44,7 @@ extension OneTrustCmp: AppLoadingHookProtocol {
 
                 self.presentationCompletion = completion
                 OTPublishersHeadlessSDK.shared.setupUI(displayViewController, UIType: .banner)
+                OTPublishersHeadlessSDK.shared.showBannerUI()
             case .error:
                 completion?()
             }

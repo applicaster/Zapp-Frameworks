@@ -41,7 +41,7 @@
     },
     "dependencies": {
       "OneTrust-CMP-tvOS-XCFramework": [
-        "~> 6.19.0.0"
+        "~> 6.18.0.0"
       ]
     },
     "source_files": "tvos/**/*.{swift}"

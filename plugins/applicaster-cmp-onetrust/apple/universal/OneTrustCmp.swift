@@ -88,8 +88,10 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
             completion?(true)
             return
         }
-
-        let sdkParams:OTSdkParams? = nil
+        
+        subscribeToEventListeners()
+        
+        let sdkParams = OTSdkParams(countryCode: nil, regionCode: nil)
         OTPublishersHeadlessSDK.shared.startSDK(
             storageLocation: storageLocation,
             domainIdentifier: domainIdentifier,
@@ -102,9 +104,12 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
             } else if let _ = response.error {
                 self.cmpStatus = .error
             }
+            
+            let status = response.responseString != nil
+            let error = response.error
+            self.logger?.debugLog(message: "Initialized with status: \(status) and error \(error?.localizedDescription ?? "No error available").)")
         }
 
-        subscribeToEventListeners()
 
         completion?(true)
     }
