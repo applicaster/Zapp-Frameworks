@@ -1,13 +1,6 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import {
-  View,
-  Platform,
-  findNodeHandle,
-  UIManager,
-  StatusBar,
-  NativeModules,
-} from "react-native";
+import { View, StatusBar, NativeModules, BackHandler } from "react-native";
 import * as R from "ramda";
 const { THEOplayerViewManager } = NativeModules;
 import {
@@ -134,7 +127,9 @@ export default class THEOPlayer extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.getCurrentTime = this.getCurrentTime.bind(this);
-
+    this.hadwareBackButtonDidPressed = this.hadwareBackButtonDidPressed.bind(
+      this
+    );
     this.state = {
       playerCreated: false,
       loadStart: false,
@@ -172,6 +167,11 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.hadwareBackButtonDidPressed
+    );
+
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
@@ -181,9 +181,20 @@ export default class THEOPlayer extends Component<Props, State> {
     if (prevState?.playerEnded === false && this.state.playerEnded) {
       this.handleEnded();
     }
+
+    const prevStateDuration = prevState?.duration;
+    const currentDuration = this.state.duration;
+
+    if (prevStateDuration !== currentDuration && currentDuration > 0) {
+      this.setCurrentTime();
+    }
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.hadwareBackButtonDidPressed
+    );
     this.analyticsTracker.handleAnalyticEvent(EVENTS.playerClosed);
   }
 
@@ -275,43 +286,54 @@ export default class THEOPlayer extends Component<Props, State> {
     this.setState({ loadedVideo: true });
   };
 
-  setCurrentTime() {
-    setTimeout(() => {
-      const resumeTime = this.props?.entry?.extensions?.resumeTime;
-      const resumeTimeInt = parseInt(resumeTime);
-      const isNewTimeOffsetNeeded =
-        this.state.adBegin === false &&
-        this.state.adBreakBegin === false &&
-        resumeTimeInt &&
-        resumeTimeInt > 0 &&
-        this.state.isContinueWatchingTimeSet === false;
+  hadwareBackButtonDidPressed(): boolean {
+    logger.info({
+      message: `hadwareBackButtonDidPressed: Handle close player`,
+    });
+    this.handleClosed();
 
-      logger.info({
-        message: `setCurrentTime: Check if needed to set new time offset: ${isNewTimeOffsetNeeded}`,
+    return true;
+  }
+
+  setCurrentTime() {
+    const duration = this.getDuration();
+    const resumeTime = this.props?.entry?.extensions?.resumeTime || "0";
+    const resumeTimeInt = parseInt(resumeTime);
+    const isNewTimeOffsetNeeded =
+      duration > 0 &&
+      this.state.adBegin === false &&
+      this.state.adBreakBegin === false &&
+      resumeTimeInt &&
+      resumeTimeInt > 0 &&
+      this.state.isContinueWatchingTimeSet === false;
+
+    logger.info({
+      message: `setCurrentTime: Check if needed to set new time offset- rersult: ${isNewTimeOffsetNeeded}`,
+      data: {
+        resumeTimeInt,
+        adBegin: this.state.adBegin,
+        adBreakBegin: this.state.adBreakBegin,
+        duration,
+        progress: this.getCurrentTime(),
+        extension: this.props?.entry?.extensions,
+      },
+    });
+
+    if (isNewTimeOffsetNeeded) {
+      logger.debug({
+        message: `setCurrentTime: Continue watching set new time offset ${resumeTimeInt}`,
         data: {
           resumeTimeInt,
-          adBegin: this.state.adBegin,
-          adBreakBegin: this.state.adBreakBegin,
-          duration: this.getDuration(),
+          duration,
           progress: this.getCurrentTime(),
         },
       });
 
-      if (isNewTimeOffsetNeeded) {
-        logger.debug({
-          message: `setCurrentTime: Continue watching set new time offset ${resumeTimeInt}`,
-          data: {
-            resumeTimeInt,
-            duration: this.getDuration(),
-            progress: this.getCurrentTime(),
-          },
-        });
-
-        this.setState({ isContinueWatchingTimeSet: true });
-        THEOplayerViewManager.setCurrentTime(resumeTimeInt);
-      }
-    }, 300);
+      this.setState({ isContinueWatchingTimeSet: true });
+      THEOplayerViewManager.setCurrentTime(resumeTimeInt);
+    }
   }
+
   onPlayerLoadStart = ({ nativeEvent }) => {
     this.setState({ loadStart: true });
   };
@@ -338,8 +360,6 @@ export default class THEOPlayer extends Component<Props, State> {
         duration,
       },
     });
-
-    this.setCurrentTime();
 
     this.setState({ duration });
     this.props.onLoad({ duration, currentTime: 0 });
