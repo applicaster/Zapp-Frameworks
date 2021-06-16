@@ -16,7 +16,7 @@ import Foundation
 
 extension OneTrustCmp {
     public func showPreferences() -> (success: Bool, errorDescription: String?) {
-        guard cmpStatus == .ready else {
+        guard cmpInitStatus == .ready else {
             return (false, "OneTrust is not ready")
         }
 
@@ -26,7 +26,7 @@ extension OneTrustCmp {
     }
 
     public func showNotice() -> (success: Bool, errorDescription: String?) {
-        guard cmpStatus == .ready else {
+        guard cmpInitStatus == .ready else {
             return (false, "OneTrust is not ready")
         }
 

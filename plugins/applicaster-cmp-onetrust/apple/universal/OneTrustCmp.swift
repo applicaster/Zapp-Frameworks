@@ -19,7 +19,12 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
     public var configurationJSON: NSDictionary?
     lazy var logger = Logger.getLogger(for: "\(kNativeSubsystemPath)/OneTrustConsentManagement")
     var presentationCompletion: (() -> Void)?
-    public var cmpStatus: OneTrustCmpStatus = .undefined
+    public var cmpInitStatus: OneTrustInitializationStatus = .undefined
+    public var cmpAcceptanceStatus: OneTrustAcceptanceStatus = .notCollected {
+        didSet {
+            updateAnalyticsProvidersIfNeeded()
+        }
+    }
 
     struct Params {
         static let domainIdentifier = "domain_identifier"
@@ -88,9 +93,8 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
             completion?(true)
             return
         }
-        
+
         subscribeToEventListeners()
-        
         let sdkParams = OTSdkParams(countryCode: nil, regionCode: nil)
         OTPublishersHeadlessSDK.shared.startSDK(
             storageLocation: storageLocation,
@@ -100,22 +104,32 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
         ) { response in
 
             if response.status {
-                self.cmpStatus = .ready
+                self.cmpInitStatus = .ready
             } else if let _ = response.error {
-                self.cmpStatus = .error
+                self.cmpInitStatus = .error
             }
-            
+
             let status = response.responseString != nil
             let error = response.error
             self.logger?.debugLog(message: "Initialized with status: \(status) and error \(error?.localizedDescription ?? "No error available").)")
         }
-
 
         completion?(true)
     }
 
     public func disable(completion: ((Bool) -> Void)?) {
         completion?(true)
+    }
+
+    func updateAnalyticsProvidersIfNeeded() {
+        switch cmpAcceptanceStatus {
+        case .given:
+            _ = FacadeConnector.connector?.pluginManager?.enableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
+        case .notGiven:
+            _ = FacadeConnector.connector?.pluginManager?.disableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
+        default:
+            break
+        }
     }
 }
 
@@ -126,8 +140,14 @@ public enum OTAuthorizationStatus: UInt {
     case authorized = 3
 }
 
-public enum OneTrustCmpStatus {
+public enum OneTrustInitializationStatus {
     case undefined
     case ready
     case error
+}
+
+public enum OneTrustAcceptanceStatus: Int {
+    case given = 1
+    case notGiven = 0
+    case notCollected = -1
 }

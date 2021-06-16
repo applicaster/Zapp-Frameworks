@@ -39,7 +39,7 @@ extension OneTrustCmp {
             }
         }
     }
-
+    
     func procceedWithProcessCompletion() {
         presentationCompletion?()
         presentationCompletion = nil
@@ -71,13 +71,22 @@ extension OneTrustCmp: OTEventListener {
     /// Conform to this method to get notified when user selects `Accept All` option from the banner view and the banner view gets dismissed from the view hierarchy.
     public func onBannerClickedAcceptAll() {
         // Request tracking permission from the user
-        requestTrackingAuthorization { _ in
+        requestTrackingAuthorization { status in
+            switch status {
+            case .authorized:
+                self.cmpAcceptanceStatus = .given
+            case .denied:
+                self.cmpAcceptanceStatus = .notGiven
+            default:
+                break
+            }
             self.procceedWithProcessCompletion()
         }
     }
 
     /// Conform to this method to get notified when user selects `Reject All` option from the banner view and the banner view gets dismissed from the view hierarchy.
     public func onBannerClickedRejectAll() {
+        cmpAcceptanceStatus = .notGiven
         procceedWithProcessCompletion()
     }
 
@@ -88,14 +97,22 @@ extension OneTrustCmp: OTEventListener {
     /// Conform to this method to get notified when user selects `Accept All` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterAcceptAll() {
         // Request tracking permission from the user
-        requestTrackingAuthorization { _ in
-            OTPublishersHeadlessSDK.shared.optIntoSaleOfData()
+        requestTrackingAuthorization { status in
+            switch status {
+            case .authorized:
+                self.cmpAcceptanceStatus = .given
+            case .denied:
+                self.cmpAcceptanceStatus = .notGiven
+            default:
+                break
+            }
             self.procceedWithProcessCompletion()
         }
     }
 
     /// Conform to this method to get notified when user selects `Reject All` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterRejectAll() {
+        cmpAcceptanceStatus = .notGiven
         procceedWithProcessCompletion()
     }
 

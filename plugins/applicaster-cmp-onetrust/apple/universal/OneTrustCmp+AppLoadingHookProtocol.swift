@@ -31,7 +31,7 @@ extension OneTrustCmp: AppLoadingHookProtocol {
                 return
             }
 
-            switch self.cmpStatus {
+            switch self.cmpInitStatus {
             case .undefined:
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.executeOnLaunch(completion: completion)
@@ -49,6 +49,11 @@ extension OneTrustCmp: AppLoadingHookProtocol {
                 completion?()
             }
         }
+    }
+
+    public func executeOnApplicationReady(displayViewController: UIViewController?, completion: (() -> Void)?) {
+        updateAnalyticsProvidersIfNeeded()
+        completion?()
     }
 
     public func executeAfterAppRootPresentation(displayViewController: UIViewController?, completion: (() -> Void)?) {
