@@ -2,22 +2,21 @@ package com.theoplayerreactnative;
 
 import androidx.annotation.NonNull;
 
+import com.applicaster.util.APLogger;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.theoplayer.android.api.ads.Ad;
-import com.theoplayer.android.api.player.RequestCallback;
+import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.addescription.THEOplayerAdDescription;
-
-import java.util.List;
 
 public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
 
     private static final String RCT_MODULE_NAME = "THEOplayerViewManager";
+    private static final String TAG = "TheoPlayerViewModule";
     private final TheoPlayerViewManager theoPlayerViewManager;
 
     TheoPlayerViewModule(@NonNull ReactApplicationContext reactContext,
@@ -80,26 +79,18 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getCurrentTime(final Promise promise) {
-        theoPlayerViewManager.playerView.getPlayer().requestCurrentTime(new RequestCallback<Double>() {
-            @Override
-            public void handleResult(Double aDouble) {
-                promise.resolve(aDouble);
-            }
-        });
+        theoPlayerViewManager.playerView.getPlayer().requestCurrentTime(aDouble -> promise.resolve(aDouble));
     }
 
     @ReactMethod
-    public void setCurrentTime(double aDouble) {
-        theoPlayerViewManager.playerView.getPlayer().setCurrentTime(aDouble);
+    public void setCurrentTime(double timeS) {
+        APLogger.debug(TAG, "Set time " + timeS);
+        Player player = theoPlayerViewManager.playerView.getPlayer();
+        player.setCurrentTime(timeS, () -> APLogger.debug(TAG, "Set time complete"));
     }
 
     @ReactMethod
     public void getCurrentAds(final Promise promise) {
-        theoPlayerViewManager.playerView.getPlayer().getAds().requestCurrentAds(new RequestCallback<List<Ad>>() {
-            @Override
-            public void handleResult(List<Ad> ads) {
-                promise.resolve(ads.size());
-            }
-        });
+        theoPlayerViewManager.playerView.getPlayer().getAds().requestCurrentAds(ads -> promise.resolve(ads.size()));
     }
 }

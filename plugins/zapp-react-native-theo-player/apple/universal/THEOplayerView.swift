@@ -160,7 +160,7 @@ class THEOplayerView: UIView {
 
         let bundle = Bundle(for: THEOplayerView.self)
         let scripthPaths = [bundle.path(forResource: "script", ofType: "js")].compactMap { $0 }
-        
+
         var stylePaths = [bundle.path(forResource: playerScaleMode, ofType: "css")].compactMap { $0 }
         if let customCss = urlForCustomCss() {
             stylePaths.append(customCss)

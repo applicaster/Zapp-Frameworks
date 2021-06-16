@@ -1,9 +1,11 @@
 package com.theoplayerreactnative.events
 
+import com.applicaster.util.APLogger
 import com.facebook.react.bridge.Arguments.createMap
 import com.facebook.react.bridge.WritableMap
 import com.theoplayer.android.api.ads.*
 import com.theoplayer.android.api.event.ads.*
+import com.theoplayerreactnative.TheoPlayerViewManager
 
 object AdEventMapper {
 
@@ -37,8 +39,9 @@ object AdEventMapper {
 
     @JvmStatic
     fun toRN(event: AdErrorEvent): WritableMap = createMap().apply {
+        APLogger.error(TAG, "AdErrorEvent:" + event.error ?: "<null>")
         collectAdInfo(this, event.ad)
-        putString("error", event.error)
+        putString("error", event.error ?: "<null>")
     }
 
     private fun collectAdInfo(map: WritableMap, ad: Ad?) {
@@ -62,4 +65,5 @@ object AdEventMapper {
         }
     }
 
+    private const val TAG = TheoPlayerViewManager.TAG + ".AdEventMapper"
 }
