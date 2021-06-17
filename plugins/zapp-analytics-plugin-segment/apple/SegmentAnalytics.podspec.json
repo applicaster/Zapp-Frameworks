@@ -1,6 +1,6 @@
 {
   "name": "SegmentAnalytics",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "platforms": {
     "ios": "11.0",
     "tvos": "11.0"
@@ -16,7 +16,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster-plugins/SegmentAnalytics-iOS",
-    "tag": "@@applicaster/zapp-analytics-plugin-segment/2.1.6"
+    "tag": "@@applicaster/zapp-analytics-plugin-segment/2.2.0"
   },
   "frameworks": [
     "Foundation",
