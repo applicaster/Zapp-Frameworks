@@ -9,12 +9,12 @@ import Foundation
 
 import Foundation
 
-@objc public protocol FacadeConnectorPushProtocol {
-    @objc func addTagsToDevice(_ tags: [String]?,
-                               completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void)
+public protocol FacadeConnectorPushProtocol {
+    func addTagsToDevice(_ tags: [String]?,
+                               completion: @escaping (Result<[String]?, Error>) -> Void)
 
-    @objc func removeTagsToDevice(_ tags: [String]?,
-                                  completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void)
+    func removeTagsToDevice(_ tags: [String]?,
+                                  completion: @escaping (Result<[String]?, Error>) -> Void)
 
-    @objc func getDeviceTags() -> [String:[String]]
+    func getDeviceTags() -> [String:[String]]
 }

@@ -9,11 +9,17 @@ import Foundation
 import ZappCore
 
 extension PushPluginsManager: FacadeConnectorPushProtocol {
-    @objc public func addTagsToDevice(_ tags: [String]?,
-                                      completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+    enum PushPluginsManagerError: Error {
+        case failedToRemoveTags
+        case failedToAddTags
+
+    }
+    
+    public func addTagsToDevice(_ tags: [String]?,
+                                      completion: @escaping (Result<[String]?, Error>) -> Void) {
         var counter = _providers.count
         guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
-            completion(false, tags)
+            completion(.failure(PushPluginsManagerError.failedToAddTags))
             return
         }
 
@@ -27,7 +33,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
                         completionSuccess = success
                     }
                     if counter == 0 {
-                        completion(true, tags)
+                        completion(.success(tags))
                     }
                 })
             } else {
@@ -36,11 +42,11 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
         }
     }
 
-    @objc public func removeTagsToDevice(_ tags: [String]?,
-                                         completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+    public func removeTagsToDevice(_ tags: [String]?,
+                                         completion: @escaping (Result<[String]?, Error>) -> Void) {
         var counter = _providers.count
         guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
-            completion(false, tags)
+            completion(.failure(PushPluginsManagerError.failedToRemoveTags))
             return
         }
 
@@ -54,7 +60,7 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
                         completionSuccess = success
                     }
                     if counter == 0 {
-                        completion(true, tags)
+                        completion(.success(tags))
                     }
                 })
             } else {
