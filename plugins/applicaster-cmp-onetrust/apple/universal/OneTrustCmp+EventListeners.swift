@@ -119,6 +119,7 @@ extension OneTrustCmp: OTEventListener {
     /// Conform to this method to get notified when user selects `Confirm Choices` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
     public func onPreferenceCenterConfirmChoices() {
         saveParamsToSessionStorageIfExists()
+        procceedWithProcessCompletion()
     }
 
     /// Conform to this method to get notified when user selects `Close` option from the prefence center and the prefence center gets dismissed from the view hierarchy.
