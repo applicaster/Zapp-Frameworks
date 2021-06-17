@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@applicaster/amazon-cognito-js@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@applicaster/amazon-cognito-js/-/amazon-cognito-js-1.1.3.tgz#43dedebac47b17da3f194b3ef332a10522650099"
+  integrity sha512-sk2wOT/7ITj68+KC89mu3U7k+/b6hiFVneOnsmBeE4qehu7ydpqEDtJuuwxToRf8JSrWjXt9QbtlPGaqL2badw==
+  dependencies:
+    "@applicaster/zapp-react-native-bridge" "5.0.1"
+
 "@applicaster/applicaster-account-components@0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@applicaster/applicaster-account-components/-/applicaster-account-components-0.1.1.tgz#dd642b71bcd36111487a27f53e8547a7d9a6f780"
@@ -454,6 +461,15 @@
     react-router-native "5.1.2"
     url "^0.11.0"
 
+"@applicaster/zapp-react-native-bridge@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-bridge/-/zapp-react-native-bridge-5.0.1.tgz#7edd17c4014d27c6e5d5ef09dc1b83bcfd938997"
+  integrity sha512-R1AI1PfrclGtbu338SBayCNmcdPTlD95by7XGRfnFkF47ZkZ5Kz4Bs3pshrtmpiyU0PzwvwYmHuLJLNpt7uaGA==
+  dependencies:
+    "@applicaster/zapp-pipes-dev-kit" "^1.4.1"
+    "@applicaster/zapp-react-native-utils" "5.0.1"
+    uuid "^3.3.2"
+
 "@applicaster/zapp-react-native-bridge@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-bridge/-/zapp-react-native-bridge-5.0.2.tgz#078e31aafa49b76af7bfbfa447de7b0d8a06ed19"
@@ -562,6 +578,22 @@
     react-router-native "^5.1.2"
     url "^0.11.0"
     uuid "^3.3.2"
+
+"@applicaster/zapp-react-native-utils@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@applicaster/zapp-react-native-utils/-/zapp-react-native-utils-5.0.1.tgz#5b450ff64fa09b56d0c3f550470873994c5d8c72"
+  integrity sha512-7NRerbs+yRyBkJIYMyVa/xJKC+hpbNQigHmMSr0A2c/hhpcMIlTqkWOwz/3UUSEjTPkymHtPEEdWG+EHkOAjYw==
+  dependencies:
+    "@applicaster/quick-brick-xray" "1.6.1"
+    "@react-native-community/netinfo" "^5.9.0"
+    buffer "^5.2.1"
+    camelize "^1.0.0"
+    create-react-context "^0.2.3"
+    create-react-ref "^0.1.0"
+    memoizee "^0.4.14"
+    prop-types "^15.0.0"
+    ramda "0.26.1"
+    react-native-handlebars "^5.0.0-alpha.1"
 
 "@applicaster/zapp-react-native-utils@5.0.2":
   version "5.0.2"
