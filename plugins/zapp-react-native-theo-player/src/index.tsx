@@ -1,7 +1,18 @@
 /// <reference types="@applicaster/applicaster-types" />
 import React, { Component } from "react";
-import { View, Platform, StatusBar } from "react-native";
+import { View, StatusBar, NativeModules, BackHandler } from "react-native";
 import * as R from "ramda";
+const { THEOplayerViewManager } = NativeModules;
+import {
+  createLogger,
+  BaseSubsystem,
+  BaseCategories,
+} from "./Services/LoggerService";
+
+const logger = createLogger({
+  category: BaseCategories.GENERAL,
+  subsystem: BaseSubsystem,
+});
 
 import { isTV } from "@applicaster/zapp-react-native-utils/reactUtils";
 
@@ -11,6 +22,7 @@ import THEOplayerView from "./THEOplayerView";
 import { getIMAData } from "./Services/GoogleIMA";
 import { getDRMData } from "./Services/DRM";
 import { EVENTS } from "./Utils/const";
+import { duration } from "moment";
 
 console.disableYellowBox = true;
 
@@ -32,6 +44,8 @@ type Entry = {
   title: string;
   extensions: {
     analyticsCustomProperties: object;
+    duration: number;
+    resumeTime: string;
   };
 };
 
@@ -45,6 +59,7 @@ type Props = {
   onLoad: (arg: any) => void;
   onEnd: () => void;
   onProgress: (arg: any) => void;
+  onTimeUpdate: (arg: any) => void;
   onEnded: () => void;
   onPause: (arg: any) => void;
   onError: (arg: any) => void;
@@ -94,7 +109,8 @@ type State = {
   error: boolean;
   playerEnded: boolean;
   playerClosed: boolean;
-  buffering: Boolean;
+  buffering: boolean;
+  isContinueWatchingTimeSet: boolean;
 };
 
 const videoStyles = ({ width, height }) => ({
@@ -105,12 +121,15 @@ const videoStyles = ({ width, height }) => ({
 });
 
 export default class THEOPlayer extends Component<Props, State> {
-  _root: typeof THEOplayerView;
+  playerRef: React.Component<any, any, any>;
   analyticsTracker = new AnalyticsTracker();
 
   constructor(props) {
     super(props);
-
+    this.getCurrentTime = this.getCurrentTime.bind(this);
+    this.hadwareBackButtonDidPressed = this.hadwareBackButtonDidPressed.bind(
+      this
+    );
     this.state = {
       playerCreated: false,
       loadStart: false,
@@ -143,10 +162,16 @@ export default class THEOPlayer extends Component<Props, State> {
       playerEnded: false,
       playerClosed: false,
       buffering: false,
+      isContinueWatchingTimeSet: false,
     };
   }
 
   componentDidMount() {
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.hadwareBackButtonDidPressed
+    );
+
     this.analyticsTracker.initialState(this.state, this.props.entry);
   }
 
@@ -156,9 +181,20 @@ export default class THEOPlayer extends Component<Props, State> {
     if (prevState?.playerEnded === false && this.state.playerEnded) {
       this.handleEnded();
     }
+
+    const prevStateDuration = prevState?.duration;
+    const currentDuration = this.state.duration;
+
+    if (prevStateDuration !== currentDuration && currentDuration > 0) {
+      this.setCurrentTime();
+    }
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.hadwareBackButtonDidPressed
+    );
     this.analyticsTracker.handleAnalyticEvent(EVENTS.playerClosed);
   }
 
@@ -209,9 +245,18 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerWaiting = ({ nativeEvent }) => {};
 
+  getCurrentTime() {
+    return this.state.currentTime;
+  }
+
+  getDuration() {
+    return this.state.duration;
+  }
+
   onPlayerTimeUpdate = ({ nativeEvent }) => {
     const { currentTime } = nativeEvent;
-
+    this.props?.onProgress && this.props?.onProgress({ currentTime });
+    this.props?.onTimeUpdate && this.props?.onTimeUpdate({ currentTime });
     this.setState({ currentTime });
   };
 
@@ -238,9 +283,56 @@ export default class THEOPlayer extends Component<Props, State> {
     const { currentTime } = nativeEvent;
 
     this.props.onLoad({ duration, currentTime });
-
     this.setState({ loadedVideo: true });
   };
+
+  hadwareBackButtonDidPressed(): boolean {
+    logger.info({
+      message: `hadwareBackButtonDidPressed: Handle close player`,
+    });
+    this.handleClosed();
+
+    return true;
+  }
+
+  setCurrentTime() {
+    const duration = this.getDuration();
+    const resumeTime = this.props?.entry?.extensions?.resumeTime || "0";
+    const resumeTimeInt = parseInt(resumeTime);
+    const isNewTimeOffsetNeeded =
+      duration > 0 &&
+      this.state.adBegin === false &&
+      this.state.adBreakBegin === false &&
+      resumeTimeInt &&
+      resumeTimeInt > 0 &&
+      this.state.isContinueWatchingTimeSet === false;
+
+    logger.info({
+      message: `setCurrentTime: Check if needed to set new time offset- rersult: ${isNewTimeOffsetNeeded}`,
+      data: {
+        resumeTimeInt,
+        adBegin: this.state.adBegin,
+        adBreakBegin: this.state.adBreakBegin,
+        duration,
+        progress: this.getCurrentTime(),
+        extension: this.props?.entry?.extensions,
+      },
+    });
+
+    if (isNewTimeOffsetNeeded) {
+      logger.debug({
+        message: `setCurrentTime: Continue watching set new time offset ${resumeTimeInt}`,
+        data: {
+          resumeTimeInt,
+          duration,
+          progress: this.getCurrentTime(),
+        },
+      });
+
+      this.setState({ isContinueWatchingTimeSet: true });
+      THEOplayerViewManager.setCurrentTime(resumeTimeInt);
+    }
+  }
 
   onPlayerLoadStart = ({ nativeEvent }) => {
     this.setState({ loadStart: true });
@@ -262,6 +354,12 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onPlayerDurationChange = ({ nativeEvent }) => {
     const { duration } = nativeEvent;
+    logger.info({
+      message: `onPlayerDurationChange: new duration ${duration}`,
+      data: {
+        duration,
+      },
+    });
 
     this.setState({ duration });
     this.props.onLoad({ duration, currentTime: 0 });
@@ -297,6 +395,13 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakBegin = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
+    logger.info({
+      message: "onAdBreakBegin:",
+      data: {
+        maxDuration,
+        nativeEvent,
+      },
+    });
     this.setState({
       adBreakBegin: true,
       adBreakEnd: false,
@@ -307,7 +412,13 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdBreakEnd = ({ nativeEvent }) => {
     const { maxDuration } = nativeEvent;
-
+    logger.info({
+      message: "onAdBreakEnd:",
+      data: {
+        maxDuration,
+        nativeEvent,
+      },
+    });
     this.setState({
       adBreakEnd: true,
       adBreakBegin: false,
@@ -317,11 +428,23 @@ export default class THEOPlayer extends Component<Props, State> {
   };
 
   onAdError = ({ nativeEvent }) => {
-    this.setState({ adError: true });
+    logger.error({
+      message: "onAdError:",
+      data: { nativeEvent },
+    });
+    this.setState({ adError: true, adBegin: false, adBreakEnd: false });
   };
 
   onAdBegin = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
+
+    logger.info({
+      message: "onAdBegin:",
+      data: {
+        duration,
+        id,
+      },
+    });
 
     this.setState({
       adBegin: true,
@@ -334,6 +457,14 @@ export default class THEOPlayer extends Component<Props, State> {
 
   onAdEnd = ({ nativeEvent }) => {
     const { duration, id } = nativeEvent;
+
+    logger.info({
+      message: "onAdEnd:",
+      data: {
+        duration,
+        id,
+      },
+    });
 
     this.setState({
       adEnd: true,
@@ -349,41 +480,49 @@ export default class THEOPlayer extends Component<Props, State> {
 
     if (type === "onCloseButtonHandle") {
       if (!R.isNil(this.props?.onFullscreenPlayerDidDismiss)) {
-        this.props?.onFullscreenPlayerDidDismiss();
+        this.handleClosed();
       } else if (this.props?.playerEvent) {
         this.handleClosed();
       }
     }
   };
 
-  _assignRoot = (component: typeof THEOplayerView) => {
-    this._root = component;
+  _assignRoot = (component: React.Component<any, any, any>) => {
+    this.playerRef = component;
   };
 
   handleEnded() {
+    logger.debug({
+      message: `handleEnded:`,
+      data: {
+        duration: this.getDuration(),
+        progress: this.getCurrentTime(),
+      },
+    });
     this.setState({ playerClosed: true });
     this.handleClosed();
   }
 
   handleClosed() {
-    if (Platform.OS === "ios" && !R.isNil(this.props?.onEnd)) {
-      this.props?.onEnd();
-    }
-
-    if (Platform.OS === "android" && !R.isNil(this.props?.onEnded)) {
+    logger.debug({
+      message: `handleClosed:`,
+      data: {
+        duration: this.getDuration(),
+        progress: this.getCurrentTime(),
+      },
+    });
+    if (!R.isNil(this.props?.onEnded)) {
       this.props?.onEnded();
     }
   }
 
   render() {
     const { entry, style: videoStyle, pluginConfiguration } = this.props;
-
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
     const drm = getDRMData({ entry });
-
     return (
       <View
         style={
@@ -444,7 +583,9 @@ export default class THEOPlayer extends Component<Props, State> {
             poster: posterImage,
           }}
         />
-      {!isTV() && <StatusBar hidden={true} showHideTransition="fade" animated />}
+        {!isTV() && (
+          <StatusBar hidden={true} showHideTransition="fade" animated />
+        )}
       </View>
     );
   }

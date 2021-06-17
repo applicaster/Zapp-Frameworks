@@ -8,7 +8,6 @@ const logger = createLogger({
 
 export function getDRMData({ entry }) {
   const drmData = getDRMFromEntry(entry);
-
   if (drmData) {
     return mapDRMToTheoData(drmData);
   }

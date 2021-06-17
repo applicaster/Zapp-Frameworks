@@ -56,9 +56,12 @@ class THEOplayerViewManager: RCTViewManager {
         }
     }
 
-    @objc
+    @objc(setCurrentTime:)
     func setCurrentTime(_ newValue: NSNumber) {
-        playerView?.player.setCurrentTime(newValue.doubleValue)
+        DispatchQueue.main.async {
+            self.playerView?.player.setCurrentTime(newValue.doubleValue)
+        }
+
     }
 
     @objc(getDuration:reject:)
