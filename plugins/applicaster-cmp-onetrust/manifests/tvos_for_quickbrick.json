@@ -58,9 +58,9 @@
     "@applicaster/applicaster-cmp-onetrust@0.1.0"
   ],
   "targets": [
-    "mobile"
+    "tv"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "tvos_for_quickbrick",
   "manifest_version": "0.1.0",
   "dependency_version": "0.1.0",
   "extra_dependencies": [
