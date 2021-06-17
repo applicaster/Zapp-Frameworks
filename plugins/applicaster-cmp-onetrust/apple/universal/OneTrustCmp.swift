@@ -125,8 +125,10 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
         DispatchQueue.main.async {
             switch self.cmpAcceptanceStatus {
             case .given:
+                self.logger?.debugLog(message: "Enabling Analytics providers")
                 _ = FacadeConnector.connector?.pluginManager?.enableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
             case .notGiven:
+                self.logger?.debugLog(message: "Disabling Analytics providers")
                 _ = FacadeConnector.connector?.pluginManager?.disableAllPlugins(pluginType: ZPPluginType.Analytics.rawValue, completion: nil)
             default:
                 break

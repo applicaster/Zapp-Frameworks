@@ -39,7 +39,7 @@ extension OneTrustCmp {
             }
         }
     }
-    
+
     func procceedWithProcessCompletion() {
         presentationCompletion?()
         presentationCompletion = nil
