@@ -9,6 +9,14 @@ const baseManifest = {
   custom_configuration_fields: [
     {
       section: "configuration",
+      type: "checkbox",
+      key: "enabled",
+      default: 1,
+      label: "Plugin enabled",
+      label_tooltip: "Disable plugin if you do not want to use plugin",
+    },
+    {
+      section: "configuration",
       type: "text",
       key: "segment_write_key",
       tooltip_text: "The key used for connecting with segment analytics",

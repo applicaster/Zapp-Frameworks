@@ -18,6 +18,13 @@ const baseManifest = {
 
   custom_configuration_fields: [
     {
+      type: "checkbox",
+      key: "enabled",
+      default: 1,
+      label: "Plugin enabled",
+      label_tooltip: "Disable plugin if you do not want to use plugin",
+    },
+    {
       type: "text",
       key: "tracker_id",
       tooltip_text: "Tracker ID",
@@ -56,8 +63,8 @@ function createManifest({ version, platform }) {
   return manifest;
 }
 const min_zapp_sdk = {
-  tvos_for_quickbrick: "2.0.2-Dev",
-  ios_for_quickbrick: "2.0.2-Dev",
+  tvos_for_quickbrick: "4.1.0-Dev",
+  ios_for_quickbrick: "4.1.0-Dev",
 };
 
 const extra_dependencies_apple = {

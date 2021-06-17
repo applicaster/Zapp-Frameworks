@@ -1,0 +1,55 @@
+{
+  "name": "ZappCmpOneTrust",
+  "version": "0.0.1",
+  "platforms": {
+    "ios": "12.0",
+    "tvos": "12.0"
+  },
+  "summary": "OneTrust Consent Management",
+  "description": "OneTrust Consent Management",
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks.git",
+  "license": "Appache 2.0",
+  "authors": "Applicaster LTD.",
+  "source": {
+    "git": "https://github.com/applicaster/Zapp-Frameworks.git",
+    "tag": "@@applicaster/applicaster-cmp-onetrust/0.0.1"
+  },
+  "requires_arc": true,
+  "swift_versions": "5.1",
+  "source_files": "universal/**/*.{swift,m}",
+  "xcconfig": {
+    "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+    "ENABLE_BITCODE": "YES"
+  },
+  "ios": {
+    "xcconfig": {
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode"
+    },
+    "dependencies": {
+      "OneTrust-CMP-XCFramework": [
+        "~> 6.19.0.0"
+      ]
+    },
+    "source_files": "ios/**/*.{swift}"
+  },
+  "tvos": {
+    "xcconfig": {
+      "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
+      "ENABLE_BITCODE": "YES",
+      "OTHER_CFLAGS": "-fembed-bitcode"
+    },
+    "dependencies": {
+      "OneTrust-CMP-tvOS-XCFramework": [
+        "~> 6.18.0.0"
+      ]
+    },
+    "source_files": "tvos/**/*.{swift}"
+  },
+  "dependencies": {
+    "ZappCore": [],
+    "XrayLogger": [],
+    "React": []
+  },
+  "swift_version": "5.1"
+}
