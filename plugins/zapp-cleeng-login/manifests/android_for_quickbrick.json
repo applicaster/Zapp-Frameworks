@@ -94,8 +94,8 @@
     ]
   },
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.1.3",
-  "manifest_version": "0.1.3",
+  "dependency_version": "0.1.4",
+  "manifest_version": "0.1.4",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [

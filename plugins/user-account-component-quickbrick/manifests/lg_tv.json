@@ -26,8 +26,8 @@
   ],
   "dependency_name": "@applicaster/quick-brick-user-account",
   "platform": "lg_tv",
-  "manifest_version": "0.3.21",
-  "dependency_version": "0.3.21",
+  "manifest_version": "0.3.22",
+  "dependency_version": "0.3.22",
   "general": {
     "fields": [
       {

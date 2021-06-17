@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp_login_plugin_oauth_tv_2_0",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@react-native-community/blur": "3.4.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "html-react-parser": "0.10.3",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
