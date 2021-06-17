@@ -39,8 +39,8 @@
     ]
   },
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.2.5",
-  "manifest_version": "0.2.5",
+  "dependency_version": "0.2.6",
+  "manifest_version": "0.2.6",
   "min_zapp_sdk": "4.1.0-Dev",
   "styles": {
     "fields": [
