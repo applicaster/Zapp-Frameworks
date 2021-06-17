@@ -15,7 +15,7 @@
   "dependencies": {
     "@applicaster/applicaster-storefront-component": "0.0.10",
     "@react-native-community/blur": "3.4.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
