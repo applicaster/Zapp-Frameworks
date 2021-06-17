@@ -31,13 +31,18 @@ class GroupAdapter(private val items: List<GroupModel.Division>,
     private var recyclerView: RecyclerView? = null
     private var teamItemMargin: Int = 0
 
+    private val groupSize = 5 // visible teams count
+
     init {
         context?.resources?.apply {
             val generalListMargin = getDimensionPixelOffset(R.dimen.horizontal_margin_item_group_list)
             val teamListMargin = getDimensionPixelOffset(R.dimen.horizontal_margin_teams_list)
             val teamItemWidth = getDimensionPixelOffset(R.dimen.horizontal_item_flag_width)
             val screenWidth = displayMetrics.widthPixels
-            teamItemMargin = ((screenWidth - (generalListMargin * 2 + teamListMargin * 2 + teamItemWidth * 4)) / 5).let { if (it < 0) 0 else it }
+            teamItemMargin = ((screenWidth -
+                    (generalListMargin * 2 + teamListMargin * 2 + teamItemWidth * groupSize))
+                    / (groupSize + 1))
+                    .coerceAtLeast(0)
         }
     }
 

@@ -163,7 +163,7 @@ class OptaStatsView(context: Context) : FrameLayout(context),
             matchesDetailedTotal = 0
 
             // add extra element to build the extra card (to show all matches card)
-            matchesDetailed.add(MatchModel.Match())
+            matchesDetailed.add(0, MatchModel.Match())
             // set up recycler view
             rv_matches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             rv_matches.adapter = MatchAdapter(matchesDetailed, context, this, this, false)
