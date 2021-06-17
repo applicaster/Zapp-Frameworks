@@ -1,9 +1,9 @@
-package com.applicaster.analytics.gemius
+package com.applicaster.analytics.adapters
 
 import androidx.annotation.CallSuper
 import java.util.*
 
-open class AnalyticsPlayerAdapter {
+open class AnalyticsPlayerAdapter : IAnalyticsAdapter {
 
     var data: Map<String, Any>? = null
     var duration: Long? = null
@@ -90,7 +90,7 @@ open class AnalyticsPlayerAdapter {
         updatePosition(params)
     }
 
-    fun routeTimedEventStart(eventName: String?, params: TreeMap<String, String>?) : Boolean {
+    override fun routeTimedEventStart(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
             // ...add events there and return true
@@ -99,7 +99,7 @@ open class AnalyticsPlayerAdapter {
         return true
     }
 
-    fun routeTimedEventEnd(eventName: String?, params: TreeMap<String, String>?) : Boolean {
+    override fun routeTimedEventEnd(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
             // ...add events there and return true
@@ -108,7 +108,7 @@ open class AnalyticsPlayerAdapter {
         return true
     }
 
-    fun routeEvent(eventName: String?, params: TreeMap<String, String>?) : Boolean {
+    override fun routeEvent(eventName: String?, params: TreeMap<String, String>?) : Boolean {
         when(eventName) {
             null -> return false
             PLAYER_CREATED_EVENT -> onStart(params)

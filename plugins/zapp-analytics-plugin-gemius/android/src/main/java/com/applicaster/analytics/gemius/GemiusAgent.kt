@@ -1,13 +1,17 @@
 package com.applicaster.analytics.gemius
 
-import androidx.annotation.CallSuper
 import com.applicaster.analytics.BaseAnalyticsAgent
+import com.applicaster.analytics.adapters.AnalyticsPlayerAdapter
+import com.applicaster.analytics.adapters.AnalyticsScreenAdapter
+import com.applicaster.analytics.adapters.IAnalyticsAdapter
 import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
 import com.applicaster.util.AppContext
 import com.applicaster.util.OSUtil
 import com.gemius.sdk.Config
 import com.gemius.sdk.audience.AudienceConfig
+import com.gemius.sdk.audience.AudienceEvent
+import com.gemius.sdk.audience.BaseEvent
 import com.gemius.sdk.stream.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -15,6 +19,8 @@ import java.util.*
 
 
 class GemiusAgent : BaseAnalyticsAgent() {
+
+    // todo: generalize routing to array of IAnalyticsAdapter
 
     private var scriptIdentifier: String = ""
     private var serverHost = "https://main.hit.gemius.pl"
@@ -217,7 +223,51 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
     }
 
-    private var player: PlayerAdapter? = null
+    private var player: IAnalyticsAdapter? = null
+
+    inner class ScreenAdapter: AnalyticsScreenAdapter(){
+
+        override fun onOpenWebpage(url: String, params: TreeMap<String, String>?) {
+            super.onOpenWebpage(url, params)
+            AudienceEvent(AppContext.get()).apply {
+                eventType = BaseEvent.EventType.FULL_PAGEVIEW
+                addExtraParameter("url", url)
+                sendEvent()
+            }
+        }
+
+        override fun onOpenScreen(screenName: String, params: TreeMap<String, String>?) {
+            super.onOpenScreen(screenName, params)
+            AudienceEvent(AppContext.get()).apply {
+                eventType = BaseEvent.EventType.FULL_PAGEVIEW
+                addExtraParameter("Screen", screenName)
+                sendEvent()
+            }
+        }
+
+        override fun onOpenHome(eventName: String, params: TreeMap<String, String>?) {
+            super.onOpenHome(eventName, params)
+            AudienceEvent(AppContext.get()).apply {
+                eventType = BaseEvent.EventType.FULL_PAGEVIEW
+                addExtraParameter("Screen", "Home")
+                sendEvent()
+            }
+        }
+
+        override fun onBackNav(eventName: String, params: TreeMap<String, String>?) {
+            super.onBackNav(eventName, params)
+            AudienceEvent(AppContext.get()).apply {
+                eventType = BaseEvent.EventType.ACTION
+                addExtraParameter("Type", BACK_NAV)
+                params?.get(BACK_NAV_KEY_SOURCE)?.let {
+                    addExtraParameter("Source", it)
+                }
+                sendEvent()
+            }
+        }
+    }
+
+    private val screenAdapter: IAnalyticsAdapter = ScreenAdapter()
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
@@ -274,6 +324,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
         if(true == player?.routeTimedEventStart(eventName, params))
             return
+        if(true == screenAdapter.routeTimedEventStart(eventName, params))
+            return
     }
 
     override fun endTimedEvent(eventName: String?, params: TreeMap<String, String>) {
@@ -283,6 +335,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
         }
         if(true == player?.routeTimedEventEnd(eventName, params))
             return
+        if(true == screenAdapter.routeTimedEventEnd(eventName, params))
+            return
     }
 
     override fun logEvent(eventName: String?, params: TreeMap<String, String>?) {
@@ -291,6 +345,8 @@ class GemiusAgent : BaseAnalyticsAgent() {
             return
         }
         if(true == player?.routeEvent(eventName, params))
+            return
+        if(true == screenAdapter.routeEvent(eventName, params))
             return
         // todo: handle or forward any other event types if needed
     }
