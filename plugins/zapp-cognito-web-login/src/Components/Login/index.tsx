@@ -8,6 +8,7 @@ import { getRiversProp } from "./Utils";
 import { WebView } from "react-native-webview";
 import { SafeAreaView } from "@applicaster/zapp-react-native-ui-components/Components/SafeAreaView";
 import KeyboardSpacer from "react-native-keyboard-spacer";
+import "@applicaster/amazon-cognito-js";
 
 import {
   saveLoginDataToStorages,
@@ -140,6 +141,11 @@ const Login = (props) => {
         if (logout_completion_action === "go_home") {
           navigator.goHome();
         }
+
+        // Clearing cache for cognito sync, it cause failes in case different logins in same app session
+        // @ts-ignore
+        const client = new AWS.CognitoSyncManager();
+        await client.wipeData();
       } else {
         await saveLoginDataToStorages(parsedData);
         const success = await refreshToken(clientId, region);
