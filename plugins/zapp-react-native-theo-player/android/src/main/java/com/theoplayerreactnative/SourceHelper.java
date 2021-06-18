@@ -17,6 +17,7 @@ import com.theoplayer.android.api.source.drm.DRMConfiguration;
 import com.theoplayer.android.api.source.drm.FairPlayKeySystemConfiguration;
 import com.theoplayer.android.api.source.drm.KeySystemConfiguration;
 import com.theoplayer.android.api.source.drm.preintegration.KeyOSDRMConfiguration;
+import com.theoplayerreactnative.drm.KeyOsDRMIntegration;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -24,9 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-
-import static com.theoplayer.android.api.source.drm.preintegration.KeyOSDRMConfiguration.*;
+import java.util.Locale;
 
 /**
  * Source parsing helper class
@@ -76,7 +77,7 @@ public class SourceHelper {
                     if(drm.has("integration")) {
                         String integration = drm.getString("integration");
                         if("keyos".equals(integration))
-                            drmConfiguration = parseKeyOSDRM(drm);
+                            drmConfiguration = parseCustomKeyOS(drm);
                         else {
                             APLogger.error(TAG, "Unknown DRM integration " + integration);
                             drmConfiguration = parseGenericDRM(drm);
@@ -124,6 +125,47 @@ public class SourceHelper {
             APLogger.error(TAG, "Failed to parse source", e);
         }
 
+        return null;
+    }
+
+    private static DRMConfiguration parseCustomKeyOS(JSONObject drm) throws JSONException {
+        APLogger.debug(TAG, "Using Custom KeyOS DRM");
+        String customdata = drm.getString("customdata");
+        HashMap<String, Object> headerData = new HashMap<>();
+        if (TextUtils.isEmpty(customdata)) {
+            // will not reach there, will have JSONException, but handle just in case
+            APLogger.error(TAG, "Missing field 'customdata' in KeyOS DRM integration");
+        } else {
+            headerData.put("customdata", customdata);
+        }
+
+        Iterator<String> drmKeys = drm.keys();
+        while (drmKeys.hasNext()) {
+            String key = drmKeys.next();
+            if (!"widevine".equals(key.toLowerCase(Locale.ENGLISH))) {
+                continue;
+            }
+
+            Object obj = drm.get(key);
+            if (!(obj instanceof JSONObject)) {
+                APLogger.error(TAG, "widevine KeyOS DRM integration data is not an JSON object");
+                continue;
+            }
+
+            JSONObject drmObject = (JSONObject) obj;
+            String acquisitionURL = "https://wv-keyos.licensekeyserver.com";
+            //String acquisitionURL = drmObject.getString("licenseAcquisitionURL");
+            return new DRMConfiguration.Builder()
+                    .customIntegrationId(KeyOsDRMIntegration.CUSTOM_INTEGRATION_ID)
+                    .integrationParameters(headerData)
+                    .widevine(
+                            KeySystemConfiguration.Builder
+                                    .keySystemConfiguration(acquisitionURL)
+                                    .build()
+                    )
+                    .build();
+        }
+        APLogger.error(TAG, "KeyOS widevine integration data is missing in the entry");
         return null;
     }
 

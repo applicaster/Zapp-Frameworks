@@ -1,6 +1,8 @@
 package com.theoplayerreactnative;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.theoplayer.android.api.THEOplayerConfig;
+import com.theoplayer.android.api.THEOplayerGlobal;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.ads.AdsConfiguration;
 import com.theoplayer.android.api.ads.GoogleImaConfiguration;
@@ -38,6 +41,8 @@ import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
 import com.theoplayer.android.api.source.analytics.ConvivaContentMetadata;
 import com.theoplayer.android.api.source.analytics.MoatOptions;
 import com.theoplayer.android.api.source.analytics.YouboraOptions;
+import com.theoplayerreactnative.drm.KeyOsDRMIntegration;
+import com.theoplayerreactnative.drm.KeyOsDRMIntegrationFactory;
 import com.theoplayerreactnative.events.AdEventMapper;
 import com.theoplayerreactnative.events.AdEventRouter;
 import com.theoplayerreactnative.events.IEventRouter;
@@ -161,6 +166,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                 .build();
 
         final Activity currentActivity = reactContext.getCurrentActivity();
+
         playerView = new THEOplayerView(currentActivity, playerConfig){
             public void requestLayout() {
                 super.requestLayout();
@@ -347,4 +353,5 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
                     .emit(InternalAndGlobalEventPair.onPlayerResize.internalEvent, map);
         });
     }
+
 }

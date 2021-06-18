@@ -1,5 +1,8 @@
 package com.theoplayerreactnative;
 
+import android.app.Application;
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.applicaster.util.APLogger;
@@ -9,9 +12,18 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.theoplayer.android.api.THEOplayerGlobal;
+import com.theoplayer.android.api.contentprotection.KeySystemId;
 import com.theoplayer.android.api.player.Player;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.addescription.THEOplayerAdDescription;
+import com.theoplayer.android.api.source.drm.DRMConfiguration;
+import com.theoplayerreactnative.drm.KeyOsDRMIntegration;
+import com.theoplayerreactnative.drm.KeyOsDRMIntegrationFactory;
+
+import java.util.HashMap;
+
+import static com.theoplayer.android.api.source.TypedSource.Builder.typedSource;
 
 public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
 
@@ -23,6 +35,7 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
                          @NonNull TheoPlayerViewManager theoPlayerViewManager) {
         super(reactContext);
         this.theoPlayerViewManager = theoPlayerViewManager;
+        registerDRM();
     }
 
     @Override
@@ -92,5 +105,15 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getCurrentAds(final Promise promise) {
         theoPlayerViewManager.playerView.getPlayer().getAds().requestCurrentAds(ads -> promise.resolve(ads.size()));
+    }
+
+    private void registerDRM(){
+        Context applicationContext = getReactApplicationContext().getApplicationContext();
+        THEOplayerGlobal theo = THEOplayerGlobal.getSharedInstance(applicationContext);
+        theo.setApplicationInstance((Application) applicationContext);
+        theo.registerContentProtectionIntegration(
+                KeyOsDRMIntegration.CUSTOM_INTEGRATION_ID,
+                KeySystemId.WIDEVINE,
+                new KeyOsDRMIntegrationFactory());
     }
 }
