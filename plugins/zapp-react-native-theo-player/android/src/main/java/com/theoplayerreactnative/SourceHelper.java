@@ -166,6 +166,7 @@ public class SourceHelper {
         }
     }
 
+    // https://github.com/theoplayerSupport/samples-drm-integration/tree/master/android/app/src/main/java/com/theoplayer/contentprotectionintegration/integration/keyos
     private static DRMConfiguration parseCustomKeyOS(JSONObject drm) throws JSONException {
         APLogger.debug(TAG, "Using Custom KeyOS DRM");
         String customdata = drm.getString("customdata");
