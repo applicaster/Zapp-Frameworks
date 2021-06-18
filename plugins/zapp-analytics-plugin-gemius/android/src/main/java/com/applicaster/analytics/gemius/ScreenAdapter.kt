@@ -6,12 +6,13 @@ import com.gemius.sdk.audience.AudienceEvent
 import com.gemius.sdk.audience.BaseEvent
 import java.util.*
 
-class ScreenAdapter: AnalyticsScreenAdapter(){
+class ScreenAdapter(private val scriptId: String) : AnalyticsScreenAdapter() {
 
     override fun onOpenWebpage(url: String, params: TreeMap<String, String>?) {
         super.onOpenWebpage(url, params)
         AudienceEvent(AppContext.get()).apply {
             eventType = BaseEvent.EventType.FULL_PAGEVIEW
+            scriptIdentifier = scriptId // not really needed, must be taken from global config
             addExtraParameter("url", url)
             sendEvent()
         }
@@ -21,6 +22,7 @@ class ScreenAdapter: AnalyticsScreenAdapter(){
         super.onOpenScreen(screenName, params)
         AudienceEvent(AppContext.get()).apply {
             eventType = BaseEvent.EventType.FULL_PAGEVIEW
+            scriptIdentifier = scriptId
             addExtraParameter("Screen", screenName)
             sendEvent()
         }
@@ -30,6 +32,7 @@ class ScreenAdapter: AnalyticsScreenAdapter(){
         super.onOpenHome(eventName, params)
         AudienceEvent(AppContext.get()).apply {
             eventType = BaseEvent.EventType.FULL_PAGEVIEW
+            scriptIdentifier = scriptId
             addExtraParameter("Screen", "Home")
             sendEvent()
         }
@@ -39,6 +42,7 @@ class ScreenAdapter: AnalyticsScreenAdapter(){
         super.onBackNav(eventName, params)
         AudienceEvent(AppContext.get()).apply {
             eventType = BaseEvent.EventType.ACTION
+            scriptIdentifier = scriptId
             addExtraParameter("Type", BACK_NAV)
             params?.get(BACK_NAV_KEY_SOURCE)?.let {
                 addExtraParameter("Source", it)

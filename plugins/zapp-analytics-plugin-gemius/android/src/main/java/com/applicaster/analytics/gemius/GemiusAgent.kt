@@ -29,8 +29,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
         synchronized(adapters) {
             adapters.clear()
             adapters.add(PlayerAdapter(playerID, serverHost, scriptIdentifier))
-            adapters.add(ScreenAdapter())
-
+            adapters.add(ScreenAdapter(scriptIdentifier))
         }
 
         Config.setLoggingEnabled(APDebugUtil.getIsInDebugMode())
