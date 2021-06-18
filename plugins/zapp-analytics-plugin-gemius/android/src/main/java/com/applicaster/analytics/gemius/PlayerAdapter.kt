@@ -81,54 +81,42 @@ class PlayerAdapter(playerID: String,
         player.newProgram(id, pdata)
     }
 
-    override fun onPlay(params: Map<String, Any>?) {
-        super.onPlay(params)
+    private fun reportEvent(event: Player.EventType) {
         player.programEvent(
                 getId(),
                 position?.toInt() ?: 0,
-                Player.EventType.PLAY,
+                event,
                 EventProgramData())
+    }
+
+    override fun onPlay(params: Map<String, Any>?) {
+        super.onPlay(params)
+        reportEvent(Player.EventType.PLAY)
     }
 
     override fun onStop(params: Map<String, Any>?) {
         super.onStop(params)
-        player.programEvent(getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.CLOSE, // stop is close for us
-                EventProgramData())
+        reportEvent(Player.EventType.CLOSE) // stop is close for us
     }
 
     override fun onPause(params: Map<String, Any>?) {
         super.onPause(params)
-        player.programEvent(getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.PAUSE,
-                EventProgramData())
+        reportEvent(Player.EventType.PAUSE)
     }
 
     override fun onResume(params: Map<String, Any>?) {
         super.onResume(params)
-        player.programEvent(
-                getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.PLAY,
-                EventProgramData())
+        reportEvent(Player.EventType.PLAY)
     }
 
     override fun onBuffering(params: Map<String, Any>?) {
         super.onBuffering(params)
-        player.programEvent(getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.BUFFER,
-                EventProgramData())
+        reportEvent(Player.EventType.BUFFER)
     }
 
     override fun onAdBreakStart(params: Map<String, Any>?) {
         super.onAdBreakStart(params)
-        player.programEvent(getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.BREAK,
-                EventProgramData())
+        reportEvent(Player.EventType.BREAK)
     }
 
     override fun onAdBreakEnd(params: Map<String, Any>?) {
@@ -180,30 +168,18 @@ class PlayerAdapter(playerID: String,
 
     override fun onSeek(params: Map<String, Any>?) {
         super.onSeek(params)
-        player.programEvent(
-                getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.SEEK,
-                EventProgramData())
+        reportEvent(Player.EventType.SEEK)
     }
 
     override fun onSeekEnd(params: Map<String, Any>?) {
         // Gemius requires Play event after seek
         super.onSeekEnd(params)
-        player.programEvent(
-                getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.PLAY,
-                EventProgramData())
+        reportEvent(Player.EventType.PLAY)
     }
 
     override fun onComplete(params: Map<String, Any>?) {
         super.onComplete(params)
-        player.programEvent(
-                getId(),
-                position?.toInt() ?: 0,
-                Player.EventType.COMPLETE,
-                EventProgramData())
+        reportEvent(Player.EventType.COMPLETE)
     }
 
     companion object {
