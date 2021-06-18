@@ -43,89 +43,127 @@ public class SourceHelper {
             JSONObject jsonSourceObject = new JSONObject(source.toHashMap());
             JSONArray jsonSources = jsonSourceObject.getJSONArray("sources");
 
-            //typed sources
+            // demo DASH source
+            //String srs = "https://d2jl6e4h8300i8.cloudfront.net/drm/BuyDRM/AnimationAudio_4_AAC/500-953-1406-1859/dash/stream.mpd";
+            //HashMap<String, Object> headerData = new HashMap<>();
+            //headerData.put("customdata", "PEtleU9TQXV0aGVudGljYXRpb25YTUw+PERhdGE+PEdlbmVyYXRpb25UaW1lPjIwMTYtMTEtMTkgMDk6MzQ6MDEuOTkyPC9HZW5lcmF0aW9uVGltZT48RXhwaXJhdGlvblRpbWU+MjAyNi0xMS0xOSAwOTozNDowMS45OTI8L0V4cGlyYXRpb25UaW1lPjxVbmlxdWVJZD4wZmZmMTk3YWQzMzQ0ZTMyOWU0MTA0OTIwMmQ5M2VlYzwvVW5pcXVlSWQ+PFJTQVB1YktleUlkPjdlMTE0MDBjN2RjY2QyOWQwMTc0YzY3NDM5N2Q5OWRkPC9SU0FQdWJLZXlJZD48V2lkZXZpbmVQb2xpY3kgZmxfQ2FuUGxheT0idHJ1ZSIgZmxfQ2FuUGVyc2lzdD0iZmFsc2UiIC8+PFdpZGV2aW5lQ29udGVudEtleVNwZWMgVHJhY2tUeXBlPSJIRCI+PFNlY3VyaXR5TGV2ZWw+MTwvU2VjdXJpdHlMZXZlbD48L1dpZGV2aW5lQ29udGVudEtleVNwZWM+PEZhaXJQbGF5UG9saWN5IC8+PExpY2Vuc2UgdHlwZT0ic2ltcGxlIiAvPjwvRGF0YT48U2lnbmF0dXJlPk1sNnhkcU5xc1VNalNuMDdicU8wME15bHhVZUZpeERXSHB5WjhLWElBYlAwOE9nN3dnRUFvMTlYK1c3MDJOdytRdmEzNFR0eDQydTlDUlJPU1NnREQzZTM4aXE1RHREcW9HelcwS2w2a0JLTWxHejhZZGRZOWhNWmpPTGJkNFVkRnJUbmxxU21raC9CWnNjSFljSmdaUm5DcUZIbGI1Y0p0cDU1QjN4QmtxMUREZUEydnJUNEVVcVJiM3YyV1NueUhGeVZqWDhCR3o0ZWFwZmVFeDlxSitKbWI3dUt3VjNqVXN2Y0Fab1ozSHh4QzU3WTlySzRqdk9Wc1I0QUd6UDlCc3pYSXhKd1ZSZEk3RXRoMjhZNXVEQUVZVi9hZXRxdWZiSXIrNVZOaE9yQ2JIVjhrR2praDhHRE43dC9nYWh6OWhVeUdOaXRqY2NCekJvZHRnaXdSUT09PC9TaWduYXR1cmU+PC9LZXlPU0F1dGhlbnRpY2F0aW9uWE1MPg==");
+            //String acquisitionURL = "https://wv-keyos.licensekeyserver.com/core/rightsmanager.asmx";
+
+            // typed sources
             ArrayList<TypedSource> typedSources = new ArrayList<>();
             for (int i = 0; i < jsonSources.length(); i++) {
                 JSONObject jsonTypedSource = (JSONObject) jsonSources.get(i);
 
+                String src = jsonTypedSource.getString("src");
+
                 TypedSource.Builder builder = TypedSource.Builder
                         .typedSource()
-                        .src(jsonTypedSource.getString("src"));
+                        .src(src);
 
-                String streamType = jsonTypedSource.getString("type");
-                // 'type' field is private in SourceType enum...
-                if ("application/x-mpegurl".equals(streamType)) {
-                    builder.type(SourceType.HLSX);
-                } else if ("application/dash+xml".equals(streamType)) {
-                    builder.type(SourceType.DASH);
-                } else if ("application/vnd.apple.mpegurl".equals(streamType)) {
-                    builder.type(SourceType.HLS);
-                }  else if ("video/hls".equals(streamType)) {
-                    APLogger.warn(TAG,
-                            "Using non-ISO MIME type 'video/hls'. " +
-                                    "Should be either 'application/vnd.apple.mpegurl' or 'application/x-mpegurl'");
-                    builder.type(SourceType.HLS);
-                } else if ("video/mp4".equals(streamType)) {
-                    builder.type(SourceType.MP4);
-                } else {
-                    APLogger.error(TAG, "Unknown stream type " + streamType);
-                }
+                parseType(jsonTypedSource, builder);
 
-                JSONObject drm = jsonTypedSource.optJSONObject("drm");
-                if (null != drm && 0 != drm.length()) {
-                    DRMConfiguration drmConfiguration;
-                    if(drm.has("integration")) {
-                        String integration = drm.getString("integration");
-                        if("keyos".equals(integration))
-                            drmConfiguration = parseCustomKeyOS(drm);
-                        else {
-                            APLogger.error(TAG, "Unknown DRM integration " + integration);
-                            drmConfiguration = parseGenericDRM(drm);
-                        }
-                    } else {
-                        drmConfiguration = parseGenericDRM(drm);
-                    }
-                    builder.drm(drmConfiguration);
-                }
+                parseDRM(jsonTypedSource, builder);
+
                 typedSources.add(builder.build());
             }
 
-            //poster
+            // poster
             String poster = jsonSourceObject.optString("poster");
 
-            //ads
-            JSONArray jsonAds = jsonSourceObject.optJSONArray("ads");
-            ArrayList<AdDescription> ads = new ArrayList<>();
-            if (jsonAds != null) {
-                for (int i = 0; i < jsonAds.length(); i++) {
-                    JSONObject jsonAdDescription = (JSONObject) jsonAds.get(i);
-                    String integration = "";
-
-                    if (jsonAdDescription.has("integration")) {
-                        integration = jsonAdDescription.getString("integration");
-                    }
-
-                    if (adsIntegrationTheo.equals(integration)) {
-                        ads.add(parseTheoAdFromJS(jsonAdDescription));
-                    } else if (adsIntegrationGoogleIma.equals(integration)) {
-                        ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
-                    } else {
-                        APLogger.debug(TAG, "Ad integration type is not specified, defaulting to Google IMA");
-                        ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
-                    }
-                }
-            }
+            // ads
+            AdDescription[] ads = parseAds(jsonSourceObject);
 
             return SourceDescription.Builder
                     .sourceDescription(typedSources.toArray(new TypedSource[]{}))
                     .poster(poster)
-                    .ads(ads.toArray(new AdDescription[]{}))
+                    .ads(ads)
                     .build();
         } catch (JSONException e) {
             APLogger.error(TAG, "Failed to parse source", e);
         }
 
         return null;
+    }
+
+    private static AdDescription[] parseAds(JSONObject jsonSourceObject) throws JSONException {
+        JSONArray jsonAds = jsonSourceObject.optJSONArray("ads");
+        if (jsonAds == null) {
+            return new AdDescription[0];
+        }
+        ArrayList<AdDescription> ads = new ArrayList<>();
+        for (int i = 0; i < jsonAds.length(); i++) {
+            JSONObject jsonAdDescription = (JSONObject) jsonAds.get(i);
+            String integration = "";
+
+            if (jsonAdDescription.has("integration")) {
+                integration = jsonAdDescription.getString("integration");
+            }
+
+            if (adsIntegrationTheo.equals(integration)) {
+                ads.add(parseTheoAdFromJS(jsonAdDescription));
+            } else if (adsIntegrationGoogleIma.equals(integration)) {
+                ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
+            } else {
+                APLogger.debug(TAG, "Ad integration type is not specified, defaulting to Google IMA");
+                ads.add(parseTheoGoogleImaAdFromJS(jsonAdDescription));
+            }
+        }
+        return ads.toArray(new AdDescription[]{});
+    }
+
+    private static void parseDRM(JSONObject jsonTypedSource, TypedSource.Builder builder) throws JSONException {
+        JSONObject drm = jsonTypedSource.optJSONObject("drm");
+        if (null == drm || 0 == drm.length()) {
+            return;
+        }
+        DRMConfiguration drmConfiguration;
+        if(drm.has("integration")) {
+            String integration = drm.getString("integration");
+            if("keyos".equals(integration)) {
+                drmConfiguration = parseCustomKeyOS(drm);
+                builder.type(SourceType.DASH); // force dash. todo: Warn
+            } else {
+                APLogger.error(TAG, "Unknown DRM integration " + integration);
+                drmConfiguration = parseGenericDRM(drm);
+            }
+        } else {
+            drmConfiguration = parseGenericDRM(drm);
+        }
+
+        if(null != drmConfiguration) {
+            builder.drm(drmConfiguration);
+        } else {
+            APLogger.error(TAG, "Could not setup DRM");
+        }
+    }
+
+    private static void parseType(JSONObject jsonTypedSource,
+                                  TypedSource.Builder builder) throws JSONException {
+        String streamType = jsonTypedSource.getString("type");
+        // 'type' field is private in SourceType enum...
+        switch (streamType) {
+            case "application/x-mpegurl":
+                builder.type(SourceType.HLSX);
+                break;
+            case "application/dash+xml":
+                builder.type(SourceType.DASH);
+                break;
+            case "application/vnd.apple.mpegurl":
+                builder.type(SourceType.HLS);
+                break;
+            case "video/hls":
+                APLogger.warn(TAG,
+                        "Using non-ISO MIME type 'video/hls'. " +
+                                "Should be either 'application/vnd.apple.mpegurl' or 'application/x-mpegurl'");
+                builder.type(SourceType.HLS);
+                break;
+            case "video/mp4":
+                builder.type(SourceType.MP4);
+                break;
+            default:
+                APLogger.error(TAG, "Unknown stream type " + streamType);
+                break;
+        }
     }
 
     private static DRMConfiguration parseCustomKeyOS(JSONObject drm) throws JSONException {
@@ -153,7 +191,8 @@ public class SourceHelper {
             }
 
             JSONObject drmObject = (JSONObject) obj;
-            String acquisitionURL = "https://wv-keyos.licensekeyserver.com";
+            String acquisitionURL = "https://wv-keyos.licensekeyserver.com/core/rightsmanager.asmx";
+            // todo: wrong data there
             //String acquisitionURL = drmObject.getString("licenseAcquisitionURL");
             return new DRMConfiguration.Builder()
                     .customIntegrationId(KeyOsDRMIntegration.CUSTOM_INTEGRATION_ID)
@@ -165,7 +204,7 @@ public class SourceHelper {
                     )
                     .build();
         }
-        APLogger.error(TAG, "KeyOS widevine integration data is missing in the entry");
+        APLogger.error(TAG, "KeyOS widevine configuration data is missing in the entry");
         return null;
     }
 
