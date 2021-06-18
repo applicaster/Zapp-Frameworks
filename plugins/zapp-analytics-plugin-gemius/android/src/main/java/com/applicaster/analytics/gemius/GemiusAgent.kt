@@ -16,11 +16,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
 
     private var serverHost = "https://main.hit.gemius.pl"
 
-    // todo: generalize routing to array of IAnalyticsAdapter
-
-    private var player: IAnalyticsAdapter? = null
-
-    private var screenAdapter: IAnalyticsAdapter? = null
+    private var adapters: MutableList<IAnalyticsAdapter> = mutableListOf()
 
     override fun initializeAnalyticsAgent(context: android.content.Context?) {
         super.initializeAnalyticsAgent(context)
@@ -30,9 +26,12 @@ class GemiusAgent : BaseAnalyticsAgent() {
             return
         }
 
-        player = PlayerAdapter(playerID, serverHost, scriptIdentifier)
+        synchronized(adapters) {
+            adapters.clear()
+            adapters.add(PlayerAdapter(playerID, serverHost, scriptIdentifier))
+            adapters.add(ScreenAdapter())
 
-        screenAdapter = ScreenAdapter()
+        }
 
         Config.setLoggingEnabled(APDebugUtil.getIsInDebugMode())
         Config.setAppInfo(OSUtil.getPackageName(), OSUtil.getZappAppVersion())
@@ -77,10 +76,11 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeTimedEventStart(eventName, params))
-            return
-        if(true == screenAdapter?.routeTimedEventStart(eventName, params))
-            return
+        synchronized(adapters) {
+            if(adapters.any { it.routeTimedEventStart(eventName, params) }) {
+                return
+            }
+        }
     }
 
     override fun endTimedEvent(eventName: String?, params: TreeMap<String, String>) {
@@ -88,10 +88,11 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeTimedEventEnd(eventName, params))
-            return
-        if(true == screenAdapter?.routeTimedEventEnd(eventName, params))
-            return
+        synchronized(adapters) {
+            if(adapters.any { it.routeTimedEventEnd(eventName, params) }) {
+                return
+            }
+        }
     }
 
     override fun logEvent(eventName: String?, params: TreeMap<String, String>?) {
@@ -99,10 +100,11 @@ class GemiusAgent : BaseAnalyticsAgent() {
         if(null == eventName) {
             return
         }
-        if(true == player?.routeEvent(eventName, params))
-            return
-        if(true == screenAdapter?.routeEvent(eventName, params))
-            return
+        synchronized(adapters) {
+            if(adapters.any { it.routeEvent(eventName, params) }) {
+                return
+            }
+        }
         // todo: handle or forward any other event types if needed
     }
 
