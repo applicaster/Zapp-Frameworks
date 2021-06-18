@@ -7,6 +7,7 @@
 //
 import Foundation
 import GoogleCast
+import THEOplayerSDK
 import ZappCore
 
 open class THEOplayerAdapter: NSObject, PluginAdapterProtocol {
@@ -18,6 +19,9 @@ open class THEOplayerAdapter: NSObject, PluginAdapterProtocol {
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel
         configurationJSON = model?.configurationJSON
+        THEOplayer.registerContentProtectionIntegration(integrationId: KeyOsDRMIntegration.integrationID,
+                                                        keySystem: .FAIRPLAY,
+                                                        integrationFactory: KeyOsDRMIntegrationFactory())
     }
 
     /// Plugin configuration keys
