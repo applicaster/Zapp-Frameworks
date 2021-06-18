@@ -126,7 +126,7 @@ export default class THEOPlayer extends Component<Props, State> {
 
   constructor(props) {
     super(props);
-    this.isBufferEnabled = this.isBufferEnabled.bind(this);
+    this.disableBufferAnimation = this.disableBufferAnimation.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
     this.hadwareBackButtonDidPressed = this.hadwareBackButtonDidPressed.bind(
       this
@@ -492,8 +492,8 @@ export default class THEOPlayer extends Component<Props, State> {
     this.playerRef = component;
   };
 
-  isBufferEnabled(): boolean {
-    return false;
+  disableBufferAnimation(): boolean {
+    return true;
   }
 
   handleEnded() {
