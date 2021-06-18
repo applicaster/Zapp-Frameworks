@@ -1,6 +1,6 @@
 {
   "name": "ZappTHEOplayer",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "summary": "THEOplayer",
   "platforms": {
     "ios": "12.0",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks",
-    "tag": "@@applicaster/zapp-react-native-theo-player/0.7.2"
+    "tag": "@@applicaster/zapp-react-native-theo-player/0.7.3"
   },
   "ios": {
     "xcconfig": {
