@@ -34,7 +34,7 @@ const general = {
     {
       type: "hidden",
       key: "method_name",
-      tooltip_text: "Default Method to Retreive",
+      tooltip_text: "Default Method to Retrieve",
       default: "showPreferences",
     },
     // Type select
