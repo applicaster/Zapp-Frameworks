@@ -38,16 +38,41 @@ public class SourceHelper {
     private static final String adsIntegrationGoogleIma = "google-ima";
     private static final String adsIntegrationTheo = "theo";
 
+    private static final boolean TEST_DRM_STREAM = false;
+
+    public static SourceDescription testDRMStream() {
+        // demo DASH source
+        String src = "https://d2jl6e4h8300i8.cloudfront.net/drm/BuyDRM/AnimationAudio_4_AAC/500-953-1406-1859/dash/stream.mpd";
+        HashMap<String, Object> headerData = new HashMap<>();
+        headerData.put("customdata", "PEtleU9TQXV0aGVudGljYXRpb25YTUw+PERhdGE+PEdlbmVyYXRpb25UaW1lPjIwMTYtMTEtMTkgMDk6MzQ6MDEuOTkyPC9HZW5lcmF0aW9uVGltZT48RXhwaXJhdGlvblRpbWU+MjAyNi0xMS0xOSAwOTozNDowMS45OTI8L0V4cGlyYXRpb25UaW1lPjxVbmlxdWVJZD4wZmZmMTk3YWQzMzQ0ZTMyOWU0MTA0OTIwMmQ5M2VlYzwvVW5pcXVlSWQ+PFJTQVB1YktleUlkPjdlMTE0MDBjN2RjY2QyOWQwMTc0YzY3NDM5N2Q5OWRkPC9SU0FQdWJLZXlJZD48V2lkZXZpbmVQb2xpY3kgZmxfQ2FuUGxheT0idHJ1ZSIgZmxfQ2FuUGVyc2lzdD0iZmFsc2UiIC8+PFdpZGV2aW5lQ29udGVudEtleVNwZWMgVHJhY2tUeXBlPSJIRCI+PFNlY3VyaXR5TGV2ZWw+MTwvU2VjdXJpdHlMZXZlbD48L1dpZGV2aW5lQ29udGVudEtleVNwZWM+PEZhaXJQbGF5UG9saWN5IC8+PExpY2Vuc2UgdHlwZT0ic2ltcGxlIiAvPjwvRGF0YT48U2lnbmF0dXJlPk1sNnhkcU5xc1VNalNuMDdicU8wME15bHhVZUZpeERXSHB5WjhLWElBYlAwOE9nN3dnRUFvMTlYK1c3MDJOdytRdmEzNFR0eDQydTlDUlJPU1NnREQzZTM4aXE1RHREcW9HelcwS2w2a0JLTWxHejhZZGRZOWhNWmpPTGJkNFVkRnJUbmxxU21raC9CWnNjSFljSmdaUm5DcUZIbGI1Y0p0cDU1QjN4QmtxMUREZUEydnJUNEVVcVJiM3YyV1NueUhGeVZqWDhCR3o0ZWFwZmVFeDlxSitKbWI3dUt3VjNqVXN2Y0Fab1ozSHh4QzU3WTlySzRqdk9Wc1I0QUd6UDlCc3pYSXhKd1ZSZEk3RXRoMjhZNXVEQUVZVi9hZXRxdWZiSXIrNVZOaE9yQ2JIVjhrR2praDhHRE43dC9nYWh6OWhVeUdOaXRqY2NCekJvZHRnaXdSUT09PC9TaWduYXR1cmU+PC9LZXlPU0F1dGhlbnRpY2F0aW9uWE1MPg==");
+        String acquisitionURL = "https://wv-keyos.licensekeyserver.com/";
+        TypedSource.Builder builder = TypedSource.Builder
+                .typedSource()
+                .type(SourceType.DASH)
+                .drm(new DRMConfiguration.Builder()
+                        .customIntegrationId(KeyOsDRMIntegration.CUSTOM_INTEGRATION_ID)
+                        .integrationParameters(headerData)
+                        .widevine(
+                                KeySystemConfiguration.Builder
+                                        .keySystemConfiguration(acquisitionURL)
+                                        .build()
+                        )
+                        .build())
+                .src(src);
+        return SourceDescription.Builder
+                .sourceDescription(builder.build())
+                .build();
+    }
+
     public static SourceDescription parseSourceFromJS(ReadableMap source) {
         try {
+            if(TEST_DRM_STREAM) {
+                return testDRMStream();
+            }
+
             JSONObject jsonSourceObject = new JSONObject(source.toHashMap());
             JSONArray jsonSources = jsonSourceObject.getJSONArray("sources");
 
-            // demo DASH source
-            //String srs = "https://d2jl6e4h8300i8.cloudfront.net/drm/BuyDRM/AnimationAudio_4_AAC/500-953-1406-1859/dash/stream.mpd";
-            //HashMap<String, Object> headerData = new HashMap<>();
-            //headerData.put("customdata", "PEtleU9TQXV0aGVudGljYXRpb25YTUw+PERhdGE+PEdlbmVyYXRpb25UaW1lPjIwMTYtMTEtMTkgMDk6MzQ6MDEuOTkyPC9HZW5lcmF0aW9uVGltZT48RXhwaXJhdGlvblRpbWU+MjAyNi0xMS0xOSAwOTozNDowMS45OTI8L0V4cGlyYXRpb25UaW1lPjxVbmlxdWVJZD4wZmZmMTk3YWQzMzQ0ZTMyOWU0MTA0OTIwMmQ5M2VlYzwvVW5pcXVlSWQ+PFJTQVB1YktleUlkPjdlMTE0MDBjN2RjY2QyOWQwMTc0YzY3NDM5N2Q5OWRkPC9SU0FQdWJLZXlJZD48V2lkZXZpbmVQb2xpY3kgZmxfQ2FuUGxheT0idHJ1ZSIgZmxfQ2FuUGVyc2lzdD0iZmFsc2UiIC8+PFdpZGV2aW5lQ29udGVudEtleVNwZWMgVHJhY2tUeXBlPSJIRCI+PFNlY3VyaXR5TGV2ZWw+MTwvU2VjdXJpdHlMZXZlbD48L1dpZGV2aW5lQ29udGVudEtleVNwZWM+PEZhaXJQbGF5UG9saWN5IC8+PExpY2Vuc2UgdHlwZT0ic2ltcGxlIiAvPjwvRGF0YT48U2lnbmF0dXJlPk1sNnhkcU5xc1VNalNuMDdicU8wME15bHhVZUZpeERXSHB5WjhLWElBYlAwOE9nN3dnRUFvMTlYK1c3MDJOdytRdmEzNFR0eDQydTlDUlJPU1NnREQzZTM4aXE1RHREcW9HelcwS2w2a0JLTWxHejhZZGRZOWhNWmpPTGJkNFVkRnJUbmxxU21raC9CWnNjSFljSmdaUm5DcUZIbGI1Y0p0cDU1QjN4QmtxMUREZUEydnJUNEVVcVJiM3YyV1NueUhGeVZqWDhCR3o0ZWFwZmVFeDlxSitKbWI3dUt3VjNqVXN2Y0Fab1ozSHh4QzU3WTlySzRqdk9Wc1I0QUd6UDlCc3pYSXhKd1ZSZEk3RXRoMjhZNXVEQUVZVi9hZXRxdWZiSXIrNVZOaE9yQ2JIVjhrR2praDhHRE43dC9nYWh6OWhVeUdOaXRqY2NCekJvZHRnaXdSUT09PC9TaWduYXR1cmU+PC9LZXlPU0F1dGhlbnRpY2F0aW9uWE1MPg==");
-            //String acquisitionURL = "https://wv-keyos.licensekeyserver.com/core/rightsmanager.asmx";
 
             // typed sources
             ArrayList<TypedSource> typedSources = new ArrayList<>();
@@ -192,7 +217,7 @@ public class SourceHelper {
             }
 
             JSONObject drmObject = (JSONObject) obj;
-            String acquisitionURL = "https://wv-keyos.licensekeyserver.com/core/rightsmanager.asmx";
+            String acquisitionURL = "https://wv-keyos.licensekeyserver.com/";
             // todo: wrong data there
             //String acquisitionURL = drmObject.getString("licenseAcquisitionURL");
             return new DRMConfiguration.Builder()
