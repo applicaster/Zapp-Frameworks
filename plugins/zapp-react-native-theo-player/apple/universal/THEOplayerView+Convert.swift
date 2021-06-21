@@ -4,13 +4,14 @@ import THEOplayerSDK
 @objc extension RCTConvert {
     @objc(TypedSource:)
     class func typedSource(_ json: [String: AnyObject]) -> TypedSource? {
+        
         logger?.debugLog(message: "New data source recieved",
                          data: ["source": json])
 
         if let src = RCTConvert.nsString(json["src"]),
            var type = RCTConvert.nsString(json["type"]) {
             if type == "video/hls" {
-                type = "application/vnd.apple.mpegurl"
+                type = "application/x-mpegurl"
             }
             if let drm = RCTConvert.nsDictionary(json["drm"]),
                let fairplay = RCTConvert.nsDictionary(drm["fairplay"]),
@@ -31,9 +32,12 @@ import THEOplayerSDK
                     if let token = RCTConvert.nsString(drm["customdata"]),
                        let licenseAcquisitionURL = licenseAcquisitionURL,
                        let certificateURL = certificateURL {
-                        baseDrm = KeyOSDRMConfiguration(licenseAcquisitionURL: licenseAcquisitionURL,
-                                                        certificateURL: certificateURL,
-                                                        customdata: token)
+                        baseDrm = FairPlayDRMConfiguration(
+                            customIntegrationId: KeyOsDRMIntegration.integrationID,
+                            licenseAcquisitionURL: licenseAcquisitionURL,
+                            certificateURL:  certificateURL,
+                            integrationParameters: ["customdata": token]
+                        )
                     }
                     break
                 default:
