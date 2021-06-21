@@ -160,7 +160,7 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
             return
         }
         callback = eventListener
-        sdk.showConsentPurposesUI(activity)
+        sdk.showPreferenceCenterUI(activity)
     }
 
     fun showNotice(eventListener: () -> Unit,
