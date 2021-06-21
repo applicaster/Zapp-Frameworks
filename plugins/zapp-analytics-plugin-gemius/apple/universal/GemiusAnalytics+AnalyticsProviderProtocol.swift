@@ -64,7 +64,8 @@ extension GemiusAnalytics: AnalyticsProviderProtocol {
         }
 
         guard !shouldHandlePlayerEvents(for: eventName, parameters: parameters),
-              !shouldHandleAdEvents(for: eventName, parameters: parameters) else {
+              !shouldHandleAdEvents(for: eventName, parameters: parameters),
+              !shouldHandleScreenEvents(for: eventName, parameters: parameters) else {
             return
         }
 

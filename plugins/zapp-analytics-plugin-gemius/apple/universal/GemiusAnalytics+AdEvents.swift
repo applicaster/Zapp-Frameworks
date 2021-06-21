@@ -3,6 +3,7 @@
 //  GemiusAnalytics
 //
 //  Created by Alex Zchut on 04/04/2021.
+//  Copyright © 2021 Applicaster Ltd. All rights reserved.
 //
 
 import Foundation
