@@ -44,14 +44,28 @@ extension DidomiCMP {
         }
 
         eventListener.onNoticeClickDisagree = { _ in
-            self.procceedWithProcessCompletion()
+            self.requestTrackingAuthorization { _ in
+                self.procceedWithProcessCompletion()
+            }
+        }
+
+        eventListener.onPreferencesClickSaveChoices = { _ in
+            self.requestTrackingAuthorization { _ in
+                self.procceedWithProcessCompletion()
+            }
+        }
+
+        eventListener.onPreferencesClickDisagreeToAll = { _ in
+            self.requestTrackingAuthorization { _ in
+                Didomi.shared.setUserDisagreeToAll()
+                self.procceedWithProcessCompletion()
+            }
         }
 
         eventListener.onPreferencesClickAgreeToAll = { _ in
-            // Click on Agree to all in the Preferences popup
-            // Request tracking permission from the user
             self.requestTrackingAuthorization { _ in
                 Didomi.shared.setUserAgreeToAll()
+                self.procceedWithProcessCompletion()
             }
         }
 
