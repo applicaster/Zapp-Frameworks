@@ -167,6 +167,9 @@ const ui_frameworks_qb = ["quickbrick"];
 const ui_frameworks = {
   ios_for_quickbrick: ui_frameworks_qb,
   tvos_for_quickbrick: ui_frameworks_qb,
+  android_for_quickbrick: ui_frameworks_qb,
+  android_tv_for_quickbrick: ui_frameworks_qb,
+  amazon_fire_tv_for_quickbrick: ui_frameworks_qb,
 };
 
 const extra_dependencies = {
