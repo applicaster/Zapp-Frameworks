@@ -197,8 +197,8 @@ const baseManifest = {
               value: "ENABLED",
             },
             {
-              text: "OFF",
-              value: "OFF",
+              text: "DISABLED",
+              value: "DISABLED",
             },
           ],
           initial_value: "ENABLED",
