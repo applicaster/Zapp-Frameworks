@@ -87,7 +87,7 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
         override fun onVendorConfirmChoices() = Unit
 
         override fun allSDKViewsDismissed(p0: String?) {
-            storeConsent()
+            storeConsent(true)
             callback?.let {
                 it()
                 callback = null
@@ -121,10 +121,11 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                     sdk.addEventListener(eventRouter)
                     if (!sdk.shouldShowBanner()) {
                         APLogger.info(TAG, "User consent was already requested or not needed")
-                        storeConsent() // update values just in case
+                        storeConsent(true) // update values just in case
                         listener.onHookFinished()
                     } else if (!presentOnStartup) {
                         APLogger.info(TAG, "User consent presentOnStartup is disabled")
+                        storeConsent(false)
                         listener.onHookFinished()
                     } else {
                         APLogger.info(TAG, "User consent requested")
@@ -180,22 +181,16 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
         sdkCall()
     }
 
-    private fun storeConsent() {
+    private fun storeConsent(shouldWarn: Boolean) {
         PreferenceManager.getDefaultSharedPreferences(AppContext.get()).apply {
-            if (!contains(onetrustGDPRApplies)) {
-                APLogger.error(TAG, "$onetrustGDPRApplies is not found in preferences")
-            } else {
-                getInt(onetrustGDPRApplies, 0).let {
-                    SessionStorage.set(onetrustGDPRApplies, it.toString(), PluginId)
-                    APLogger.info(TAG, "$onetrustGDPRApplies $it")
-                }
-            }
-            if (!contains(onetrustIABConsent)) {
-                APLogger.error(TAG, "$onetrustIABConsent is not found in preferences")
-            } else {
-                getString(onetrustIABConsent, null).let {
-                    SessionStorage.set(onetrustIABConsent, it, PluginId)
-                    APLogger.info(TAG, "$onetrustIABConsent $it")
+            val allKeys = all
+            for (key in requiredKeys) {
+                when (val v = allKeys[key]) {
+                    null -> if(shouldWarn) APLogger.error(TAG, "$key is not found in preferences")
+                    else -> {
+                        SessionStorage.set(key, v.toString(), PluginId)
+                        APLogger.info(TAG, "Saved $key $v")
+                    }
                 }
             }
         }
@@ -206,7 +201,6 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
 
         const val PluginId = "applicaster-cmp-onetrust"
 
-        const val onetrustGDPRApplies = "IABTCF_gdprApplies"
-        const val onetrustIABConsent = "IABTCF_TCString"
+        val requiredKeys = setOf("IABTCF_gdprApplies", "IABUSPrivacy_String")
     }
 }
