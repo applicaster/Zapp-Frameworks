@@ -26,7 +26,7 @@ class OneTrustBridge(reactContext: ReactApplicationContext)
     fun showPreferences(result: Promise) {
         getPlugin().apply {
             when {
-                isReady() -> reactApplicationContext.runOnUiQueueThread {
+                isReady -> reactApplicationContext.runOnUiQueueThread {
                     showPreferences(
                             { result.resolve(true) },
                             currentActivity as AppCompatActivity)
@@ -40,7 +40,7 @@ class OneTrustBridge(reactContext: ReactApplicationContext)
     fun showNotice(result: Promise) {
         getPlugin().apply {
             when {
-                isReady() -> reactApplicationContext.runOnUiQueueThread {
+                isReady -> reactApplicationContext.runOnUiQueueThread {
                     showNotice(
                             { result.resolve(true) },
                             currentActivity as AppCompatActivity)

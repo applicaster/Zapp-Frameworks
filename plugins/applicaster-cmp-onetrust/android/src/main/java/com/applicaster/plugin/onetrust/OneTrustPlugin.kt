@@ -1,12 +1,16 @@
 package com.applicaster.plugin.onetrust
 
 import android.content.Context
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
+import com.applicaster.session.SessionStorage
 import com.applicaster.util.APLogger
+import com.applicaster.util.AppContext
+import com.applicaster.util.AppData
 import com.google.gson.JsonElement
 import com.onetrust.otpublishers.headless.Public.OTCallback
 import com.onetrust.otpublishers.headless.Public.OTEventListener
@@ -106,12 +110,14 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
             return
         }
 
+        val language = AppData.getLocale()?.language ?: "en"
+
         try {
             sdk = OTPublishersHeadlessSDK(context.applicationContext)
-            sdk.startSDK(storageLocation!!, domainIdentifier!!, "en", null, object : OTCallback{
+            sdk.startSDK(storageLocation!!, domainIdentifier!!, language, null, object : OTCallback{
                 override fun onSuccess(otResponse: OTResponse) {
                     isReady = true
-                    APLogger.info(TAG, "OneTrust initialized $otResponse")
+                    APLogger.info(TAG, "OneTrust initialized: $otResponse")
                     sdk.addEventListener(eventRouter)
                     if (!sdk.shouldShowBanner()) {
                         APLogger.info(TAG, "User consent was already requested or not needed")
@@ -128,7 +134,7 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                 }
 
                 override fun onFailure(otResponse: OTResponse) {
-                    APLogger.error(TAG, "OneTrust has failed to initialize $otResponse")
+                    APLogger.error(TAG, "OneTrust has failed to initialize: $otResponse")
                     listener.onHookFinished()
                 }
 
@@ -153,33 +159,47 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
         private set
 
     fun showPreferences(eventListener: () -> Unit,
-                        activity: AppCompatActivity) {
-        if(!isReady) {
-            // todo: log error
-            eventListener()
-            return
-        }
-        callback = eventListener
-        sdk.showPreferenceCenterUI(activity)
-    }
+                        activity: AppCompatActivity) =
+            checkedCall(eventListener) { sdk.showPreferenceCenterUI(activity) }
 
     fun showNotice(eventListener: () -> Unit,
-                   activity: AppCompatActivity) {
-        if(!isReady) {
-            // todo: log error
+                   activity: AppCompatActivity) =
+            checkedCall(eventListener) { sdk.showBannerUI(activity) }
+
+    private fun checkedCall(eventListener: () -> Unit,
+                            sdkCall: () -> Unit) {
+        if (!isReady) {
+            // should not happen, we have a check on the bridge
+            APLogger.info(TAG, "showPreferences call failed: OneTrust library is not ready or failed to init.")
             eventListener()
             return
         }
+        if(null != callback) {
+            APLogger.error(TAG, "Another call is in progress, it will be overridden")
+        }
         callback = eventListener
-        sdk.showBannerUI(activity)
+        sdkCall()
     }
 
     private fun storeConsent() {
-        // todo
+        PreferenceManager.getDefaultSharedPreferences(AppContext.get()).apply {
+            getInt(onetrustGDPRApplies, 0).let {
+                SessionStorage.set(onetrustGDPRApplies, it.toString(), PluginId)
+                APLogger.info(TAG, "$onetrustGDPRApplies $it")
+            }
+            getString(onetrustIABConsent, null)?.let {
+                SessionStorage.set(onetrustIABConsent, it, PluginId)
+                APLogger.info(TAG, "$onetrustIABConsent $it")
+            }
+        }
     }
 
     companion object {
         private const val TAG = "OneTrust"
+
         const val PluginId = "applicaster-cmp-onetrust"
+
+        const val onetrustGDPRApplies = "IABTCF_gdprApplies"
+        const val onetrustIABConsent = "IABTCF_TCString"
     }
 }

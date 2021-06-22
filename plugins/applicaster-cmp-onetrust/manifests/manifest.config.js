@@ -84,6 +84,7 @@ function createManifest({ version, platform }) {
     dependency_version: version,
     min_zapp_sdk: min_zapp_sdk[platform],
     extra_dependencies: extra_dependencies[platform],
+    project_dependencies: project_dependencies[platform],
     api: api[platform],
     npm_dependencies: [`@applicaster/applicaster-cmp-onetrust@${version}`],
     targets: targets[platform],
@@ -131,16 +132,35 @@ const custom_configuration_fields_apple = custom_configuration_fields_shared.con
 const custom_configuration_fields = {
   ios_for_quickbrick: custom_configuration_fields_apple,
   tvos_for_quickbrick: custom_configuration_fields_apple,
+  android_for_quickbrick: custom_configuration_fields_shared,
+  android_tv_for_quickbrick: custom_configuration_fields_shared,
+  amazon_fire_tv_for_quickbrick: custom_configuration_fields_shared,
 };
 
 const min_zapp_sdk = {
   ios_for_quickbrick: "4.1.0-Dev",
   tvos_for_quickbrick: "4.1.0-Dev",
+  android_for_quickbrick: "4.0.0",
+  android_tv_for_quickbrick: "4.0.0",
+  amazon_fire_tv_for_quickbrick: "4.0.0",
 };
 
 const extra_dependencies_apple = {
   ZappCmpOneTrust:
     ":path => './node_modules/@applicaster/applicaster-cmp-onetrust/apple/ZappCmpOneTrust.podspec'",
+};
+
+const project_dependencies_android = [
+  {
+    "applicaster-cmp-didomi":
+      "node_modules/@applicaster/applicaster-cmp-onetrust/android",
+  },
+];
+
+const project_dependencies = {
+  android_for_quickbrick: project_dependencies_android,
+  android_tv_for_quickbrick: project_dependencies_android,
+  amazon_fire_tv_for_quickbrick: project_dependencies_android,
 };
 
 const ui_frameworks_qb = ["quickbrick"];
@@ -160,9 +180,18 @@ const api_apple = {
   modules: ["ZappCmpOneTrust"],
 };
 
+const api_android = {
+  require_startup_execution: true,
+  class_name: "com.applicaster.plugin.onetrust.OneTrustPlugin",
+  react_packages: ["com.applicaster.plugin.onetrust.reactnative.OneTrustPackage"],
+};
+
 const api = {
   ios_for_quickbrick: api_apple,
   tvos_for_quickbrick: api_apple,
+  android_for_quickbrick: api_android,
+  android_tv_for_quickbrick: api_android,
+  amazon_fire_tv_for_quickbrick: api_android,
 };
 
 const mobileTarget = ["mobile"];
@@ -170,6 +199,9 @@ const tvTarget = ["tv"];
 const targets = {
   ios_for_quickbrick: mobileTarget,
   tvos_for_quickbrick: tvTarget,
+  android_for_quickbrick: mobileTarget,
+  android_tv_for_quickbrick: tvTarget,
+  amazon_fire_tv_for_quickbrick: tvTarget,
 };
 
 module.exports = createManifest;
