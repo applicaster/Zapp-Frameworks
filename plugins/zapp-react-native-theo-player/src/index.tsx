@@ -530,7 +530,8 @@ export default class THEOPlayer extends Component<Props, State> {
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
 
-    const drm = drm_enabled === "OFF" ? null : getDRMData({ entry });
+    const drm = drm_enabled === "OFF" ? {} : getDRMData({ entry });
+
     return (
       <View
         style={
