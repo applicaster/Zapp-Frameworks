@@ -188,11 +188,20 @@ const baseManifest = {
       folded: true,
       fields: [
         {
+          type: "select",
           key: "drm_enabled",
-          type: "checkbox",
-          label: "DRM is enabled",
-          default: 1,
-          tooltip_text: "Disable drm across the app",
+          tooltip_text: "Disable DRM across the app",
+          options: [
+            {
+              text: "ENABLED",
+              value: "ENABLED",
+            },
+            {
+              text: "OFF",
+              value: "OFF",
+            },
+          ],
+          initial_value: "ENABLED",
         },
       ],
     },
