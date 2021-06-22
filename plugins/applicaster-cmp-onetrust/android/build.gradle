@@ -51,5 +51,5 @@ dependencies {
     } else {
         api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
     }
-    implementation "com.onetrust.cmp:native-sdk:6.19.0.5"
+    implementation "com.onetrust.cmp:native-sdk:6.18.0.0"
 }

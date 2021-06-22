@@ -183,13 +183,21 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
 
     private fun storeConsent() {
         PreferenceManager.getDefaultSharedPreferences(AppContext.get()).apply {
-            getInt(onetrustGDPRApplies, 0).let {
-                SessionStorage.set(onetrustGDPRApplies, it.toString(), PluginId)
-                APLogger.info(TAG, "$onetrustGDPRApplies $it")
+            if (!contains(onetrustGDPRApplies)) {
+                APLogger.error(TAG, "$onetrustGDPRApplies is not found in preferences")
+            } else {
+                getInt(onetrustGDPRApplies, 0).let {
+                    SessionStorage.set(onetrustGDPRApplies, it.toString(), PluginId)
+                    APLogger.info(TAG, "$onetrustGDPRApplies $it")
+                }
             }
-            getString(onetrustIABConsent, null)?.let {
-                SessionStorage.set(onetrustIABConsent, it, PluginId)
-                APLogger.info(TAG, "$onetrustIABConsent $it")
+            if (!contains(onetrustIABConsent)) {
+                APLogger.error(TAG, "$onetrustIABConsent is not found in preferences")
+            } else {
+                getString(onetrustIABConsent, null).let {
+                    SessionStorage.set(onetrustIABConsent, it, PluginId)
+                    APLogger.info(TAG, "$onetrustIABConsent $it")
+                }
             }
         }
     }
