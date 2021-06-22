@@ -28,8 +28,8 @@ class OneTrustBridge(reactContext: ReactApplicationContext)
             when {
                 isReady -> reactApplicationContext.runOnUiQueueThread {
                     showPreferences(
-                            { result.resolve(true) },
-                            currentActivity as AppCompatActivity)
+                            currentActivity as AppCompatActivity
+                    ) { result.resolve(true) }
                 }
                 else -> result.reject("NotReady", "OneTrust is not ready")
             }
@@ -42,8 +42,8 @@ class OneTrustBridge(reactContext: ReactApplicationContext)
             when {
                 isReady -> reactApplicationContext.runOnUiQueueThread {
                     showNotice(
-                            { result.resolve(true) },
-                            currentActivity as AppCompatActivity)
+                            currentActivity as AppCompatActivity
+                    ) { result.resolve(true) }
                 }
                 else -> result.reject("NotReady", "OneTrust is not ready")
             }

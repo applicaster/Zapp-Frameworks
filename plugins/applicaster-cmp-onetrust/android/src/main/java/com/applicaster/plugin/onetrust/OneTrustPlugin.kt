@@ -128,8 +128,7 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                         listener.onHookFinished()
                     } else {
                         APLogger.info(TAG, "User consent requested")
-                        // force show since otherwise we don't know if it was actually shown (in an easy way), and can't unsubscribe
-                        sdk.showBannerUI(context as AppCompatActivity)
+                        showNotice(context as AppCompatActivity) { listener.onHookFinished() }
                     }
                 }
 
@@ -158,12 +157,12 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
     var isReady: Boolean = false
         private set
 
-    fun showPreferences(eventListener: () -> Unit,
-                        activity: AppCompatActivity) =
+    fun showPreferences(activity: AppCompatActivity,
+                        eventListener: () -> Unit) =
             checkedCall(eventListener) { sdk.showPreferenceCenterUI(activity) }
 
-    fun showNotice(eventListener: () -> Unit,
-                   activity: AppCompatActivity) =
+    fun showNotice(activity: AppCompatActivity,
+                   eventListener: () -> Unit) =
             checkedCall(eventListener) { sdk.showBannerUI(activity) }
 
     private fun checkedCall(eventListener: () -> Unit,
