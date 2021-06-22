@@ -57,7 +57,7 @@ const baseManifest = {
     {
       type: "uploader",
       key: "css_url",
-      tooltip_text: "Additional CSS file"
+      tooltip_text: "Additional CSS file",
     },
     {
       group: true,
@@ -178,6 +178,21 @@ const baseManifest = {
           key: "moat_partner_code",
           tooltip_text: "Moad partner code",
           default: "",
+        },
+      ],
+    },
+    {
+      group: true,
+      label: "DRM",
+      tooltip: "DRM Settings",
+      folded: true,
+      fields: [
+        {
+          key: "drm_enabled",
+          type: "checkbox",
+          label: "DRM is enabled",
+          default: 1,
+          tooltip_text: "Disable drm across the app",
         },
       ],
     },
