@@ -152,7 +152,7 @@ const extra_dependencies_apple = {
 
 const project_dependencies_android = [
   {
-    "applicaster-cmp-didomi":
+    "applicaster-cmp-onetrust":
       "node_modules/@applicaster/applicaster-cmp-onetrust/android",
   },
 ];
