@@ -33,6 +33,7 @@ public class OneTrustCmp: NSObject, GeneralProviderProtocol {
         static let pluginIdentifier = "applicaster-cmp-onetrust"
         static let onetrustGDPRApplies = "IABTCF_gdprApplies"
         static let onetrustIABConsent = "IABTCF_TCString"
+        static let onetrustUSPrivacy = "IABUSPrivacy_String"
     }
 
     public required init(pluginModel: ZPPluginModel) {
