@@ -444,7 +444,12 @@ extension TeamCardViewController: UITableViewDelegate {
             viewController.playerID = player.id ?? ""
         }
 
-        navigationController?.pushViewController(viewController, animated: true)
+        if let navigationController = navigationController {
+            navigationController.pushViewController(viewController, animated: true)
+        }
+        else {
+            OptaStats.presentViewControllerModally(viewController: viewController)
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
