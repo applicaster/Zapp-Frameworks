@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol ParallaxableView: class {
+public protocol ParallaxableView: AnyObject {
 
     var parallaxEffectOptions: ParallaxEffectOptions { get set }
 

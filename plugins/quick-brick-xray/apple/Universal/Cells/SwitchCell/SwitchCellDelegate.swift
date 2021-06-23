@@ -8,7 +8,7 @@
 import Foundation
 import XrayLogger
 
-protocol SwitchCellDelegate: class {
+protocol SwitchCellDelegate: AnyObject {
     func switcherDidChange(value: Bool,
                            indexPath: IndexPath)
 }
