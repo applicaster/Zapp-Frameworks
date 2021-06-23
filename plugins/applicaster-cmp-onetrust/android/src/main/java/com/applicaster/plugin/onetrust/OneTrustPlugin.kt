@@ -3,6 +3,7 @@ package com.applicaster.plugin.onetrust
 import android.content.Context
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import com.applicaster.analytics.AnalyticsAgentUtil
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
@@ -66,17 +67,17 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
 
         override fun onHideBanner() = Unit
 
-        override fun onBannerClickedAcceptAll() = Unit
+        override fun onBannerClickedAcceptAll() = enableAnalytics(true)
 
-        override fun onBannerClickedRejectAll() = Unit
+        override fun onBannerClickedRejectAll() = enableAnalytics(false)
 
         override fun onShowPreferenceCenter() = Unit
 
         override fun onHidePreferenceCenter() = Unit
 
-        override fun onPreferenceCenterAcceptAll() = Unit
+        override fun onPreferenceCenterAcceptAll() = enableAnalytics(true)
 
-        override fun onPreferenceCenterRejectAll() = Unit
+        override fun onPreferenceCenterRejectAll() = enableAnalytics(false)
 
         override fun onPreferenceCenterConfirmChoices() = Unit
 
@@ -192,6 +193,18 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                         APLogger.info(TAG, "Saved $key $v")
                     }
                 }
+            }
+        }
+    }
+
+    private fun enableAnalytics(enable: Boolean) {
+        AppContext.get().let {
+            if (enable) {
+                AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(true, it)
+                AnalyticsAgentUtil.resumeTracking(it)
+            } else {
+                AnalyticsAgentUtil.pauseTracking(it)
+                AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(false, it)
             }
         }
     }
