@@ -37,6 +37,12 @@ extension OneTrustCmp {
                                                                                value: onetrustIABConsent,
                                                                                namespace: Params.pluginIdentifier)
             }
+            
+            if let onetrustUSPrivacy = UserDefaults.standard.string(forKey: Params.onetrustUSPrivacy) {
+                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.onetrustUSPrivacy,
+                                                                               value: onetrustUSPrivacy,
+                                                                               namespace: Params.pluginIdentifier)
+            }
         }
     }
 
