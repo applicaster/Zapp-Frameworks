@@ -286,14 +286,10 @@ extension MatchesCollectionView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell: UICollectionViewCell
-        if indexPath.row == 0 && allowAllMatches {
-            let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ViewAllMatchesCollectionViewCell", for: indexPath) as! ViewAllMatchesCollectionViewCell
-            cell = newCell
-        }
-        else {
-            let index = indexPath.row - (allowAllMatches ? 1 : 0)
+
+        if indexPath.row < matchStats.count {
             let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchCardCollectionViewCell", for: indexPath) as! MatchCardCollectionViewCell
-            let matchStat = matchStats[index]
+            let matchStat = matchStats[indexPath.row]
             newCell.matchView.didTapOnTeamFlag = { [weak self] teamId in
                 self?.launchTeamScreenBlock?(teamId)
             }
@@ -305,6 +301,9 @@ extension MatchesCollectionView: UICollectionViewDataSource {
             if !showDottedOutline {
                 newCell.backgroundColor = .white
             }
+            cell = newCell
+        } else {
+            let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ViewAllMatchesCollectionViewCell", for: indexPath) as! ViewAllMatchesCollectionViewCell
             cell = newCell
         }
 
