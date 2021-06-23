@@ -200,9 +200,11 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
     private fun enableAnalytics(enable: Boolean) {
         AppContext.get().let {
             if (enable) {
+                APLogger.error(TAG, "Enabling analytics plugins")
                 AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(true, it)
                 AnalyticsAgentUtil.resumeTracking(it)
             } else {
+                APLogger.error(TAG, "Disabling analytics plugins")
                 AnalyticsAgentUtil.pauseTracking(it)
                 AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(false, it)
             }
