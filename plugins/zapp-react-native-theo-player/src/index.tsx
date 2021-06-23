@@ -30,6 +30,7 @@ type PluginConfiguration = {
   theoplayer_scale_mode: string;
   theoplayer_license_key: string;
   moat_partner_code: string;
+  drm_enabled: string;
 };
 
 type Content = {
@@ -525,9 +526,12 @@ export default class THEOPlayer extends Component<Props, State> {
     const { entry, style: videoStyle, pluginConfiguration } = this.props;
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
+    const drm_enabled = pluginConfiguration?.drm_enabled;
     const moat_partner_code = pluginConfiguration?.moat_partner_code;
     const posterImage = fetchImageFromMetaByKey(entry);
-    const drm = getDRMData({ entry });
+
+    const drm = drm_enabled === "DISABLED" ? {} : getDRMData({ entry });
+
     return (
       <View
         style={

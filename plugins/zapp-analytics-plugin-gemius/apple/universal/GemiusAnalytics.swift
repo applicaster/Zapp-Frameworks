@@ -54,6 +54,7 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
     var adIsPlaying: Bool = false
     var lastProceededPlayerEvent: String?
     var lastProceededAdEvent: String?
+    var lastProceededScreenEvent: String?
 
     public required init(pluginModel: ZPPluginModel) {
         model = pluginModel

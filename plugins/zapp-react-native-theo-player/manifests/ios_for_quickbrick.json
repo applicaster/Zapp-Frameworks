@@ -195,11 +195,35 @@
           "default": ""
         }
       ]
+    },
+    {
+      "group": true,
+      "label": "DRM",
+      "tooltip": "DRM Settings",
+      "folded": true,
+      "fields": [
+        {
+          "type": "select",
+          "key": "drm_enabled",
+          "tooltip_text": "Disable DRM across the app",
+          "options": [
+            {
+              "text": "ENABLED",
+              "value": "ENABLED"
+            },
+            {
+              "text": "DISABLED",
+              "value": "DISABLED"
+            }
+          ],
+          "initial_value": "ENABLED"
+        }
+      ]
     }
   ],
   "platform": "ios_for_quickbrick",
-  "dependency_version": "0.7.4",
-  "manifest_version": "0.7.4",
+  "dependency_version": "0.7.5",
+  "manifest_version": "0.7.5",
   "api": {
     "class_name": "THEOplayerAdapter",
     "modules": [
@@ -213,7 +237,7 @@
     }
   },
   "npm_dependencies": [
-    "@applicaster/zapp-react-native-theo-player@0.7.4"
+    "@applicaster/zapp-react-native-theo-player@0.7.5"
   ],
   "dependency_repository_url": {},
   "min_zapp_sdk": "3.0.0-Dev",
