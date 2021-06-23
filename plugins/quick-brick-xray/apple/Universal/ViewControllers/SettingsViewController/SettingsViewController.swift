@@ -11,7 +11,7 @@ import Reporter
 import UIKit
 import XrayLogger
 
-protocol SettingsViewControllerProtocol: class {
+protocol SettingsViewControllerProtocol: AnyObject {
     var fileLogLevelOptions: LogLevelOptions { get }
     func setFileLogLevelOptions(newLogLevelOptions: LogLevelOptions)
 
@@ -22,7 +22,7 @@ protocol SettingsViewControllerProtocol: class {
     func setNetworkRequestsIgnoredDomains(domains: [String])
 }
 
-protocol SettingsViewControllerDelegate: class {
+protocol SettingsViewControllerDelegate: AnyObject {
     var delegate: SettingsViewController? { get set }
 }
 
