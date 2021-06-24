@@ -94,15 +94,15 @@
     "5ae06cef8fba0f00084bd3c6"
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-opta-stats@0.6.5"
+    "@applicaster/quick-brick-opta-stats@0.6.6"
   ],
   "identifier": "quick-brick-opta-stats",
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.6.5",
-  "dependency_version": "0.6.5",
+  "manifest_version": "0.6.6",
+  "dependency_version": "0.6.6",
   "extra_dependencies": [
     {
       "OptaStats": ":path => './node_modules/@applicaster/quick-brick-opta-stats/apple/OptaStats.podspec'"
