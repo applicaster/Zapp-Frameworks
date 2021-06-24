@@ -147,13 +147,21 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
     }
 
     override fun executeOnStartup(context: Context,
-                                  listener: HookListener) = listener.onHookFinished()
+                                  listener: HookListener) {
+        if (!hasAnyConsent()) {
+            // most likely the first launch, make sure nothing will be reported until we ask the user
+            APLogger.info(TAG, "User consent data not found, disabling analytics until consent request is presented")
+            AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(false, context)
+        }
+        listener.onHookFinished()
+    }
 
     override fun setPluginConfigurationParams(params: Map<*, *>?) {
         // handled in setPluginModel
     }
 
     private fun isDomainIdValid() = !domainIdentifier.isNullOrBlank()
+
     private fun isStorageValid() = !storageLocation.isNullOrBlank()
 
     var isReady: Boolean = false
@@ -209,6 +217,11 @@ class OneTrustPlugin : GenericPluginI, ApplicationLoaderHookUpI {
                 AnalyticsAgentUtil.getInstance().setAnalyticsEnabled(false, it)
             }
         }
+    }
+
+    private fun hasAnyConsent() : Boolean {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(AppContext.get())
+        return requiredKeys.any { prefs.contains(it) }
     }
 
     companion object {
