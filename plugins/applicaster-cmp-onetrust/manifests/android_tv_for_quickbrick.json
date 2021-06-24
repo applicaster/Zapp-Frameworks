@@ -1,9 +1,9 @@
 {
   "api": {
     "require_startup_execution": true,
-    "class_name": "OneTrustCmp",
-    "modules": [
-      "ZappCmpOneTrust"
+    "class_name": "com.applicaster.plugin.onetrust.OneTrustPlugin",
+    "react_packages": [
+      "com.applicaster.plugin.onetrust.reactnative.OneTrustPackage"
     ]
   },
   "dependency_repository_url": [],
@@ -20,7 +20,7 @@
   "ui_frameworks": [
     "quickbrick"
   ],
-  "min_zapp_sdk": "4.1.0-Dev",
+  "min_zapp_sdk": "4.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
   "custom_configuration_fields": [
@@ -44,13 +44,6 @@
       "label": "Storage Location",
       "default": "cdn.cookielaw.org",
       "tooltip_text": "Storage Location"
-    },
-    {
-      "type": "text",
-      "key": "plist.NSUserTrackingUsageDescription",
-      "label": "ATT description",
-      "default": "This identifier will be used to deliver personalized ads to you.",
-      "tooltip_text": "Please enter the description for ATT"
     }
   ],
   "identifier": "applicaster-cmp-onetrust",
@@ -58,14 +51,14 @@
     "@applicaster/applicaster-cmp-onetrust@0.2.0"
   ],
   "targets": [
-    "mobile"
+    "tv"
   ],
-  "platform": "ios_for_quickbrick",
+  "platform": "android_tv_for_quickbrick",
   "manifest_version": "0.2.0",
   "dependency_version": "0.2.0",
-  "extra_dependencies": [
+  "project_dependencies": [
     {
-      "ZappCmpOneTrust": ":path => './node_modules/@applicaster/applicaster-cmp-onetrust/apple/ZappCmpOneTrust.podspec'"
+      "applicaster-cmp-onetrust": "node_modules/@applicaster/applicaster-cmp-onetrust/android"
     }
   ],
   "general": {

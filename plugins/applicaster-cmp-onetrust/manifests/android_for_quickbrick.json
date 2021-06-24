@@ -1,4 +1,11 @@
 {
+  "api": {
+    "require_startup_execution": true,
+    "class_name": "com.applicaster.plugin.onetrust.OneTrustPlugin",
+    "react_packages": [
+      "com.applicaster.plugin.onetrust.reactnative.OneTrustPackage"
+    ]
+  },
   "dependency_repository_url": [],
   "dependency_name": "@applicaster/applicaster-cmp-onetrust",
   "author_name": "Applicaster",
@@ -10,15 +17,50 @@
   "react_native": true,
   "ui_builder_support": true,
   "whitelisted_account_ids": [],
+  "ui_frameworks": [
+    "quickbrick"
+  ],
+  "min_zapp_sdk": "4.0.0",
   "deprecated_since_zapp_sdk": "",
   "unsupported_since_zapp_sdk": "",
+  "custom_configuration_fields": [
+    {
+      "key": "present_on_startup",
+      "type": "checkbox",
+      "default": 1,
+      "label": "Present on startup",
+      "label_tooltip": "If enabled, consent screen will be shown on first application launch"
+    },
+    {
+      "key": "domain_identifier",
+      "type": "text",
+      "label": "Domain Identifier",
+      "default": "",
+      "tooltip_text": "Domain Identifier"
+    },
+    {
+      "key": "storage_location",
+      "type": "text",
+      "label": "Storage Location",
+      "default": "cdn.cookielaw.org",
+      "tooltip_text": "Storage Location"
+    }
+  ],
   "identifier": "applicaster-cmp-onetrust",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-onetrust@0.1.0"
+    "@applicaster/applicaster-cmp-onetrust@0.2.0"
+  ],
+  "targets": [
+    "mobile"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "0.1.0",
-  "dependency_version": "0.1.0",
+  "manifest_version": "0.2.0",
+  "dependency_version": "0.2.0",
+  "project_dependencies": [
+    {
+      "applicaster-cmp-onetrust": "node_modules/@applicaster/applicaster-cmp-onetrust/android"
+    }
+  ],
   "general": {
     "fields": [
       {
@@ -30,7 +72,7 @@
       {
         "type": "hidden",
         "key": "method_name",
-        "tooltip_text": "Default Method to Retreive",
+        "tooltip_text": "Default Method to Retrieve",
         "default": "showPreferences"
       },
       {
