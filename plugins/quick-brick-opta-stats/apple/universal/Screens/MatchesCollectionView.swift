@@ -246,7 +246,7 @@ extension MatchesCollectionView: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == matchStats.count && allowAllMatches {
+        if indexPath.row == 0 && allowAllMatches {
             launchAllMatchesScreenBlock?()
         } else {
         }
