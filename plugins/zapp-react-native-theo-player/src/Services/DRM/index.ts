@@ -12,7 +12,7 @@ export function getDRMData({ entry }) {
     return mapDRMToTheoData(drmData);
   }
 
-  return null;
+  return {};
 }
 
 function getDRMFromEntry(entry) {
