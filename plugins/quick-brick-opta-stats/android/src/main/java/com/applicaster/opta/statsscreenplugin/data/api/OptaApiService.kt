@@ -46,6 +46,18 @@ interface OptaApiService {
                      @Query("_lcl") localization: String):
             Observable<Response<TeamModel.Team>>
 
+    // https://docs.performgroup.com/docs/data/reference/soccer/opta-sdapi-soccer-api-seasonal-stats.htm
+    @GET("seasonstats/{token}")
+    fun getTeamCompetitionStats(@Path("token") token: String,
+                                @Header("Referer") referer: String,
+                                @Query("_rt") rt: String,
+                                @Query("_fmt") format: String,
+                                @Query("comp") competitionId: String,
+                                @Query("ctst") contestantId: String,
+                                @Query("detailed") detailed: String,
+                                @Query("_lcl") localization: String):
+            Observable<Response<TeamModel.Team>>
+
     @GET("squads/{token}")
     fun getSquads(@Path("token") token: String,
                   @Header("Referer") referer: String, @Query("_rt") rt: String,

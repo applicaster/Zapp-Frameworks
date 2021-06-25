@@ -32,8 +32,9 @@ class TeamInteractor : Interactor() {
     fun requestTeamStats(onFinishedListener: OnFinishedListener, teamId: String) {
         // right now is not possible to get data from opta of the Copa America 2019 so we are using
         // old calendar and contestant ids
-        disposable = copaAmericaApiService.getTeamStats(PluginDataRepository.INSTANCE.getToken(), referer,
-                "c", "json", calendarId, teamId, "yes", ModelUtils.getLocalization())
+        disposable = copaAmericaApiService.getTeamCompetitionStats(
+                PluginDataRepository.INSTANCE.getToken(), referer,
+                "c", "json", competitionId, teamId, "yes", ModelUtils.getLocalization())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

@@ -9,6 +9,7 @@ open class Interactor {
 
     protected var referer = PluginDataRepository.INSTANCE.getReferer()
     protected var calendarId = PluginDataRepository.INSTANCE.getCalendarId()
+    protected var competitionId = PluginDataRepository.INSTANCE.getCompetitionId()
 
     protected val copaAmericaApiService by lazy {
         OptaApiService.create()
