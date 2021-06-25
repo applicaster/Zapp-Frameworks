@@ -6,5 +6,6 @@ import { connectToStore } from "@applicaster/zapp-react-native-redux";
 export default {
   isFlowBlocker: () => true,
   presentFullScreen: true,
+  hasPlayerHook: true,
   Component: connectToStore(R.pick(["rivers"]))(Component),
 };
