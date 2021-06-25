@@ -44,7 +44,11 @@ class PlayerGoalAdapter(private val items: List<MatchModel.Goal>?, val context: 
 
     override fun getItemViewType(position: Int): Int {
         items?.let {
-            return if (it[position].contestantId == homeContestantId) homeGoal else awayGoal
+            val goal = it[position]
+            return when (goal.type) {
+                "OG" -> if (goal.contestantId != homeContestantId) homeGoal else awayGoal
+                else -> if (goal.contestantId == homeContestantId) homeGoal else awayGoal
+            }
         } ?: return homeGoal
     }
 
