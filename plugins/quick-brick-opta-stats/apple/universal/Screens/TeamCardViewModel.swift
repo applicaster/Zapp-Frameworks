@@ -23,22 +23,23 @@ final class TeamCardViewModel: ViewModel {
     override func fetch() {
         isLoading.on(.next(true))
 
-        if OptaStats.pluginParams.competitionId.isEmpty == false {
-            ApiManager.fetchTeamScreenCompetitionDetails(competitionId: OptaStats.pluginParams.competitionId,
-                                                         contestantId: contestantId) { _, json in
-                self.isLoading.on(.next(false))
-
-                // API endpoint gives success code even though payload contains error details
-                // hence, we have to check for errorCode key
-                if let json = json {
-                    if let _ = json["errorCode"].string {
-                        self.errorOnFetch.value = true
-                    } else {
-                        self.teamCard.value = TeamCard(json: json)
-                    }
-                }
-            }
-        } else if OptaStats.pluginParams.calendarId.isEmpty == false {
+//        if OptaStats.pluginParams.competitionId.isEmpty == false {
+//            ApiManager.fetchTeamScreenCompetitionDetails(competitionId: OptaStats.pluginParams.competitionId,
+//                                                         contestantId: contestantId) { _, json in
+//                self.isLoading.on(.next(false))
+//
+//                // API endpoint gives success code even though payload contains error details
+//                // hence, we have to check for errorCode key
+//                if let json = json {
+//                    if let _ = json["errorCode"].string {
+//                        self.errorOnFetch.value = true
+//                    } else {
+//                        self.teamCard.value = TeamCard(json: json)
+//                    }
+//                }
+//            }
+//        } else
+        if OptaStats.pluginParams.calendarId.isEmpty == false {
             ApiManager.fetchTeamScreenDetails(tournamentCalendar: OptaStats.pluginParams.calendarId, contestantId: contestantId) { _, json in
                 self.isLoading.on(.next(false))
 
