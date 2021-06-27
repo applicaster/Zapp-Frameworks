@@ -379,6 +379,18 @@ class MatchDetailViewController: ViewControllerBase, UITableViewDelegate, UITabl
 
             if let label = cell.viewWithTag(300) as? UILabel {
                 label.text = goal.scorerName?.uppercased() ?? ""
+                if goal.type == "OG" {
+                    label.textColor = UIColor(argbHexString: "#ffd50000")
+                    if let ball = cell.viewWithTag(200) as? UIImageView {
+                        if #available(iOS 13.0, *) {
+                            ball.image = ball.image?.withTintColor(label.textColor)
+                        }
+                        else {
+                            ball.image = ball.image?.withRenderingMode(.alwaysTemplate)
+                            ball.tintColor = label.textColor
+                        }
+                    }
+                }
             }
 
             if let imageView = cell.viewWithTag(10) as? UIImageView {
