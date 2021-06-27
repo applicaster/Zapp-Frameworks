@@ -59,6 +59,23 @@ struct ApiManager {
             completion(success, json)
         }
     }
+    
+    static func fetchTeamScreenCompetitionDetails(competitionId: String,
+                                                  contestantId: String,
+                                                  completion: @escaping (ApiCompletionHandler)) {
+                   let params = [
+                       "_rt": "c",
+                       "_fmt": "json",
+                       "comp": competitionId,
+                       "ctst": contestantId,
+                       "detailed": "yes",
+                       "_lcl": languageCode,
+                   ] as [String: AnyObject]
+
+        NetworkService.makeRequest(.teamCompetitionScreen(requestParams: params)) { success, json in
+            completion(success, json)
+        }
+    }
 
     static func fetchTournamentWinners(competitionId: String,
                                        completion: @escaping (ApiCompletionHandler)) {

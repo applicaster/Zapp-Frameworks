@@ -17,6 +17,7 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
     case matchScreen(requestParams: [String: AnyObject])
     case groupCards(requestParams: [String: AnyObject])
     case teamScreen(requestParams: [String: AnyObject])
+    case teamCompetitionScreen(requestParams: [String: AnyObject])
     case playerScreenFullSquad(requestParams: [String: AnyObject])
     case playerScreenCareer(requestParams: [String: AnyObject])
     case allMatches(requestParams: [String: AnyObject])
@@ -43,6 +44,8 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
             return "/standings/\(token)"
         case .teamScreen:
             return "/seasonstats/\(token)"
+        case .teamCompetitionScreen:
+            return "/seasonstats/\(token)"
         case .playerScreenFullSquad:
             return "/squads/\(token)"
         case .playerScreenCareer:
@@ -68,6 +71,8 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
             return "standings"
         case .teamScreen:
             return "seasonstats"
+        case .teamCompetitionScreen:
+            return "seasonstatsforcompetition"
         case .playerScreenFullSquad:
             return "squads"
         case .playerScreenCareer:
@@ -112,6 +117,7 @@ enum NetworkURLRequestConvertible: URLRequestConvertible {
         case let .matchScreen(requestParams), let
             .groupCards(requestParams), let
             .teamScreen(requestParams), let
+            .teamCompetitionScreen(requestParams), let
             .playerScreenFullSquad(requestParams), let
             .playerScreenCareer(requestParams), let
             .allMatches(requestParams), let
