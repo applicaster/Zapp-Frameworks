@@ -103,6 +103,12 @@ extension SegmentAnalytics {
     @objc public func login(with identity: String,
                             traits: [String: Any]?,
                             options: [String: Any]?) {
+
+        //check if the plugin is enabled 
+        guard isDisabled == false else {
+            return
+        }       
+
         SEGAnalytics.shared()?.identify(identity,
                                         traits: traits,
                                         options: options)
