@@ -93,8 +93,9 @@ public class RootController: NSObject {
         let plugins = LoadingState()
         plugins.stateHandler = loadPluginsGroup
         plugins.readableName = "<app-loader-state-machine> Load plugins"
-        plugins.dependantStates = [remoteConfiguration.name]
-
+        plugins.dependantStates = [splashState.name,
+                                   remoteConfiguration.name]
+        
         let userInterfaceLayer = LoadingState()
         userInterfaceLayer.stateHandler = loadUserInterfaceLayerGroup
         userInterfaceLayer.readableName = "<app-loader-state-machine> Prepare User Interface Layer"
