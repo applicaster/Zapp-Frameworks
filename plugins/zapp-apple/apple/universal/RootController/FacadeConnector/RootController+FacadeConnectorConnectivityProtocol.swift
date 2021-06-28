@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Reachability
 import ZappCore
 
 extension RootController: FacadeConnectorConnnectivityProtocol {
@@ -14,7 +13,7 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
         var revValue = false
 
         switch currentConnection {
-        case .wifi, .cellular:
+        case .connected:
             revValue = true
         default:
             break
@@ -30,16 +29,15 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
     public func getCurrentConnectivityState() -> ConnectivityState {
         var retValue: ConnectivityState = .cellular
 
-        guard let connection = currentConnection else {
-            return retValue
-        }
-
-        switch connection {
-        case .cellular:
-            retValue = .cellular
-        case .wifi:
-            retValue = .wifi
-        case .unavailable, .none:
+        switch currentConnection {
+        case let .connected(connections):
+            if connections.contains(.cellular) {
+                retValue = .cellular
+            }
+            else {
+                retValue = .wifi
+            }
+        case .disconnected:
             retValue = .offline
         }
         return retValue
