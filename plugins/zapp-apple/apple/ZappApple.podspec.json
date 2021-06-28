@@ -43,9 +43,6 @@
   },
   "dependencies": {
     "ZappCore": [],
-    "ReachabilitySwift": [
-      "= 5.0.0"
-    ],
     "DeviceKit": [
       "= 4.3.0"
     ],

@@ -7,29 +7,25 @@
 //
 
 import Foundation
-import Reachability
 import ZappCore
 
 extension RootController: ReachabilityManagerDelegate {
-    func reachabilityChanged(connection: Reachability.Connection) {
-        switch connection {
-        case .wifi, .cellular:
-            if let currentConnection = currentConnection,
-               currentConnection == .unavailable {
+    func reachabilityChanged(_ state: ReachabilityState) {
+        switch state {
+        case .connected(_):
+            if currentConnection == .disconnected {
                 forceReloadApplication()
             }
-        case .none:
-            showInternetError()
-        case .unavailable:
+        case .disconnected:
             showInternetError()
         }
-        currentConnection = connection
+        currentConnection = state
 
         updateConnectivityListeners()
         
         let event = EventsBus.Event(type: EventsBusType(.reachabilityChanged),
                                     source: logger?.subsystem,
-                                    data: ["connection": connection.description])
+                                    data: ["connection": currentConnection.description])
         EventsBus.post(event)
     }
 

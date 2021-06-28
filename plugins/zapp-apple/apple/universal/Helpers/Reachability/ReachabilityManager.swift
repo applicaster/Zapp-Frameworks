@@ -7,45 +7,28 @@
 //
 
 import Foundation
-import Reachability
+import Network
 
 class ReachabilityManager {
-    var reachability: Reachability?
+    let monitor: NWPathMonitor = NWPathMonitor()
     var delegate: ReachabilityManagerDelegate
+
     init(delegate: ReachabilityManagerDelegate) {
         self.delegate = delegate
-        do {
-            reachability = try Reachability()
-            startObserve()
-        } catch let error {
-            print(error.localizedDescription)
-        }
+        startObserve()
     }
 
     func startObserve() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reachabilityChanged(note:)),
-                                               name: .reachabilityChanged,
-                                               object: reachability)
-        do {
-            try reachability?.startNotifier()
-        } catch {
-            print("could not start reachability notifier")
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                let interfaceTypes = path.availableInterfaces.map { $0.type }
+                self.delegate.reachabilityChanged(.connected(interfaceTypes))
+            } else {
+                self.delegate.reachabilityChanged(.disconnected)
+            }
         }
-    }
-
-    func stopObserve() {
-        reachability?.stopNotifier()
-
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .reachabilityChanged,
-                                                  object: reachability)
-    }
-
-    @objc func reachabilityChanged(note: Notification) {
-        guard let reachability = note.object as? Reachability else {
-            return delegate.reachabilityChanged(connection: .unavailable)
-        }
-        delegate.reachabilityChanged(connection: reachability.connection)
+        
+        let queue = DispatchQueue(label: "ReachabilityMonitor")
+        monitor.start(queue: queue)
     }
 }

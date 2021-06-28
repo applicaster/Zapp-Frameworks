@@ -6,7 +6,6 @@
 //  Copyright © 2018 Applicaster LTD. All rights reserved.
 //
 
-import Reachability
 import UIKit
 import XrayLogger
 import ZappCore
@@ -25,7 +24,7 @@ public class RootController: NSObject {
     lazy var connectivityListeners: NSMutableArray = []
 
     var reachabilityManager: ReachabilityManager?
-    var currentConnection: Reachability.Connection?
+    var currentConnection: ReachabilityState = .connected([.wifi])
 
     var loadingStateMachine: LoadingStateMachine!
     public var userInterfaceLayer: UserInterfaceLayerProtocol?
@@ -52,25 +51,26 @@ public class RootController: NSObject {
             showErrorMessage(message: RootControllerError.canNotCreateInterfaceLayer)
             return
         }
-        
-        guard let window = UIApplication.shared.delegate?.window else {
-            return
-        }
-        
-        window?.makeKeyAndVisible()
-        splashViewController = window?.rootViewController as? SplashViewController
-        #if os(iOS)
-        NetworkRequestsManager.startListening()
-        #endif
-        pluginsManager.crashlogs.prepareManager { [weak self] success in
-            guard let self = self else { return }
-            if success {
 
-                self.loadingStateMachine = LoadingStateMachine(dataSource: self,
-                                                               withStates: self.prepareLoadingStates())
-                self.loadingStateMachine.startStatesInvocation()
-            } else {
-                self.showErrorMessage(message: "Can not intialize application!")
+        DispatchQueue.main.async { [self] in
+            guard let window = UIApplication.shared.delegate?.window else {
+                return
+            }
+
+            window?.makeKeyAndVisible()
+            splashViewController = window?.rootViewController as? SplashViewController
+            #if os(iOS)
+                NetworkRequestsManager.startListening()
+            #endif
+            self.pluginsManager.crashlogs.prepareManager { [weak self] success in
+                guard let self = self else { return }
+                if success {
+                    self.loadingStateMachine = LoadingStateMachine(dataSource: self,
+                                                                   withStates: self.prepareLoadingStates())
+                    self.loadingStateMachine.startStatesInvocation()
+                } else {
+                    self.showErrorMessage(message: "Can not intialize application!")
+                }
             }
         }
     }
@@ -83,19 +83,18 @@ public class RootController: NSObject {
         let remoteConfiguration = LoadingState()
         remoteConfiguration.stateHandler = loadRemoteConfigurationGroup
         remoteConfiguration.readableName = "<app-loader-state-machine> Load RemoteConfiguration"
-        
+
         let styles = LoadingState()
         styles.stateHandler = loadStylesGroup
         styles.readableName = "<app-loader-state-machine> Load Styles"
 
         // Dependant states
-        
+
         let plugins = LoadingState()
         plugins.stateHandler = loadPluginsGroup
         plugins.readableName = "<app-loader-state-machine> Load plugins"
         plugins.dependantStates = [remoteConfiguration.name]
 
-        
         let userInterfaceLayer = LoadingState()
         userInterfaceLayer.stateHandler = loadUserInterfaceLayerGroup
         userInterfaceLayer.readableName = "<app-loader-state-machine> Prepare User Interface Layer"
