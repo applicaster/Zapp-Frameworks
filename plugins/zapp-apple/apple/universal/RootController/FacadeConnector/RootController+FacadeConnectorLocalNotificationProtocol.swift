@@ -14,11 +14,11 @@ extension RootController: FacadeConnectorLocalNotificationProtocol {
     }
 
     public func cancelLocalNotifications(_ identifiers: [String]?,
-                                         completion: @escaping (Bool, Error?) -> Void) {
+                                         completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let localNotificationManager = pluginsManager.localNotificationManager else {
-            completion(false, NSError(domain: errorDomainNoPluginExist,
+            completion(.failure(NSError(domain: errorDomainNoPluginExist,
                                       code: 0,
-                                      userInfo: nil))
+                                      userInfo: nil)))
             return
         }
         localNotificationManager.cancelLocalNotifications(identifiers,
@@ -26,11 +26,11 @@ extension RootController: FacadeConnectorLocalNotificationProtocol {
     }
 
     public func presentLocalNotification(_ payload: [AnyHashable: Any],
-                                         completion: @escaping (Bool, Error?) -> Void) {
+                                         completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let localNotificationManager = pluginsManager.localNotificationManager else {
-            completion(false, NSError(domain: errorDomainNoPluginExist,
+            completion(.failure(NSError(domain: errorDomainNoPluginExist,
                                       code: 0,
-                                      userInfo: nil))
+                                      userInfo: nil)))
             return
         }
         localNotificationManager.presentLocalNotification(payload,

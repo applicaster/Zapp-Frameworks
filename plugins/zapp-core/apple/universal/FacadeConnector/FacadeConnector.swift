@@ -35,11 +35,11 @@ import UIKit
         return connectorProvider as? FacadeConnectorPluginManagerProtocol
     }
 
-    @objc public var push: FacadeConnectorPushProtocol? {
+    public var push: FacadeConnectorPushProtocol? {
         return connectorProvider as? FacadeConnectorPushProtocol
     }
 
-    @objc public var localNotification: FacadeConnectorLocalNotificationProtocol? {
+    public var localNotification: FacadeConnectorLocalNotificationProtocol? {
         return connectorProvider as? FacadeConnectorLocalNotificationProtocol
     }
 
