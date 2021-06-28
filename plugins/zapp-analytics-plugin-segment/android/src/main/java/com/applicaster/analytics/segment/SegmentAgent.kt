@@ -5,7 +5,9 @@ import androidx.annotation.CallSuper
 import com.applicaster.analytics.AnalyticsAgentUtil
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.plugin_manager.PluginManager
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
+import com.google.gson.Gson
 import com.segment.analytics.Analytics
 import com.segment.analytics.Properties
 import com.segment.analytics.Traits
@@ -16,7 +18,6 @@ class SegmentAgent : BaseAnalyticsAgent() {
 
     private var analytics: Analytics? = null
     private var writeKey: String = ""
-    private var identity: Identity? = null
 
     override fun initializeAnalyticsAgent(context: Context) {
         super.initializeAnalyticsAgent(context)
@@ -35,7 +36,7 @@ class SegmentAgent : BaseAnalyticsAgent() {
                 .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
                 .recordScreenViews() // Enable this to record screen views automatically!
                 .build()
-        identity?.let {
+        restoreIdentity()?.let {
             reportIdentity(it, analytics!!)
         }
         APLogger.info(TAG, "Initialization complete")
@@ -113,7 +114,7 @@ class SegmentAgent : BaseAnalyticsAgent() {
                         val options: HashMap<String, Any>)
 
     fun setUserIdentify(identity: Identity) {
-        this.identity = identity
+        storeIdentity(identity)
         val analyticsInstance = analytics
         when {
             null != analyticsInstance && AnalyticsAgentUtil.getInstance().analyticsEnabled -> {
@@ -121,9 +122,35 @@ class SegmentAgent : BaseAnalyticsAgent() {
             }
             else -> {
                 APLogger.info(TAG, "Analytics is disabled or not yet initialized, " +
-                        "identifyUser call information will be postponed until reporting is enabled")
+                        "identify information will be stored until reporting is enabled")
             }
         }
+    }
+
+    private fun storeIdentity(identity: Identity) {
+        try {
+            val json = gson.toJson(identity)
+            LocalStorage.set(identityKey, json, pluginId)
+            APLogger.debug(TAG, "Identity was stored in persistent storage")
+        } catch (e: RuntimeException) {
+            APLogger.error(TAG, "Failed to serialize identity $identity", e)
+        }
+    }
+
+    private fun restoreIdentity() : Identity? {
+        val json = LocalStorage.get(identityKey, pluginId)
+        if(json.isNullOrEmpty()) {
+            return null
+        }
+        try {
+            val id = gson.fromJson(json, Identity::class.java)
+            APLogger.debug(TAG, "Stored identity found")
+            return id
+        } catch (e: RuntimeException) {
+            LocalStorage.remove(identityKey, pluginId)
+            APLogger.error(TAG, "Failed to deserialize stored identity", e)
+        }
+        return null
     }
 
     private fun reportIdentity(identity: Identity,
@@ -152,6 +179,7 @@ class SegmentAgent : BaseAnalyticsAgent() {
         private const val TAG = "SegmentAgent"
 
         const val pluginId = "segment_analytics"
+        const val identityKey = "identity"
 
         // plugin uses different key and separator from the base class
         private const val BLACKLISTED_EVENTS_LIST_KEY = "blacklisted_events_list"
@@ -160,5 +188,7 @@ class SegmentAgent : BaseAnalyticsAgent() {
         @JvmStatic
         fun instance(): SegmentAgent? =
                 PluginManager.getInstance().getInitiatedPlugin(pluginId)?.instance as SegmentAgent?
+
+        private val gson by lazy { Gson() }
     }
 }
