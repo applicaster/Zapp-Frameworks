@@ -22,7 +22,7 @@ class ReachabilityManager {
     func startObserve() {
         monitor?.pathUpdateHandler = { path in
             if path.status == .satisfied {
-                let interfaceTypes = path.availableInterfaces.map { $0.type }
+                let interfaceTypes = path.availableInterfaces.map(\.type)
                 self.delegate.reachabilityChanged(.connected(interfaceTypes))
             } else {
                 self.delegate.reachabilityChanged(.disconnected)
