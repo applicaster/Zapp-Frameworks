@@ -10,16 +10,17 @@ import Foundation
 import Network
 
 class ReachabilityManager {
-    let monitor: NWPathMonitor = NWPathMonitor()
+    let monitor: NWPathMonitor?
     var delegate: ReachabilityManagerDelegate
 
     init(delegate: ReachabilityManagerDelegate) {
         self.delegate = delegate
+        self.monitor = NWPathMonitor()
         startObserve()
     }
 
     func startObserve() {
-        monitor.pathUpdateHandler = { path in
+        monitor?.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 let interfaceTypes = path.availableInterfaces.map { $0.type }
                 self.delegate.reachabilityChanged(.connected(interfaceTypes))
@@ -29,6 +30,6 @@ class ReachabilityManager {
         }
         
         let queue = DispatchQueue(label: "ReachabilityMonitor")
-        monitor.start(queue: queue)
+        monitor?.start(queue: queue)
     }
 }
