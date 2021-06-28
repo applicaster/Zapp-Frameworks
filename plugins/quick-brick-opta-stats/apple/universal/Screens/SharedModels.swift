@@ -278,6 +278,10 @@ struct Goal {
     var type, scorerId, scorerName, assistPlayerId: String?
     var assistPlayerName, optaEventId: String?
     var homeScore, awayScore: Int?
+
+    var isOwnGoal: Bool {
+        return type == "OG"
+    }
 }
 
 struct LineUp {
