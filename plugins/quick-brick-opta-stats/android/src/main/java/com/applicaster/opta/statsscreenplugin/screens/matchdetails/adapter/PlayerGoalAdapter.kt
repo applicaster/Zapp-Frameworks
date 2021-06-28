@@ -23,26 +23,40 @@ class PlayerGoalAdapter(private val items: List<MatchModel.Goal>?, val context: 
 
     override fun getItemCount(): Int {
         return items?.size ?: 0
-
-
     }
 
     override fun onBindViewHolder(holder: PlayerGoalViewHolder, position: Int) {
         items?.let {
-            holder.tvGoalTime.text = String.format("%s\'", it[position].timeMin.toString())
-            holder.tvPlayerGoalName.text = it[position].scorerName
+            val goal = it[position]
+            holder.tvGoalTime.text = String.format("%s\'", goal.timeMin.toString())
+            holder.tvPlayerGoalName.text = goal.scorerName
+
+            if(goal.type == "OG") {
+                val color = holder.ivGoalIcon.resources.getColor(R.color.own_goal)
+                holder.tvPlayerGoalName.setTextColor(color)
+                holder.ivGoalIcon.setColorFilter(color)
+            } else {
+                holder.tvPlayerGoalName.setTextColor(holder.originalTextColor)
+                holder.ivGoalIcon.clearColorFilter()
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         items?.let {
-            return if (it[position].contestantId == homeContestantId) homeGoal else awayGoal
+            val goal = it[position]
+            return when (goal.type) {
+                "OG" -> if (goal.contestantId != homeContestantId) homeGoal else awayGoal
+                else -> if (goal.contestantId == homeContestantId) homeGoal else awayGoal
+            }
         } ?: return homeGoal
     }
 
 }
 
 class PlayerGoalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    var tvGoalTime = view.tv_goal_time
-    var tvPlayerGoalName = view.tv_player_goal_name
+    val tvGoalTime = view.tv_goal_time
+    val tvPlayerGoalName = view.tv_player_goal_name
+    val ivGoalIcon = view.iv_goal_icon
+    val originalTextColor = tvPlayerGoalName.currentTextColor // faded_black in the styles, but lets save it
 }

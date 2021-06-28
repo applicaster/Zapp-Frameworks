@@ -365,9 +365,26 @@ class MatchDetailViewController: ViewControllerBase, UITableViewDelegate, UITabl
         var cell: UITableViewCell!
 
         if tableView == goalsTableView {
+            
+            func isHomeGoal(_ model: RxSwift.Variable<MatchStatsCard>.E?, goal: Goal) -> Bool {
+                var retValue = false
+                guard let model = model else {
+                    return retValue
+                }
+                
+                retValue = model.isPlayerInHomeTeam(id: goal.scorerId ?? "")
+                
+                if goal.isOwnGoal {
+                    retValue = !retValue
+                }
+                return retValue
+            }
+            
             let goal = goals[indexPath.row]
 
-            if let model = matchStatsCardViewModel.matchStatsCard.value, model.isPlayerInHomeTeam(id: goal.scorerId ?? "") {
+            let model = matchStatsCardViewModel.matchStatsCard.value
+ 
+            if isHomeGoal(model, goal: goal) {
                 cell = tableView.dequeueReusableCell(withIdentifier: "HomeGoalsCell")!
             } else {
                 cell = tableView.dequeueReusableCell(withIdentifier: "AwayGoalsCell")!
@@ -379,6 +396,18 @@ class MatchDetailViewController: ViewControllerBase, UITableViewDelegate, UITabl
 
             if let label = cell.viewWithTag(300) as? UILabel {
                 label.text = goal.scorerName?.uppercased() ?? ""
+                if goal.isOwnGoal {
+                    label.textColor = UIColor(argbHexString: "#ffd50000")
+                    if let ball = cell.viewWithTag(200) as? UIImageView {
+                        if #available(iOS 13.0, *) {
+                            ball.image = ball.image?.withTintColor(label.textColor)
+                        }
+                        else {
+                            ball.image = ball.image?.withRenderingMode(.alwaysTemplate)
+                            ball.tintColor = label.textColor
+                        }
+                    }
+                }
             }
 
             if let imageView = cell.viewWithTag(10) as? UIImageView {
