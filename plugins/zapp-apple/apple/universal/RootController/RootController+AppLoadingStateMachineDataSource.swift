@@ -57,14 +57,8 @@ extension RootController: LoadingStateMachineDataSource {
     
     func loadPluginsRemoteConfigurationGroup(_ successHandler: @escaping StateCallBack,
                          _ failHandler: @escaping StateCallBack) {
-        let loadingManager = LoadingManager()
-        loadingManager.loadFile(type: .plugins) { success in
-            if success == true {
-                successHandler()
-            } else {
-                failHandler()
-            }
-        }
+        
+        pluginsManager.loadPluginConfiguration(successHandler, failHandler)
     }
 
     func loadUserInterfaceLayerGroup(_ successHandler: @escaping StateCallBack,

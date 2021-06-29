@@ -39,7 +39,7 @@ public class PluginsManager: NSObject {
         pluginsStateMachine.startStatesInvocation()
     }
 
-    func loadPluginsGroup(_ successHandler: @escaping StateCallBack,
+    func loadPluginConfiguration(_ successHandler: @escaping StateCallBack,
                           _ failHandler: @escaping StateCallBack) {
         logger?.debugLog(template: PluginsManagerLogs.loadingPluginsConfiguration)
 
