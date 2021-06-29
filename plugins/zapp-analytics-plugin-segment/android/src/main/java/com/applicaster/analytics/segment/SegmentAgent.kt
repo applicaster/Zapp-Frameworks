@@ -1,9 +1,16 @@
 package com.applicaster.analytics.segment
 
+import android.content.Context
+import androidx.annotation.CallSuper
+import com.applicaster.analytics.AnalyticsAgentUtil
 import com.applicaster.analytics.BaseAnalyticsAgent
+import com.applicaster.plugin_manager.PluginManager
+import com.applicaster.storage.LocalStorage
 import com.applicaster.util.APLogger
+import com.google.gson.Gson
 import com.segment.analytics.Analytics
 import com.segment.analytics.Properties
+import com.segment.analytics.Traits
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,8 +19,12 @@ class SegmentAgent : BaseAnalyticsAgent() {
     private var analytics: Analytics? = null
     private var writeKey: String = ""
 
-    override fun initializeAnalyticsAgent(context: android.content.Context?) {
+    override fun initializeAnalyticsAgent(context: Context) {
         super.initializeAnalyticsAgent(context)
+        init(context)
+    }
+
+    private fun init(context: Context) {
         if (analytics != null) {
             return
         }
@@ -25,7 +36,10 @@ class SegmentAgent : BaseAnalyticsAgent() {
                 .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
                 .recordScreenViews() // Enable this to record screen views automatically!
                 .build()
-        Analytics.setSingletonInstance(analytics)
+        restoreIdentity()?.let {
+            reportIdentity(it, analytics!!)
+        }
+        APLogger.info(TAG, "Initialization complete")
     }
 
     override fun setParams(params: MutableMap<Any?, Any?>) {
@@ -78,12 +92,103 @@ class SegmentAgent : BaseAnalyticsAgent() {
         return this
     }
 
+    @CallSuper
+    override fun resumeTracking(context: Context) {
+        super.resumeTracking(context)
+        APLogger.info(TAG, "Resuming tracking")
+        init(context)
+    }
+
+    @CallSuper
+    override fun pauseTracking(context: Context) {
+        super.pauseTracking(context)
+        analytics?.let {
+            APLogger.info(TAG, "Shutting down")
+            analytics = null
+            it.shutdown()
+        }
+    }
+
+    data class Identity(val userId: String,
+                        val traits: HashMap<String, Any>,
+                        val options: HashMap<String, Any>)
+
+    fun setUserIdentify(identity: Identity) {
+        storeIdentity(identity)
+        val analyticsInstance = analytics
+        when {
+            null != analyticsInstance && AnalyticsAgentUtil.getInstance().analyticsEnabled -> {
+                reportIdentity(identity, analyticsInstance)
+            }
+            else -> {
+                APLogger.info(TAG, "Analytics is disabled or not yet initialized, " +
+                        "identify information will be stored until reporting is enabled")
+            }
+        }
+    }
+
+    private fun storeIdentity(identity: Identity) {
+        try {
+            val json = gson.toJson(identity)
+            LocalStorage.set(identityKey, json, pluginId)
+            APLogger.debug(TAG, "Identity was stored in persistent storage")
+        } catch (e: RuntimeException) {
+            APLogger.error(TAG, "Failed to serialize identity $identity", e)
+        }
+    }
+
+    private fun restoreIdentity() : Identity? {
+        val json = LocalStorage.get(identityKey, pluginId)
+        if(json.isNullOrEmpty()) {
+            return null
+        }
+        try {
+            val id = gson.fromJson(json, Identity::class.java)
+            APLogger.debug(TAG, "Stored identity found")
+            return id
+        } catch (e: RuntimeException) {
+            LocalStorage.remove(identityKey, pluginId)
+            APLogger.error(TAG, "Failed to deserialize stored identity", e)
+        }
+        return null
+    }
+
+    private fun reportIdentity(identity: Identity,
+                               analyticsInstance: Analytics) {
+        val newTraits = Traits()
+
+        // Add context traits
+        //for (trait in analytics.analyticsContext.traits()) {
+        //    newTraits.putValue(trait.key, trait.value)
+        //}
+
+        // Add additional traits
+        for (entry in identity.traits) {
+            newTraits.putValue(entry.key, entry.value)
+        }
+
+        // Add new options
+        val newOptions = analyticsInstance.defaultOptions
+        newOptions?.context()?.putAll(identity.options)
+        analyticsInstance.identify(identity.userId, newTraits, newOptions)
+        APLogger.info(TAG, "User identity information updated")
+    }
+
     companion object {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.UK)
         private const val TAG = "SegmentAgent"
 
+        const val pluginId = "segment_analytics"
+        const val identityKey = "identity"
+
         // plugin uses different key and separator from the base class
         private const val BLACKLISTED_EVENTS_LIST_KEY = "blacklisted_events_list"
         private const val BLACKLISTED_EVENTS_LIST_DELIMITER = ","
+
+        @JvmStatic
+        fun instance(): SegmentAgent? =
+                PluginManager.getInstance().getInitiatedPlugin(pluginId)?.instance as SegmentAgent?
+
+        private val gson by lazy { Gson() }
     }
 }
