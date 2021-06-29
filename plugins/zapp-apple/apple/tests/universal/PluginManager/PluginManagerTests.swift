@@ -70,7 +70,7 @@ extension PluginManagerTests {
         let expectation = XCTestExpectation(description: "Download plugins configuration")
 
         let pluginManager = PluginsManager()
-        pluginManager.loadPluginsGroup {
+        pluginManager.loadPluginConfiguration {
             let pluginModels = PluginsManager.parseLatestPluginsJson()
             XCTAssertNotEqual(pluginModels?.count ?? 0, 0, ErrorMessages.pluginsListEmpty)
             completion?(pluginModels)
