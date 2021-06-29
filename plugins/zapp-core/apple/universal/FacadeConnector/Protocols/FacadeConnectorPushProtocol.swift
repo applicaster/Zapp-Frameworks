@@ -10,11 +10,19 @@ import Foundation
 import Foundation
 
 public protocol FacadeConnectorPushProtocol {
-    func addTagsToDevice(_ tags: [String]?,
+    func addTags(_ tags: [String]?,
                                completion: @escaping (Result<[String]?, Error>) -> Void)
 
-    func removeTagsToDevice(_ tags: [String]?,
+    func removeTags(_ tags: [String]?,
                                   completion: @escaping (Result<[String]?, Error>) -> Void)
+    
+    @available(*, deprecated, message: "Deprecated since QB SDK 5.1.0, use addTags(_, completion:) instead")
+    func addTagsToDevice(_ tags: [String]?,
+                               completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void)
+
+    @available(*, deprecated, message: "Deprecated since QB SDK 5.1.0, use removeTags(_, completion:) instead")
+    func removeTagsToDevice(_ tags: [String]?,
+                                  completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void)
 
     func getDeviceTags() -> [String:[String]]
 }
