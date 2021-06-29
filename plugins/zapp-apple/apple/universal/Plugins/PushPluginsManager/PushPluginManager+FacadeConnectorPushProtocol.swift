@@ -12,11 +12,22 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     enum PushPluginsManagerError: Error {
         case failedToRemoveTags
         case failedToAddTags
-
     }
-    
+
     public func addTagsToDevice(_ tags: [String]?,
-                                      completion: @escaping (Result<[String]?, Error>) -> Void) {
+                                completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+        addTags(tags) { result in
+            switch result {
+            case let .success(tags):
+                completion(true, tags)
+            case .failure:
+                completion(false, tags)
+            }
+        }
+    }
+
+    public func addTags(_ tags: [String]?,
+                        completion: @escaping (Result<[String]?, Error>) -> Void) {
         var counter = _providers.count
         guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
             completion(.failure(PushPluginsManagerError.failedToAddTags))
@@ -43,7 +54,19 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     }
 
     public func removeTagsToDevice(_ tags: [String]?,
-                                         completion: @escaping (Result<[String]?, Error>) -> Void) {
+                                   completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
+        removeTags(tags) { result in
+            switch result {
+            case let .success(tags):
+                completion(true, tags)
+            case .failure:
+                completion(false, tags)
+            }
+        }
+    }
+
+    public func removeTags(_ tags: [String]?,
+                           completion: @escaping (Result<[String]?, Error>) -> Void) {
         var counter = _providers.count
         guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
             completion(.failure(PushPluginsManagerError.failedToRemoveTags))
