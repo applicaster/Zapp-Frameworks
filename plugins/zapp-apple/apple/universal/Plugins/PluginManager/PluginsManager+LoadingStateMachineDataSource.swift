@@ -10,14 +10,9 @@ import Foundation
 
 extension PluginsManager: LoadingStateMachineDataSource {
     func prepareLoadingPluginStates() -> [LoadingState] {
-        let loadPlugins = LoadingState()
-        loadPlugins.stateHandler = loadPluginsGroup
-        loadPlugins.readableName = "<plugins-state-machine> Load General Plugins JSON"
-
         let onLaunchHook = LoadingState()
         onLaunchHook.stateHandler = hookOnLaunch
         onLaunchHook.readableName = "<plugins-state-machine> Execute Hook Plugin On Launch"
-        onLaunchHook.dependantStates = [loadPlugins.name]
 
         let analytics = LoadingState()
         analytics.stateHandler = prepareAnalyticsPlugins
@@ -44,8 +39,7 @@ extension PluginsManager: LoadingStateMachineDataSource {
         pluginsSessionStorageData.readableName = "<plugins-state-machine> Plugins Session Storage"
         pluginsSessionStorageData.dependantStates = [onLaunchHook.name]
 
-        return [loadPlugins,
-                onLaunchHook,
+        return [onLaunchHook,
                 analytics,
                 push,
                 general,

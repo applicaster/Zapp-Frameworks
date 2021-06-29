@@ -84,6 +84,10 @@ public class RootController: NSObject {
         remoteConfiguration.stateHandler = loadRemoteConfigurationGroup
         remoteConfiguration.readableName = "<app-loader-state-machine> Load RemoteConfiguration"
 
+        let pluginsRemoteConfiguration = LoadingState()
+        pluginsRemoteConfiguration.stateHandler = loadPluginsRemoteConfigurationGroup
+        pluginsRemoteConfiguration.readableName = "<app-loader-state-machine> Load Plugins Remote Configuration"
+
         let styles = LoadingState()
         styles.stateHandler = loadStylesGroup
         styles.readableName = "<app-loader-state-machine> Load Styles"
@@ -94,6 +98,7 @@ public class RootController: NSObject {
         plugins.stateHandler = loadPluginsGroup
         plugins.readableName = "<app-loader-state-machine> Load plugins"
         plugins.dependantStates = [splashState.name,
+                                   pluginsRemoteConfiguration.name,
                                    remoteConfiguration.name]
         
         let userInterfaceLayer = LoadingState()
@@ -118,9 +123,9 @@ public class RootController: NSObject {
                 plugins,
                 styles,
                 remoteConfiguration,
+                pluginsRemoteConfiguration,
                 audience,
                 userInterfaceLayer,
-
                 onApplicationReadyHook]
     }
 
