@@ -2,9 +2,13 @@ package com.theoplayerreactnative;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 
+import com.applicaster.util.APDebugUtil;
 import com.applicaster.util.APLogger;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
@@ -36,6 +40,13 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
         super(reactContext);
         this.theoPlayerViewManager = theoPlayerViewManager;
         registerDRM();
+        if(APDebugUtil.getIsInDebugMode()) {
+            // reactContext.runOnUiQueueThread is not yet available
+            new Handler(Looper.getMainLooper()).post(() -> {
+                WebView.setWebContentsDebuggingEnabled(true);
+                APLogger.info(TAG, "WebView debugging enabled");
+            });
+        }
     }
 
     @Override
