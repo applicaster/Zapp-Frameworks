@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/zapp-analytics-plugin-segment",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Segment Analytics provider",
   "repository": {
     "type": "git",
