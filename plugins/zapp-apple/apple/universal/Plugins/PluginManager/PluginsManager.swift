@@ -39,16 +39,6 @@ public class PluginsManager: NSObject {
         pluginsStateMachine.startStatesInvocation()
     }
 
-    func loadPluginsGroup(_ successHandler: @escaping StateCallBack,
-                          _ failHandler: @escaping StateCallBack) {
-        logger?.debugLog(template: PluginsManagerLogs.loadingPluginsConfiguration)
-
-        let loadingManager = LoadingManager()
-        loadingManager.loadFile(type: .plugins) { success in
-            success ? successHandler() : failHandler()
-        }
-    }
-
     // If will not be used remove in future
     func crashLogs(_ successHandler: @escaping StateCallBack,
                    _ failHandler: @escaping StateCallBack) {
