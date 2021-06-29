@@ -1,5 +1,6 @@
 package com.applicaster.plugin.didomi
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.applicaster.plugin_manager.GenericPluginI
 import com.applicaster.plugin_manager.Plugin
 import com.applicaster.plugin_manager.PluginManager
+import com.applicaster.plugin_manager.cmp.IUserConsent
 import com.applicaster.plugin_manager.hook.ApplicationLoaderHookUpI
 import com.applicaster.plugin_manager.hook.HookListener
 import com.applicaster.session.SessionStorage
@@ -23,6 +25,7 @@ import io.didomi.sdk.events.HideNoticeEvent
 
 class DidomiPlugin : GenericPluginI
         , ApplicationLoaderHookUpI
+        , IUserConsent
         , EventListener() {
 
     private var apiToken: String? = null
@@ -75,30 +78,7 @@ class DidomiPlugin : GenericPluginI
                 addEventListener(this@DidomiPlugin)
                 onReady {
                     APLogger.info(TAG, "Didomi initialized")
-                    if (!shouldConsentBeCollected()) {
-                        APLogger.info(TAG, "User consent was already requested or not needed")
-                        storeConsent() // update values just in case
-                        listener.onHookFinished()
-                    } else if (!presentOnStartup) {
-                        APLogger.info(TAG, "User consent presentOnStartup is disabled")
-                        listener.onHookFinished()
-                    } else {
-                        APLogger.info(TAG, "User consent requested")
-                        addEventListener(object : EventListener() {
-                            override fun hideNotice(event: HideNoticeEvent?) {
-                                super.hideNotice(event)
-                                removeEventListener(this)
-                                storeConsent()
-                                // Do the logo validation check after the notice was presented,
-                                // since sometimes it's not yet initialized before that,
-                                // and it's still ok to inform the user a bit later.
-                                validateLogo()
-                                listener.onHookFinished()
-                            }
-                        })
-                        // force show since otherwise we don't know if it was actually shown (in an easy way), and can't unsubscribe
-                        forceShowNotice(context as AppCompatActivity)
-                    }
+                    listener.onHookFinished()
                 }
                 onError {
                     APLogger.error(TAG, "Didomi has failed to initialize")
@@ -197,5 +177,34 @@ class DidomiPlugin : GenericPluginI
         const val didomiIABConsent = "IABTCF_TCString"
 
         private const val pluginAssetsKey = "android_assets_bundle"
+    }
+
+    override fun presentStartupNotice(activity: Activity, listener: IUserConsent.IListener) {
+        Didomi.getInstance().apply {
+            if (!shouldConsentBeCollected()) {
+                APLogger.info(TAG, "User consent was already requested or not needed")
+                storeConsent() // update values just in case
+                listener.onComplete()
+            } else if (!presentOnStartup) {
+                APLogger.info(TAG, "User consent presentOnStartup is disabled")
+                listener.onComplete()
+            } else {
+                APLogger.info(TAG, "User consent requested")
+                addEventListener(object : EventListener() {
+                    override fun hideNotice(event: HideNoticeEvent?) {
+                        super.hideNotice(event)
+                        removeEventListener(this)
+                        storeConsent()
+                        // Do the logo validation check after the notice was presented,
+                        // since sometimes it's not yet initialized before that,
+                        // and it's still ok to inform the user a bit later.
+                        validateLogo()
+                        listener.onComplete()
+                    }
+                })
+                // force show since otherwise we don't know if it was actually shown (in an easy way), and can't unsubscribe
+                forceShowNotice(activity as AppCompatActivity)
+            }
+        }
     }
 }
