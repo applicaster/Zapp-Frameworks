@@ -67,7 +67,9 @@ extension GemiusAnalytics {
         event.eventType = type
         event.scriptIdentifier = scriptIdentifier
         for (key, value) in params {
-            event.addExtraParameter(key, value: value)
+            if key.count > 0 && value.count > 0 {
+                event.addExtraParameter(key, value: value)
+            }
         }
         event.send()
 
