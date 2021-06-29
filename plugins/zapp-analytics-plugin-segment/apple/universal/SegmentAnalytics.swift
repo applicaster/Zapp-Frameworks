@@ -139,26 +139,27 @@ extension SegmentAnalytics {
     }
 
     func fetchLoginData() -> IdentityObject? {
-        guard let storageValue = FacadeConnector.connector?.storage?.sessionStorageValue(for: Params.identityStorageKey,
+            guard let storageValue = FacadeConnector.connector?.storage?.sessionStorageValue(for: Params.identityStorageKey,
 
-                                                                                         namespace: Params.pluginIdentifier) else {
-            return nil
-        }
+                                                                                             namespace: Params.pluginIdentifier) else {
+                return nil
+            }
 
-        // remove the content
-        _ = FacadeConnector.connector?.storage?.sessionStorageRemoveValue(for: Params.identityStorageKey,
-                                                                          namespace: Params.pluginIdentifier)
-        return IdentityObject(jsonString: storageValue)
+            // remove the content
+            _ = FacadeConnector.connector?.storage?.sessionStorageRemoveValue(for: Params.identityStorageKey,
+                                                                              namespace: Params.pluginIdentifier)
+            return IdentityObject(jsonString: storageValue)
     }
 
     func sendLoginInformationIfAvailable() {
-        guard let identityObject = fetchLoginData() else {
-            return
-        }
+            guard let identityObject = fetchLoginData() else {
+                return
+            }
 
-        login(with: identityObject.identity,
-              traits: identityObject.traits,
-              options: identityObject.options)
+            login(with: identityObject.identity,
+                       traits: identityObject.traits,
+                       options: identityObject.options)
+
     }
 }
 
@@ -179,14 +180,17 @@ struct IdentityObject {
         self.options = options
     }
 
-    init(jsonString: String) {
-        let object = IdentityObject.fromJsonString(jsonString)
-        identity = object?.identity ?? ""
-        traits = object?.traits
-        options = object?.options
+    init?(jsonString: String) {
+        guard let object = IdentityObject.fromJsonString(jsonString) else {
+            return nil
+        }
+        
+        identity = object.identity
+        traits = object.traits
+        options = object.options
     }
 
-    init(dictionary: [String: Any]?) {
+    private init(dictionary: [String: Any]?) {
         identity = dictionary?[CodingKeys.identity.rawValue] as? String ?? ""
         traits = dictionary?[CodingKeys.traits.rawValue] as? [String: Any]
         options = dictionary?[CodingKeys.options.rawValue] as? [String: Any]
