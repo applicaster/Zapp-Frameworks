@@ -41,7 +41,7 @@ def safeExtGet(prop, fallback) {
     return ver
 }
 
-def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.0.0")
+def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.3.8")
 
 dependencies {
     // Check if an open SDK is defined - if not use the closed one.
@@ -49,7 +49,7 @@ dependencies {
     if (devSDK != null) {
         implementation project(':applicaster-android-sdk')
     } else {
-        api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
+        api "com.applicaster:applicaster-android-sdk-core:$applicasterSDKVersion"
     }
 
     implementation 'io.didomi.sdk:android:1.35.1'

@@ -138,9 +138,9 @@ const custom_configuration_fields = {
 
 const min_zapp_sdk = {
   ios_for_quickbrick: "4.1.0-Dev",
-  android_for_quickbrick: "4.0.0",
-  android_tv_for_quickbrick: "4.0.0",
-  amazon_fire_tv_for_quickbrick: "4.0.0",
+  android_for_quickbrick: "6.1.0-dev",
+  android_tv_for_quickbrick: "6.1.0-dev",
+  amazon_fire_tv_for_quickbrick: "6.1.0-dev",
 };
 
 const extra_dependencies_apple = {
