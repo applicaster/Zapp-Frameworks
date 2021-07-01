@@ -1,6 +1,6 @@
 {
   "name": "ZappCmpOneTrust",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0"
@@ -12,7 +12,7 @@
   "authors": "Applicaster LTD.",
   "source": {
     "git": "https://github.com/applicaster/Zapp-Frameworks.git",
-    "tag": "@@applicaster/applicaster-cmp-onetrust/0.2.0"
+    "tag": "@@applicaster/applicaster-cmp-onetrust/0.2.1"
   },
   "requires_arc": true,
   "swift_versions": "5.1",
