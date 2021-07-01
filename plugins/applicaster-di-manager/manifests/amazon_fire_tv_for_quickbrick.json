@@ -45,13 +45,13 @@
   ],
   "identifier": "di_manager_call",
   "npm_dependencies": [
-    "@applicaster/applicaster-di-manager@0.3.3"
+    "@applicaster/applicaster-di-manager@0.3.4"
   ],
   "targets": [
     "tv"
   ],
   "platform": "amazon_fire_tv_for_quickbrick",
-  "manifest_version": "0.3.3",
+  "manifest_version": "0.3.4",
   "project_dependencies": [
     {
       "applicaster-di-manager": "node_modules/@applicaster/applicaster-di-manager/android"
