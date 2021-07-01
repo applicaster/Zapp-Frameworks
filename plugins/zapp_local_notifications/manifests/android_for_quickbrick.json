@@ -12,7 +12,7 @@
   "description": "Generic Local Notifications",
   "type": "general",
   "screen": false,
-  "react_native": false,
+  "react_native": true,
   "identifier": "generic_local_notifications",
   "ui_builder_support": true,
   "whitelisted_account_ids": [
@@ -30,9 +30,9 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "manifest_version": "1.1.1",
+  "manifest_version": "1.1.2",
   "npm_dependencies": [
-    "@applicaster/zapp_local_notifications@1.1.1"
+    "@applicaster/zapp_local_notifications@1.1.2"
   ],
   "project_dependencies": [
     {
