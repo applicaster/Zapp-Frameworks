@@ -54,12 +54,12 @@ class MatchListingTableViewCell: UITableViewCell {
         awayScoreLabel.useBoldFont()
         halfLabel.useBoldFont()
         minuteInGameLabel.useBoldFont()
-
-        cellBackgroundContainerView.layer.cornerRadius = 9
-        cellBackgroundContainerView.layer.shadowColor = UIColor.black.cgColor
-        cellBackgroundContainerView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        cellBackgroundContainerView.layer.shadowOpacity = 0.1
+  
+        cellBackgroundContainerView.layer.cornerRadius = 9.0
         cellBackgroundContainerView.layer.shadowRadius = 20.0
+        cellBackgroundContainerView.layer.shadowOpacity = 0.1
+        cellBackgroundContainerView.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        cellBackgroundContainerView.layer.shadowColor = UIColor.black.cgColor
 
         roundProgressView()
     }

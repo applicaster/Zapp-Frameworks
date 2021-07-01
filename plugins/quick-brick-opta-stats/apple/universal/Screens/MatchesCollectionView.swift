@@ -22,6 +22,7 @@ class MatchesCollectionView: UICollectionView {
 
     var allowAllMatches: Bool = false
     var showAllMatches: Bool = false
+    var showAllMatchesAsFirstItem: Bool = false
     var pageControl: UIPageControl?
     var showDottedOutline: Bool = true
 
@@ -226,6 +227,26 @@ class MatchesCollectionView: UICollectionView {
             matchesCardViewModel.fetch()
         }
     }
+    
+    func isAllMatchesItem(with indexPath: IndexPath) -> Bool {
+        var retValue = false
+        if allowAllMatches {
+            if indexPath.row == 0,
+               showAllMatchesAsFirstItem == true {
+                retValue = true
+            }
+            else if indexPath.row == matchStats.count,
+                    showAllMatchesAsFirstItem == false {
+                retValue = true
+            }
+        }
+        
+        return retValue
+    }
+    
+    var adjustIndexPathRow: Int {
+        return allowAllMatches ? (showAllMatchesAsFirstItem ? 1 : 0) : 0
+    }
 }
 
 extension MatchesCollectionView: UICollectionViewDelegateFlowLayout {
@@ -246,10 +267,11 @@ extension MatchesCollectionView: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 && allowAllMatches {
-            launchAllMatchesScreenBlock?()
-        } else {
+        
+        guard isAllMatchesItem(with: indexPath) else {
+            return
         }
+        launchAllMatchesScreenBlock?()
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -286,12 +308,13 @@ extension MatchesCollectionView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell: UICollectionViewCell
-        if indexPath.row == 0 && allowAllMatches {
+        
+        if isAllMatchesItem(with: indexPath) {
             let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ViewAllMatchesCollectionViewCell", for: indexPath) as! ViewAllMatchesCollectionViewCell
             cell = newCell
         }
         else {
-            let index = indexPath.row - (allowAllMatches ? 1 : 0)
+            let index = indexPath.row - adjustIndexPathRow
             let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchCardCollectionViewCell", for: indexPath) as! MatchCardCollectionViewCell
             let matchStat = matchStats[index]
             newCell.matchView.didTapOnTeamFlag = { [weak self] teamId in

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,13 +11,13 @@
         <!--Team Card View Controller-->
         <scene sceneID="rth-wk-VV5">
             <objects>
-                <viewController storyboardIdentifier="TeamCardViewController" id="WcP-H9-slg" customClass="TeamCardViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamCardViewController" id="WcP-H9-slg" customClass="TeamCardViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wNP-tv-Tcn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I7W-nk-ty2">
-                                <rect key="frame" x="27.5" y="50" width="320" height="220"/>
+                                <rect key="frame" x="27.5" y="30" width="320" height="220"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info-coming-soon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Az0-Fu-dTh">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="220"/>
@@ -48,13 +46,14 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ahC-MD-oFL">
-                                <rect key="frame" x="8" y="28" width="359" height="647"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <rect key="frame" x="8" y="8" width="359" height="667"/>
                                 <viewLayoutGuide key="safeArea" id="trP-1V-wwc"/>
+                                <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Eh-FD-Ip7"/>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Eh-FD-Ip7" firstAttribute="trailing" secondItem="ahC-MD-oFL" secondAttribute="trailing" constant="8" id="49k-fL-zzy"/>
@@ -66,7 +65,6 @@
                             <constraint firstItem="ahC-MD-oFL" firstAttribute="bottom" secondItem="6Eh-FD-Ip7" secondAttribute="bottom" constant="8" id="wFS-C4-tbK"/>
                             <constraint firstItem="I7W-nk-ty2" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Eh-FD-Ip7" secondAttribute="leading" constant="8" id="zE7-0i-kJC"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Eh-FD-Ip7"/>
                     </view>
                     <connections>
                         <outlet property="noInformationLabel" destination="bhI-CC-Ili" id="wPY-NU-c3g"/>
@@ -81,24 +79,24 @@
         <!--Generic View Controller-->
         <scene sceneID="AKP-AH-2lc">
             <objects>
-                <viewController storyboardIdentifier="GenericViewController" id="1Dg-Li-9Ud" customClass="GenericViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GenericViewController" id="1Dg-Li-9Ud" customClass="GenericViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2P-4k-pSC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;screen_name&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BI5-lt-v2s">
-                                <rect key="frame" x="126.5" y="60" width="122.5" height="20.5"/>
+                                <rect key="frame" x="125.5" y="40" width="124" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="FZV-En-dAq"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="BI5-lt-v2s" firstAttribute="top" secondItem="FZV-En-dAq" secondAttribute="top" constant="40" id="GBQ-Hz-4Zb"/>
                             <constraint firstItem="BI5-lt-v2s" firstAttribute="centerX" secondItem="g2P-4k-pSC" secondAttribute="centerX" id="Sxn-hW-WI0"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="FZV-En-dAq"/>
                     </view>
                     <connections>
                         <outlet property="screenNameLabel" destination="BI5-lt-v2s" id="Q3P-rz-8ZV"/>
@@ -111,7 +109,7 @@
         <!--Group Cards View Controller-->
         <scene sceneID="5aW-5Y-IeK">
             <objects>
-                <viewController storyboardIdentifier="GroupCardsViewController" id="AN0-rC-QI9" customClass="GroupCardsViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GroupCardsViewController" id="AN0-rC-QI9" customClass="GroupCardsViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dja-yF-XGC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -120,9 +118,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZb-aT-Xxl">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="269"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="259.5"/>
                                         <subviews>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7Bm-68-85j" customClass="MatchesCollectionView" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7Bm-68-85j" customClass="MatchesCollectionView" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -137,7 +135,7 @@
                                                 <cells/>
                                             </collectionView>
                                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mig-bb-7fe">
-                                                <rect key="frame" x="168" y="232" width="39" height="37"/>
+                                                <rect key="frame" x="127" y="232" width="121.5" height="27.5"/>
                                                 <color key="pageIndicatorTintColor" red="0.77254901960784317" green="0.77254901960784317" blue="0.77254901960784317" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="currentPageIndicatorTintColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                             </pageControl>
@@ -154,7 +152,7 @@
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Epz-W5-Ixr">
-                                        <rect key="frame" x="0.0" y="269" width="375" height="300"/>
+                                        <rect key="frame" x="0.0" y="259.5" width="375" height="300"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="300" id="Yq2-Rz-PCF"/>
@@ -175,6 +173,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="jXI-cb-q3s"/>
                         <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="jXI-cb-q3s" firstAttribute="bottom" secondItem="5CP-qx-4lo" secondAttribute="bottom" id="AVO-51-0kv"/>
@@ -184,7 +183,6 @@
                             <constraint firstItem="5CP-qx-4lo" firstAttribute="centerX" secondItem="jXI-cb-q3s" secondAttribute="centerX" id="eBY-dy-jYN"/>
                             <constraint firstAttribute="top" secondItem="5CP-qx-4lo" secondAttribute="top" id="wLn-MK-bEg"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="jXI-cb-q3s"/>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="7Bm-68-85j" id="ITC-Xe-JZs"/>
@@ -201,24 +199,24 @@
         <!--Matches Card View Controller-->
         <scene sceneID="EXb-qV-FHB">
             <objects>
-                <viewController storyboardIdentifier="MatchesCardViewController" id="HsB-TE-NeK" customClass="MatchesCardViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MatchesCardViewController" id="HsB-TE-NeK" customClass="MatchesCardViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Qr7-pp-mQW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kDe-UH-hcF">
-                                <rect key="frame" x="8" y="0.0" width="359" height="667"/>
+                            <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kDe-UH-hcF" customClass="MatchesTableView" customModule="OptaStats" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TestCell" id="92h-wy-20A">
-                                        <rect key="frame" x="0.0" y="28" width="359" height="44"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="375" height="46.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="92h-wy-20A" id="Mjt-Hd-djE">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="46.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FH0-Ps-bX7">
-                                                    <rect key="frame" x="23" y="13" width="313" height="18"/>
+                                                    <rect key="frame" x="24" y="13" width="327" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -235,14 +233,14 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="Bbw-iz-VzQ"/>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Bbw-iz-VzQ" firstAttribute="bottom" secondItem="kDe-UH-hcF" secondAttribute="bottom" id="A3t-Un-ACg"/>
-                            <constraint firstItem="kDe-UH-hcF" firstAttribute="leading" secondItem="Bbw-iz-VzQ" secondAttribute="leading" constant="8" id="IS4-FX-AfV"/>
+                            <constraint firstItem="kDe-UH-hcF" firstAttribute="leading" secondItem="Bbw-iz-VzQ" secondAttribute="leading" id="IS4-FX-AfV"/>
                             <constraint firstItem="kDe-UH-hcF" firstAttribute="top" secondItem="Qr7-pp-mQW" secondAttribute="top" id="hEZ-oU-Dyn"/>
-                            <constraint firstItem="Bbw-iz-VzQ" firstAttribute="trailing" secondItem="kDe-UH-hcF" secondAttribute="trailing" constant="8" id="oX2-jb-h3n"/>
+                            <constraint firstItem="Bbw-iz-VzQ" firstAttribute="trailing" secondItem="kDe-UH-hcF" secondAttribute="trailing" id="oX2-jb-h3n"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="Bbw-iz-VzQ"/>
                     </view>
                     <connections>
                         <outlet property="tableView" destination="kDe-UH-hcF" id="efQ-xA-pl6"/>
@@ -255,7 +253,7 @@
         <!--Player Details View Controller-->
         <scene sceneID="qTD-Gp-E6z">
             <objects>
-                <viewController storyboardIdentifier="PlayerDetailsViewController" id="V3X-4W-048" customClass="PlayerDetailsViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayerDetailsViewController" id="V3X-4W-048" customClass="PlayerDetailsViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9id-6V-hmW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="867"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -292,7 +290,7 @@
                                                     <constraint firstAttribute="width" constant="55" id="jhQ-Fz-0dw"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCH-V7-8pX" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCH-V7-8pX" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="240" width="47.5" height="19.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <color key="textColor" red="0.47843137250000001" green="0.47843137250000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -433,16 +431,16 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="k2w-a1-3Nj">
-                                                <rect key="frame" x="20" y="481" width="173" height="36.5"/>
+                                                <rect key="frame" x="20" y="481" width="172.5" height="36.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFESSIONAL TEAM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mbj-TA-cCD">
-                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="19.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="172.5" height="19.5"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                         <color key="textColor" red="0.47843137250000001" green="0.47843137250000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IA4-JM-zTu">
-                                                        <rect key="frame" x="0.0" y="19.5" width="173" height="17"/>
+                                                        <rect key="frame" x="0.0" y="19.5" width="172.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -450,7 +448,7 @@
                                                 </subviews>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BIOMETRIA" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yy-NF-Apu">
-                                                <rect key="frame" x="20" y="525.5" width="89.5" height="19.5"/>
+                                                <rect key="frame" x="20" y="525.5" width="89" height="19.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <color key="textColor" red="0.47843137250000001" green="0.47843137250000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -563,6 +561,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="XM4-Ef-QXM"/>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="XM4-Ef-QXM" firstAttribute="trailing" secondItem="Xzz-8C-klh" secondAttribute="trailing" id="ZFQ-x3-EdQ"/>
@@ -570,7 +569,6 @@
                             <constraint firstItem="Xzz-8C-klh" firstAttribute="leading" secondItem="XM4-Ef-QXM" secondAttribute="leading" id="btc-2c-e2t"/>
                             <constraint firstItem="Xzz-8C-klh" firstAttribute="top" secondItem="9id-6V-hmW" secondAttribute="top" id="vHF-D8-Vxw"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="XM4-Ef-QXM"/>
                     </view>
                     <size key="freeformSize" width="375" height="867"/>
                     <connections>
@@ -609,18 +607,18 @@
         <!--Match Detail View Controller-->
         <scene sceneID="qSk-LC-knZ">
             <objects>
-                <viewController storyboardIdentifier="MatchDetailViewController" id="Kzc-TT-qBz" customClass="MatchDetailViewController" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MatchDetailViewController" id="Kzc-TT-qBz" customClass="MatchDetailViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RUR-zA-wZ3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="1567"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAE-7m-ZEV">
-                                <rect key="frame" x="0.0" y="20" width="375" height="1547"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="1567"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="poC-M6-Enp">
                                         <rect key="frame" x="8" y="8" width="359" height="1292"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V93-mx-BUC" customClass="MatchView" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V93-mx-BUC" customClass="MatchView" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="20" width="319" height="215"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -642,7 +640,7 @@
                                                 </constraints>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HomeGoalsCell" rowHeight="32" id="6hB-Bl-Q6f">
-                                                        <rect key="frame" x="0.0" y="28" width="319" height="32"/>
+                                                        <rect key="frame" x="0.0" y="24.5" width="319" height="32"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6hB-Bl-Q6f" id="q9T-l6-taO">
                                                             <rect key="frame" x="0.0" y="0.0" width="319" height="32"/>
@@ -655,20 +653,20 @@
                                                                     <rect key="frame" x="4" y="4" width="311" height="20"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="261" verticalHuggingPriority="251" horizontalCompressionResistancePriority="760" text="99'" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VY3-U7-X5g">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="28.5" height="20"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="29.5" height="20"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                                             <color key="textColor" red="1" green="0.86274509803921573" blue="0.20784313725490194" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="261" verticalHuggingPriority="251" horizontalCompressionResistancePriority="760" image="football.png" translatesAutoresizingMaskIntoConstraints="NO" id="tjX-nm-FqE">
-                                                                            <rect key="frame" x="32.5" y="0.0" width="20" height="20"/>
+                                                                            <rect key="frame" x="33.5" y="0.0" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="20" id="4p6-Bs-5lY"/>
                                                                                 <constraint firstAttribute="width" secondItem="tjX-nm-FqE" secondAttribute="height" multiplier="1:1" id="AXb-Fs-TbW"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PLAYERNAME" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClW-kP-U9K">
-                                                                            <rect key="frame" x="56.5" y="0.0" width="254.5" height="20"/>
+                                                                            <rect key="frame" x="57.5" y="0.0" width="253.5" height="20"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                                             <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
@@ -689,7 +687,7 @@
                                                         </tableViewCellContentView>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AwayGoalsCell" rowHeight="32" id="M9f-Mq-prD">
-                                                        <rect key="frame" x="0.0" y="60" width="319" height="32"/>
+                                                        <rect key="frame" x="0.0" y="56.5" width="319" height="32"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="M9f-Mq-prD" id="peU-ve-aUZ">
                                                             <rect key="frame" x="0.0" y="0.0" width="319" height="32"/>
@@ -702,20 +700,20 @@
                                                                     <rect key="frame" x="4" y="4" width="311" height="20"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" verticalHuggingPriority="251" text="PLAYERNAME" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wVF-uD-JEM">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="254.5" height="20"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="253.5" height="20"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                                             <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="football.png" translatesAutoresizingMaskIntoConstraints="NO" id="JJp-3Z-SEG">
-                                                                            <rect key="frame" x="258.5" y="0.0" width="20" height="20"/>
+                                                                            <rect key="frame" x="257.5" y="0.0" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="20" id="Tnr-JR-fOJ"/>
                                                                                 <constraint firstAttribute="width" secondItem="JJp-3Z-SEG" secondAttribute="height" multiplier="1:1" id="XFN-gf-dyA"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99'" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1EY-Lz-Fvi">
-                                                                            <rect key="frame" x="282.5" y="0.0" width="28.5" height="20"/>
+                                                                            <rect key="frame" x="281.5" y="0.0" width="29.5" height="20"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                                             <color key="textColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <nil key="highlightedColor"/>
@@ -740,20 +738,20 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gac-hh-qjP">
                                                 <rect key="frame" x="20" y="386" width="319" height="37.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="POSSESSION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i1F-g7-iTk" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="POSSESSION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i1F-g7-iTk" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="119.5" y="0.0" width="80" height="14.5"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                         <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acW-Wd-skL">
-                                                        <rect key="frame" x="0.0" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="0.0" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jiI-pk-DRa">
-                                                        <rect key="frame" x="28.5" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="29.5" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
@@ -765,12 +763,12 @@
                                                         </constraints>
                                                     </imageView>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lk6-0P-KnM">
-                                                        <rect key="frame" x="175" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="175" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJo-oA-JgW">
-                                                        <rect key="frame" x="298.5" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="297.5" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -798,20 +796,20 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fca-tg-LBY">
                                                 <rect key="frame" x="20" y="431.5" width="319" height="37.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COMPLETED PASSES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5d-rk-vac" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
-                                                        <rect key="frame" x="95.5" y="0.0" width="128" height="14.5"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COMPLETED PASSES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5d-rk-vac" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
+                                                        <rect key="frame" x="96" y="0.0" width="127.5" height="14.5"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jaT-wL-14L">
-                                                        <rect key="frame" x="0.0" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="0.0" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5HW-Xk-x2g">
-                                                        <rect key="frame" x="28.5" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="29.5" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
@@ -823,12 +821,12 @@
                                                         </constraints>
                                                     </imageView>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zw4-aU-3SY">
-                                                        <rect key="frame" x="175" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="175" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rpG-II-aKd">
-                                                        <rect key="frame" x="298.5" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="297.5" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -863,7 +861,7 @@
                                                             <constraint firstAttribute="width" constant="30" id="OdB-bi-U8x"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CORNERS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UbW-7W-ksS" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CORNERS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UbW-7W-ksS" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="55" y="38" width="69" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
@@ -894,7 +892,7 @@
                                                             <constraint firstAttribute="width" secondItem="8Z6-6O-AxL" secondAttribute="height" multiplier="1:1" id="mz9-jE-Y71"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CORNERS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H03-k8-6fM" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CORNERS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H03-k8-6fM" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="55" y="38" width="69" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
@@ -911,20 +909,20 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YjS-Fx-j4C">
                                                 <rect key="frame" x="20" y="596" width="319" height="37.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SHOTS TO GOAL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jDK-DS-vcm" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SHOTS TO GOAL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jDK-DS-vcm" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="109.5" y="0.0" width="100.5" height="14.5"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PHS-wE-ofQ">
-                                                        <rect key="frame" x="0.0" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="0.0" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BkJ-x8-RpJ">
-                                                        <rect key="frame" x="28.5" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="29.5" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
@@ -936,12 +934,12 @@
                                                         </constraints>
                                                     </imageView>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YRd-mr-3xQ">
-                                                        <rect key="frame" x="175" y="29" width="115.5" height="2"/>
+                                                        <rect key="frame" x="175" y="28" width="114.5" height="4"/>
                                                         <color key="progressTintColor" red="1" green="0.86274509799999999" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="trackTintColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ANc-et-Oyx">
-                                                        <rect key="frame" x="298.5" y="21.5" width="20.5" height="17"/>
+                                                        <rect key="frame" x="297.5" y="21.5" width="21.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -976,7 +974,7 @@
                                                             <constraint firstAttribute="width" secondItem="xrA-W7-MIe" secondAttribute="height" multiplier="1:1" id="hcj-Qm-s0p"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FOULS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YH3-aJ-scp" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FOULS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YH3-aJ-scp" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="66" y="38" width="47.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
@@ -1007,7 +1005,7 @@
                                                             <constraint firstAttribute="width" constant="30" id="frW-hF-esO"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FOULS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iU9-ty-Glu" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FOULS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iU9-ty-Glu" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                         <rect key="frame" x="66" y="38" width="47.5" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
@@ -1107,7 +1105,7 @@
                                                     </stackView>
                                                 </subviews>
                                             </stackView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MgX-vt-0cP" customClass="MatchPlayerFormationView" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MgX-vt-0cP" customClass="MatchPlayerFormationView" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="760.5" width="319" height="239.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="MgX-vt-0cP" secondAttribute="height" multiplier="1.333" id="MOo-3w-UPI"/>
@@ -1139,7 +1137,7 @@
                                                     <constraint firstAttribute="height" constant="53" id="jyw-NI-g7z"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFEREE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69K-3f-BEs" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFEREE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69K-3f-BEs" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="152.5" y="1185" width="54" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                 <nil key="textColor"/>
@@ -1163,7 +1161,7 @@
                                                 <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASSISTANTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2cL-SB-uyl" customClass="LocalizedLabel" customModule="CopaAmericaStatsScreenPlugin" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASSISTANTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2cL-SB-uyl" customClass="LocalizedLabel" customModule="OptaStats" customModuleProvider="target">
                                                 <rect key="frame" x="140.5" y="1232.5" width="78" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                                 <nil key="textColor"/>
@@ -1253,6 +1251,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="BX7-h7-aT8"/>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="zAE-7m-ZEV" firstAttribute="top" secondItem="BX7-h7-aT8" secondAttribute="top" id="3RS-oA-BrL"/>
@@ -1261,7 +1260,6 @@
                             <constraint firstItem="zAE-7m-ZEV" firstAttribute="bottom" secondItem="BX7-h7-aT8" secondAttribute="bottom" id="fVC-HD-3PT"/>
                             <constraint firstItem="zAE-7m-ZEV" firstAttribute="leading" secondItem="BX7-h7-aT8" secondAttribute="leading" id="oNR-yF-Oi8"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="BX7-h7-aT8"/>
                     </view>
                     <size key="freeformSize" width="375" height="1567"/>
                     <connections>
@@ -1317,6 +1315,113 @@
             </objects>
             <point key="canvasLocation" x="2311.1999999999998" y="29.23538230884558"/>
         </scene>
+        <!--Knockout Group Cards View Controller-->
+        <scene sceneID="8AN-Mt-uDq">
+            <objects>
+                <viewController storyboardIdentifier="KnockoutGroupCardsViewController" id="Jie-Mc-XFF" customClass="KnockoutGroupCardsViewController" customModule="OptaStats" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AJ3-4c-5kz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AHx-m6-dra">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A0T-rv-A2G">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="259.5"/>
+                                        <subviews>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Oye-Ok-R8F" customClass="MatchesCollectionView" customModule="OptaStats" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="232" id="Kjt-ci-yp2"/>
+                                                </constraints>
+                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="0DH-5Y-gPL">
+                                                    <size key="itemSize" width="375" height="232"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells/>
+                                            </collectionView>
+                                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="w9o-fa-vr0">
+                                                <rect key="frame" x="127" y="232" width="121.5" height="27.5"/>
+                                                <color key="pageIndicatorTintColor" red="0.7725490196" green="0.7725490196" blue="0.7725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="currentPageIndicatorTintColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            </pageControl>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="Oye-Ok-R8F" firstAttribute="leading" secondItem="A0T-rv-A2G" secondAttribute="leading" id="1QV-KC-1EM"/>
+                                            <constraint firstItem="Oye-Ok-R8F" firstAttribute="width" secondItem="A0T-rv-A2G" secondAttribute="width" id="A9H-I7-qd8"/>
+                                            <constraint firstAttribute="bottom" secondItem="w9o-fa-vr0" secondAttribute="bottom" id="Ts0-b8-5d0"/>
+                                            <constraint firstAttribute="trailing" secondItem="Oye-Ok-R8F" secondAttribute="trailing" id="WjJ-y7-Ubl"/>
+                                            <constraint firstItem="w9o-fa-vr0" firstAttribute="top" secondItem="Oye-Ok-R8F" secondAttribute="bottom" id="YQf-k8-eaq"/>
+                                            <constraint firstItem="Oye-Ok-R8F" firstAttribute="top" secondItem="A0T-rv-A2G" secondAttribute="top" id="f1O-U9-c9l"/>
+                                            <constraint firstItem="w9o-fa-vr0" firstAttribute="centerX" secondItem="A0T-rv-A2G" secondAttribute="centerX" id="yKx-fE-ub2"/>
+                                        </constraints>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aVr-oM-c7h" customClass="MatchesTableView" customModule="OptaStats" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="259.5" width="375" height="50"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="d7W-hS-Zt9"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="heightConstraint" destination="d7W-hS-Zt9" id="48F-12-q11"/>
+                                        </connections>
+                                    </tableView>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xlK-M1-uOg" customClass="GroupCardsTableView" customModule="OptaStats" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="309.5" width="375" height="300"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="300" id="V5F-Ru-lGw"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="heightConstraint" destination="V5F-Ru-lGw" id="HXG-LT-UOe"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="xlK-M1-uOg" secondAttribute="bottom" id="00j-BC-i3X"/>
+                                    <constraint firstItem="A0T-rv-A2G" firstAttribute="centerX" secondItem="AHx-m6-dra" secondAttribute="centerX" id="2tQ-kO-zVx"/>
+                                    <constraint firstItem="A0T-rv-A2G" firstAttribute="leading" secondItem="AHx-m6-dra" secondAttribute="leading" id="4ye-x5-NyH"/>
+                                    <constraint firstItem="aVr-oM-c7h" firstAttribute="centerX" secondItem="AHx-m6-dra" secondAttribute="centerX" id="937-Kk-p7F"/>
+                                    <constraint firstItem="aVr-oM-c7h" firstAttribute="top" secondItem="A0T-rv-A2G" secondAttribute="bottom" id="E31-fU-5mZ"/>
+                                    <constraint firstItem="xlK-M1-uOg" firstAttribute="leading" secondItem="AHx-m6-dra" secondAttribute="leading" id="V8F-8E-FpY"/>
+                                    <constraint firstAttribute="trailing" secondItem="aVr-oM-c7h" secondAttribute="trailing" id="XQb-lb-Xmg"/>
+                                    <constraint firstItem="A0T-rv-A2G" firstAttribute="top" secondItem="AHx-m6-dra" secondAttribute="top" id="YUx-CV-vt9"/>
+                                    <constraint firstItem="A0T-rv-A2G" firstAttribute="width" secondItem="AHx-m6-dra" secondAttribute="width" id="fCK-qp-5QV"/>
+                                    <constraint firstItem="xlK-M1-uOg" firstAttribute="centerX" secondItem="AHx-m6-dra" secondAttribute="centerX" id="rUm-pZ-ibB"/>
+                                    <constraint firstAttribute="trailing" secondItem="A0T-rv-A2G" secondAttribute="trailing" id="rrg-jo-ch3"/>
+                                    <constraint firstItem="aVr-oM-c7h" firstAttribute="leading" secondItem="AHx-m6-dra" secondAttribute="leading" id="wUo-Fj-Z2e"/>
+                                    <constraint firstItem="aVr-oM-c7h" firstAttribute="bottom" secondItem="xlK-M1-uOg" secondAttribute="top" id="xlY-uv-p1N"/>
+                                    <constraint firstAttribute="trailing" secondItem="xlK-M1-uOg" secondAttribute="trailing" id="yn4-Ua-FoX"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7pv-VU-hZy"/>
+                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="7pv-VU-hZy" firstAttribute="bottom" secondItem="AHx-m6-dra" secondAttribute="bottom" id="DhA-r7-yCE"/>
+                            <constraint firstAttribute="top" secondItem="AHx-m6-dra" secondAttribute="top" id="Kej-WQ-q6D"/>
+                            <constraint firstItem="7pv-VU-hZy" firstAttribute="leading" secondItem="AHx-m6-dra" secondAttribute="leading" id="MZz-kF-tKA"/>
+                            <constraint firstItem="AHx-m6-dra" firstAttribute="trailing" secondItem="7pv-VU-hZy" secondAttribute="trailing" id="hLa-aN-1Om"/>
+                            <constraint firstItem="AHx-m6-dra" firstAttribute="centerX" secondItem="7pv-VU-hZy" secondAttribute="centerX" id="og6-JZ-nWj"/>
+                            <constraint firstItem="AHx-m6-dra" firstAttribute="width" secondItem="AJ3-4c-5kz" secondAttribute="width" id="v9G-HD-icL"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="Oye-Ok-R8F" id="vzd-d6-W4x"/>
+                        <outlet property="matchStatsPageControl" destination="w9o-fa-vr0" id="XPq-et-8kn"/>
+                        <outlet property="scrollView" destination="AHx-m6-dra" id="9SR-CR-RFk"/>
+                        <outlet property="tableViewCompletedMatches" destination="aVr-oM-c7h" id="jar-Vg-eDD"/>
+                        <outlet property="tableViewGroupCards" destination="xlK-M1-uOg" id="GZR-bH-n4v"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XRj-uX-tqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="733.60000000000002" y="22.938530734632685"/>
+        </scene>
     </scenes>
     <resources>
         <image name="CopaAmerica-noWords-Logo.png" width="176" height="184"/>
@@ -1328,5 +1433,8 @@
         <image name="playerDetailsBodyOutline.png" width="360" height="360"/>
         <image name="shoes.png" width="128" height="128"/>
         <image name="whistle.png" width="128" height="128"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

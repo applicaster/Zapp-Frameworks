@@ -48,6 +48,31 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
         static let numberOfMatches = "number_of_matches"
         static let navbarBgColor = "navbar_bg_color"
         static let navbarLogoImageUrl = "navbar_logo_image_url"
+        static let mainScreenType = "main_screen_type"
+        static let allMatchesItem = "all_matches_item"
+    }
+    
+    enum MainScreenTypes: String {
+        case `default`
+        case knockout
+    }
+    
+    enum AllMatchesItem: String {
+        case first
+        case last
+        case hidden
+        
+        func getStates() -> (allow: Bool, asFirst: Bool) {
+            var retValue: (allow: Bool, asFirst: Bool) = (false, false)
+            switch self {
+            case .first:
+                retValue = (true, true)
+            case .last:
+                retValue = (true, false)
+            default: break
+            }
+            return retValue
+        }
     }
 
     lazy var pluginParams: PluginParams = {
@@ -59,7 +84,9 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
                      showTeam: configurationJSON?[Params.showTeam] as? String ?? "false",
                      numberOfMatches: configurationJSON?[Params.numberOfMatches] as? String ?? "3",
                      navbarBgColor: configurationJSON?[Params.navbarBgColor] as? String ?? "",
-                     navbarLogoImageUrl: configurationJSON?[Params.navbarLogoImageUrl] as? String ?? "")
+                     navbarLogoImageUrl: configurationJSON?[Params.navbarLogoImageUrl] as? String ?? "",
+                     allMatchesItem: configurationJSON?[Params.allMatchesItem] as? String ?? "first",
+                     mainScreenType: configurationJSON?[Params.mainScreenType] as? String ?? MainScreenTypes.default.rawValue)
     }()
 
     public lazy var mainStoryboard: UIStoryboard = {
@@ -69,16 +96,39 @@ public class OptaStats: NSObject, GeneralProviderProtocol {
     func updateParams() {
         OptaStats.pluginParams = pluginParams
     }
+    
+    
 
     func showScreen(on targetView: UIView) {
         self.targetView = targetView
+        let mainScreenType = MainScreenTypes(rawValue: pluginParams.mainScreenType) ?? .default
+        let allMatchesItemPresentation = AllMatchesItem(rawValue: pluginParams.allMatchesItem) ?? .first
 
-        guard let viewController = mainStoryboard.instantiateViewController(withIdentifier: GroupCardsViewController.storyboardID) as? GroupCardsViewController else {
+        var viewController: ViewControllerBase?
+        switch mainScreenType {
+        case .default:
+            let groupCardsViewController = mainStoryboard.instantiateViewController(withIdentifier: GroupCardsViewController.storyboardID) as? GroupCardsViewController
+            let viewModel = GroupCardsViewModel()
+            groupCardsViewController?.groupCardViewModel = viewModel
+            let allMatchesStates = allMatchesItemPresentation.getStates()
+            groupCardsViewController?.showAllMatchesAsFirstItem = allMatchesStates.asFirst
+            groupCardsViewController?.allowAllMatches = allMatchesStates.allow
+
+            viewController = groupCardsViewController
+        case .knockout:
+            let knockoutGroupCardsViewController = mainStoryboard.instantiateViewController(withIdentifier: KnockoutGroupCardsViewController.storyboardID) as? KnockoutGroupCardsViewController
+                        
+            let allMatchesStates = allMatchesItemPresentation.getStates()
+            knockoutGroupCardsViewController?.showAllMatchesAsFirstItem = allMatchesStates.asFirst
+            knockoutGroupCardsViewController?.allowAllMatches = allMatchesStates.allow
+            
+            viewController = knockoutGroupCardsViewController
+        }
+        
+        guard let viewController = viewController else {
             return
         }
         
-        let viewModel = GroupCardsViewModel()
-        viewController.groupCardViewModel = viewModel
         replaceViewController(with: viewController, on: nil)
     }
     
@@ -125,6 +175,8 @@ public struct PluginParams {
     var numberOfMatches: Int
     var navbarBgColor: String
     var navbarLogoImageUrl: String
+    var mainScreenType: String
+    var allMatchesItem: String
     
     init() {
         token = ""
@@ -136,6 +188,8 @@ public struct PluginParams {
         numberOfMatches = 3
         navbarBgColor = ""
         navbarLogoImageUrl = ""
+        mainScreenType = "default"
+        allMatchesItem = "first"
     }
 
     init(token: String,
@@ -146,7 +200,9 @@ public struct PluginParams {
          showTeam: String,
          numberOfMatches: String,
          navbarBgColor: String,
-         navbarLogoImageUrl: String) {
+         navbarLogoImageUrl: String,
+         allMatchesItem: String,
+         mainScreenType: String) {
         self.token = token
         self.referer = referer
         self.competitionId = competitionId
@@ -156,5 +212,7 @@ public struct PluginParams {
         self.numberOfMatches = Int(numberOfMatches) ?? 3
         self.navbarBgColor = navbarBgColor
         self.navbarLogoImageUrl = navbarLogoImageUrl
+        self.mainScreenType = mainScreenType
+        self.allMatchesItem = allMatchesItem
     }
 }
