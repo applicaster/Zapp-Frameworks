@@ -83,6 +83,7 @@ class Localized: NSObject {
                                                ["en": "Attacker", "pt": "Atacante", "es": "Delantero"],
                                                ["en": "Substitute", "pt": "Suplente", "es": "Suplente"],
                                                ["en": "Striker", "pt": "Atacante", "es": "Delantero"],
+                                               ["en": "All Matches", "pt": "Todas As Partidas", "es": "Todos Los Partidos"],
                                                ["en": "Unknown", "pt": "Indefinido", "es": "Sin definir"]]
 
     static func getLocalizedString(from source: String) -> String {

@@ -22,6 +22,8 @@ class MatchesCollectionView: UICollectionView {
 
     var allowAllMatches: Bool = false
     var showAllMatches: Bool = false
+    var numberOfMatchesToShow: Int = OptaStats.pluginParams.numberOfMatches
+
     var showAllMatchesAsFirstItem: Bool = false
     var pageControl: UIPageControl?
     var showDottedOutline: Bool = true
@@ -80,24 +82,35 @@ class MatchesCollectionView: UICollectionView {
     }
 
     fileprivate func subscribe() {
+        matchesCardViewModel.numberOfMatchesToShow = numberOfMatchesToShow
         matchesCardViewModel.matchesForDisplay.asObservable().subscribe { e in
             switch e {
             case .next:
                 UIView.animate(withDuration: 0.25, animations: {
                     self.alpha = 1.0
                 })
-                if !self.activityIndicatorView.isAnimating {
-                    self.activityIndicatorView.startAnimating()
-                }
 
                 let matches = self.showAllMatches ? self.matchesCardViewModel.allMatches : self.matchesCardViewModel.matchesForDisplay.value
                 self.matchesToProcess = matches.count
                 self.matchesProcessed = 0
 
-                for match in matches {
-                    guard let matchID = match.id else { continue }
-                    self.processMatchStats(matchID: matchID)
+                if self.activityIndicatorView.isAnimating {
+                    if matches.count > 0 {
+                        for match in matches {
+                            guard let matchID = match.id else { continue }
+                            self.processMatchStats(matchID: matchID)
+                        }
+                    }
+                    else {
+                        self.activityIndicatorView.stopAnimating()
+                        self.didFinishProcessingMatchStats?()
+                        self.removeFromSuperview()
+                    }
                 }
+                else {
+                    self.activityIndicatorView.startAnimating()
+                }
+
             case let .error(error):
                 print("Error: \(error)")
             case .completed:
@@ -226,6 +239,10 @@ class MatchesCollectionView: UICollectionView {
         } else {
             matchesCardViewModel.fetch()
         }
+    }
+    
+    func hideActivityIndicator() {
+        self.activityIndicatorView.stopAnimating()
     }
     
     func isAllMatchesItem(with indexPath: IndexPath) -> Bool {

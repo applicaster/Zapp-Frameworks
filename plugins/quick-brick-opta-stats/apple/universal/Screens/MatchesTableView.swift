@@ -16,7 +16,7 @@ class MatchesTableView: UITableView {
     var teamID: String?
     var parent: ViewControllerBase?
     var showCompletedMatchesOnly: Bool = false
-
+    var numberOfItems: Int = 0
     fileprivate var matchDates = [MatchDate]()
     fileprivate var matches = [MatchDetail]()
     fileprivate var matchDetailForMatchId = [String: MatchStatsCard]()
@@ -27,10 +27,13 @@ class MatchesTableView: UITableView {
 
     func setup(with parent: ViewControllerBase?,
                teamID: String? = nil,
-               showCompletedMatchesOnly: Bool = false) {
+               showCompletedMatchesOnly: Bool = false,
+               numberOfItems: Int = 99) {
         self.parent = parent
         self.teamID = teamID
         self.showCompletedMatchesOnly = showCompletedMatchesOnly
+        self.numberOfItems = numberOfItems
+        
         delegate = self
         dataSource = self
         clipsToBounds = false
@@ -74,8 +77,9 @@ class MatchesTableView: UITableView {
                                 return true
                             }
                             return date < Date()
-                        })
-                        self.matches.reverse()
+                        }).reversed()
+                        let distance = self.matches.distance(from: numberOfItems, to: self.matches.endIndex)
+                        self.matches = self.matches.dropLast(distance)
                     } else {
                         self.matches = matches
                     }
@@ -186,5 +190,34 @@ extension MatchesTableView: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200.00
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 50))
+        
+        let button = UIButton(frame: CGRect(x: 8, y: 0, width: footerView.frame.size.width-16, height: footerView.frame.size.height-16))
+        button.setTitle(Localized.getLocalizedString(from: "All Matches").uppercased(), for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.useMediumBoldFont()
+
+        button.setTitleColor(.darkGray, for: .normal)
+        button.addTarget(self, action: #selector(MatchesTableView.footerButtonAction(_:)), for: .touchUpInside)
+        button.layer.cornerRadius = 9.0
+        button.layer.shadowRadius = 20.0
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.backgroundColor = .white
+        footerView.addSubview(button)
+
+        return footerView
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    @objc func footerButtonAction(_ sender: AnyObject) {
+        self.parent?.showAllMatchesScreen()
     }
 }

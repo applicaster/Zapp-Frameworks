@@ -14,6 +14,7 @@ final class MatchesCardViewModel: ViewModel {
     let matchesForDisplay = Variable<[Match]>([])
     var finishedFetchingUpcomingMatches: Bool = false
     var allMatches = [Match]()
+    var numberOfMatchesToShow: Int = OptaStats.pluginParams.numberOfMatches
 
     override func fetch() {
         isLoading.on(.next(true))
@@ -85,14 +86,14 @@ final class MatchesCardViewModel: ViewModel {
 
         for matchDate in matchDates {
             // we only retrieve UP to 3 matches per day
-            if matches.count == OptaStats.pluginParams.numberOfMatches { continue }
+            if matches.count == numberOfMatchesToShow { continue }
 
             let startOfToday = Calendar.current.startOfDay(for: Date())
 
             if let matchesToAdd = matchDate.matches {
                 for match in matchesToAdd {
                     // we only retrieve UP to 3 matches per day
-                    if matches.count == OptaStats.pluginParams.numberOfMatches { continue }
+                    if matches.count == numberOfMatchesToShow { continue }
 
                     if let currentMatchDate = match.date {
                         let startOfMatchDay = Calendar.current.startOfDay(for: currentMatchDate)

@@ -35,6 +35,7 @@ class KnockoutGroupCardsViewController: ViewControllerBase {
         collectionView.pageControl = matchStatsPageControl
         collectionView.showDottedOutline = true
         collectionView.didFinishProcessingMatchStats = { () in
+            self.collectionView.hideActivityIndicator()
             // heartbeat enabled all the time in case user is sitting in screen waiting for a match to start
             self.updateHeartbeat(liveData: nil, force: true)
             self.heartbeatBlock = { () -> Void in
@@ -52,7 +53,7 @@ class KnockoutGroupCardsViewController: ViewControllerBase {
         }
 
         matchStatsPageControl.isHidden = true
-
+        collectionView.numberOfMatchesToShow = 99
         collectionView.setup()
     }
 
@@ -65,7 +66,8 @@ class KnockoutGroupCardsViewController: ViewControllerBase {
 
     fileprivate func configureCompletedMatchesTableView() {
         tableViewCompletedMatches.setup(with: self,
-                                        showCompletedMatchesOnly: true)
+                                        showCompletedMatchesOnly: true,
+                                        numberOfItems: 5)
         tableViewCompletedMatches.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
         tableViewCompletedMatches.isScrollEnabled = false
     }

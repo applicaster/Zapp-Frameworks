@@ -1333,7 +1333,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="232" id="Kjt-ci-yp2"/>
+                                                    <constraint firstAttribute="height" priority="750" constant="232" id="Kjt-ci-yp2"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="0DH-5Y-gPL">
                                                     <size key="itemSize" width="375" height="232"/>
