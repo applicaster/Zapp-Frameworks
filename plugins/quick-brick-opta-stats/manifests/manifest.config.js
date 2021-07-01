@@ -89,6 +89,42 @@ const baseManifest = {
       key: "navbar_logo_image_url",
       tooltip_text: "Upload NavBar logo image"
     },
+    {
+      type: "tag_select",
+      key: "all_matches_item",
+      tooltip_text: "Show All Matches Item",
+      options: [
+        {
+          text: "As First Item",
+          value: "first",
+        },
+        {
+          text: "As Last Item",
+          value: "last",
+        },
+        {
+          text: "Hidden",
+          value: "hidden",
+        },
+      ],
+      initial_value: "first",
+    },
+    {
+      type: "tag_select",
+      key: "main_screen_type",
+      tooltip_text: "Set the main screen type",
+      options: [
+        {
+          text: "Default",
+          value: "default",
+        },
+        {
+          text: "Knockout phase",
+          value: "knockout",
+        },
+      ],
+      initial_value: "default",
+    },
   ],
 };
 

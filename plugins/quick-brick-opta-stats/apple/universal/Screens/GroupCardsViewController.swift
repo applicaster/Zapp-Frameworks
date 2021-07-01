@@ -16,7 +16,9 @@ class GroupCardsViewController: ViewControllerBase, GroupCardTableViewCellDelega
     lazy var groupCardViewModel: GroupCardsViewModel = {
         GroupCardsViewModel()
     }()
-
+    
+    var allowAllMatches: Bool = true
+    var showAllMatchesAsFirstItem: Bool = true
     let bag = DisposeBag()
 
     fileprivate var divisions = [Division]()
@@ -37,7 +39,8 @@ class GroupCardsViewController: ViewControllerBase, GroupCardTableViewCellDelega
         subscribe()
 
         configureTableView()
-        collectionView.allowAllMatches = true
+        collectionView.allowAllMatches = allowAllMatches
+        collectionView.showAllMatchesAsFirstItem = showAllMatchesAsFirstItem
         collectionView.pageControl = matchStatsPageControl
         collectionView.showDottedOutline = true
         collectionView.didFinishProcessingMatchStats = { () in
