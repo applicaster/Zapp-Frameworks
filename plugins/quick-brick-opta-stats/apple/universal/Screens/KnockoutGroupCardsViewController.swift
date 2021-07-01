@@ -61,7 +61,6 @@ class KnockoutGroupCardsViewController: ViewControllerBase {
 
     fileprivate func configureGroupCardsTableView() {
         tableViewGroupCards.setup(with: self)
-        tableViewGroupCards.isScrollEnabled = false
     }
 
     fileprivate func configureCompletedMatchesTableView() {
