@@ -61,14 +61,12 @@ class KnockoutGroupCardsViewController: ViewControllerBase {
     fileprivate func configureGroupCardsTableView() {
         tableViewGroupCards.setup(with: self)
         tableViewGroupCards.isScrollEnabled = false
-
     }
-    
+
     fileprivate func configureCompletedMatchesTableView() {
         tableViewCompletedMatches.setup(with: self,
                                         showCompletedMatchesOnly: true)
         tableViewCompletedMatches.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
         tableViewCompletedMatches.isScrollEnabled = false
-
     }
 }
