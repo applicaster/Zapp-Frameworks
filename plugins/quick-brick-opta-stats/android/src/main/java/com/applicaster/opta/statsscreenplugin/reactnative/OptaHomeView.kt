@@ -29,6 +29,9 @@ import com.applicaster.opta.statsscreenplugin.screens.match.MatchInteractor
 import com.applicaster.opta.statsscreenplugin.screens.match.MatchPresenter
 import com.applicaster.opta.statsscreenplugin.screens.match.MatchView
 import com.applicaster.opta.statsscreenplugin.utils.Constants
+import com.applicaster.opta.statsscreenplugin.utils.Constants.ALL_MATCHES_BANNER_POSITION_FIRST
+import com.applicaster.opta.statsscreenplugin.utils.Constants.ALL_MATCHES_BANNER_POSITION_LAST
+import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_MAIN_SCREEN_MODE_KNOCKOUT
 import com.applicaster.opta.statsscreenplugin.utils.ModelUtils
 import com.applicaster.opta.statsscreenplugin.utils.PluginUtils
 import com.applicaster.opta.statsscreenplugin.view.StickyRecyclerView
@@ -42,7 +45,7 @@ class OptaHomeView(context: Context) : FrameLayout(context),
 
     // todo: timers (handle focus lost as well)
 
-    private val knockout: Boolean = true
+    private val knockout: Boolean
     private val loadQueue = ArrayDeque<AllMatchesModel.Match>()
 
     // instead of synthetics for now
@@ -55,6 +58,8 @@ class OptaHomeView(context: Context) : FrameLayout(context),
     init {
         APLogger.info(TAG, "OptaStatsView created")
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_home, this, false)
+
+        knockout = PluginDataRepository.INSTANCE.getMainScreenMode() == PARAM_MAIN_SCREEN_MODE_KNOCKOUT
 
         pageIndicator = view.findViewById(R.id.pageIndicator)
         rv_group_cards = view.findViewById(R.id.rv_group_cards)
@@ -187,37 +192,41 @@ class OptaHomeView(context: Context) : FrameLayout(context),
 
     private fun showMatchData() {
         val currentDate = DateUtils.getCurrentDate(Constants.UTC_DATE_FORMAT)
-        val date = if (startDate > currentDate) startDate else currentDate
-        val (past, future) = matches.partition { it.date < date }
+        val (past, future) = matches.partition { it.date < currentDate }
 
-        if (future.isEmpty()) {
-            rv_matches.visibility = GONE
-            pageIndicator.visibility = GONE
-        } else {
-            val futureMatches = future.flatMap { it.match }.map { matchDetails[it.id]!! }.toMutableList()
-            // add extra element to build the extra card (to show all matches card)
-            futureMatches.add(0, MatchModel.Match())
+        // there will me only few last past games if tournament is over
+        val highlightMatches = if(future.isEmpty()) past.reversed() else future
+        val bannerMatches = highlightMatches
+                .flatMap { it.match }
+                .mapNotNull { matchDetails[it.id] } // should not be nulls but just in case
+                .toMutableList()
 
-            // set up top recycler view
-            rv_matches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            rv_matches.adapter = MatchAdapter(futureMatches, context, this, this, false)
-            pageIndicator.attachTo(rv_matches)
-            rv_matches.visibility = VISIBLE
-            pageIndicator.visibility = VISIBLE
+        // add extra element to build the extra card (to show all matches card)
+        when(PluginDataRepository.INSTANCE.getAllMatchesBannerPosition()) {
+            ALL_MATCHES_BANNER_POSITION_FIRST -> bannerMatches.add(0, MatchModel.Match())
+            ALL_MATCHES_BANNER_POSITION_LAST -> bannerMatches.add(MatchModel.Match())
         }
 
-        if (past.isEmpty()) {
+        // set up top recycler view
+        rv_matches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rv_matches.adapter = MatchAdapter(bannerMatches, context, this, this, false)
+        pageIndicator.attachTo(rv_matches)
+
+        if (!knockout || past.isEmpty()) {
             rv_past_matches.visibility = View.GONE
         } else {
             // set up list recycler view
             rv_past_matches.visibility = View.VISIBLE
-            val pastMatches = past.reversed().flatMap { it.match }.map { matchDetails[it.id]!! }
+            val pastMatches = past.reversed()
+                    .flatMap { it.match }
+                    .mapNotNull { matchDetails[it.id] } // should not be nulls but just in case
             rv_past_matches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             rv_past_matches.adapter = MatchAdapter(pastMatches, context, this, this, false)
         }
     }
 
     private fun nextMatchDetails() {
+        // can just use loadQueue.poll()
         if (!loadQueue.isEmpty()) {
             matchPresenter.getMatchDetails(loadQueue.poll().id)
         } else {
@@ -229,14 +238,6 @@ class OptaHomeView(context: Context) : FrameLayout(context),
     override fun getMatchSuccess(matches: MatchModel.Match) {
         matchDetails[matches.matchInfo!!.id] = matches
         nextMatchDetails()
-    }
-
-    override fun onTeamFlagClicked(teamId: String) {
-        PluginUtils.goToTeamScreen(teamId)
-    }
-
-    override fun onMatchClicked(matchId: String) {
-        PluginUtils.goToMatchDetailsScreen(matchId)
     }
 
     override fun getMatchFailed(error: String?) {
@@ -252,6 +253,14 @@ class OptaHomeView(context: Context) : FrameLayout(context),
 
     override fun getAllMatchesFail(error: String?) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onTeamFlagClicked(teamId: String) {
+        PluginUtils.goToTeamScreen(teamId)
+    }
+
+    override fun onMatchClicked(matchId: String) {
+        PluginUtils.goToMatchDetailsScreen(matchId)
     }
 
     override fun showProgress() {
