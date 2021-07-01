@@ -54,13 +54,13 @@
   ],
   "identifier": "remote_info_to_session_storage",
   "npm_dependencies": [
-    "@applicaster/remote-info-to-session-storage@0.1.1"
+    "@applicaster/remote-info-to-session-storage@0.1.2"
   ],
   "targets": [
     "mobile"
   ],
   "platform": "ios_for_quickbrick",
-  "manifest_version": "0.1.1",
+  "manifest_version": "0.1.2",
   "extra_dependencies": [
     {
       "ZappRemoteInfoToSessionStorage": ":path => './node_modules/@applicaster/remote-info-to-session-storage/apple/ZappRemoteInfoToSessionStorage.podspec'"
