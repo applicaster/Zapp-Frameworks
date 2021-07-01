@@ -88,21 +88,57 @@
       "type": "uploader",
       "key": "navbar_logo_image_url",
       "tooltip_text": "Upload NavBar logo image"
+    },
+    {
+      "type": "tag_select",
+      "key": "all_matches_item",
+      "tooltip_text": "Show All Matches Item",
+      "options": [
+        {
+          "text": "As First Item",
+          "value": "first"
+        },
+        {
+          "text": "As Last Item",
+          "value": "last"
+        },
+        {
+          "text": "Hidden",
+          "value": "hidden"
+        }
+      ],
+      "initial_value": "first"
+    },
+    {
+      "type": "tag_select",
+      "key": "main_screen_type",
+      "tooltip_text": "Set the main screen type",
+      "options": [
+        {
+          "text": "Default",
+          "value": "default"
+        },
+        {
+          "text": "Knockout phase",
+          "value": "knockout"
+        }
+      ],
+      "initial_value": "default"
     }
   ],
   "whitelisted_account_ids": [
     "5ae06cef8fba0f00084bd3c6"
   ],
   "npm_dependencies": [
-    "@applicaster/quick-brick-opta-stats@0.7.0"
+    "@applicaster/quick-brick-opta-stats@0.8.0"
   ],
   "identifier": "quick-brick-opta-stats",
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.7.0",
-  "dependency_version": "0.7.0",
+  "manifest_version": "0.8.0",
+  "dependency_version": "0.8.0",
   "extra_dependencies": [
     {
       "OptaStats": ":path => './node_modules/@applicaster/quick-brick-opta-stats/apple/OptaStats.podspec'"
