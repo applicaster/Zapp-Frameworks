@@ -7,7 +7,7 @@ const baseManifest = {
   description: "Generic Local Notifications",
   type: "general",
   screen: false,
-  react_native: false,
+  react_native: true, // required for Android to install
   identifier: "generic_local_notifications",
   ui_builder_support: true,
   whitelisted_account_ids: ["5e39259919785a0008225336"],

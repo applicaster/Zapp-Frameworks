@@ -3,12 +3,19 @@ apply plugin: 'kotlin-android'
 
 import org.gradle.util.VersionNumber
 
+def _buildToolsVersion = safeExtGet("buildToolsVersion", "28.0.3")
+def _compileSdkVersion = safeExtGetInt("compileSdkVersion", 28)
+def _minSdkVersion = safeExtGetInt("minSdkVersion", 16)
+def _targetSdkVersion = safeExtGetInt("targetSdkVersion", 28)
+def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.0.0")
+
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion _compileSdkVersion
+    buildToolsVersion _buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion _minSdkVersion
+        targetSdkVersion _targetSdkVersion
         consumerProguardFiles 'proguard-rules.pro'
     }
 
@@ -41,7 +48,13 @@ def safeExtGet(prop, fallback) {
     return ver
 }
 
-def applicasterSDKVersion = safeExtGet("applicaster_android_sdk_core_version", "8.0.0")
+def safeExtGetInt(prop, fallback) {
+    def ver = rootProject.ext.has(prop) ? rootProject.ext.get(prop) as int : fallback
+    if (fallback > ver) {
+        throw new Exception("Version mismatch for $prop: $ver found, at least $fallback required")
+    }
+    return ver
+}
 
 dependencies {
     // Check if an open SDK is defined - if not use the closed one.
@@ -49,6 +62,6 @@ dependencies {
     if (devSDK != null) {
         implementation project(':applicaster-android-sdk')
     } else {
-        api "com.applicaster:applicaster-android-sdk:$applicasterSDKVersion"
+        api "com.applicaster:applicaster-android-sdk-core:$applicasterSDKVersion"
     }
 }

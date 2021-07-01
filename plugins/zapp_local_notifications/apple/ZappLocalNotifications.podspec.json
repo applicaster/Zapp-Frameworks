@@ -31,20 +31,5 @@
   "dependencies": {
     "ZappCore": []
   },
-  "testspecs": [
-    {
-      "name": "UnitTests",
-      "test_type": "unit",
-      "ios": {
-        "source_files": "tests/iOS/**/*.{swift}",
-        "resources": [
-          "tests/iOS/**/*.{png}"
-        ]
-      },
-      "tvos": {
-        "source_files": "tests/iOS/**/Dummy.swift"
-      }
-    }
-  ],
   "swift_version": "5.1"
 }
