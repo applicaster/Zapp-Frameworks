@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.applicaster.app.CustomApplication
 import com.applicaster.opta.statsscreenplugin.OptaStatsActivity
 import com.applicaster.opta.statsscreenplugin.R
 import com.applicaster.opta.statsscreenplugin.data.model.MatchModel
@@ -17,7 +16,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_all_matches.view.*
 import kotlinx.android.synthetic.main.item_match.view.*
 
-class MatchAdapter(private val items: List<Any>,
+class MatchAdapter(private val items: List<MatchModel.Match>,
                    private val context: Context?,
                    listener: GroupAdapter.OnTeamFlagClickListener,
                    matchListener: OnMatchClickListener,

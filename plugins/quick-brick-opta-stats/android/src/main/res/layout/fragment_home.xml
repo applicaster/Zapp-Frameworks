@@ -44,6 +44,19 @@
             app:piSelectedColor="@color/gray" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_past_matches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_all_matches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/avg_per_match_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_group_cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

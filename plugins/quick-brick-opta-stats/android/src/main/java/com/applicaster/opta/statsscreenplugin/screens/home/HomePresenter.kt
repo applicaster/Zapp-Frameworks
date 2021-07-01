@@ -14,7 +14,7 @@ class HomePresenter(private var homeView: HomeView?,
 
     fun getAllMatchesFromDate() {
         homeView?.showProgress()
-        homeInteractor.requestAllMatchesFromDate(this)
+        homeInteractor.requestAllMatches(this)
     }
 
     fun onDestroy() {
@@ -27,9 +27,9 @@ class HomePresenter(private var homeView: HomeView?,
         homeView?.getGroupsSuccess(groupCards)
     }
 
-    override fun onAllMatchesFromDateSuccess(allMatchesFromDate: AllMatchesModel.AllMatches) {
+    override fun onAllMatchesSuccess(allMatchesFromDate: AllMatchesModel.AllMatches) {
         homeView?.hideProgress()
-        homeView?.getAllMatchesFromDateSuccess(allMatchesFromDate)
+        homeView?.getAllMatchesSuccess(allMatchesFromDate)
     }
 
     override fun onGetGroupsFail(error: String?) {
