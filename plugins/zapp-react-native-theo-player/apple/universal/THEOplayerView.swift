@@ -195,9 +195,6 @@ class THEOplayerView: UIView {
         player.source = source
         player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         player.addAsSubview(of: self)
-        if autoplay {
-            player.play()
-        }
     }
 
     func urlForCustomCss() -> String? {
