@@ -10,10 +10,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.applicaster.lesscodeutils.date.DateUtils.Companion.getCurrentDate
 import com.applicaster.opta.statsscreenplugin.R
 import com.applicaster.opta.statsscreenplugin.data.model.AllMatchesModel
 import com.applicaster.opta.statsscreenplugin.data.model.GroupModel
 import com.applicaster.opta.statsscreenplugin.data.model.MatchModel
+import com.applicaster.opta.statsscreenplugin.plugin.PluginDataRepository
 import com.applicaster.opta.statsscreenplugin.screens.base.HeartbeatFragment
 import com.applicaster.opta.statsscreenplugin.screens.home.adapters.GroupAdapter
 import com.applicaster.opta.statsscreenplugin.screens.home.adapters.MatchAdapter
@@ -23,9 +25,7 @@ import com.applicaster.opta.statsscreenplugin.screens.match.MatchView
 import com.applicaster.opta.statsscreenplugin.utils.Constants.UTC_DATE_FORMAT
 import com.applicaster.opta.statsscreenplugin.utils.ModelUtils
 import com.applicaster.opta.statsscreenplugin.utils.PluginUtils
-import com.applicaster.lesscodeutils.date.DateUtils.Companion.getCurrentDate
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlin.collections.ArrayList
 
 /**
  * To apply MVP architecture I used as reference this article
@@ -101,17 +101,17 @@ class HomeFragment : HeartbeatFragment(), HomeView, MatchView, GroupAdapter.OnTe
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun getAllMatchesFromDateSuccess(allMatchesFromDate: AllMatchesModel.AllMatches) {
-        startDate = allMatchesFromDate.tournamentCalendar.startDate
-        endDate = allMatchesFromDate.tournamentCalendar.endDate
+    override fun getAllMatchesSuccess(allMatches: AllMatchesModel.AllMatches) {
+        startDate = allMatches.tournamentCalendar.startDate
+        endDate = allMatches.tournamentCalendar.endDate
 
         val date = if (startDate > getCurrentDate(UTC_DATE_FORMAT)) startDate else getCurrentDate(UTC_DATE_FORMAT)
-        getAllMatchesDetailed(allMatchesFromDate, date)
+        getAllMatchesDetailed(allMatches, date)
     }
 
     private fun getAllMatchesDetailed(allMatches: AllMatchesModel.AllMatches, date: String) {
         // this is the specific method that get all the matches from a specific date
-        matchesFromDate = ModelUtils.getNextThreeMatches(allMatches, date)
+        matchesFromDate = ModelUtils.getNextMatches(allMatches, date, PluginDataRepository.INSTANCE.getNumberOfMatches().toInt())
         // check if there are matches for this day
         if (matchesFromDate.isNotEmpty()) {
             // initialize a counter that will be use to count each match details

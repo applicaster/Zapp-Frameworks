@@ -50,4 +50,17 @@ object Constants {
     const val PLAYED = "Played"
 
     const val UTC_DATE_FORMAT = "yyyy-MM-dd'Z'"
+
+    // todo: make me enum
+    const val PARAM_ALL_MATCHES_BANNER_POSITION = "all_matches_item"
+    const val ALL_MATCHES_BANNER_POSITION_FIRST = "first"
+    const val ALL_MATCHES_BANNER_POSITION_LAST = "last"
+    const val ALL_MATCHES_BANNER_POSITION_HIDDEN = "hidden"
+
+    // todo: make me enum
+    const val PARAM_MAIN_SCREEN_MODE = "main_screen_type"
+    const val PARAM_MAIN_SCREEN_MODE_DEFAULT = "default"
+    const val PARAM_MAIN_SCREEN_MODE_KNOCKOUT = "knockout"
+
+    const val PLUGIN_ID = "quick-brick-opta-stats"
 }

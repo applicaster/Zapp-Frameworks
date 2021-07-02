@@ -71,4 +71,8 @@ interface PluginRepository {
     fun setNavBarColor(colorHEX: Int)
 
     fun getNavBarColor() : Int
+    fun setMainScreenMode(mode: String)
+    fun getMainScreenMode(): String
+    fun setAllMatchesBannerPosition(mode: String)
+    fun getAllMatchesBannerPosition(): String
 }

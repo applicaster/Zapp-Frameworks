@@ -75,7 +75,9 @@ class ModelUtils {
             return divisions
         }
 
-        fun getNextThreeMatches(matches: AllMatchesModel.AllMatches, date: String):
+        fun getNextMatches(matches: AllMatchesModel.AllMatches,
+                           date: String,
+                           limit: Int):
                 List<AllMatchesModel.Match> {
             val matchesFromDate: MutableList<AllMatchesModel.Match> = ArrayList()
 
@@ -84,7 +86,7 @@ class ModelUtils {
                     if (match.date >= date) {
                         matchesFromDate.add(match)
 
-                        if (matchesFromDate.count() == PluginDataRepository.INSTANCE.getNumberOfMatches().toInt()) {
+                        if (matchesFromDate.count() == limit) {
                             return matchesFromDate
                         }
                     }

@@ -20,7 +20,7 @@ class HomeInteractor : Interactor() {
         fun onGetGroupsSuccess(groupCards: GroupModel.Group)
         fun onGetGroupsFail(error: String?)
 
-        fun onAllMatchesFromDateSuccess(allMatchesFromDate: AllMatchesModel.AllMatches)
+        fun onAllMatchesSuccess(allMatchesFromDate: AllMatchesModel.AllMatches)
     }
 
     fun requestGroupCards(onFinishedListener: OnFinishedListener) {
@@ -37,13 +37,13 @@ class HomeInteractor : Interactor() {
                 )
     }
 
-    fun requestAllMatchesFromDate(onFinishedListener: OnFinishedListener) {
+    fun requestAllMatches(onFinishedListener: OnFinishedListener) {
         disposable = copaAmericaApiService.getAllMatches(PluginDataRepository.INSTANCE.getToken(), referer,
                 "c", "json", calendarId, ModelUtils.getLocalization())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { result -> onFinishedListener.onAllMatchesFromDateSuccess(result) },
+                        { result -> onFinishedListener.onAllMatchesSuccess(result) },
                         { error -> onFinishedListener.onGetGroupsFail(error.message) }
                 )
     }

@@ -7,5 +7,5 @@ import com.applicaster.opta.statsscreenplugin.screens.base.View
 interface HomeView : View {
     fun getGroupsSuccess(groupCards: GroupModel.Group)
     fun getGroupsFail(error: String?)
-    fun getAllMatchesFromDateSuccess(allMatchesFromDate: AllMatchesModel.AllMatches)
+    fun getAllMatchesSuccess(allMatches: AllMatchesModel.AllMatches)
 }

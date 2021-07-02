@@ -50,4 +50,5 @@
     <string name="played">Jogado</string>
     <string name="playing">Jogando</string>
     <string name="unknown">Indefinido</string>
+    <string name="btn_all_matches">Todas as partidas</string>
 </resources>

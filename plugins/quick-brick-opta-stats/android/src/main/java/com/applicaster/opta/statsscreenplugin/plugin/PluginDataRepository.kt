@@ -1,8 +1,10 @@
 package com.applicaster.opta.statsscreenplugin.plugin
 
 import com.applicaster.opta.statsscreenplugin.R
+import com.applicaster.opta.statsscreenplugin.utils.Constants.ALL_MATCHES_BANNER_POSITION_FIRST
 import com.applicaster.opta.statsscreenplugin.utils.Constants.DEFAULT_BACK_BUTTON_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.DEFAULT_LOGO_URL
+import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_ALL_MATCHES_BANNER_POSITION
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_APP_ID
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_BACK_BUTTON_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_CALENDAR_ID
@@ -10,6 +12,8 @@ import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_COMPETITION_
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_ENABLE_PLAYER_SCREEN
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_FLAG_IMAGE_BASE_URL
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_LOGO_URL
+import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_MAIN_SCREEN_MODE
+import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_MAIN_SCREEN_MODE_DEFAULT
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_NAV_BAR_COLOR
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_NUMBER_OF_MATCHES
 import com.applicaster.opta.statsscreenplugin.utils.Constants.PARAM_PARTIDOS_IMAGE_BASE_URL
@@ -168,5 +172,21 @@ enum class PluginDataRepository : PluginRepository {
         return PreferenceUtil.getInstance().getIntPref(
                 PARAM_NAV_BAR_COLOR,
                 AppContext.get().resources.getColor(R.color.bg_toolbar))
+    }
+
+    override fun getMainScreenMode(): String {
+        return PreferenceUtil.getInstance().getStringPref(PARAM_MAIN_SCREEN_MODE, PARAM_MAIN_SCREEN_MODE_DEFAULT)
+    }
+
+    override fun setMainScreenMode(mode: String) {
+        PreferenceUtil.getInstance().setStringPref(PARAM_MAIN_SCREEN_MODE, mode)
+    }
+
+    override fun getAllMatchesBannerPosition(): String {
+        return PreferenceUtil.getInstance().getStringPref(PARAM_ALL_MATCHES_BANNER_POSITION, ALL_MATCHES_BANNER_POSITION_FIRST)
+    }
+
+    override fun setAllMatchesBannerPosition(mode: String) {
+        PreferenceUtil.getInstance().setStringPref(PARAM_ALL_MATCHES_BANNER_POSITION, mode)
     }
 }
