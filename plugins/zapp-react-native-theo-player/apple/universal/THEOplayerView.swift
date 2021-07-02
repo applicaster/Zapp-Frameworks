@@ -192,6 +192,7 @@ class THEOplayerView: UIView {
         attachJSEventListeners()
         attachEventListeners()
         player.autoplay = autoplay
+        player.setPreload(.auto)
         player.source = source
         player.fullscreenOrientationCoupling = fullscreenOrientationCoupling
         player.addAsSubview(of: self)
