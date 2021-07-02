@@ -124,6 +124,7 @@ class OptaHomeView(context: Context) : FrameLayout(context),
     // this one is only used in knockout
     private var matchesPresenter: AllMatchesPresenter = AllMatchesPresenter(this, AllMatchesInteractor())
 
+    // todo: store flatten mathes only
     private var matches: List<AllMatchesModel.MatchDate> = listOf()
 
     // above matches but with more details
@@ -219,6 +220,7 @@ class OptaHomeView(context: Context) : FrameLayout(context),
             rv_past_matches.visibility = View.VISIBLE
             val pastMatches = past.reversed()
                     .flatMap { it.match }
+                    .take(5) // take only 5 games (not days)
                     .mapNotNull { matchDetails[it.id] } // should not be nulls but just in case
             rv_past_matches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             rv_past_matches.adapter = MatchAdapter(pastMatches, context, this, this, false)
