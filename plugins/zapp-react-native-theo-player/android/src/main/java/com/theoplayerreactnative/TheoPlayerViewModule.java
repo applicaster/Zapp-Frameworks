@@ -111,6 +111,7 @@ public class TheoPlayerViewModule extends ReactContextBaseJavaModule {
         APLogger.debug(TAG, "Set time " + timeS);
         Player player = theoPlayerViewManager.playerView.getPlayer();
         player.setCurrentTime(timeS, () -> APLogger.debug(TAG, "Set time complete"));
+        player.play();
     }
 
     @ReactMethod

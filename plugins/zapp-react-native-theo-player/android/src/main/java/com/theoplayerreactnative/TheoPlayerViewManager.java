@@ -35,6 +35,7 @@ import com.theoplayer.android.api.cast.CastStrategy;
 import com.theoplayer.android.api.event.ads.AdsEventTypes;
 import com.theoplayer.android.api.event.player.PlayerEventTypes;
 import com.theoplayer.android.api.player.Player;
+import com.theoplayer.android.api.player.PreloadType;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.analytics.AnalyticsDescription;
 import com.theoplayer.android.api.source.analytics.ConvivaConfiguration;
@@ -198,6 +199,7 @@ public class TheoPlayerViewManager extends SimpleViewManager<THEOplayerView> imp
         });
         playerView.evaluateJavaScript("init({player: player})", null);
         addPropertyChangeListeners(reactContext);
+        playerView.getPlayer().setPreload(PreloadType.AUTO);
         reactContext.addLifecycleEventListener(this);
         goFullscreen(currentActivity);
 
