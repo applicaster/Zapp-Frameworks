@@ -129,9 +129,8 @@ export default class THEOPlayer extends Component<Props, State> {
     super(props);
     this.disableBufferAnimation = this.disableBufferAnimation.bind(this);
     this.getCurrentTime = this.getCurrentTime.bind(this);
-    this.hadwareBackButtonDidPressed = this.hadwareBackButtonDidPressed.bind(
-      this
-    );
+    this.hadwareBackButtonDidPressed =
+      this.hadwareBackButtonDidPressed.bind(this);
     this.state = {
       playerCreated: false,
       loadStart: false,
@@ -543,7 +542,7 @@ export default class THEOPlayer extends Component<Props, State> {
           ref={this._assignRoot}
           style={{ flex: 1 }}
           fullscreenOrientationCoupling={false}
-          autoplay={true}
+          autoplay={!this.props?.entry?.extensions?.resumeTime}
           entry={entry}
           onPlayerPlay={this.onPlayerPlay}
           onPlayerPlaying={this.onPlayerPlaying}
