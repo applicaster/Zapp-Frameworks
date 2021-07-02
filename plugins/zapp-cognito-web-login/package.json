@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "types": "index.d.ts",
   "dependencies": {
-    "@applicaster/amazon-cognito-js": "1.1.3",
+    "@applicaster/amazon-cognito-js": "1.2.2",
     "axios": "^0.21.1",
     "jwt-decode": "3.1.2",
     "moment": "^2.24.0",
@@ -17,6 +17,7 @@
   },
   "peerDependencies": {
     "@applicaster/applicaster-types": "*",
+    "@applicaster/zapp-react-native-bridge": "*",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-safe-area-context": "*"
