@@ -185,7 +185,6 @@ export default class THEOPlayer extends Component<Props, State> {
 
     const prevStateDuration = prevState?.duration;
     const currentDuration = this.state.duration;
-
     if (prevStateDuration !== currentDuration && currentDuration > 0) {
       this.setCurrentTime();
     }
@@ -522,6 +521,8 @@ export default class THEOPlayer extends Component<Props, State> {
   }
 
   render() {
+    const resumeTime = this.props?.entry?.extensions?.resumeTime;
+    const shouldAutoPlay = !resumeTime || resumeTime == "0";
     const { entry, style: videoStyle, pluginConfiguration } = this.props;
     const theoplayer_license_key = pluginConfiguration?.theoplayer_license_key;
     const theoplayer_scale_mode = pluginConfiguration?.theoplayer_scale_mode;
@@ -542,7 +543,7 @@ export default class THEOPlayer extends Component<Props, State> {
           ref={this._assignRoot}
           style={{ flex: 1 }}
           fullscreenOrientationCoupling={false}
-          autoplay={!this.props?.entry?.extensions?.resumeTime}
+          autoplay={shouldAutoPlay}
           entry={entry}
           onPlayerPlay={this.onPlayerPlay}
           onPlayerPlaying={this.onPlayerPlaying}
