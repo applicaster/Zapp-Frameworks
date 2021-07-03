@@ -93,7 +93,7 @@ class MatchesTableView: UITableView {
                 var enableHeartbeat = false
                 var didScroll = false
                 for (index, m) in model.matches.enumerated() {
-                    if let date = m.date, Helpers.isDateToday(date) && didScroll == false {
+                    if let date = m.date, Helpers.isDateToday(date) && didScroll == false, index < self.matches.count  {
                         didScroll = true
                         self.selectRow(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .top)
                     }
