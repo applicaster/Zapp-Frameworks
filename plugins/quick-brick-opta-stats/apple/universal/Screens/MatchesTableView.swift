@@ -89,11 +89,11 @@ class MatchesTableView: UITableView {
             self.reloadData()
             self.heightConstraint?.constant = self.contentSize.height
 
-            if let model = self.allMatchesCardViewModel.matchesCard.value {
+            if self.matches.count > 0 {
                 var enableHeartbeat = false
                 var didScroll = false
-                for (index, m) in model.matches.enumerated() {
-                    if let date = m.date, Helpers.isDateToday(date) && didScroll == false, index < self.matches.count  {
+                for (index, m) in self.matches.enumerated() {
+                    if let date = m.date, Helpers.isDateToday(date) && didScroll == false  {
                         didScroll = true
                         self.selectRow(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .top)
                     }
