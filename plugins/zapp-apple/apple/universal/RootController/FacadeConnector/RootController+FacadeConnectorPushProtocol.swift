@@ -19,12 +19,12 @@ extension RootController: FacadeConnectorPushProtocol {
                                                completion: completion)
     }
 
-    public func addTags(_ tags: [String]?, completion: @escaping (Result<[String]?, Error>) -> Void) {
+    public func addTags(_ tags: [String]?, completion: @escaping (Result<[String]?, PushProviderError>) -> Void) {
         pluginsManager.push.addTags(tags,
                                     completion: completion)
     }
 
-    public func removeTags(_ tags: [String]?, completion: @escaping (Result<[String]?, Error>) -> Void) {
+    public func removeTags(_ tags: [String]?, completion: @escaping (Result<[String]?, PushProviderError>) -> Void) {
         pluginsManager.push.removeTags(tags,
                                        completion: completion)
     }

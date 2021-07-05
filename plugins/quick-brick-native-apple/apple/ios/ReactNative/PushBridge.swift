@@ -37,17 +37,16 @@ class PushBridge: NSObject, RCTBridgeModule {
     @objc func registerTags(_ tags: [String]?,
                             resolver: @escaping RCTPromiseResolveBlock,
                             rejecter: @escaping RCTPromiseRejectBlock) {
-        guard let tags = tags else {
-            rejecter(addTagsErrorCode, "The tags couldn't be registered. Please check that the tags don't exist already.", nil)
-            return
-        }
-        FacadeConnector.connector?.push?.addTagsToDevice(tags, completion: { success, _ in
-            if success {
+        
+        FacadeConnector.connector?.push?.addTags(tags, completion: { result in
+            switch result {
+            case .success(_):
                 resolver(true)
-            } else {
-                rejecter(self.addTagsErrorCode, "The tags couldn't be registered. Please check that the tags don't exist already.", nil)
+            case let .failure(error):
+                rejecter(self.addTagsErrorCode, error.description, nil)
             }
         })
+
     }
 
     /// Remove the tags from the push provider
@@ -59,16 +58,13 @@ class PushBridge: NSObject, RCTBridgeModule {
     @objc func unregisterTags(_ tags: [String]?,
                               resolver: @escaping RCTPromiseResolveBlock,
                               rejecter: @escaping RCTPromiseRejectBlock) {
-        guard let tags = tags else {
-            rejecter(removeTagsErrorCode,
-                     "The tags couldn't be unregistered. Please check that the tags exist.", nil)
-            return
-        }
-        FacadeConnector.connector?.push?.removeTagsToDevice(tags, completion: { success, _ in
-            if success {
+
+        FacadeConnector.connector?.push?.removeTags(tags, completion: { result in
+            switch result {
+            case .success(_):
                 resolver(true)
-            } else {
-                rejecter(self.removeTagsErrorCode, "The tags couldn't be unregistered. Please check that the tags exist.", nil)
+            case let .failure(error):
+                rejecter(self.removeTagsErrorCode, error.localizedDescription, nil)
             }
         })
     }
