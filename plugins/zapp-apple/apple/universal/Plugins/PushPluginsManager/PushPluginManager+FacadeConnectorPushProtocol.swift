@@ -9,10 +9,6 @@ import Foundation
 import ZappCore
 
 extension PushPluginsManager: FacadeConnectorPushProtocol {
-    enum PushPluginsManagerError: Error {
-        case failedToRemoveTags
-        case failedToAddTags
-    }
 
     public func addTagsToDevice(_ tags: [String]?,
                                 completion: @escaping (_ success: Bool, _ tags: [String]?) -> Void) {
@@ -27,13 +23,24 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     }
 
     public func addTags(_ tags: [String]?,
-                        completion: @escaping (Result<[String]?, Error>) -> Void) {
-        var counter = _providers.count
-        guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
-            completion(.failure(PushPluginsManagerError.failedToAddTags))
+                        completion: @escaping (Result<[String]?, PushProviderError>) -> Void) {
+
+        guard UIApplication.shared.isRegisteredForRemoteNotifications == true else {
+            completion(.failure(.failedToAddTags0NotRegisteredForRemoteNotifications))
+            return
+        }
+        
+        guard let tags = tags, tags.count > 0 else {
+            completion(.failure(.failedToAddTags0NoTagsToRegister))
             return
         }
 
+        var counter = _providers.count
+        guard counter > 0 else {
+            completion(.failure(.failedToAddTags0NoPushProvidersAvailable))
+            return
+        }
+        
         var completionSuccess = true
         _providers.forEach { providerDict in
             let provider = providerDict.value
@@ -66,10 +73,21 @@ extension PushPluginsManager: FacadeConnectorPushProtocol {
     }
 
     public func removeTags(_ tags: [String]?,
-                           completion: @escaping (Result<[String]?, Error>) -> Void) {
+                           completion: @escaping (Result<[String]?, PushProviderError>) -> Void) {
+        
+        guard UIApplication.shared.isRegisteredForRemoteNotifications == true else {
+            completion(.failure(.failedToRemoveTags0NotRegisteredForRemoteNotifications))
+            return
+        }
+        
+        guard let tags = tags, tags.count > 0 else {
+            completion(.failure(.failedToRemoveTags0NoTagsToRemove))
+            return
+        }
+        
         var counter = _providers.count
-        guard counter > 0, UIApplication.shared.isRegisteredForRemoteNotifications == true else {
-            completion(.failure(PushPluginsManagerError.failedToRemoveTags))
+        guard counter > 0 else {
+            completion(.failure(.failedToRemoveTags0NoPushProvidersAvailable))
             return
         }
 
