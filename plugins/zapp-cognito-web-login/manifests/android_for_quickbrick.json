@@ -98,8 +98,8 @@
     ]
   },
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.1.1",
-  "manifest_version": "0.1.1",
+  "dependency_version": "0.1.2",
+  "manifest_version": "0.1.2",
   "api": {},
   "project_dependencies": [],
   "extra_dependencies": [],
