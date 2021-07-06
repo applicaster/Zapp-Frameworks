@@ -48,14 +48,14 @@
   ],
   "identifier": "applicaster-cmp-onetrust",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-onetrust@0.2.3-beta.0"
+    "@applicaster/applicaster-cmp-onetrust@0.2.3-beta.1"
   ],
   "targets": [
     "tv"
   ],
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "0.2.3-beta.0",
-  "dependency_version": "0.2.3-beta.0",
+  "manifest_version": "0.2.3-beta.1",
+  "dependency_version": "0.2.3-beta.1",
   "project_dependencies": [
     {
       "applicaster-cmp-onetrust": "node_modules/@applicaster/applicaster-cmp-onetrust/android"
