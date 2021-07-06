@@ -78,7 +78,7 @@ export const isAuthenticationRequired = (payload) => {
 };
 
 export function isTokenExpired(expiresIn) {
-  return moment(expiresIn).diff(moment()) <= 0;
+  return expiresIn < moment().unix();
 }
 
 export async function refreshToken(oAuthConfig) {
