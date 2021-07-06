@@ -53,7 +53,8 @@ export default NativeScreen = ({ screenData }: Props) => {
     intro_button_text: introButtonText,
     [`intro_button_font_${platformEndpoint}`]: introButtonFont,
     intro_button_fontsize: introButtonFontSize,
-    intro_button_fontcolor: introButtonFontColor
+    intro_button_fontcolor: introButtonFontColor,
+    intro_button_backgroundcolor: introBackgroundColor
   } = generalData;
 
   const buttonStyle = {
@@ -85,7 +86,7 @@ export default NativeScreen = ({ screenData }: Props) => {
           label={introButtonText}
           onPress={openNativeScreen}
           textStyle={buttonStyle}
-          backgroundColor={"#000000"}
+          backgroundColor={introBackgroundColor}
         />
       </View>
     );

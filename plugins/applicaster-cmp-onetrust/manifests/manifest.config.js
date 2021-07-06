@@ -125,6 +125,12 @@ const general = {
           label_tooltip: "Font Color for Intro Button Text.",
           initial_value: "rgba(84, 90, 92, 1)",
         },
+        {
+          key: "intro_button_backgroundcolor",
+          type: "color_picker_rgba",
+          label_tooltip: "Background Color for Intro Button Text.",
+          initial_value: "rgba(84, 90, 92, 1)",
+        },
       ]
     }
   ],
