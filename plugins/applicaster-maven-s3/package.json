@@ -1,0 +1,29 @@
+{
+  "name": "@applicaster/applicaster-maven-s3",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applicaster/Zapp-Frameworks"
+  },
+  "dependencies": {
+  },
+  "homepage": "https://github.com/applicaster/Zapp-Frameworks",
+  "applicaster": {
+    "supportedPlatforms": [
+      "android_for_quickbrick",
+      "android_tv_for_quickbrick",
+      "amazon_fire_tv_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
+}
