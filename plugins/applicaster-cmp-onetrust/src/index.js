@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { NativeModules } from "react-native";
 
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+import Button from "./components/Button";
 import { createLogger, addContext } from "./logger";
-import { DEFAULT, releaseBuild } from "./utils";
+import { DEFAULT, releaseBuild, parseFontKey} from "./utils";
 import { styles, stylesError } from "./styles";
 
 /**
@@ -45,6 +46,58 @@ export default NativeScreen = ({ screenData }: Props) => {
   const methodName = generalData?.method_name || DEFAULT.methodName;
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
+  const showIntroScreen = generalData.show_intro_screen;
+  const platformEndpoint = parseFontKey(Platform.OS);
+
+  const {
+    intro_button_text: introButtonText,
+    [`intro_button_font_${platformEndpoint}`]: introButtonFont,
+    intro_button_fontsize: introButtonFontSize,
+    intro_button_fontcolor: introButtonFontColor
+  } = generalData;
+
+  const buttonStyle = {
+    color: introButtonFontColor,
+    fontSize: introButtonFontSize,
+    fontFamily: introButtonFont
+  };
+
+  const openNativeScreen = async () => {
+    addContext({
+      manifestData: DEFAULT,
+      screenId: screenData.id,
+      screenName: screenData.name,
+    });
+
+    try {
+      const res = await method();
+      logger.info(`Received response from native method ${methodName}`, res);
+      onDismiss();
+    } catch (error) {
+      renderError(error);
+    }
+  }
+
+  const renderIntroScreen = () => {
+    return (
+      <View style={styles.introContainer}>
+        <Button
+          label={introButtonText}
+          onPress={openNativeScreen}
+          textStyle={buttonStyle}
+          backgroundColor={"#000000"}
+        />
+      </View>
+    );
+  }
+
+  const renderContent = () => {
+    if (showIntroScreen) {
+      return renderIntroScreen();
+    }
+
+    return <View style={styles.container}/>;
+  };
 
   const onDismiss = () => {
     // todo: this exit action should be customizible: go back or go home/other screen
@@ -84,29 +137,15 @@ export default NativeScreen = ({ screenData }: Props) => {
   }
 
   React.useEffect(() => {
-    (async () => {
-      addContext({
-        manifestData: DEFAULT,
-        screenId: screenData.id,
-        screenName: screenData.name,
-      });
-      // todo: add params
-
-      try {
-        const res = await method();
-        logger.info(`Received response from native method ${methodName}`, res);
-        onDismiss();
-      } catch (error) {
-        renderError(error);
-      }
-      // todo: obtain result as optional object
-      // todo: handle errors and fire exit action right away after showing some error message for the user
-    })();
+    if (!showIntroScreen) {
+      openNativeScreen();
+    }
 
     return () => {
       logger.info("Unmounted native screen");
       onDismiss();
     };
   }, []);
-  return <View style={styles.container}></View>;
+
+  return renderContent();
 };
