@@ -29,7 +29,7 @@
   ],
   "platform": "android_tv_for_quickbrick",
   "min_zapp_sdk": "4.0.0",
-  "manifest_version": "0.5.2",
+  "manifest_version": "0.6.0",
   "project_dependencies": [
     {
       "zapp-analytics-plugin-gemius": "node_modules/@applicaster/zapp-analytics-plugin-gemius/android"
@@ -42,6 +42,6 @@
     "tv"
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-gemius@0.5.2"
+    "@applicaster/zapp-analytics-plugin-gemius@0.6.0"
   ]
 }
