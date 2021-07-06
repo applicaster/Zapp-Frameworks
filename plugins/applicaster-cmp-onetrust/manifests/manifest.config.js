@@ -73,6 +73,60 @@ const general = {
         },
       ],
     },
+    {
+      key: "show_intro_screen",
+      type: "switch",
+      label: "Show intro screen before open native screen",
+      label_tooltip: "Enables the intro screen.",
+      initial_value: "false"
+    },
+    {
+      group: true,
+      label: "Intro Screen Design and Text",
+      tooltip: "These fields affect the design of the intro screen.",
+      folded: true,
+      fields: [
+        {
+          key: "intro_button_text",
+          type: "text_input",
+          label: "Button Text",
+          label_tooltip:
+            "Text in the button of the intro screen",
+          initial_value: "Preferences",
+          placeholder: "Preferences",
+        },
+        {
+          key: "intro_button_font_tvos",
+          type: "tvos_font_selector",
+          label_tooltip: "Font for Intro Button Text for TvOS.",
+          initial_value: "Helvetica-Bold",
+        },
+        {
+          key: "intro_button_font_android",
+          type: "android_font_selector",
+          label_tooltip: "Font for Intro Button Text for Android TV.",
+          initial_value: "Roboto-Bold",
+        },
+        {
+          key: "intro_button_font_samsung",
+          type: "samsung_tv_font_selector",
+          label_tooltip: "Font for Intro Button Text for Samsung TV.",
+          initial_value: "Times New Roman",
+        },
+        {
+          key: "intro_button_fontsize",
+          type: "number_input",
+          label_tooltip: "Font Size for Intro Button Text.",
+          initial_value: "41",
+        },
+        {
+          key: "intro_button_fontcolor",
+          type: "color_picker_rgba",
+          label_tooltip: "Font Color for Intro Button Text.",
+          initial_value: "rgba(84, 90, 92, 1)",
+        },
+      ]
+    }
   ],
 };
 
