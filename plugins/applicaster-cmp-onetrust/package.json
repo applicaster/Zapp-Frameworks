@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/applicaster-cmp-onetrust",
-  "version": "0.2.2",
+  "version": "0.2.3-beta.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {

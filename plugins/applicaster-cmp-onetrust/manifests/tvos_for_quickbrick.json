@@ -55,14 +55,14 @@
   ],
   "identifier": "applicaster-cmp-onetrust",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-onetrust@0.2.2"
+    "@applicaster/applicaster-cmp-onetrust@0.2.3-beta.0"
   ],
   "targets": [
     "tv"
   ],
   "platform": "tvos_for_quickbrick",
-  "manifest_version": "0.2.2",
-  "dependency_version": "0.2.2",
+  "manifest_version": "0.2.3-beta.0",
+  "dependency_version": "0.2.3-beta.0",
   "extra_dependencies": [
     {
       "ZappCmpOneTrust": ":path => './node_modules/@applicaster/applicaster-cmp-onetrust/apple/ZappCmpOneTrust.podspec'"
@@ -165,6 +165,12 @@
             "key": "intro_button_fontcolor",
             "type": "color_picker_rgba",
             "label_tooltip": "Font Color for Intro Button Text.",
+            "initial_value": "rgba(84, 90, 92, 1)"
+          },
+          {
+            "key": "intro_button_backgroundcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Background Color for Intro Button Text.",
             "initial_value": "rgba(84, 90, 92, 1)"
           }
         ]
