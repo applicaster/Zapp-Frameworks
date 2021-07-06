@@ -59,7 +59,7 @@ export default NativeScreen = ({ screenData }: Props) => {
 
   const buttonStyle = {
     color: introButtonFontColor,
-    fontSize: introButtonFontSize,
+    fontSize: Number(introButtonFontSize),
     fontFamily: introButtonFont
   };
 
