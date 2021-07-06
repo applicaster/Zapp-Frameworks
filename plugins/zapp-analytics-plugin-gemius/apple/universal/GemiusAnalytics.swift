@@ -19,6 +19,7 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
         static let scriptIdentifier = "script_identifier"
         static let hitCollectorHost = "hit_collector_host"
         static let pluginIdentifier = "applicaster-cmp-gemius"
+        static let storageKeyUserAgent = "webview_user_agent"
     }
 
     public var model: ZPPluginModel?
@@ -41,14 +42,14 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
         }
         return scriptIdentifier
     }()
-    
+
     lazy var hitCollectorHost: String = {
         guard let hitCollectorHost = model?.configurationValue(for: Params.hitCollectorHost) as? String else {
             return ""
         }
         return hitCollectorHost
     }()
-    
+
     var gemiusPlayerObject: GSMPlayer?
     var lastProgramID: String?
     var adIsPlaying: Bool = false
@@ -74,8 +75,10 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
                let appVersion = FacadeConnector.connector?.storage?.sessionStorageValue(for: "version_name", namespace: nil),
                appVersion.isEmpty == false {
                 GEMConfig.sharedInstance()?.setAppInfo(appName, version: appVersion)
+
+                saveWebViewUserAgent()
             }
-            
+
             completion?(true)
         } else {
             disable(completion: completion)
@@ -98,12 +101,26 @@ class GemiusAnalytics: NSObject, PluginAdapterProtocol {
 
         return "\(dateString)"
     }
-    
+
     func isDebug() -> Bool {
         guard let value = FacadeConnector.connector?.applicationData?.isDebugEnvironment() else {
             return false
         }
 
         return Bool(value)
+    }
+
+    func saveWebViewUserAgent() {
+        DispatchQueue.global(qos: .default).async {
+            guard let useragent = GEMConfig.sharedInstance()?.getUA4WebView() else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                _ = FacadeConnector.connector?.storage?.sessionStorageSetValue(for: Params.storageKeyUserAgent,
+                                                                               value: useragent,
+                                                                               namespace: nil)
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.applicaster.analytics.gemius
 
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.analytics.adapters.IAnalyticsAdapter
+import com.applicaster.session.SessionStorage
 import com.applicaster.util.APDebugUtil
 import com.applicaster.util.APLogger
 import com.applicaster.util.OSUtil
@@ -38,6 +39,14 @@ class GemiusAgent : BaseAnalyticsAgent() {
         //global config for Audience/Prism hits
         AudienceConfig.getSingleton().hitCollectorHost = serverHost
         AudienceConfig.getSingleton().scriptIdentifier = scriptIdentifier
+
+        // Set User Agent
+        val userAgent = Config.getUA4WebView(context)
+        SessionStorage.set(webViewUAKey, userAgent, pluginId)
+        // temporary set global one as well
+        // todo: must use SDK constant and maybe check old value to be empty
+        SessionStorage.set(webViewUAKey, userAgent)
+        APLogger.info(TAG, "UserAgent $userAgent")
     }
 
     override fun setParams(params: MutableMap<Any?, Any?>) {
@@ -110,5 +119,7 @@ class GemiusAgent : BaseAnalyticsAgent() {
     companion object {
         const val TAG = "GemiusAgent"
         private const val playerID = "DefaultPlayer" // todo: maybe check for, say, inline player, theo?
+        private const val pluginId = "gemius_analytics"
+        private const val webViewUAKey = "webview_user_agent"
     }
 }
