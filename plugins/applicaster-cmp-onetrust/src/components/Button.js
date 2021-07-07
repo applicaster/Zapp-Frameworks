@@ -14,6 +14,7 @@ export default function Button({
   backgroundColor = "",
   backgroundButtonUri = "",
   backgroundButtonUriActive = "",
+  focusedTextColor = ""
 }) {
   const buttonStyle = { ...styles.input, backgroundColor };
     
@@ -36,7 +37,7 @@ export default function Button({
             style={[buttonStyle, styles.opacity(focused)]}
           >
             <Text
-              style={focused ? styles.textStyle(textStyle) : textStyle}
+              style={focused ? styles.textStyle(textStyle, focusedTextColor) : textStyle}
               numberOfLines={2}
               ellipsizeMode="tail"
             >
@@ -49,8 +50,6 @@ export default function Button({
   );
 }
 
-const COLOR = "#5F5F5F";
-
 const styles = StyleSheet.create({
   input: {
     width: 600,
@@ -60,5 +59,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   opacity: (focused) => ({ opacity: focused ? 1 : 0.9 }),
-  textStyle: (textStyle) => ({ ...textStyle, color: COLOR }),
+  textStyle: (textStyle, focusedTextColor) => ({ ...textStyle, color: focusedTextColor }),
 });
