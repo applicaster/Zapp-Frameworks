@@ -144,8 +144,8 @@ const Login = (props) => {
 
         // Clearing cache for cognito sync, it cause failes in case different logins in same app session
         // @ts-ignore
-        const client = new AWS.CognitoSyncManager();
-        await client.wipeData();
+        // const client = new AWS.CognitoSyncManager();
+        // await client.wipeData();
       } else {
         await saveLoginDataToStorages(parsedData);
         const success = await refreshToken(clientId, region);
