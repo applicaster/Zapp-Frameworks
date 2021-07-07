@@ -105,6 +105,9 @@ export default NativeScreen = ({ screenData }: Props) => {
   };
 
   const onDismiss = () => {
+    if (showIntroScreen) {
+      return;
+    }
     // todo: this exit action should be customizible: go back or go home/other screen
     // manifest already has fields set up for this behavior
     if (navigator.canGoBack()) {
