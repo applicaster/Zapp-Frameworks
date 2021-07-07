@@ -48,14 +48,14 @@
   ],
   "identifier": "applicaster-cmp-onetrust",
   "npm_dependencies": [
-    "@applicaster/applicaster-cmp-onetrust@0.2.3-beta.1"
+    "@applicaster/applicaster-cmp-onetrust@0.2.3-beta.2"
   ],
   "targets": [
     "tv"
   ],
   "platform": "android_tv_for_quickbrick",
-  "manifest_version": "0.2.3-beta.1",
-  "dependency_version": "0.2.3-beta.1",
+  "manifest_version": "0.2.3-beta.2",
+  "dependency_version": "0.2.3-beta.2",
   "project_dependencies": [
     {
       "applicaster-cmp-onetrust": "node_modules/@applicaster/applicaster-cmp-onetrust/android"
@@ -161,9 +161,21 @@
             "initial_value": "rgba(84, 90, 92, 1)"
           },
           {
+            "key": "intro_button_focused_fontcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Font Color for Intro Button Focused Text.",
+            "initial_value": "rgba(84, 90, 92, 1)"
+          },
+          {
             "key": "intro_button_backgroundcolor",
             "type": "color_picker_rgba",
             "label_tooltip": "Background Color for Intro Button Text.",
+            "initial_value": "rgba(84, 90, 92, 1)"
+          },
+          {
+            "key": "intro_button_focused_backgroundcolor",
+            "type": "color_picker_rgba",
+            "label_tooltip": "Background Color for Intro Button Focused Text",
             "initial_value": "rgba(84, 90, 92, 1)"
           }
         ]
