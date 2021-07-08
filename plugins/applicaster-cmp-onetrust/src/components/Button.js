@@ -9,6 +9,7 @@ export default function Button({
   buttonRef,
   nextFocusDown,
   nextFocusUp,
+  nextFocusLeft,
   groupId,
   textStyle = {},
   backgroundColor = "",
@@ -27,6 +28,7 @@ export default function Button({
       ref={buttonRef}
       nextFocusDown={nextFocusDown}
       nextFocusUp={nextFocusUp}
+      nextFocusLeft={nextFocusLeft}
     >
       {(focused) => {
         return (

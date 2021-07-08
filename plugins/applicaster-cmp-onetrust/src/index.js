@@ -2,7 +2,9 @@ import * as React from "react";
 import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { NativeModules } from "react-native";
 
+import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+
 import Button from "./components/Button";
 import { createLogger, addContext } from "./logger";
 import { DEFAULT, releaseBuild, parseFontKey} from "./utils";
@@ -39,7 +41,9 @@ function renderError(message: string, onDismiss: () => void) {
   );
 }
 
-export default NativeScreen = ({ screenData }: Props) => {
+export default NativeScreen = (props: Props) => {
+  const { screenData, parentFocus, focused } = props;
+
   const navigator = useNavigation();
   const generalData = screenData?.general;
   const packageName = generalData?.package_name || DEFAULT.packageName;
@@ -48,6 +52,8 @@ export default NativeScreen = ({ screenData }: Props) => {
   const method = screenPackage?.[methodName];
   const showIntroScreen = generalData.show_intro_screen;
   const platformEndpoint = parseFontKey(Platform.OS);
+
+  const introBtnRef = React.useRef(null);
 
   const {
     intro_button_text: introButtonText,
@@ -64,6 +70,10 @@ export default NativeScreen = ({ screenData }: Props) => {
     fontSize: Number(introButtonFontSize),
     fontFamily: introButtonFont
   };
+
+  if (Platform.OS === 'android') {
+    useInitialFocus(focused, introBtnRef);
+  }
 
   const openNativeScreen = async () => {
     addContext({
@@ -87,10 +97,15 @@ export default NativeScreen = ({ screenData }: Props) => {
         <Button
           label={introButtonText}
           onPress={openNativeScreen}
+          groupId={screenData.groupId}
           textStyle={buttonStyle}
           backgroundColor={introBackgroundColor}
           backgroundButtonUriActive={introButtonFocusedBgColor}
           focusedTextColor={introButtonFocusedColor}
+          nextFocusTop={parentFocus ? parentFocus.nextFocusTop : null}
+          nextFocusLeft={parentFocus ? parentFocus.nextFocusLeft : null}
+          buttonRef={introBtnRef}
+          preferredFocus={true}
         />
       </View>
     );
@@ -148,7 +163,7 @@ export default NativeScreen = ({ screenData }: Props) => {
     if (!showIntroScreen) {
       openNativeScreen();
     }
-
+    
     return () => {
       logger.info("Unmounted native screen");
       onDismiss();
