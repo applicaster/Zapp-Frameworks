@@ -13,7 +13,7 @@ class QuickBrickViewController: UIViewController {
     lazy var logger = Logger.getLogger(for: QuickBrickViewControllerLogs.subsystem)
 
     var orientationStack = [UIInterfaceOrientationMask.all]
-    var orientationMask: UIInterfaceOrientationMask = UIInterfaceOrientationMask.portrait
+    var orientationMask: UIInterfaceOrientationMask = QuickBrickViewController.initialOrientationMask
     
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
           return orientationMask
@@ -21,6 +21,17 @@ class QuickBrickViewController: UIViewController {
 
     override public var shouldAutorotate: Bool {
           return true
+    }
+    
+    static var initialOrientationMask: UIInterfaceOrientationMask {
+        var retValue:UIInterfaceOrientationMask = .portrait
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            retValue = .landscape
+        default:
+            break
+        }
+        return retValue
     }
     
     /// Allow Orientation for specific screen
