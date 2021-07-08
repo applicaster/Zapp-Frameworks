@@ -83,7 +83,7 @@ const baseManifest = {
       fields: [
         {
           type: "select",
-          key: "poster_image_enabled",
+          key: "google_ima_enabled",
           tooltip_text: "Disable Google IMA if needed",
           options: [
             {

@@ -1,7 +1,7 @@
 import * as R from "ramda";
 
 export function getIMAData({ entry, pluginConfiguration }) {
-  if (pluginConfiguration?.advertisment_type === "DISABLED") {
+  if (pluginConfiguration?.google_ima_enabled === "DISABLED") {
     return null;
   }
 
