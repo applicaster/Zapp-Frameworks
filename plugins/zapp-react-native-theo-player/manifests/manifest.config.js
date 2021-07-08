@@ -60,6 +60,22 @@ const baseManifest = {
       tooltip_text: "Additional CSS file",
     },
     {
+      type: "select",
+      key: "poster_image_enabled",
+      tooltip_text: "Disable poster image if needed",
+      options: [
+        {
+          text: "ENABLED",
+          value: "ENABLED",
+        },
+        {
+          text: "DISABLED",
+          value: "DISABLED",
+        },
+      ],
+      initial_value: "ENABLED",
+    },
+    {
       group: true,
       label: "Google IMA",
       tooltip: "Google IMA Settings",
@@ -67,83 +83,19 @@ const baseManifest = {
       fields: [
         {
           type: "select",
-          key: "advertisment_type",
-          tooltip_text: "Ads type",
+          key: "google_ima_enabled",
+          tooltip_text: "Disable Google IMA if needed",
           options: [
             {
-              text: "VMAP",
-              value: "VMAP",
+              text: "ENABLED",
+              value: "ENABLED",
             },
             {
-              text: "VAST",
-              value: "VAST",
-            },
-            {
-              text: "OFF",
-              value: "OFF",
+              text: "DISABLED",
+              value: "DISABLED",
             },
           ],
-          initial_value: "VMAP",
-        },
-        {
-          type: "text_input",
-          key: "tag_vmap_url",
-          tooltip_text: "VMAP URL",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["VMAP"],
-              key: "custom_configuration_fields/advertisment_type",
-            },
-          ],
-        },
-        {
-          type: "text_input",
-          key: "tag_preroll_url",
-          tooltip_text: "Preroll URL",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["VAST"],
-              key: "custom_configuration_fields/advertisment_type",
-            },
-          ],
-        },
-        {
-          type: "text_input",
-          key: "tag_postroll_url",
-          tooltip_text: "Postroll URL",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["VAST"],
-              key: "custom_configuration_fields/advertisment_type",
-            },
-          ],
-        },
-        {
-          type: "text_input",
-          key: "tag_midroll_url",
-          tooltip_text: "Midroll URL",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["VAST"],
-              key: "custom_configuration_fields/advertisment_type",
-            },
-          ],
-        },
-        {
-          type: "text_input",
-          key: "midroll_offset",
-          tooltip_text: "Midroll offset in percentage",
-          default: "",
-          conditional_fields: [
-            {
-              condition_value: ["VAST"],
-              key: "custom_configuration_fields/advertisment_type",
-            },
-          ],
+          initial_value: "ENABLED",
         },
       ],
     },

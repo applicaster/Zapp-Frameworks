@@ -1,7 +1,7 @@
 import * as R from "ramda";
 
 export function getIMAData({ entry, pluginConfiguration }) {
-  if (pluginConfiguration?.advertisment_type === "OFF") {
+  if (pluginConfiguration?.google_ima_enabled === "DISABLED") {
     return null;
   }
 
@@ -59,25 +59,25 @@ function getZappAdsData({ entry, pluginConfiguration }) {
 
   const video_ads = [];
 
-  if (tag_preroll_url) {
-    video_ads.push({
-      offset: "preroll",
-      ad_url: tag_preroll_url,
-    });
-  }
+  // if (tag_preroll_url) {
+  //   video_ads.push({
+  //     offset: "preroll",
+  //     ad_url: tag_preroll_url,
+  //   });
+  // }
 
-  if (tag_postroll_url) {
-    video_ads.push({
-      offset: "postroll",
-      ad_url: tag_postroll_url,
-    });
-  }
+  // if (tag_postroll_url) {
+  //   video_ads.push({
+  //     offset: "postroll",
+  //     ad_url: tag_postroll_url,
+  //   });
+  // }
 
-  if (tag_midroll_url && midroll_offset) {
-    video_ads.push({
-      offset: String(midroll_offset),
-      ad_url: tag_midroll_url,
-    });
-  }
+  // if (tag_midroll_url && midroll_offset) {
+  //   video_ads.push({
+  //     offset: String(midroll_offset),
+  //     ad_url: tag_midroll_url,
+  //   });
+  // }
   return video_ads;
 }
