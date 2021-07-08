@@ -6,38 +6,46 @@
 //
 
 import UIKit
-import ZappCore
 import XrayLogger
+import ZappCore
 
 class QuickBrickViewController: UIViewController {
     lazy var logger = Logger.getLogger(for: QuickBrickViewControllerLogs.subsystem)
 
     var orientationStack = [UIInterfaceOrientationMask.all]
     var orientationMask: UIInterfaceOrientationMask = QuickBrickViewController.initialOrientationMask
-    
+
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-          return orientationMask
+        return orientationMask
     }
 
     override public var shouldAutorotate: Bool {
-          return true
+        return true
     }
-    
+
     static var initialOrientationMask: UIInterfaceOrientationMask {
-        var retValue:UIInterfaceOrientationMask = .portrait
+        var retValue: UIInterfaceOrientationMask = .portrait
         switch UIDevice.current.userInterfaceIdiom {
         case .pad:
-            retValue = .landscape
+            retValue = isTabletPortrait ? .portrait : .landscape
         default:
             break
         }
         return retValue
     }
-    
+
+    static var isTabletPortrait: Bool {
+        guard let value = FacadeConnector.connector?.storage?.sessionStorageValue(for: "isTabletPortrait",
+                                                                                             namespace: nil) else {
+            return false
+        }
+        return value.boolValue
+    }
+
     /// Allow Orientation for specific screen
     ///
     /// - Parameters:
-    ///   - orientation: int value representing 
+    ///   - orientation: int value representing
     ///         JS_PORTAIT = 1
     ///         JS_LANDSCAPE = 1
     ///         JS_LANDSCAPE_REVERSED = 4
@@ -46,20 +54,20 @@ class QuickBrickViewController: UIViewController {
     ///         JS_PORTAIT_SENSOR = JS_PORTAIT | JS_PORTAIT_REVERSED
     ///         JS_FULL_SENSOR = JS_LANDSCAPE_SENSOR | JS_PORTAIT_SENSOR
     ///         JS_SENSOR = JS_LANDSCAPE_SENSOR | JS_PORTAIT
-    public func allowOrientationForScreen(_ orientation:Int){
-        self.orientationMask =  mapOrientation(orientation)
+    public func allowOrientationForScreen(_ orientation: Int) {
+        orientationMask = mapOrientation(orientation)
         orientationStack.append(orientationMask)
         forceOrientationIfNeeded(orientationMask: orientationMask)
     }
 
     /// Release Orientation for specific screen to previous state
-    public func releaseOrientationForScreen(){
-        if(orientationStack.count > 1) {
+    public func releaseOrientationForScreen() {
+        if orientationStack.count > 1 {
             _ = orientationStack.dropLast()
             forceOrientationIfNeeded(orientationMask: orientationStack.last ?? UIInterfaceOrientationMask.all)
         }
     }
-    
+
     private func mapOrientation(_ orientation: Int) -> UIInterfaceOrientationMask {
         let JS_PORTAIT = 0x00000001
         let JS_LANDSCAPE = 0x00000002 // landscapeRight: 2,
@@ -69,7 +77,7 @@ class QuickBrickViewController: UIViewController {
         let JS_PORTAIT_SENSOR = JS_PORTAIT | JS_PORTAIT_REVERSED
         let JS_FULL_SENSOR = JS_LANDSCAPE_SENSOR | JS_PORTAIT_SENSOR
         let JS_SENSOR = JS_LANDSCAPE_SENSOR | JS_PORTAIT
-        
+
         switch orientation {
         case JS_PORTAIT:
             return UIInterfaceOrientationMask.portrait
@@ -91,7 +99,7 @@ class QuickBrickViewController: UIViewController {
             return UIInterfaceOrientationMask.all
         }
     }
-    
+
     private func mapOrientationMask(_ orientationMask: UIInterfaceOrientationMask) -> UIInterfaceOrientation {
         switch orientationMask {
         case UIInterfaceOrientationMask.portrait:
@@ -112,47 +120,47 @@ class QuickBrickViewController: UIViewController {
             return UIInterfaceOrientation.portrait
         }
     }
-    
-    private func forceOrientationIfNeeded(orientationMask: UIInterfaceOrientationMask){
+
+    private func forceOrientationIfNeeded(orientationMask: UIInterfaceOrientationMask) {
         switch orientationMask {
-            case UIInterfaceOrientationMask.portrait:
-                if(!UIDevice.current.orientation.isPortrait){
-                    forceOrientation(UIInterfaceOrientation.portrait)
-                }
-                break
-            case UIInterfaceOrientationMask.landscape:
-                if(!UIDevice.current.orientation.isLandscape){
-                    forceOrientation(UIInterfaceOrientation.landscapeRight)
-                }
-                break
-            case UIInterfaceOrientationMask.landscapeRight:
-                if(UIDevice.current.orientation.rawValue != UIInterfaceOrientation.landscapeRight.rawValue){
-                    forceOrientation(UIInterfaceOrientation.landscapeRight)
-                }
-                break
-            case UIInterfaceOrientationMask.landscapeLeft:
-                if(UIDevice.current.orientation.rawValue != UIInterfaceOrientation.landscapeLeft.rawValue){
-                    forceOrientation(UIInterfaceOrientation.landscapeLeft)
-                }
-                break
-            case UIInterfaceOrientationMask.all:
-                break
-            case UIInterfaceOrientationMask.allButUpsideDown:
-                if(!UIDevice.current.orientation.isLandscape && UIDevice.current.orientation.rawValue != UIInterfaceOrientation.portrait.rawValue){
-                    forceOrientation(UIInterfaceOrientation.portrait)
-                }
-                break
-            case UIInterfaceOrientationMask.portraitUpsideDown:
-                if(UIDevice.current.orientation.rawValue != UIInterfaceOrientation.portraitUpsideDown.rawValue){
-                    forceOrientation(UIInterfaceOrientation.portraitUpsideDown)
-                }
-                break
-            default:
-                break
+        case UIInterfaceOrientationMask.portrait:
+            if !UIDevice.current.orientation.isPortrait {
+                forceOrientation(UIInterfaceOrientation.portrait)
+            }
+            break
+        case UIInterfaceOrientationMask.landscape:
+            if !UIDevice.current.orientation.isLandscape {
+                forceOrientation(UIInterfaceOrientation.landscapeRight)
+            }
+            break
+        case UIInterfaceOrientationMask.landscapeRight:
+            if UIDevice.current.orientation.rawValue != UIInterfaceOrientation.landscapeRight.rawValue {
+                forceOrientation(UIInterfaceOrientation.landscapeRight)
+            }
+            break
+        case UIInterfaceOrientationMask.landscapeLeft:
+            if UIDevice.current.orientation.rawValue != UIInterfaceOrientation.landscapeLeft.rawValue {
+                forceOrientation(UIInterfaceOrientation.landscapeLeft)
+            }
+            break
+        case UIInterfaceOrientationMask.all:
+            break
+        case UIInterfaceOrientationMask.allButUpsideDown:
+            if !UIDevice.current.orientation.isLandscape && UIDevice.current.orientation.rawValue != UIInterfaceOrientation.portrait.rawValue {
+                forceOrientation(UIInterfaceOrientation.portrait)
+            }
+            break
+        case UIInterfaceOrientationMask.portraitUpsideDown:
+            if UIDevice.current.orientation.rawValue != UIInterfaceOrientation.portraitUpsideDown.rawValue {
+                forceOrientation(UIInterfaceOrientation.portraitUpsideDown)
+            }
+            break
+        default:
+            break
         }
     }
-    
-    private func forceOrientation(_ orientation: UIInterfaceOrientation){
+
+    private func forceOrientation(_ orientation: UIInterfaceOrientation) {
         logger?.debugLog(message: QuickBrickViewControllerLogs.forceOrientation.message,
                          category: QuickBrickViewControllerLogs.forceOrientation.category,
                          data: ["orientation": "\(orientation.rawValue)"])
@@ -160,5 +168,4 @@ class QuickBrickViewController: UIViewController {
         UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
         UIViewController.attemptRotationToDeviceOrientation()
     }
-    
 }
