@@ -82,12 +82,20 @@ const baseManifest = {
       folded: true,
       fields: [
         {
-          text: "ENABLED",
-          value: "ENABLED",
-        },
-        {
-          text: "DISABLED",
-          value: "DISABLED",
+          type: "select",
+          key: "poster_image_enabled",
+          tooltip_text: "Disable Google IMA if needed",
+          options: [
+            {
+              text: "ENABLED",
+              value: "ENABLED",
+            },
+            {
+              text: "DISABLED",
+              value: "DISABLED",
+            },
+          ],
+          initial_value: "ENABLED",
         },
       ],
     },
