@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
+import com.applicaster.analytics.AnalyticsAgentUtil
+import com.applicaster.analytics.AnalyticsAgentUtil.ToastLevel
 import com.applicaster.plugin.xray.R
 import com.applicaster.plugin.xray.TimingSink
 import com.applicaster.plugin.xray.XRayPlugin
@@ -98,7 +100,26 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-            // RN Printer logging
+            // Analytics toast
+            view.findViewById<Spinner>(R.id.cbAnalyticsToasts).let {
+                val analytics = AnalyticsAgentUtil.getInstance()
+                it.adapter = ArrayAdapter.createFromResource(
+                        it.context,
+                        R.array.xray_analytics_toasts_levels,
+                        android.R.layout.simple_spinner_dropdown_item)
+                it.setSelection(analytics.toastLevel.ordinal)
+                it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        analytics.toastLevel = ToastLevel.values().getOrElse(position) { ToastLevel.none }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+                }
+            }
+
+            // Timings
             view.findViewById<SwitchCompat>(R.id.switchTimingLogging).let {
                 it.isChecked = true == settings.timingLogging
                 it.setOnCheckedChangeListener { _, isChecked ->
