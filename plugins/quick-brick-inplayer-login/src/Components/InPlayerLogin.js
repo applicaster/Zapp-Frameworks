@@ -158,6 +158,7 @@ const InPlayerLogin = (props) => {
       },
       getItem: async function () {
         const token = await localStorageGet(localStorageTokenKey);
+
         return token;
       },
       removeItem: async function () {
@@ -168,13 +169,23 @@ const InPlayerLogin = (props) => {
 
     setLastEmailUsed((await InPlayerService.getLastEmailUsed()) || null);
 
-    const { token } = await InPlayerSDK.Account.getToken();
-    setIdtoken(token);
+    try {
+      const { token } = await InPlayerSDK.Account.getToken();
+      setIdtoken(token);
+    } catch(err) {
+      logger.debug({
+        message: `Error getting InPlayer Token`,
+        data: {
+          err
+        },
+      });
+    }
 
     logger.debug({
       message: "Starting InPlayer Plugin",
       data: { configuration: props?.configuration },
     });
+
     let shouldBeSkipped = payload?.extensions?.skip_hook;
 
     if (show_hook_once) {
