@@ -290,7 +290,7 @@ const InPlayerLogin = (props) => {
         const { callback } = props;
         event.setMessage(`${eventMessage}, plugin finished task`).send();
         if (payload) {
-          let newPayload = payload;
+          let newPayload = { ...payload };
           if (newPayload.extensions) {
             newPayload.extensions = {
               ...payload.extensions,
