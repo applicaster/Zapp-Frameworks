@@ -28,13 +28,14 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
 
     public func getCurrentConnectivityState() -> ConnectivityState {
         var retValue: ConnectivityState = .cellular
-
+        
         switch currentConnection {
         case let .connected(connections):
             if connections.contains(.cellular) {
                 retValue = .cellular
             }
-            else {
+            
+            if connections.contains(.wifi) {
                 retValue = .wifi
             }
         case .disconnected:
