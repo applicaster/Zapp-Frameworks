@@ -15,7 +15,6 @@ const logger = createLogger({
 
 export async function sendEvent(data: AnalyticEvent) {
   const event = `${eventCategory}: ${data.action}`;
-  console.log("sendEvent", { event, data });
   logger.log({
     message: `sendEvent: eventName - ${event}`,
     data: data,
