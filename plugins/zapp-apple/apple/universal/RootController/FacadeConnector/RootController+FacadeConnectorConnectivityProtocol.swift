@@ -31,11 +31,11 @@ extension RootController: FacadeConnectorConnnectivityProtocol {
 
         switch currentConnection {
         case let .connected(connections):
-            if connections.contains(.cellular) {
-                retValue = .cellular
+            if connections.contains(.wifi) {
+                retValue = .wifi
             }
             else {
-                retValue = .wifi
+                retValue = .cellular
             }
         case .disconnected:
             retValue = .offline
