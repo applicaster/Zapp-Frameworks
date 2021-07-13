@@ -44,3 +44,13 @@ export const DEFAULT = {
   packageName: getFromManifest("general", "package_name")?.default,
   methodName: getFromManifest("general", "method_name")?.default,
 };
+
+export const parseFontKey = (platform) => {
+  const endpoints = {
+    ios: "tvos",
+    android: "android",
+    samsung_tv: "samsung",
+  };
+
+  return endpoints[platform];
+};
