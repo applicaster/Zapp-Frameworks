@@ -93,8 +93,8 @@
     "quickbrick"
   ],
   "platform": "samsung_tv",
-  "dependency_version": "8.0.6-alpha.1",
-  "manifest_version": "8.0.6-alpha.1",
+  "dependency_version": "8.0.6",
+  "manifest_version": "8.0.6",
   "api": {
     "excludedNodeModules": [
       "react-native-dropdownalert",
