@@ -11,7 +11,7 @@ export default function TopBar({
   onBack,
   onNext,
   onClose,
-  onSignIn,
+  onSignUp,
   isLastScreen = false,
   isFistScreen = false,
 }) {
@@ -144,7 +144,7 @@ export default function TopBar({
           textStyle={TextStylSignInButtons}
           textStyleDisabled={TextStylSignInButtonsDisabled}
           title={sign_in_button_text}
-          onPress={onSignIn}
+          onPress={onSignUp}
           disabled={isFistScreen && isLastScreen === false}
           hidden={screenStyles?.is_bar_login_button_hidden === "1"}
         />

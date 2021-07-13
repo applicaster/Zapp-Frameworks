@@ -3,6 +3,7 @@ import XRayLogger from "@applicaster/quick-brick-xray";
 export const BaseSubsystem = "plugins/first-time-user-expirience-screen";
 export const BaseCategories = {
   GENERAL: "general",
+  ANALYTICS: "analytics",
 };
 
 let loggers = {};
