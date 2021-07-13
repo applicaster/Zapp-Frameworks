@@ -88,7 +88,7 @@ export async function screenShouldBePresented(
     : R.isNil(storedVersionName);
 
   logger.debug({
-    message: `Screen should be presented: ${result}, currentVersionName:${currentVersionName}, storedVersionName:${storedVersionName}`,
+    message: `Screen should be presented: ${result}, currentVersionName: ${currentVersionName}, storedVersionName: ${storedVersionName}`,
     data: {
       screen_should_be_presented: result,
       current_version_name: currentVersionName,

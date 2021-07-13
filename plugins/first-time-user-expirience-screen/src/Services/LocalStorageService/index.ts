@@ -4,6 +4,7 @@ import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorag
 const localStorageNamespace = "first-time-user-expirience-screen";
 const screenWasPresentedKey = "screenWasPresented";
 
+console.log({ sessionStorage, localStorage });
 export async function getBuildNumber() {
   return await sessionStorage.getItem("version_name");
 }
