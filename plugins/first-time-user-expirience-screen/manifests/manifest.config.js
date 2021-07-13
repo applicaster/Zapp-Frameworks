@@ -441,6 +441,14 @@ function createManifest({ version, platform }) {
           disableField: true,
         },
         {
+          key: "version",
+          type: "text_input",
+          tooltip_text:
+            "Increment version number to +1 toforce load screen on start again",
+          label: "Version of the screen",
+          initial_value: "1",
+        },
+        {
           type: "switch",
           key: "show_hook_once",
           tooltip_text:
