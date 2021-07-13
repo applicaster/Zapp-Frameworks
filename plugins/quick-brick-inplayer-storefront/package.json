@@ -1,6 +1,6 @@
 {
   "name": "@applicaster/quick-brick-inplayer-storefront",
-  "version": "0.0.18-beta.2",
+  "version": "0.0.18",
   "description": "",
   "main": "index.js",
   "scripts": {

@@ -117,8 +117,8 @@
     "quickbrick"
   ],
   "platform": "android_for_quickbrick",
-  "dependency_version": "0.0.18-beta.2",
-  "manifest_version": "0.0.18-beta.2",
+  "dependency_version": "0.0.18",
+  "manifest_version": "0.0.18",
   "api": {
     "class_name": "com.applicaster.reactnative.plugins.APReactNativeAdapter",
     "react_packages": [
