@@ -19,6 +19,8 @@ data class Settings(val dummy: Any? = null) {
     // enable TimingSink csv output
     var timingLogging: Boolean? = null
 
+    var logzToken: String? = null
+
     companion object {
         fun merge(base: Settings, overrides: Settings): Settings {
             val merged = base.copy()
@@ -29,6 +31,7 @@ data class Settings(val dummy: Any? = null) {
             merged.reactNativeLogLevel = overrides.reactNativeLogLevel ?: base.reactNativeLogLevel
             merged.reactNativeDebugLogging = overrides.reactNativeDebugLogging ?: base.reactNativeDebugLogging
             merged.timingLogging = overrides.timingLogging ?: base.timingLogging
+            merged.logzToken = overrides.logzToken // always override
             return merged
         }
 

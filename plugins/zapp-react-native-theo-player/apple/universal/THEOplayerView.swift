@@ -189,6 +189,7 @@ class THEOplayerView: UIView {
         player.evaluateJavaScript("init({player: player})")
         player.presentationMode = .inline
 
+        addNotificationsObserver()
         attachJSEventListeners()
         attachEventListeners()
         player.autoplay = autoplay
@@ -204,5 +205,18 @@ class THEOplayerView: UIView {
             return nil
         }
         return cssURL
+    }
+    
+    func addNotificationsObserver() {
+        let defaultCenter = NotificationCenter.default
+
+        defaultCenter.addObserver(self,
+                                  selector: #selector(applicationWillEnterForeground(notification:)),
+                                  name: UIApplication.willEnterForegroundNotification,
+                                  object: nil)
+    }
+
+    @objc func applicationWillEnterForeground(notification: Notification) {
+        player?.play()
     }
 }
