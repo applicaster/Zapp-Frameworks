@@ -59,14 +59,14 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   }
   return null;
 }
-export async function saveScreenFinishedState(plugin_version = "1") {
-  const pluginVersionInt = parseInt(plugin_version);
-  if (!pluginVersionInt) {
+export async function saveScreenFinishedState(plugin_version = 1) {
+  const pluginVersionString = plugin_version.toString();
+  if (!pluginVersionString) {
     logger.warning({
       message: `saveScreenFinishedState: ${plugin_version}, can not save should be value`,
       data: {
         plugin_version,
-        pluginVersionInt,
+        pluginVersionString,
       },
     });
     return;
@@ -88,9 +88,9 @@ export async function removeScreenFinishedState() {
 }
 
 export async function screenShouldBePresented(
-  plugin_version = "1"
+  plugin_version = 1
 ): Promise<boolean> {
-  const pluginVersionInt = plugin_version && parseInt(plugin_version);
+  const pluginVersionInt = plugin_version;
   const storedPluginVersion = await getPluginVersion();
   const storedPluginVersionInt =
     storedPluginVersion && parseInt(storedPluginVersion);
@@ -102,7 +102,6 @@ export async function screenShouldBePresented(
         screen_should_be_presented: "true",
         plugin_version,
         storedPluginVersion,
-        pluginVersionInt,
         storedPluginVersionInt,
       },
     });

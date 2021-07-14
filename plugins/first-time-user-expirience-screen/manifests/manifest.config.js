@@ -442,11 +442,11 @@ function createManifest({ version, platform }) {
         },
         {
           key: "plugin_version",
-          type: "text_input",
+          type: "number_input",
           tooltip_text:
             "Increment version number to +1 to force load FTUE on start again",
           label: "Version of the screen",
-          initial_value: "1",
+          initial_value: 1,
         },
         {
           type: "switch",

@@ -52,7 +52,7 @@ export default function FirstTimeUserExpirience(props) {
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
 
-  const plugin_version = general?.plugin_version || "1";
+  const plugin_version = general?.plugin_version || 1;
   useEffect(() => {
     mounted.current = true;
 
