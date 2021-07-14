@@ -90,25 +90,25 @@ export async function removeScreenFinishedState() {
 export async function screenShouldBePresented(
   plugin_version = 1
 ): Promise<boolean> {
-  const pluginVersionInt = plugin_version;
+  const pluginVersionNumber = plugin_version;
   const storedPluginVersion = await getPluginVersion();
-  const storedPluginVersionInt =
-    storedPluginVersion && parseInt(storedPluginVersion);
+  const storedPluginVersionNumber =
+    storedPluginVersion && Number(storedPluginVersion);
 
-  if (!pluginVersionInt || !storedPluginVersionInt) {
+  if (!pluginVersionNumber || !storedPluginVersionNumber) {
     logger.debug({
       message: `screenShouldBePresented: true`,
       data: {
         screen_should_be_presented: "true",
         plugin_version,
         storedPluginVersion,
-        storedPluginVersionInt,
+        storedPluginVersionNumber,
       },
     });
     return true;
   }
 
-  const result = pluginVersionInt > storedPluginVersionInt;
+  const result = pluginVersionNumber > storedPluginVersionNumber;
 
   logger.debug({
     message: `screenShouldBePresented: ${result}, plugin_version: ${plugin_version}, storedPluginVersion: ${storedPluginVersion}`,
@@ -116,8 +116,8 @@ export async function screenShouldBePresented(
       screen_should_be_presented: result,
       storedPluginVersion,
       plugin_version,
-      pluginVersionInt,
-      storedPluginVersionInt,
+      pluginVersionNumber,
+      storedPluginVersionNumber,
     },
   });
   return result;
