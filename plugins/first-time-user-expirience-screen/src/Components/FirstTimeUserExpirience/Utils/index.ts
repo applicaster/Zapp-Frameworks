@@ -1,9 +1,9 @@
 import * as R from "ramda";
 import { DataModel } from "../../../models";
 import {
-  savePluginVersion,
-  getPluginVersion,
-  removePluginVersion,
+  saveFlowVersion,
+  getFlowVersion,
+  removeFlowVersion,
 } from "../../../Services/LocalStorageService";
 
 const logger = createLogger({
@@ -60,13 +60,13 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   return null;
 }
 export async function saveScreenFinishedState(flow_version = 1) {
-  const pluginVersionString = flow_version.toString();
-  if (!pluginVersionString) {
+  const flowVersionString = flow_version.toString();
+  if (!flowVersionString) {
     logger.warning({
       message: `saveScreenFinishedState: ${flow_version}, can not save should be value`,
       data: {
         flow_version,
-        pluginVersionString,
+        flowVersionString,
       },
     });
     return;
@@ -77,25 +77,25 @@ export async function saveScreenFinishedState(flow_version = 1) {
       flow_version,
     },
   });
-  return await savePluginVersion(flow_version);
+  return await saveFlowVersion(flow_version);
 }
 
 export async function removeScreenFinishedState() {
   logger.debug({
     message: `Remove data from local storage`,
   });
-  await removePluginVersion();
+  await removeFlowVersion();
 }
 
 export async function screenShouldBePresented(
   flow_version = 1
 ): Promise<boolean> {
-  const pluginVersionNumber = flow_version;
-  const storedFlowVersion = await getPluginVersion();
+  const flowVersionNumber = flow_version;
+  const storedFlowVersion = await getFlowVersion();
   const storedFlowVersionNumber =
-  storedFlowVersion && Number(storedFlowVersion);
+    storedFlowVersion && Number(storedFlowVersion);
 
-  if (!pluginVersionNumber || !storedFlowVersionNumber) {
+  if (!flowVersionNumber || !storedFlowVersionNumber) {
     logger.debug({
       message: `screenShouldBePresented: true`,
       data: {
@@ -108,7 +108,7 @@ export async function screenShouldBePresented(
     return true;
   }
 
-  const result = pluginVersionNumber > storedFlowVersionNumber;
+  const result = flowVersionNumber > storedFlowVersionNumber;
 
   logger.debug({
     message: `screenShouldBePresented: ${result}, flow_version: ${flow_version}, storedFlowVersion: ${storedFlowVersion}`,
@@ -116,7 +116,7 @@ export async function screenShouldBePresented(
       screen_should_be_presented: result,
       storedFlowVersion,
       flow_version,
-      pluginVersionNumber,
+      flowVersionNumber,
       storedFlowVersionNumber,
     },
   });
