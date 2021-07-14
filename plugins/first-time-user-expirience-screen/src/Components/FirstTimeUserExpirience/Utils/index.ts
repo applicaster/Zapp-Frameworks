@@ -60,6 +60,17 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   return null;
 }
 export async function saveScreenFinishedState(plugin_version = "1") {
+  const pluginVersionInt = parseInt(plugin_version);
+  if (!pluginVersionInt) {
+    logger.warning({
+      message: `saveScreenFinishedState: ${plugin_version}, can not save should be value`,
+      data: {
+        plugin_version,
+        pluginVersionInt,
+      },
+    });
+    return;
+  }
   logger.debug({
     message: `Save data to local storage: ${plugin_version}`,
     data: {
@@ -85,17 +96,29 @@ export async function screenShouldBePresented(
     storedPluginVersion && parseInt(storedPluginVersion);
 
   if (!pluginVersionInt || !storedPluginVersionInt) {
+    logger.debug({
+      message: `screenShouldBePresented: true`,
+      data: {
+        screen_should_be_presented: "true",
+        plugin_version,
+        storedPluginVersion,
+        pluginVersionInt,
+        storedPluginVersionInt,
+      },
+    });
     return true;
   }
 
   const result = pluginVersionInt > storedPluginVersionInt;
 
   logger.debug({
-    message: `Screen should be presented: ${result}, plugin_version: ${plugin_version}, storedPluginVersion: ${storedPluginVersion}`,
+    message: `screenShouldBePresented: ${result}, plugin_version: ${plugin_version}, storedPluginVersion: ${storedPluginVersion}`,
     data: {
       screen_should_be_presented: result,
       storedPluginVersion,
       plugin_version,
+      pluginVersionInt,
+      storedPluginVersionInt,
     },
   });
   return result;
