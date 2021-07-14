@@ -1,10 +1,9 @@
 import * as R from "ramda";
 import { DataModel } from "../../../models";
 import {
-  localStorageSet,
-  localStorageGet,
-  localStorageRemove,
-  getBuildNumber,
+  saveFlowVersion,
+  getFlowVersion,
+  removeFlowVersion,
 } from "../../../Services/LocalStorageService";
 
 const logger = createLogger({
@@ -60,39 +59,65 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   }
   return null;
 }
-export async function updatePresentedInfo() {
-  const currentVersionName = await getBuildNumber();
+export async function saveScreenFinishedState(flow_version = 1) {
+  const flowVersionString = flow_version.toString();
+  if (!flowVersionString) {
+    logger.warning({
+      message: `saveScreenFinishedState: required parameter ${flow_version} is missing`,
+      data: {
+        flow_version,
+        flowVersionString,
+      },
+    });
+    return;
+  }
   logger.debug({
-    message: `Save data to local storage: ${currentVersionName}`,
+    message: `Save data to local storage: ${flow_version}`,
     data: {
-      current_version_name: currentVersionName,
+      flow_version,
     },
   });
-  return await localStorageSet(currentVersionName);
+  return await saveFlowVersion(flow_version);
 }
 
-export async function removePresentedInfo() {
+export async function removeScreenFinishedState() {
   logger.debug({
     message: `Remove data from local storage`,
   });
-  await localStorageRemove();
+  await removeFlowVersion();
 }
 
 export async function screenShouldBePresented(
-  present_on_each_new_version = false
+  flow_version = 1
 ): Promise<boolean> {
-  const currentVersionName = await getBuildNumber();
-  const storedVersionName = await localStorageGet();
-  const result = present_on_each_new_version
-    ? currentVersionName !== storedVersionName
-    : R.isNil(storedVersionName);
+  const flowVersionNumber = flow_version;
+  const storedFlowVersion = await getFlowVersion();
+  const storedFlowVersionNumber =
+    storedFlowVersion && Number(storedFlowVersion);
+
+  if (!flowVersionNumber || !storedFlowVersionNumber) {
+    logger.debug({
+      message: `screenShouldBePresented: true`,
+      data: {
+        screen_should_be_presented: "true",
+        flow_version,
+        storedFlowVersion,
+        storedFlowVersionNumber,
+      },
+    });
+    return true;
+  }
+
+  const result = flowVersionNumber > storedFlowVersionNumber;
 
   logger.debug({
-    message: `Screen should be presented: ${result}, currentVersionName: ${currentVersionName}, storedVersionName: ${storedVersionName}`,
+    message: `screenShouldBePresented: ${result}, flow_version: ${flow_version}, storedFlowVersion: ${storedFlowVersion}`,
     data: {
       screen_should_be_presented: result,
-      current_version_name: currentVersionName,
-      stored_version_name: storedVersionName,
+      storedFlowVersion,
+      flow_version,
+      flowVersionNumber,
+      storedFlowVersionNumber,
     },
   });
   return result;

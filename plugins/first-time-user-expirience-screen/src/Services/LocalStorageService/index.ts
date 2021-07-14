@@ -1,31 +1,20 @@
 import { localStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/LocalStorage";
-import { sessionStorage } from "@applicaster/zapp-react-native-bridge/ZappStorage/SessionStorage";
 
 const localStorageNamespace = "first-time-user-expirience-screen";
-const screenWasPresentedKey = "screenWasPresented";
+const flowVersionKey = "flow_version";
 
-export async function getBuildNumber() {
-  return await sessionStorage.getItem("version_name");
-}
-
-export async function localStorageSet(versionName) {
+export async function saveFlowVersion(version) {
   return await localStorage.setItem(
-    screenWasPresentedKey,
-    versionName,
+    flowVersionKey,
+    version,
     localStorageNamespace
   );
 }
 
-export async function localStorageRemove() {
-  return await localStorage.removeItem(
-    screenWasPresentedKey,
-    localStorageNamespace
-  );
+export async function removeFlowVersion() {
+  return await localStorage.removeItem(flowVersionKey, localStorageNamespace);
 }
 
-export async function localStorageGet(): Promise<boolean> {
-  return await localStorage.getItem(
-    screenWasPresentedKey,
-    localStorageNamespace
-  );
+export async function getFlowVersion(): Promise<string> {
+  return await localStorage.getItem(flowVersionKey, localStorageNamespace);
 }
