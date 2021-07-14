@@ -91,33 +91,33 @@ export async function screenShouldBePresented(
   flow_version = 1
 ): Promise<boolean> {
   const pluginVersionNumber = flow_version;
-  const storedPluginVersion = await getPluginVersion();
-  const storedPluginVersionNumber =
-    storedPluginVersion && Number(storedPluginVersion);
+  const storedFlowVersion = await getPluginVersion();
+  const storedFlowVersionNumber =
+  storedFlowVersion && Number(storedFlowVersion);
 
-  if (!pluginVersionNumber || !storedPluginVersionNumber) {
+  if (!pluginVersionNumber || !storedFlowVersionNumber) {
     logger.debug({
       message: `screenShouldBePresented: true`,
       data: {
         screen_should_be_presented: "true",
         flow_version,
-        storedPluginVersion,
-        storedPluginVersionNumber,
+        storedFlowVersion,
+        storedFlowVersionNumber,
       },
     });
     return true;
   }
 
-  const result = pluginVersionNumber > storedPluginVersionNumber;
+  const result = pluginVersionNumber > storedFlowVersionNumber;
 
   logger.debug({
-    message: `screenShouldBePresented: ${result}, flow_version: ${flow_version}, storedPluginVersion: ${storedPluginVersion}`,
+    message: `screenShouldBePresented: ${result}, flow_version: ${flow_version}, storedFlowVersion: ${storedFlowVersion}`,
     data: {
       screen_should_be_presented: result,
-      storedPluginVersion,
+      storedFlowVersion,
       flow_version,
       pluginVersionNumber,
-      storedPluginVersionNumber,
+      storedFlowVersionNumber,
     },
   });
   return result;
