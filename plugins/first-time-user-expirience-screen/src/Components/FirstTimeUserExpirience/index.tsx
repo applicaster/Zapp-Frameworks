@@ -52,7 +52,7 @@ export default function FirstTimeUserExpirience(props) {
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
 
-  const plugin_version = general?.plugin_version || 1;
+  const flow_version = general?.flow_version || 1;
   useEffect(() => {
     mounted.current = true;
 
@@ -78,7 +78,7 @@ export default function FirstTimeUserExpirience(props) {
       });
 
       if (show_hook_once) {
-        const presentScreen = await screenShouldBePresented(plugin_version);
+        const presentScreen = await screenShouldBePresented(flow_version);
         if (presentScreen) {
           prepareDataSource();
         } else {
@@ -158,7 +158,7 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onClose() {
     if (show_hook_once) {
-      saveScreenFinishedState(plugin_version);
+      saveScreenFinishedState(flow_version);
     }
 
     const currentScreen = dataSource?.[currentScreenIndex].Screen;

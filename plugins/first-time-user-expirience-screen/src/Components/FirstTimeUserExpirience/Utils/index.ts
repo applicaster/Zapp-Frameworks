@@ -59,25 +59,25 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   }
   return null;
 }
-export async function saveScreenFinishedState(plugin_version = 1) {
-  const pluginVersionString = plugin_version.toString();
+export async function saveScreenFinishedState(flow_version = 1) {
+  const pluginVersionString = flow_version.toString();
   if (!pluginVersionString) {
     logger.warning({
-      message: `saveScreenFinishedState: ${plugin_version}, can not save should be value`,
+      message: `saveScreenFinishedState: ${flow_version}, can not save should be value`,
       data: {
-        plugin_version,
+        flow_version,
         pluginVersionString,
       },
     });
     return;
   }
   logger.debug({
-    message: `Save data to local storage: ${plugin_version}`,
+    message: `Save data to local storage: ${flow_version}`,
     data: {
-      plugin_version,
+      flow_version,
     },
   });
-  return await savePluginVersion(plugin_version);
+  return await savePluginVersion(flow_version);
 }
 
 export async function removeScreenFinishedState() {
@@ -88,9 +88,9 @@ export async function removeScreenFinishedState() {
 }
 
 export async function screenShouldBePresented(
-  plugin_version = 1
+  flow_version = 1
 ): Promise<boolean> {
-  const pluginVersionNumber = plugin_version;
+  const pluginVersionNumber = flow_version;
   const storedPluginVersion = await getPluginVersion();
   const storedPluginVersionNumber =
     storedPluginVersion && Number(storedPluginVersion);
@@ -100,7 +100,7 @@ export async function screenShouldBePresented(
       message: `screenShouldBePresented: true`,
       data: {
         screen_should_be_presented: "true",
-        plugin_version,
+        flow_version,
         storedPluginVersion,
         storedPluginVersionNumber,
       },
@@ -111,11 +111,11 @@ export async function screenShouldBePresented(
   const result = pluginVersionNumber > storedPluginVersionNumber;
 
   logger.debug({
-    message: `screenShouldBePresented: ${result}, plugin_version: ${plugin_version}, storedPluginVersion: ${storedPluginVersion}`,
+    message: `screenShouldBePresented: ${result}, flow_version: ${flow_version}, storedPluginVersion: ${storedPluginVersion}`,
     data: {
       screen_should_be_presented: result,
       storedPluginVersion,
-      plugin_version,
+      flow_version,
       pluginVersionNumber,
       storedPluginVersionNumber,
     },

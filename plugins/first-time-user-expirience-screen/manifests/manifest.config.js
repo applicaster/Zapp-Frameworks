@@ -441,7 +441,7 @@ function createManifest({ version, platform }) {
           disableField: true,
         },
         {
-          key: "plugin_version",
+          key: "flow_version",
           type: "number_input",
           tooltip_text:
             "Increment version number to +1 to force load FTUE on start again",
