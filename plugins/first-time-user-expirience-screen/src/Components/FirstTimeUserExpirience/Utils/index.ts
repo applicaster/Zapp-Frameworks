@@ -63,7 +63,7 @@ export async function saveScreenFinishedState(flow_version = 1) {
   const flowVersionString = flow_version.toString();
   if (!flowVersionString) {
     logger.warning({
-      message: `saveScreenFinishedState: ${flow_version}, can not save should be value`,
+      message: `saveScreenFinishedState: required parameter ${flow_version} is missing`,
       data: {
         flow_version,
         flowVersionString,
