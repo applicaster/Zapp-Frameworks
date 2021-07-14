@@ -193,7 +193,7 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onSignUp() {
     if (show_hook_once) {
-      saveScreenFinishedState();
+      saveScreenFinishedState(flow_version);
     }
     const currentScreen = dataSource?.[currentScreenIndex].Screen;
 
