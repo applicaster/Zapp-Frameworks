@@ -11,8 +11,7 @@ import {
   getRiversProp,
   prepareData,
   screenShouldBePresented,
-  updatePresentedInfo,
-  removePresentedInfo,
+  saveScreenFinishedState,
 } from "./Utils";
 import { getStyles } from "../../Utils/Customization";
 import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Components/River/ComponentsMap";
@@ -52,9 +51,8 @@ export default function FirstTimeUserExpirience(props) {
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
-  const present_on_each_new_version =
-    general?.present_on_each_new_version || false;
 
+  const plugin_version = general?.plugin_version || "1";
   useEffect(() => {
     mounted.current = true;
 
@@ -80,9 +78,7 @@ export default function FirstTimeUserExpirience(props) {
       });
 
       if (show_hook_once) {
-        const presentScreen = await screenShouldBePresented(
-          present_on_each_new_version
-        );
+        const presentScreen = await screenShouldBePresented(plugin_version);
         if (presentScreen) {
           prepareDataSource();
         } else {
@@ -96,7 +92,6 @@ export default function FirstTimeUserExpirience(props) {
           callback && callback({ success: true, error: null, payload });
         }
       } else {
-        await removePresentedInfo();
         prepareDataSource();
       }
     } catch (error) {
@@ -163,7 +158,7 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onClose() {
     if (show_hook_once) {
-      updatePresentedInfo();
+      saveScreenFinishedState(plugin_version);
     }
 
     const currentScreen = dataSource?.[currentScreenIndex].Screen;
@@ -198,7 +193,7 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onSignUp() {
     if (show_hook_once) {
-      updatePresentedInfo();
+      saveScreenFinishedState();
     }
     const currentScreen = dataSource?.[currentScreenIndex].Screen;
 

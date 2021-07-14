@@ -441,10 +441,10 @@ function createManifest({ version, platform }) {
           disableField: true,
         },
         {
-          key: "version",
+          key: "plugin_version",
           type: "text_input",
           tooltip_text:
-            "Increment version number to +1 toforce load screen on start again",
+            "Increment version number to +1 to force load FTUE on start again",
           label: "Version of the screen",
           initial_value: "1",
         },
@@ -454,13 +454,6 @@ function createManifest({ version, platform }) {
           tooltip_text:
             "Define if hook should be presented on time or each time screen will open",
           initial_value: true,
-        },
-        {
-          type: "switch",
-          key: "present_on_each_new_version",
-          label: "Present component on each new application version",
-          tooltip_text: "Present component on each new application version",
-          initial_value: false,
         },
         {
           type: "screen_selector",

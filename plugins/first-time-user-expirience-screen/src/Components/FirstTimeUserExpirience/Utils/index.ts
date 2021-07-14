@@ -1,10 +1,9 @@
 import * as R from "ramda";
 import { DataModel } from "../../../models";
 import {
-  localStorageSet,
-  localStorageGet,
-  localStorageRemove,
-  getBuildNumber,
+  savePluginVersion,
+  getPluginVersion,
+  removePluginVersion,
 } from "../../../Services/LocalStorageService";
 
 const logger = createLogger({
@@ -60,39 +59,43 @@ function dataModelFromScreenData(screenId?: string, rivers?: any): DataModel {
   }
   return null;
 }
-export async function updatePresentedInfo() {
-  const currentVersionName = await getBuildNumber();
+export async function saveScreenFinishedState(plugin_version = "1") {
   logger.debug({
-    message: `Save data to local storage: ${currentVersionName}`,
+    message: `Save data to local storage: ${plugin_version}`,
     data: {
-      current_version_name: currentVersionName,
+      plugin_version,
     },
   });
-  return await localStorageSet(currentVersionName);
+  return await savePluginVersion(plugin_version);
 }
 
-export async function removePresentedInfo() {
+export async function removeScreenFinishedState() {
   logger.debug({
     message: `Remove data from local storage`,
   });
-  await localStorageRemove();
+  await removePluginVersion();
 }
 
 export async function screenShouldBePresented(
-  present_on_each_new_version = false
+  plugin_version = "1"
 ): Promise<boolean> {
-  const currentVersionName = await getBuildNumber();
-  const storedVersionName = await localStorageGet();
-  const result = present_on_each_new_version
-    ? currentVersionName !== storedVersionName
-    : R.isNil(storedVersionName);
+  const pluginVersionInt = plugin_version && parseInt(plugin_version);
+  const storedPluginVersion = await getPluginVersion();
+  const storedPluginVersionInt =
+    storedPluginVersion && parseInt(storedPluginVersion);
+
+  if (!pluginVersionInt || !storedPluginVersionInt) {
+    return true;
+  }
+
+  const result = pluginVersionInt > storedPluginVersionInt;
 
   logger.debug({
-    message: `Screen should be presented: ${result}, currentVersionName: ${currentVersionName}, storedVersionName: ${storedVersionName}`,
+    message: `Screen should be presented: ${result}, plugin_version: ${plugin_version}, storedPluginVersion: ${storedPluginVersion}`,
     data: {
       screen_should_be_presented: result,
-      current_version_name: currentVersionName,
-      stored_version_name: storedVersionName,
+      storedPluginVersion,
+      plugin_version,
     },
   });
   return result;
