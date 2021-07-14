@@ -7,7 +7,7 @@ const baseManifest = {
   dependency_name: "@applicaster/first-time-user-expirience-screen",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "First time user expirience screen",
+  name: "First time user experience screen",
   description: "Hook to present one time",
   type: "general",
   react_native: true,
