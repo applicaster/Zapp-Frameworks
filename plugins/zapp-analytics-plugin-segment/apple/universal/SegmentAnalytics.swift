@@ -33,6 +33,7 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
         static let pluginKey = "SegmentAnalytics"
         static let pluginIdentifier = "segment_analytics"
         static let identityStorageKey = "identity"
+        static let appLaunchedStorageKey = "appLaunched"
     }
 
     var isDisabled = false
@@ -79,6 +80,10 @@ class SegmentAnalytics: NSObject, PluginAdapterProtocol {
                                                 delegate: self)
 
             sendLoginInformationIfAvailable()
+
+            if configuration.trackApplicationLifecycleEvents {
+                sendCustomLifecycleEvents()
+            }
             completion?(true)
         } else {
             disable(completion: completion)
@@ -139,26 +144,25 @@ extension SegmentAnalytics {
     }
 
     func fetchLoginData() -> IdentityObject? {
-            guard let storageValue = FacadeConnector.connector?.storage?.sessionStorageValue(for: Params.identityStorageKey,
+        guard let storageValue = FacadeConnector.connector?.storage?.sessionStorageValue(for: Params.identityStorageKey,
 
-                                                                                             namespace: Params.pluginIdentifier) else {
-                return nil
-            }
+                                                                                         namespace: Params.pluginIdentifier) else {
+            return nil
+        }
 
-            // remove the content
-            _ = FacadeConnector.connector?.storage?.sessionStorageRemoveValue(for: Params.identityStorageKey,
-                                                                              namespace: Params.pluginIdentifier)
-            return IdentityObject(jsonString: storageValue)
+        // remove the content
+        _ = FacadeConnector.connector?.storage?.sessionStorageRemoveValue(for: Params.identityStorageKey,
+                                                                          namespace: Params.pluginIdentifier)
+        return IdentityObject(jsonString: storageValue)
     }
 
     func sendLoginInformationIfAvailable() {
-            guard let identityObject = fetchLoginData() else {
-                return
-            }
+        guard let identityObject = fetchLoginData() else {
+            return
+        }
 
-            login(with: identityObject.identity,
-                       traits: identityObject.traits,
-                       options: identityObject.options)
-
+        login(with: identityObject.identity,
+              traits: identityObject.traits,
+              options: identityObject.options)
     }
 }
