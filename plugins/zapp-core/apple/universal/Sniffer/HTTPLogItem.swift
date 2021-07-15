@@ -10,7 +10,9 @@
 import Foundation
 
 public final class HTTPLogItem {
-    var url: URL { urlRequest.url! }
+    var url: URL? {
+        return urlRequest.url
+    }
 
     private var urlRequest: URLRequest
     private var urlResponse: URLResponse?
@@ -29,13 +31,11 @@ public final class HTTPLogItem {
         logRequest()
     }
 
-    func didReceive(response: URLResponse) {
+    func didReceive(response: URLResponse, data: Data) {
         urlResponse = response
-        data = Data()
-    }
-
-    func didReceive(data: Data) {
-        self.data?.append(data)
+        self.data = data
+        
+        didCompleteWithError(nil)
     }
 
     func didCompleteWithError(_ error: Error?) {
@@ -64,8 +64,8 @@ private extension HTTPLogItem {
         static let error = "error"
     }
 
-    func log(_ url: URL, result: [String: Any], type: Sniffer.LogType) {
-        if let logger = Sniffer.onLogger {
+    func log(_ url: URL?, result: [String: Any], type: Sniffer.LogType) {
+        if let logger = Sniffer.onLogger, let url = url {
             logger(url, type, result)
         } else {
             print(result)
@@ -77,7 +77,7 @@ private extension HTTPLogItem {
 
         if let method = urlRequest.httpMethod {
             result[Params.method] = method
-            result[Params.url] = url.absoluteString
+            result[Params.url] = url?.absoluteString ?? ""
         }
 
         result[Params.httpHeaderFieldsDescription] = urlRequest.httpHeaderFieldsDescription
@@ -88,7 +88,7 @@ private extension HTTPLogItem {
 
     func logDidComplete() {
         var result: [String: Any] = [:]
-        result[Params.url] = url.absoluteString
+        result[Params.url] = url?.absoluteString ?? ""
 
         if let duration = duration {
             result[Params.duration] = "\(duration)"

@@ -45,7 +45,7 @@ public class Sniffer: URLProtocol {
     public class func ignore(extensions: [String]) {
         ignoreExtensions = extensions.map { $0.lowercased() }
     }
-    
+
     static func find(deserialize contentType: String) -> BodyDeserializer? {
         for (pattern, deserializer) in Sniffer.bodyDeserializers {
             do {
@@ -85,16 +85,16 @@ public class Sniffer: URLProtocol {
         super.init(request: request, cachedResponse: cachedResponse, client: client)
 
         if session == nil {
-            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session = URLSession(configuration: .default)
         }
     }
 
     override public class func canInit(with request: URLRequest) -> Bool {
-        guard let url = request.url, let scheme = url.scheme else { return false }
+        guard let url = request.url else { return false }
         guard !shouldIgnoreDomain(with: url) else { return false }
         guard !shouldIgnoreExtensions(with: url) else { return false }
 
-        return ["http", "https"].contains(scheme) && property(forKey: Keys.request, in: request) == nil
+        return property(forKey: Keys.request, in: request) == nil
     }
 
     override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
@@ -106,7 +106,18 @@ public class Sniffer: URLProtocol {
 
         logItem = HTTPLogItem(request: urlRequest as URLRequest)
         Sniffer.setProperty(true, forKey: Keys.request, in: urlRequest)
-        sessionTask = session?.dataTask(with: urlRequest as URLRequest)
+
+        sessionTask = session?.dataTask(with: urlRequest as URLRequest, completionHandler: { data, response, error in
+            if let data = data, let response = response {
+                self.logItem?.didReceive(response: response, data: data)
+                self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+                self.client?.urlProtocol(self, didLoad: data)
+            } else if let error = error {
+                self.logItem?.didCompleteWithError(error)
+                self.client?.urlProtocol(self, didFailWithError: error)
+            }
+            self.client?.urlProtocolDidFinishLoading(self)
+        })
         sessionTask?.resume()
     }
 
