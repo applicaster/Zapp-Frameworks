@@ -1,5 +1,5 @@
 /// <reference types="@applicaster/applicaster-types" />
 
-import UserAccount from "./UserAccount";
+import { UserAccount } from "./components/UserAccount";
 
 export default UserAccount;
