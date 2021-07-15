@@ -47,13 +47,6 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.google.com' }
     maven { url 'https://jitpack.io' }
-    maven { // Applicaster
-        credentials{
-            username System.getenv("MAVEN_USERNAME")
-            password System.getenv("MAVEN_PASSWORD")
-        }
-        url 'https://dl.bintray.com/applicaster-ltd/maven'
-    }
 }
 
 //SDK Manager
@@ -82,5 +75,5 @@ dependencies {
     }
 
     api 'com.npaw.youbora:youboralib:6.0.9'
-    api 'com.segment.analytics.android:analytics:4.7.0'
+    api 'com.segment.analytics.android:analytics:4.10.0'
 }
