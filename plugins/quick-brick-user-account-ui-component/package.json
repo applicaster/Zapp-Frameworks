@@ -1,0 +1,32 @@
+{
+  "name": "@applicaster/quick-brick-user-account-ui-component",
+  "version": "0.0.1",
+  "author": "Zapp Team",
+  "license": "ISC",
+  "description": "User Account Component",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "ramda": "^0.26.1",
+    "react-redux": "^7.2.1"
+  },
+  "peerDependencies": {
+    "@applicaster/applicaster-types": "*",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-safe-area-context": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "applicaster": {
+    "supportedPlatforms": [
+      "ios_for_quickbrick",
+      "android_for_quickbrick"
+    ],
+    "zappOwnerAccountId": "5e12fac7666333000ec0f8ab"
+  }
+}
