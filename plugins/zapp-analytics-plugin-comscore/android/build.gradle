@@ -1,0 +1,78 @@
+apply plugin: 'com.android.library'
+
+import org.gradle.util.VersionNumber
+
+repositories {
+    jcenter()
+    google()
+    mavenCentral()
+    maven {
+        url 'https://maven.google.com'
+    }
+    maven {
+        url "https://comscore.bintray.com/Analytics"
+    }
+    maven { url 'https://jitpack.io' }
+    maven {
+        credentials {
+            username System.getenv("MAVEN_USERNAME")
+            password System.getenv("MAVEN_PASSWORD")
+        }
+        url 'https://dl.bintray.com/applicaster-ltd/maven'
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.2"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 28
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+}
+
+def getExtOrDefault(name, fallback) {
+    def ver = rootProject.ext.has(name) ? rootProject.ext.get(name) : fallback
+    if (VersionNumber.parse(fallback) > VersionNumber.parse(ver)) {
+        throw new Exception("Version mismatch for $name: $ver found, at least $fallback required")
+    }
+    return ver
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api "com.comscore:android-analytics:5.7.3"
+
+    // Check if an open SDK is defined - if not use the closed one.
+    if (!findProject(':applicaster-android-sdk')) {
+        def sdkVersion = getExtOrDefault('applicaster_android_sdk_core_version', '8.0.0')
+        api "com.applicaster:applicaster-android-sdk-core:${sdkVersion}"
+    }
+    else {
+        api project(':applicaster-android-sdk')
+    }
+}
