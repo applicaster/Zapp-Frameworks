@@ -16,5 +16,7 @@ import Foundation
     @objc func bundleIdentifier() -> String
     @objc func bundleName() -> String
     @objc func appVersion() -> String
+    @objc func appBuild() -> String
     @objc func isDebugEnvironment() -> Bool
+    @objc func launchOptions() -> [UIApplication.LaunchOptionsKey: Any]?
 }

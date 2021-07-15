@@ -17,6 +17,10 @@ extension RootController: FacadeConnectorAppDataProtocol {
     public func appVersion() -> String {
         return UIApplication.appVersion()
     }
+    
+    public func appBuild() -> String {
+        return UIApplication.appBuild()
+    }
 
     public func pluginsURLPath() -> URL? {
         return LoadingManager().file(type: .plugins)?.localURLPath()
@@ -29,5 +33,9 @@ extension RootController: FacadeConnectorAppDataProtocol {
 
     public func isDebugEnvironment() -> Bool {
         return FeaturesCustomization.isDebugEnvironment()
+    }
+    
+    public func launchOptions() -> [UIApplication.LaunchOptionsKey: Any]? {
+        return self.appDelegate?.launchOptions
     }
 }
