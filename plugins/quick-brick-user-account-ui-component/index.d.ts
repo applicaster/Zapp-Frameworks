@@ -59,3 +59,10 @@ type ButtonStyles = {
     title_text_font_android: string;
   };
 };
+
+type LabelStyles = {
+  title_color: string;
+  title_text_fontsize: string;
+  title_text_font_ios: string;
+  title_text_font_android: string;
+};

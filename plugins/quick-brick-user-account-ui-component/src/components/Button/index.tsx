@@ -8,18 +8,13 @@ type Props = {
   onPress: () => void;
   titleText: string;
   styles: ButtonStyles;
+  customContainerStyle: {};
 };
 
 const componentStyles = StyleSheet.create({
   containerStyle: {
     flex: 1,
     flexDirection: "row",
-    borderRadius: 5,
-    // width: 239,
-    height: 32,
-    marginRight: 57,
-    marginLeft: 57,
-    marginBottom: 12,
   },
   flexOne: {
     flex: 1,
@@ -44,7 +39,7 @@ export function Button(props: Props) {
 
   const propsContainerStyle = props?.styles?.containerStyle;
   const propsLabelStyles = props?.styles?.labelStyles;
-
+  const customContainerStyle = props?.customContainerStyle || {};
   const containerStyle = {
     ...componentStyles.containerStyle,
     backgroundColor: propsContainerStyle?.background_color,
@@ -55,6 +50,7 @@ export function Button(props: Props) {
     borderWidth: isUnderlay
       ? Number(propsContainerStyle?.border_underlay)
       : Number(propsContainerStyle?.border),
+    ...customContainerStyle,
   };
   const background_underlay_color =
     propsContainerStyle?.background_underlay_color;

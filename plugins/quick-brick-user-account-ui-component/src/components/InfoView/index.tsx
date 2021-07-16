@@ -5,33 +5,24 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 
 type Props = {
   titles: {
-    titleText: string;
-    descriptionText: string;
+    title_text: string;
+    description_text: string;
   };
   styles: {
-    titleStyle: {
-      title_color: string;
-      title_text_fontsize: string;
-      title_text_font_ios: string;
-      title_text_font_android: string;
-    };
-    description_style: {
-      title_color: string;
-      title_text_fontsize: string;
-      title_text_font_ios: string;
-      title_text_font_android: string;
-    };
+    title_style: LabelStyles;
+    description_style: LabelStyles;
   };
 };
 
 const componentStyles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    flexDirection: "row",
+    paddingBottom: 20,
   },
   flexOne: {
     flex: 1,
     justifyContent: "center",
+    paddingBottom: 5,
   },
   labelStyles: {
     textAlign: "left",
@@ -40,7 +31,7 @@ const componentStyles = StyleSheet.create({
 });
 
 export function InfoView(props: Props) {
-  const propsTitleStyle = props?.styles?.titleStyle;
+  const propsTitleStyle = props?.styles?.title_style;
   const propsDiscription = props?.styles?.description_style;
 
   const titleLabelStyle = {
@@ -62,17 +53,16 @@ export function InfoView(props: Props) {
       android: propsDiscription?.title_text_font_android,
     }),
   };
-
   return (
-    <View>
-      <View style={componentStyles.containerStyle}>
+    <View style={componentStyles.containerStyle}>
+      <View style={componentStyles.flexOne}>
         <Text numberOfLines={1} style={titleLabelStyle}>
-          {props?.titles?.titleText}
+          {props?.titles?.title_text}
         </Text>
       </View>
-      <View style={componentStyles.containerStyle}>
+      <View style={componentStyles.flexOne}>
         <Text numberOfLines={1} style={descriptionLabelStyle}>
-          {props?.titles?.descriptionText}
+          {props?.titles?.description_text}
         </Text>
       </View>
     </View>

@@ -20,6 +20,8 @@ import {
   styleForLogin1Button,
   styleForLogin2Button,
   styleForLogoutButton,
+  getStylesForTitleLabel,
+  getStylesForDescriptionLabel,
 } from "./Utils";
 const logger = componentsLogger.addSubsystem(
   "quick-brick-toggle-plugin-lifecycle"
@@ -48,7 +50,7 @@ const componentStyles = StyleSheet.create({
 });
 
 export function UserAccount(props: Props) {
-  //   const [enabled, setEnabled] = React.useState(null);
+  const [isLogedIn, setIsLogedIn] = React.useState(false);
   const theme = useTheme();
 
   const newContainerStyleStyle = {
@@ -89,26 +91,70 @@ export function UserAccount(props: Props) {
     [styles]
   );
 
+  const styleLogoutButton = React.useCallback(
+    () => styleForLogoutButton(styles),
+    [styles]
+  );
+
+  const styleTitleLabel = React.useCallback(
+    () => getStylesForTitleLabel(styles),
+    [styles]
+  );
+
+  const styleDescriptionLabel = React.useCallback(
+    () => getStylesForDescriptionLabel(styles),
+    [styles]
+  );
+
+  const accoutInfoStyles = {
+    logoutButtonStyles: styleLogoutButton(),
+    labelStyles: {
+      title_style: styleTitleLabel(),
+      description_style: styleDescriptionLabel(),
+    },
+  };
+  const accountTitles = {
+    account_title,
+    user_name_title,
+    subscription_title,
+    subscription_expiration_title,
+    logout_title_text,
+  };
+
   const onLogin1 = React.useCallback(() => {}, []);
   const onLogin2 = React.useCallback(() => {}, []);
   const onLogout = React.useCallback(() => {}, []);
 
+  const customContainerStyle = {
+    height: 32,
+    marginRight: 57,
+    marginLeft: 57,
+    marginBottom: 12,
+  };
+
   return (
     <View style={newContainerStyleStyle}>
-      <UserPhoto imageSrc={styles?.user_image_placeholder} />
-      {/* <AccountInfo /> */}
-      <Button
+      <AccountInfo
+        onLogoutPress={onLogout}
+        user_image_placeholder={styles?.user_image_placeholder}
+        styles={accoutInfoStyles}
+        titles={accountTitles}
+      />
+      {/* <UserPhoto imageSrc={styles?.user_image_placeholder} /> */}
+      {/* <Button
+      customContainerStyle={customContainerStyle}
         styles={styleLogin1Button()}
         id={"login_1"}
         onPress={onLogin1}
         titleText={login_button_1_title_text}
       />
       <Button
+      customContainerStyle={customContainerStyle}
         styles={styleLogin2Button()}
         id={"login_2"}
         onPress={onLogin2}
         titleText={login_button_2_title_text}
-      />
+      /> */}
     </View>
   );
 }
