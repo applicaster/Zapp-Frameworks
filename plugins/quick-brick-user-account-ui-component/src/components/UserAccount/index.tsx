@@ -23,6 +23,8 @@ import {
   getStylesForTitleLabel,
   getStylesForDescriptionLabel,
 } from "./Utils";
+import { login, logout, getUserId, getSubscriptionData } from "../../mockData";
+
 const logger = componentsLogger.addSubsystem(
   "quick-brick-toggle-plugin-lifecycle"
 );
@@ -114,15 +116,32 @@ export function UserAccount(props: Props) {
   };
   const accountTitles = {
     account_title,
-    user_name_title,
+    user_name_title: getUserId(user_name_title),
     subscription_title,
-    subscription_expiration_title,
+    subscription_expiration_title: getSubscriptionData(
+      subscription_expiration_title
+    ),
     logout_title_text,
   };
 
-  const onLogin1 = React.useCallback(() => {}, []);
-  const onLogin2 = React.useCallback(() => {}, []);
-  const onLogout = React.useCallback(() => {}, []);
+  const onLogin1 = React.useCallback(async () => {
+    const result = await login();
+    if (result) {
+      setIsLogedIn(true);
+    }
+  }, []);
+  const onLogin2 = React.useCallback(async () => {
+    const result = await login();
+    if (result) {
+      setIsLogedIn(true);
+    }
+  }, []);
+  const onLogout = React.useCallback(async () => {
+    const result = await logout();
+    if (result) {
+      setIsLogedIn(false);
+    }
+  }, []);
 
   const customContainerStyle = {
     height: 32,

@@ -3,7 +3,6 @@ import { View, StyleSheet } from "react-native";
 import { InfoView } from "../InfoView";
 import { Button } from "../Button";
 import { UserPhoto } from "../UserPhoto";
-
 type Props = {
   onLogoutPress: () => void;
   user_image_placeholder: string;
