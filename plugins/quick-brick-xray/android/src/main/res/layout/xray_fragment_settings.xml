@@ -144,6 +144,26 @@
             android:text="@string/react_native_low_level_logging_hint"
             android:textColor="@android:color/black" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/xray_analytics_toasts"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/cbAnalyticsToasts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchTimingLogging"
             style="@style/TextAppearance.AppCompat.Medium"

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="xray_analytics_toasts_levels">
+        <item>@string/xray_analytics_toasts_none</item>
+        <item>@string/xray_analytics_toasts_basic</item>
+        <item>@string/xray_analytics_toasts_detailed</item>
+    </array>
+
+</resources>

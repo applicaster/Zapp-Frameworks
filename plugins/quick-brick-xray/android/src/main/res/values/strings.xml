@@ -13,6 +13,11 @@
     <string name="xray_timing_logging_hint">Log time passed before each next message logged to CSV file.</string>
     <string name="xray_btn_share_timings_as_csv">Share timings as CSV</string>
 
+    <string name="xray_analytics_toasts">Analytics events toasts</string>>
+    <string name="xray_analytics_toasts_none">None</string>>
+    <string name="xray_analytics_toasts_basic">Names only</string>
+    <string name="xray_analytics_toasts_detailed">Detailed</string>
+
     <string name="btn_xray_remote_disable">Disable</string>
     <string name="dlg_remote_log_title">Enabling remote logging</string>
     <string name="dlg_remote_log_message">It should be only used in development environment since it is insecure.</string>
