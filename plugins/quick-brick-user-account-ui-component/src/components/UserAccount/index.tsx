@@ -42,7 +42,6 @@ type Props = {
 const componentStyles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    // flexDirection: "row",
     backgroundColor: "#161b29FF",
     alignItems: "center",
     justifyContent: "center",
@@ -132,29 +131,39 @@ export function UserAccount(props: Props) {
     marginBottom: 12,
   };
 
+  function renderLoginFlow() {
+    return (
+      <>
+        <UserPhoto imageSrc={styles?.user_image_placeholder} />
+        <Button
+          customContainerStyle={customContainerStyle}
+          styles={styleLogin1Button()}
+          id={"login_1"}
+          onPress={onLogin1}
+          titleText={login_button_1_title_text}
+        />
+        <Button
+          customContainerStyle={customContainerStyle}
+          styles={styleLogin2Button()}
+          id={"login_2"}
+          onPress={onLogin2}
+          titleText={login_button_2_title_text}
+        />
+      </>
+    );
+  }
   return (
     <View style={newContainerStyleStyle}>
-      <AccountInfo
-        onLogoutPress={onLogout}
-        user_image_placeholder={styles?.user_image_placeholder}
-        styles={accoutInfoStyles}
-        titles={accountTitles}
-      />
-      {/* <UserPhoto imageSrc={styles?.user_image_placeholder} /> */}
-      {/* <Button
-      customContainerStyle={customContainerStyle}
-        styles={styleLogin1Button()}
-        id={"login_1"}
-        onPress={onLogin1}
-        titleText={login_button_1_title_text}
-      />
-      <Button
-      customContainerStyle={customContainerStyle}
-        styles={styleLogin2Button()}
-        id={"login_2"}
-        onPress={onLogin2}
-        titleText={login_button_2_title_text}
-      /> */}
+      {isLogedIn ? (
+        <AccountInfo
+          onLogoutPress={onLogout}
+          user_image_placeholder={styles?.user_image_placeholder}
+          styles={accoutInfoStyles}
+          titles={accountTitles}
+        />
+      ) : (
+        renderLoginFlow()
+      )}
     </View>
   );
 }
