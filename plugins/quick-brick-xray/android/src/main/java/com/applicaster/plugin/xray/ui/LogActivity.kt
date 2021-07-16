@@ -3,6 +3,7 @@ package com.applicaster.plugin.xray.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.applicaster.plugin.xray.R
@@ -43,7 +44,31 @@ class LogActivity : AppCompatActivity() {
         settings.reactNativeDebugLogging = optBoolean(data, "reactNativeDebugLogging", settings.reactNativeDebugLogging)
         settings.reactNativeLogLevel = optLogLevel(data, "reactNativeLogLevel", settings.reactNativeLogLevel)
 
-        xRayPlugin.applySettings(settings)
+        val logzToken = data.getQueryParameter("logzToken")
+
+        if (logzToken.isNullOrEmpty()) {
+            // disable even if it was on
+            settings.logzToken = null
+            xRayPlugin.applySettings(settings)
+        } else {
+            if (!settings.logzToken.isNullOrEmpty()) {
+                // some token is already present, update it
+                settings.logzToken = logzToken
+                xRayPlugin.applySettings(settings)
+            } else {
+                // ask user to enable remote logging
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.dlg_remote_log_title)
+                        .setMessage(R.string.dlg_remote_log_message)
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            settings.logzToken = logzToken
+                            xRayPlugin.applySettings(settings)
+                        }
+                        .setNegativeButton(android.R.string.cancel) { _, _ ->
+                            xRayPlugin.applySettings(settings)
+                        }.show()
+            }
+        }
     }
 
     private fun optBoolean(data: Uri, key: String, default: Boolean?): Boolean? {

@@ -7,7 +7,7 @@ const baseManifest = {
   dependency_name: "@applicaster/first-time-user-expirience-screen",
   author_name: "Applicaster",
   author_email: "zapp@applicaster.com",
-  name: "First time user expirience screen",
+  name: "First time user experience screen",
   description: "Hook to present one time",
   type: "general",
   react_native: true,
@@ -441,18 +441,19 @@ function createManifest({ version, platform }) {
           disableField: true,
         },
         {
+          key: "flow_version",
+          type: "number_input",
+          tooltip_text:
+            "Increment version number to +1 to force load FTUE on start again",
+          label: "Version of the screen",
+          initial_value: 1,
+        },
+        {
           type: "switch",
           key: "show_hook_once",
           tooltip_text:
             "Define if hook should be presented on time or each time screen will open",
           initial_value: true,
-        },
-        {
-          type: "switch",
-          key: "present_on_each_new_version",
-          label: "Present component on each new application version",
-          tooltip_text: "Present component on each new application version",
-          initial_value: false,
         },
         {
           type: "screen_selector",

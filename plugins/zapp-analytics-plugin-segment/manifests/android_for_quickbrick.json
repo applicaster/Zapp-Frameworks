@@ -38,7 +38,7 @@
   ],
   "platform": "android_for_quickbrick",
   "min_zapp_sdk": "2.0.0",
-  "manifest_version": "2.2.1",
+  "manifest_version": "2.3.0",
   "project_dependencies": [
     {
       "zapp-analytics-plugin-segment": "node_modules/@applicaster/zapp-analytics-plugin-segment/android"
@@ -55,6 +55,6 @@
     "mobile"
   ],
   "npm_dependencies": [
-    "@applicaster/zapp-analytics-plugin-segment@2.2.1"
+    "@applicaster/zapp-analytics-plugin-segment@2.3.0"
   ]
 }

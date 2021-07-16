@@ -3,6 +3,7 @@
 //  ZappCore
 //
 //  Created by Alex Zchut on 04/03/2021.
+//  Copyright © 2021 Applicaster LTD. All rights reserved.
 //
 
 import Foundation

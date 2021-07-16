@@ -86,7 +86,7 @@ const InPlayer = (props) => {
       },
       getItem: async function () {
         const token = await localStorageGet(localStorageTokenKey);
-        return token;
+        return JSON.stringify(token);
       },
       removeItem: async function () {
         await localStorageRemove(localStorageTokenKey);

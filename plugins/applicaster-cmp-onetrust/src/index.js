@@ -1,10 +1,13 @@
 import * as React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { NativeModules } from "react-native";
 
+import { useInitialFocus } from "@applicaster/zapp-react-native-utils/focusManager";
 import { useNavigation } from "@applicaster/zapp-react-native-utils/reactHooks/navigation";
+
+import Button from "./components/Button";
 import { createLogger, addContext } from "./logger";
-import { DEFAULT, releaseBuild } from "./utils";
+import { DEFAULT, releaseBuild, parseFontKey} from "./utils";
 import { styles, stylesError } from "./styles";
 
 /**
@@ -38,15 +41,88 @@ function renderError(message: string, onDismiss: () => void) {
   );
 }
 
-export default NativeScreen = ({ screenData }: Props) => {
+export default NativeScreen = (props: Props) => {
+  const { screenData, parentFocus, focused } = props;
+
   const navigator = useNavigation();
   const generalData = screenData?.general;
   const packageName = generalData?.package_name || DEFAULT.packageName;
   const methodName = generalData?.method_name || DEFAULT.methodName;
   const screenPackage = NativeModules?.[packageName];
   const method = screenPackage?.[methodName];
+  const showIntroScreen = generalData.show_intro_screen;
+  const platformEndpoint = parseFontKey(Platform.OS);
+
+  const introBtnRef = React.useRef(null);
+
+  const {
+    intro_button_text: introButtonText,
+    [`intro_button_font_${platformEndpoint}`]: introButtonFont,
+    intro_button_fontsize: introButtonFontSize,
+    intro_button_fontcolor: introButtonFontColor,
+    intro_button_backgroundcolor: introBackgroundColor,
+    intro_button_focused_fontcolor: introButtonFocusedColor,
+    intro_button_focused_backgroundcolor: introButtonFocusedBgColor
+  } = generalData;
+
+  const buttonStyle = {
+    color: introButtonFontColor,
+    fontSize: Number(introButtonFontSize),
+    fontFamily: introButtonFont
+  };
+
+  if (Platform.OS === 'android') {
+    useInitialFocus(focused, introBtnRef);
+  }
+
+  const openNativeScreen = async () => {
+    addContext({
+      manifestData: DEFAULT,
+      screenId: screenData.id,
+      screenName: screenData.name,
+    });
+
+    try {
+      const res = await method();
+      logger.info(`Received response from native method ${methodName}`, res);
+      onDismiss();
+    } catch (error) {
+      renderError(error);
+    }
+  }
+
+  const renderIntroScreen = () => {
+    return (
+      <View style={styles.introContainer}>
+        <Button
+          label={introButtonText}
+          onPress={openNativeScreen}
+          groupId={screenData.groupId}
+          textStyle={buttonStyle}
+          backgroundColor={introBackgroundColor}
+          backgroundButtonUriActive={introButtonFocusedBgColor}
+          focusedTextColor={introButtonFocusedColor}
+          nextFocusTop={parentFocus ? parentFocus.nextFocusTop : null}
+          nextFocusLeft={parentFocus ? parentFocus.nextFocusLeft : null}
+          buttonRef={introBtnRef}
+          preferredFocus={true}
+        />
+      </View>
+    );
+  }
+
+  const renderContent = () => {
+    if (showIntroScreen) {
+      return renderIntroScreen();
+    }
+
+    return <View style={styles.container}/>;
+  };
 
   const onDismiss = () => {
+    if (showIntroScreen) {
+      return;
+    }
     // todo: this exit action should be customizible: go back or go home/other screen
     // manifest already has fields set up for this behavior
     if (navigator.canGoBack()) {
@@ -84,29 +160,15 @@ export default NativeScreen = ({ screenData }: Props) => {
   }
 
   React.useEffect(() => {
-    (async () => {
-      addContext({
-        manifestData: DEFAULT,
-        screenId: screenData.id,
-        screenName: screenData.name,
-      });
-      // todo: add params
-
-      try {
-        const res = await method();
-        logger.info(`Received response from native method ${methodName}`, res);
-        onDismiss();
-      } catch (error) {
-        renderError(error);
-      }
-      // todo: obtain result as optional object
-      // todo: handle errors and fire exit action right away after showing some error message for the user
-    })();
-
+    if (!showIntroScreen) {
+      openNativeScreen();
+    }
+    
     return () => {
       logger.info("Unmounted native screen");
       onDismiss();
     };
   }, []);
-  return <View style={styles.container}></View>;
+
+  return renderContent();
 };

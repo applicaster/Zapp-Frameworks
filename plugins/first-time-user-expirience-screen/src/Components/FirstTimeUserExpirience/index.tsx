@@ -6,13 +6,12 @@ import React, {
   useRef,
 } from "react";
 import { Platform, ActivityIndicator } from "react-native";
-
+import { sendEvent } from "../../Services/AnalyticsService";
 import {
   getRiversProp,
   prepareData,
   screenShouldBePresented,
-  updatePresentedInfo,
-  removePresentedInfo,
+  saveScreenFinishedState,
 } from "./Utils";
 import { getStyles } from "../../Utils/Customization";
 import { ComponentsMap } from "@applicaster/zapp-react-native-ui-components/Components/River/ComponentsMap";
@@ -52,9 +51,8 @@ export default function FirstTimeUserExpirience(props) {
   const screenStyles = useMemo(() => getStyles(styles), [styles]);
   const screenLocalizations = getLocalizations(localizations);
   const show_hook_once = general?.show_hook_once || false;
-  const present_on_each_new_version =
-    general?.present_on_each_new_version || false;
 
+  const flow_version = general?.flow_version || 1;
   useEffect(() => {
     mounted.current = true;
 
@@ -80,9 +78,7 @@ export default function FirstTimeUserExpirience(props) {
       });
 
       if (show_hook_once) {
-        const presentScreen = await screenShouldBePresented(
-          present_on_each_new_version
-        );
+        const presentScreen = await screenShouldBePresented(flow_version);
         if (presentScreen) {
           prepareDataSource();
         } else {
@@ -96,7 +92,6 @@ export default function FirstTimeUserExpirience(props) {
           callback && callback({ success: true, error: null, payload });
         }
       } else {
-        await removePresentedInfo();
         prepareDataSource();
       }
     } catch (error) {
@@ -120,7 +115,13 @@ export default function FirstTimeUserExpirience(props) {
   const onBack = useCallback(() => {
     if (currentScreenIndex > 0) {
       const newIndex = currentScreenIndex - 1;
+      const currentScreen = dataSource?.[currentScreenIndex].Screen;
       const newScreenId = dataSource?.[newIndex]?.screenId;
+      sendEvent({
+        action: "Back",
+        label: currentScreen?.name,
+        value: currentScreenIndex + 1,
+      });
       logger.debug({
         message: `Go back: to index: ${newIndex}, screenId: ${newScreenId}`,
         data: {
@@ -135,8 +136,14 @@ export default function FirstTimeUserExpirience(props) {
 
   const onNext = useCallback(() => {
     if (currentScreenIndex < dataSource.length - 1) {
+      const currentScreen = dataSource?.[currentScreenIndex].Screen;
       const newIndex = currentScreenIndex + 1;
       const newScreenId = dataSource?.[newIndex]?.screenId;
+      sendEvent({
+        action: "Next",
+        label: currentScreen?.name,
+        value: currentScreenIndex + 1,
+      });
       logger.debug({
         message: `Go forward: to index: ${newIndex}, screenId: ${newScreenId}`,
         data: {
@@ -151,8 +158,17 @@ export default function FirstTimeUserExpirience(props) {
 
   async function onClose() {
     if (show_hook_once) {
-      updatePresentedInfo();
+      saveScreenFinishedState(flow_version);
     }
+
+    const currentScreen = dataSource?.[currentScreenIndex].Screen;
+
+    sendEvent({
+      action: "Close",
+      label: currentScreen?.name,
+      value: currentScreenIndex + 1,
+    });
+
     logger.debug({
       message: `On Close button, hook finished task`,
       data: {
@@ -175,12 +191,19 @@ export default function FirstTimeUserExpirience(props) {
     callback && callback({ success: true, error: null, newPayload });
   }
 
-  async function onSignIn() {
+  async function onSignUp() {
     if (show_hook_once) {
-      updatePresentedInfo();
+      saveScreenFinishedState(flow_version);
     }
+    const currentScreen = dataSource?.[currentScreenIndex].Screen;
+
+    sendEvent({
+      action: "Sign Up",
+      label: currentScreen?.name,
+      value: currentScreenIndex + 1,
+    });
     logger.debug({
-      message: `On Sign In button, hook finished task`,
+      message: `On Sign Up button, hook finished task`,
       data: {
         data_source: dataSource,
       },
@@ -236,7 +259,7 @@ export default function FirstTimeUserExpirience(props) {
           onBack={onBack}
           onNext={onNext}
           onClose={onClose}
-          onSignIn={onSignIn}
+          onSignUp={onSignUp}
           isFistScreen={currentScreenIndex === 0}
           isLastScreen={currentScreenIndex === dataSource?.length - 1}
         />

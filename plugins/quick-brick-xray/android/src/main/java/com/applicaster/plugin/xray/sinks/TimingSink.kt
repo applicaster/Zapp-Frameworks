@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray
+package com.applicaster.plugin.xray.sinks
 
 import android.os.Handler
 import android.os.HandlerThread
@@ -29,7 +29,7 @@ class TimingSink : ISink {
         val now = System.currentTimeMillis()
         val currentThread = Thread.currentThread()
         val prev = lastThreadTimestamps.put(currentThread.id, now) ?: lastTimestamp
-        Log.e(Companion.TAG, "s ${now - startTimestamp} a ${now - lastTimestamp} t(${currentThread.name}) ${now - prev} | ${event.category} | ${event.subsystem} | ${event.message.take(45)}")
+        Log.e(TAG, "s ${now - startTimestamp} a ${now - lastTimestamp} t(${currentThread.name}) ${now - prev} | ${event.category} | ${event.subsystem} | ${event.message.take(45)}")
         val s = "${now - startTimestamp}," +
                 "${now - lastTimestamp}," +
                 "${currentThread.name}," +

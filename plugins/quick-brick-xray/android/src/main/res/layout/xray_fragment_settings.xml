@@ -11,6 +11,46 @@
         android:padding="16dp"
         tools:context=".ui.fragments.SettingsFragment">
 
+        <LinearLayout
+            android:id="@+id/cnt_remoteLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7fff0000"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lbl_xray_remote_log"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/btnRemoteLogDisable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_xray_remote_disable" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/lbl_uuid"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_baseline_content_copy_24"
+                android:padding="4dp"
+                android:textColor="@android:color/black"
+                tools:text="UUID" />
+
+        </LinearLayout>
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchNotification"
             style="@style/TextAppearance.AppCompat.Medium"
