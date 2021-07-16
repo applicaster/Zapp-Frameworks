@@ -7,20 +7,7 @@ type Props = {
   id: string;
   onPress: () => void;
   titleText: string;
-  styles: {
-    containerStyle: {
-      background_underlay_color: string;
-      background_color: string;
-      button_radius: string;
-    };
-    labelStyles: {
-      title_underlay_color: string;
-      title_color: string;
-      title_text_fontsize: string;
-      title_text_font_ios: string;
-      title_text_font_android: string;
-    };
-  };
+  styles: ButtonStyles;
 };
 
 const componentStyles = StyleSheet.create({
@@ -28,6 +15,11 @@ const componentStyles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 5,
+    // width: 239,
+    height: 32,
+    marginRight: 57,
+    marginLeft: 57,
+    marginBottom: 12,
   },
   flexOne: {
     flex: 1,
@@ -56,7 +48,13 @@ export function Button(props: Props) {
   const containerStyle = {
     ...componentStyles.containerStyle,
     backgroundColor: propsContainerStyle?.background_color,
-    borderRadius: Number(propsContainerStyle?.button_radius),
+    borderRadius: Number(propsContainerStyle?.radius),
+    borderColor: isUnderlay
+      ? propsContainerStyle?.border_underlay_color
+      : propsContainerStyle?.border_color,
+    borderWidth: isUnderlay
+      ? Number(propsContainerStyle?.border_underlay)
+      : Number(propsContainerStyle?.border),
   };
   const background_underlay_color =
     propsContainerStyle?.background_underlay_color;
@@ -84,7 +82,7 @@ export function Button(props: Props) {
       accessible={false}
     >
       <View style={componentStyles.flexOne}>
-        <Text numberOfLines={2} style={labelStyles}>
+        <Text numberOfLines={1} style={labelStyles}>
           {props?.titleText}
         </Text>
       </View>

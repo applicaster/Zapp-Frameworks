@@ -88,12 +88,12 @@ export function AccountInfo(props: Props) {
         styles={subscriptionDataStyles}
         titles={subscriptionDataTitles}
       />
-      <Button
+      {/* <Button
         onPress={props?.onLogoutPress}
         titleText={titles.logout_title_text}
         styles={logoutButtonStyles}
         id={"logout"}
-      />
+      /> */}
     </View>
   );
 }

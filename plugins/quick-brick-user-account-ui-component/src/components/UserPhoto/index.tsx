@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, Image } from "react-native";
 
-const styles = StyleSheet.create({ image: { width: 55, height: 55 } });
+const styles = StyleSheet.create({
+  image: { width: 55, height: 55, marginBottom: 23, marginTop: 31 },
+});
 
-const ClientLogo = ({ imageSrc }) => (
+export const UserPhoto = ({ imageSrc }) => (
   <Image style={styles.image} source={{ uri: imageSrc }} />
 );
 
-ClientLogo.propTypes = { imageSrc: PropTypes.string };
-
-export default ClientLogo;
+UserPhoto.propTypes = { imageSrc: PropTypes.string };
