@@ -85,7 +85,7 @@ export function Button(props: Props) {
     >
       <View style={componentStyles.flexOne}>
         <Text numberOfLines={2} style={labelStyles}>
-          {props?.text}
+          {props?.titleText}
         </Text>
       </View>
     </TouchableHighlight>
