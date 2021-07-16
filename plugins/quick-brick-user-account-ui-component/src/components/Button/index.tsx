@@ -6,14 +6,14 @@ import { platformSelect } from "@applicaster/zapp-react-native-utils/reactUtils"
 type Props = {
   id: string;
   onPress: () => void;
-  text: string;
+  titleText: string;
   styles: {
     containerStyle: {
       background_underlay_color: string;
       background_color: string;
       button_radius: string;
     };
-    textStyles: {
+    labelStyles: {
       title_underlay_color: string;
       title_color: string;
       title_text_fontsize: string;
@@ -33,13 +33,13 @@ const componentStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  textStyles: {
+  labelStyles: {
     textAlign: "center",
     justifyContent: "center",
   },
 });
 
-function Button(props) {
+export function Button(props: Props) {
   const [isUnderlay, setIsUnderlay] = React.useState(false);
 
   function onShowUnderlay() {
@@ -51,7 +51,7 @@ function Button(props) {
   }
 
   const propsContainerStyle = props?.styles?.containerStyle;
-  const propsTextStyle = props?.styles?.textStyle;
+  const propsLabelStyles = props?.styles?.labelStyles;
 
   const containerStyle = {
     ...componentStyles.containerStyle,
@@ -61,15 +61,15 @@ function Button(props) {
   const background_underlay_color =
     propsContainerStyle?.background_underlay_color;
 
-  const textStyle = {
-    ...componentStyles.textStyles,
+  const labelStyles = {
+    ...componentStyles.labelStyles,
     color: isUnderlay
-      ? propsTextStyle?.title_underlay_color
-      : propsTextStyle?.title_color,
-    fontSize: handleStyleType(propsTextStyle?.title_text_fontsize),
+      ? propsLabelStyles?.title_underlay_color
+      : propsLabelStyles?.title_color,
+    fontSize: handleStyleType(propsLabelStyles?.title_text_fontsize),
     fontFamily: platformSelect({
-      ios: propsTextStyle?.title_text_font_ios,
-      android: propsTextStyle?.title_text_font_android,
+      ios: propsLabelStyles?.title_text_font_ios,
+      android: propsLabelStyles?.title_text_font_android,
     }),
   };
 
@@ -84,7 +84,7 @@ function Button(props) {
       accessible={false}
     >
       <View style={componentStyles.flexOne}>
-        <Text numberOfLines={2} style={textStyle}>
+        <Text numberOfLines={2} style={labelStyles}>
           {props?.text}
         </Text>
       </View>
